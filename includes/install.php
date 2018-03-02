@@ -50,13 +50,13 @@ function wpum_run_install() {
 	// Store plugin installation date.
 	add_option( 'wpum_activation_date', strtotime( "now" ) );
 
-	// Add Upgraded From Option
+	// Add Upgraded From Option.
 	$current_version = get_option( 'wpum_version' );
 	if ( $current_version ) {
 		update_option( 'wpum_version_upgraded_from', $current_version );
 	}
 
-	// Update current version
+	// Update current version.
 	update_option( 'wpum_version', WPUM_VERSION );
 
 }
