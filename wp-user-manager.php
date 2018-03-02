@@ -73,7 +73,19 @@ if ( ! class_exists( 'WP_User_Manager' ) ) :
 			// Verify the plugin can run first.
 			if( $this->plugin_can_run() ) {
 				$this->setup_constants();
+				$this->includes();
 			}
+
+		}
+
+		/**
+		 * Load plugins required files.
+		 *
+		 * @return void
+		 */
+		private function includes() {
+
+			require __DIR__ . '/vendor/autoload.php';
 
 		}
 
