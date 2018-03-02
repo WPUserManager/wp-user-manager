@@ -74,6 +74,7 @@ if ( ! class_exists( 'WP_User_Manager' ) ) :
 			if( $this->plugin_can_run() ) {
 				$this->setup_constants();
 				$this->includes();
+				$this->init_hooks();
 			}
 
 		}
@@ -84,9 +85,25 @@ if ( ! class_exists( 'WP_User_Manager' ) ) :
 		 * @return void
 		 */
 		private function includes() {
-
 			require __DIR__ . '/vendor/autoload.php';
+		}
 
+		/**
+		 * Hook in our actions and filters.
+		 *
+		 * @return void
+		 */
+		private function init_hooks() {
+			add_action( 'plugins_loaded', array( $this, 'load_textdomain' ), 0 );
+		}
+
+		/**
+		 * Load plugin textdomain.
+		 *
+		 * @return void
+		 */
+		public function load_textdomain() {
+			load_plugin_textdomain( 'wpum', false, basename( dirname( __FILE__ ) ) . '/languages' );
 		}
 
 		/**
