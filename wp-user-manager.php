@@ -72,7 +72,70 @@ if ( ! class_exists( 'WP_User_Manager' ) ) :
 
 			// Verify the plugin can run first.
 			if( $this->plugin_can_run() ) {
+				$this->setup_constants();
+			}
 
+		}
+
+		/**
+		 * Throw error on object clone
+		 *
+		 * The whole idea of the singleton design pattern is that there is a single
+		 * object therefore, we don't want the object to be cloned.
+		 *
+		 * @since 1.0.0
+		 * @access protected
+		 * @return void
+		 */
+		public function __clone() {
+			// Cloning instances of the class is forbidden
+			_doing_it_wrong( __FUNCTION__, __( 'Cheatin&#8217; huh?', 'wpum' ), '1.0.0' );
+		}
+
+		/**
+		 * Disable unserializing of the class
+		 *
+		 * @since 1.0.0
+		 * @access protected
+		 * @return void
+		 */
+		public function __wakeup() {
+			// Unserializing instances of the class is forbidden
+			_doing_it_wrong( __FUNCTION__, __( 'Cheatin&#8217; huh?', 'wpum' ), '1.0.0' );
+		}
+
+		/**
+		 * Setup plugin constants
+		 *
+		 * @access private
+		 * @since 1.0.0
+		 * @return void
+		 */
+		private function setup_constants() {
+
+			// Plugin version.
+			if ( ! defined( 'WPUM_VERSION' ) ) {
+				define( 'WPUM_VERSION', '2.0.0' );
+			}
+
+			// Plugin Folder Path.
+			if ( ! defined( 'WPUM_PLUGIN_DIR' ) ) {
+				define( 'WPUM_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
+			}
+
+			// Plugin Folder URL.
+			if ( ! defined( 'WPUM_PLUGIN_URL' ) ) {
+				define( 'WPUM_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
+			}
+
+			// Plugin Root File.
+			if ( ! defined( 'WPUM_PLUGIN_FILE' ) ) {
+				define( 'WPUM_PLUGIN_FILE', __FILE__ );
+			}
+
+			// Plugin Slug.
+			if ( ! defined( 'WPUM_SLUG' ) ) {
+				define( 'WPUM_SLUG', plugin_basename( __FILE__ ) );
 			}
 
 		}
@@ -88,7 +151,7 @@ if ( ! class_exists( 'WP_User_Manager' ) ) :
 
 			$requirements_check = new WP_Requirements_Check( array(
 				'title' => 'WP User Manager',
-				'php'   => '9.3',
+				'php'   => '5.3',
 				'wp'    => '4.7',
 				'file'  => __FILE__,
 			) );
