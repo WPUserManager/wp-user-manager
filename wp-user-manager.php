@@ -51,6 +51,13 @@ if ( ! class_exists( 'WP_User_Manager' ) ) :
 		protected static $_instance;
 
 		/**
+		 * Holds the admin notice creation helper class.
+		 *
+		 * @var object
+		 */
+		public $notices;
+
+		/**
 		 * Main WPUM Instance.
 		 *
 		 * Ensures that only one instance of Give exists in memory at any one
@@ -71,11 +78,12 @@ if ( ! class_exists( 'WP_User_Manager' ) ) :
 		public function __construct() {
 
 			// Verify the plugin can run first.
-			if( $this->plugin_can_run() ) {
-				$this->setup_constants();
-				$this->includes();
-				$this->init_hooks();
-			}
+			$this->plugin_can_run();
+
+			// Now run everything.
+			$this->setup_constants();
+			$this->includes();
+			$this->init_hooks();
 
 		}
 
@@ -86,6 +94,13 @@ if ( ! class_exists( 'WP_User_Manager' ) ) :
 		 */
 		private function includes() {
 			require __DIR__ . '/vendor/autoload.php';
+
+			if ( is_admin() || ( defined( 'WP_CLI' ) && WP_CLI ) ) {
+				require_once WPUM_PLUGIN_DIR . 'includes/classes/class-wpum-notices.php';
+			}
+
+			require_once WPUM_PLUGIN_DIR . 'includes/install.php';
+
 		}
 
 		/**
@@ -94,7 +109,9 @@ if ( ! class_exists( 'WP_User_Manager' ) ) :
 		 * @return void
 		 */
 		private function init_hooks() {
+			register_activation_hook( WPUM_PLUGIN_FILE, 'wp_user_manager_install' );
 			add_action( 'plugins_loaded', array( $this, 'load_textdomain' ), 0 );
+			add_action( 'plugins_loaded', array( $this, 'init' ), 0 );
 		}
 
 		/**
@@ -104,6 +121,27 @@ if ( ! class_exists( 'WP_User_Manager' ) ) :
 		 */
 		public function load_textdomain() {
 			load_plugin_textdomain( 'wpum', false, basename( dirname( __FILE__ ) ) . '/languages' );
+		}
+
+		/**
+		 * Hook into WordPress once all plugins are loaded.
+		 *
+		 * @return void
+		 */
+		public function init() {
+
+			/**
+			 * @todo document before_wpum_init
+			 */
+			do_action( 'before_wpum_init' );
+
+			$this->notices = TDP\WP_Notice::instance();
+
+			/**
+			 * @todo document after_wpum_init
+			 */
+			do_action( 'after_wpum_init' );
+
 		}
 
 		/**
