@@ -29,7 +29,7 @@ Domain Path: /languages
  * @author     Alessandro Tesoro
  * @version    2.0.0
  * @copyright  (c) 2018 Alessandro Tesoro
- * @license    http://www.gnu.org/licenses/gpl-2.0.txt GNU LESSER GENERAL PUBLIC LICENSE
+ * @license    http://www.gnu.org/licenses/gpl-3.0.txt GNU LESSER GENERAL PUBLIC LICENSE
  * @package    wp-user-manager
  */
 
