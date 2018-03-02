@@ -77,7 +77,7 @@ if ( ! class_exists( 'WP_User_Manager' ) ) :
 		 */
 		public function __construct() {
 
-			// Verify the plugin can run first.
+			// Verify the plugin can run first. If not, disable the plugin automagically.
 			$this->plugin_can_run();
 
 			// Now run everything.

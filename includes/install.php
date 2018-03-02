@@ -42,6 +42,21 @@ function wp_user_manager_install( $network_wide = false ) {
 function wpum_run_install() {
 
 	// Setup a transient to display the activation notice.
-    set_transient( 'wpum-activation-notice', true, 5 );
+	set_transient( 'wpum-activation-notice', true, 5 );
+
+	// Enable registrations on the site.
+	update_option( 'users_can_register', true );
+
+	// Store plugin installation date.
+	add_option( 'wpum_activation_date', strtotime( "now" ) );
+
+	// Add Upgraded From Option
+	$current_version = get_option( 'wpum_version' );
+	if ( $current_version ) {
+		update_option( 'wpum_version_upgraded_from', $current_version );
+	}
+
+	// Update current version
+	update_option( 'wpum_version', WPUM_VERSION );
 
 }
