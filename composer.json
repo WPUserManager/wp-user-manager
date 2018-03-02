@@ -1,0 +1,7 @@
+{
+    "require": {
+        "wearerequired/wp-requirements-check": "^1.0",
+        "alessandrotesoro/wp-optionskit": "^1.0",
+        "alessandrotesoro/wp-notices": "^1.0"
+    }
+}

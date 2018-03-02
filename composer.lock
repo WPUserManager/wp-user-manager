@@ -1,0 +1,272 @@
+{
+    "_readme": [
+        "This file locks the dependencies of your project to a known state",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "This file is @generated automatically"
+    ],
+    "hash": "1d7967fbf09c57ebea83020c560b365a",
+    "content-hash": "3ba8098918021c8e463f0f6e7889e6ba",
+    "packages": [
+        {
+            "name": "alessandrotesoro/wp-notices",
+            "version": "1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/alessandrotesoro/wp-notices.git",
+                "reference": "7f408942817ea60d89577f4bc15031166b9f16d5"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/alessandrotesoro/wp-notices/zipball/7f408942817ea60d89577f4bc15031166b9f16d5",
+                "reference": "7f408942817ea60d89577f4bc15031166b9f16d5",
+                "shasum": ""
+            },
+            "require": {
+                "composer/installers": "~1.0",
+                "php": ">=5.3.2"
+            },
+            "type": "library",
+            "autoload": {
+                "classmap": [
+                    "wp-notices.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-3.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "Alessandro Tesoro",
+                    "homepage": "http://alessandrotesoro.me"
+                }
+            ],
+            "description": "An helper library to create persistent and dismissible WordPress admin notices.",
+            "homepage": "https://github.com/alessandrotesoro/wp-notices/",
+            "keywords": [
+                "notices",
+                "wordpress"
+            ],
+            "time": "2018-03-02 11:02:17"
+        },
+        {
+            "name": "alessandrotesoro/wp-optionskit",
+            "version": "1.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/alessandrotesoro/wp-optionskit.git",
+                "reference": "269dfaa969790a97583e2b18ba7571d41b2a32ab"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/alessandrotesoro/wp-optionskit/zipball/269dfaa969790a97583e2b18ba7571d41b2a32ab",
+                "reference": "269dfaa969790a97583e2b18ba7571d41b2a32ab",
+                "shasum": ""
+            },
+            "require": {
+                "composer/installers": "~1.0",
+                "php": ">=5.3.2"
+            },
+            "type": "library",
+            "autoload": {
+                "classmap": [
+                    "wp-optionskit.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-3.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "Alessandro Tesoro",
+                    "homepage": "http://alessandrotesoro.me"
+                }
+            ],
+            "description": "A toolkit for developers to create administration options panels for WordPress powered by Vuejs",
+            "homepage": "https://github.com/alessandrotesoro/wp-optionskit/",
+            "keywords": [
+                "optionskit",
+                "wordpress"
+            ],
+            "time": "2018-02-27 11:56:46"
+        },
+        {
+            "name": "composer/installers",
+            "version": "v1.5.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/composer/installers.git",
+                "reference": "049797d727261bf27f2690430d935067710049c2"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/composer/installers/zipball/049797d727261bf27f2690430d935067710049c2",
+                "reference": "049797d727261bf27f2690430d935067710049c2",
+                "shasum": ""
+            },
+            "require": {
+                "composer-plugin-api": "^1.0"
+            },
+            "replace": {
+                "roundcube/plugin-installer": "*",
+                "shama/baton": "*"
+            },
+            "require-dev": {
+                "composer/composer": "1.0.*@dev",
+                "phpunit/phpunit": "^4.8.36"
+            },
+            "type": "composer-plugin",
+            "extra": {
+                "class": "Composer\\Installers\\Plugin",
+                "branch-alias": {
+                    "dev-master": "1.0-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Composer\\Installers\\": "src/Composer/Installers"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Kyle Robinson Young",
+                    "email": "kyle@dontkry.com",
+                    "homepage": "https://github.com/shama"
+                }
+            ],
+            "description": "A multi-framework Composer library installer",
+            "homepage": "https://composer.github.io/installers/",
+            "keywords": [
+                "Craft",
+                "Dolibarr",
+                "Eliasis",
+                "Hurad",
+                "ImageCMS",
+                "Kanboard",
+                "Lan Management System",
+                "MODX Evo",
+                "Mautic",
+                "Maya",
+                "OXID",
+                "Plentymarkets",
+                "Porto",
+                "RadPHP",
+                "SMF",
+                "Thelia",
+                "WolfCMS",
+                "agl",
+                "aimeos",
+                "annotatecms",
+                "attogram",
+                "bitrix",
+                "cakephp",
+                "chef",
+                "cockpit",
+                "codeigniter",
+                "concrete5",
+                "croogo",
+                "dokuwiki",
+                "drupal",
+                "eZ Platform",
+                "elgg",
+                "expressionengine",
+                "fuelphp",
+                "grav",
+                "installer",
+                "itop",
+                "joomla",
+                "kohana",
+                "laravel",
+                "lavalite",
+                "lithium",
+                "magento",
+                "majima",
+                "mako",
+                "mediawiki",
+                "modulework",
+                "modx",
+                "moodle",
+                "osclass",
+                "phpbb",
+                "piwik",
+                "ppi",
+                "puppet",
+                "pxcms",
+                "reindex",
+                "roundcube",
+                "shopware",
+                "silverstripe",
+                "sydes",
+                "symfony",
+                "typo3",
+                "wordpress",
+                "yawik",
+                "zend",
+                "zikula"
+            ],
+            "time": "2017-12-29 09:13:20"
+        },
+        {
+            "name": "wearerequired/wp-requirements-check",
+            "version": "1.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/wearerequired/wp-requirements-check.git",
+                "reference": "1ff6197d2427f46778fcdfd7211cf6c500e45b02"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/wearerequired/wp-requirements-check/zipball/1ff6197d2427f46778fcdfd7211cf6c500e45b02",
+                "reference": "1ff6197d2427f46778fcdfd7211cf6c500e45b02",
+                "shasum": ""
+            },
+            "type": "library",
+            "autoload": {
+                "classmap": [
+                    "WP_Requirements_Check.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-2.0+"
+            ],
+            "authors": [
+                {
+                    "name": "Pascal Birchler",
+                    "email": "pascal@required.ch",
+                    "role": "Developer"
+                },
+                {
+                    "name": "required",
+                    "email": "support@required.ch",
+                    "homepage": "https://required.com",
+                    "role": "Company"
+                },
+                {
+                    "name": "Ulrich Pogson",
+                    "email": "ulrich@required.ch",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Simple requirements checking class",
+            "keywords": [
+                "requirements",
+                "wordpress"
+            ],
+            "time": "2017-10-23 09:14:03"
+        }
+    ],
+    "packages-dev": [],
+    "aliases": [],
+    "minimum-stability": "stable",
+    "stability-flags": [],
+    "prefer-stable": false,
+    "prefer-lowest": false,
+    "platform": [],
+    "platform-dev": []
+}
