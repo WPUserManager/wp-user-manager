@@ -227,6 +227,12 @@ class WPUM_Options_Panel {
 					'labels'   => array( 'placeholder' => __( 'Select one or more user roles from the list.' ) ),
 					'options'  => wpum_get_roles()
 				),
+				'exclude_usernames' => array(
+					'id'   => 'exclude_usernames',
+					'name' => __( 'Excluded usernames:', 'wpum' ),
+					'desc' => __('Enter the usernames that you wish to disable. Separate each username on a new line.', 'wpum'),
+					'type' => 'textarea'
+				),
 			],
 			'registration' => [
 				array(
