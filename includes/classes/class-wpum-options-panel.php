@@ -94,8 +94,8 @@ class WPUM_Options_Panel {
 
 		$tabs = array(
 			'general'      => __( 'General' ),
-			'login'        => __( 'Login' ),
 			'registration' => __( 'Registration' ),
+			'emails'       => __( 'Emails' ),
 			'profiles'     => __( 'Profiles' ),
 			'redirects'    => __( 'Redirects' ),
 		);
@@ -113,10 +113,22 @@ class WPUM_Options_Panel {
 	public function register_settings_subsections( $sections ) {
 
 		$sections = array(
-			'general' => array(
-				'emails' => __( 'Emails' ),
-				'extra'  => __( 'Extra' )
-			)
+			'general' => [
+				'login' => __( 'Login settings' ),
+				'misc'  => __( 'Misc settings' )
+			],
+			'registration' => [
+				'terms' => __( 'Terms & Conditions' )
+			],
+			'emails' => [
+				'admin_notifications' => __( 'Administration notifications' )
+			],
+			'profiles' => [
+				'profiles_content' => __( 'Profiles content' )
+			],
+			'redirects' => [
+				'backend_redirects' => __( 'Backend redirects' )
+			]
 		);
 
 		return $sections;
@@ -194,6 +206,186 @@ class WPUM_Options_Panel {
 					'desc'     => __( 'Select the page where you have added the profile shortcode.' ),
 					'type'     => 'multiselect',
 					'options'  => wpum_get_pages()
+				),
+			],
+			'login' => [
+				array(
+					'id'      => 'login_method',
+					'name'    => __( 'Allow users to login with:', 'wpum' ),
+					'type'    => 'select',
+					'std'     => 'email',
+					'options' => wpum_get_login_methods()
+				),
+			],
+			'misc' => [
+				array(
+					'id'       => 'adminbar_roles',
+					'name'     => __( 'Admin Bar:', 'wpum' ),
+					'desc'     => __('Hide WordPress admin bar for specific user roles.', 'wpum'),
+					'type'     => 'multiselect',
+					'multiple' => true,
+					'labels'   => array( 'placeholder' => __( 'Select one or more user roles from the list.' ) ),
+					'options'  => wpum_get_roles()
+				),
+			],
+			'registration' => [
+				array(
+					'id'   => 'custom_passwords',
+					'name' => __( 'Users custom passwords:', 'wpum' ),
+					'desc' => __('Enable to allow users to set custom passwords on the registration page.', 'wpum'),
+					'type' => 'checkbox'
+				),
+				array(
+					'id'   => 'login_after_registration',
+					'name' => __( 'Login after registration:', 'wpum' ),
+					'desc' => __('Enable this option to authenticate users after registration.', 'wpum'),
+					'type' => 'checkbox'
+				),
+				array(
+					'id'   => 'allow_role_select',
+					'name' => __( 'Allow role section:', 'wpum' ),
+					'desc' => __('Enable to allow users to select a user role on registration.', 'wpum'),
+					'type' => 'checkbox'
+				),
+				array(
+					'id'       => 'register_roles',
+					'name'     => __( 'Allowed Roles:', 'wpum' ),
+					'desc'     => __('Select which roles can be selected upon registration.', 'wpum'),
+					'type'     => 'multiselect',
+					'multiple' => true,
+					'labels'   => array( 'placeholder' => __( 'Select one or more user roles from the list.' ) ),
+					'options'  => wpum_get_roles()
+				),
+			],
+			'terms' => [
+				array(
+					'id'   => 'enable_terms',
+					'name' => __( 'Enable terms & conditions:', 'wpum' ),
+					'desc' => __('Enable to force users to agree to your terms before registering an account.', 'wpum'),
+					'type' => 'checkbox'
+				),
+				array(
+					'id'      => 'terms_page',
+					'name'    => __( 'Terms Page:', 'wpum' ),
+					'desc'    => __('Select the page that contains your terms.', 'wpum'),
+					'type'    => 'multiselect',
+					'options' => wpum_get_pages()
+				),
+			],
+			'emails' => [
+				array(
+					'id'   => 'from_name',
+					'name' => __( 'From Name:', 'wpum' ),
+					'desc' => __( 'The name emails are said to come from. This should probably be your site name.', 'wpum' ),
+					'type' => 'text',
+					'std'  => get_option( 'blogname' )
+				),
+				array(
+					'id'   => 'from_email',
+					'name' => __( 'From Email:', 'wpum' ),
+					'desc' => __( 'This will act as the "from" and "reply-to" address.', 'wpum' ),
+					'type' => 'text',
+					'std'  => get_option( 'admin_email' )
+				),
+				array(
+					'id'   => 'email_logo',
+					'name' => __( 'Logo', 'wpum' ),
+					'desc' => __( 'Upload or choose a logo to be displayed at the top of emails. Displayed on HTML emails only.', 'wpum' ),
+					'type' => 'file'
+				),
+			],
+			'admin_notifications' => [
+				array(
+					'id'   => 'disable_admin_register_email',
+					'name' => __( 'Disable admin registration email:', 'wpum' ),
+					'desc' => __( 'Enable this option to stop receiving notifications when a new user registers.', 'wpum' ),
+					'type' => 'checkbox'
+				),
+				array(
+					'id'   => 'disable_admin_password_recovery_email',
+					'name' => __( 'Disable admin password recovery email:', 'wpum' ),
+					'desc' => __( 'Enable this option to stop receiving notifications when a new user resets his password.', 'wpum' ),
+					'type' => 'checkbox'
+				),
+			],
+			'profiles' => [
+				array(
+					'id'   => 'guests_can_view_profiles',
+					'name' => __( 'Allow guests to view profiles', 'wpum' ),
+					'desc' => __( 'Enable this option to allow guests to view users profiles.', 'wpum' ),
+					'type' => 'checkbox'
+				),
+				array(
+					'id'   => 'members_can_view_profiles',
+					'name' => __( 'Allow members to view profiles', 'wpum' ),
+					'desc' => __( 'Enable this option to allow members to view users profiles. If disabled, users can only see their own profile.', 'wpum' ),
+					'type' => 'checkbox'
+				),
+				array(
+					'id'   => 'custom_avatars',
+					'name' => __( 'Custom Avatars', 'wpum' ),
+					'desc' => __( 'Enable this option to allow users to upload custom avatars for their profiles.', 'wpum' ),
+					'type' => 'checkbox'
+				),
+			],
+			'profiles_content' => [
+				array(
+					'id'   => 'profile_posts',
+					'name' => __( 'Display posts', 'wpum' ),
+					'desc' => __( 'Enable this option to display users submitted post on their profile page.', 'wpum' ),
+					'type' => 'checkbox'
+				),
+				array(
+					'id'   => 'profile_comments',
+					'name' => __( 'Display comments', 'wpum' ),
+					'desc' => __( 'Enable this option to display users submitted comments on their profile page.', 'wpum' ),
+					'type' => 'checkbox'
+				),
+			],
+			'redirects' => [
+				array(
+					'id'      => 'login_redirect',
+					'name'    => __( 'Login', 'wpum' ),
+					'desc'    => __('Select the page where you want to redirect users after they login.', 'wpum'),
+					'type'    => 'multiselect',
+					'options' => wpum_get_pages()
+				),
+				array(
+					'id'      => 'logout_redirect',
+					'name'    => __( 'Logout', 'wpum' ),
+					'desc'    => __( 'Select the page where you want to redirect users after they logout. If empty will return to wp-login.php', 'wpum'),
+					'type'    => 'multiselect',
+					'options' => wpum_get_pages()
+				),
+				array(
+					'id'      => 'registration_redirect',
+					'name'    => __( 'Registration', 'wpum' ),
+					'desc'    => __( 'Select the page where you want to redirect users after they successfully register. If empty a message will be displayed instead.', 'wpum'),
+					'type'    => 'multiselect',
+					'options' => wpum_get_pages()
+				),
+			],
+			'backend_redirects' => [
+				array(
+					'id'      => 'wp_login_signup_redirect',
+					'name'    => __( 'Backend register', 'wpum' ),
+					'desc'    => __( 'Select a page if you wish to redirect users who try to signup through wp-login.php', 'wpum'),
+					'type'    => 'multiselect',
+					'options' => wpum_get_pages()
+				),
+				array(
+					'id'      => 'wp_login_password_redirect',
+					'name'    => __( 'Backend lost password', 'wpum' ),
+					'desc'    => __( 'Select a page if you wish to redirect users who try to recover a lost password through wp-login.php', 'wpum'),
+					'type'    => 'multiselect',
+					'options' => wpum_get_pages()
+				),
+				array(
+					'id'      => 'backend_profile_redirect',
+					'name'    => __( 'Backend profile', 'wpum' ),
+					'desc'    => __( 'Select the page where you want to redirect users who try to access their profile on the backend.', 'wpum'),
+					'type'    => 'multiselect',
+					'options' => wpum_get_pages()
 				),
 			]
 		];
