@@ -101,6 +101,7 @@ if ( ! class_exists( 'WP_User_Manager' ) ) :
 
 				require_once WPUM_PLUGIN_DIR . 'includes/classes/class-wpum-notices.php';
 				require_once WPUM_PLUGIN_DIR . 'includes/classes/class-wpum-options-panel.php';
+				require_once WPUM_PLUGIN_DIR . 'includes/classes/class-wpum-user-table.php';
 			}
 
 			require_once WPUM_PLUGIN_DIR . 'includes/install.php';
