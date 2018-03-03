@@ -94,6 +94,7 @@ class WPUM_Options_Panel {
 
 		$tabs = array(
 			'general'      => __( 'General' ),
+			'login'        => __( 'Login' ),
 			'registration' => __( 'Registration' ),
 			'profiles'     => __( 'Profiles' ),
 			'redirects'    => __( 'Redirects' ),
@@ -139,7 +140,7 @@ class WPUM_Options_Panel {
 				'selectLabel'   => __( 'Press enter to select' ),
 				'SelectedLabel' => __( 'Selected' ),
 				'deselectLabel' => __( 'Press enter to remove' ),
-				'placeholder'   => __( 'Select option' ),
+				'placeholder'   => __( 'Select option (type to search)' ),
 			),
 			'error'        => __( 'Whoops! Something went wrong. Please check the following fields for more info:' ),
 		);
