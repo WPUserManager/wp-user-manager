@@ -68,6 +68,9 @@ function wpum_get_roles() {
 		$available_roles = $wp_roles->get_names();
 
 		foreach ( $available_roles as $role_id => $role ) {
+			if( $role_id == 'administrator' ) {
+				continue;
+			}
 			$roles[] = array(
 				'value' => esc_attr( $role_id ),
 				'label' => esc_html( $role ),
