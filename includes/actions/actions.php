@@ -10,3 +10,19 @@
 
 if ( ! defined( 'ABSPATH' ) ) exit;
 
+/**
+ * Hide admin bar from the frontend based on the selected roles.
+ *
+ * @return void
+ */
+function wpum_remove_admin_bar() {
+	$excluded_roles = wpum_get_option( 'adminbar_roles' );
+	$user           = wp_get_current_user();
+
+	if( ! empty( $excluded_roles ) && is_user_logged_in() && in_array( $user->roles[0], $excluded_roles ) && ! is_admin() ) {
+		if ( current_user_can( $user->roles[0] ) ) {
+			show_admin_bar( false );
+		}
+	}
+}
+add_action( 'after_setup_theme', 'wpum_remove_admin_bar' );
