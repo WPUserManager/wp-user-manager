@@ -9,16 +9,16 @@
     "packages": [
         {
             "name": "alessandrotesoro/wp-notices",
-            "version": "1.0.0",
+            "version": "1.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/alessandrotesoro/wp-notices.git",
-                "reference": "7f408942817ea60d89577f4bc15031166b9f16d5"
+                "reference": "f998b1bbdd302cbe9f021b64225df64b47bbe0cc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/alessandrotesoro/wp-notices/zipball/7f408942817ea60d89577f4bc15031166b9f16d5",
-                "reference": "7f408942817ea60d89577f4bc15031166b9f16d5",
+                "url": "https://api.github.com/repos/alessandrotesoro/wp-notices/zipball/f998b1bbdd302cbe9f021b64225df64b47bbe0cc",
+                "reference": "f998b1bbdd302cbe9f021b64225df64b47bbe0cc",
                 "shasum": ""
             },
             "require": {
@@ -47,20 +47,20 @@
                 "notices",
                 "wordpress"
             ],
-            "time": "2018-03-02 11:02:17"
+            "time": "2018-03-02 12:14:00"
         },
         {
             "name": "alessandrotesoro/wp-optionskit",
-            "version": "1.0.1",
+            "version": "1.0.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/alessandrotesoro/wp-optionskit.git",
-                "reference": "269dfaa969790a97583e2b18ba7571d41b2a32ab"
+                "reference": "121f8f728d20ab42e5fcc53251ea9c42fc247ce2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/alessandrotesoro/wp-optionskit/zipball/269dfaa969790a97583e2b18ba7571d41b2a32ab",
-                "reference": "269dfaa969790a97583e2b18ba7571d41b2a32ab",
+                "url": "https://api.github.com/repos/alessandrotesoro/wp-optionskit/zipball/121f8f728d20ab42e5fcc53251ea9c42fc247ce2",
+                "reference": "121f8f728d20ab42e5fcc53251ea9c42fc247ce2",
                 "shasum": ""
             },
             "require": {
@@ -89,7 +89,7 @@
                 "optionskit",
                 "wordpress"
             ],
-            "time": "2018-02-27 11:56:46"
+            "time": "2018-03-04 12:08:22"
         },
         {
             "name": "composer/installers",

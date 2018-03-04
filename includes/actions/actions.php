@@ -26,3 +26,21 @@ function wpum_remove_admin_bar() {
 	}
 }
 add_action( 'after_setup_theme', 'wpum_remove_admin_bar' );
+
+/**
+ * Restrict access to the wp-login.php registration page
+ * and redirect to the WPUM registration page.
+ *
+ * @return void
+ */
+function wpum_restrict_wp_registration() {
+
+	$registration_redirect = wpum_get_option( 'wp_login_signup_redirect' );
+
+	if( $registration_redirect ) {
+		wp_safe_redirect( esc_url( get_permalink( $registration_redirect[0] ) ) );
+		exit;
+	}
+
+}
+add_action( 'login_form_register', 'wpum_restrict_wp_registration' );
