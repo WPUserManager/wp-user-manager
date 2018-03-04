@@ -106,6 +106,8 @@ if ( ! class_exists( 'WP_User_Manager' ) ) :
 
 			require_once WPUM_PLUGIN_DIR . 'includes/actions/actions.php';
 
+			require_once WPUM_PLUGIN_DIR . 'includes/filters/global-filters.php';
+
 			if ( is_admin() || ( defined( 'WP_CLI' ) && WP_CLI ) ) {
 				require_once WPUM_PLUGIN_DIR . 'includes/filters/admin-filters.php';
 				require_once WPUM_PLUGIN_DIR . 'includes/classes/class-wpum-notices.php';
