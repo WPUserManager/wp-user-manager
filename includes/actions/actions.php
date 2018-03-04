@@ -61,3 +61,20 @@ function wpum_restrict_wp_lostpassword() {
 
 }
 add_action( 'login_form_lostpassword', 'wpum_restrict_wp_lostpassword' );
+
+/**
+ * Restrict access to WordPress admin profile.
+ *
+ * @return void
+ */
+function wpum_restrict_wp_profile() {
+
+	$profile_redirect = wpum_get_option( 'backend_profile_redirect' );
+
+	if ( ! current_user_can( 'administrator' ) && IS_PROFILE_PAGE && $profile_redirect ) {
+		wp_safe_redirect( esc_url( get_permalink( $profile_redirect[0] ) ) );
+		exit;
+	}
+
+}
+add_action( 'load-profile.php', 'wpum_restrict_wp_profile' );
