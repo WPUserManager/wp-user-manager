@@ -44,3 +44,20 @@ function wpum_restrict_wp_registration() {
 
 }
 add_action( 'login_form_register', 'wpum_restrict_wp_registration' );
+
+/**
+ * Restrict access to wp-login.php?action=lostpassword
+ *
+ * @return void
+ */
+function wpum_restrict_wp_lostpassword() {
+
+	$password_redirect = wpum_get_option( 'wp_login_password_redirect' );
+
+	if( $password_redirect ) {
+		wp_safe_redirect( esc_url( get_permalink( $password_redirect[0] ) ) );
+		exit;
+	}
+
+}
+add_action( 'login_form_lostpassword', 'wpum_restrict_wp_lostpassword' );
