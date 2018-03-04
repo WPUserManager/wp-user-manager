@@ -15,9 +15,14 @@ if ( ! defined( 'ABSPATH' ) ) exit;
  *
  * @return array
  */
-function wpum_get_pages() {
+function wpum_get_pages( $force = false ) {
 
-	$pages     = [];
+	$pages = [];
+
+	if ( ( ! isset( $_GET['page'] ) || 'wpum-settings' != $_GET['page'] ) && ! $force ) {
+		return $pages;
+	}
+
 	$transient =  get_transient( 'wpum_get_pages' );
 
 	if ( $transient ) {
@@ -55,9 +60,14 @@ function wpum_get_login_methods() {
  *
  * @return array
  */
-function wpum_get_roles() {
+function wpum_get_roles( $force = false ) {
 
 	$roles = [];
+
+	if ( ( ! isset( $_GET['page'] ) || 'wpum-settings' != $_GET['page'] ) && ! $force ) {
+		return $roles;
+	}
+
 	$transient =  get_transient( 'wpum_get_roles' );
 
 	if ( $transient ) {

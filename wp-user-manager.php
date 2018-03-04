@@ -93,17 +93,26 @@ if ( ! class_exists( 'WP_User_Manager' ) ) :
 		 * @return void
 		 */
 		private function includes() {
+
 			require __DIR__ . '/vendor/autoload.php';
 
-			if ( is_admin() || ( defined( 'WP_CLI' ) && WP_CLI ) ) {
-				require_once WPUM_PLUGIN_DIR . 'includes/functions/admin-functions.php';
-				require_once WPUM_PLUGIN_DIR . 'includes/filters/admin-filters.php';
+			// Store options in global variable.
+			global $wpum_options;
+			require_once WPUM_PLUGIN_DIR . 'includes/functions/options-functions.php';
+			$wpum_options = wpum_get_settings();
 
+			require_once WPUM_PLUGIN_DIR . 'includes/functions/admin-functions.php';
+			require_once WPUM_PLUGIN_DIR . 'includes/functions/global-functions.php';
+
+			require_once WPUM_PLUGIN_DIR . 'includes/actions/actions.php';
+
+			if ( is_admin() || ( defined( 'WP_CLI' ) && WP_CLI ) ) {
+				require_once WPUM_PLUGIN_DIR . 'includes/filters/admin-filters.php';
 				require_once WPUM_PLUGIN_DIR . 'includes/classes/class-wpum-notices.php';
-				require_once WPUM_PLUGIN_DIR . 'includes/classes/class-wpum-options-panel.php';
 				require_once WPUM_PLUGIN_DIR . 'includes/classes/class-wpum-user-table.php';
 			}
 
+			require_once WPUM_PLUGIN_DIR . 'includes/classes/class-wpum-options-panel.php';
 			require_once WPUM_PLUGIN_DIR . 'includes/install.php';
 
 		}
