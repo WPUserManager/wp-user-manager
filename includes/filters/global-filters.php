@@ -17,6 +17,11 @@ if ( ! defined( 'ABSPATH' ) ) exit;
  * @return void
  */
 function wpum_set_registration_url( $url ) {
-	return esc_url( get_permalink( wpum_get_core_page_id( 'register' ) ) );
+	$registration_page = wpum_get_core_page_id( 'register' );
+	if ( $registration_page ) {
+		return esc_url( get_permalink( $registration_page ) );
+	} else {
+		return $url;
+	}
 }
 add_filter( 'register_url', 'wpum_set_registration_url' );
