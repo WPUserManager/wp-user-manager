@@ -25,3 +25,23 @@ function wpum_set_registration_url( $url ) {
 	}
 }
 add_filter( 'register_url', 'wpum_set_registration_url' );
+
+/**
+ * Modify the url of the wp_lostpassword_url() function.
+ *
+ * @param string $url
+ * @param string $redirect
+ * @return void
+ */
+function wpum_set_lostpassword_url( $url, $redirect ) {
+
+	$password_page = wpum_get_core_page_id( 'password' );
+
+	if ( $password_page ) {
+		return esc_url( get_permalink( $password_page ) );
+	} else {
+		return $url;
+	}
+
+}
+add_filter( 'lostpassword_url', 'wpum_set_lostpassword_url', 10, 2 );
