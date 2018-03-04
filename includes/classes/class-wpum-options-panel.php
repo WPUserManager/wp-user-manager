@@ -210,6 +210,12 @@ class WPUM_Options_Panel {
 			],
 			'login' => [
 				array(
+					'id'   => 'lock_wplogin',
+					'name' => __( 'Lock access to wp-login.php:', 'wpum' ),
+					'desc' => __('Enable to lock access to wp-login.php. Users will be redirected to the WPUM login page.', 'wpum'),
+					'type' => 'checkbox'
+				),
+				array(
 					'id'      => 'login_method',
 					'name'    => __( 'Allow users to login with:', 'wpum' ),
 					'type'    => 'select',
@@ -227,7 +233,7 @@ class WPUM_Options_Panel {
 					'labels'   => array( 'placeholder' => __( 'Select one or more user roles from the list.' ) ),
 					'options'  => wpum_get_roles()
 				),
-				'exclude_usernames' => array(
+				array(
 					'id'   => 'exclude_usernames',
 					'name' => __( 'Excluded usernames:', 'wpum' ),
 					'desc' => __('Enter the usernames that you wish to disable. Separate each username on a new line.', 'wpum'),
