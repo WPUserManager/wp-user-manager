@@ -3,6 +3,7 @@
         "wearerequired/wp-requirements-check": "^1.0",
         "alessandrotesoro/wp-optionskit": "^1.0",
         "alessandrotesoro/wp-notices": "^1.0",
-        "htmlburger/carbon-fields": "^2.1"
+        "htmlburger/carbon-fields": "^2.1",
+        "gamajo/template-loader": "^1.3"
     }
 }

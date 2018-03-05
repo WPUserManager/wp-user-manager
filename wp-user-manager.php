@@ -58,6 +58,13 @@ if ( ! class_exists( 'WP_User_Manager' ) ) :
 		public $notices;
 
 		/**
+		 * Store the template loader object.
+		 *
+		 * @var object
+		 */
+		public $templates;
+
+		/**
 		 * Main WPUM Instance.
 		 *
 		 * Ensures that only one instance of WPUM exists in memory at any one
@@ -83,6 +90,7 @@ if ( ! class_exists( 'WP_User_Manager' ) ) :
 			$this->setup_constants();
 			$this->autoload();
 			$this->autoload_options();
+			$this->setup_templates();
 			$this->includes();
 			$this->init_hooks();
 
@@ -107,6 +115,16 @@ if ( ! class_exists( 'WP_User_Manager' ) ) :
 			global $wpum_options;
 			require_once WPUM_PLUGIN_DIR . 'includes/functions/options-functions.php';
 			$wpum_options = wpum_get_settings();
+		}
+
+		/**
+		 * Setup the template loader.
+		 *
+		 * @return void
+		 */
+		private function setup_templates() {
+			require_once WPUM_PLUGIN_DIR . 'includes/classes/class-wpum-template-loader.php';
+			$this->templates = new WPUM_Template_Loader;
 		}
 
 		/**
