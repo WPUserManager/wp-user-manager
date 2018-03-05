@@ -80,11 +80,33 @@ if ( ! class_exists( 'WP_User_Manager' ) ) :
 			// Verify the plugin can run first. If not, disable the plugin automagically.
 			$this->plugin_can_run();
 
-			// Now run everything.
 			$this->setup_constants();
+			$this->autoload();
+			$this->autoload_options();
 			$this->includes();
 			$this->init_hooks();
 
+		}
+
+		/**
+		 * Autoload composer and other required classes.
+		 *
+		 * @return void
+		 */
+		private function autoload() {
+			require __DIR__ . '/vendor/autoload.php';
+			\Carbon_Fields\Carbon_Fields::boot();
+		}
+
+		/**
+		 * Load WPUM options.
+		 *
+		 * @return void
+		 */
+		private function autoload_options() {
+			global $wpum_options;
+			require_once WPUM_PLUGIN_DIR . 'includes/functions/options-functions.php';
+			$wpum_options = wpum_get_settings();
 		}
 
 		/**
@@ -94,19 +116,13 @@ if ( ! class_exists( 'WP_User_Manager' ) ) :
 		 */
 		private function includes() {
 
-			require __DIR__ . '/vendor/autoload.php';
-
-			// Store options in global variable.
-			global $wpum_options;
-			require_once WPUM_PLUGIN_DIR . 'includes/functions/options-functions.php';
-			$wpum_options = wpum_get_settings();
-
 			require_once WPUM_PLUGIN_DIR . 'includes/functions/admin-functions.php';
 			require_once WPUM_PLUGIN_DIR . 'includes/functions/global-functions.php';
-
 			require_once WPUM_PLUGIN_DIR . 'includes/actions/actions.php';
-
 			require_once WPUM_PLUGIN_DIR . 'includes/filters/global-filters.php';
+
+			require_once WPUM_PLUGIN_DIR . 'includes/classes/class-wpum-avatars.php';
+			require_once WPUM_PLUGIN_DIR . 'includes/classes/class-wpum-options-panel.php';
 
 			if ( is_admin() || ( defined( 'WP_CLI' ) && WP_CLI ) ) {
 				require_once WPUM_PLUGIN_DIR . 'includes/filters/admin-filters.php';
@@ -114,7 +130,6 @@ if ( ! class_exists( 'WP_User_Manager' ) ) :
 				require_once WPUM_PLUGIN_DIR . 'includes/classes/class-wpum-user-table.php';
 			}
 
-			require_once WPUM_PLUGIN_DIR . 'includes/classes/class-wpum-options-panel.php';
 			require_once WPUM_PLUGIN_DIR . 'includes/install.php';
 
 		}

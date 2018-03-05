@@ -357,21 +357,21 @@ class WPUM_Options_Panel {
 			'redirects' => [
 				array(
 					'id'      => 'login_redirect',
-					'name'    => __( 'Login', 'wpum' ),
+					'name'    => __( 'After login', 'wpum' ),
 					'desc'    => __('Select the page where you want to redirect users after they login.', 'wpum'),
 					'type'    => 'multiselect',
 					'options' => wpum_get_pages()
 				),
 				array(
 					'id'      => 'logout_redirect',
-					'name'    => __( 'Logout', 'wpum' ),
+					'name'    => __( 'After logout', 'wpum' ),
 					'desc'    => __( 'Select the page where you want to redirect users after they logout. If empty will return to wp-login.php', 'wpum'),
 					'type'    => 'multiselect',
 					'options' => wpum_get_pages()
 				),
 				array(
 					'id'      => 'registration_redirect',
-					'name'    => __( 'Registration', 'wpum' ),
+					'name'    => __( 'After registration', 'wpum' ),
 					'desc'    => __( 'Select the page where you want to redirect users after they successfully register. If empty a message will be displayed instead.', 'wpum'),
 					'type'    => 'multiselect',
 					'options' => wpum_get_pages()
