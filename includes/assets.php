@@ -16,7 +16,7 @@ if ( ! defined( 'ABSPATH' ) ) exit;
  * @return void
  */
 function wpum_load_scripts() {
-	wp_register_script( 'wpum-vuejs-dev', 'http://localhost:8080/app.js', array(), WPUM_VERSION, true );
+	wp_register_script( 'wpum-vuejs-dev', 'http://localhost:8080/login.js', array(), WPUM_VERSION, true );
 	wp_enqueue_script( 'wpum-vuejs-dev' );
 }
 add_action( 'wp_enqueue_scripts', 'wpum_load_scripts' );

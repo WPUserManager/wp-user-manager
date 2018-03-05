@@ -20,7 +20,7 @@ function wpum_login_form( $atts, $content = null ) {
 
 	ob_start();
 
-	echo '<div id="app"></div>';
+	echo '<div id="wpum-login-form"></div>';
 
 	$output = ob_get_clean();
 
