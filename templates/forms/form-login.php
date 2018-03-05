@@ -20,7 +20,7 @@
 
 	<form action="#" method="post">
 		<p>
-			<label for="user-login"><?php esc_html_e( 'Username' ); ?></label>
+			<label for="user-login"><?php echo esc_html( $data->login_label ); ?></label>
 			<input type="text" class="wpum-form-input" name="user-login" id="user-login">
 		</p>
 		<p>

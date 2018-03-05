@@ -20,7 +20,9 @@ function wpum_login_form( $atts, $content = null ) {
 
 	ob_start();
 
-	WPUM()->templates->get_template_part( 'forms/form', 'login' );
+	WPUM()->templates
+		->set_template_data( [ 'psw' => $psw_link, 'register' => $register_link, 'login_label' => wpum_get_login_label() ] )
+		->get_template_part( 'forms/form', 'login' );
 
 	$output = ob_get_clean();
 

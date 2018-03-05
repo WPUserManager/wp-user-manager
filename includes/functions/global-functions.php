@@ -105,3 +105,18 @@ function wpum_list_pluck( $list, $field, $index_key = null ) {
 	$list = $newlist;
 	return $list;
 }
+
+function wpum_get_login_label() {
+
+	$label        = esc_html__( 'Username' );
+	$login_method = wpum_get_option( 'login_method' );
+
+	if( $login_method == 'email' ) {
+		$label = esc_html__( 'Email' );
+	} elseif( $login_method == 'username_email' ) {
+		$label = esc_html__( 'Username or email' );
+	}
+
+	return $label;
+
+}
