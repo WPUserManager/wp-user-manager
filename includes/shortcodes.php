@@ -9,3 +9,22 @@
  */
 
 if ( ! defined( 'ABSPATH' ) ) exit;
+
+function wpum_login_form( $atts, $content = null ) {
+
+	extract( shortcode_atts( array(
+		'login_link'     => '',
+		'psw_link'       => '',
+		'register_link'  => ''
+	), $atts ) );
+
+	ob_start();
+
+	echo '<div id="app"></div>';
+
+	$output = ob_get_clean();
+
+	return $output;
+
+}
+add_shortcode( 'wpum_login_form', 'wpum_login_form' );

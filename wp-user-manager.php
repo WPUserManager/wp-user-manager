@@ -125,6 +125,7 @@ if ( ! class_exists( 'WP_User_Manager' ) ) :
 			require_once WPUM_PLUGIN_DIR . 'includes/classes/class-wpum-options-panel.php';
 
 			require_once WPUM_PLUGIN_DIR . 'includes/shortcodes.php';
+			require_once WPUM_PLUGIN_DIR . 'includes/assets.php';
 
 			if ( is_admin() || ( defined( 'WP_CLI' ) && WP_CLI ) ) {
 				require_once WPUM_PLUGIN_DIR . 'includes/filters/admin-filters.php';
