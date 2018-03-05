@@ -20,7 +20,7 @@ function wpum_login_form( $atts, $content = null ) {
 
 	ob_start();
 
-	echo '<div id="wpum-login-form"></div>';
+	WPUM()->templates->get_template_part( 'forms/form', 'login' );
 
 	$output = ob_get_clean();
 
