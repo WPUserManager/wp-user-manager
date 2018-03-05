@@ -124,8 +124,12 @@ if ( ! class_exists( 'WP_User_Manager' ) ) :
 			require_once WPUM_PLUGIN_DIR . 'includes/classes/class-wpum-avatars.php';
 			require_once WPUM_PLUGIN_DIR . 'includes/classes/class-wpum-options-panel.php';
 
+			require_once WPUM_PLUGIN_DIR . 'includes/shortcodes.php';
+
 			if ( is_admin() || ( defined( 'WP_CLI' ) && WP_CLI ) ) {
 				require_once WPUM_PLUGIN_DIR . 'includes/filters/admin-filters.php';
+				require_once WPUM_PLUGIN_DIR . 'includes/actions/admin-actions.php';
+
 				require_once WPUM_PLUGIN_DIR . 'includes/classes/class-wpum-notices.php';
 				require_once WPUM_PLUGIN_DIR . 'includes/classes/class-wpum-user-table.php';
 
