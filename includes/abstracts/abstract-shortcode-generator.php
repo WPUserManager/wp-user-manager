@@ -309,4 +309,13 @@ abstract class WPUM_Shortcode_Generator {
 		return false;
 	}
 
+	/**
+	 * Retrieve the yes or no option for listboxes.
+	 *
+	 * @return array
+	 */
+	protected function get_yes_no() {
+		return [ 'yes' => esc_html__( 'Yes' ), 'no' => esc_html__( 'No' ) ];
+	}
+
 }

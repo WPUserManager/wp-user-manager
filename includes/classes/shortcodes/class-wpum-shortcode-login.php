@@ -10,37 +10,46 @@
 // Exit if accessed directly
 if ( ! defined( 'ABSPATH' ) ) exit;
 
+/**
+ * Add login shortcode window to the editor.
+ */
 class WPUM_Shortcode_Login extends WPUM_Shortcode_Generator {
 
+	/**
+	 * Inject the editor for this shortcode.
+	 */
 	public function __construct() {
-		$this->shortcode['title'] = esc_html__( 'Login' );
-		$this->shortcode['label'] = esc_html__( 'Login' );
-		parent::__construct( 'wpum_login' );
+		$this->shortcode['title'] = esc_html__( 'Login form' );
+		$this->shortcode['label'] = esc_html__( 'Login form' );
+		parent::__construct( 'wpum_login_form' );
 	}
 
+	/**
+	 * Setup fields for the login shortcode window.
+	 *
+	 * @return array
+	 */
 	public function define_fields() {
-		return array(
+		return [
 			array(
-				'type' => 'container',
-				'html' => sprintf( '<p class="no-margin">%s</p>', esc_html__( 'Login Redirect URL (optional):' ) ),
+				'type'    => 'listbox',
+				'name'    => 'profile',
+				'label'   => esc_html__( 'Show profile:' ),
+				'options' => $this->get_yes_no(),
 			),
 			array(
-				'type'     => 'textbox',
-				'name'     => 'login-redirect',
-				'minWidth' => 320,
-				'tooltip'  => esc_attr__( 'Enter an URL here to redirect to after login.' ),
+				'type'    => 'listbox',
+				'name'    => 'psw_link',
+				'label'   => esc_html__( 'Show password link:' ),
+				'options' => $this->get_yes_no(),
 			),
-            array(
-                'type' => 'container',
-                'html' => sprintf( '<p class="no-margin">%s</p>', esc_html__( 'Logout Redirect URL (optional):' ) ),
-            ),
-            array(
-                'type'     => 'textbox',
-                'name'     => 'logout-redirect',
-                'minWidth' => 320,
-                'tooltip'  => esc_attr__( 'Enter an URL here to redirect to after logout.' ),
-            ),
-		);
+			array(
+				'type'    => 'listbox',
+				'name'    => 'register_link',
+				'label'   => esc_html__( 'Show registration link:' ),
+				'options' => $this->get_yes_no(),
+			),
+		];
 	}
 
 }
