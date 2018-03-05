@@ -60,7 +60,7 @@ if ( ! class_exists( 'WP_User_Manager' ) ) :
 		/**
 		 * Main WPUM Instance.
 		 *
-		 * Ensures that only one instance of Give exists in memory at any one
+		 * Ensures that only one instance of WPUM exists in memory at any one
 		 * time. Also prevents needing to define globals all over the place.
 		 *
 		 * @return WPUM
@@ -128,6 +128,11 @@ if ( ! class_exists( 'WP_User_Manager' ) ) :
 				require_once WPUM_PLUGIN_DIR . 'includes/filters/admin-filters.php';
 				require_once WPUM_PLUGIN_DIR . 'includes/classes/class-wpum-notices.php';
 				require_once WPUM_PLUGIN_DIR . 'includes/classes/class-wpum-user-table.php';
+
+				require_once WPUM_PLUGIN_DIR . 'includes/abstracts/abstract-shortcode-generator.php';
+				require_once WPUM_PLUGIN_DIR . 'includes/classes/shortcodes/class-wpum-shortcode-button.php';
+				require_once WPUM_PLUGIN_DIR . 'includes/classes/shortcodes/class-wpum-shortcode-login.php';
+				require_once WPUM_PLUGIN_DIR . 'includes/classes/shortcodes/class-wpum-shortcode-login2.php';
 			}
 
 			require_once WPUM_PLUGIN_DIR . 'includes/install.php';

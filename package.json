@@ -1,0 +1,44 @@
+{
+  "name": "wp-user-manager",
+  "title": "WP User Manager",
+  "description": "Plugin",
+  "version": "2.0.0",
+  "homepage": "http://wpusermanager.com",
+  "author": {
+    "name": "Alessandro Tesoro",
+    "url": "http://alessandrotesoro.me"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/alessandrotesoro/wp-user-manager.git"
+  },
+  "devDependencies": {
+    "git-changelog": "^0.1.8",
+    "grunt": "~0.4.5",
+    "grunt-bump": "latest",
+    "grunt-contrib-clean": "~0.6.0",
+    "grunt-contrib-compress": "~0.12.0",
+    "grunt-contrib-concat": "~0.5.0",
+    "grunt-contrib-copy": "~0.7.0",
+    "grunt-contrib-cssmin": "~0.10.0",
+    "grunt-contrib-jshint": "~0.10.0",
+    "grunt-contrib-sass": "~0.8.0",
+    "grunt-contrib-uglify": "~0.6.0",
+    "grunt-contrib-watch": "~0.6.1",
+    "grunt-git": "^0.3.4",
+    "grunt-github-changes": "0.0.6",
+    "grunt-mkdir": "^0.1.2",
+    "grunt-prompt": "~1.3.0",
+    "grunt-push-svn": "^0.2.1",
+    "grunt-remove": "^0.1.0",
+    "grunt-shell": "~0.6.1",
+    "grunt-svn-checkout": "^0.1.1",
+    "grunt-svn-copy": "^0.1.4",
+    "grunt-text-replace": "^0.4.0",
+    "grunt-wp-i18n": "~0.4.0",
+    "load-grunt-tasks": "^0.6.0",
+    "lodash": "~2.4.1",
+    "semver": "~2.2.1"
+  },
+  "keywords": []
+}
