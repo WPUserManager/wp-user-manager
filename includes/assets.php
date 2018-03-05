@@ -16,7 +16,21 @@ if ( ! defined( 'ABSPATH' ) ) exit;
  * @return void
  */
 function wpum_load_scripts() {
-	wp_register_script( 'wpum-vuejs-dev', 'http://localhost:8080/login.js', array(), WPUM_VERSION, true );
-	wp_enqueue_script( 'wpum-vuejs-dev' );
+
+	// Determine wether vuejs is running in dev mode.
+	// If so, load all .js files into the "src" folder from the webpack server.
+	$is_vue_dev = defined( 'WPUM_VUE_DEV' ) && WPUM_VUE_DEV ? true : false;
+
+	if( $is_vue_dev ) {
+		$vuefiles = array();
+		foreach ( glob( WPUM_PLUGIN_DIR . 'src/*.js' ) as $file ) {
+			$vuefiles[] = basename( $file );
+		}
+		foreach( $vuefiles as $jsfile ) {
+			wp_register_script( $jsfile, 'http://localhost:8080/' . $jsfile, array(), WPUM_VERSION, true );
+			wp_enqueue_script( $jsfile );
+		}
+	}
+
 }
 add_action( 'wp_enqueue_scripts', 'wpum_load_scripts' );
