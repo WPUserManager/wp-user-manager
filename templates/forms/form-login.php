@@ -17,7 +17,7 @@
 if ( ! defined( 'ABSPATH' ) ) exit;
 ?>
 
-<div class="wpum-template wpum-form wpum-login-form">
+<span class="wpum-template wpum-form wpum-login-form">
 
 	<?php do_action( 'wpum_before_login_form' ); ?>
 
@@ -25,21 +25,45 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 
 		<?php foreach ( $data->fields as $key => $field ) : ?>
 			<fieldset class="fieldset-<?php echo esc_attr( $key ); ?>">
-				<label for="<?php echo esc_attr( $key ); ?>">
-					<?php echo esc_html( $field['label'] ); ?>
-					<?php if( isset( $field['required'] ) && $field['required'] ) : ?>
-						<span class="wpum-required">*</span>
-					<?php endif; ?>
-				</label>
-				<div class="field <?php echo $field['required'] ? 'required-field' : ''; ?>">
-					<?php
-						// Add the key to field.
-						$field[ 'key' ] = $key;
-						WPUM()->templates
-							->set_template_data( $field )
-							->get_template_part( 'form-fields/' . $field['type'], 'field' );
-					?>
-				</div>
+
+				<?php if( $field['type'] == 'checkbox' ) : ?>
+
+					<label for="<?php echo esc_attr( $key ); ?>">
+						<span class="field <?php echo $field['required'] ? 'required-field' : ''; ?>">
+							<?php
+								// Add the key to field.
+								$field[ 'key' ] = $key;
+								WPUM()->templates
+									->set_template_data( $field )
+									->get_template_part( 'form-fields/' . $field['type'], 'field' );
+							?>
+						</span>
+						<?php echo esc_html( $field['label'] ); ?>
+						<?php if( isset( $field['required'] ) && $field['required'] ) : ?>
+							<span class="wpum-required">*</span>
+						<?php endif; ?>
+					</label>
+
+				<?php else : ?>
+
+					<label for="<?php echo esc_attr( $key ); ?>">
+						<?php echo esc_html( $field['label'] ); ?>
+						<?php if( isset( $field['required'] ) && $field['required'] ) : ?>
+							<span class="wpum-required">*</span>
+						<?php endif; ?>
+					</label>
+					<div class="field <?php echo $field['required'] ? 'required-field' : ''; ?>">
+						<?php
+							// Add the key to field.
+							$field[ 'key' ] = $key;
+							WPUM()->templates
+								->set_template_data( $field )
+								->get_template_part( 'form-fields/' . $field['type'], 'field' );
+						?>
+					</div>
+
+				<?php endif; ?>
+
 			</fieldset>
 		<?php endforeach; ?>
 
