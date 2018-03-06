@@ -12,29 +12,36 @@
  *
  * @version 1.0.0
  */
+
+// Exit if accessed directly
+if ( ! defined( 'ABSPATH' ) ) exit;
 ?>
 
 <div class="wpum-template wpum-form wpum-login-form">
 
 	<?php do_action( 'wpum_before_login_form' ); ?>
 
-	<form action="#" method="post">
-		<p>
-			<label for="user-login"><?php echo esc_html( $data->login_label ); ?></label>
-			<input type="text" class="wpum-form-input" name="user-login" id="user-login">
-		</p>
-		<p>
-			<label for="user-password"><?php esc_html_e( 'Password' ); ?></label>
-			<input type="password" class="wpum-form-input" name="user-password" id="user-password">
-		</p>
-		<p>
-			<input type="submit" class="button button-primary" value="<?php esc_html_e( 'Login' ); ?>">
-			<span>
-				<label for="remember-me">
-					<input type="checkbox" name="remember-me" id="remember-me"> <?php esc_html_e( 'Remember me' ); ?>
-				</label>
-			</span>
-		</p>
+	<form action="<?php echo esc_url( $data->action ); ?>" method="post" id="wpum-submit-login-form" enctype="multipart/form-data">
+
+		<?php foreach ( $data->fields as $key => $field ) : ?>
+			<fieldset class="fieldset-<?php echo esc_attr( $key ); ?>">
+				<label for="<?php echo esc_attr( $key ); ?>"><?php echo $field['label'] . apply_filters( 'wpum_form_required_label', $field['required'] ? '' : ' <small>' . __( '(optional)' ) . '</small>', $field ); ?></label>
+				<div class="field <?php echo $field['required'] ? 'required-field' : ''; ?>">
+					<?php
+						// Add the key to field.
+						$field[ 'key' ] = $key;
+						WPUM()->templates
+							->set_template_data( $field )
+							->get_template_part( 'form-fields/' . $field['type'], 'field' );
+					?>
+				</div>
+			</fieldset>
+		<?php endforeach; ?>
+
+		<input type="hidden" name="wpum_form" value="<?php echo $data->form; ?>" />
+		<input type="hidden" name="step" value="<?php echo esc_attr( $data->step ); ?>" />
+		<input type="submit" name="submit_login" class="button" value="Login" />
+
 	</form>
 
 	<?php do_action( 'wpum_after_login_form' ); ?>

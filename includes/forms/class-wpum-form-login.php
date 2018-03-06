@@ -101,59 +101,32 @@ class WPUM_Form_Login extends WPUM_Form {
 	}
 
 	/**
-	 * Validates the posted fields.
+	 * Show the form.
 	 *
-	 * @param array $values
-	 * @throws Exception Uploaded file is not a valid mime-type or other validation error
-	 * @return bool|WP_Error True on success, WP_Error on failure
+	 * @return void
 	 */
-	protected function validate_fields( $values ) {
-		foreach ( $this->fields as $group_key => $group_fields ) {
-			foreach ( $group_fields as $key => $field ) {
-				if ( $field['required'] && empty( $values[ $group_key ][ $key ] ) ) {
-					return new WP_Error( 'validation-error', sprintf( __( '%s is a required field' ), $field['label'] ) );
-				}
-				if ( ! empty( $field['taxonomy'] ) && in_array( $field['type'], array( 'term-checklist', 'term-select', 'term-multiselect' ) ) ) {
-					if ( is_array( $values[ $group_key ][ $key ] ) ) {
-						$check_value = $values[ $group_key ][ $key ];
-					} else {
-						$check_value = empty( $values[ $group_key ][ $key ] ) ? array() : array( $values[ $group_key ][ $key ] );
-					}
-					foreach ( $check_value as $term ) {
-						if ( ! term_exists( $term, $field['taxonomy'] ) ) {
-							return new WP_Error( 'validation-error', sprintf( __( '%s is invalid' ), $field['label'] ) );
-						}
-					}
-				}
-				if ( 'file' === $field['type'] && ! empty( $field['allowed_mime_types'] ) ) {
-					if ( is_array( $values[ $group_key ][ $key ] ) ) {
-						$check_value = array_filter( $values[ $group_key ][ $key ] );
-					} else {
-						$check_value = array_filter( array( $values[ $group_key ][ $key ] ) );
-					}
-					if ( ! empty( $check_value ) ) {
-						foreach ( $check_value as $file_url ) {
-							$file_url  = current( explode( '?', $file_url ) );
-							$file_info = wp_check_filetype( $file_url );
-							if ( ! is_numeric( $file_url ) && $file_info && ! in_array( $file_info['type'], $field['allowed_mime_types'] ) ) {
-								throw new Exception( sprintf( __( '"%s" (filetype %s) needs to be one of the following file types: %s' ), $field['label'], $file_info['ext'], implode( ', ', array_keys( $field['allowed_mime_types'] ) ) ) );
-							}
-						}
-					}
-				}
-			}
-		}
-		return apply_filters( 'submit_job_form_validate_fields', true, $this->fields, $values );
-	}
-
 	public function submit() {
 
 		$this->init_fields();
 
-		echo 'humm here goes it';
+		$data = [
+			'form'   => $this->form_name,
+			'action' => $this->get_action(),
+			'fields' => $this->get_fields( 'login' ),
+			'step'   => $this->get_step()
+		];
+
+		WPUM()->templates
+			->set_template_data( $data )
+			->get_template_part( 'forms/form', 'login' );
 
 	}
 
+	/**
+	 * Handle submission of the form.
+	 *
+	 * @return void
+	 */
 	public function submit_handler() {
 		try {
 
@@ -161,7 +134,7 @@ class WPUM_Form_Login extends WPUM_Form {
 
 			$values = $this->get_posted_fields();
 
-			if ( empty( $_POST['submit_job'] ) ) {
+			if ( empty( $_POST['submit_login'] ) ) {
 				return;
 			}
 
