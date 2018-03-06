@@ -19,6 +19,11 @@ class WPUM_Form_Login extends WPUM_Form {
 	 */
 	public $form_name = 'login';
 
+	/**
+	 * Store the user id if any.
+	 *
+	 * @var [type]
+	 */
 	protected $user_id;
 
 	/**
@@ -56,7 +61,8 @@ class WPUM_Form_Login extends WPUM_Form {
 			),
 			'done' => array(
 				'name'     => __( 'Done' ),
-				'view'     => array( $this, 'done' ),
+				'view'     => false,
+				'handler'  => array( $this, 'done' ),
 				'priority' => 30
 			)
 		) );
@@ -142,6 +148,21 @@ class WPUM_Form_Login extends WPUM_Form {
 				throw new Exception( $return->get_error_message() );
 			}
 
+			$username = $values['login']['username'];
+			$password = $values['login']['password'];
+
+			$authenticate = wp_authenticate( $username, $password );
+
+			if( is_wp_error( $authenticate ) ) {
+
+				throw new Exception( $authenticate->get_error_message() );
+
+			} elseif( $authenticate instanceof WP_User ) {
+
+				$this->user_id = $authenticate->data->ID;
+
+			}
+
 			// Successful, show next step.
 			$this->step ++;
 
@@ -150,4 +171,39 @@ class WPUM_Form_Login extends WPUM_Form {
 			return;
 		}
 	}
+
+	/**
+	 * Sign the user in.
+	 *
+	 * @return void
+	 */
+	public function done() {
+
+		try {
+
+			$values   = $this->get_posted_fields();
+			$username = $values['login']['username'];
+			$password = $values['login']['password'];
+
+			$creds = [
+				'user_login'    => $username,
+				'user_password' => $password
+			];
+
+			$user = wp_signon( $creds, false );
+
+			if( is_wp_error( $user ) ) {
+				throw new Exception( $user->get_error_message() );
+			} else {
+				wp_safe_redirect( home_url() );
+				exit;
+			}
+
+		} catch ( Exception $e ) {
+			$this->add_error( $e->getMessage() );
+			return;
+		}
+
+	}
+
 }
