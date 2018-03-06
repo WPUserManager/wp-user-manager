@@ -30,6 +30,10 @@ function wpum_login_form( $atts, $content = null ) {
 
 	echo WPUM()->forms->get_form( 'login', $atts );
 
+	WPUM()->templates
+		->set_template_data( $atts )
+		->get_template_part( 'action-links' );
+
 	$output = ob_get_clean();
 
 	return $output;

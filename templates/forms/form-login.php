@@ -15,9 +15,10 @@
 
 // Exit if accessed directly
 if ( ! defined( 'ABSPATH' ) ) exit;
+
 ?>
 
-<span class="wpum-template wpum-form wpum-login-form">
+<div class="wpum-template wpum-form wpum-login-form">
 
 	<?php do_action( 'wpum_before_login_form' ); ?>
 
