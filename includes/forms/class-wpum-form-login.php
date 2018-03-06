@@ -90,7 +90,7 @@ class WPUM_Form_Login extends WPUM_Form {
 				),
 				'password' => array(
 					'label'       => __( 'Password' ),
-					'type'        => 'text',
+					'type'        => 'textarea',
 					'required'    => true,
 					'placeholder' => '',
 					'priority'    => 2
