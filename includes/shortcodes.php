@@ -10,6 +10,14 @@
 
 if ( ! defined( 'ABSPATH' ) ) exit;
 
+/**
+ * Login form shortcode.
+ * Vuejs handles the display of the form.
+ *
+ * @param array $atts
+ * @param string $content
+ * @return void
+ */
 function wpum_login_form( $atts, $content = null ) {
 
 	extract( shortcode_atts( array(
@@ -20,9 +28,7 @@ function wpum_login_form( $atts, $content = null ) {
 
 	ob_start();
 
-	WPUM()->templates
-		->set_template_data( [ 'psw' => $psw_link, 'register' => $register_link, 'login_label' => wpum_get_login_label() ] )
-		->get_template_part( 'forms/form', 'login' );
+	echo '<div id="wpum-login-form"></div>';
 
 	$output = ob_get_clean();
 

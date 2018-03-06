@@ -106,6 +106,11 @@ function wpum_list_pluck( $list, $field, $index_key = null ) {
 	return $list;
 }
 
+/**
+ * Retrieve the correct label for the login form.
+ *
+ * @return string
+ */
 function wpum_get_login_label() {
 
 	$label        = esc_html__( 'Username' );
