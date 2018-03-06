@@ -90,7 +90,7 @@ class WPUM_Form_Login extends WPUM_Form {
 				),
 				'password' => array(
 					'label'       => __( 'Password' ),
-					'type'        => 'checkbox',
+					'type'        => 'password',
 					'required'    => true,
 					'placeholder' => '',
 					'priority'    => 2
