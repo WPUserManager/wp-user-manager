@@ -82,7 +82,7 @@ class WPUM_Form_Login extends WPUM_Form {
 		$this->fields = apply_filters( 'login_form_fields', array(
 			'login' => array(
 				'username' => array(
-					'label'       => __( 'Username' ),
+					'label'       => wpum_get_login_label(),
 					'type'        => 'text',
 					'required'    => true,
 					'placeholder' => '',
