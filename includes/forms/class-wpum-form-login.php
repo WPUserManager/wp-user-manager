@@ -101,6 +101,12 @@ class WPUM_Form_Login extends WPUM_Form {
 					'placeholder' => '',
 					'priority'    => 2
 				),
+				'remember' => array(
+					'label'       => __( 'Remember me' ),
+					'type'        => 'checkbox',
+					'required'    => false,
+					'priority'    => 3
+				),
 			)
 		) );
 
@@ -190,7 +196,7 @@ class WPUM_Form_Login extends WPUM_Form {
 				'user_password' => $password
 			];
 
-			$user = wp_signon( $creds, false );
+			$user = wp_signon( $creds );
 
 			if( is_wp_error( $user ) ) {
 				throw new Exception( $user->get_error_message() );

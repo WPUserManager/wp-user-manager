@@ -25,7 +25,12 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 
 		<?php foreach ( $data->fields as $key => $field ) : ?>
 			<fieldset class="fieldset-<?php echo esc_attr( $key ); ?>">
-				<label for="<?php echo esc_attr( $key ); ?>"><?php echo $field['label'] . apply_filters( 'wpum_form_required_label', $field['required'] ? '' : ' <small>' . __( '(optional)' ) . '</small>', $field ); ?></label>
+				<label for="<?php echo esc_attr( $key ); ?>">
+					<?php echo esc_html( $field['label'] ); ?>
+					<?php if( isset( $field['required'] ) && $field['required'] ) : ?>
+						<span class="wpum-required">*</span>
+					<?php endif; ?>
+				</label>
 				<div class="field <?php echo $field['required'] ? 'required-field' : ''; ?>">
 					<?php
 						// Add the key to field.
