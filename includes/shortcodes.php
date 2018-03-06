@@ -28,7 +28,7 @@ function wpum_login_form( $atts, $content = null ) {
 
 	ob_start();
 
-	echo '<div id="wpum-login-form"></div>';
+	echo WPUM()->forms->get_form( 'login', $atts );
 
 	$output = ob_get_clean();
 

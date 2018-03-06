@@ -64,6 +64,8 @@ if ( ! class_exists( 'WP_User_Manager' ) ) :
 		 */
 		public $templates;
 
+		public $forms;
+
 		/**
 		 * Main WPUM Instance.
 		 *
@@ -93,6 +95,8 @@ if ( ! class_exists( 'WP_User_Manager' ) ) :
 			$this->setup_templates();
 			$this->includes();
 			$this->init_hooks();
+
+			$this->forms = WPUM_Forms::instance();
 
 		}
 
@@ -141,6 +145,7 @@ if ( ! class_exists( 'WP_User_Manager' ) ) :
 
 			require_once WPUM_PLUGIN_DIR . 'includes/classes/class-wpum-avatars.php';
 			require_once WPUM_PLUGIN_DIR . 'includes/classes/class-wpum-options-panel.php';
+			require_once WPUM_PLUGIN_DIR . 'includes/classes/class-wpum-forms.php';
 
 			require_once WPUM_PLUGIN_DIR . 'includes/shortcodes.php';
 			require_once WPUM_PLUGIN_DIR . 'includes/assets.php';
