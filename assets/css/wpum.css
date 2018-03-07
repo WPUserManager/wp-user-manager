@@ -39,6 +39,8 @@
     .wpum-form fieldset label small {
       opacity: .75;
       font-size: 0.83em; }
+    .wpum-form fieldset label .wpum-required {
+      color: red; }
   .wpum-form fieldset div.field {
     width: 70%;
     float: right;
@@ -73,5 +75,10 @@
   .wpum-form fieldset.fieldset-user_avatar .wpum-uploaded-file-preview img {
     width: 70px;
     height: 70px; }
+
+.wpum-action-links {
+  list-style: none;
+  padding: 0;
+  margin-top: 1em; }
 
 /*# sourceMappingURL=wpum.css.map */
