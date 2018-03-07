@@ -1,0 +1,69 @@
+/* Form elements */
+.wpum-form {
+	fieldset {
+		margin: 0 0 1em 0;
+		padding: 0 0 1em 0;
+		line-height: 2em;
+		border: 0;
+		border-bottom: 1px solid #ccc;
+		label {
+			display: block;
+			margin: 0;
+			width: 29%;
+			float: left;
+			vertical-align: middle;
+			small {
+				opacity: .75;
+				font-size: 0.83em;
+			}
+		}
+		div.field {
+			width: 70%;
+			float: right;
+			vertical-align: middle;
+			label {
+				float: none;
+				width: auto;
+			}
+			&.field-mailchimp {
+				label~small {
+					margin-top: 0;
+					margin-bottom: 1.2em;
+				}
+			}
+		}
+		input.input-text,
+		input.input-email,
+		textarea,
+		select {
+			margin: 0;
+			vertical-align: middle;
+			width: 100%;
+			-webkit-box-sizing: border-box;
+			/* Safari/Chrome, other WebKit */
+			-moz-box-sizing: border-box;
+			/* Firefox, other Gecko */
+			box-sizing: border-box;
+			/* Opera/IE 8+ */
+		}
+		small.description {
+			opacity: .75;
+			font-size: 0.83em;
+			margin: 1.2em 0 0 0;
+			display: block;
+			line-height: 1.2em;
+		}
+		input[type=checkbox]~.description {
+			display: inline;
+		}
+		&.fieldset-user_avatar {
+			.wpum-uploaded-file-preview {
+				img {
+					width: 70px;
+					height: 70px;
+				}
+			}
+		}
+	}
+}
+

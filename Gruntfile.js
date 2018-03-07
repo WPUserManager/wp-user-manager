@@ -71,6 +71,7 @@ module.exports = function( grunt ) {
 			all: {
 				files: {
 					'assets/css/admin/shortcodes.css': 'assets/css/src/admin/shortcodes.scss',
+					'assets/css/wpum.css': 'assets/css/src/wpum.scss',
 				}
 			}
 		},
@@ -120,7 +121,7 @@ module.exports = function( grunt ) {
 			minify: {
 				expand: true,
 
-				cwd: 'assets/css/**/',
+				cwd: 'assets/css/',
 				src: ['*.css', '!*.min.css'],
 
 				dest: 'assets/css/',

@@ -1,0 +1,5 @@
+/*! WP User Manager - v2.0.0
+ * http://wpusermanager.com
+ * Copyright (c) 2018; * Licensed GPLv2+ */
+
+.wpum-form fieldset{margin:0 0 1em;padding:0 0 1em;line-height:2em;border:0;border-bottom:1px solid #ccc}.wpum-form fieldset label{display:block;margin:0;width:29%;float:left;vertical-align:middle}.wpum-form fieldset label small{opacity:.75;font-size:.83em}.wpum-form fieldset div.field{width:70%;float:right;vertical-align:middle}.wpum-form fieldset div.field label{float:none;width:auto}.wpum-form fieldset div.field.field-mailchimp label~small{margin-top:0;margin-bottom:1.2em}.wpum-form fieldset input.input-email,.wpum-form fieldset input.input-text,.wpum-form fieldset select,.wpum-form fieldset textarea{margin:0;vertical-align:middle;width:100%;-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box}.wpum-form fieldset small.description{opacity:.75;font-size:.83em;margin:1.2em 0 0;display:block;line-height:1.2em}.wpum-form fieldset input[type=checkbox]~.description{display:inline}.wpum-form fieldset.fieldset-user_avatar .wpum-uploaded-file-preview img{width:70px;height:70px}

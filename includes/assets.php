@@ -32,5 +32,8 @@ function wpum_load_scripts() {
 		}
 	}
 
+	// Load frontend styles and scripts.
+	wp_enqueue_style( 'wpum-frontend', WPUM_PLUGIN_URL . 'assets/css/wpum.min.css', array(), WPUM_VERSION );
+
 }
 add_action( 'wp_enqueue_scripts', 'wpum_load_scripts' );
