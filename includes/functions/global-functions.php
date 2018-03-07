@@ -126,17 +126,20 @@ function wpum_get_login_label() {
 
 }
 
-function wpum_get_vuejs_allowed_tags() {
+/**
+ * Undocumented function
+ *
+ * @return void
+ */
+function wpum_get_login_redirect() {
 
-	$tags = [
-		'input',
-		'fieldset',
-		'label',
-		'div',
-		'span',
-		'form',
-	];
+	$redirect_to = wpum_get_option( 'login_redirect' );
+	$url         = home_url();
 
-	return apply_filters( 'wpum_get_vuejs_allowed_tags', $tags );
+	if( ! empty( $redirect_to ) && is_array( $redirect_to ) ) {
+		$url = get_permalink( $redirect_to[0] );
+	}
+
+	return apply_filters( 'wpum_get_login_redirect', esc_url( $url ) );
 
 }

@@ -201,7 +201,11 @@ class WPUM_Form_Login extends WPUM_Form {
 			if( is_wp_error( $user ) ) {
 				throw new Exception( $user->get_error_message() );
 			} else {
-				wp_safe_redirect( home_url() );
+				if( wp_get_referer() ) {
+					wp_safe_redirect( wp_get_referer() );
+				} else {
+					wp_safe_redirect( wpum_get_login_redirect() );
+				}
 				exit;
 			}
 
