@@ -36,6 +36,11 @@ class WPUM_Rest extends WP_REST_Controller {
 		add_action( 'wp_enqueue_scripts', [ $this, 'register_js_variables' ] );
 	}
 
+	/**
+	 * Add local js variables to the frontend.
+	 *
+	 * @return void
+	 */
 	public function register_js_variables() {
 
 		$rest_url = get_rest_url( null, $this->namespace . $this->version );
@@ -94,6 +99,8 @@ class WPUM_Rest extends WP_REST_Controller {
 	 * @return object
 	 */
 	public function get_form( WP_REST_Request $request ) {
+
+		check_ajax_referer( 'wpum_rest', 'nonce' );
 
 		$params = $request->get_params();
 

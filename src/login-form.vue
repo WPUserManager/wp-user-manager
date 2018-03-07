@@ -22,19 +22,23 @@ export default {
 	},
 	methods: {
 		createLoginForm() {
-			axios.get( wpumRest.rest + '/get-form/login' )
-				.then( response => {
-					if( typeof response.data.form !== 'undefined' ) {
-						this.loading = false
-						this.form = sanitizeHTML(response.data.form, {
-							  allowedTags: sanitizeHTML.defaults.allowedTags.concat( wpumRest.html_tags ),
-							  allowedAttributes: false
-						})
-					}
-				})
-				.catch(function (error) {
-					console.log(error);
-				});
+			axios.get( wpumRest.rest + '/get-form/login', {
+				params: {
+      				nonce: wpumRest.nonce
+    			}
+			} )
+			.then( response => {
+				if( typeof response.data.form !== 'undefined' ) {
+					this.loading = false
+					this.form = sanitizeHTML(response.data.form, {
+						  allowedTags: sanitizeHTML.defaults.allowedTags.concat( wpumRest.html_tags ),
+						  allowedAttributes: false
+					})
+				}
+			})
+			.catch(function (error) {
+				console.log(error);
+			});
 
 		}
 	}
