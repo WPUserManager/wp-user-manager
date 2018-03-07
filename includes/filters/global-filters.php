@@ -45,3 +45,47 @@ function wpum_set_lostpassword_url( $url, $redirect ) {
 
 }
 add_filter( 'lostpassword_url', 'wpum_set_lostpassword_url', 10, 2 );
+
+/**
+ * Validate authentication with the selected login method.
+ *
+ * @param object $user
+ * @param string $username
+ * @param string $password
+ * @return void
+ */
+function wpum_authentication( $user, $username, $password ) {
+
+	$authentication_method = wpum_get_option( 'login_method' );
+
+	if( $authentication_method == 'username' ) {
+
+		if( is_email( $username ) ) {
+			return new WP_Error( 'username_only', __( 'Invalid username or incorrect password.' ) );
+		}
+
+		return wp_authenticate_username_password( null, $username, $password );
+
+	} elseif( $authentication_method == 'email' ) {
+
+		if( ! empty( $username ) && is_email( $username ) ) {
+
+			$user = get_user_by( 'email', $username );
+
+			if ( isset( $user, $user->user_login, $user->user_status ) && 0 == (int) $user->user_status ) {
+				$username = $user->user_login;
+				return wp_authenticate_username_password( null, $username, $password );
+			}
+
+		} else {
+
+			return new WP_Error( 'email_only', __( 'Invalid email address or incorrect password.' ) );
+
+		}
+
+	}
+
+	return $user;
+
+}
+add_filter( 'authenticate', 'wpum_authentication', 20, 3 );
