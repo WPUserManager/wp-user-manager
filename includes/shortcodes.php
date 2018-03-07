@@ -28,11 +28,16 @@ function wpum_login_form( $atts, $content = null ) {
 
 	ob_start();
 
-	echo WPUM()->forms->get_form( 'login', $atts );
+	if( is_user_logged_in() ) {
+		WPUM()->templates
+			->get_template_part( 'already-logged-in' );
+	} else {
+		echo WPUM()->forms->get_form( 'login', $atts );
 
-	WPUM()->templates
-		->set_template_data( $atts )
-		->get_template_part( 'action-links' );
+		WPUM()->templates
+			->set_template_data( $atts )
+			->get_template_part( 'action-links' );
+	}
 
 	$output = ob_get_clean();
 

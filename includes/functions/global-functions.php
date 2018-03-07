@@ -127,9 +127,9 @@ function wpum_get_login_label() {
 }
 
 /**
- * Undocumented function
+ * Retrieve the url where to redirect the user after login.
  *
- * @return void
+ * @return string
  */
 function wpum_get_login_redirect() {
 
@@ -141,5 +141,24 @@ function wpum_get_login_redirect() {
 	}
 
 	return apply_filters( 'wpum_get_login_redirect', esc_url( $url ) );
+
+}
+
+/**
+ * Retrieve the logout redirect url.
+ *
+ * @return string
+ */
+function wpum_get_logout_url() {
+
+	$redirect = wpum_get_option( 'logout_redirect' );
+
+	if( ! empty( $redirect ) && is_array( $redirect ) ) {
+		$redirect = get_permalink( $redirect[0] );
+	}
+
+	$logout_url = wp_logout_url( $redirect );
+
+	return $logout_url;
 
 }
