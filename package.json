@@ -19,6 +19,7 @@
   },
   "dependencies": {
     "axios": "^0.18.0",
+    "form-serialize": "^0.7.2",
     "sanitize-html": "^1.18.2",
     "vue": "^2.5.2"
   },

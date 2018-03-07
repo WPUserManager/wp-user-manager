@@ -157,7 +157,6 @@ if ( ! class_exists( 'WP_User_Manager' ) ) :
 				require_once WPUM_PLUGIN_DIR . 'includes/classes/shortcodes/class-wpum-shortcode-login.php';
 			}
 
-			require_once WPUM_PLUGIN_DIR . 'includes/classes/api/class-wpum-rest.php';
 			require_once WPUM_PLUGIN_DIR . 'includes/install.php';
 
 		}
@@ -196,8 +195,6 @@ if ( ! class_exists( 'WP_User_Manager' ) ) :
 
 			$this->notices    = TDP\WP_Notice::instance();
 			$this->templates  = new WPUM_Template_Loader;
-			$wpum_rest_server = new WPUM_Rest();
-			$wpum_rest_server->init();
 
 			/**
 			 * @todo document after_wpum_init
