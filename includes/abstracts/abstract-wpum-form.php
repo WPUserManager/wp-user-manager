@@ -126,7 +126,7 @@ abstract class WPUM_Form {
 	 */
 	public function show_errors() {
 		foreach ( $this->errors as $error ) {
-			echo '<div class="wpum-error">' . $error . '</div>';
+			echo '<div class="wpum-message error">' . $error . '</div>';
 		}
 	}
 

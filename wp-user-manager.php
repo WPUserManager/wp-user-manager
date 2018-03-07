@@ -64,6 +64,11 @@ if ( ! class_exists( 'WP_User_Manager' ) ) :
 		 */
 		public $templates;
 
+		/**
+		 * Store all forms.
+		 *
+		 * @var object
+		 */
 		public $forms;
 
 		/**
