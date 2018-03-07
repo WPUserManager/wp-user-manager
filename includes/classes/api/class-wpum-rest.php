@@ -43,12 +43,9 @@ class WPUM_Rest extends WP_REST_Controller {
 	 */
 	public function register_js_variables() {
 
-		$rest_url = get_rest_url( null, $this->namespace . $this->version );
-		$nonce    = wp_create_nonce( 'wpum_rest' );
-
 		$js_variables = [
-			'rest'      => $rest_url,
-			'nonce'     => $nonce,
+			'rest'      => get_rest_url( null, $this->namespace . $this->version ),
+			'nonce'     => wp_create_nonce('wp_rest'),
 			'html_tags' => wpum_get_vuejs_allowed_tags()
 		];
 
@@ -100,7 +97,7 @@ class WPUM_Rest extends WP_REST_Controller {
 	 */
 	public function get_form( WP_REST_Request $request ) {
 
-		check_ajax_referer( 'wpum_rest', 'nonce' );
+		check_ajax_referer( 'wp_rest', '_wpnonce' );
 
 		$params = $request->get_params();
 
