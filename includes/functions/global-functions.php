@@ -125,3 +125,18 @@ function wpum_get_login_label() {
 	return $label;
 
 }
+
+function wpum_get_vuejs_allowed_tags() {
+
+	$tags = [
+		'input',
+		'fieldset',
+		'label',
+		'div',
+		'span',
+		'form',
+	];
+
+	return apply_filters( 'wpum_get_vuejs_allowed_tags', $tags );
+
+}

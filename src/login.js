@@ -7,7 +7,7 @@ Vue.config.productionTip = false
 
 /* eslint-disable no-new */
 new Vue({
-  	el: '#wpum-login-form',
+	el: '#wpum-login-form',
 	components: { LoginForm },
 	template: '<LoginForm/>'
 })

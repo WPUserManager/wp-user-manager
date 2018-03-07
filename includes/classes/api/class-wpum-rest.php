@@ -32,7 +32,23 @@ class WPUM_Rest extends WP_REST_Controller {
 	 * @return void
 	 */
 	public function init() {
-		add_action( 'rest_api_init', array( $this, 'register_routes' ) );
+		add_action( 'rest_api_init', [ $this, 'register_routes' ] );
+		add_action( 'wp_enqueue_scripts', [ $this, 'register_js_variables' ] );
+	}
+
+	public function register_js_variables() {
+
+		$rest_url = get_rest_url( null, $this->namespace . $this->version );
+		$nonce    = wp_create_nonce( 'wpum_rest' );
+
+		$js_variables = [
+			'rest'      => $rest_url,
+			'nonce'     => $nonce,
+			'html_tags' => wpum_get_vuejs_allowed_tags()
+		];
+
+		wp_localize_script( 'login.js', 'wpumRest', $js_variables );
+
 	}
 
 	/**
@@ -86,7 +102,7 @@ class WPUM_Rest extends WP_REST_Controller {
 		}
 
 		$response = [
-			'form' => do_shortcode( $params['form'] ),
+			'form' => $params['form'],
 		];
 
 		return rest_ensure_response( $response );

@@ -28,11 +28,14 @@ function wpum_login_form( $atts, $content = null ) {
 
 	ob_start();
 
+	/*
 	echo WPUM()->forms->get_form( 'login', $atts );
 
 	WPUM()->templates
 		->set_template_data( $atts )
-		->get_template_part( 'action-links' );
+		->get_template_part( 'action-links' );*/
+
+	echo '<div id="wpum-login-form"></div>';
 
 	$output = ob_get_clean();
 
