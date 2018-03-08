@@ -16,6 +16,12 @@
 // Exit if accessed directly
 if ( ! defined( 'ABSPATH' ) ) exit;
 
+$referrer = wp_get_referer();
+
+if( isset( $_GET['redirect_to'] ) ) {
+	$referrer = wp_validate_redirect( esc_url( $_GET['redirect_to'] ) );
+}
+
 ?>
 
 <div class="wpum-template wpum-form wpum-login-form">
@@ -70,7 +76,7 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 
 		<input type="hidden" name="wpum_form" value="<?php echo $data->form; ?>" />
 		<input type="hidden" name="step" value="<?php echo esc_attr( $data->step ); ?>" />
-		<input type="hidden" name="submit_referrer" value="<?php echo esc_url( wp_get_referer() ); ?>" />
+		<input type="hidden" name="submit_referrer" value="<?php echo esc_url( $referrer ); ?>" />
 		<input type="submit" name="submit_login" class="button" value="Login" />
 
 	</form>
