@@ -72,6 +72,13 @@ if ( ! class_exists( 'WP_User_Manager' ) ) :
 		public $forms;
 
 		/**
+		 * The email templates handler.
+		 *
+		 * @var object
+		 */
+		public $emails;
+
+		/**
 		 * Main WPUM Instance.
 		 *
 		 * Ensures that only one instance of WPUM exists in memory at any one
@@ -140,6 +147,7 @@ if ( ! class_exists( 'WP_User_Manager' ) ) :
 			require_once WPUM_PLUGIN_DIR . 'includes/classes/class-wpum-template-loader.php';
 			require_once WPUM_PLUGIN_DIR . 'includes/classes/class-wpum-avatars.php';
 			require_once WPUM_PLUGIN_DIR . 'includes/classes/class-wpum-options-panel.php';
+			require_once WPUM_PLUGIN_DIR . 'includes/emails/class-wpum-emails.php';
 			require_once WPUM_PLUGIN_DIR . 'includes/classes/class-wpum-forms.php';
 
 			require_once WPUM_PLUGIN_DIR . 'includes/shortcodes.php';
@@ -194,8 +202,9 @@ if ( ! class_exists( 'WP_User_Manager' ) ) :
 			 */
 			do_action( 'before_wpum_init' );
 
-			$this->notices    = TDP\WP_Notice::instance();
-			$this->templates  = new WPUM_Template_Loader;
+			$this->notices   = TDP\WP_Notice::instance();
+			$this->templates = new WPUM_Template_Loader;
+			$this->emails    = new WPUM_Emails;
 
 			/**
 			 * @todo document after_wpum_init
