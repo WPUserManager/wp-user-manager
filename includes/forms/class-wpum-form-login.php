@@ -193,7 +193,8 @@ class WPUM_Form_Login extends WPUM_Form {
 
 			$creds = [
 				'user_login'    => $username,
-				'user_password' => $password
+				'user_password' => $password,
+				'remember'      => $values['login']['remember'] ? true : false
 			];
 
 			$referrer = isset( $_POST['submit_referrer'] ) ? esc_url( $_POST['submit_referrer'] ): false;
