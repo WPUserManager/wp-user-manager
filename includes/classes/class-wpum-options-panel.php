@@ -300,6 +300,14 @@ class WPUM_Options_Panel {
 					'std'  => get_option( 'admin_email' )
 				),
 				array(
+					'id'   => 'email_template',
+					'name' => __( 'Email template:', 'wpum' ),
+					'desc' => __( 'Select the email template you wish to use for all emails sent by WPUM.', 'wpum' ),
+					'type' => 'select',
+					'std'  => 'default',
+					'options' => wpum_get_email_templates()
+				),
+				array(
 					'id'   => 'email_logo',
 					'name' => __( 'Logo', 'wpum' ),
 					'desc' => __( 'Upload or choose a logo to be displayed at the top of emails. Displayed on HTML emails only.', 'wpum' ),
