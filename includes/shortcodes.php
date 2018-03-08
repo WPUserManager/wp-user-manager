@@ -21,7 +21,6 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 function wpum_login_form( $atts, $content = null ) {
 
 	extract( shortcode_atts( array(
-		'login_link'     => '',
 		'psw_link'       => '',
 		'register_link'  => ''
 	), $atts ) );

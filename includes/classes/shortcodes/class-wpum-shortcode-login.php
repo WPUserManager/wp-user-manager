@@ -33,12 +33,6 @@ class WPUM_Shortcode_Login extends WPUM_Shortcode_Generator {
 		return [
 			array(
 				'type'    => 'listbox',
-				'name'    => 'profile',
-				'label'   => esc_html__( 'Show profile:' ),
-				'options' => $this->get_yes_no(),
-			),
-			array(
-				'type'    => 'listbox',
 				'name'    => 'psw_link',
 				'label'   => esc_html__( 'Show password link:' ),
 				'options' => $this->get_yes_no(),
