@@ -250,7 +250,7 @@ class WPUM_Emails {
 		$attachments = apply_filters( 'wpum_email_attachments', $attachments, $this );
 		$sent        = wp_mail( $to, $subject, $message, $this->get_headers(), $attachments );
 
-		do_action( 'affwp_email_send_after', $this );
+		do_action( 'wpum_email_send_after', $this );
 
 		return $sent;
 
