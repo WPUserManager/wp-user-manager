@@ -20,11 +20,11 @@ class WPUM_Form_Login extends WPUM_Form {
 	public $form_name = 'login';
 
 	/**
-	 * Store the user id if any.
+	 * Determine if there's a referrer.
 	 *
-	 * @var [type]
+	 * @var mixed
 	 */
-	protected $user_id;
+	protected $referrer;
 
 	/**
 	 * Stores static instance of class.
@@ -196,13 +196,14 @@ class WPUM_Form_Login extends WPUM_Form {
 				'user_password' => $password
 			];
 
-			$user = wp_signon( $creds );
+			$referrer = isset( $_POST['submit_referrer'] ) ? esc_url( $_POST['submit_referrer'] ): false;
+			$user     = wp_signon( $creds );
 
 			if( is_wp_error( $user ) ) {
 				throw new Exception( $user->get_error_message() );
 			} else {
-				if( wp_get_referer() ) {
-					wp_safe_redirect( wp_get_referer() );
+				if( ! empty( $referrer ) && ! empty( wp_validate_redirect( $referrer ) ) ) {
+					wp_safe_redirect( wp_validate_redirect( $referrer ) );
 				} else {
 					wp_safe_redirect( wpum_get_login_redirect() );
 				}

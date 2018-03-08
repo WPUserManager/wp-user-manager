@@ -57,11 +57,11 @@ function wpum_set_logout_url( $logout_url, $redirect ) {
 
 	$logout_redirect = wpum_get_option( 'logout_redirect' );
 
-	if( ! empty( $logout_redirect ) && is_array( $logout_redirect ) && ! $redirect ) {
+	if ( ! empty( $logout_redirect ) && is_array( $logout_redirect ) && ! $redirect ) {
 		$logout_redirect = get_permalink( $logout_redirect[0] );
 
 		$args = [
-			'action' => 'logout',
+			'action'      => 'logout',
 			'redirect_to' => $logout_redirect
 		];
 
