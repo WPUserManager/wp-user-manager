@@ -128,6 +128,12 @@ export default {
 					this.success = true
 				}
 
+				let self = this
+
+				setInterval(function() {
+					self.$data.success = false
+				}, 4000)
+
 			})
 			.catch( response => {
 				this.loading = false
