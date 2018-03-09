@@ -134,7 +134,7 @@ class WPUM_Emails_Customizer {
 
 		$email = isset( $_POST['email'] ) ? sanitize_email( $_POST['email'] ) : false;
 
-		if( $email && is_email( $email ) ) {
+		if( $email && is_email( $email ) && current_user_can( 'manage_options' ) && is_admin() ) {
 
 			$emails       = new WPUM_Emails;
 			$emails->__set( 'heading', esc_html__( 'Test email' ) );
