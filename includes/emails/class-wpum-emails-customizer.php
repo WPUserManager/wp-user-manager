@@ -80,7 +80,7 @@ class WPUM_Emails_Customizer {
 				'customize'         => esc_html__( 'Customize' ),
 				'send'              => esc_html__( 'Send test email' ),
 				'success'           => esc_html__( 'Test email successfully sent.' ),
-				'error'             => esc_html__( 'Something went wrong while sending the test email. Please check your server logs.' )
+				'error'             => esc_html__( 'Something went wrong while sending the test email. Please verify the email address you typed is correct or check your server logs.' )
 			]
 		];
 
@@ -145,6 +145,8 @@ class WPUM_Emails_Customizer {
 
 			$emails->send( $email, $subject, $message );
 
+		} else {
+			wp_die( -1, 403 );
 		}
 
 		wp_send_json_success();
