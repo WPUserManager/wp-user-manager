@@ -36,10 +36,10 @@
 							<span :class="getEmailStatusIcon( email.status )"></span>
 						</div>
 					</td>
-					<td><a href="#" v-text="sanitized(email.name)"></a></td>
+					<td><a :href="getCustomizationURL( index )" v-text="sanitized(email.name)"></a></td>
 					<td v-text="sanitized(email.description)"></td>
 					<td v-text="sanitized(email.recipient)"></td>
-					<td><a href="#" class="button"><span class="dashicons dashicons-edit"></span> <span v-text="sanitized(labels.customize)"></span></a></td>
+					<td><a :href="getCustomizationURL( index )" class="button"><span class="dashicons dashicons-edit"></span> <span v-text="sanitized(labels.customize)"></span></a></td>
 				</tr>
 			</tbody>
 			<tfoot>
@@ -102,8 +102,14 @@ export default {
 			return tooltipText
 		},
 		/**
+		 * Retrieve the url for the customization button.
+		 */
+		getCustomizationURL( index ) {
+			return wpumEmailsEditor.siteurl + qs.stringify({ wpum_email_customizer: true, wpum_email: index }, { addQueryPrefix: true })
+		},
+		/**
 		 * Send test email.
-		*/
+		 */
 		sendTestEmail: function (event) {
 			this.loading  = true
 			this.error = false

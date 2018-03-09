@@ -168,6 +168,8 @@ if ( ! class_exists( 'WP_User_Manager' ) ) :
 				require_once WPUM_PLUGIN_DIR . 'includes/classes/shortcodes/class-wpum-shortcode-password.php';
 			}
 
+			require_once WPUM_PLUGIN_DIR . 'includes/emails/class-wpum-emails-customizer.php';
+
 			require_once WPUM_PLUGIN_DIR . 'includes/install.php';
 
 		}

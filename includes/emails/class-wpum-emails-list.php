@@ -66,6 +66,7 @@ class WPUM_Emails_List {
 
 		$js_variables = [
 			'ajax'          => admin_url( 'admin-ajax.php' ),
+			'siteurl'       => admin_url( 'customize.php' ),
 			'nonce'         => wp_create_nonce( 'wpum_test_email' ),
 			'default_email' => get_option( 'admin_email' ),
 			'emails'        => $this->get_registered_emails(),
