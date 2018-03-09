@@ -11,7 +11,7 @@
 		</div>
 
 		<div class="wp-filter">
-			<form action="" class="search-form search-plugins">
+			<form action="" class="search-form search-plugins" v-on:submit.prevent="sendTestEmail">
 				<label>
 					<input name="email" :disabled="loading" v-model="test_email" class="wp-filter-search" :placeholder="labels.placeholder" type="text">
 				</label>
