@@ -1,6 +1,6 @@
 <?php
 /**
- * Handles the email templates customizer.
+ * Handles the email templates list in the backend.
  *
  * @package     wp-user-manager
  * @copyright   Copyright (c) 2018, Alessandro Tesoro
@@ -13,7 +13,7 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 /**
  * Class that handles the email customization functionalities.
  */
-class WPUM_Emails_Customizer {
+class WPUM_Emails_List {
 
 	/**
 	 * Get things started.
@@ -155,4 +155,4 @@ class WPUM_Emails_Customizer {
 
 }
 
-new WPUM_Emails_Customizer;
+new WPUM_Emails_List;
