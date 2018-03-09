@@ -1,17 +1,21 @@
 <template>
 	<div id="wpum-emails-list">
-		<h1>WPUM Emails Customization</h1>
+		<h1 v-text="sanitized(labels.title)"></h1>
 
 		<div class="notice notice-success is-dismissible" v-if="success">
-			<p><strong>Test email successfully sent.</strong></p>
+			<p><strong v-text="sanitized(labels.success)"></strong></p>
+		</div>
+
+		<div class="notice notice-error is-dismissible" v-if="error">
+			<p><strong v-text="sanitized(labels.error)"></strong></p>
 		</div>
 
 		<div class="wp-filter">
 			<form action="" class="search-form search-plugins">
 				<label>
-					<input name="email" value="" class="wp-filter-search" placeholder="Search plugins..." type="text">
+					<input name="email" :disabled="loading" v-model="test_email" class="wp-filter-search" :placeholder="labels.placeholder" type="text">
 				</label>
-				<a href="#" class="button"><span class="dashicons dashicons-email-alt"></span> Send test mail</a>
+				<a href="#" class="button" v-on:click="sendTestEmail" :disabled="loading"><span class="dashicons dashicons-email-alt"></span> <span v-text="sanitized(labels.send)" class="send-text"></span></a>
 				<div class="spinner is-active" v-if="loading"></div>
 			</form>
 		</div>
@@ -19,38 +23,31 @@
 			<thead>
 				<tr>
 					<th scope="col" class="icon-col"></th>
-					<th scope="col" class="column-primary">Email</th>
-					<th scope="col">Description</th>
-					<th scope="col">Recipient(s)</th>
+					<th scope="col" class="column-primary" v-text="sanitized(labels.email)"></th>
+					<th scope="col" v-text="sanitized(labels.description)"></th>
+					<th scope="col" v-text="sanitized(labels.recipients)"></th>
 					<th scope="col"></th>
 				</tr>
 			</thead>
 			<tbody>
-				<tr>
+				<tr v-for="(email, index) in emails" :key="index">
 					<td>
-						<div data-balloon="I'm a tooltip." data-balloon-pos="right">
-							<span class="dashicons dashicons-yes"></span>
+						<div :data-balloon="getTooltip( email.status )" data-balloon-pos="right">
+							<span :class="getEmailStatusIcon( email.status )"></span>
 						</div>
 					</td>
-					<td> <a href="#">New account</a></td>
-					<td>Description here</td>
-					<td>email@email.com</td>
-					<td><a href="#" class="button"><span class="dashicons dashicons-edit"></span> Customize</a></td>
-				</tr>
-				<tr>
-					<td><span class="dashicons dashicons-yes"></span></td>
-					<td> <a href="#">New account</a></td>
-					<td>Description here</td>
-					<td>email@email.com</td>
-					<td><a href="#" class="button"><span class="dashicons dashicons-edit"></span> Customize</a></td>
+					<td><a href="#" v-text="sanitized(email.name)"></a></td>
+					<td v-text="sanitized(email.description)"></td>
+					<td v-text="sanitized(email.recipient)"></td>
+					<td><a href="#" class="button"><span class="dashicons dashicons-edit"></span> <span v-text="sanitized(labels.customize)"></span></a></td>
 				</tr>
 			</tbody>
 			<tfoot>
 				<tr>
 					<th scope="col"></th>
-					<th scope="col">Email</th>
-					<th scope="col">Description</th>
-					<th scope="col">Recipient(s)</th>
+					<th scope="col" class="column-primary" v-text="sanitized(labels.email)"></th>
+					<th scope="col" v-text="sanitized(labels.description)"></th>
+					<th scope="col" v-text="sanitized(labels.recipients)"></th>
 					<th scope="col"></th>
 				</tr>
 			</tfoot>
@@ -59,19 +56,91 @@
 </template>
 
 <script>
+import axios from 'axios'
+import qs from 'qs'
+import Sanitize from 'sanitize-html'
+import balloon from 'balloon-css'
+
 export default {
 	name: 'emails-editor',
 	data() {
 		return {
 			loading: false,
-			success: false
+			success: false,
+			error: false,
+			placeholder: wpumEmailsEditor.placeholder,
+			test_email: wpumEmailsEditor.default_email,
+			emails: wpumEmailsEditor.emails,
+			labels: wpumEmailsEditor.labels,
+		}
+	},
+	methods: {
+		/**
+		 * Sanitize strings (needed because strings can be translated)
+		 */
+		sanitized( content ) {
+			return Sanitize( content )
+		},
+		/**
+		 * Determine classes for the icon to display within the table.
+		 */
+		getEmailStatusIcon( status ) {
+			return [
+                'dashicons',
+				status == 'active' ? 'dashicons-yes' : false,
+				status == 'manual' ? 'dashicons-arrow-right-alt' : false
+            ];
+		},
+		/**
+		 * Retrieve the correct tooltip text based on the status of the email.
+		 */
+		getTooltip( status ) {
+			let tooltipText = this.sanitized( this.labels.tooltip_automatic )
+			if( status == 'manual' ) {
+				tooltipText = this.sanitized( this.labels.tooltip_manual )
+			}
+			return tooltipText
+		},
+		/**
+		 * Send test email.
+		*/
+		sendTestEmail: function (event) {
+			this.loading  = true
+			this.error = false
+			this.success = false
+
+			axios.post( wpumEmailsEditor.ajax,
+				qs.stringify({
+					email: this.test_email,
+					nonce: wpumEmailsEditor.nonce
+				}),
+				{
+					params: {
+						action: 'wpum_send_test_email'
+					},
+				}
+			)
+			.then( response => {
+
+				if( response.data.success === true ) {
+					this.loading = false
+					this.error = false
+					this.success = true
+				}
+
+			})
+			.catch( response => {
+				this.loading = false
+				this.error   = true
+				this.success = false
+			});
+
 		}
 	}
 }
 </script>
 
 <style lang="scss">
-@import url('https://cdnjs.cloudflare.com/ajax/libs/balloon-css/0.5.0/balloon.min.css');
 #wpum-emails-list table {
 	margin-top: 1em;
 
@@ -123,6 +192,11 @@ export default {
 				display: inline-block;
 				margin-top: 3px;
 				padding-right: 3px;
+				&.send-text {
+					display: inherit;
+					margin: 0;
+					padding: 0;
+				}
 			}
 		}
 		.search-form {

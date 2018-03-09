@@ -30,6 +30,7 @@ class WPUM_Emails_Customizer {
 	private function init() {
 		add_action( 'admin_menu', [ $this, 'setup_menu_page' ], 9 );
 		add_action( 'admin_enqueue_scripts', [ $this, 'load_scripts' ] );
+		add_action( 'wp_ajax_wpum_send_test_email', array( $this, 'send_test_email' ) );
 	}
 
 	/**
@@ -63,6 +64,28 @@ class WPUM_Emails_Customizer {
 			}
 		}
 
+		$js_variables = [
+			'ajax'          => admin_url( 'admin-ajax.php' ),
+			'nonce'         => wp_create_nonce( 'wpum_test_email' ),
+			'default_email' => get_option( 'admin_email' ),
+			'emails'        => $this->get_registered_emails(),
+			'labels'        => [
+				'title'             => esc_html__( 'WPUM Emails Customization' ),
+				'email'             => esc_html__( 'Email' ),
+				'description'       => esc_html__( 'Description' ),
+				'recipients'        => esc_html__( 'Recipient(s)' ),
+				'tooltip_automatic' => esc_html__( 'Sent automatically' ),
+				'tooltip_manual'    => esc_html__( 'Manually triggered' ),
+				'placeholder'       => esc_html__( 'Enter email address...' ),
+				'customize'         => esc_html__( 'Customize' ),
+				'send'              => esc_html__( 'Send test email' ),
+				'success'           => esc_html__( 'Test email successfully sent.' ),
+				'error'             => esc_html__( 'Something went wrong while sending the test email. Please check your server logs.' )
+			]
+		];
+
+		wp_localize_script( 'wpum-emails-editor', 'wpumEmailsEditor', $js_variables );
+
 	}
 
 	/**
@@ -72,6 +95,60 @@ class WPUM_Emails_Customizer {
 	 */
 	public function display_emails_list() {
 		echo '<div class="wrap"><div id="wpum-emails-list"></div></div>';
+	}
+
+	/**
+	 * Retrieve registered emails
+	 *
+	 * @return void
+	 */
+	private function get_registered_emails() {
+
+		$emails = [
+			'registration_email' => [
+				'status'            => 'active',
+				'name'              => esc_html__( 'New account notification' ),
+				'description'       => esc_html__( 'This is the email that is sent to the user upon successful registration.' ),
+				'recipient'         => esc_html__( 'User\'s email.' ),
+			],
+			'password_recovery_email' => [
+				'status'            => 'active',
+				'name'              => esc_html__( 'Password recovery notification' ),
+				'description'       => esc_html__( 'This is the email that is sent to the visitor upon password reset request.' ),
+				'recipient'         => esc_html__( 'Email address of the requested user.' ),
+			]
+		];
+
+		return apply_filters( 'wpum_registered_emails', $emails );
+
+	}
+
+	/**
+	 * Send test email via ajax.
+	 *
+	 * @return void
+	 */
+	public function send_test_email() {
+
+		check_ajax_referer( 'wpum_test_email', 'nonce' );
+
+		$email = isset( $_POST['email'] ) ? sanitize_email( $_POST['email'] ) : false;
+
+		if( $email && is_email( $email ) ) {
+
+			$emails       = new WPUM_Emails;
+			$emails->__set( 'heading', esc_html__( 'Test email' ) );
+
+			$sitename = wp_specialchars_decode( get_option( 'blogname' ), ENT_QUOTES );
+			$subject  = sprintf( esc_html( 'Test email from: %s' ), $sitename );
+			$message  = esc_html( 'The following is a simple test email to verify that emails are correctly being delivered from your website.' );
+
+			$emails->send( $email, $subject, $message );
+
+		}
+
+		wp_send_json_success();
+
 	}
 
 }

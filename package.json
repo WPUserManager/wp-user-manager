@@ -19,7 +19,9 @@
   },
   "dependencies": {
     "axios": "^0.18.0",
+    "balloon-css": "^0.5.0",
     "form-serialize": "^0.7.2",
+    "qs": "^6.5.1",
     "sanitize-html": "^1.18.2",
     "vue": "^2.5.2"
   },
