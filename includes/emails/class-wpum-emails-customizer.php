@@ -52,48 +52,8 @@ class WPUM_Emails_Customizer {
 	 * @return void
 	 */
 	private function init() {
-		add_action( 'admin_init', [ $this, 'redirect_to_customizer' ] );
 		add_action( 'customize_register', [ $this, 'customize_register' ], 11 );
-		add_filter( 'template_include', [ $this, 'customizer_include_file' ] );
-	}
-
-	/**
-	 * Redirect the user to the email customizer when the browser url contains some parameters.
-	 *
-	 * @return void
-	 */
-	public function redirect_to_customizer() {
-		if( $this->redirect_detected() ) {
-			$url = add_query_arg(
-				array(
-					'email'                => sanitize_text_field( $_GET['wpum_email'] ),
-					'wpum_customize_email' => true,
-				),
-				admin_url( 'customize.php' )
-			);
-			wp_safe_redirect( $url );
-		}
-	}
-
-	/**
-	 * Trigger a redirect in the admin panel to the customizer.
-	 *
-	 * @return boolean
-	 */
-	private function redirect_detected() {
-
-		$pass = false;
-
-		if(
-			isset( $_GET['wpum_email_customizer'] )
-			&& $_GET['wpum_email_customizer'] == 'true'
-			&& isset( $_GET['wpum_email'] )
-			&& ! empty( $_GET['wpum_email'] ) ) {
-			$pass = true;
-		}
-
-		return $pass;
-
+		add_action( 'parse_request', [ $this, 'customizer_setup_preview' ] );
 	}
 
 	/**
@@ -118,7 +78,7 @@ class WPUM_Emails_Customizer {
 		] );
 
 		$wp_customize->add_section( $this->settings_section_id, [
-			'title'       => esc_html__( 'Email Content' ),
+			'title'       => esc_html__( 'Email title and footer' ),
 			'description' => '',
 			'capability'  => 'manage_options',
 			'panel'       => $this->panel_id,
@@ -185,10 +145,25 @@ class WPUM_Emails_Customizer {
 
 	}
 
-	public function customizer_include_file( $template ) {
+	/**
+	 *
+	 *
+	 * @return boolean
+	 */
+	private function is_email_customizer_preview() {
+		return isset( $_GET['wpum_email_preview'] ) && $_GET['wpum_email_preview'] == '1' ? true : false;
+	}
 
-		if( is_customize_preview() ) {
-			return WPUM_PLUGIN_DIR . 'templates/customizer-preview.php';
+	/**
+	 * Override the template file loaded within the preview panel.
+	 *
+	 * @return void
+	 */
+	public function customizer_setup_preview() {
+
+		if( $this->is_email_customizer_preview() && is_customize_preview() ) {
+			WPUM()->templates->get_template_part( 'email-customizer-preview' );
+			exit;
 		}
 
 	}
