@@ -151,7 +151,7 @@ class WPUM_Emails_Customizer {
 	 * @return boolean
 	 */
 	private function is_email_customizer_preview() {
-		return isset( $_GET['wpum_email_preview'] ) && $_GET['wpum_email_preview'] == 'true' ? true : false;
+		return isset( $_GET['wpum_email_preview'] ) && $_GET['wpum_email_preview'] && isset( $_GET['email'] ) == 'true' ? true : false;
 	}
 
 	/**
@@ -162,7 +162,11 @@ class WPUM_Emails_Customizer {
 	public function customizer_setup_preview() {
 
 		if( $this->is_email_customizer_preview() && is_customize_preview() ) {
-			WPUM()->templates->get_template_part( 'email-customizer-preview' );
+			WPUM()->templates
+				->set_template_data( [
+					'email' => sanitize_text_field( $_GET['email'] )
+				] )
+				->get_template_part( 'email-customizer-preview' );
 			exit;
 		}
 
