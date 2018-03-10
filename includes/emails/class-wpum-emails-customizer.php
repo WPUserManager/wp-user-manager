@@ -52,8 +52,53 @@ class WPUM_Emails_Customizer {
 	 * @return void
 	 */
 	private function init() {
-		add_action( 'customize_register', [ $this, 'customize_register' ], 11 );
+		if ( ! isset( $_GET[ WPUM()::CUSTOMIZER_QUERY_PARAM ] ) || 'true' !== wp_unslash( $_GET[ WPUM()::CUSTOMIZER_QUERY_PARAM ] ) ) {
+			return;
+		}
+		add_filter( 'customize_loaded_components', [ $this, 'setup_customizer_components' ], 1, 1 );
+		add_action( 'customize_controls_init', [ $this, 'persist_email_customizer' ] );
 		add_action( 'parse_request', [ $this, 'customizer_setup_preview' ] );
+	}
+
+	/**
+	 * Remove all customizer components and load our custom component only
+	 * when accessing the customizer through the WPUM emails special url.
+	 *
+	 * @param array $components
+	 * @return void
+	 */
+	public function setup_customizer_components( $components ) {
+
+		$priority = 1;
+
+		add_action( 'wp_loaded', function() {
+
+			global $wp_customize;
+
+			remove_all_actions( 'customize_register' );
+
+			add_action( 'customize_register', [ $this, 'customize_register' ], 11 );
+
+		}, $priority );
+
+		// Short-circuit widgets, nav-menus, etc from being loaded.
+		$components = array();
+
+		return $components;
+
+	}
+
+	public function persist_email_customizer() {
+
+		global $wp_customize;
+
+			$wp_customize->set_preview_url(
+				add_query_arg(
+					array( WPUM()::CUSTOMIZER_QUERY_PARAM => 'true' ),
+					$wp_customize->get_preview_url()
+				)
+			);
+
 	}
 
 	/**
@@ -107,13 +152,7 @@ class WPUM_Emails_Customizer {
 
 		$pass = false;
 
-		if(
-			is_customize_preview()
-			&& isset( $_GET['wpum_customize_email'] )
-			&& $_GET['wpum_customize_email'] == 1
-			&& isset( $_GET['email'] )
-			&& ! empty( $_GET['email'] )
-		) {
+		if( is_customize_preview() && isset( $_GET['wpum_customize_email'] ) && $_GET['wpum_customize_email'] == 'true' ) {
 			$pass = true;
 		}
 

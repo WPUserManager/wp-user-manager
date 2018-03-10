@@ -44,6 +44,11 @@ if ( ! class_exists( 'WP_User_Manager' ) ) :
 	final class WP_User_Manager {
 
 		/**
+		 * Flag for when our internal customizer requests should be detected.
+		 */
+		const CUSTOMIZER_QUERY_PARAM = 'wpum_customizer';
+
+		/**
 		 * WPUM Instance.
 		 *
 		 * @var WPUM() the WPUM Instance
