@@ -55,7 +55,7 @@ $header_content_h1 = "
 	line-height: 1.2;
 ";
 $header_img = '';
-$heading    = WPUM()->emails->get_heading();
+$heading    = 'Heading test';
 ?>
 <!DOCTYPE html>
 <html>

@@ -106,7 +106,7 @@ export default {
 		 */
 		getCustomizationURL( index ) {
 			let previewURL = wpumEmailsEditor.url + qs.stringify({ wpum_email_preview: true, email: this.sanitized(index) }, { addQueryPrefix: true })
-			return wpumEmailsEditor.customizeurl + qs.stringify({ wpum_email_customize: true, url: previewURL, wpum_customizer: 'true' }, { addQueryPrefix: true })
+			return wpumEmailsEditor.customizeurl + qs.stringify({ wpum_email_customize: true, url: previewURL, wpum_customizer: 'true', 'autofocus[panel]': 'wpum_email_editor', email: this.sanitized(index) }, { addQueryPrefix: true })
 		},
 		/**
 		 * Send test email.

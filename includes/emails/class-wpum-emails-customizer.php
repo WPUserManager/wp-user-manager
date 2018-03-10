@@ -88,16 +88,22 @@ class WPUM_Emails_Customizer {
 
 	}
 
+	/**
+	 * Persist a specific url parameter so we can understand
+	 * if our customizer is currently enabled.
+	 *
+	 * @return void
+	 */
 	public function persist_email_customizer() {
 
 		global $wp_customize;
 
-			$wp_customize->set_preview_url(
-				add_query_arg(
-					array( WPUM()::CUSTOMIZER_QUERY_PARAM => 'true' ),
-					$wp_customize->get_preview_url()
-				)
-			);
+		$wp_customize->set_preview_url(
+			add_query_arg(
+				array( WPUM()::CUSTOMIZER_QUERY_PARAM => 'true' ),
+				$wp_customize->get_preview_url()
+			)
+		);
 
 	}
 
@@ -110,8 +116,12 @@ class WPUM_Emails_Customizer {
 	public function customize_register( $wp_customize ) {
 
 		$wp_customize->add_panel( $this->panel_id, [
-			'title'       => esc_html__( 'WP User Manager Emails' ),
-			'description' => '',
+			'title'       => $this->get_email_name(),
+			'description' => sprintf(
+				esc_html__( 'The WP User Manager email editor allows you to customize the emails sent to your users by WPUM. You\'re currently editing the %s. %s Edit shortcuts are shown for some editable elements of the email.' ),
+				'<strong>' . strtolower( $this->get_email_name() ) . '</strong>',
+				'<br/><br/>'
+			),
 			'capability'  => 'manage_options',
 		] );
 
@@ -152,7 +162,7 @@ class WPUM_Emails_Customizer {
 
 		$pass = false;
 
-		if( is_customize_preview() && isset( $_GET['wpum_customize_email'] ) && $_GET['wpum_customize_email'] == 'true' ) {
+		if( is_customize_preview() && isset( $_GET['wpum_email_customize'] ) && $_GET['wpum_email_customize'] == 'true' ) {
 			$pass = true;
 		}
 
@@ -166,7 +176,8 @@ class WPUM_Emails_Customizer {
 	 */
 	private function get_email_name() {
 
-		$name = 'Unknown';
+		$name     = 'Unknown';
+		$email_id = false;
 
 		if( $this->is_email_customizer_active() ) {
 			$email_id = sanitize_text_field( $_GET['email'] );
@@ -180,7 +191,7 @@ class WPUM_Emails_Customizer {
 			}
 		}
 
-		return apply_filter( 'wpum_emails_customizer_get_email_name', $name, $email_id );
+		return apply_filters( 'wpum_emails_customizer_get_email_name', $name, $email_id );
 
 	}
 
