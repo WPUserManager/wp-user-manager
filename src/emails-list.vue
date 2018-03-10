@@ -105,7 +105,8 @@ export default {
 		 * Retrieve the url for the customization button.
 		 */
 		getCustomizationURL( index ) {
-			return wpumEmailsEditor.customizeurl + qs.stringify({ wpum_email_customize: true, url: wpumEmailsEditor.url }, { addQueryPrefix: true })
+			let previewURL = wpumEmailsEditor.url + qs.stringify({ wpum_email_preview: true, email: this.sanitized(index) }, { addQueryPrefix: true })
+			return wpumEmailsEditor.customizeurl + qs.stringify({ wpum_email_customize: true, url: previewURL }, { addQueryPrefix: true })
 		},
 		/**
 		 * Send test email.

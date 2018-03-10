@@ -151,7 +151,7 @@ class WPUM_Emails_Customizer {
 	 * @return boolean
 	 */
 	private function is_email_customizer_preview() {
-		return isset( $_GET['wpum_email_preview'] ) && $_GET['wpum_email_preview'] == '1' ? true : false;
+		return isset( $_GET['wpum_email_preview'] ) && $_GET['wpum_email_preview'] == 'true' ? true : false;
 	}
 
 	/**
