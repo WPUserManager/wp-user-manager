@@ -53,7 +53,8 @@ class WPUM_Emails_Customizer {
 	 */
 	private function init() {
 		add_action( 'admin_init', [ $this, 'redirect_to_customizer' ] );
-		add_action( 'customize_register', array( $this, 'customize_register' ), 11 );
+		add_action( 'customize_register', [ $this, 'customize_register' ], 11 );
+		add_filter( 'template_include', [ $this, 'customizer_include_file' ] );
 	}
 
 	/**
@@ -104,8 +105,8 @@ class WPUM_Emails_Customizer {
 	public function customize_register( $wp_customize ) {
 
 		$wp_customize->add_panel( $this->panel_id, [
-			'title'       => esc_html__( 'WPUM Emails Editor' ),
-			'description' => esc_html__( 'Description of what this panel does.' ),
+			'title'       => esc_html__( 'WP User Manager Emails' ),
+			'description' => '',
 			'capability'  => 'manage_options',
 		] );
 
@@ -132,11 +133,16 @@ class WPUM_Emails_Customizer {
 			'type'        => 'text',
 			'section'     => $this->settings_section_id,
 			'label'       => __( 'Heading title', 'textdomain' ),
-			'description' => '',
+			'description' => esc_html__( 'Customize the heading title of the email.' ),
 		) );
 
 	}
 
+	/**
+	 * Detect if the customize is active.
+	 *
+	 * @return boolean
+	 */
 	private function is_email_customizer_active() {
 
 		$pass = false;
@@ -144,7 +150,7 @@ class WPUM_Emails_Customizer {
 		if(
 			is_customize_preview()
 			&& isset( $_GET['wpum_customize_email'] )
-			&& $_GET['wpum_customize_email'] == 'true'
+			&& $_GET['wpum_customize_email'] == 1
 			&& isset( $_GET['email'] )
 			&& ! empty( $_GET['email'] )
 		) {
@@ -154,15 +160,36 @@ class WPUM_Emails_Customizer {
 		return $pass;
 	}
 
+	/**
+	 * Retrieve the name of the email based on url parameters.
+	 *
+	 * @return string
+	 */
 	private function get_email_name() {
 
-		$name = '';
+		$name = 'Unknown';
 
 		if( $this->is_email_customizer_active() ) {
-			$name = 'User registration confirmation email';
+			$email_id = sanitize_text_field( $_GET['email'] );
+			switch ($email_id) {
+				case 'registration_email':
+					$name = esc_html__( 'New account notification email' );
+					break;
+				case 'password_recovery_email':
+					$name = esc_html__( 'Password recovery notification' );
+					break;
+			}
 		}
 
-		return $name;
+		return apply_filter( 'wpum_emails_customizer_get_email_name', $name, $email_id );
+
+	}
+
+	public function customizer_include_file( $template ) {
+
+		if( is_customize_preview() ) {
+			return WPUM_PLUGIN_DIR . 'templates/customizer-preview.php';
+		}
 
 	}
 
