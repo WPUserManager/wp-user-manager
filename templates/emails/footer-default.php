@@ -21,21 +21,21 @@ if ( ! defined( 'ABSPATH' ) ) {
 $footer = wpum_get_email_field( $data->email_id, 'footer' )
 
 ?>
+<?php if( ! empty( $footer ) ) : ?>
 <tr>
 	<td style="box-sizing: border-box; font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif; word-break: break-word;">
 		<table class="email-footer" align="center" width="570" cellpadding="0" cellspacing="0" style="box-sizing: border-box; font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif; margin: 0 auto; padding: 0; text-align: center; width: 570px;">
 			<tr>
 				<td class="content-cell" align="center" style="box-sizing: border-box; font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif; padding: 35px; word-break: break-word;">
-					<?php if( !empty( $footer ) ) : ?>
 					<p class="sub align-center footer-tagline" style="box-sizing: border-box; color: #AEAEAE; font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif; font-size: 12px; line-height: 1.5em; margin-top: 0;" align="center">
 						<?php echo wp_kses_post( wptexturize( apply_filters( 'wpum_email_footer_text', $footer ) ) ); ?>
 					</p>
-					<?php endif; ?>
 				</td>
 			</tr>
 		</table>
 	</td>
 </tr>
+<?php endif; ?>
 </table>
 </td>
 </tr>

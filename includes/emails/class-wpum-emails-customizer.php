@@ -130,18 +130,30 @@ class WPUM_Emails_Customizer {
 		] );
 
 		$wp_customize->add_section( $this->settings_section_id, [
-			'title'       => esc_html__( 'Email Settings' ),
-			'description' => '',
-			'capability'  => 'manage_options',
-			'panel'       => $this->panel_id,
-		] );
-
-		$wp_customize->add_section( $this->settings_section_id, [
 			'title'       => esc_html__( 'Email content' ),
 			'description' => '',
 			'capability'  => 'manage_options',
 			'panel'       => $this->panel_id,
 		] );
+
+		$wp_customize->add_setting( 'wpum_email[logo]', array(
+			'capability'        => 'manage_options',
+			'sanitize_callback' => 'sanitize_text_field',
+			'transport'         => 'postMessage',
+			'type'              => 'option',
+		) );
+
+		$wp_customize->add_control(
+			new WP_Customize_Image_Control(
+				$wp_customize,
+				'wpum_email[logo]',
+				array(
+					'label'      => esc_html__( 'Email logo' ),
+					'section'    => $this->settings_section_id,
+					'settings'   => 'wpum_email[logo]',
+				)
+			)
+		);
 
 		$this->register_settings( $wp_customize, $selected_email_id );
 
@@ -300,7 +312,7 @@ class WPUM_Emails_Customizer {
 		$wp_customize->add_control( 'wpum_email[' . $selected_email_id . '][title]', array(
 			'type'        => 'text',
 			'section'     => $this->settings_section_id,
-			'label'       => __( 'Heading title', 'textdomain' ),
+			'label'       => __( 'Heading title' ),
 			'description' => esc_html__( 'Customize the heading title of the email.' ),
 		) );
 
@@ -314,7 +326,7 @@ class WPUM_Emails_Customizer {
 		$wp_customize->add_control( 'wpum_email[' . $selected_email_id . '][footer]', array(
 			'type'        => 'textarea',
 			'section'     => $this->settings_section_id,
-			'label'       => __( 'Footer tagline', 'textdomain' ),
+			'label'       => __( 'Footer tagline' ),
 			'description' => esc_html__( 'Customize the footer tagline for this email.' ),
 		) );
 
