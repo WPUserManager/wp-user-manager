@@ -137,7 +137,7 @@ class WPUM_Emails_Customizer {
 		] );
 
 		$wp_customize->add_section( $this->settings_section_id, [
-			'title'       => esc_html__( 'Email title and footer' ),
+			'title'       => esc_html__( 'Email content' ),
 			'description' => '',
 			'capability'  => 'manage_options',
 			'panel'       => $this->panel_id,
@@ -306,13 +306,13 @@ class WPUM_Emails_Customizer {
 
 		$wp_customize->add_setting( 'wpum_email[' . $selected_email_id . '][footer]', array(
 			'capability'        => 'manage_options',
-			'sanitize_callback' => 'sanitize_text_field',
+			'sanitize_callback' => 'wp_kses',
 			'transport'         => 'postMessage',
 			'type'              => 'option',
 		) );
 
 		$wp_customize->add_control( 'wpum_email[' . $selected_email_id . '][footer]', array(
-			'type'        => 'text',
+			'type'        => 'textarea',
 			'section'     => $this->settings_section_id,
 			'label'       => __( 'Footer tagline', 'textdomain' ),
 			'description' => esc_html__( 'Customize the footer tagline for this email.' ),

@@ -46,24 +46,28 @@ function wpum_email_tag_website( $user_id ) {
 }
 
 /**
- * Retrieve the heading title of a specific email.
+ * Retrieve data of a stored email from the database.
  *
- * @param string $email_id
+ * @param string|boolean $email_id
+ * @param string|boolean $field_id
  * @return void
  */
-function wpum_get_email_heading( $email_id = false ) {
+function wpum_get_email_field( $email_id = false, $field_id = false ) {
 
-	if( ! $email_id ) {
+	if( ! $email_id || ! $field_id ) {
 		return false;
 	}
 
-	$heading              = false;
-	$stored_emails_option = get_option( 'wpum_email', false );
+	$output = false;
+	$stored_email = get_option( 'wpum_email', false );
 
-	if( ! empty( $stored_emails_option ) && array_key_exists( $email_id, $stored_emails_option ) && array_key_exists( 'title', $stored_emails_option[ $email_id ] ) ) {
-		$heading = $stored_emails_option[ $email_id ][ 'title' ];
+	if( ! empty( $stored_email ) && is_array( $stored_email ) && array_key_exists( $email_id, $stored_email ) ) {
+		$found_email = $stored_email[ $email_id ];
+		if( array_key_exists( $field_id, $found_email ) ) {
+			$output = $found_email[ $field_id ];
+		}
 	}
 
-	return $heading;
+	return $output;
 
 }

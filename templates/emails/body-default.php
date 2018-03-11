@@ -18,7 +18,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-$heading = wpum_get_email_heading( $data->email_id );
+$heading = wpum_get_email_field( $data->email_id, 'title' );
 
 // {email} is replaced by the content entered in the customizer.
 ?>
