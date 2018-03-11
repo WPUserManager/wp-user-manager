@@ -1,57 +1,45 @@
 <?php
+/**
+ * The Template for displaying the footer section of the emails.
+ *
+ * This template can be overridden by copying it to yourtheme/wpum/emails/footer-default.php
+ *
+ * HOWEVER, on occasion WPUM will need to update template files and you
+ * (the theme developer) will need to copy the new files to your theme to
+ * maintain compatibility. We try to do this as little as possible, but it does
+ * happen. When this occurs the version of the template file will be bumped and
+ * the readme will list any important changes.
+ *
+ * @version 1.0.0
+ */
 
 // Exit if accessed directly
-if ( ! defined( 'ABSPATH' ) ) exit;
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 
-// For gmail compatibility, including CSS styles in head/body are stripped out therefore styles need to be inline. These variables contain rules which are added to the template inline.
-$template_footer = "
-	border-top:0;
-	-webkit-border-radius:3px;
-";
-
-$credit = "
-	border:0;
-	color: #000000;
-	font-family: 'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif;
-	font-size:12px;
-	line-height:125%;
-	text-align:center;
-";
 ?>
-															</div>
-														</td>
-                                                    </tr>
-                                                </table>
-                                                <!-- End Content -->
-                                            </td>
-                                        </tr>
-                                    </table>
-                                    <!-- End Body -->
-                                </td>
-                            </tr>
-                            <tr>
-                                <td align="center" valign="top">
-                                    <!-- Footer -->
-                                    <table border="0" cellpadding="10" cellspacing="0" width="600" id="template_footer" style="<?php echo $template_footer; ?>">
-                                        <tr>
-                                            <td valign="top">
-                                                <table border="0" cellpadding="10" cellspacing="0" width="100%">
-                                                    <tr>
-                                                        <td colspan="2" valign="middle" id="credit" style="<?php echo $credit; ?>">
-                                                           <?php echo wpautop( wp_kses_post( wptexturize( apply_filters( 'wpum_email_footer_text', '<a href="' . esc_url( home_url() ) . '">' . get_bloginfo( 'name' ) . '</a>' ) ) ) ); ?>
-                                                        </td>
-                                                    </tr>
-                                                </table>
-                                            </td>
-                                        </tr>
-                                    </table>
-                                    <!-- End Footer -->
-                                </td>
-                            </tr>
-                        </table>
-                    </td>
-                </tr>
-            </table>
-        </div>
-    </body>
+<tr>
+	<td style="box-sizing: border-box; font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif; word-break: break-word;">
+		<table class="email-footer" align="center" width="570" cellpadding="0" cellspacing="0" style="box-sizing: border-box; font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif; margin: 0 auto; padding: 0; text-align: center; width: 570px;">
+			<tr>
+				<td class="content-cell" align="center" style="box-sizing: border-box; font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif; padding: 35px; word-break: break-word;">
+					<p class="sub align-center" style="box-sizing: border-box; color: #AEAEAE; font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif; font-size: 12px; line-height: 1.5em; margin-top: 0;" align="center">
+						<?php echo wpautop( wp_kses_post( wptexturize( apply_filters( 'wpum_email_footer_text', '<a href="' . esc_url( home_url() ) . '">' . get_bloginfo( 'name' ) . '</a>' ) ) ) ); ?>
+					</p>
+					<p class="sub align-center" style="box-sizing: border-box; color: #AEAEAE; font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif; font-size: 12px; line-height: 1.5em; margin-top: 0;" align="center">
+						[Company Name, LLC]
+						<br />1234 Street Rd.
+						<br />Suite 1234
+					</p>
+				</td>
+			</tr>
+		</table>
+	</td>
+</tr>
+</table>
+</td>
+</tr>
+</table>
+</body>
 </html>

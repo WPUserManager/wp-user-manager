@@ -49,7 +49,8 @@ module.exports = function( grunt ) {
 			all: {
 				files: {
 					'assets/js/admin/tinymce/mce-plugin.min.js': ['assets/js/src/admin/tinymce/mce-plugin.js'],
-					'assets/js/admin/admin-shortcodes.min.js': ['assets/js/src/admin/admin-shortcodes.js']
+					'assets/js/admin/admin-shortcodes.min.js': ['assets/js/src/admin/admin-shortcodes.js'],
+					'assets/js/admin/admin-email-customizer.min.js': ['assets/js/src/admin/admin-email-customizer.js']
 				},
 				options: {
 					banner: '/*! <%= pkg.title %> - v<%= pkg.version %>\n' +

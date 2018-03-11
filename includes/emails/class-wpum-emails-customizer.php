@@ -57,6 +57,7 @@ class WPUM_Emails_Customizer {
 		}
 		add_filter( 'customize_loaded_components', [ $this, 'setup_customizer_components' ], 1, 1 );
 		add_action( 'customize_controls_init', [ $this, 'persist_email_customizer' ] );
+		add_action( 'customize_preview_init', [ $this, 'update_preview' ] );
 		add_action( 'parse_request', [ $this, 'customizer_setup_preview' ] );
 	}
 
@@ -142,6 +143,7 @@ class WPUM_Emails_Customizer {
 		$wp_customize->add_setting( 'my_theme_mod_setting', array(
 			'capability'        => 'manage_options',
 			'sanitize_callback' => 'sanitize_text_field',
+			'transport'         => 'postMessage'
 		) );
 
 		$wp_customize->add_control( 'my_theme_mod_setting', array(
@@ -149,6 +151,13 @@ class WPUM_Emails_Customizer {
 			'section'     => $this->settings_section_id,
 			'label'       => __( 'Heading title', 'textdomain' ),
 			'description' => esc_html__( 'Customize the heading title of the email.' ),
+		) );
+
+		$wp_customize->selective_refresh->add_partial( 'my_theme_mod_setting', array(
+			'selector'        => 'h1',
+			'render_callback' => function() {
+				return get_theme_mod( 'my_theme_mod_setting' );
+			}
 		) );
 
 	}
@@ -202,6 +211,10 @@ class WPUM_Emails_Customizer {
 	 */
 	private function is_email_customizer_preview() {
 		return isset( $_GET['wpum_email_preview'] ) && $_GET['wpum_email_preview'] && isset( $_GET['email'] ) == 'true' ? true : false;
+	}
+
+	public function update_preview() {
+		wp_enqueue_script( 'wpum-email-customizer', WPUM_PLUGIN_URL . '/assets/js/admin/admin-email-customizer.min.js', array( 'jquery','customize-preview' ) );
 	}
 
 	/**
