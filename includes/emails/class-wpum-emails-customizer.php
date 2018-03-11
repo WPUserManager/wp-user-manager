@@ -269,7 +269,7 @@ class WPUM_Emails_Customizer {
 		foreach( $setting_ids as $dynamic_setting_id ) {
 			if ( $dynamic_setting_id === $setting_id ) {
 				$setting_args = [
-					'type' => 'theme_mod',
+					'type' => 'option',
 				];
 			}
 		}
@@ -293,7 +293,8 @@ class WPUM_Emails_Customizer {
 		$wp_customize->add_setting( 'wpum_email[' . $selected_email_id . '][title]', array(
 			'capability'        => 'manage_options',
 			'sanitize_callback' => 'sanitize_text_field',
-			'transport'         => 'postMessage'
+			'transport'         => 'postMessage',
+			'type'              => 'option',
 		) );
 
 		$wp_customize->add_control( 'wpum_email[' . $selected_email_id . '][title]', array(
@@ -306,7 +307,8 @@ class WPUM_Emails_Customizer {
 		$wp_customize->add_setting( 'wpum_email[' . $selected_email_id . '][footer]', array(
 			'capability'        => 'manage_options',
 			'sanitize_callback' => 'sanitize_text_field',
-			'transport'         => 'postMessage'
+			'transport'         => 'postMessage',
+			'type'              => 'option',
 		) );
 
 		$wp_customize->add_control( 'wpum_email[' . $selected_email_id . '][footer]', array(
