@@ -52,10 +52,11 @@ class WPUM_Emails_Customizer {
 	 * @return void
 	 */
 	private function init() {
-		if ( ! isset( $_GET[ WPUM()::CUSTOMIZER_QUERY_PARAM ] ) || 'true' !== wp_unslash( $_GET[ WPUM()::CUSTOMIZER_QUERY_PARAM ] ) ) {
+		/*if ( ! isset( $_GET[ WPUM()::CUSTOMIZER_QUERY_PARAM ] ) || 'true' !== wp_unslash( $_GET[ WPUM()::CUSTOMIZER_QUERY_PARAM ] ) ) {
 			return;
-		}
+		}*/
 		add_filter( 'customize_loaded_components', [ $this, 'setup_customizer_components' ], 1, 1 );
+		add_filter( 'customize_dynamic_setting_args', [ $this, 'register_dynamic_settings' ], 10, 2 );
 		add_action( 'customize_controls_init', [ $this, 'persist_email_customizer' ] );
 		add_action( 'customize_preview_init', [ $this, 'update_preview' ] );
 		add_action( 'parse_request', [ $this, 'customizer_setup_preview' ] );
@@ -116,6 +117,8 @@ class WPUM_Emails_Customizer {
 	 */
 	public function customize_register( $wp_customize ) {
 
+		$selected_email_id = $this->get_selected_email();
+
 		$wp_customize->add_panel( $this->panel_id, [
 			'title'       => $this->get_email_name(),
 			'description' => sprintf(
@@ -140,25 +143,7 @@ class WPUM_Emails_Customizer {
 			'panel'       => $this->panel_id,
 		] );
 
-		$wp_customize->add_setting( 'my_theme_mod_setting', array(
-			'capability'        => 'manage_options',
-			'sanitize_callback' => 'sanitize_text_field',
-			'transport'         => 'postMessage'
-		) );
-
-		$wp_customize->add_control( 'my_theme_mod_setting', array(
-			'type'        => 'text',
-			'section'     => $this->settings_section_id,
-			'label'       => __( 'Heading title', 'textdomain' ),
-			'description' => esc_html__( 'Customize the heading title of the email.' ),
-		) );
-
-		$wp_customize->selective_refresh->add_partial( 'my_theme_mod_setting', array(
-			'selector'        => 'h1',
-			'render_callback' => function() {
-				return get_theme_mod( 'my_theme_mod_setting' );
-			}
-		) );
+		$this->register_settings( $wp_customize, $selected_email_id );
 
 	}
 
@@ -205,7 +190,18 @@ class WPUM_Emails_Customizer {
 	}
 
 	/**
+	 * Retrieve the selected email into the customizer.
 	 *
+	 * @return void
+	 */
+	private function get_selected_email() {
+
+		return isset( $_GET['email'] ) && ! empty( $_GET['email'] ) ? sanitize_text_field( $_GET['email'] ) : false;
+
+	}
+
+	/**
+	 * Check if we're viewing the preview through the customizer.
 	 *
 	 * @return boolean
 	 */
@@ -213,6 +209,11 @@ class WPUM_Emails_Customizer {
 		return isset( $_GET['wpum_email_preview'] ) && $_GET['wpum_email_preview'] && isset( $_GET['email'] ) == 'true' ? true : false;
 	}
 
+	/**
+	 * Add scripts and styles to the email customizer.
+	 *
+	 * @return void
+	 */
 	public function update_preview() {
 		wp_enqueue_script( 'wpum-email-customizer', WPUM_PLUGIN_URL . '/assets/js/admin/admin-email-customizer.min.js', array( 'jquery','customize-preview' ) );
 	}
@@ -232,6 +233,88 @@ class WPUM_Emails_Customizer {
 				->get_template_part( 'email-customizer-preview' );
 			exit;
 		}
+
+	}
+
+	/**
+	 * Register the emails available for customizations through the customizer.
+	 *
+	 * @return void
+	 */
+	private function get_registered_settings_emails() {
+
+		$emails = [ 'registration_email', 'password_recovery_email' ];
+
+		return apply_filters( 'wpum_customizer_registered_emails', $emails );
+
+	}
+
+	/**
+	 * Dynamically tell the customizer that our dynamic settings exist and are valid.
+	 *
+	 * @param array $setting_args
+	 * @param string $setting_id
+	 * @return void
+	 */
+	public function register_dynamic_settings( $setting_args, $setting_id ) {
+
+		$registered_emails = $this->get_registered_settings_emails();
+		$setting_ids       = apply_filters( 'wpum_email_customizer_dynamic_setting_ids', [] );
+
+		foreach( $registered_emails as $email_id ) {
+			$setting_ids[] = 'wpum_email[' . $email_id . '][title]';
+			$setting_ids[] = 'wpum_email[' . $email_id . '][footer]';
+		}
+
+		foreach( $setting_ids as $dynamic_setting_id ) {
+			if ( $dynamic_setting_id === $setting_id ) {
+				$setting_args = [
+					'type' => 'theme_mod',
+				];
+			}
+		}
+
+		return $setting_args;
+	}
+
+	/**
+	 * Dynamically register settings for the email being customized.
+	 *
+	 * @param object $wp_customize
+	 * @param string $selected_email_id
+	 * @return void
+	 */
+	private function register_settings( $wp_customize, $selected_email_id ) {
+
+		if( ! $selected_email_id || ! $wp_customize || ! in_array( $selected_email_id, $this->get_registered_settings_emails() ) ) {
+			return;
+		}
+
+		$wp_customize->add_setting( 'wpum_email[' . $selected_email_id . '][title]', array(
+			'capability'        => 'manage_options',
+			'sanitize_callback' => 'sanitize_text_field',
+			'transport'         => 'postMessage'
+		) );
+
+		$wp_customize->add_control( 'wpum_email[' . $selected_email_id . '][title]', array(
+			'type'        => 'text',
+			'section'     => $this->settings_section_id,
+			'label'       => __( 'Heading title', 'textdomain' ),
+			'description' => esc_html__( 'Customize the heading title of the email.' ),
+		) );
+
+		$wp_customize->add_setting( 'wpum_email[' . $selected_email_id . '][footer]', array(
+			'capability'        => 'manage_options',
+			'sanitize_callback' => 'sanitize_text_field',
+			'transport'         => 'postMessage'
+		) );
+
+		$wp_customize->add_control( 'wpum_email[' . $selected_email_id . '][footer]', array(
+			'type'        => 'text',
+			'section'     => $this->settings_section_id,
+			'label'       => __( 'Footer tagline', 'textdomain' ),
+			'description' => esc_html__( 'Customize the footer tagline for this email.' ),
+		) );
 
 	}
 
