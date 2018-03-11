@@ -44,3 +44,26 @@ function wpum_get_emails_tags_list() {
 function wpum_email_tag_website( $user_id ) {
 	return home_url();
 }
+
+/**
+ * Retrieve the heading title of a specific email.
+ *
+ * @param string $email_id
+ * @return void
+ */
+function wpum_get_email_heading( $email_id = false ) {
+
+	if( ! $email_id ) {
+		return false;
+	}
+
+	$heading              = false;
+	$stored_emails_option = get_option( 'wpum_email', false );
+
+	if( ! empty( $stored_emails_option ) && array_key_exists( $email_id, $stored_emails_option ) && array_key_exists( 'title', $stored_emails_option[ $email_id ] ) ) {
+		$heading = $stored_emails_option[ $email_id ][ 'title' ];
+	}
+
+	return $heading;
+
+}

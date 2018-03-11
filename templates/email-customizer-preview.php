@@ -13,12 +13,21 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 $detected_email = $data->email;
 
 WPUM()->templates
+	->set_template_data( [
+		'email_id' => $detected_email
+	] )
 	->get_template_part( 'emails/header', WPUM()->emails->get_template() );
 
 WPUM()->templates
+	->set_template_data( [
+		'email_id' => $detected_email
+	] )
 	->get_template_part( 'emails/body', WPUM()->emails->get_template() );
 
 WPUM()->templates
+	->set_template_data( [
+		'email_id' => $detected_email
+	] )
 	->get_template_part( 'emails/footer', WPUM()->emails->get_template() );
 
 ?>
