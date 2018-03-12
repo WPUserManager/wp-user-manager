@@ -213,7 +213,7 @@ class WPUM_Emails_Customizer {
 	}
 
 	/**
-	 * Add scripts and styles to the email customizer.
+	 * Add scripts required to update the live preview of the customizer.
 	 *
 	 * @return void
 	 */
