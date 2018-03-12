@@ -62,31 +62,32 @@ class WPUM_Emails_List {
 				wp_register_script( 'wpum-emails-editor', 'http://localhost:8080/emails.js', array(), WPUM_VERSION, true );
 				wp_enqueue_script( 'wpum-emails-editor' );
 			}
+
+			$js_variables = [
+				'ajax'          => admin_url( 'admin-ajax.php' ),
+				'customizeurl'  => admin_url( 'customize.php' ),
+				'url'           => site_url( '/' ),
+				'nonce'         => wp_create_nonce( 'wpum_test_email' ),
+				'default_email' => get_option( 'admin_email' ),
+				'emails'        => wpum_get_registered_emails(),
+				'labels'        => [
+					'title'             => esc_html__( 'WPUM Emails Customization' ),
+					'email'             => esc_html__( 'Email' ),
+					'description'       => esc_html__( 'Description' ),
+					'recipients'        => esc_html__( 'Recipient(s)' ),
+					'tooltip_automatic' => esc_html__( 'Sent automatically' ),
+					'tooltip_manual'    => esc_html__( 'Manually triggered' ),
+					'placeholder'       => esc_html__( 'Enter email address...' ),
+					'customize'         => esc_html__( 'Customize' ),
+					'send'              => esc_html__( 'Send test email' ),
+					'success'           => esc_html__( 'Test email successfully sent.' ),
+					'error'             => esc_html__( 'Something went wrong while sending the test email. Please verify the email address you typed is correct or check your server logs.' )
+				]
+			];
+
+			wp_localize_script( 'wpum-emails-editor', 'wpumEmailsEditor', $js_variables );
+
 		}
-
-		$js_variables = [
-			'ajax'          => admin_url( 'admin-ajax.php' ),
-			'customizeurl'  => admin_url( 'customize.php' ),
-			'url'           => site_url( '/' ),
-			'nonce'         => wp_create_nonce( 'wpum_test_email' ),
-			'default_email' => get_option( 'admin_email' ),
-			'emails'        => wpum_get_registered_emails(),
-			'labels'        => [
-				'title'             => esc_html__( 'WPUM Emails Customization' ),
-				'email'             => esc_html__( 'Email' ),
-				'description'       => esc_html__( 'Description' ),
-				'recipients'        => esc_html__( 'Recipient(s)' ),
-				'tooltip_automatic' => esc_html__( 'Sent automatically' ),
-				'tooltip_manual'    => esc_html__( 'Manually triggered' ),
-				'placeholder'       => esc_html__( 'Enter email address...' ),
-				'customize'         => esc_html__( 'Customize' ),
-				'send'              => esc_html__( 'Send test email' ),
-				'success'           => esc_html__( 'Test email successfully sent.' ),
-				'error'             => esc_html__( 'Something went wrong while sending the test email. Please verify the email address you typed is correct or check your server logs.' )
-			]
-		];
-
-		wp_localize_script( 'wpum-emails-editor', 'wpumEmailsEditor', $js_variables );
 
 	}
 

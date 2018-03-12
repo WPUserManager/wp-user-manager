@@ -15,7 +15,6 @@ if ( ! defined( 'ABSPATH' ) ) exit;
  */
 class WPUM_Emails_Customizer {
 
-
 	/**
 	 * Holds all currently registered emails.
 	 *
@@ -53,35 +52,62 @@ class WPUM_Emails_Customizer {
 	 * @return void
 	 */
 	private function init() {
-		add_filter( 'customize_loaded_components', [ $this, 'detect_email_customizer' ], 1, 1 );
+		if( defined( 'DOING_AJAX' ) || ( isset( $_GET['wpum_email_customizer'] ) && 'true' == $_GET['wpum_email_customizer'] ) ) {
+			add_action( 'customize_register', [ $this, 'customize_register' ], 11 );
+			add_filter( 'customize_section_active', [ $this, 'remove_sections' ], 10, 2 );
+			add_filter( 'customize_panel_active', [ $this, 'remove_panels' ], 10, 2 );
+			add_action( 'parse_request', [ $this, 'customizer_setup_preview' ] );
+			add_action( 'customize_preview_init', [ $this, 'update_preview' ] );
+		}
 	}
 
 	/**
-	 * Detect if our customizer is triggered and hide all other loaded components,
-	 * then load our customizer settings only.
+	 * Remove all other registered sections except ours.
 	 *
-	 * @param array $components
+	 * @param boolean $active
+	 * @param object $section
 	 * @return void
 	 */
-	public function detect_email_customizer( $components ) {
+	public function remove_sections( $active, $section ) {
+		// Bail if not our customizer.
+		if( ! isset( $_GET['wpum_email_customizer'] ) ) {
+			return true;
+		}
+		// Deactivate all other sections except the ones registered for emails.
+		if( isset( $_GET['wpum_email_customizer'] ) && $_GET['wpum_email_customizer'] == 'true' ) {
+			$sections = [];
+			foreach( $this->emails as $email_id => $registered_email ) {
+				$sections[] = $email_id . '_settings';
+			}
+			if( in_array( $section->id, $sections ) ) {
+				return true;
+			}
+			return false;
+		}
+	}
 
-		$priority = 1;
-
-		add_action( 'wp_loaded', function() {
-
-			global $wp_customize;
-
-			remove_all_actions( 'customize_register' );
-
-			add_action( 'customize_register', [ $this, 'customize_register' ], 11 );
-
-		}, $priority );
-
-		// Short-circuit widgets, nav-menus, etc from being loaded.
-		$components = array();
-
-		return $components;
-
+	/**
+	 * Hide all other panels except the ones registered for our customizer.
+	 *
+	 * @param boolean $active
+	 * @param object $panel
+	 * @return void
+	 */
+	public function remove_panels( $active, $panel ) {
+		if( ! isset( $_GET['wpum_email_customizer'] ) ) {
+			return true;
+		}
+		// Deactivate all other panels except the ones registered for emails.
+		if( isset( $_GET['wpum_email_customizer'] ) && $_GET['wpum_email_customizer'] == 'true' ) {
+			$panels = [];
+			foreach( $this->emails as $email_id => $registered_email ) {
+				$panels[] = $email_id;
+			}
+			if( in_array( $panel->id, $panels ) ) {
+				return true;
+			}
+			return false;
+		}
 	}
 
 	/**
@@ -166,6 +192,37 @@ class WPUM_Emails_Customizer {
 			'description' => esc_html__( 'Customize the footer tagline for this email.' ),
 		) );
 
+	}
+
+	/**
+	 * Load the email template into the customizer window.
+	 *
+	 * @return void
+	 */
+	public function customizer_setup_preview() {
+
+		if( is_customize_preview() && isset( $_GET['email'] ) ) {
+			WPUM()->templates
+				->set_template_data( [
+					'email' => sanitize_text_field( $_GET['email'] )
+				] )
+				->get_template_part( 'email-customizer-preview' );
+			exit;
+		}
+
+	}
+
+	/**
+	 * Add scripts and styles to the email customizer.
+	 *
+	 * @return void
+	 */
+	public function update_preview() {
+		wp_enqueue_script( 'wpum-email-customizer-preview', WPUM_PLUGIN_URL . 'assets/js/admin/admin-email-customizer-preview.min.js', array( 'jquery','customize-preview' ) );
+		$js_variables = [
+			'emails' => []
+		];
+		wp_localize_script( 'wpum-email-customizer-preview', 'wpumEmailCustomizer', $js_variables );
 	}
 
 }
