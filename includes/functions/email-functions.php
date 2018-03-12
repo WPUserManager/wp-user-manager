@@ -46,6 +46,32 @@ function wpum_email_tag_website( $user_id ) {
 }
 
 /**
+ * Retrieve registered emails
+ *
+ * @return array
+ */
+function wpum_get_registered_emails() {
+
+	$emails = [
+		'registration_confirmation' => [
+			'status'            => 'active',
+			'name'              => esc_html__( 'Registration confirmation' ),
+			'description'       => esc_html__( 'This is the email that is sent to the user upon successful registration.' ),
+			'recipient'         => esc_html__( 'User\'s email.' ),
+		],
+		'password_recovery_request' => [
+			'status'            => 'active',
+			'name'              => esc_html__( 'Password recovery request' ),
+			'description'       => esc_html__( 'This is the email that is sent to the visitor upon password reset request.' ),
+			'recipient'         => esc_html__( 'Email address of the requested user.' ),
+		]
+	];
+
+	return apply_filters( 'wpum_registered_emails', $emails );
+
+}
+
+/**
  * Retrieve data of a stored email from the database.
  *
  * @param string|boolean $email_id

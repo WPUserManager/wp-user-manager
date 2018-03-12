@@ -44,7 +44,7 @@
 		api.EmailCustomizerPreview.init()
 	})
 
-	api('my_theme_mod_setting', function (value) {
+	api('wpum_email[password_recovery_email][title]', function (value) {
 		value.bind(function (newval) {
 			$('h1').text(newval)
 		})

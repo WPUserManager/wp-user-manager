@@ -70,7 +70,7 @@ class WPUM_Emails_List {
 			'url'           => site_url( '/' ),
 			'nonce'         => wp_create_nonce( 'wpum_test_email' ),
 			'default_email' => get_option( 'admin_email' ),
-			'emails'        => $this->get_registered_emails(),
+			'emails'        => wpum_get_registered_emails(),
 			'labels'        => [
 				'title'             => esc_html__( 'WPUM Emails Customization' ),
 				'email'             => esc_html__( 'Email' ),
@@ -97,32 +97,6 @@ class WPUM_Emails_List {
 	 */
 	public function display_emails_list() {
 		echo '<div class="wrap"><div id="wpum-emails-list"></div></div>';
-	}
-
-	/**
-	 * Retrieve registered emails
-	 *
-	 * @return void
-	 */
-	private function get_registered_emails() {
-
-		$emails = [
-			'registration_email' => [
-				'status'            => 'active',
-				'name'              => esc_html__( 'New account notification' ),
-				'description'       => esc_html__( 'This is the email that is sent to the user upon successful registration.' ),
-				'recipient'         => esc_html__( 'User\'s email.' ),
-			],
-			'password_recovery_email' => [
-				'status'            => 'active',
-				'name'              => esc_html__( 'Password recovery notification' ),
-				'description'       => esc_html__( 'This is the email that is sent to the visitor upon password reset request.' ),
-				'recipient'         => esc_html__( 'Email address of the requested user.' ),
-			]
-		];
-
-		return apply_filters( 'wpum_registered_emails', $emails );
-
 	}
 
 	/**

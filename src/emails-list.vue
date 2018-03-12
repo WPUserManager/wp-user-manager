@@ -105,8 +105,9 @@ export default {
 		 * Retrieve the url for the customization button.
 		 */
 		getCustomizationURL( index ) {
-			let previewURL = wpumEmailsEditor.url + qs.stringify({ wpum_email_preview: true, email: this.sanitized(index) }, { addQueryPrefix: true })
-			return wpumEmailsEditor.customizeurl + qs.stringify({ wpum_email_customize: true, url: previewURL, wpum_customizer: 'true', 'autofocus[panel]': 'wpum_email_editor', email: this.sanitized(index) }, { addQueryPrefix: true })
+			//let previewURL = wpumEmailsEditor.url + qs.stringify({ wpum_email_preview: true, email: this.sanitized(index) }, { addQueryPrefix: true })
+			//wpumEmailsEditor.customizeurl + qs.stringify({ wpum_email_customize: true, url: previewURL, wpum_customizer: 'true', 'autofocus[panel]': 'wpum_email_editor', email: this.sanitized(index) }, { addQueryPrefix: true })
+			return index
 		},
 		/**
 		 * Send test email.
