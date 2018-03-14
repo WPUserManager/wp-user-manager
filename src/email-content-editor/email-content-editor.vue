@@ -37,18 +37,32 @@ export default {
 	},
 	methods: {
 		/**
-		 * Open the editor window and init wp.editor
+		 * Open the editor window and initialize wp.editor.
 		 */
 		openEditor() {
 			this.editorVisible = true
-			console.log( wp.editor )
+			let that = this
 			setTimeout(
 				() => {
 					wp.editor.initialize('wpum-email-content', {
-						tinymce: true,
+						tinymce: {
+                            setup(ed) {
+                                ed.on('change', function (ed, l) {
+									that.updateLiveContent()
+                            	});
+                            }
+                        },
 					})
 				},
-			10)
+			1)
+		},
+		/**
+		 * Update the live preview content.
+		 */
+		updateLiveContent() {
+			wp.customize( 'wpum_email[registration_confirmation][title]', function ( obj ) {
+				obj.set( wp.editor.getContent('wpum-email-content') );
+			} );
 		}
 	}
 }

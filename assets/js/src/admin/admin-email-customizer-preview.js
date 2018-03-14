@@ -21,4 +21,10 @@
 			})
 		})
 	})
+
+	wp.customize.bind('preview-ready', function () {
+		wp.customize.preview.bind('wpum-email-body-updated', function (data) {
+			console.log(data)
+		})
+	})
 })(window.wp, jQuery)
