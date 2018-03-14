@@ -20,11 +20,10 @@
 				$('table.email-footer td.content-cell p').html(sanitizeHtml(newval))
 			})
 		})
-	})
-
-	wp.customize.bind('preview-ready', function () {
-		wp.customize.preview.bind('wpum-email-body-updated', function (data) {
-			console.log(data)
+		wp.customize('wpum_email[' + id + '][content]', function (value) {
+			value.bind(function (newval) {
+				$('table.email-body_inner td.content-cell h1 ~ p').html(sanitizeHtml(newval))
+			})
 		})
 	})
 })(window.wp, jQuery)

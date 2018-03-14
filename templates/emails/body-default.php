@@ -19,6 +19,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 $heading = wpum_get_email_field( $data->email_id, 'title' );
+$preview = is_customize_preview() ? wpum_get_email_field( $data->email_id, 'content' ) : false;
 
 // {email} is replaced by the content entered in the customizer.
 ?>
@@ -30,7 +31,11 @@ $heading = wpum_get_email_field( $data->email_id, 'title' );
 					<?php if( $heading ) : ?>
 					<h1 style="box-sizing: border-box; color: #2F3133; font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif; font-size: 19px; font-weight: bold; margin-top: 0;" align="left"><?php echo esc_html( $heading ); ?></h1>
 					<?php endif; ?>
-                    <p style="box-sizing: border-box; color: #74787E; font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif; font-size: 16px; line-height: 1.5em; margin-top: 0;" align="left">{email}</p>
+					<?php if( $preview ) : ?>
+					    <p style="box-sizing: border-box; color: #74787E; font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif; font-size: 16px; line-height: 1.5em; margin-top: 0;" align="left"><?php echo $preview; ?></p>
+					<?php else : ?>
+                    	<p style="box-sizing: border-box; color: #74787E; font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif; font-size: 16px; line-height: 1.5em; margin-top: 0;" align="left">{email}</p>
+					<?php endif; ?>
                 </td>
             </tr>
         </table>

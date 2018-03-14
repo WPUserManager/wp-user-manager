@@ -1,11 +1,9 @@
 <template>
 	<div id="wpum-email-content-editor">
-
 		<a href="#" class="button button-hero" id="wpum-email-editor-btn" @click="openEditor">
 			<span class="dashicons dashicons-edit"></span>
 			Open email content editor
 		</a>
-
 		<transition name="slide">
 			<div v-dom-portal="'.wp-full-overlay'" :class="classes" v-if="editorVisible">
 				<div class="inside">
@@ -60,7 +58,7 @@ export default {
 		 * Update the live preview content.
 		 */
 		updateLiveContent() {
-			wp.customize( 'wpum_email[registration_confirmation][title]', function ( obj ) {
+			wp.customize( 'wpum_email[registration_confirmation][content]', function ( obj ) {
 				obj.set( wp.editor.getContent('wpum-email-content') );
 			} );
 		}

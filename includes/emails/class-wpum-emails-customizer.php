@@ -189,11 +189,17 @@ class WPUM_Emails_Customizer {
 			'description' => esc_html__( 'Customize the heading title of the email.' ),
 		) );
 
-		$wp_customize->add_control( new WPUM_Emails_Customizer_Editor_Control( $wp_customize, 'wpum_email[' . $email_id . '][editor_button]', array(
+		$wp_customize->add_setting( 'wpum_email[' . $email_id . '][content]', array(
+			'capability'        => 'manage_options',
+			'sanitize_callback' => 'wp_kses_post',
+			'transport'         => 'postMessage',
+			'type'              => 'option',
+		) );
+
+		$wp_customize->add_control( new WPUM_Emails_Customizer_Editor_Control( $wp_customize, 'wpum_email[' . $email_id . '][content]', array(
 			'label'       => esc_html__( 'Email content' ),
 			'description' => esc_html__( 'Click the button to open the content customization editor.' ),
 			'section'     => $email_id . '_settings',
-			'settings'    => array(),
 		) ) );
 
 		$wp_customize->add_setting( 'wpum_email[' . $email_id . '][footer]', array(
