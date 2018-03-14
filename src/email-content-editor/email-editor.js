@@ -2,7 +2,8 @@
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import Vue from 'vue'
 import EmailContentEditor from './email-content-editor'
-
+import DomPortal from 'vue-dom-portal'
+Vue.use(DomPortal)
 Vue.config.productionTip = false;
 
 (function (wp, $) {

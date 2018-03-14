@@ -36,7 +36,7 @@ class WPUM_Emails_Customizer_Editor_Control extends WP_Customize_Control {
 		<div id="wpum-email-content-editor"></div>
 
 		<?php if( $this->description ) : ?>
-			<span class="description customize-control-description"><?php echo esc_html( $this->description ); ?></span>
+			<br/><span class="description customize-control-description"><?php echo esc_html( $this->description ); ?></span>
 		<?php endif; ?>
 
 		<?php

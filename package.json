@@ -23,7 +23,8 @@
     "form-serialize": "^0.7.2",
     "qs": "^6.5.1",
     "sanitize-html": "^1.18.2",
-    "vue": "^2.5.2"
+    "vue": "^2.5.2",
+    "vue-dom-portal": "^0.1.6"
   },
   "devDependencies": {
     "autoprefixer": "^7.1.2",

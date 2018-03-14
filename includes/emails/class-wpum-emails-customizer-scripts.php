@@ -55,8 +55,13 @@ class WPUM_Emails_Customizer_Scripts {
 		} else {
 			wp_die('Yo VUEJS build missing');
 		}
-
+		wp_enqueue_editor();
 		wp_enqueue_script( 'wpum-email-customizer-editor-control' );
+
+		$js_variables = [
+			'selected_email_id' => isset( $_GET['email'] ) ? esc_html( $_GET['email'] ) : false
+		];
+		wp_localize_script( 'wpum-email-customizer-editor-control', 'wpumCustomizeControls', $js_variables );
 
 		/*
 		wp_enqueue_script( 'wpum-email-customize-controls', WPUM_PLUGIN_URL . 'assets/js/admin/admin-email-customizer-controls.min.js', array( 'customize-controls' ), WPUM_VERSION, true );
