@@ -9,12 +9,20 @@ Vue.config.productionTip = false;
 (function (wp, $) {
 	'use strict'
 	wp.customize.bind('ready', function () {
-		new Vue({
-			el: '#wpum-email-content-editor',
-			components: {
-				EmailContentEditor
-			},
-			template: '<EmailContentEditor/>'
+		wp.customize.panel('registration_confirmation', function (section) {
+			section.expanded.bind(function (isExpanding) {
+				var vm = false
+				if (!vm) {
+					new Vue({
+						el: '#wpum-email-content-editor',
+						components: {
+							EmailContentEditor
+						},
+						template: '<EmailContentEditor/>'
+					})
+					vm = true
+				}
+			})
 		})
 	})
 })(window.wp, jQuery)

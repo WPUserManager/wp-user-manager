@@ -48,27 +48,20 @@ class WPUM_Emails_Customizer_Scripts {
 	 */
 	public function customize_controls() {
 
-		$is_vue_dev = defined( 'WPUM_VUE_DEV' ) && WPUM_VUE_DEV ? true : false;
+		$email_id = isset( $_GET['email'] ) ? esc_html( $_GET['email'] ) : false;
 
-		if( $is_vue_dev ) {
-			wp_register_script( 'wpum-email-customizer-editor-control', 'http://localhost:8080/EmailContentEditor.js', array( 'customize-controls' ), WPUM_VERSION, true );
-		} else {
-			wp_die('Yo VUEJS build missing');
-		}
 		wp_enqueue_editor();
-		wp_enqueue_script( 'wpum-email-customizer-editor-control' );
-
-		$js_variables = [
-			'selected_email_id' => isset( $_GET['email'] ) ? esc_html( $_GET['email'] ) : false
-		];
-		wp_localize_script( 'wpum-email-customizer-editor-control', 'wpumCustomizeControls', $js_variables );
-
-		/*
 		wp_enqueue_script( 'wpum-email-customize-controls', WPUM_PLUGIN_URL . 'assets/js/admin/admin-email-customizer-controls.min.js', array( 'customize-controls' ), WPUM_VERSION, true );
+
 		$js_variables = [
-			'selected_email_id' => isset( $_GET['email'] ) ? esc_html( $_GET['email'] ) : false
+			'labels'        => [
+				'open'  => esc_html__( 'Open email content editor' ),
+				'close' => esc_html__( 'Close email content editor' )
+			],
+			'email_content'     => wpum_get_email_field( $email_id, 'content' ),
+			'selected_email_id' => $email_id,
 		];
-		wp_localize_script( 'wpum-email-customize-controls', 'wpumCustomizeControls', $js_variables );*/
+		wp_localize_script( 'wpum-email-customize-controls', 'wpumCustomizeControls', $js_variables );
 
 	}
 

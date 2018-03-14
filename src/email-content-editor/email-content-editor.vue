@@ -1,13 +1,14 @@
 <template>
 	<div id="wpum-email-content-editor">
 		<a href="#" class="button button-hero" id="wpum-email-editor-btn" @click="openEditor">
-			<span class="dashicons dashicons-edit"></span>
-			Open email content editor
+			<span class="dashicons dashicons-edit" v-if="!editorVisible"></span>
+			<span class="dashicons dashicons-hidden" v-else></span>
+			<span v-text="buttonLabel"></span>
 		</a>
 		<transition name="slide">
 			<div v-dom-portal="'.wp-full-overlay'" :class="classes" v-if="editorVisible">
 				<div class="inside">
-					<textarea name="wpum-email-content" id="wpum-email-content" cols="30" rows="10"></textarea>
+					<textarea name="wpum-email-content" id="wpum-email-content" cols="30" rows="10" v-model="emailContent"></textarea>
 				</div>
 			</div>
 		</transition>
@@ -30,7 +31,9 @@ export default {
 	data() {
 		return {
 			editorVisible: false,
-			emailID: wpumCustomizeControls.selected_email_id
+			emailID: wpumCustomizeControls.selected_email_id,
+			emailContent: wpumCustomizeControls.email_content,
+			buttonLabel: wpumCustomizeControls.labels.open
 		}
 	},
 	methods: {
@@ -38,7 +41,15 @@ export default {
 		 * Open the editor window and initialize wp.editor.
 		 */
 		openEditor() {
-			this.editorVisible = true
+			this.editorVisible = !this.editorVisible
+
+			if( this.editorVisible ) {
+				this.buttonLabel = wpumCustomizeControls.labels.close
+				wp.editor.remove('wpum-email-content')
+			} else {
+				this.buttonLabel = wpumCustomizeControls.labels.open
+			}
+
 			let that = this
 			setTimeout(
 				() => {
@@ -52,7 +63,7 @@ export default {
                         },
 					})
 				},
-			1)
+			10)
 		},
 		/**
 		 * Update the live preview content.
@@ -68,7 +79,7 @@ export default {
 
 <style lang="scss">
 #wpum-email-editor-btn {
-	span {
+	span.dashicons {
 		margin-top: 12px;
 		margin-right: 5px;
 	}
@@ -77,7 +88,7 @@ export default {
 .wpum-editor-window {
 	border-top: solid 1px #ddd;
 	position: absolute;
-	height: 300px;
+	height: 275px;
 	right: 0;
 	left: 0;
 	z-index: 20;
