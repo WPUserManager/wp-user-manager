@@ -22,7 +22,7 @@
 		})
 		wp.customize('wpum_email[' + id + '][content]', function (value) {
 			value.bind(function (newval) {
-				$('table.email-body_inner td.content-cell h1 ~ p').html(sanitizeHtml(newval))
+				$('table.email-body_inner td.content-cell .preview-content').html(sanitizeHtml(newval))
 			})
 		})
 	})

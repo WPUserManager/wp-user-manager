@@ -32,7 +32,9 @@ $preview = is_customize_preview() ? wpum_get_email_field( $data->email_id, 'cont
 					<h1 style="box-sizing: border-box; color: #2F3133; font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif; font-size: 19px; font-weight: bold; margin-top: 0;" align="left"><?php echo esc_html( $heading ); ?></h1>
 					<?php endif; ?>
 					<?php if( $preview ) : ?>
-					    <p style="box-sizing: border-box; color: #74787E; font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif; font-size: 16px; line-height: 1.5em; margin-top: 0;" align="left"><?php echo $preview; ?></p>
+						<div class="preview-content" style="box-sizing: border-box; color: #74787E; font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif; font-size: 16px; line-height: 1.5em; margin-top: 0;">
+							<?php echo $preview; ?>
+						</div>
 					<?php else : ?>
                     	<p style="box-sizing: border-box; color: #74787E; font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif; font-size: 16px; line-height: 1.5em; margin-top: 0;" align="left">{email}</p>
 					<?php endif; ?>
