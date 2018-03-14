@@ -57,8 +57,16 @@ class WPUM_Emails_Customizer {
 			add_filter( 'customize_section_active', [ $this, 'remove_sections' ], 10, 2 );
 			add_filter( 'customize_panel_active', [ $this, 'remove_panels' ], 10, 2 );
 			add_action( 'parse_request', [ $this, 'customizer_setup_preview' ] );
-			add_action( 'customize_preview_init', [ $this, 'update_preview' ] );
 		}
+	}
+
+	/**
+	 * Require other classes and functions for the customizer to work.
+	 *
+	 * @return void
+	 */
+	private function includes() {
+		require_once WPUM_PLUGIN_DIR . 'includes/emails/class-wpum-emails-customizer-editor-control.php';
 	}
 
 	/**
@@ -103,7 +111,7 @@ class WPUM_Emails_Customizer {
 			foreach( $this->emails as $email_id => $registered_email ) {
 				$panels[] = $email_id;
 			}
-			if( in_array( $panel->id, $panels ) ) {
+			if( in_array( $panel->id, $panels ) && $_GET['email'] == $panel->id ) {
 				return true;
 			}
 			return false;
@@ -117,6 +125,8 @@ class WPUM_Emails_Customizer {
 	 * @return void
 	 */
 	public function customize_register( $wp_customize ) {
+
+		$this->includes();
 
 		foreach( $this->emails as $email_id => $registered_email ) {
 
@@ -136,7 +146,7 @@ class WPUM_Emails_Customizer {
 				] );
 
 				$wp_customize->add_section( $email_id . '_settings' , [
-					'title'       => esc_html__( 'Email settings' ),
+					'title'       => esc_html__( 'Email content settings' ),
 					'description' => '',
 					'capability'  => 'manage_options',
 					'panel'       => $email_id,
@@ -168,20 +178,29 @@ class WPUM_Emails_Customizer {
 			'capability'        => 'manage_options',
 			'sanitize_callback' => 'sanitize_text_field',
 			'transport'         => 'postMessage',
+			'default'           => $this->get_default( $email_id, 'title' ),
 			'type'              => 'option',
 		) );
 
 		$wp_customize->add_control( 'wpum_email[' . $email_id . '][title]', array(
 			'type'        => 'text',
 			'section'     => $email_id . '_settings',
-			'label'       => __( 'Email heading title' ),
+			'label'       => esc_html__( 'Email heading title' ),
 			'description' => esc_html__( 'Customize the heading title of the email.' ),
 		) );
 
+		$wp_customize->add_control( new WPUM_Emails_Customizer_Editor_Control( $wp_customize, 'wpum_email[' . $email_id . '][editor_button]', array(
+			'label'       => esc_html__( 'Email content' ),
+			'description' => esc_html__( 'Click the button to open the content customization editor.' ),
+			'section'     => $email_id . '_settings',
+			'settings'    => array(),
+		) ) );
+
 		$wp_customize->add_setting( 'wpum_email[' . $email_id . '][footer]', array(
 			'capability'        => 'manage_options',
-			'sanitize_callback' => 'wp_kses',
+			'sanitize_callback' => 'wp_kses_post',
 			'transport'         => 'postMessage',
+			'default'           => '<a href="{siteurl}">{sitename}</a><br />Some content for the footer goes here.',
 			'type'              => 'option',
 		) );
 
@@ -191,6 +210,30 @@ class WPUM_Emails_Customizer {
 			'label'       => __( 'Footer tagline' ),
 			'description' => esc_html__( 'Customize the footer tagline for this email.' ),
 		) );
+
+	}
+
+	/**
+	 * Retrieve a defaul value for the registered settings of each email.
+	 *
+	 * @param string $email_id
+	 * @param mixed|boolean $field
+	 * @return void
+	 */
+	private function get_default( $email_id, $field = false ) {
+
+		$default = false;
+
+		$defaults = apply_filters( 'wpum_email_customizer_settings_defaults', [
+			'registration_confirmation_title' => esc_html__( 'Welcome to {sitename}!' ),
+		] );
+
+		if( $email_id && $field ) {
+			$key     = esc_html( "{$email_id}_{$field}" );
+			$default = isset( $defaults[ $key ] ) ? $defaults[ $key ] : false;
+		}
+
+		return $default;
 
 	}
 
@@ -210,19 +253,6 @@ class WPUM_Emails_Customizer {
 			exit;
 		}
 
-	}
-
-	/**
-	 * Add scripts required to update the live preview of the customizer.
-	 *
-	 * @return void
-	 */
-	public function update_preview() {
-		wp_enqueue_script( 'wpum-email-customizer-preview', WPUM_PLUGIN_URL . 'assets/js/admin/admin-email-customizer-preview.min.js', array( 'jquery','customize-preview' ) );
-		$js_variables = [
-			'emails' => []
-		];
-		wp_localize_script( 'wpum-email-customizer-preview', 'wpumEmailCustomizer', $js_variables );
 	}
 
 }

@@ -19,6 +19,7 @@
 				<div class="spinner is-active" v-if="loading"></div>
 			</form>
 		</div>
+
 		<table class="wp-list-table widefat fixed striped">
 			<thead>
 				<tr>
@@ -107,6 +108,7 @@ export default {
 		getCustomizationURL( index ) {
 			let previewURL = wpumEmailsEditor.url + qs.stringify({ wpum_email_customizer: true, email: this.sanitized(index) }, { addQueryPrefix: true })
 			return wpumEmailsEditor.customizeurl + qs.stringify({
+					'autofocus[panel]': this.sanitized(index),
 					wpum_email_customizer: true,
 					email: this.sanitized(index),
 					url: previewURL
