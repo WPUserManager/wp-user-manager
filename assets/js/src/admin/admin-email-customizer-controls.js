@@ -43,8 +43,17 @@
 		var $editorButtonIcon = $editorButton.find('span.dashicons')
 		var $editorToolbarAdded = false
 		var $editorActive = false
+
+		// ============== Trigger for the email list ==============
 		var $mergeTagsButton = $('#wpum-display-tags-btn')
 		var $mergeTagsList = $('.wpum-email-tags-list')
+
+		$mergeTagsButton.click(function (e) {
+			var $this = $(e.currentTarget)
+			e.preventDefault()
+			$this.toggleClass('active')
+			$mergeTagsList.slideToggle('fast')
+		})
 
 		// Move the editor window within the preview frame.
 		$editorContainer.appendTo('.wp-full-overlay')
@@ -108,12 +117,15 @@
 			})
 		})
 
-		// ============== Trigger for the email list ==============
-		$mergeTagsButton.click(function (e) {
-			var $this = $(e.currentTarget)
-			e.preventDefault()
-			$this.toggleClass('active')
-			$mergeTagsList.slideToggle('fast')
+		// ===== Close the editor if switching section =====
+		wpumCustomizeControls.sections.forEach(function (sectionID) {
+			wp.customize.section(sectionID, function (section) {
+				section.expanded.bind(function (isExpanding) {
+					if (isExpanding === false && $editorButton.hasClass('active')) {
+						$editorButton.click()
+					}
+				})
+			})
 		})
 	})
 })(window.wp, jQuery)

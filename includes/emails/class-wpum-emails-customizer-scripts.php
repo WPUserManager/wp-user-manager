@@ -16,9 +16,15 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 class WPUM_Emails_Customizer_Scripts {
 
 	/**
+	 * Store the registered emails of the plugin.
+	 */
+	public $registered_emails;
+
+	/**
 	 * Get things started.
 	 */
 	public function __construct() {
+		$this->registered_emails = wpum_get_registered_emails();
 		add_action( 'customize_preview_init', array( $this, 'customize_preview' ) );
 		add_action( 'customize_controls_enqueue_scripts', array( $this, 'customize_controls' ), 90 );
 	}
@@ -34,7 +40,7 @@ class WPUM_Emails_Customizer_Scripts {
 		wp_enqueue_script( 'wpum-email-customize-preview', WPUM_PLUGIN_URL . 'assets/js/admin/admin-email-customizer-preview.min.js', array( 'customize-preview' ), WPUM_VERSION, true );
 
 		$js_variables = [
-			'emails' => wpum_get_registered_emails()
+			'emails' => $this->registered_emails
 		];
 
 		wp_localize_script( 'wpum-email-customize-preview', 'wpumCustomizePreview', $js_variables );
@@ -53,16 +59,23 @@ class WPUM_Emails_Customizer_Scripts {
 		wp_enqueue_editor();
 		wp_enqueue_script( 'wpum-email-customize-controls', WPUM_PLUGIN_URL . 'assets/js/admin/admin-email-customizer-controls.min.js', array( 'customize-controls' ), WPUM_VERSION, true );
 
+		// Create a list of registered sections based on the registered emails.
+		$sections = [];
+		foreach ( $this->registered_emails as $email_id => $email_settings ) {
+			$sections[] = $email_id . '_settings';
+		}
+
 		$js_variables = [
-			'labels'        => [
-				'open'            => esc_html__( 'Open email content editor' ),
-				'close'           => esc_html__( 'Close email content editor' ),
-				'addMerge'        => esc_html__( 'Add merge tags' ),
-				'addMergeTooltip' => esc_html__( 'Merge tags allow you to dynamically add content to your email' )
+			'labels'            => [
+				'open'             => esc_html__( 'Open email content editor' ),
+				'close'            => esc_html__( 'Close email content editor' ),
+				'addMerge'         => esc_html__( 'Add merge tags' ),
+				'addMergeTooltip'  => esc_html__( 'Merge tags allow you to dynamically add content to your email' )
 			],
 			'email_content'     => wpum_get_email_field( $email_id, 'content' ),
 			'selected_email_id' => $email_id,
-			'mergeTags'         => WPUM()->emails->get_tags()
+			'mergeTags'         => WPUM()->emails->get_tags(),
+			'sections'          => $sections
 		];
 		wp_localize_script( 'wpum-email-customize-controls', 'wpumCustomizeControls', $js_variables );
 
