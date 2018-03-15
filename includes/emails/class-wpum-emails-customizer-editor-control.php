@@ -43,7 +43,9 @@ class WPUM_Emails_Customizer_Editor_Control extends WP_Customize_Control {
 		</a>
 
 		<div id="wpum-editor-window">
-			<textarea name="wpum-mail-content-editor" id="wpum-mail-content-editor" cols="30" rows="10"></textarea>
+			<textarea name="wpum-mail-content-editor" id="wpum-mail-content-editor" cols="30" rows="10">
+				<?php echo esc_textarea( $this->value() ); ?>
+			</textarea>
 		</div>
 
 		<br/>

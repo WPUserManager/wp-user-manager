@@ -25,6 +25,15 @@
 	}
 
 	/**
+	 * Update live preview when content changes.
+	 */
+	function wpumEditorUpdatePreview() {
+		wp.customize('wpum_email[registration_confirmation][content]', function (obj) {
+			obj.set(wp.editor.getContent('wpum-mail-content-editor'))
+		})
+	}
+
+	/**
 	 * Hook into the customizer
 	 */
 	wp.customize.bind('ready', function () {
@@ -81,7 +90,18 @@
 				})
 			}
 			// Initialize the editor.
-			wp.editor.initialize('wpum-mail-content-editor')
+			wp.editor.initialize('wpum-mail-content-editor', {
+				tinymce: {
+					setup: function (ed) {
+						ed.on('change', function (ed, l) {
+							wpumEditorUpdatePreview()
+						})
+						ed.on('keyup', function (ed, l) {
+							wpumEditorUpdatePreview()
+						})
+					}
+				}
+			})
 		})
 	})
 })(window.wp, jQuery)
