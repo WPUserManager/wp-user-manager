@@ -61,6 +61,8 @@ class WPUM_Emails_List {
 			if( $is_vue_dev ) {
 				wp_register_script( 'wpum-emails-editor', 'http://localhost:8080/emails.js', array(), WPUM_VERSION, true );
 				wp_enqueue_script( 'wpum-emails-editor' );
+			} else {
+				wp_die( 'Vue build missing' );
 			}
 
 			$js_variables = [
@@ -71,7 +73,7 @@ class WPUM_Emails_List {
 				'default_email' => get_option( 'admin_email' ),
 				'emails'        => wpum_get_registered_emails(),
 				'labels'        => [
-					'title'             => esc_html__( 'WPUM Emails Customization' ),
+					'title'             => esc_html__( 'WP User Manager Emails Customization' ),
 					'email'             => esc_html__( 'Email' ),
 					'description'       => esc_html__( 'Description' ),
 					'recipients'        => esc_html__( 'Recipient(s)' ),
