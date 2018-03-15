@@ -4,11 +4,35 @@
 /* eslint complexity: ["error", 8] */
 (function (wp, $) {
 	'use strict'
+
+	/**
+	 * Generate an array of email tags which is used for the merge tags menu of the editor.
+	 */
+	function wpumEditorGetEmailTags(editor) {
+		if (!editor) {
+			return false
+		}
+		var $mergeTagsMenu = []
+		wpumCustomizeControls.mergeTags.forEach(function (tag) {
+			$mergeTagsMenu.push({
+				text: tag.name,
+				onclick: function () {
+					editor.insertContent('{' + tag.tag + '}')
+				}
+			})
+		})
+		return $mergeTagsMenu
+	}
+
+	/**
+	 * Hook into the customizer
+	 */
 	wp.customize.bind('ready', function () {
 		// Email editor controller.
 		var $editorButton = $('#wpum-email-editor-btn')
 		var $editorContainer = $('#wpum-editor-window')
 		var $editorButtonIcon = $editorButton.find('span.dashicons')
+		var $editorToolbarAdded = false
 		var $editorActive = false
 
 		// Move the editor window within the preview frame.
@@ -20,6 +44,7 @@
 		$editorButton.click(function (e) {
 			var $this = $(e.currentTarget)
 
+			// Toggle the editor instance if it was already created.
 			if ($editorActive === true) {
 				wp.editor.remove('wpum-mail-content-editor')
 			}
@@ -41,30 +66,21 @@
 			// Toggle the editor area.
 			$editorContainer.toggleClass('is-active')
 
-			$(document).on('tinymce-editor-setup', function (event, editor) {
-				editor.settings.toolbar1 += ',wpumEmailTags';
-				editor.addButton('wpumEmailTags', {
-					text: 'Add email tags',
-					icon: false,
-					type: 'menubutton',
-					tooltip: 'Merge tags allow you to dynamically add content to your email',
-					menu: [
-						{
-							text: 'Sample Item 1',
-							onclick: function () {
-								editor.insertContent('[wdm_shortcode 1]');
-							}
-						},
-						{
-							text: 'Sample Item 2',
-							onclick: function () {
-								editor.insertContent('[wdm_shortcode 2]');
-							}
-						}
-					]
-				});
-			});
-
+			// Determine wether the editor was already loaded and if not add the new tooldbar button.
+			if ($editorToolbarAdded === false) {
+				$(document).on('tinymce-editor-setup', function (event, editor) {
+					editor.settings.toolbar1 += ',wpumEmailTags'
+					editor.addButton('wpumEmailTags', {
+						text: wpumCustomizeControls.labels.addMerge,
+						icon: false,
+						type: 'menubutton',
+						tooltip: wpumCustomizeControls.labels.addMergeTooltip,
+						menu: wpumEditorGetEmailTags(editor)
+					})
+					$editorToolbarAdded = true
+				})
+			}
+			// Initialize the editor.
 			wp.editor.initialize('wpum-mail-content-editor')
 		})
 	})

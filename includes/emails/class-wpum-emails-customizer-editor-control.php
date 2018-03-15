@@ -39,19 +39,14 @@ class WPUM_Emails_Customizer_Editor_Control extends WP_Customize_Control {
 		<label class="customize-control-title"><?php echo esc_html( $this->label ); ?></label>
 		<a href="#" class="button button-hero" id="wpum-email-editor-btn">
 			<span class="dashicons dashicons-edit"></span>
-			<span>Open email content editor</span>
+			<span><?php esc_html_e( 'Open email content editor' ); ?></span>
 		</a>
 
 		<div id="wpum-editor-window">
 			<textarea name="wpum-mail-content-editor" id="wpum-mail-content-editor" cols="30" rows="10"></textarea>
 		</div>
 
-		<br/><br/>
-		<strong>
-			<?php esc_html_e( 'Available email tags:' ); ?>
-		</strong>
 		<br/>
-		<?php echo wpum_get_emails_tags_list(); ?>
 
 		<?php
 

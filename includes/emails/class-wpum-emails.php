@@ -330,8 +330,9 @@ class WPUM_Emails {
 
 		$email_tags = array(
 			array(
+				'name'        => esc_html__( 'Website URL' ),
+				'description' => esc_html__( 'The website url.' ),
 				'tag'         => 'website',
-				'description' => __( 'The website url.' ),
 				'function'    => 'wpum_email_tag_website'
 			),
 		);
