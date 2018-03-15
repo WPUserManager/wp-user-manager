@@ -18,28 +18,15 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-$heading = wpum_get_email_field( $data->email_id, 'title' );
-$preview = is_customize_preview() ? wpum_get_email_field( $data->email_id, 'content' ) : false;
+// Determine the output of the content.
+// If we're loading this file through the editor
+// we'll show fake content so the user can edit it.
+$output = '{email}';
+
+if( isset( $data->preview ) && $data->preview === true ) {
+	$output = '<div class="preview-content">' . wpum_get_email_field( $data->email_id, 'content' ) . '</div>';
+}
 
 // {email} is replaced by the content entered in the customizer.
 ?>
-<tr>
-	<td class="email-body" width="100%" cellpadding="0" cellspacing="0" style="-premailer-cellpadding: 0; -premailer-cellspacing: 0; border-bottom-color: #EDEFF2; border-bottom-style: solid; border-bottom-width: 1px; border-top-color: #EDEFF2; border-top-style: solid; border-top-width: 1px; box-sizing: border-box; font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif; margin: 0; padding: 0; width: 100%; word-break: break-word;" bgcolor="#FFFFFF">
-		<table class="email-body_inner" align="center" width="570" cellpadding="0" cellspacing="0" style="box-sizing: border-box; font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif; margin: 0 auto; padding: 0; width: 570px;" bgcolor="#FFFFFF">
-			<tr>
-				<td class="content-cell" style="box-sizing: border-box; font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif; padding: 35px; word-break: break-word;">
-					<?php if( $heading ) : ?>
-					<h1 style="box-sizing: border-box; color: #2F3133; font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif; font-size: 19px; font-weight: bold; margin-top: 0;" align="left"><?php echo esc_html( $heading ); ?></h1>
-					<?php endif; ?>
-					<?php if( $preview ) : ?>
-						<div class="preview-content" style="box-sizing: border-box; color: #74787E; font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif; font-size: 16px; line-height: 1.5em; margin-top: 0;">
-							<?php echo $preview; ?>
-						</div>
-					<?php else : ?>
-                    	<p style="box-sizing: border-box; color: #74787E; font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif; font-size: 16px; line-height: 1.5em; margin-top: 0;" align="left">{email}</p>
-					<?php endif; ?>
-                </td>
-            </tr>
-        </table>
-    </td>
-</tr>
+<?php echo $output; ?>

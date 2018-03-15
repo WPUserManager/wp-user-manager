@@ -204,17 +204,24 @@ class WPUM_Emails {
 
 		ob_start();
 
+		$data = [
+			'heading'  => $this->heading,
+		];
+
 		WPUM()->templates
+			->set_template_data( $data )
 			->get_template_part( 'emails/header', $this->get_template() );
 
 		do_action( 'wpum_email_header', $this );
 
 		WPUM()->templates
+			->set_template_data( $data )
 			->get_template_part( 'emails/body', $this->get_template() );
 
 		do_action( 'wpum_email_body', $this );
 
 		WPUM()->templates
+			->set_template_data( $data )
 			->get_template_part( 'emails/footer', $this->get_template() );
 
 		do_action( 'wpum_email_footer', $this );

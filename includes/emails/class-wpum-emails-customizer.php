@@ -222,21 +222,6 @@ class WPUM_Emails_Customizer {
 			'section'     => $email_id . '_settings',
 		) ) );
 
-		$wp_customize->add_setting( 'wpum_email[' . $email_id . '][footer]', array(
-			'capability'        => 'manage_options',
-			'sanitize_callback' => 'wp_kses_post',
-			'transport'         => 'postMessage',
-			'default'           => '<a href="{siteurl}">{sitename}</a>',
-			'type'              => 'option',
-		) );
-
-		$wp_customize->add_control( 'wpum_email[' . $email_id . '][footer]', array(
-			'type'        => 'textarea',
-			'section'     => $email_id . '_settings',
-			'label'       => __( 'Footer tagline' ),
-			'description' => esc_html__( 'Customize the footer tagline for this email.' ),
-		) );
-
 	}
 
 	/**
@@ -283,9 +268,14 @@ class WPUM_Emails_Customizer {
 	public function customizer_setup_preview() {
 
 		if( is_customize_preview() && isset( $_GET['email'] ) ) {
+
+			$email_id = sanitize_text_field( $_GET['email'] );
+
 			WPUM()->templates
 				->set_template_data( [
-					'email' => sanitize_text_field( $_GET['email'] )
+					'email_id' => sanitize_text_field( $email_id ),
+					'heading'  => wpum_get_email_field( $email_id, 'title' ),
+					'preview'  => true
 				] )
 				->get_template_part( 'email-customizer-preview' );
 			exit;

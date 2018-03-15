@@ -9,25 +9,16 @@
 // Exit if accessed directly
 if ( ! defined( 'ABSPATH' ) ) exit;
 
-// Retrieve the selected email to modify.
-$detected_email = $data->email;
-
 WPUM()->templates
-	->set_template_data( [
-		'email_id' => $detected_email
-	] )
+	->set_template_data( $data )
 	->get_template_part( 'emails/header', WPUM()->emails->get_template() );
 
 WPUM()->templates
-	->set_template_data( [
-		'email_id'   => $detected_email
-	] )
+	->set_template_data( $data )
 	->get_template_part( 'emails/body', WPUM()->emails->get_template() );
 
 WPUM()->templates
-	->set_template_data( [
-		'email_id' => $detected_email
-	] )
+	->set_template_data( $data )
 	->get_template_part( 'emails/footer', WPUM()->emails->get_template() );
 
 ?>

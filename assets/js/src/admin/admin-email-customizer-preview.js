@@ -15,14 +15,9 @@
 				$('h1').text(newval)
 			})
 		})
-		wp.customize('wpum_email[' + id + '][footer]', function (value) {
-			value.bind(function (newval) {
-				$('table.email-footer td.content-cell p').html(sanitizeHtml(newval))
-			})
-		})
 		wp.customize('wpum_email[' + id + '][content]', function (value) {
 			value.bind(function (newval) {
-				$('table.email-body_inner td.content-cell .preview-content').html(sanitizeHtml(newval))
+				$('.preview-content').html(sanitizeHtml(newval))
 			})
 		})
 	})
