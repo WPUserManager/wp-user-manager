@@ -75,10 +75,19 @@
   .wpum-form fieldset.fieldset-user_avatar .wpum-uploaded-file-preview img {
     width: 70px;
     height: 70px; }
+  .wpum-form fieldset.fieldset-remember {
+    border: none;
+    display: inline-block; }
+    .wpum-form fieldset.fieldset-remember label {
+      width: auto; }
 
 .wpum-action-links {
   list-style: none;
-  padding: 0;
-  margin-top: 1em; }
+  padding: 0; }
+
+#wpum-submit-login-form {
+  clear: both; }
+  #wpum-submit-login-form input[type="submit"] {
+    float: right; }
 
 /*# sourceMappingURL=wpum.css.map */
