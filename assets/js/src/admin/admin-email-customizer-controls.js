@@ -54,8 +54,8 @@
 
 		$editorButton.click(function (e) {
 			var $this = $(e.currentTarget)
-
 			e.preventDefault()
+			$this.toggleClass('active')
 
 			// Toggle the editor instance if it was already created.
 			if ($editorActive === true) {
