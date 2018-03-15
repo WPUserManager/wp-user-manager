@@ -193,6 +193,7 @@ class WPUM_Emails_Customizer {
 			'capability'        => 'manage_options',
 			'sanitize_callback' => 'wp_kses_post',
 			'transport'         => 'postMessage',
+			'default'           => $this->get_default( $email_id, 'content' ),
 			'type'              => 'option',
 		) );
 
@@ -206,7 +207,7 @@ class WPUM_Emails_Customizer {
 			'capability'        => 'manage_options',
 			'sanitize_callback' => 'wp_kses_post',
 			'transport'         => 'postMessage',
-			'default'           => '<a href="{siteurl}">{sitename}</a><br />Some content for the footer goes here.',
+			'default'           => '<a href="{siteurl}">{sitename}</a>',
 			'type'              => 'option',
 		) );
 
@@ -232,6 +233,10 @@ class WPUM_Emails_Customizer {
 
 		$defaults = apply_filters( 'wpum_email_customizer_settings_defaults', [
 			'registration_confirmation_title' => esc_html__( 'Welcome to {sitename}!' ),
+			'registration_confirmation_content' => "<p>Hello {username}, and welcome to {sitename}. We’re thrilled to have you on board.</p>
+<p>For reference, here\'s your login information:</p>
+<p>Username: {username}<br />Login page: {login_page_url}</p>
+<p>Thanks,<br />{sitename}</p>"
 		] );
 
 		if( $email_id && $field ) {

@@ -16,13 +16,7 @@
 // Exit if accessed directly
 if ( ! defined( 'ABSPATH' ) ) exit;
 
-$image = get_option( 'wpum_email' );
-
-if( array_key_exists( 'logo', $image ) ) {
-	$image = esc_url( $image['logo'] );
-} else {
-	$image = false;
-}
+$image = wpum_get_option( 'email_logo' );
 
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -36,6 +30,9 @@ if( array_key_exists( 'logo', $image ) ) {
 		<style type="text/css">
 			body {
 				width: 100% !important; height: 100%; margin: 0; line-height: 1.4; background-color: #F2F4F6; color: #74787E; -webkit-text-size-adjust: none;
+			}
+			a {
+				color:#74787E;
 			}
 			@media only screen and (max-width: 600px) {
 				.email-body_inner {
@@ -59,7 +56,7 @@ if( array_key_exists( 'logo', $image ) ) {
 					<tr>
 						<td class="email-masthead" style="box-sizing: border-box; font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif; padding: 25px 0; word-break: break-word;" align="center">
 							<a href="<?php echo home_url(); ?>" class="email-masthead_name" style="box-sizing: border-box; color: #bbbfc3; font-family: Arial, 'Helvetica Neue', Helvetica, sans-serif; font-size: 16px; font-weight: bold; text-decoration: none; text-shadow: 0 1px 0 white;">
-								<?php if( $image ) : ?>
+								<?php if( ! empty( $image ) ) : ?>
 									<img src="<?php echo esc_url( $image ); ?>" alt="<?php echo esc_attr( get_bloginfo( 'name' ) ); ?>">
 								<?php else : ?>
 									<?php echo esc_html( get_bloginfo( 'name' ) ); ?>
