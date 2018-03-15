@@ -44,3 +44,37 @@ function wpum_login_form( $atts, $content = null ) {
 
 }
 add_shortcode( 'wpum_login_form', 'wpum_login_form' );
+
+/**
+ * Password recovery shortcode.
+ *
+ * @param array $atts
+ * @param string $content
+ * @return void
+ */
+function wpum_password_recovery( $atts, $content = null ) {
+
+	extract( shortcode_atts( array(
+		'login_link'    => '',
+		'register_link' => ''
+	), $atts ) );
+
+	ob_start();
+
+	$output = ob_get_clean();
+
+	if( is_user_logged_in() ) {
+		WPUM()->templates
+			->get_template_part( 'already-logged-in' );
+	} else {
+		echo WPUM()->forms->get_form( 'password-recovery', $atts );
+
+		WPUM()->templates
+			->set_template_data( $atts )
+			->get_template_part( 'action-links' );
+	}
+
+	return $output;
+
+}
+add_shortcode( 'wpum_password_recovery', 'wpum_password_recovery' );
