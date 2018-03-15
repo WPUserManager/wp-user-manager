@@ -174,6 +174,21 @@ class WPUM_Emails_Customizer {
 			return;
 		}
 
+		$wp_customize->add_setting( 'wpum_email[' . $email_id . '][subject]', array(
+			'capability'        => 'manage_options',
+			'sanitize_callback' => 'sanitize_text_field',
+			'transport'         => 'postMessage',
+			'default'           => $this->get_default( $email_id, 'subject' ),
+			'type'              => 'option',
+		) );
+
+		$wp_customize->add_control( 'wpum_email[' . $email_id . '][subject]', array(
+			'type'        => 'text',
+			'section'     => $email_id . '_settings',
+			'label'       => esc_html__( 'Email subject' ),
+			'description' => esc_html__( 'Customize the subject line of the email.' ),
+		) );
+
 		$wp_customize->add_setting( 'wpum_email[' . $email_id . '][title]', array(
 			'capability'        => 'manage_options',
 			'sanitize_callback' => 'sanitize_text_field',
@@ -232,11 +247,15 @@ class WPUM_Emails_Customizer {
 		$default = false;
 
 		$defaults = apply_filters( 'wpum_email_customizer_settings_defaults', [
-			'registration_confirmation_title' => esc_html__( 'Welcome to {sitename}!' ),
+			'registration_confirmation_title'   => esc_html__( 'Welcome to {sitename}!' ),
+			'registration_confirmation_subject' => esc_html__( 'Welcome to {sitename}!' ),
 			'registration_confirmation_content' => "<p>Hello {username}, and welcome to {sitename}. We’re thrilled to have you on board.</p>
 <p>For reference, here\'s your login information:</p>
 <p>Username: {username}<br />Login page: {login_page_url}</p>
-<p>Thanks,<br />{sitename}</p>"
+<p>Thanks,<br />{sitename}</p>",
+			'password_recovery_request_subject' => esc_html__( 'Reset your {sitename} password' ),
+			'password_recovery_request_title'   => esc_html__( 'Reset your {sitename} password' ),
+			'password_recovery_request_content' => 'hehehe'
 		] );
 
 		if( $email_id && $field ) {
