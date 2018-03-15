@@ -259,7 +259,11 @@ class WPUM_Emails_Customizer {
 <p>Thanks,<br />{sitename}</p>",
 			'password_recovery_request_subject' => esc_html__( 'Reset your {sitename} password' ),
 			'password_recovery_request_title'   => esc_html__( 'Reset your {sitename} password' ),
-			'password_recovery_request_content' => 'hehehe'
+			'password_recovery_request_content' => '<p>Hello {username},</p>
+<p>You are receiving this message because you or somebody else has attempted to reset your password on {sitename}.</p>
+<p>If this was a mistake, just ignore this email and nothing will happen.</p>
+<p>To reset your password, visit the following address:</p>
+<p>{recovery_url}</p>'
 		] );
 
 		if( $email_id && $field ) {
