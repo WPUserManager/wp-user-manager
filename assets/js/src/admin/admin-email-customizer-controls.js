@@ -43,6 +43,8 @@
 		var $editorButtonIcon = $editorButton.find('span.dashicons')
 		var $editorToolbarAdded = false
 		var $editorActive = false
+		var $mergeTagsButton = $('#wpum-display-tags-btn')
+		var $mergeTagsList = $('.wpum-email-tags-list')
 
 		// Move the editor window within the preview frame.
 		$editorContainer.appendTo('.wp-full-overlay')
@@ -52,6 +54,8 @@
 
 		$editorButton.click(function (e) {
 			var $this = $(e.currentTarget)
+
+			e.preventDefault()
 
 			// Toggle the editor instance if it was already created.
 			if ($editorActive === true) {
@@ -102,6 +106,14 @@
 					}
 				}
 			})
+		})
+
+		// ============== Trigger for the email list ==============
+		$mergeTagsButton.click(function (e) {
+			var $this = $(e.currentTarget)
+			e.preventDefault()
+			$this.toggleClass('active')
+			$mergeTagsList.slideToggle('fast')
 		})
 	})
 })(window.wp, jQuery)

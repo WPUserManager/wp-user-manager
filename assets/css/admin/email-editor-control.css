@@ -37,6 +37,9 @@
     margin-right: 5px; }
 
 .wpum-email-tags-list {
-  display: none; }
+  display: none;
+  margin-top: 15px; }
+  .wpum-email-tags-list hr {
+    margin-top: 15px; }
 
 /*# sourceMappingURL=email-editor-control.css.map */

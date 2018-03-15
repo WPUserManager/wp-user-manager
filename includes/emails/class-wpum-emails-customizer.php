@@ -147,7 +147,7 @@ class WPUM_Emails_Customizer {
 
 				$wp_customize->add_section( $email_id . '_settings' , [
 					'title'       => esc_html__( 'Email content settings' ),
-					'description' => '<a href="#" class="button" id="wpum-display-tags-btn"><span class="dashicons dashicons-editor-code"></span>' . esc_html__( 'View available email merge tags' ) . '</a><div class="wpum-email-tags-list">' . esc_html__( 'Available email merge tags:' ) . '<br/>' . wpum_get_emails_tags_list() . '<hr/></div>',
+					'description' => '<a href="#" class="button" id="wpum-display-tags-btn"><span class="dashicons dashicons-editor-code"></span>' . esc_html__( 'View available email merge tags' ) . '</a><div class="wpum-email-tags-list"><strong>' . esc_html__( 'Available email merge tags:' ) . '</strong><br/>' . wpum_get_emails_tags_list() . '<hr/></div>',
 					'capability'  => 'manage_options',
 					'panel'       => $email_id,
 				] );
