@@ -42,7 +42,7 @@ class WPUM_Emails_Customizer_Editor_Control extends WP_Customize_Control {
 			<span><?php esc_html_e( 'Open email content editor' ); ?></span>
 		</a>
 
-		<div id="wpum-editor-window">
+		<div id="wpum-editor-window" class="editor-window">
 			<textarea name="wpum-mail-content-editor" id="wpum-mail-content-editor" cols="30" rows="10">
 				<?php echo esc_textarea( $this->value() ); ?>
 			</textarea>

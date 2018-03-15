@@ -130,6 +130,10 @@ class WPUM_Emails_Customizer {
 
 		foreach( $this->emails as $email_id => $registered_email ) {
 
+			if( isset( $_GET['email'] ) && $_GET['email'] !== $email_id ) {
+				continue;
+			}
+
 			if( isset( $registered_email['name'] ) && isset( $registered_email['description'] ) ) {
 
 				$email_id = esc_attr( $email_id );

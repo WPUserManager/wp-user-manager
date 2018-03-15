@@ -28,7 +28,8 @@
 	 * Update live preview when content changes.
 	 */
 	function wpumEditorUpdatePreview() {
-		wp.customize('wpum_email[registration_confirmation][content]', function (obj) {
+		var $emailID = wpumCustomizeControls.selected_email_id
+		wp.customize('wpum_email[' + $emailID + '][content]', function (obj) {
 			obj.set(wp.editor.getContent('wpum-mail-content-editor'))
 		})
 	}
@@ -59,7 +60,7 @@
 		$editorContainer.appendTo('.wp-full-overlay')
 
 		// Don't ask me why but elements are duplicated and I'm tired of trying to figure this out.
-		$('.wp-full-overlay').find('#wpum-editor-window').remove()
+		// $('.wp-full-overlay').find('#wpum-editor-window').remove()
 
 		$editorButton.click(function (e) {
 			var $this = $(e.currentTarget)

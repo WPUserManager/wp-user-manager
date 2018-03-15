@@ -2,7 +2,7 @@
   margin-top: 12px;
   margin-right: 5px; }
 
-#wpum-editor-window {
+.editor-window {
   border-top: solid 1px #ddd;
   position: absolute;
   height: 275px;
@@ -13,7 +13,7 @@
   display: block;
   bottom: -301px;
   transition: all .2s; }
-  #wpum-editor-window.is-active {
+  .editor-window.is-active {
     bottom: 0; }
 
 .slide-leave-active,

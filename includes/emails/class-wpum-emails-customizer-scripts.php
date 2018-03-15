@@ -54,7 +54,7 @@ class WPUM_Emails_Customizer_Scripts {
 	 */
 	public function customize_controls() {
 
-		$email_id = isset( $_GET['email'] ) ? esc_html( $_GET['email'] ) : false;
+		$selected_email_id = isset( $_GET['email'] ) ? esc_html( $_GET['email'] ) : false;
 
 		wp_enqueue_editor();
 		wp_enqueue_script( 'wpum-email-customize-controls', WPUM_PLUGIN_URL . 'assets/js/admin/admin-email-customizer-controls.min.js', array( 'customize-controls' ), WPUM_VERSION, true );
@@ -73,7 +73,7 @@ class WPUM_Emails_Customizer_Scripts {
 				'addMergeTooltip'  => esc_html__( 'Merge tags allow you to dynamically add content to your email' )
 			],
 			'email_content'     => wpum_get_email_field( $email_id, 'content' ),
-			'selected_email_id' => $email_id,
+			'selected_email_id' => $selected_email_id,
 			'mergeTags'         => WPUM()->emails->get_tags(),
 			'sections'          => $sections
 		];
