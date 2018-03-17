@@ -92,6 +92,48 @@ function wpum_email_tag_email( $user_id ) {
 }
 
 /**
+ * Parse the {firstname} tag into the email to display the user's first name.
+ *
+ * @param string $user_id
+ * @return void
+ */
+function wpum_email_tag_firstname( $user_id ) {
+
+	$firstname = get_user_meta( $user_id, 'first_name', true );
+
+	return $firstname;
+}
+
+/**
+ * Parse the {lastname} tag into the email to display the user's last name.
+ *
+ * @param string $user_id
+ * @return void
+ */
+function wpum_email_tag_lastname( $user_id ) {
+
+	$firstname = get_user_meta( $user_id, 'last_name', true );
+
+	return $firstname;
+}
+
+/**
+ * Parse the {login_page_url} tag into the email to display the site login page url.
+ *
+ * @param string $user_id
+ * @return void
+ */
+function wpum_email_tag_login_page_url( $user_id = false ) {
+
+	$login_page_url = wpum_get_core_page_id( 'login' );
+	$login_page_url = get_permalink( $login_page_url );
+
+	$url = '<a href="'. esc_url( $login_page_url ) .'">' . esc_html( $login_page_url ) . '</a>';
+
+	return $url;
+}
+
+/**
  * Retrieve registered emails
  *
  * @return array

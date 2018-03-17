@@ -360,6 +360,30 @@ class WPUM_Emails {
 				'tag'         => 'email',
 				'function'    => 'wpum_email_tag_email'
 			),
+			array(
+				'name'        => esc_html__( 'User first name' ),
+				'description' => esc_html__( 'Display the user\'s first name.' ),
+				'tag'         => 'firstname',
+				'function'    => 'wpum_email_tag_firstname'
+			),
+			array(
+				'name'        => esc_html__( 'User last name' ),
+				'description' => esc_html__( 'Display the user\'s last name.' ),
+				'tag'         => 'lastname',
+				'function'    => 'wpum_email_tag_lastname'
+			),
+			array(
+				'name'        => esc_html__( 'Login page url' ),
+				'description' => esc_html__( 'Display the login page url.' ),
+				'tag'         => 'login_page_url',
+				'function'    => 'wpum_email_tag_login_page_url'
+			),
+			array(
+				'name'        => esc_html__( 'Password recovery url' ),
+				'description' => esc_html__( 'Display the login page url.' ),
+				'tag'         => 'login_page_url',
+				'function'    => 'wpum_email_tag_login_page_url'
+			),
 		);
 
 		return apply_filters( 'wpum_email_tags', $email_tags, $this );
