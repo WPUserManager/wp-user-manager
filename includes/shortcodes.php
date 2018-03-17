@@ -68,10 +68,6 @@ function wpum_password_recovery( $atts, $content = null ) {
 			->get_template_part( 'already-logged-in' );
 	} else {
 		echo WPUM()->forms->get_form( 'password-recovery', $atts );
-
-		WPUM()->templates
-			->set_template_data( $atts )
-			->get_template_part( 'action-links' );
 	}
 
 	return $output;

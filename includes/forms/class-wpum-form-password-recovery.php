@@ -153,7 +153,7 @@ class WPUM_Form_Password_Recovery extends WPUM_Form {
 	 *
 	 * @return void
 	 */
-	public function submit() {
+	public function submit( $atts ) {
 
 		$this->init_fields();
 
@@ -167,6 +167,10 @@ class WPUM_Form_Password_Recovery extends WPUM_Form {
 		WPUM()->templates
 			->set_template_data( $data )
 			->get_template_part( 'forms/form', 'password-recovery' );
+
+		WPUM()->templates
+			->set_template_data( $atts )
+			->get_template_part( 'action-links' );
 
 	}
 
