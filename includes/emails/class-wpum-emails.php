@@ -348,6 +348,18 @@ class WPUM_Emails {
 				'tag'         => 'website',
 				'function'    => 'wpum_email_tag_website'
 			),
+			array(
+				'name'        => esc_html__( 'Username' ),
+				'description' => esc_html__( 'Display the user\'s username.' ),
+				'tag'         => 'username',
+				'function'    => 'wpum_email_tag_username'
+			),
+			array(
+				'name'        => esc_html__( 'User email' ),
+				'description' => esc_html__( 'Display the user\'s email.' ),
+				'tag'         => 'email',
+				'function'    => 'wpum_email_tag_email'
+			),
 		);
 
 		return apply_filters( 'wpum_email_tags', $email_tags, $this );

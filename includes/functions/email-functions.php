@@ -56,6 +56,42 @@ function wpum_email_tag_sitename( $user_id ) {
 }
 
 /**
+ * Parse the {username} tag into the email to display the user's username.
+ *
+ * @param string $user_id
+ * @return void
+ */
+function wpum_email_tag_username( $user_id ) {
+
+	$user     = get_user_by( 'id', $user_id );
+	$username = '';
+
+	if( $user instanceof WP_User ) {
+		$username = $user->data->user_login;
+	}
+
+	return $username;
+}
+
+/**
+ * Parse the {email} tag into the email to display the user's email.
+ *
+ * @param string $user_id
+ * @return void
+ */
+function wpum_email_tag_email( $user_id ) {
+
+	$user     = get_user_by( 'id', $user_id );
+	$email = '';
+
+	if( $user instanceof WP_User ) {
+		$email = $user->data->user_email;
+	}
+
+	return $email;
+}
+
+/**
  * Retrieve registered emails
  *
  * @return array
