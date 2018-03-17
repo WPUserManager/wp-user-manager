@@ -1,16 +1,13 @@
 /* Form elements */
 .wpum-form {
 	fieldset {
-		margin: 0 0 1em 0;
+		margin: 0;
 		padding: 0 0 1em 0;
 		line-height: 2em;
 		border: 0;
-		border-bottom: 1px solid #ccc;
 		label {
 			display: block;
 			margin: 0;
-			width: 29%;
-			float: left;
 			vertical-align: middle;
 			small {
 				opacity: .75;
@@ -21,8 +18,6 @@
 			}
 		}
 		div.field {
-			width: 70%;
-			float: right;
 			vertical-align: middle;
 			label {
 				float: none;
@@ -67,24 +62,14 @@
 				}
 			}
 		}
-		&.fieldset-remember {
-			border: none;
-			display: inline-block;
-			label {
-				width: auto;
-			}
-		}
 	}
 }
 
 .wpum-action-links {
 	list-style: none;
 	padding: 0;
-}
-
-#wpum-submit-login-form {
-	clear:both;
-	input[type="submit"] {
-		float: right;
+	margin-top: 1em;
+	li {
+		margin-bottom: 0.3em;
 	}
 }

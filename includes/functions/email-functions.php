@@ -97,3 +97,27 @@ function wpum_get_email_field( $email_id = false, $field_id = false ) {
 	return $output;
 
 }
+
+/**
+ * Retrieve details about emails stored into the database.
+ *
+ * @param string $email_id
+ * @return void
+ */
+function wpum_get_email( $email_id = false ) {
+
+	$email = false;
+
+	if( ! $email_id ) {
+		return false;
+	}
+
+	$emails = get_option( 'wpum_email', false );
+
+	if( array_key_exists( $email_id, $emails ) && is_array( $emails[ $email_id ] ) ) {
+		$email = $emails[ $email_id ];
+	}
+
+	return $email;
+
+}
