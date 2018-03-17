@@ -46,6 +46,16 @@ function wpum_email_tag_website( $user_id ) {
 }
 
 /**
+ * Parse the {sitename} tag into the email to display the site name.
+ *
+ * @param string $user_id
+ * @return void
+ */
+function wpum_email_tag_sitename( $user_id ) {
+	return esc_html( get_bloginfo( 'name' ) );
+}
+
+/**
  * Retrieve registered emails
  *
  * @return array

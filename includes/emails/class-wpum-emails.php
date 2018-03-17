@@ -337,6 +337,12 @@ class WPUM_Emails {
 
 		$email_tags = array(
 			array(
+				'name'        => esc_html__( 'Website name' ),
+				'description' => esc_html__( 'Display the name of the website.' ),
+				'tag'         => 'sitename',
+				'function'    => 'wpum_email_tag_sitename'
+			),
+			array(
 				'name'        => esc_html__( 'Website URL' ),
 				'description' => esc_html__( 'The website url.' ),
 				'tag'         => 'website',
