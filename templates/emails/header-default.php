@@ -53,7 +53,7 @@ $body_content = "
 	font-family: 'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif;
 ";
 $body_content_inner = "
-	color: #000000;
+	color: #515151;
 	font-size:14px;
 	font-family: 'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif;
 	line-height:150%;

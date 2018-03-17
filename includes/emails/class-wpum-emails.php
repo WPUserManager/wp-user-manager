@@ -79,6 +79,13 @@ class WPUM_Emails {
 	private $user_id;
 
 	/**
+	 * The dynamic key for password reset.
+	 *
+	 * @var string
+	 */
+	private $password_reset_key;
+
+	/**
 	 * Get things started.
 	 */
 	public function __construct() {
@@ -380,9 +387,9 @@ class WPUM_Emails {
 			),
 			array(
 				'name'        => esc_html__( 'Password recovery url' ),
-				'description' => esc_html__( 'Display the login page url.' ),
-				'tag'         => 'login_page_url',
-				'function'    => 'wpum_email_tag_login_page_url'
+				'description' => esc_html__( 'Display the password recovery url.' ),
+				'tag'         => 'recovery_url',
+				'function'    => 'wpum_email_tag_password_recovery_url'
 			),
 		);
 
@@ -403,7 +410,7 @@ class WPUM_Emails {
 		if ( ! $this->email_tag_exists( $tag ) ) {
 			return $m[0];
 		}
-		return call_user_func( $this->tags[ $tag ]['function'], $this->user_id, $tag );
+		return call_user_func( $this->tags[ $tag ]['function'], $this->user_id, $this->password_reset_key, $tag );
 	}
 
 	/**

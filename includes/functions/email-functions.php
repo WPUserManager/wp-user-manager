@@ -134,6 +134,26 @@ function wpum_email_tag_login_page_url( $user_id = false ) {
 }
 
 /**
+ * Parse the {recovery_url} tag into the email to display personalized password recovery url.
+ *
+ * @param string $user_id
+ * @return void
+ */
+function wpum_email_tag_password_recovery_url( $user_id, $password_reset_key ) {
+
+	$reset_page = wpum_get_core_page_id( 'password' );
+	$reset_page = get_permalink( $reset_page );
+	$reset_page = add_query_arg( [
+		'user_id' => $user_id,
+		'key'     => $password_reset_key
+	], $reset_page );
+
+	$link_color = apply_filters( 'wpum_email_tag_password_recovery_url_color', '#000' );
+
+	return '<a href="' . esc_url( $reset_page ) . '" style="color:' . $link_color . '">' . esc_html( $reset_page ) . '</a>';
+}
+
+/**
  * Retrieve registered emails
  *
  * @return array
