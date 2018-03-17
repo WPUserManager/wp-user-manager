@@ -25,12 +25,12 @@ if( isset( $data->scalar ) ) {
 <ul class="wpum-action-links">
 	<?php if( isset( $data->login_link ) && $data->login_link == 'yes' ) : ?>
 	<li>
-		<?php echo apply_filters( 'wpum_login_link_label', sprintf( __( 'Already have an account? <a href="%s">Sign In &raquo;</a>', 'wpum' ), esc_url( get_permalink( wpum_get_core_page_id( 'login_page' ) ) ) ) ); ?>
+		<?php echo apply_filters( 'wpum_login_link_label', sprintf( __( 'Already have an account? <a href="%s">Sign In &raquo;</a>', 'wpum' ), esc_url( get_permalink( wpum_get_core_page_id( 'login' ) ) ) ) ); ?>
 	</li>
 	<?php endif; ?>
 	<?php if( isset( $data->register_link ) && $data->register_link == 'yes' ) : ?>
 	<li>
-		<?php echo apply_filters( 'wpum_registration_link_label', sprintf( __( 'Don\'t have an account? <a href="%s">Signup Now &raquo;</a>', 'wpum' ), esc_url( get_permalink( wpum_get_core_page_id( 'registration_page' ) ) ) ) ); ?>
+		<?php echo apply_filters( 'wpum_registration_link_label', sprintf( __( 'Don\'t have an account? <a href="%s">Signup Now &raquo;</a>', 'wpum' ), esc_url( get_permalink( wpum_get_core_page_id( 'registration' ) ) ) ) ); ?>
 	</li>
 	<?php endif; ?>
 	<?php if( isset( $data->psw_link ) && $data->psw_link == 'yes' ) : ?>

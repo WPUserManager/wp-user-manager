@@ -47,17 +47,17 @@ class WPUM_Form_Password_Recovery extends WPUM_Form {
 		add_action( 'wp', array( $this, 'process' ) );
 		add_filter( 'submit_wpum_form_validate_fields', [ $this, 'validate_username_or_email' ], 10, 4 );
 
-		$this->steps  = (array) apply_filters( 'password_steps', array(
+		$this->steps  = (array) apply_filters( 'password_reset_steps', array(
 			'submit' => array(
 				'name'     => esc_html__( 'Password recovery details request' ),
 				'view'     => array( $this, 'submit' ),
 				'handler'  => array( $this, 'submit_handler' ),
 				'priority' => 10
 			),
-			'instructions' => array(
-				'name'     => esc_html__( 'Send instructions' ),
-				'view'     => array( $this, 'instructions' ),
-				'handler'  => array( $this, 'instructions_handler' ),
+			'sent' => array(
+				'name'     => esc_html__( 'Instructions sent' ),
+				'view'     => array( $this, 'instructions_sent' ),
+				'handler'  => false,
 				'priority' => 11
 			),
 			'reset' => array(
@@ -232,10 +232,19 @@ class WPUM_Form_Password_Recovery extends WPUM_Form {
 				throw new Exception( esc_html__( 'Something went wrong.' ) );
 			}
 
+			// Successful, show next step.
+			$this->step ++;
+
 		} catch ( Exception $e ) {
 			$this->add_error( $e->getMessage() );
 			return;
 		}
+	}
+
+	public function instructions_sent() {
+
+		echo 'yup';
+
 	}
 
 }
