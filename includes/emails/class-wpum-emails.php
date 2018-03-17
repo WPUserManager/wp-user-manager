@@ -259,6 +259,7 @@ class WPUM_Emails {
 
 		do_action( 'wpum_email_send_before', $this );
 
+		$subject     = $this->parse_tags( $subject );
 		$message     = $this->build_email( $message );
 		$message     = $this->parse_tags( $message );
 		$attachments = apply_filters( 'wpum_email_attachments', $attachments, $this );
