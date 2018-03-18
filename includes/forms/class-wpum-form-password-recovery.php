@@ -273,4 +273,12 @@ class WPUM_Form_Password_Recovery extends WPUM_Form {
 
 	}
 
+	public function reset() {
+
+		$this->init_fields();
+
+		echo 'yup';
+
+	}
+
 }
