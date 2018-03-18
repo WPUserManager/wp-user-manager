@@ -44,6 +44,7 @@
 		var $editorButtonIcon = $editorButton.find('span.dashicons')
 		var $editorToolbarAdded = false
 		var $editorActive = false
+		var $editorIframe = $('#customize-preview')
 
 		// ============== Trigger for the email list ==============
 		var $mergeTagsButton = $('#wpum-display-tags-btn')
@@ -66,6 +67,9 @@
 			var $this = $(e.currentTarget)
 			e.preventDefault()
 			$this.toggleClass('active')
+
+			// Make the iframe scrollable.
+			$editorIframe.toggleClass('scroll-frame')
 
 			// Toggle the editor instance if it was already created.
 			if ($editorActive === true) {

@@ -42,4 +42,8 @@
   .wpum-email-tags-list hr {
     margin-top: 15px; }
 
+.scroll-frame iframe {
+  overflow: visible;
+  height: calc( 100% - 275px ) !important; }
+
 /*# sourceMappingURL=email-editor-control.css.map */

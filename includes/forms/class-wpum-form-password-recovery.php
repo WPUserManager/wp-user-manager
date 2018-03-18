@@ -415,6 +415,11 @@ class WPUM_Form_Password_Recovery extends WPUM_Form {
 
 	}
 
+	/**
+	 * Display success message at the end.
+	 *
+	 * @return void
+	 */
 	public function done() {
 
 		$data = [
