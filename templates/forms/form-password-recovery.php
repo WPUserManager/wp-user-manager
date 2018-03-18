@@ -18,15 +18,15 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 
 ?>
 
-<div class="wpum-template wpum-form wpum-login-form">
+<div class="wpum-template wpum-form wpum-password-recovery-form">
 
 	<?php do_action( 'wpum_before_password_recovery_form' ); ?>
 
 	<p>
-		<?php echo apply_filters( 'wpum_lost_password_message', esc_html__( 'Lost your password? Please enter your username or email address. You will receive a link to create a new password via email.', 'wpum' ) ); ?>
+		<?php echo esc_html( $data->message ); ?>
 	</p>
 
-	<form action="<?php echo esc_url( $data->action ); ?>" method="post" id="wpum-submit-login-form" enctype="multipart/form-data">
+	<form action="<?php echo esc_url( $data->action ); ?>" method="post" id="wpum-submit-password-recovery-form" enctype="multipart/form-data">
 
 		<?php foreach ( $data->fields as $key => $field ) : ?>
 			<fieldset class="fieldset-<?php echo esc_attr( $key ); ?>">

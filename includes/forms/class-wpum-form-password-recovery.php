@@ -45,7 +45,9 @@ class WPUM_Form_Password_Recovery extends WPUM_Form {
 	public function __construct() {
 
 		add_action( 'wp', array( $this, 'process' ) );
+
 		add_filter( 'submit_wpum_form_validate_fields', [ $this, 'validate_username_or_email' ], 10, 4 );
+		add_filter( 'submit_wpum_form_validate_fields', [ $this, 'validate_passwords' ], 10, 4 );
 
 		$this->steps  = (array) apply_filters( 'password_reset_steps', array(
 			'submit' => array(
@@ -69,7 +71,7 @@ class WPUM_Form_Password_Recovery extends WPUM_Form {
 			'done' => array(
 				'name'     => esc_html__( 'Done' ),
 				'view'     => array( $this, 'done' ),
-				'handler'  => array( $this, 'done_handler' ),
+				'handler'  => false,
 				'priority' => 12
 			)
 		) );
@@ -121,8 +123,11 @@ class WPUM_Form_Password_Recovery extends WPUM_Form {
 		) );
 
 		// If we're on the first step. We disable the password fields temporarily.
+		// If we're on the reset step, we disable the user fields.
 		if( $this->step === 0 ) {
 			unset( $this->fields['password'] );
+		} elseif( $this->step === 2 ) {
+			unset( $this->fields['user'] );
 		}
 
 	}
@@ -138,7 +143,7 @@ class WPUM_Form_Password_Recovery extends WPUM_Form {
 	 */
 	public function validate_username_or_email( $pass, $fields, $values, $form ) {
 
-		if( $form == 'password-recovery' ) {
+		if( $form == 'password-recovery' && isset( $values['user']['username_email'] ) ) {
 			$username = sanitize_text_field( $values['user']['username_email'] );
 			if( is_email( $username ) && !email_exists( $username ) || !is_email( $username ) && !username_exists( $username ) )
 				return new WP_Error( 'username-validation-error', esc_html__( 'A user with this username or email does not exist. Please check your entry and try again.', 'wpum' ) );
@@ -158,10 +163,11 @@ class WPUM_Form_Password_Recovery extends WPUM_Form {
 		$this->init_fields();
 
 		$data = [
-			'form'   => $this->form_name,
-			'action' => $this->get_action(),
-			'fields' => $this->get_fields( 'user' ),
-			'step'   => $this->get_step()
+			'form'    => $this->form_name,
+			'action'  => $this->get_action(),
+			'fields'  => $this->get_fields( 'user' ),
+			'step'    => $this->get_step(),
+			'message' => apply_filters( 'wpum_lost_password_message', esc_html__( 'Lost your password? Please enter your username or email address. You will receive a link to create a new password via email.', 'wpum' ) )
 		];
 
 		WPUM()->templates
@@ -273,11 +279,151 @@ class WPUM_Form_Password_Recovery extends WPUM_Form {
 
 	}
 
+	/**
+	 * Display the password reset form.
+	 *
+	 * @return void
+	 */
 	public function reset() {
 
 		$this->init_fields();
 
-		echo 'yup';
+		// Grab all the details form the URL first.
+		$user_id          = isset( $_GET['user_id'] ) && ! empty( $_GET['user_id'] ) ? (int) $_GET['user_id'] : false;
+		$get_user         = get_user_by( 'id', $user_id );
+		$verification_key = isset( $_GET['key'] ) && ! empty( $_GET['key'] ) ? $_GET['key'] : false;
+
+		// Verify the url is properly formatted and has correct information.
+		if( $user_id && $get_user instanceof WP_User && $verification_key ) {
+
+			$verify_key = check_password_reset_key( $verification_key, $get_user->data->user_login );
+
+			if( is_wp_error( $verify_key ) ) {
+				$data = [
+					'message'  => esc_html__( 'The reset key is wrong or expired. Please check that you used the right reset link or request a new one.' ),
+				];
+
+				WPUM()->templates
+					->set_template_data( $data )
+					->get_template_part( 'messages/general', 'error' );
+			} else {
+
+				$data = [
+					'form'    => $this->form_name,
+					'action'  => $this->get_action(),
+					'fields'  => $this->get_fields( 'password' ),
+					'step'    => $this->get_step(),
+					'message' => apply_filters( 'wpum_new_password_message', esc_html__( 'Enter a new password below.', 'wpum' ) )
+				];
+
+				WPUM()->templates
+					->set_template_data( $data )
+					->get_template_part( 'forms/form', 'password-recovery' );
+
+			}
+
+		} else {
+
+			$data = [
+				'message'  => esc_html__( 'The link you followed may be broken. Please check that you used the right reset link or request a new one.' ),
+			];
+
+			WPUM()->templates
+				->set_template_data( $data )
+				->get_template_part( 'messages/general', 'error' );
+
+		}
+
+	}
+
+	/**
+	 * Validate the 2 passwords are the same and make sure they're safe enough.
+	 *
+	 * @param boolean $pass
+	 * @param array $fields
+	 * @param array $values
+	 * @param string $form
+	 * @return void
+	 */
+	public function validate_passwords( $pass, $fields, $values, $form ) {
+
+		if( $form == 'password-recovery' && isset( $values['password']['password'] ) && isset( $values['password']['password_2'] ) ) {
+
+			$password_1 = $values['password']['password'];
+			$password_2 = $values['password']['password_2'];
+
+			if ( $password_1 !== $password_2 ) {
+				return new WP_Error( 'password-validation-nomatch', esc_html__( 'Error: passwords do not match.' ) );
+			}
+
+			$containsLetter  = preg_match('/[A-Z]/', $password_1 );
+			$containsDigit   = preg_match('/\d/', $password_1 );
+			$containsSpecial = preg_match('/[^a-zA-Z\d]/', $password_1 );
+
+			if( ! $containsLetter || ! $containsDigit || ! $containsSpecial || strlen( $password_1 ) < 8 ) {
+				return new WP_Error( 'password-validation-error', esc_html__( 'Password must be at least 8 characters long and contain at least 1 number and 1 uppercase letter and 1 special character.', 'wpum' ) );
+			}
+
+		}
+
+		return $pass;
+
+	}
+
+	/**
+	 * Finally reset the user password now.
+	 *
+	 * @return void
+	 */
+	public function reset_handler() {
+
+		try {
+
+			$this->init_fields();
+
+			$values = $this->get_posted_fields();
+
+			if( ! wp_verify_nonce( $_POST['password_recovery_nonce'], 'verify_password_recovery_form' ) ) {
+				return;
+			}
+
+			if ( empty( $_POST['submit_password_recovery'] ) ) {
+				return;
+			}
+
+			if ( is_wp_error( ( $return = $this->validate_fields( $values ) ) ) ) {
+				throw new Exception( $return->get_error_message() );
+			}
+
+			$password_1 = $values['password']['password'];
+			$password_2 = $values['password']['password_2'];
+			$user_id    = isset( $_GET['user_id'] ) && ! empty( $_GET['user_id'] ) ? (int) $_GET['user_id'] : false;
+
+			wp_set_password( $password_1, $user_id );
+
+			// Clear all user sessions.
+			$sessions = WP_Session_Tokens::get_instance( $user_id );
+			$sessions->destroy_all();
+
+			// Successful, show next step.
+			$this->step ++;
+
+		} catch ( Exception $e ) {
+			$this->add_error( $e->getMessage() );
+			return;
+		}
+
+	}
+
+	public function done() {
+
+		$data = [
+			'message' => esc_html__( 'Password successfully reset.' ) . ' ' . '<a href="' . get_permalink( wpum_get_core_page_id( 'login' ) ) . '">' . esc_html__( 'Login now &raquo;' ) . '</a>'
+		];
+
+		WPUM()->templates
+			->set_template_data( $data )
+			->get_template_part( 'messages/general', 'success' );
 
 	}
 
