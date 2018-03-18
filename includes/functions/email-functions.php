@@ -145,7 +145,8 @@ function wpum_email_tag_password_recovery_url( $user_id, $password_reset_key ) {
 	$reset_page = get_permalink( $reset_page );
 	$reset_page = add_query_arg( [
 		'user_id' => $user_id,
-		'key'     => $password_reset_key
+		'key'     => $password_reset_key,
+		'step'    => 3
 	], $reset_page );
 
 	$link_color = apply_filters( 'wpum_email_tag_password_recovery_url_color', '#000' );

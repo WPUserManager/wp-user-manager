@@ -143,3 +143,40 @@ function wpum_get_login_redirect() {
 	return apply_filters( 'wpum_get_login_redirect', esc_url( $url ) );
 
 }
+
+/**
+ * Replace during email parsing characters.
+ *
+ * @param string $str
+ * @return void
+ */
+function wpum_starmid( $str ) {
+    switch ( strlen( $str ) ) {
+        case 0: return false;
+        case 1: return $str;
+        case 2: return $str[0] . "*";
+        default: return $str[0] . str_repeat( "*", strlen($str) - 2 ) . substr($str, -1);
+    }
+}
+
+/**
+ * Mask an email address.
+ *
+ * @param string $email_address
+ * @return void
+ */
+function wpum_mask_email_address( $email_address ) {
+
+	if ( ! filter_var( $email_address, FILTER_VALIDATE_EMAIL ) ) {
+        return false;
+    }
+
+	list( $u, $d ) = explode( "@", $email_address );
+
+	$d   = explode( ".", $d );
+	$tld = array_pop( $d );
+	$d   = implode( ".", $d );
+
+    return wpum_starmid( $u ) . "@" . wpum_starmid( $d ) . ".$tld";
+
+}

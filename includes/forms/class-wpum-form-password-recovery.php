@@ -245,9 +245,31 @@ class WPUM_Form_Password_Recovery extends WPUM_Form {
 		}
 	}
 
+	/**
+	 * Display a success message after successfully requesting a new password.
+	 *
+	 * @return void
+	 */
 	public function instructions_sent() {
 
-		echo 'yup';
+		$values = $this->get_posted_fields();
+
+		$username = $values['user']['username_email'];
+
+		if( is_email( $username ) ) {
+			$user = get_user_by( 'email', $username );
+		} else {
+			$user = get_user_by( 'login', $username );
+		}
+
+		$data = [
+			'email' => $user->data->user_email,
+			'from'  => wpum_get_option( 'from_email' ),
+		];
+
+		WPUM()->templates
+			->set_template_data( $data )
+			->get_template_part( 'messages/password-reset', 'request-success' );
 
 	}
 
