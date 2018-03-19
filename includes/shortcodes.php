@@ -100,3 +100,28 @@ function wpum_login_link( $atts, $content = null ) {
 
 }
 add_shortcode( 'wpum_login', 'wpum_login_link' );
+
+/**
+ * Display a logout link.
+ *
+ * @param array $atts
+ * @param string $content
+ * @return void
+ */
+function wpum_logout_link( $atts, $content = null ) {
+
+	extract( shortcode_atts( array(
+		'redirect' => '',
+		'label'    => esc_html__( 'Logout' )
+	), $atts ) );
+
+	$output = '';
+
+	if( is_user_logged_in() ) {
+		$output = '<a href="' . esc_url( wp_logout_url( $redirect ) ) . '">' . esc_html( $label ) . '</a>';
+	}
+
+	return $output;
+
+}
+add_shortcode( 'wpum_logout', 'wpum_logout_link' );
