@@ -230,3 +230,12 @@ function wpum_get_email( $email_id = false ) {
 	return $email;
 
 }
+
+/**
+ * Disable the email notification sent to the admin when a user changes the password.
+ */
+if ( wpum_get_option( 'disable_admin_password_recovery_email' ) && ! function_exists( 'wp_password_change_notification' ) ) {
+    function wp_password_change_notification( $user ) {
+        return;
+    }
+}

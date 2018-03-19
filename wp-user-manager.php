@@ -44,11 +44,6 @@ if ( ! class_exists( 'WP_User_Manager' ) ) :
 	final class WP_User_Manager {
 
 		/**
-		 * Flag for when our internal customizer requests should be detected.
-		 */
-		const CUSTOMIZER_QUERY_PARAM = 'wpum_customizer';
-
-		/**
 		 * WPUM Instance.
 		 *
 		 * @var WPUM() the WPUM Instance
@@ -123,7 +118,6 @@ if ( ! class_exists( 'WP_User_Manager' ) ) :
 		 */
 		private function autoload() {
 			require __DIR__ . '/vendor/autoload.php';
-			\Carbon_Fields\Carbon_Fields::boot();
 		}
 
 		/**
@@ -213,6 +207,7 @@ if ( ! class_exists( 'WP_User_Manager' ) ) :
 			 * @todo document before_wpum_init
 			 */
 			do_action( 'before_wpum_init' );
+			\Carbon_Fields\Carbon_Fields::boot();
 
 			$this->notices   = TDP\WP_Notice::instance();
 			$this->templates = new WPUM_Template_Loader;
