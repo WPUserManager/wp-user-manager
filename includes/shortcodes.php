@@ -74,3 +74,29 @@ function wpum_password_recovery( $atts, $content = null ) {
 
 }
 add_shortcode( 'wpum_password_recovery', 'wpum_password_recovery' );
+
+/**
+ * Display a login link.
+ *
+ * @param array $atts
+ * @param string $content
+ * @return void
+ */
+function wpum_login_link( $atts, $content = null ) {
+
+	extract( shortcode_atts( array(
+		'redirect' => '',
+		'label'    => esc_html__( 'Login', 'wpum' )
+	), $atts ) );
+
+	if( is_user_logged_in() ) {
+		$output = '';
+	} else {
+		$url    = wp_login_url( $redirect );
+		$output = '<a href="'. esc_url( $url ) .'" class="wpum-login-link">'.esc_html( $label ).'</a>';
+	}
+
+	return $output;
+
+}
+add_shortcode( 'wpum_login', 'wpum_login_link' );

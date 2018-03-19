@@ -33,8 +33,15 @@ class WPUM_Shortcode_Login_Link extends WPUM_Shortcode_Generator {
 		return [
 			array(
 				'type'    => 'textbox',
-				'name'    => 'label',
-				'label'   => esc_html__( 'Login label' ),
+				'name'    => 'redirect',
+				'label'   => esc_html__( 'Redirect to' ),
+				'tooltip' => esc_html__( '(optional) must be a link within this website.' )
+			),
+			array(
+				'type'  => 'textbox',
+				'name'  => 'label',
+				'value' => 'Login',
+				'label' => esc_html__( 'Login label' ),
 			)
 		];
 	}
