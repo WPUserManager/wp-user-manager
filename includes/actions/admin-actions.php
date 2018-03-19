@@ -64,3 +64,23 @@ function wpum_admin_bar_menu( $wp_admin_bar ) {
 
 }
 add_action( 'admin_bar_menu', 'wpum_admin_bar_menu', 100 );
+
+/**
+ * Highlight registration and default registration role within the users page.
+ *
+ * @return void
+ */
+function wpum_show_registration_details() {
+
+	$status              = get_option( 'users_can_register' );
+	$role                = get_option('default_role');
+	$enabled_or_disabled = ( $status ) ? esc_html__( 'enabled' ) : esc_html__( 'disabled' );
+
+	?>
+	<div class="notice wpum-registration-status">
+		<p><?php esc_html_e( 'Registration status:' ); ?> <span class="<?php if( $status ) : ?>enabled<?php else : ?>disabled<?php endif; ?>"><?php echo $enabled_or_disabled; ?></span> <?php esc_html_e( 'Default registration role:' ); ?> <span><?php echo esc_html( $role ); ?></span></p>
+    </div>
+	<?php
+
+}
+add_action( 'admin_notices', 'wpum_show_registration_details' );

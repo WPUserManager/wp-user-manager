@@ -37,3 +37,19 @@ function wpum_load_scripts() {
 
 }
 add_action( 'wp_enqueue_scripts', 'wpum_load_scripts' );
+
+/**
+ * Load assets into the admin panel.
+ *
+ * @return void
+ */
+function wpum_load_admin_scripts() {
+
+	$screen = get_current_screen();
+
+	if( $screen->base == 'users' ) {
+		wp_enqueue_style( 'wpum-registration-status', WPUM_PLUGIN_URL . 'assets/css/admin/registration-status.css', array(), WPUM_VERSION );
+	}
+
+}
+add_action( 'admin_enqueue_scripts', 'wpum_load_admin_scripts' );

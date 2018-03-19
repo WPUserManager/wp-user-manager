@@ -1,0 +1,21 @@
+.wpum-registration-status {
+  border: none;
+  box-shadow: none;
+  background: transparent;
+  padding: 0; }
+  .wpum-registration-status span {
+    display: inline-block;
+    padding: .4em .6em;
+    font-size: 75%;
+    font-weight: 700;
+    line-height: 1;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: baseline;
+    border-radius: .25rem;
+    background: #3d8c4e;
+    color: #fff; }
+    .wpum-registration-status span.disabled {
+      background: red; }
+
+/*# sourceMappingURL=registration-status.css.map */
