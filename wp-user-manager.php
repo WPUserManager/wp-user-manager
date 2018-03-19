@@ -105,6 +105,7 @@ if ( ! class_exists( 'WP_User_Manager' ) ) :
 			$this->autoload();
 			$this->autoload_options();
 			$this->includes();
+			$this->setup_database_tables();
 			$this->init_hooks();
 
 			$this->forms = WPUM_Forms::instance();
@@ -138,6 +139,10 @@ if ( ! class_exists( 'WP_User_Manager' ) ) :
 		 */
 		private function includes() {
 
+			require_once WPUM_PLUGIN_DIR . 'includes/abstracts/abstract-wp-db-table.php';
+			require_once WPUM_PLUGIN_DIR . 'includes/classes/class-wpum-db-table.php';
+			require_once WPUM_PLUGIN_DIR . 'includes/classes/class-wpum-db-table-fields.php';
+			require_once WPUM_PLUGIN_DIR . 'includes/classes/class-wpum-db-table-field-meta.php';
 			require_once WPUM_PLUGIN_DIR . 'includes/functions/admin-functions.php';
 			require_once WPUM_PLUGIN_DIR . 'includes/functions/global-functions.php';
 			require_once WPUM_PLUGIN_DIR . 'includes/functions/email-functions.php';
@@ -176,6 +181,26 @@ if ( ! class_exists( 'WP_User_Manager' ) ) :
 
 			require_once WPUM_PLUGIN_DIR . 'includes/install.php';
 
+		}
+
+		/**
+		 * Setup all of the custom database tables
+		 *
+		 * This method invokes all of the classes for each custom database table,
+		 * and returns them in an array for easier testing.
+		 *
+		 * In a normal request, this method is called extremely early in WPUM's load
+		 * order, to ensure these tables have been created & upgraded before any
+		 * other utility occurs on them (query, migration, etc...)
+		 *
+		 * @access public
+		 * @return array
+		 */
+		private function setup_database_tables() {
+			return array(
+				'fields'              => new WPUM_DB_Table_Fields(),
+				'fieldmeta'           => new WPUM_DB_Table_Field_Meta(),
+			);
 		}
 
 		/**
