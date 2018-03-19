@@ -12,11 +12,12 @@
 		text-align: center;
 		white-space: nowrap;
 		vertical-align: baseline;
-		border-radius: .25rem;
-		background: #3d8c4e;
-		color: #fff;
+		border-radius: 2px;
+		background: #f7f7f7;
+		border:1px solid #ccc;
 		&.disabled {
 			background: red;
+			color: #fff;
 		}
 	}
 }
