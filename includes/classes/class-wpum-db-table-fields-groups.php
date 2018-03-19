@@ -1,6 +1,6 @@
 <?php
 /**
- * Handles storage of the custom fields.
+ * Handles storage of the custom fields groups.
  *
  * @package     wp-user-manager
  * @copyright   Copyright (c) 2018, Alessandro Tesoro
@@ -11,9 +11,9 @@
 if ( ! defined( 'ABSPATH' ) ) exit;
 
 /**
- * Setup the global "wpum_fields" database table
+ * Setup the global "wpum_fieldsgroups" database table
  */
-final class WPUM_DB_Table_Fields extends WPUM_DB_Table {
+final class WPUM_DB_Table_Fields_Groups extends WPUM_DB_Table {
 
 	/**
 	 * Table name
@@ -21,7 +21,7 @@ final class WPUM_DB_Table_Fields extends WPUM_DB_Table {
 	 * @access protected
 	 * @var string
 	 */
-	protected $name = 'wpum_fields';
+	protected $name = 'wpum_fieldsgroups';
 
 	/**
 	 * Database version
@@ -31,7 +31,7 @@ final class WPUM_DB_Table_Fields extends WPUM_DB_Table {
 	 */
 	protected $version = 201801170001;
 
-		/**
+	/**
 	 * Setup the database schema
 	 *
 	 * @access protected
@@ -40,14 +40,12 @@ final class WPUM_DB_Table_Fields extends WPUM_DB_Table {
 	protected function set_schema() {
 		$max_index_length = 191;
 		$this->schema     = "id bigint(20) unsigned NOT NULL auto_increment,
-			group_id bigint(20) unsigned NOT NULL default '0',
-			field_order bigint(20) unsigned NOT NULL default '0',
-			type varchar(20) NOT NULL default 'text',
+			group_order bigint(20) unsigned NOT NULL default '0',
 			name varchar(255) NOT NULL default '',
 			description longtext DEFAULT NULL,
 			PRIMARY KEY (id),
-			KEY group_id (group_id),
-			KEY field_order (field_order)";
+			KEY name (name(255)),
+			KEY group_order (group_order)";
 	}
 
 	/**

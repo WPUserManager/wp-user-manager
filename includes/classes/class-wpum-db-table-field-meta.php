@@ -19,7 +19,6 @@ final class WPUM_DB_Table_Field_Meta extends WPUM_DB_Table {
 	 * Table name
 	 *
 	 * @access protected
-	 * @since 3.0.0
 	 * @var string
 	 */
 	protected $name = 'wpum_fieldmeta';
@@ -28,7 +27,6 @@ final class WPUM_DB_Table_Field_Meta extends WPUM_DB_Table {
 	 * Database version
 	 *
 	 * @access protected
-	 * @since 3.0.0
 	 * @var int
 	 */
 	protected $version = 201801170001;
@@ -37,7 +35,6 @@ final class WPUM_DB_Table_Field_Meta extends WPUM_DB_Table {
 	 * Setup the database schema
 	 *
 	 * @access protected
-	 * @since 3.0.0
 	 * @return void
 	 */
 	protected function set_schema() {
@@ -55,7 +52,6 @@ final class WPUM_DB_Table_Field_Meta extends WPUM_DB_Table {
 	 * Handle schema changes
 	 *
 	 * @access protected
-	 * @since 3.0.0
 	 * @return void
 	 */
 	protected function upgrade() {}
