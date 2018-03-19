@@ -76,6 +76,28 @@ function wpum_set_logout_url( $logout_url, $redirect ) {
 add_filter( 'logout_url', 'wpum_set_logout_url', 20, 2 );
 
 /**
+ * Filter the wp_login_url function by using the built-in wpum page.
+ *
+ * @param string $login_url
+ * @param string $redirect
+ * @param boolean $force_reauth
+ * @return void
+ */
+function wpum_login_url( $login_url, $redirect, $force_reauth ) {
+
+	$wpum_login_page = wpum_get_core_page_id( 'login' );
+	$wpum_login_page = get_permalink( $wpum_login_page );
+
+	if( $redirect ) {
+		$wpum_login_page = add_query_arg( [ 'redirect_to' => $redirect ], $wpum_login_page );
+	}
+
+	return $wpum_login_page;
+
+}
+add_filter( 'login_url', 'wpum_login_url', 10, 3 );
+
+/**
  * Validate authentication with the selected login method.
  *
  * @param object $user
