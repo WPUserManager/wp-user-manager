@@ -162,4 +162,69 @@ class WPUM_DB_Fields_Groups extends WPUM_DB {
 		return $last_changed;
 	}
 
+	/**
+	 * Retrieve groups from the database
+	 *
+	 * @access public
+	 *
+	 * @param array $args {
+	 *      Query arguments.
+	 * }
+	 *
+	 * @return array $groups Array of `EDD_Discount` objects.
+	 */
+	public function get_groups( $args = array() ) {
+		global $wpdb;
+
+		$defaults = array(
+			'number'  => 20,
+			'offset'  => 0,
+			'search'  => '',
+			'orderby' => 'id',
+			'order'   => 'DESC',
+		);
+
+		$args = wp_parse_args( $args, $defaults );
+
+		if ( $args['number'] < 1 ) {
+			$args['number'] = 999999999999;
+		}
+
+		if ( isset( $args['search'] ) && ! empty( $args['search'] ) ) {
+			$args['search'] = $wpdb->esc_like( $args['search'] );
+		}
+
+		$where = $this->parse_where( $args );
+
+		$args['orderby'] = ! array_key_exists( $args['orderby'], $this->get_columns() ) ? 'id' : $args['orderby'];
+
+		$cache_key = md5( 'wpum_fields_groups_' . serialize( $args ) );
+
+		$groups = wp_cache_get( $cache_key, $this->cache_group );
+
+		$args['orderby'] = esc_sql( $args['orderby'] );
+		$args['order']   = esc_sql( $args['order'] );
+
+		if ( false === $groups ) {
+			$groups = $wpdb->get_col( $wpdb->prepare(
+				"
+					SELECT id
+					FROM $this->table_name
+					$where
+					ORDER BY {$args['orderby']} {$args['order']}
+					LIMIT %d,%d;
+				", absint( $args['offset'] ), absint( $args['number'] ) ), 0 );
+
+			if ( ! empty( $groups ) ) {
+				foreach ( $groups as $key => $group ) {
+					$groups[ $key ] = new WPUM_Field_Group( $group );
+				}
+
+				wp_cache_set( $cache_key, $groups, $this->cache_group, 3600 );
+			}
+		}
+
+		return $groups;
+	}
+
 }
