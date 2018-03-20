@@ -167,6 +167,8 @@ if ( ! class_exists( 'WP_User_Manager' ) ) :
 				require_once WPUM_PLUGIN_DIR . 'includes/classes/class-wpum-user-table.php';
 				require_once WPUM_PLUGIN_DIR . 'includes/emails/class-wpum-emails-list.php';
 
+				require_once WPUM_PLUGIN_DIR . 'includes/fields/class-wpum-fields-editor.php';
+
 				require_once WPUM_PLUGIN_DIR . 'includes/abstracts/abstract-shortcode-generator.php';
 				require_once WPUM_PLUGIN_DIR . 'includes/classes/shortcodes/class-wpum-shortcode-button.php';
 				require_once WPUM_PLUGIN_DIR . 'includes/classes/shortcodes/class-wpum-shortcode-login.php';
