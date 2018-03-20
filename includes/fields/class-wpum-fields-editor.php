@@ -68,6 +68,12 @@ class WPUM_Fields_Editor {
 
 			wp_enqueue_script( 'wpum-fields-editor' );
 
+			$js_variables = [
+				'page_title' => esc_html__( 'WP User Manager Fields Editor' )
+			];
+
+			wp_localize_script( 'wpum-fields-editor', 'wpumFieldsEditor', $js_variables );
+
 		}
 
 	}

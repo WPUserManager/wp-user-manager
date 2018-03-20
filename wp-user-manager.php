@@ -79,6 +79,13 @@ if ( ! class_exists( 'WP_User_Manager' ) ) :
 		public $emails;
 
 		/**
+		 * The fields groups handler.
+		 *
+		 * @var object
+		 */
+		public $fields_groups;
+
+		/**
 		 * Main WPUM Instance.
 		 *
 		 * Ensures that only one instance of WPUM exists in memory at any one
@@ -144,12 +151,15 @@ if ( ! class_exists( 'WP_User_Manager' ) ) :
 			require_once WPUM_PLUGIN_DIR . 'includes/classes/class-wpum-db-table-fields.php';
 			require_once WPUM_PLUGIN_DIR . 'includes/classes/class-wpum-db-table-field-meta.php';
 			require_once WPUM_PLUGIN_DIR . 'includes/classes/class-wpum-db-table-fields-groups.php';
+
+			require_once WPUM_PLUGIN_DIR . 'includes/abstracts/abstract-wpum-db.php';
+			require_once WPUM_PLUGIN_DIR . 'includes/classes/class-wpum-db-fields-groups.php';
+
 			require_once WPUM_PLUGIN_DIR . 'includes/functions/admin-functions.php';
 			require_once WPUM_PLUGIN_DIR . 'includes/functions/global-functions.php';
 			require_once WPUM_PLUGIN_DIR . 'includes/functions/email-functions.php';
 			require_once WPUM_PLUGIN_DIR . 'includes/actions/actions.php';
 			require_once WPUM_PLUGIN_DIR . 'includes/filters/global-filters.php';
-
 			require_once WPUM_PLUGIN_DIR . 'includes/classes/class-wpum-template-loader.php';
 			require_once WPUM_PLUGIN_DIR . 'includes/classes/class-wpum-avatars.php';
 			require_once WPUM_PLUGIN_DIR . 'includes/classes/class-wpum-options-panel.php';
@@ -178,8 +188,8 @@ if ( ! class_exists( 'WP_User_Manager' ) ) :
 			}
 
 			if( defined( 'DOING_AJAX' ) || ( isset( $_GET['wpum_email_customizer'] ) && 'true' == $_GET['wpum_email_customizer'] ) ) {
-			require_once WPUM_PLUGIN_DIR . 'includes/emails/class-wpum-emails-customizer-scripts.php';
-			require_once WPUM_PLUGIN_DIR . 'includes/emails/class-wpum-emails-customizer.php';
+				require_once WPUM_PLUGIN_DIR . 'includes/emails/class-wpum-emails-customizer-scripts.php';
+				require_once WPUM_PLUGIN_DIR . 'includes/emails/class-wpum-emails-customizer.php';
 			}
 
 			require_once WPUM_PLUGIN_DIR . 'includes/install.php';
@@ -240,9 +250,10 @@ if ( ! class_exists( 'WP_User_Manager' ) ) :
 			do_action( 'before_wpum_init' );
 			\Carbon_Fields\Carbon_Fields::boot();
 
-			$this->notices   = TDP\WP_Notice::instance();
-			$this->templates = new WPUM_Template_Loader;
-			$this->emails    = new WPUM_Emails;
+			$this->notices       = TDP\WP_Notice::instance();
+			$this->templates     = new WPUM_Template_Loader();
+			$this->emails        = new WPUM_Emails();
+			$this->fields_groups = new WPUM_DB_Fields_Groups();
 
 			/**
 			 * @todo document after_wpum_init

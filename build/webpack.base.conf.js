@@ -11,7 +11,8 @@ function resolve(dir) {
 module.exports = {
   context: path.resolve(__dirname, '../'),
   entry: {
-	emails: './src/emails.js'
+	emails: './src/emails.js',
+	'fields-editor': './src/fields-editor/fields-editor.js'
   },
   output: {
     path: config.build.assetsRoot,
