@@ -81,9 +81,9 @@ class WPUM_Avatars {
 	 * @return void
 	 */
 	public function avatar_field() {
-		Container::make( 'user_meta', __( 'Avatar' ) )
+		Container::make( 'user_meta', esc_html__( 'Avatar' ) )
 			->add_fields( array(
-				Field::make( 'image', 'current_user_avatar', __( 'Custom user avatar' ) )
+				Field::make( 'image', 'current_user_avatar', esc_html__( 'Custom user avatar' ) )
 					->set_value_type( 'url' )
 			) );
 	}

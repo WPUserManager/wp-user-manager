@@ -97,4 +97,4 @@ function wpum_restrict_wplogin() {
 	}
 
 }
-//add_action( 'init', 'wpum_restrict_wplogin' );
+add_action( 'init', 'wpum_restrict_wplogin' );
