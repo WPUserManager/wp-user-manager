@@ -69,7 +69,19 @@ class WPUM_Fields_Editor {
 			wp_enqueue_script( 'wpum-fields-editor' );
 
 			$js_variables = [
-				'page_title' => esc_html__( 'WP User Manager Fields Editor' )
+				'is_addon_installed'  => apply_filters( 'wpum_fields_editor_has_custom_fields_addon', false ),
+				'page_title'          => esc_html__( 'WP User Manager Fields Editor' ),
+				'labels'              => [
+					'table_name'         => esc_html__( 'Group name' ),
+					'table_desc'         => esc_html__( 'Group description' ),
+					'table_default'      => esc_html__( 'Default' ),
+					'table_fields'       => esc_html__( 'Fields' ),
+					'table_actions'      => esc_html__( 'Actions' ),
+					'table_add_group'    => esc_html__( 'Add new field group' ),
+					'table_edit_group'   => esc_html__( 'Edit group settings' ),
+					'table_edit_fields'  => esc_html__( 'Customize fields' ),
+					'table_delete_group' => esc_html__( 'Delete group' )
+				]
 			];
 
 			wp_localize_script( 'wpum-fields-editor', 'wpumFieldsEditor', $js_variables );
@@ -84,7 +96,6 @@ class WPUM_Fields_Editor {
 	 * @return void
 	 */
 	public function display_fields_editor() {
-		$test = new WPUM_Field_Group( 3 );
 		echo '<div class="wrap"><div id="wpum-fields-editor"></div></div>';
 	}
 
