@@ -71,6 +71,7 @@ class WPUM_Fields_Editor {
 			$js_variables = [
 				'is_addon_installed'  => apply_filters( 'wpum_fields_editor_has_custom_fields_addon', false ),
 				'page_title'          => esc_html__( 'WP User Manager Fields Editor' ),
+				'success_message'     => esc_html__( 'Fields groups successfully saved' ),
 				'labels'              => [
 					'table_name'         => esc_html__( 'Group name' ),
 					'table_desc'         => esc_html__( 'Group description' ),
@@ -82,7 +83,7 @@ class WPUM_Fields_Editor {
 					'table_edit_fields'  => esc_html__( 'Customize fields' ),
 					'table_delete_group' => esc_html__( 'Delete group' )
 				],
-				'groups' => $this->get_groups()
+				'groups'              => $this->get_groups()
 			];
 
 			wp_localize_script( 'wpum-fields-editor', 'wpumFieldsEditor', $js_variables );

@@ -3,10 +3,12 @@
 
 		<h1 class="wp-heading-inline" v-text="sanitized(pageTitle)"></h1>
 		<a href="#" class="page-title-action" id="wpum-add-field-group"><span class="dashicons dashicons-plus-alt"></span> <span v-text="sanitized(labels.table_add_group)"></span></a>
-
+		<div class="spinner is-active" v-if="loading"></div>
 		<br/><br/>
 
-		<wp-notice type="success">Notice message goes here.</wp-notice>
+		<wp-notice :type="messageStatus" v-if="showMessage">
+			<strong>{{sanitized(messageText)}}</strong>
+		</wp-notice>
 
 		<table class="wp-list-table widefat fixed striped wpum-fields-groups-table">
 			<thead>
@@ -19,34 +21,33 @@
 					<th scope="col" v-text="sanitized(labels.table_actions)"></th>
 				</tr>
 			</thead>
-			<tbody>
-				<tr v-for="group in groups" :key="group.id">
-					<td class="order-anchor align-middle">
-						<span class="dashicons dashicons-menu"></span>
-					</td>
-					<td class="column-username has-row-actions column-primary" data-colname="Event">
-						<strong><a href="#">{{group.name}}</a></strong><br>
-						<div class="row-actions">
-							<span>
-								<a href="#" v-text="sanitized(labels.table_edit_group)"></a>
-							</span>
-						</div>
-						<button type="button" class="toggle-row">
-							<span class="screen-reader-text">Show more details</span>
-						</button>
-					</td>
-					<td data-colname="Start Date">{{group.description}}</td>
-					<td data-colname="End Date">
-						<span class="dashicons dashicons-yes" v-if="isDefault(group.id)"></span>
-					</td>
-					<td data-colname="End Date">{{group.fields}}</td>
-					<td class="align-middle">
-						<button type="submit" class="button"><span class="dashicons dashicons-admin-settings"></span> <span v-text="sanitized(labels.table_edit_fields)"></span></button>
-						<button type="submit" class="button delete-btn" v-if="! isDefault(group.id)"><span class="dashicons dashicons-trash"></span> <span v-text="sanitized(labels.table_delete_group)"></span></button>
-					</td>
-				</tr>
-			</tbody>
-
+				<draggable v-model="groups" :element="'tbody'" :options="{handle:'.order-anchor'}" @start="onSortingStart" @end="onSortingEnd">
+					<tr v-for="group in groups" :key="group.id">
+						<td class="order-anchor align-middle">
+							<span class="dashicons dashicons-menu"></span>
+						</td>
+						<td class="column-username has-row-actions column-primary" data-colname="Event">
+							<strong><a href="#">{{group.name}}</a></strong><br>
+							<div class="row-actions">
+								<span>
+									<a href="#" v-text="sanitized(labels.table_edit_group)"></a>
+								</span>
+							</div>
+							<button type="button" class="toggle-row">
+								<span class="screen-reader-text">Show more details</span>
+							</button>
+						</td>
+						<td data-colname="Start Date">{{group.description}}</td>
+						<td data-colname="End Date">
+							<span class="dashicons dashicons-yes" v-if="isDefault(group.id)"></span>
+						</td>
+						<td data-colname="End Date">{{group.fields}}</td>
+						<td class="align-middle">
+							<button type="submit" class="button"><span class="dashicons dashicons-admin-settings"></span> <span v-text="sanitized(labels.table_edit_fields)"></span></button>
+							<button type="submit" class="button delete-btn" v-if="! isDefault(group.id)"><span class="dashicons dashicons-trash"></span> <span v-text="sanitized(labels.table_delete_group)"></span></button>
+						</td>
+					</tr>
+				</draggable>
 		</table>
 
 	</section>
@@ -55,18 +56,24 @@
 <script>
 import Sanitize from 'sanitize-html'
 import GroupsSelector from './groups-selector'
+import draggable from 'vuedraggable'
 
 export default {
 	name: 'editor-interface',
 	components: {
-		GroupsSelector
+		GroupsSelector,
+		draggable
 	},
 	data() {
 		return {
 			addonInstalled: wpumFieldsEditor.is_addon_installed,
 			pageTitle: wpumFieldsEditor.page_title,
 			labels: wpumFieldsEditor.labels,
-			groups: wpumFieldsEditor.groups
+			groups: wpumFieldsEditor.groups,
+			loading: false,
+			showMessage: false,
+			messageStatus: 'success',
+			messageText: wpumFieldsEditor.success_message,
 		}
 	},
 	methods: {
@@ -82,6 +89,20 @@ export default {
 		 */
 		isDefault( group_id ) {
 			return group_id === '1' ? true : false
+		},
+		/**
+		 * Tell the app sorting of the table has started.
+		 */
+		onSortingStart( event ) {
+			this.loading = true
+			console.log('start')
+		},
+		/**
+		 * Update the database when the sorting is finished.
+		 */
+		onSortingEnd( event ) {
+			this.loading = false
+			console.log(event)
 		}
 	}
 }
@@ -142,11 +163,6 @@ export default {
 	.align-middle {
 		vertical-align: middle;
 	}
-
-	tr:hover {
-		background: #e7f7ff
-	}
-
 }
 
 #wpum-fields-editor-wrapper {
@@ -154,6 +170,19 @@ export default {
 		margin-right: 0;
 		margin-bottom: 20px;
 	}
+}
+
+.sortable-ghost {
+	background: #fffecc;
+}
+
+.sortable-chosen {
+	background: #fffecc;
+}
+
+.spinner {
+	float: none;
+	margin-top: -8px;
 }
 
 </style>

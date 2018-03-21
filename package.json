@@ -24,7 +24,8 @@
     "qs": "^6.5.1",
     "sanitize-html": "^1.18.2",
     "vue": "^2.5.2",
-    "vue-wp-notice": "^1.0.1"
+    "vue-wp-notice": "^1.0.1",
+    "vuedraggable": "^2.16.0"
   },
   "devDependencies": {
     "autoprefixer": "^7.1.2",
