@@ -24,7 +24,6 @@
     "qs": "^6.5.1",
     "sanitize-html": "^1.18.2",
     "vue": "^2.5.2",
-    "vue-dom-portal": "^0.1.6",
     "vue-wp-notice": "^1.0.1"
   },
   "devDependencies": {
