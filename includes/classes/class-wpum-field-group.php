@@ -133,7 +133,7 @@ class WPUM_Field_Group {
 	 * @return void
 	 */
 	public function get_ID() {
-		return $this->ID;
+		return $this->id;
 	}
 
 	/**

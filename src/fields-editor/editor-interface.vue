@@ -6,6 +6,8 @@
 
 		<br/><br/>
 
+		<wp-notice type="success">Notice message goes here.</wp-notice>
+
 		<table class="wp-list-table widefat fixed striped wpum-fields-groups-table">
 			<thead>
 				<tr>
@@ -18,12 +20,12 @@
 				</tr>
 			</thead>
 			<tbody>
-				<tr>
-					<td class="order-anchor">
+				<tr v-for="group in groups" :key="group.id">
+					<td class="order-anchor align-middle">
 						<span class="dashicons dashicons-menu"></span>
 					</td>
 					<td class="column-username has-row-actions column-primary" data-colname="Event">
-						<strong><a href="#">WordCamp Philly</a></strong><br>
+						<strong><a href="#">{{group.name}}</a></strong><br>
 						<div class="row-actions">
 							<span>
 								<a href="#" v-text="sanitized(labels.table_edit_group)"></a>
@@ -33,12 +35,14 @@
 							<span class="screen-reader-text">Show more details</span>
 						</button>
 					</td>
-					<td data-colname="Start Date">2016 </td>
-					<td data-colname="End Date">2017</td>
-					<td data-colname="End Date">2017</td>
-					<td>
+					<td data-colname="Start Date">{{group.description}}</td>
+					<td data-colname="End Date">
+						<span class="dashicons dashicons-yes" v-if="isDefault(group.id)"></span>
+					</td>
+					<td data-colname="End Date">{{group.fields}}</td>
+					<td class="align-middle">
 						<button type="submit" class="button"><span class="dashicons dashicons-admin-settings"></span> <span v-text="sanitized(labels.table_edit_fields)"></span></button>
-						<button type="submit" class="button delete-btn"><span class="dashicons dashicons-trash"></span> <span v-text="sanitized(labels.table_delete_group)"></span></button>
+						<button type="submit" class="button delete-btn" v-if="! isDefault(group.id)"><span class="dashicons dashicons-trash"></span> <span v-text="sanitized(labels.table_delete_group)"></span></button>
 					</td>
 				</tr>
 			</tbody>
@@ -61,7 +65,8 @@ export default {
 		return {
 			addonInstalled: wpumFieldsEditor.is_addon_installed,
 			pageTitle: wpumFieldsEditor.page_title,
-			labels: wpumFieldsEditor.labels
+			labels: wpumFieldsEditor.labels,
+			groups: wpumFieldsEditor.groups
 		}
 	},
 	methods: {
@@ -76,7 +81,7 @@ export default {
 		 * Needed to check wether we can delete it or not.
 		 */
 		isDefault( group_id ) {
-			return group_id === 1 ? true : false
+			return group_id === '1' ? true : false
 		}
 	}
 }
@@ -128,6 +133,26 @@ export default {
 				}
 			}
 		}
+	}
+
+	.dashicons-yes {
+		color: green;
+	}
+
+	.align-middle {
+		vertical-align: middle;
+	}
+
+	tr:hover {
+		background: #e7f7ff
+	}
+
+}
+
+#wpum-fields-editor-wrapper {
+	.vue-wp-notice {
+		margin-right: 0;
+		margin-bottom: 20px;
 	}
 }
 

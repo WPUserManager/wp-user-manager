@@ -81,7 +81,8 @@ class WPUM_Fields_Editor {
 					'table_edit_group'   => esc_html__( 'Edit group settings' ),
 					'table_edit_fields'  => esc_html__( 'Customize fields' ),
 					'table_delete_group' => esc_html__( 'Delete group' )
-				]
+				],
+				'groups' => $this->get_groups()
 			];
 
 			wp_localize_script( 'wpum-fields-editor', 'wpumFieldsEditor', $js_variables );
@@ -97,6 +98,27 @@ class WPUM_Fields_Editor {
 	 */
 	public function display_fields_editor() {
 		echo '<div class="wrap"><div id="wpum-fields-editor"></div></div>';
+	}
+
+	private function get_groups() {
+
+		$groups            = WPUM()->fields_groups->get_groups();
+		$registered_groups = [];
+
+		if( ! empty( $groups ) && is_array( $groups ) ) {
+			foreach ( $groups as $group ) {
+				$registered_groups[] = [
+					'id'          => $group->get_ID(),
+					'name'        => $group->get_name(),
+					'description' => $group->get_description(),
+					'default'     => $group->get_ID() === 1 ? true: false,
+					'fields'      => 'Test'
+				];
+			}
+		}
+
+		return $registered_groups;
+
 	}
 
 }

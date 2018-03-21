@@ -2,6 +2,8 @@
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import Vue from 'vue'
 import EditorInterface from './editor-interface'
+import WPNotice from 'vue-wp-notice'
+Vue.use(WPNotice)
 
 Vue.config.productionTip = false
 
