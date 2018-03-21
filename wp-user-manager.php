@@ -151,7 +151,6 @@ if ( ! class_exists( 'WP_User_Manager' ) ) :
 			require_once WPUM_PLUGIN_DIR . 'includes/classes/class-wpum-db-table-fields.php';
 			require_once WPUM_PLUGIN_DIR . 'includes/classes/class-wpum-db-table-field-meta.php';
 			require_once WPUM_PLUGIN_DIR . 'includes/classes/class-wpum-db-table-fields-groups.php';
-
 			require_once WPUM_PLUGIN_DIR . 'includes/abstracts/abstract-wpum-db.php';
 			require_once WPUM_PLUGIN_DIR . 'includes/classes/class-wpum-db-fields-groups.php';
 
@@ -165,6 +164,7 @@ if ( ! class_exists( 'WP_User_Manager' ) ) :
 			require_once WPUM_PLUGIN_DIR . 'includes/classes/class-wpum-options-panel.php';
 			require_once WPUM_PLUGIN_DIR . 'includes/emails/class-wpum-emails.php';
 			require_once WPUM_PLUGIN_DIR . 'includes/classes/class-wpum-forms.php';
+			require_once WPUM_PLUGIN_DIR . 'includes/classes/class-wpum-field-group.php';
 
 			require_once WPUM_PLUGIN_DIR . 'includes/shortcodes.php';
 			require_once WPUM_PLUGIN_DIR . 'includes/assets.php';
@@ -172,13 +172,10 @@ if ( ! class_exists( 'WP_User_Manager' ) ) :
 			if ( is_admin() || ( defined( 'WP_CLI' ) && WP_CLI ) ) {
 				require_once WPUM_PLUGIN_DIR . 'includes/filters/admin-filters.php';
 				require_once WPUM_PLUGIN_DIR . 'includes/actions/admin-actions.php';
-
 				require_once WPUM_PLUGIN_DIR . 'includes/classes/class-wpum-notices.php';
 				require_once WPUM_PLUGIN_DIR . 'includes/classes/class-wpum-user-table.php';
 				require_once WPUM_PLUGIN_DIR . 'includes/emails/class-wpum-emails-list.php';
-
 				require_once WPUM_PLUGIN_DIR . 'includes/fields/class-wpum-fields-editor.php';
-
 				require_once WPUM_PLUGIN_DIR . 'includes/abstracts/abstract-shortcode-generator.php';
 				require_once WPUM_PLUGIN_DIR . 'includes/classes/shortcodes/class-wpum-shortcode-button.php';
 				require_once WPUM_PLUGIN_DIR . 'includes/classes/shortcodes/class-wpum-shortcode-login.php';

@@ -227,4 +227,38 @@ class WPUM_DB_Fields_Groups extends WPUM_DB {
 		return $groups;
 	}
 
+	/**
+	 * Parse the `WHERE` clause for the SQL query.
+	 *
+	 * @param array $args
+	 * @return void
+	 */
+	private function parse_where( $args ) {
+
+		$where = '';
+
+		if ( ! empty( $where ) ) {
+			$where = ' WHERE 1=1 ' . $where;
+		}
+
+		return $where;
+
+	}
+
+	/**
+	 * Count available fields groups into the database.
+	 *
+	 * @param array $args
+	 * @return void
+	 */
+	public function count( $args = array() ) {
+		global $wpdb;
+
+		$where = $this->parse_where( $args );
+		$sql   = "SELECT COUNT($this->primary_key) FROM " . $this->table_name . "{$where};";
+		$count = $wpdb->get_var( $sql );
+
+		return absint( $count );
+	}
+
 }

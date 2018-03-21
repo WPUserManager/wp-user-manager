@@ -84,6 +84,7 @@ class WPUM_Fields_Editor {
 	 * @return void
 	 */
 	public function display_fields_editor() {
+		$test = new WPUM_Field_Group( 3 );
 		echo '<div class="wrap"><div id="wpum-fields-editor"></div></div>';
 	}
 
