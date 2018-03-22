@@ -31,11 +31,6 @@ class WPUM_Fields_Editor {
 		add_action( 'admin_menu', [ $this, 'setup_menu_page' ], 9 );
 		add_action( 'admin_enqueue_scripts', [ $this, 'load_scripts' ] );
 		add_action( 'wp_ajax_wpum_update_fields_groups_order', [ $this, 'update_groups_order' ] );
-		add_action( 'wp_ajax_wpum_delete_field_group', [ $this, 'test' ] );
-	}
-
-	public function test() {
-		wp_send_json_success();
 	}
 
 	/**
