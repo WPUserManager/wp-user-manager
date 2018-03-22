@@ -3,7 +3,10 @@
 import Vue from 'vue'
 import EditorInterface from './editor-interface'
 import WPNotice from 'vue-wp-notice'
+import VModal from 'vue-js-modal'
+
 Vue.use(WPNotice)
+Vue.use(VModal)
 
 Vue.config.productionTip = false
 
