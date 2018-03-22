@@ -10,6 +10,9 @@
 			<strong>{{sanitized(messageText)}}</strong>
 		</wp-notice>
 
+		<v-dialog/>
+		<modals-container/>
+
 		<table class="wp-list-table widefat fixed striped wpum-fields-groups-table">
 			<thead>
 				<tr>
@@ -44,7 +47,7 @@
 						<td data-colname="End Date">{{group.fields}}</td>
 						<td class="align-middle">
 							<button type="submit" class="button"><span class="dashicons dashicons-admin-settings"></span> <span v-text="sanitized(labels.table_edit_fields)"></span></button>
-							<button type="submit" class="button delete-btn" v-if="! isDefault(group.id)"><span class="dashicons dashicons-trash"></span> <span v-text="sanitized(labels.table_delete_group)"></span></button>
+							<button type="submit" class="button delete-btn" v-if="! isDefault(group.id)" @click="showDeleteDialog( group.name, group.id )"><span class="dashicons dashicons-trash"></span> <span v-text="sanitized(labels.table_delete_group)"></span></button>
 						</td>
 					</tr>
 				</draggable>
@@ -57,15 +60,15 @@
 import axios from 'axios'
 import qs from 'qs'
 import Sanitize from 'sanitize-html'
-import GroupsSelector from './groups-selector'
 import draggable from 'vuedraggable'
 import balloon from 'balloon-css'
+import DeleteDialog from './delete-dialog'
 
 export default {
 	name: 'editor-interface',
 	components: {
-		GroupsSelector,
-		draggable
+		draggable,
+		DeleteDialog
 	},
 	data() {
 		return {
@@ -132,7 +135,6 @@ export default {
 		 * Update the database when the sorting is finished.
 		 */
 		onSortingEnd( event ) {
-
 			axios.post( wpumFieldsEditor.ajax,
 				qs.stringify({
 					nonce: wpumFieldsEditor.nonce,
@@ -161,7 +163,28 @@ export default {
 				}, 3000 )
 
 			})
-
+		},
+		/**
+		 * Show the delete group modal.
+		 */
+		showDeleteDialog( group_name, group_id ) {
+			this.$modal.show( DeleteDialog , {
+				group: group_name,
+				group_id: group_id,
+				/**
+				 * Pass a function to the component so we can
+				 * then update the app status from the child component response.
+				 */
+				updateStatus:(status, message) => {
+					if( status == 'error' ) {
+						this.showError(message)
+					} else {
+						this.showSuccess()
+					}
+				}
+			},{
+				height: '210px',
+			})
 		}
 	}
 }
@@ -250,6 +273,5 @@ export default {
 		color: #0073aa;
 	}
 }
-
 </style>
 

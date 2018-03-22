@@ -31,6 +31,11 @@ class WPUM_Fields_Editor {
 		add_action( 'admin_menu', [ $this, 'setup_menu_page' ], 9 );
 		add_action( 'admin_enqueue_scripts', [ $this, 'load_scripts' ] );
 		add_action( 'wp_ajax_wpum_update_fields_groups_order', [ $this, 'update_groups_order' ] );
+		add_action( 'wp_ajax_wpum_delete_field_group', [ $this, 'test' ] );
+	}
+
+	public function test() {
+		wp_send_json_success();
 	}
 
 	/**
@@ -112,7 +117,10 @@ class WPUM_Fields_Editor {
 			'table_edit_fields'     => esc_html__( 'Customize fields' ),
 			'table_delete_group'    => esc_html__( 'Delete group' ),
 			'table_drag_tooltip'    => esc_html__( 'Drag and drop the rows below to change the order of the fields groups' ),
-			'table_default_tooltip' => esc_html__( 'The default fields group cannot be deleted.' )
+			'table_default_tooltip' => esc_html__( 'The default fields group cannot be deleted.' ),
+			'modal_group_delete'    => esc_html__( 'You are about to delete the group:' ),
+			'modal_delete'          => esc_html__( 'This action cannot be reversed. Are you sure you want to continue? All fields within this group will be deleted too.' ),
+			'confirm_delete'        => esc_html__( 'Confirm delete' )
 		];
 
 	}
