@@ -124,7 +124,10 @@ class WPUM_Fields_Editor {
 	 */
 	private function get_groups() {
 
-		$groups            = WPUM()->fields_groups->get_groups();
+		$groups            = WPUM()->fields_groups->get_groups( [
+			'orderby' => 'group_order',
+			'order'   => 'ASC'
+		] );
 		$registered_groups = [];
 
 		if( ! empty( $groups ) && is_array( $groups ) ) {
