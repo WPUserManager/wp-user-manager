@@ -30,6 +30,7 @@ class WPUM_Fields_Editor {
 	private function init_hooks() {
 		add_action( 'admin_menu', [ $this, 'setup_menu_page' ], 9 );
 		add_action( 'admin_enqueue_scripts', [ $this, 'load_scripts' ] );
+		add_action( 'wp_ajax_wpum_update_fields_groups_order', [ $this, 'update_groups_order' ] );
 	}
 
 	/**
@@ -71,19 +72,11 @@ class WPUM_Fields_Editor {
 			$js_variables = [
 				'is_addon_installed'  => apply_filters( 'wpum_fields_editor_has_custom_fields_addon', false ),
 				'page_title'          => esc_html__( 'WP User Manager Fields Editor' ),
-				'success_message'     => esc_html__( 'Fields groups successfully saved' ),
-				'labels'              => [
-					'table_name'         => esc_html__( 'Group name' ),
-					'table_desc'         => esc_html__( 'Group description' ),
-					'table_default'      => esc_html__( 'Default' ),
-					'table_fields'       => esc_html__( 'Fields' ),
-					'table_actions'      => esc_html__( 'Actions' ),
-					'table_add_group'    => esc_html__( 'Add new field group' ),
-					'table_edit_group'   => esc_html__( 'Edit group settings' ),
-					'table_edit_fields'  => esc_html__( 'Customize fields' ),
-					'table_delete_group' => esc_html__( 'Delete group' )
-				],
-				'groups'              => $this->get_groups()
+				'success_message'     => esc_html__( 'Changes successfully saved.' ),
+				'labels'              => $this->get_labels(),
+				'groups'              => $this->get_groups(),
+				'ajax'                => admin_url( 'admin-ajax.php' ),
+				'nonce'               => wp_create_nonce( 'wpum_update_fields_groups' ),
 			];
 
 			wp_localize_script( 'wpum-fields-editor', 'wpumFieldsEditor', $js_variables );
@@ -101,6 +94,34 @@ class WPUM_Fields_Editor {
 		echo '<div class="wrap"><div id="wpum-fields-editor"></div></div>';
 	}
 
+	/**
+	 * Define the labels for the interface.
+	 *
+	 * @return array
+	 */
+	private function get_labels() {
+
+		return [
+			'table_name'            => esc_html__( 'Group name' ),
+			'table_desc'            => esc_html__( 'Group description' ),
+			'table_default'         => esc_html__( 'Default' ),
+			'table_fields'          => esc_html__( 'Fields' ),
+			'table_actions'         => esc_html__( 'Actions' ),
+			'table_add_group'       => esc_html__( 'Add new field group' ),
+			'table_edit_group'      => esc_html__( 'Edit group settings' ),
+			'table_edit_fields'     => esc_html__( 'Customize fields' ),
+			'table_delete_group'    => esc_html__( 'Delete group' ),
+			'table_drag_tooltip'    => esc_html__( 'Drag and drop the rows below to change the order of the fields groups' ),
+			'table_default_tooltip' => esc_html__( 'The default fields group cannot be deleted.' )
+		];
+
+	}
+
+	/**
+	 * Retrieve a formatted list of fields groups from the database.
+	 *
+	 * @return array
+	 */
 	private function get_groups() {
 
 		$groups            = WPUM()->fields_groups->get_groups();
@@ -113,12 +134,38 @@ class WPUM_Fields_Editor {
 					'name'        => $group->get_name(),
 					'description' => $group->get_description(),
 					'default'     => $group->get_ID() === 1 ? true: false,
-					'fields'      => 'Test'
+					'fields'      => 0
 				];
 			}
 		}
 
 		return $registered_groups;
+
+	}
+
+	/**
+	 * Update groups order within the database.
+	 *
+	 * @return void
+	 */
+	public function update_groups_order() {
+
+		check_ajax_referer( 'wpum_update_fields_groups', 'nonce' );
+
+		$groups = isset( $_POST['groups'] ) && is_array( $_POST['groups'] ) && ! empty( $_POST['groups'] ) ? $_POST['groups'] : false;
+
+		if( $groups ) {
+			foreach( $groups as $order => $group ) {
+				$group_id = (int) $group['id'];
+				if( $group_id ) {
+					$updated_group = WPUM()->fields_groups->update( $group_id, [ 'group_order' => $order ] );
+				}
+			}
+		} else {
+			wp_die( esc_html__( 'Something went wrong: could not update the groups order.' ), 403 );
+		}
+
+		wp_send_json_success( $groups );
 
 	}
 

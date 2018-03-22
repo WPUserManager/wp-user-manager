@@ -183,7 +183,7 @@ abstract class WPUM_DB {
 		$data_keys = array_keys( $data );
 		$column_formats = array_merge( array_flip( $data_keys ), $column_formats );
 
-		if ( false === $wpdb->update( $this->table_name, $data, array( $where => $row_id ), $column_formats ) ) {
+		if ( ! $wpdb->update( $this->table_name, $data, array( $where => $row_id ), $column_formats ) ) {
 			return false;
 		}
 

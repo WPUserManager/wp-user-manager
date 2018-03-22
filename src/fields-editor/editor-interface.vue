@@ -13,10 +13,10 @@
 		<table class="wp-list-table widefat fixed striped wpum-fields-groups-table">
 			<thead>
 				<tr>
-					<th scope="col" class="order-column"><span class="dashicons dashicons-menu"></span></th>
+					<th scope="col" class="order-column" :data-balloon="sanitized(labels.table_drag_tooltip)" data-balloon-pos="right"><span class="dashicons dashicons-menu"></span></th>
 					<th scope="col" class="column-primary" v-text="sanitized(labels.table_name)"></th>
 					<th scope="col" v-text="sanitized(labels.table_desc)"></th>
-					<th scope="col" class="small-column" v-text="sanitized(labels.table_default)"></th>
+					<th scope="col" class="small-column" v-text="sanitized(labels.table_default)" :data-balloon="sanitized(labels.table_default_tooltip)" data-balloon-pos="up"></th>
 					<th scope="col" class="small-column" v-text="sanitized(labels.table_fields)"></th>
 					<th scope="col" v-text="sanitized(labels.table_actions)"></th>
 				</tr>
@@ -54,9 +54,12 @@
 </template>
 
 <script>
+import axios from 'axios'
+import qs from 'qs'
 import Sanitize from 'sanitize-html'
 import GroupsSelector from './groups-selector'
 import draggable from 'vuedraggable'
+import balloon from 'balloon-css'
 
 export default {
 	name: 'editor-interface',
@@ -95,14 +98,70 @@ export default {
 		 */
 		onSortingStart( event ) {
 			this.loading = true
-			console.log('start')
+			console.log(event)
+		},
+		/**
+		 * Show the success status for the editor.
+		 *
+		 * - Disable loading spinner.
+		 * - Enable message.
+		 * - Set message status to success.
+		 * - Inject the status message.
+		 */
+		showSuccess() {
+			this.loading = false
+			this.showMessage = true
+			this.messageStatus = 'success'
+			this.messageText = wpumFieldsEditor.success_message
+		},
+		/**
+		 * Show an error message within the app.
+		 *
+		 * - Disable loading spinner.
+		 * - Enable message.
+		 * - Set message status to error
+		 * - Inject the message from the server side.
+		 */
+		showError( message ) {
+			this.loading = false
+			this.showMessage = true
+			this.messageStatus = 'error'
+			this.messageText = message
 		},
 		/**
 		 * Update the database when the sorting is finished.
 		 */
 		onSortingEnd( event ) {
-			this.loading = false
-			console.log(event)
+
+			axios.post( wpumFieldsEditor.ajax,
+				qs.stringify({
+					nonce: wpumFieldsEditor.nonce,
+					groups: this.groups
+				}),
+				{
+					params: {
+						action: 'wpum_update_fields_groups_order'
+					},
+				}
+			)
+			.then( response => {
+				this.showSuccess()
+			})
+			/**
+			 * Show error message and update the message text with
+			 * the one retrieved from the backend.
+			 *
+			 * Then automatically hide the message after 3 seconds.
+			 */
+			.catch( error => {
+				this.showError( error.response.data )
+				let self = this
+				setInterval( function() {
+					self.$data.showMessage = false
+				}, 3000 )
+
+			})
+
 		}
 	}
 }
@@ -183,6 +242,13 @@ export default {
 .spinner {
 	float: none;
 	margin-top: -8px;
+}
+
+.dashicons-menu {
+	&:hover {
+		cursor: move;
+		color: #0073aa;
+	}
 }
 
 </style>
