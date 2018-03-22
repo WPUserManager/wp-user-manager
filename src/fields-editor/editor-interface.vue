@@ -273,5 +273,49 @@ export default {
 		color: #0073aa;
 	}
 }
+
+.v--modal-overlay {
+	background: rgba(0, 0, 0, 0.7);
+	z-index: 9999;
+}
+
+.v--modal {
+	box-shadow: 0 5px 15px rgba(0,0,0,.7);
+	background: #fcfcfc;
+	border-radius: 0;
+}
+
+.media-modal-content {
+	min-height: initial;
+}
+
+.media-frame-title,
+.media-frame-content,
+.media-frame-toolbar {
+	left: 0;
+}
+
+.media-frame-title {
+	.dashicons {
+		display: inline-block;
+		margin-top: 16px;
+		margin-right: 10px;
+		color: red;
+	}
+}
+
+.media-frame-content {
+	top: 50px;
+	padding: 10px 16px;
+	font-size: 13px;
+	line-height: 1.6em;
+}
+
+.wpum-dialog {
+	.spinner {
+		float: none;
+		margin-top: 20px;
+	}
+}
 </style>
 

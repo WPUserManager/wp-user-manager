@@ -1,5 +1,5 @@
 <template>
-	<div class="media-modal-content" id="delete-dialog">
+	<div class="media-modal-content wpum-dialog" id="delete-dialog">
 		<button type="button" class="media-modal-close" @click="$emit('close')"><span class="media-modal-icon"><span class="screen-reader-text">Close panel</span></span></button>
 		<div class="media-frame mode-select wp-core-ui">
 			<div class="media-frame-title">
@@ -40,7 +40,7 @@ export default {
 	methods: {
 		/**
 		 * Delete a fields group from the database.
-		 * Only works when the custom fields addon is active. 
+		 * Only works when the custom fields addon is active.
 		 */
 		deleteGroup() {
 			this.loading = true
@@ -70,50 +70,3 @@ export default {
 	}
 }
 </script>
-
-<style lang="scss">
-.v--modal-overlay {
-	background: rgba(0, 0, 0, 0.7);
-	z-index: 9999;
-}
-
-.v--modal {
-	box-shadow: 0 5px 15px rgba(0,0,0,.7);
-	background: #fcfcfc;
-	border-radius: 0;
-}
-
-.media-modal-content {
-	min-height: initial;
-}
-
-.media-frame-title,
-.media-frame-content,
-.media-frame-toolbar {
-	left: 0;
-}
-
-.media-frame-title {
-	.dashicons {
-		display: inline-block;
-		margin-top: 16px;
-		margin-right: 10px;
-		color: red;
-	}
-}
-
-.media-frame-content {
-	top: 50px;
-	padding: 10px 16px;
-	font-size: 13px;
-	line-height: 1.6em;
-}
-
-#delete-dialog {
-	.spinner {
-		float: none;
-		margin-top: 20px;
-	}
-}
-
-</style>
