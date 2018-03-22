@@ -115,7 +115,8 @@ class WPUM_Fields_Editor {
 			'table_default_tooltip' => esc_html__( 'The default fields group cannot be deleted.' ),
 			'modal_group_delete'    => esc_html__( 'You are about to delete the group:' ),
 			'modal_delete'          => esc_html__( 'This action cannot be reversed. Are you sure you want to continue? All fields within this group will be deleted too.' ),
-			'confirm_delete'        => esc_html__( 'Confirm delete' )
+			'confirm_delete'        => esc_html__( 'Confirm delete' ),
+			'save'                  => esc_html__( 'Save changes' )
 		];
 
 	}

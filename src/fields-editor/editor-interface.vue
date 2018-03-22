@@ -33,7 +33,7 @@
 							<strong><a href="#">{{group.name}}</a></strong><br>
 							<div class="row-actions">
 								<span>
-									<a href="#" v-text="sanitized(labels.table_edit_group)"></a>
+									<a href="#" @click="showEditGroupDialog( group.id )" v-text="sanitized(labels.table_edit_group)"></a>
 								</span>
 							</div>
 							<button type="button" class="toggle-row">
@@ -63,12 +63,14 @@ import Sanitize from 'sanitize-html'
 import draggable from 'vuedraggable'
 import balloon from 'balloon-css'
 import DeleteDialog from './delete-dialog'
+import EditGroupDialog from './edit-group-dialog'
 
 export default {
 	name: 'editor-interface',
 	components: {
 		draggable,
-		DeleteDialog
+		DeleteDialog,
+		EditGroupDialog
 	},
 	data() {
 		return {
@@ -185,6 +187,16 @@ export default {
 			},{
 				height: '210px',
 			})
+		},
+		/**
+		 * Show the edit group dialog.
+		 */
+		showEditGroupDialog( group_id ) {
+			this.$modal.show( EditGroupDialog , {
+				group_id: group_id,
+			},{
+				height: '350px',
+			})
 		}
 	}
 }
@@ -287,6 +299,7 @@ export default {
 
 .media-modal-content {
 	min-height: initial;
+	background: #efefef;
 }
 
 .media-frame-title,
@@ -300,7 +313,9 @@ export default {
 		display: inline-block;
 		margin-top: 16px;
 		margin-right: 10px;
-		color: red;
+		&.dashicons-warning {
+			color: red;
+		}
 	}
 }
 
@@ -317,5 +332,25 @@ export default {
 		margin-top: 20px;
 	}
 }
+
+.dialog-form {
+	padding-top: 10px;
+	label {
+		display: block;
+		font-weight: bold;
+		color: #000;
+		margin-bottom: 5px;
+	}
+
+	input, textarea {
+		display: block;
+		width: 100%;
+		margin-bottom: 20px;
+		&:last-child {
+			margin-bottom: 0;
+		}
+	}
+}
+
 </style>
 
