@@ -197,7 +197,7 @@ class WPUM_Form_Login extends WPUM_Form {
 				'remember'      => $values['login']['remember'] ? true : false
 			];
 
-			$referrer = isset( $_POST['redirect_to'] ) ? esc_url( $_POST['redirect_to'] ): false;
+			$referrer = isset( $_GET['redirect_to'] ) ? esc_url( $_GET['redirect_to'] ): false;
 			$user     = wp_signon( $creds );
 
 			if( is_wp_error( $user ) ) {
