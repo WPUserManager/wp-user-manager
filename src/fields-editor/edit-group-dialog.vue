@@ -71,18 +71,18 @@ export default {
 				}),
 				{
 					params: {
-						action: 'wpum_update_field_group'
+						action: 'wpum_update_fields_group'
 					},
 				}
 			)
 			.then( response => {
 				this.loading = false
-				this.updateGroupDetails('success')
+				this.updateGroupDetails( 'success', response.data.data )
 				this.$emit('close')
 			})
 			.catch( error => {
 				this.loading = false
-				this.updateGroupDetails('error', error.response.data)
+				this.updateGroupDetails( 'error', error.response.data )
 				this.$emit('close')
 			})
 

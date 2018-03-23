@@ -31,6 +31,7 @@ class WPUM_Fields_Editor {
 		add_action( 'admin_menu', [ $this, 'setup_menu_page' ], 9 );
 		add_action( 'admin_enqueue_scripts', [ $this, 'load_scripts' ] );
 		add_action( 'wp_ajax_wpum_update_fields_groups_order', [ $this, 'update_groups_order' ] );
+		add_action( 'wp_ajax_wpum_update_fields_group', [ $this, 'update_group' ] );
 	}
 
 	/**
@@ -175,6 +176,42 @@ class WPUM_Fields_Editor {
 		}
 
 		wp_send_json_success( $groups );
+
+	}
+
+	/**
+	 * Update a fields group via ajax.
+	 *
+	 * @return void
+	 */
+	public function update_group() {
+
+		check_ajax_referer( 'wpum_update_fields_groups', 'nonce' );
+
+		$group_id          = isset( $_POST['group_id'] ) && ! empty( $_POST['group_id'] ) ? (int) $_POST['group_id'] : false;
+		$group_name        = isset( $_POST['group_name'] ) && ! empty( $_POST['group_name'] ) ? sanitize_text_field( $_POST['group_name'] ) : false;
+		$group_description = isset( $_POST['group_description'] ) && ! empty( $_POST['group_description'] ) ? wp_kses_post( $_POST['group_description'] ) : '';
+
+		if( $group_id && $group_name ) {
+
+			$updated_group = WPUM()->fields_groups->update( $group_id, [
+				'name'        => $group_name,
+				'description' => $group_description
+			] );
+
+			if( ! $updated_group ) {
+				wp_die( esc_html__( 'Something went wrong: could not update the group details.' ), 403 );
+			}
+
+		} else {
+			wp_die( esc_html__( 'Something went wrong: could not update the group details.' ), 403 );
+		}
+
+		wp_send_json_success( [
+			'id'          => $group_id,
+			'name'        => $group_name,
+			'description' => $group_description
+		] );
 
 	}
 

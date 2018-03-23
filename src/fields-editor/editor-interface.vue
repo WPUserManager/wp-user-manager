@@ -196,11 +196,12 @@ export default {
 				group_id: group.id,
 				group_name: group.name,
 				group_desc: group.description,
-				updateGroupDetails: (status, message) => {
+				updateGroupDetails: ( status, data_or_message ) => {
 					if( status == 'error' ) {
-						this.showError(message)
+						this.showError(data_or_message)
 					} else {
 						this.showSuccess()
+						console.log( data_or_message )
 					}
 				}
 			},{
