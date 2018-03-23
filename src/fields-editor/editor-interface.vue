@@ -40,7 +40,7 @@
 								<span class="screen-reader-text">Show more details</span>
 							</button>
 						</td>
-						<td data-colname="Start Date">{{group.description}}</td>
+						<td data-colname="Start Date" v-html="sanitized(group.description)"></td>
 						<td data-colname="End Date">
 							<span class="dashicons dashicons-yes" v-if="isDefault(group.id)"></span>
 						</td>
@@ -64,6 +64,7 @@ import draggable from 'vuedraggable'
 import balloon from 'balloon-css'
 import DeleteDialog from './delete-dialog'
 import EditGroupDialog from './edit-group-dialog'
+import findIndex from 'lodash.findindex'
 
 export default {
 	name: 'editor-interface',
@@ -118,6 +119,7 @@ export default {
 			this.showMessage = true
 			this.messageStatus = 'success'
 			this.messageText = wpumFieldsEditor.success_message
+			this.resetMessages()
 		},
 		/**
 		 * Show an error message within the app.
@@ -132,6 +134,16 @@ export default {
 			this.showMessage = true
 			this.messageStatus = 'error'
 			this.messageText = message
+			this.resetMessages()
+		},
+		/**
+		 * Automatically hide the admin notice after 4 seconds.
+		 */
+		resetMessages() {
+			let self = this
+			setInterval(function() {
+				self.$data.showMessage = false
+			}, 4000)
 		},
 		/**
 		 * Update the database when the sorting is finished.
@@ -196,12 +208,21 @@ export default {
 				group_id: group.id,
 				group_name: group.name,
 				group_desc: group.description,
+				/**
+				 * Update the interface with the newly retrieve info from the backend.
+				 * Show a success or error message depending on what happened.
+				 */
 				updateGroupDetails: ( status, data_or_message ) => {
 					if( status == 'error' ) {
 						this.showError(data_or_message)
 					} else {
+						// Find object index of the updated group.
+						const groupIndex = findIndex( this.groups , function(o) { return o.id == data_or_message.id })
+						// Now update the interface content.
+						this.groups[groupIndex].name = data_or_message.name
+						this.groups[groupIndex].description = data_or_message.description
+						// Show success message.
 						this.showSuccess()
-						console.log( data_or_message )
 					}
 				}
 			},{

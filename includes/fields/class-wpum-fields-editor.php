@@ -199,10 +199,6 @@ class WPUM_Fields_Editor {
 				'description' => $group_description
 			] );
 
-			if( ! $updated_group ) {
-				wp_die( esc_html__( 'Something went wrong: could not update the group details.' ), 403 );
-			}
-
 		} else {
 			wp_die( esc_html__( 'Something went wrong: could not update the group details.' ), 403 );
 		}
