@@ -71,13 +71,14 @@ class WPUM_Fields_Editor {
 			wp_enqueue_script( 'wpum-fields-editor' );
 
 			$js_variables = [
-				'is_addon_installed'  => apply_filters( 'wpum_fields_editor_has_custom_fields_addon', false ),
-				'page_title'          => esc_html__( 'WP User Manager Fields Editor' ),
-				'success_message'     => esc_html__( 'Changes successfully saved.' ),
-				'labels'              => $this->get_labels(),
-				'groups'              => $this->get_groups(),
-				'ajax'                => admin_url( 'admin-ajax.php' ),
-				'nonce'               => wp_create_nonce( 'wpum_update_fields_groups' ),
+				'is_addon_installed' => apply_filters( 'wpum_fields_editor_has_custom_fields_addon', false ),
+				'page_title'         => esc_html__( 'WP User Manager Fields Editor' ),
+				'success_message'    => esc_html__( 'Changes successfully saved.' ),
+				'labels'             => $this->get_labels(),
+				'groups'             => $this->get_groups(),
+				'ajax'               => admin_url( 'admin-ajax.php' ),
+				'nonce'              => wp_create_nonce( 'wpum_update_fields_groups' ),
+				'cf_addon_url'       => 'https://wpusermanager.com/addons/custom-fields/?ref=wp_admin'
 			];
 
 			wp_localize_script( 'wpum-fields-editor', 'wpumFieldsEditor', $js_variables );
@@ -119,7 +120,9 @@ class WPUM_Fields_Editor {
 			'confirm_delete'            => esc_html__( 'Confirm delete' ),
 			'save'                      => esc_html__( 'Save changes' ),
 			'tooltip_group_name'        => esc_html__( 'Customize the name of group. This may be used in your theme.' ),
-			'tooltip_group_description' => esc_html__( 'Customize the description of the group. This may be used into your theme.' )
+			'tooltip_group_description' => esc_html__( 'Customize the description of the group. This may be used into your theme.' ),
+			'purchase' 					=> esc_html__( 'Purchase now' ),
+			'premium_addon'             => sprintf( __( 'Create <a href="%1$s" target="_blank">unlimited custom fields and groups</a> for user profiles and registration form with a drag & drop interface. The <a href="%1$s" target="_blank">custom fields</a> addon is required if you wish to extend your community.' ), 'https://wpusermanager.com/addons/custom-fields/?ref=wp_admin' ),
 		];
 
 	}

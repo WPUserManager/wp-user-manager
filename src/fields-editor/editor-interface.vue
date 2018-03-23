@@ -2,7 +2,7 @@
 	<section id="wpum-fields-editor-wrapper">
 
 		<h1 class="wp-heading-inline" v-text="sanitized(pageTitle)"></h1>
-		<a href="#" class="page-title-action" id="wpum-add-field-group"><span class="dashicons dashicons-plus-alt"></span> <span v-text="sanitized(labels.table_add_group)"></span></a>
+		<a href="#" class="page-title-action" id="wpum-add-field-group" @click="showAddGroupDialog()"><span class="dashicons dashicons-plus-alt"></span> <span v-text="sanitized(labels.table_add_group)"></span></a>
 		<div class="spinner is-active" v-if="loading"></div>
 		<br/><br/>
 
@@ -64,6 +64,7 @@ import draggable from 'vuedraggable'
 import balloon from 'balloon-css'
 import DeleteDialog from './delete-dialog'
 import EditGroupDialog from './edit-group-dialog'
+import PremiumDialog from './premium-dialog'
 import findIndex from 'lodash.findindex'
 
 export default {
@@ -228,6 +229,18 @@ export default {
 			},{
 				height: '350px',
 			})
+		},
+		/**
+		 * Show the add new group modal or show the premium dialog if the addon isn't installed.
+		 */
+		showAddGroupDialog() {
+
+			if( wpumFieldsEditor.is_addon_installed ) {
+
+			} else {
+				this.$modal.show( PremiumDialog, {},{ height: '220px' })
+			}
+
 		}
 	}
 }
