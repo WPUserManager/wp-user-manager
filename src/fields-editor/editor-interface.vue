@@ -336,7 +336,7 @@ export default {
 .dialog-form {
 	padding-top: 10px;
 	label {
-		display: block;
+		display: inline-block;
 		font-weight: bold;
 		color: #000;
 		margin-bottom: 5px;

@@ -7,10 +7,10 @@
 			</div>
 			<div class="media-frame-content">
 				<form action="#" method="post" class="dialog-form">
-					<label for="group-name">Group name <span class="dashicons dashicons-editor-help"></span></label>
-					<input type="text" name="group-name" id="group-name" value="">
-					<label for="group-description">Group description <span class="dashicons dashicons-editor-help"></span></label>
-					<textarea name="group-description" id="group-description" cols="30" rows="4"></textarea>
+					<label for="group-name" :data-balloon="labels.tooltip_group_name" data-balloon-pos="right"><span>{{labels.table_name}}</span> <span class="dashicons dashicons-editor-help"></span></label>
+					<input type="text" name="group-name" id="group-name" value="" v-model="groupName">
+					<label for="group-description" :data-balloon="labels.tooltip_group_description" data-balloon-pos="right"><span>{{labels.table_desc}}</span> <span class="dashicons dashicons-editor-help"></span></label>
+					<textarea name="group-description" id="group-description" cols="30" rows="4" v-model="groupDescription"></textarea>
 				</form>
 			</div>
 			<div class="media-frame-toolbar">
@@ -37,7 +37,9 @@ export default {
 	data() {
 		return {
 			loading: false,
-			labels: wpumFieldsEditor.labels
+			labels: wpumFieldsEditor.labels,
+			groupName: '',
+			groupDescription: ''
 		}
 	},
 }

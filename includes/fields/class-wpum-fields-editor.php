@@ -102,21 +102,23 @@ class WPUM_Fields_Editor {
 	private function get_labels() {
 
 		return [
-			'table_name'            => esc_html__( 'Group name' ),
-			'table_desc'            => esc_html__( 'Group description' ),
-			'table_default'         => esc_html__( 'Default' ),
-			'table_fields'          => esc_html__( 'Fields' ),
-			'table_actions'         => esc_html__( 'Actions' ),
-			'table_add_group'       => esc_html__( 'Add new field group' ),
-			'table_edit_group'      => esc_html__( 'Edit group settings' ),
-			'table_edit_fields'     => esc_html__( 'Customize fields' ),
-			'table_delete_group'    => esc_html__( 'Delete group' ),
-			'table_drag_tooltip'    => esc_html__( 'Drag and drop the rows below to change the order of the fields groups' ),
-			'table_default_tooltip' => esc_html__( 'The default fields group cannot be deleted.' ),
-			'modal_group_delete'    => esc_html__( 'You are about to delete the group:' ),
-			'modal_delete'          => esc_html__( 'This action cannot be reversed. Are you sure you want to continue? All fields within this group will be deleted too.' ),
-			'confirm_delete'        => esc_html__( 'Confirm delete' ),
-			'save'                  => esc_html__( 'Save changes' )
+			'table_name'                => esc_html__( 'Group name' ),
+			'table_desc'                => esc_html__( 'Group description' ),
+			'table_default'             => esc_html__( 'Default' ),
+			'table_fields'              => esc_html__( 'Fields' ),
+			'table_actions'             => esc_html__( 'Actions' ),
+			'table_add_group'           => esc_html__( 'Add new field group' ),
+			'table_edit_group'          => esc_html__( 'Edit group settings' ),
+			'table_edit_fields'         => esc_html__( 'Customize fields' ),
+			'table_delete_group'        => esc_html__( 'Delete group' ),
+			'table_drag_tooltip'        => esc_html__( 'Drag and drop the rows below to change the order of the fields groups' ),
+			'table_default_tooltip'     => esc_html__( 'The default fields group cannot be deleted.' ),
+			'modal_group_delete'        => esc_html__( 'You are about to delete the group:' ),
+			'modal_delete'              => esc_html__( 'This action cannot be reversed. Are you sure you want to continue? All fields within this group will be deleted too.' ),
+			'confirm_delete'            => esc_html__( 'Confirm delete' ),
+			'save'                      => esc_html__( 'Save changes' ),
+			'tooltip_group_name'        => esc_html__( 'Customize the name of group. This may be used in your theme.' ),
+			'tooltip_group_description' => esc_html__( 'Customize the description of the group. This may be used into your theme.' )
 		];
 
 	}
