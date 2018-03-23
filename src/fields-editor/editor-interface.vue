@@ -33,7 +33,7 @@
 							<strong><a href="#">{{group.name}}</a></strong><br>
 							<div class="row-actions">
 								<span>
-									<a href="#" @click="showEditGroupDialog( group.id )" v-text="sanitized(labels.table_edit_group)"></a>
+									<a href="#" @click="showEditGroupDialog( group )" v-text="sanitized(labels.table_edit_group)"></a>
 								</span>
 							</div>
 							<button type="button" class="toggle-row">
@@ -191,9 +191,18 @@ export default {
 		/**
 		 * Show the edit group dialog.
 		 */
-		showEditGroupDialog( group_id ) {
+		showEditGroupDialog( group ) {
 			this.$modal.show( EditGroupDialog , {
-				group_id: group_id,
+				group_id: group.id,
+				group_name: group.name,
+				group_desc: group.description,
+				updateGroupDetails: (status, message) => {
+					if( status == 'error' ) {
+						this.showError(message)
+					} else {
+						this.showSuccess()
+					}
+				}
 			},{
 				height: '350px',
 			})
@@ -345,7 +354,8 @@ export default {
 	input, textarea {
 		display: block;
 		width: 100%;
-		margin-bottom: 20px;
+		margin-bottom: 15px;
+		font-size: 13px !important;
 		&:last-child {
 			margin-bottom: 0;
 		}
