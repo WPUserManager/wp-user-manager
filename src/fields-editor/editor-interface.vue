@@ -173,11 +173,6 @@ export default {
 			 */
 			.catch( error => {
 				this.showError( error.response.data )
-				let self = this
-				setInterval( function() {
-					self.$data.showMessage = false
-				}, 3000 )
-
 			})
 		},
 		/**
