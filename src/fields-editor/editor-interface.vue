@@ -243,6 +243,7 @@ export default {
 						} else {
 							this.showSuccess()
 							console.log( data_or_message )
+							this.groups.push(data_or_message)
 						}
 					}
 				},{ height: '350px' })
