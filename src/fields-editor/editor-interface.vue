@@ -235,13 +235,20 @@ export default {
 		 * Show the add new group modal or show the premium dialog if the addon isn't installed.
 		 */
 		showAddGroupDialog() {
-
 			if( wpumFieldsEditor.is_addon_installed ) {
-
+				this.$modal.show( CreateGroupDialog, {
+					addNewGroup: ( status, data_or_message ) => {
+						if( status == 'error' ) {
+							this.showError(data_or_message)
+						} else {
+							this.showSuccess()
+							console.log( data_or_message )
+						}
+					}
+				},{ height: '350px' })
 			} else {
 				this.$modal.show( PremiumDialog, {},{ height: '220px' })
 			}
-
 		}
 	}
 }
