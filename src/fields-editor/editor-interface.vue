@@ -66,7 +66,8 @@ import DeleteDialog from './dialogs/dialog-delete-group'
 import EditGroupDialog from './dialogs/dialog-edit-group'
 import PremiumDialog from './dialogs/dialog-premium'
 import CreateGroupDialog from './dialogs/dialog-create-group'
-import findIndex from 'lodash.findindex'
+import findGroupIndex from 'lodash.findindex'
+import removeGroupByID from 'lodash.remove'
 
 export default {
 	name: 'editor-interface',
@@ -186,10 +187,13 @@ export default {
 				 * Pass a function to the component so we can
 				 * then update the app status from the child component response.
 				 */
-				updateStatus:(status, message) => {
+				updateStatus:(status, id_or_message) => {
 					if( status == 'error' ) {
-						this.showError(message)
+						this.showError(id_or_message)
 					} else {
+						removeGroupByID(this.groups, {
+							id: id_or_message
+						})
 						this.showSuccess()
 					}
 				}
@@ -214,7 +218,7 @@ export default {
 						this.showError(data_or_message)
 					} else {
 						// Find object index of the updated group.
-						const groupIndex = findIndex( this.groups , function(o) { return o.id == data_or_message.id })
+						const groupIndex = findGroupIndex( this.groups , function(o) { return o.id == data_or_message.id })
 						// Now update the interface content.
 						this.groups[groupIndex].name = data_or_message.name
 						this.groups[groupIndex].description = data_or_message.description
