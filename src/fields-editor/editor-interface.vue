@@ -242,7 +242,6 @@ export default {
 							this.showError(data_or_message)
 						} else {
 							this.showSuccess()
-							console.log( data_or_message )
 							this.groups.push(data_or_message)
 						}
 					}
