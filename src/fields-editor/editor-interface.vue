@@ -65,6 +65,7 @@ import balloon from 'balloon-css'
 import DeleteDialog from './delete-dialog'
 import EditGroupDialog from './edit-group-dialog'
 import PremiumDialog from './premium-dialog'
+import CreateGroupDialog from './create-group-dialog'
 import findIndex from 'lodash.findindex'
 
 export default {
