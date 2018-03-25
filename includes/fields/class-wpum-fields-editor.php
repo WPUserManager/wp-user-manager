@@ -113,7 +113,7 @@ class WPUM_Fields_Editor {
 			'table_edit_group'          => esc_html__( 'Edit group settings' ),
 			'table_edit_fields'         => esc_html__( 'Customize fields' ),
 			'table_delete_group'        => esc_html__( 'Delete group' ),
-			'table_drag_tooltip'        => esc_html__( 'Drag and drop the rows below to change the order of the fields groups' ),
+			'table_drag_tooltip'        => esc_html__( 'Drag and drop the rows below to change the order.' ),
 			'table_default_tooltip'     => esc_html__( 'The default fields group cannot be deleted.' ),
 			'modal_group_delete'        => esc_html__( 'You are about to delete the group:' ),
 			'modal_delete'              => esc_html__( 'This action cannot be reversed. Are you sure you want to continue? All fields within this group will be deleted too.' ),
@@ -127,6 +127,10 @@ class WPUM_Fields_Editor {
 			'fields_page_title'         => esc_html__( 'Editing:' ),
 			'fields_go_back'            => esc_html__( 'Back to the groups list' ),
 			'fields_add_new'            => esc_html__( 'Add new custom field' ),
+			'fields_name'               => esc_html__( 'Field name' ),
+			'fields_type'               => esc_html__( 'Field type' ),
+			'fields_required'           => esc_html__( 'Required' ),
+			'fields_visibility'         => esc_html__( 'Visibility' )
 		];
 
 	}

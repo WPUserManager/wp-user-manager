@@ -29,7 +29,7 @@
 						<td class="order-anchor align-middle">
 							<span class="dashicons dashicons-menu"></span>
 						</td>
-						<td class="column-username has-row-actions column-primary" data-colname="Event">
+						<td class="column-username has-row-actions column-primary">
 							<strong><a href="#">{{group.name}}</a></strong><br>
 							<div class="row-actions">
 								<span>
