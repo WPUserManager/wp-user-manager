@@ -9,7 +9,7 @@ export default new Router({
 	routes: [
 		{
 			path: '/',
-			name: 'Editor',
+			name: 'groups-list',
 			component: GroupEditorInterface
 		},
 		{

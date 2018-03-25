@@ -121,9 +121,12 @@ class WPUM_Fields_Editor {
 			'save'                      => esc_html__( 'Save changes' ),
 			'tooltip_group_name'        => esc_html__( 'Customize the name of group. This may be used in your theme.' ),
 			'tooltip_group_description' => esc_html__( 'Customize the description of the group. This may be used into your theme.' ),
-			'purchase' 					=> esc_html__( 'Purchase now' ),
+			'purchase'                  => esc_html__( 'Purchase now' ),
 			'create_group'              => esc_html__( 'Create new fields group' ),
 			'premium_addon'             => sprintf( __( 'Create <a href="%1$s" target="_blank">unlimited custom fields and groups</a> for user profiles and registration forms with a drag & drop interface. The <a href="%1$s" target="_blank">custom fields</a> addon is required if you wish to extend your community.' ), 'https://wpusermanager.com/addons/custom-fields/?ref=wp_admin' ),
+			'fields_page_title'         => esc_html__( 'Editing:' ),
+			'fields_go_back'            => esc_html__( 'Back to the groups list' ),
+			'fields_add_new'            => esc_html__( 'Add new custom field' ),
 		];
 
 	}
