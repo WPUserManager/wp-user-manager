@@ -46,7 +46,7 @@
 						</td>
 						<td data-colname="End Date">{{group.fields}}</td>
 						<td class="align-middle">
-							<button type="submit" class="button"><span class="dashicons dashicons-admin-settings"></span> <span v-text="sanitized(labels.table_edit_fields)"></span></button>
+							<router-link :to="{ name: 'group', params: { id: group.id }}" tag="button" type="submit" class="button"><span class="dashicons dashicons-admin-settings"></span> <span v-text="sanitized(labels.table_edit_fields)"></span></router-link>
 							<button type="submit" class="button delete-btn" v-if="! isDefault(group.id)" @click="showDeleteDialog( group.name, group.id )"><span class="dashicons dashicons-trash"></span> <span v-text="sanitized(labels.table_delete_group)"></span></button>
 						</td>
 					</tr>
