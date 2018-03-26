@@ -78,7 +78,18 @@ class WPUM_Fields_Editor {
 				'groups'             => $this->get_groups(),
 				'ajax'               => admin_url( 'admin-ajax.php' ),
 				'nonce'              => wp_create_nonce( 'wpum_update_fields_groups' ),
-				'cf_addon_url'       => 'https://wpusermanager.com/addons/custom-fields/?ref=wp_admin'
+				'cf_addon_url'       => 'https://wpusermanager.com/addons/custom-fields/?ref=wp_admin',
+				'fields' => [
+					array(
+						'name'       => 'Custom field name',
+						'id'         => 1,
+						'type'       => 'text',
+						'required'   => true,
+						'default'    => true,
+						'visibility' => 'public',
+						'editable'   => 'public',
+					)
+				]
 			];
 
 			wp_localize_script( 'wpum-fields-editor', 'wpumFieldsEditor', $js_variables );
@@ -128,9 +139,16 @@ class WPUM_Fields_Editor {
 			'fields_go_back'            => esc_html__( 'Back to the groups list' ),
 			'fields_add_new'            => esc_html__( 'Add new custom field' ),
 			'fields_name'               => esc_html__( 'Field name' ),
-			'fields_type'               => esc_html__( 'Field type' ),
+			'fields_type'               => esc_html__( 'Type' ),
 			'fields_required'           => esc_html__( 'Required' ),
-			'fields_visibility'         => esc_html__( 'Visibility' )
+			'fields_visibility'         => esc_html__( 'Visibility' ),
+			'fields_edit'               => esc_html__( 'Edit field' ),
+			'fields_delete'             => esc_html__( 'Delete field' ),
+			'fields_editable'           => esc_html__( 'Editable' ),
+			'fields_default_tooltip'    => esc_html__( 'Default fields marked with a green check icon, cannot be deleted.' ),
+			'fields_required_tooltip'   => esc_html__( 'Fields marked as required will be required within the registration form.' ),
+			'fields_editable_tooltip'   => esc_html__( 'Fields marked as locked, can only be edited by an administrator and will not be visible in any form.' ),
+			'fields_visibility_tooltip' => esc_html__( 'Fields marked as hidden will be visible only to administrators.' ),
 		];
 
 	}

@@ -9,37 +9,47 @@
 
 		<br/>
 
-		<table class="wp-list-table widefat fixed striped">
+		<table class="wp-list-table widefat fixed striped wpum-fields-groups-table">
 			<thead>
 				<tr>
 					<th scope="col" class="order-column" :data-balloon="labels.table_drag_tooltip" data-balloon-pos="right"><span class="dashicons dashicons-menu"></span></th>
 					<th scope="col" class="column-primary">{{labels.fields_name}}</th>
-					<th scope="col">{{labels.fields_type}}</th>
-					<th scope="col">{{labels.fields_required}}</th>
-					<th scope="col">{{labels.fields_visibility}}</th>
+					<th scope="col" class="small-column">{{labels.fields_type}}</th>
+					<th scope="col" class="small-column" :data-balloon="labels.fields_required_tooltip" data-balloon-pos="up">{{labels.fields_required}}</th>
+					<th scope="col" class="small-column" :data-balloon="labels.fields_default_tooltip" data-balloon-pos="up">{{labels.table_default}}</th>
+					<th scope="col" class="small-column" :data-balloon="labels.fields_visibility_tooltip" data-balloon-pos="up">{{labels.fields_visibility}}</th>
+					<th scope="col" class="small-column" :data-balloon="labels.fields_editable_tooltip" data-balloon-pos="up">{{labels.fields_editable}}</th>
+					<th scope="col">{{labels.table_actions}}</th>
 				</tr>
 			</thead>
 			<tbody>
-				<tr>
+				<tr v-for="field in fields" :key="field.id">
 					<td class="order-anchor align-middle">
 						<span class="dashicons dashicons-menu"></span>
 					</td>
 					<td class="column-primary">
-						Field name
-						<div class="row-actions">
-							<span>
-								<a href="#">Edit field</a> | <a href="#">Delete field</a>
-							</span>
-						</div>
+						{{field.name}}
 					</td>
 					<td>
-						Text
+						{{field.type}}
 					</td>
 					<td>
-						no
+						<span class="dashicons dashicons-yes" v-if="isRequired(field.required)"></span>
 					</td>
 					<td>
-						more
+						<span class="dashicons dashicons-yes" v-if="isDefault(field.default)"></span>
+					</td>
+					<td>
+						<span class="dashicons dashicons-visibility" v-if="field.visibility == 'public'"></span>
+						<span class="dashicons dashicons-hidden" v-else></span>
+					</td>
+					<td>
+						<span class="dashicons dashicons-yes" v-if="field.editable == 'public'"></span>
+						<span class="dashicons dashicons-lock" v-else></span>
+					</td>
+					<td class="align-middle">
+						<button type="submit" class="button"><span class="dashicons dashicons-edit"></span> {{labels.fields_edit}}</button>
+						<button type="submit" class="button delete-btn"><span class="dashicons dashicons-trash"></span> {{labels.fields_delete}}</button>
 					</td>
 				</tr>
 			</tbody>
@@ -61,6 +71,7 @@ export default {
 			labels:         wpumFieldsEditor.labels,
 			group_id:       '',
 			group_name:     '',
+			fields:         wpumFieldsEditor.fields
 		}
 	},
 	/**
@@ -82,7 +93,19 @@ export default {
 			} else {
 				this.$modal.show( PremiumDialog, {},{ height: '220px' })
 			}
-		}
+		},
+		/**
+		 * Determine if the field is a required one or not.
+		 */
+		isRequired( is_required ) {
+			return is_required === true ? true : false
+		},
+		/**
+		 * Determine if the field is a default one or not.
+		 */
+		isDefault( is_default ) {
+			return is_default === true ? true : false
+		},
 	}
 }
 </script>
@@ -102,4 +125,49 @@ export default {
 		top: 3px;
 	}
 }
+
+.order-column {
+	width: 30px;
+	border-right: 1px solid #e1e1e1;
+	text-align: center !important;
+}
+
+.order-anchor {
+	border-right: 1px solid #e1e1e1;
+	text-align: center !important;
+}
+
+.small-column {
+	width: 100px;
+}
+
+.wpum-fields-groups-table {
+	.button {
+		margin-right: 5px;
+		&:last-child {
+			margin-right: 0;
+		}
+		span.dashicons {
+			position: relative;
+			top: 3px;
+			margin-right: 3px;
+		}
+		&.delete-btn {
+			&:hover {
+				span.dashicons {
+					color: red;
+				}
+			}
+		}
+	}
+
+	.dashicons-yes {
+		color: green;
+	}
+
+	td {
+		vertical-align: middle;
+	}
+}
+
 </style>
