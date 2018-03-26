@@ -12,7 +12,7 @@
 		<table class="wp-list-table widefat fixed striped wpum-fields-groups-table">
 			<thead>
 				<tr>
-					<th scope="col" class="order-column" :data-balloon="labels.table_drag_tooltip" data-balloon-pos="right"><span class="dashicons dashicons-menu"></span></th>
+					<th scope="col" class="order-column" :data-balloon="labels.table_drag_tooltip" data-balloon-pos="right" v-if="fields > 1"><span class="dashicons dashicons-menu"></span></th>
 					<th scope="col" class="column-primary">{{labels.fields_name}}</th>
 					<th scope="col" class="small-column">{{labels.fields_type}}</th>
 					<th scope="col" class="small-column" :data-balloon="labels.fields_required_tooltip" data-balloon-pos="up">{{labels.fields_required}}</th>
@@ -24,7 +24,7 @@
 			</thead>
 			<tbody>
 				<tr v-for="field in fields" :key="field.id">
-					<td class="order-anchor align-middle">
+					<td class="order-anchor align-middle" v-if="fields > 1">
 						<span class="dashicons dashicons-menu"></span>
 					</td>
 					<td class="column-primary">
