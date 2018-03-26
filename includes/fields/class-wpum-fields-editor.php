@@ -79,17 +79,7 @@ class WPUM_Fields_Editor {
 				'ajax'               => admin_url( 'admin-ajax.php' ),
 				'nonce'              => wp_create_nonce( 'wpum_update_fields_groups' ),
 				'cf_addon_url'       => 'https://wpusermanager.com/addons/custom-fields/?ref=wp_admin',
-				'fields' => [
-					array(
-						'name'       => 'Custom field name',
-						'id'         => 1,
-						'type'       => 'text',
-						'required'   => true,
-						'default'    => true,
-						'visibility' => 'public',
-						'editable'   => 'public',
-					)
-				]
+				'fields' => false
 			];
 
 			wp_localize_script( 'wpum-fields-editor', 'wpumFieldsEditor', $js_variables );
@@ -149,6 +139,7 @@ class WPUM_Fields_Editor {
 			'fields_required_tooltip'   => esc_html__( 'Fields marked as required will be required within the registration and account form.' ),
 			'fields_editable_tooltip'   => esc_html__( 'Fields marked as locked, can only be edited by an administrator and will not be visible in any form.' ),
 			'fields_visibility_tooltip' => esc_html__( 'Fields marked as hidden will be visible only to administrators.' ),
+			'fields_not_found'          => esc_html__( 'This fields group is empty.' )
 		];
 
 	}
