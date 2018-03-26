@@ -30,7 +30,8 @@
 							<span class="dashicons dashicons-menu"></span>
 						</td>
 						<td class="column-username has-row-actions column-primary">
-							<strong><a href="#">{{group.name}}</a></strong><br>
+							<strong>
+								<router-link :to="{ name: 'group', params: { id: group.id }}">{{group.name}}</router-link></strong><br>
 							<div class="row-actions">
 								<span>
 									<a href="#" @click="showEditGroupDialog( group )" v-text="sanitized(labels.table_edit_group)"></a>
