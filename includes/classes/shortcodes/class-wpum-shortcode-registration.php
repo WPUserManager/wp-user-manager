@@ -1,6 +1,6 @@
 <?php
 /**
- * Handles the display of login form generator.
+ * Handles the display of registration form shortcode generator.
  *
  * @package     wp-user-manager
  * @copyright   Copyright (c) 2018, Alessandro Tesoro
@@ -11,17 +11,17 @@
 if ( ! defined( 'ABSPATH' ) ) exit;
 
 /**
- * Add login shortcode window to the editor.
+ * Add registration form shortcode window to the editor.
  */
-class WPUM_Shortcode_Login extends WPUM_Shortcode_Generator {
+class WPUM_Shortcode_Registration extends WPUM_Shortcode_Generator {
 
 	/**
 	 * Inject the editor for this shortcode.
 	 */
 	public function __construct() {
-		$this->shortcode['title'] = esc_html__( 'Login form' );
-		$this->shortcode['label'] = esc_html__( 'Login form' );
-		parent::__construct( 'wpum_login_form' );
+		$this->shortcode['title'] = esc_html__( 'Registration form' );
+		$this->shortcode['label'] = esc_html__( 'Registration form' );
+		parent::__construct( 'wpum_register' );
 	}
 
 	/**
@@ -33,14 +33,14 @@ class WPUM_Shortcode_Login extends WPUM_Shortcode_Generator {
 		return [
 			array(
 				'type'    => 'listbox',
-				'name'    => 'psw_link',
-				'label'   => esc_html__( 'Show password recovery link:' ),
+				'name'    => 'login_link',
+				'label'   => esc_html__( 'Show login link:' ),
 				'options' => $this->get_yes_no(),
 			),
 			array(
 				'type'    => 'listbox',
-				'name'    => 'register_link',
-				'label'   => esc_html__( 'Show registration link:' ),
+				'name'    => 'psw_link',
+				'label'   => esc_html__( 'Show password recovery link:' ),
 				'options' => $this->get_yes_no(),
 			),
 		];
@@ -48,4 +48,4 @@ class WPUM_Shortcode_Login extends WPUM_Shortcode_Generator {
 
 }
 
-new WPUM_Shortcode_Login;
+new WPUM_Shortcode_Registration;
