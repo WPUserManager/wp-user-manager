@@ -16,7 +16,7 @@
 		<table class="wp-list-table widefat fixed striped wpum-fields-groups-table">
 			<thead>
 				<tr>
-					<th scope="col" class="order-column" :data-balloon="sanitized(labels.table_drag_tooltip)" data-balloon-pos="right"><span class="dashicons dashicons-menu"></span></th>
+					<th scope="col" class="order-column" :data-balloon="sanitized(labels.table_drag_tooltip)" data-balloon-pos="right" v-if="groups > 1"><span class="dashicons dashicons-menu"></span></th>
 					<th scope="col" class="column-primary" v-text="sanitized(labels.table_name)"></th>
 					<th scope="col" v-text="sanitized(labels.table_desc)"></th>
 					<th scope="col" class="small-column" v-text="sanitized(labels.table_default)" :data-balloon="sanitized(labels.table_default_tooltip)" data-balloon-pos="up"></th>
@@ -26,7 +26,7 @@
 			</thead>
 				<draggable v-model="groups" :element="'tbody'" :options="{handle:'.order-anchor'}" @start="onSortingStart" @end="onSortingEnd">
 					<tr v-for="group in groups" :key="group.id">
-						<td class="order-anchor align-middle">
+						<td class="order-anchor align-middle" v-if="groups > 1">
 							<span class="dashicons dashicons-menu"></span>
 						</td>
 						<td class="column-username has-row-actions column-primary">
