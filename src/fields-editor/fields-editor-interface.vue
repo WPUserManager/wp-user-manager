@@ -23,7 +23,7 @@
 				</tr>
 			</thead>
 			<tbody>
-				<tr v-if="fields" v-for="field in fields" :key="field.id">
+				<tr v-if="fields && !loading" v-for="field in fields" :key="field.id">
 					<td class="order-anchor align-middle" v-if="fields > 1">
 						<span class="dashicons dashicons-menu"></span>
 					</td>
@@ -52,7 +52,12 @@
 						<button type="submit" class="button delete-btn"><span class="dashicons dashicons-trash"></span> {{labels.fields_delete}}</button>
 					</td>
 				</tr>
-				<tr class="no-items" v-if="fields < 1"><td class="colspanchange" colspan="7"><strong>{{labels.fields_not_found}}</strong></td></tr>
+				<tr class="no-items" v-if="fields < 1 && ! loading"><td class="colspanchange" colspan="7"><strong>{{labels.fields_not_found}}</strong></td></tr>
+				<tr class="no-items" v-if="loading">
+					<td class="colspanchange" colspan="7">
+						<div class="spinner is-active"></div>
+					</td>
+				</tr>
 			</tbody>
 		</table>
 
@@ -72,7 +77,8 @@ export default {
 			labels:         wpumFieldsEditor.labels,
 			group_id:       '',
 			group_name:     '',
-			fields:         wpumFieldsEditor.fields
+			fields:         wpumFieldsEditor.fields,
+			loading:        false
 		}
 	},
 	/**
