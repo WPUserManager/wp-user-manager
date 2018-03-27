@@ -171,6 +171,7 @@ if ( ! class_exists( 'WP_User_Manager' ) ) :
 			require_once WPUM_PLUGIN_DIR . 'includes/emails/class-wpum-emails.php';
 			require_once WPUM_PLUGIN_DIR . 'includes/classes/class-wpum-forms.php';
 			require_once WPUM_PLUGIN_DIR . 'includes/classes/class-wpum-field-group.php';
+			require_once WPUM_PLUGIN_DIR . 'includes/classes/class-wpum-field.php';
 
 			require_once WPUM_PLUGIN_DIR . 'includes/functions/admin-functions.php';
 			require_once WPUM_PLUGIN_DIR . 'includes/functions/global-functions.php';

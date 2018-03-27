@@ -156,4 +156,98 @@ class WPUM_DB_Fields extends WPUM_DB {
 		return $last_changed;
 	}
 
+	/**
+	 * Retrieve fields from the database
+	 *
+	 * @access public
+	 *
+	 * @param array $args
+	 *
+	 * @return array $groups Array of `WPUM_Field` objects.
+	 */
+	public function get_fields( $args = array() ) {
+
+		global $wpdb;
+
+		$defaults = array(
+			'number'   => -1,
+			'offset'   => 0,
+			'search'   => '',
+			'group_id' => false,
+			'orderby'  => 'id',
+			'order'    => 'DESC',
+		);
+
+		$args = wp_parse_args( $args, $defaults );
+
+		if ( $args['number'] < 1 ) {
+			$args['number'] = 999999999999;
+		}
+
+		if ( isset( $args['search'] ) && ! empty( $args['search'] ) ) {
+			$args['search'] = $wpdb->esc_like( $args['search'] );
+		}
+
+		$where = $this->parse_where( $args );
+
+		$args['orderby'] = ! array_key_exists( $args['orderby'], $this->get_columns() ) ? 'id' : $args['orderby'];
+
+		$cache_key = md5( 'wpum_fields_' . serialize( $args ) );
+
+		$fields = wp_cache_get( $cache_key, $this->cache_group );
+
+		$args['orderby'] = esc_sql( $args['orderby'] );
+		$args['order']   = esc_sql( $args['order'] );
+
+		if ( false === $fields ) {
+			$fields = $wpdb->get_col( $wpdb->prepare(
+				"
+					SELECT id
+					FROM $this->table_name
+					$where
+					ORDER BY {$args['orderby']} {$args['order']}
+					LIMIT %d,%d;
+				", absint( $args['offset'] ), absint( $args['number'] ) ), 0 );
+
+			if ( ! empty( $fields ) ) {
+				foreach ( $fields as $key => $field ) {
+					$fields[ $key ] = new WPUM_Field( $field );
+				}
+
+				wp_cache_set( $cache_key, $fields, $this->cache_group, 3600 );
+			}
+		}
+
+		return $fields;
+
+	}
+
+	/**
+	 * Parse the `WHERE` clause for the SQL query.
+	 *
+	 * @param array $args
+	 * @return void
+	 */
+	private function parse_where( $args ) {
+
+		$where = '';
+
+		// Specific fields group.
+		if ( ! empty( $args['group_id'] ) ) {
+			if ( is_array( $args['group_id'] ) ) {
+				$group_ids = implode( "','", array_map( 'sanitize_text_field', $args['group_id'] ) );
+			} else {
+				$group_ids = sanitize_text_field( $args['group_id'] );
+			}
+			$where .= " AND `group_id` IN( '{$group_ids}' ) ";
+		}
+
+		if ( ! empty( $where ) ) {
+			$where = ' WHERE 1=1 ' . $where;
+		}
+
+		return $where;
+
+	}
+
 }

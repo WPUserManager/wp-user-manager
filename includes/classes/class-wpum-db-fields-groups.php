@@ -173,7 +173,7 @@ class WPUM_DB_Fields_Groups extends WPUM_DB {
 	 *      Query arguments.
 	 * }
 	 *
-	 * @return array $groups Array of `EDD_Discount` objects.
+	 * @return array $groups Array of `WPUM_Field_Group` objects.
 	 */
 	public function get_groups( $args = array() ) {
 		global $wpdb;
