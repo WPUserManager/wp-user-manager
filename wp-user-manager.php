@@ -154,17 +154,20 @@ if ( ! class_exists( 'WP_User_Manager' ) ) :
 			require_once WPUM_PLUGIN_DIR . 'includes/abstracts/abstract-wpum-db.php';
 			require_once WPUM_PLUGIN_DIR . 'includes/classes/class-wpum-db-fields-groups.php';
 
-			require_once WPUM_PLUGIN_DIR . 'includes/functions/admin-functions.php';
-			require_once WPUM_PLUGIN_DIR . 'includes/functions/global-functions.php';
-			require_once WPUM_PLUGIN_DIR . 'includes/functions/email-functions.php';
 			require_once WPUM_PLUGIN_DIR . 'includes/actions/actions.php';
 			require_once WPUM_PLUGIN_DIR . 'includes/filters/global-filters.php';
 			require_once WPUM_PLUGIN_DIR . 'includes/classes/class-wpum-template-loader.php';
 			require_once WPUM_PLUGIN_DIR . 'includes/classes/class-wpum-avatars.php';
 			require_once WPUM_PLUGIN_DIR . 'includes/classes/class-wpum-options-panel.php';
+			require_once WPUM_PLUGIN_DIR . 'includes/classes/class-wpum-fields.php';
 			require_once WPUM_PLUGIN_DIR . 'includes/emails/class-wpum-emails.php';
 			require_once WPUM_PLUGIN_DIR . 'includes/classes/class-wpum-forms.php';
 			require_once WPUM_PLUGIN_DIR . 'includes/classes/class-wpum-field-group.php';
+
+			require_once WPUM_PLUGIN_DIR . 'includes/functions/admin-functions.php';
+			require_once WPUM_PLUGIN_DIR . 'includes/functions/global-functions.php';
+			require_once WPUM_PLUGIN_DIR . 'includes/functions/email-functions.php';
+			require_once WPUM_PLUGIN_DIR . 'includes/functions/fields-functions.php';
 
 			require_once WPUM_PLUGIN_DIR . 'includes/shortcodes.php';
 			require_once WPUM_PLUGIN_DIR . 'includes/assets.php';

@@ -1,0 +1,61 @@
+<?php
+/**
+ * Handles loading of all field types.
+ *
+ * @package     wp-user-manager
+ * @copyright   Copyright (c) 2018, Alessandro Tesoro
+ * @license     https://opensource.org/licenses/GPL-3.0 GNU Public License
+*/
+
+// Exit if accessed directly
+if ( ! defined( 'ABSPATH' ) ) exit;
+
+/**
+ * Registration of the Fields loader class.
+ */
+class WPUM_Fields {
+
+	/**
+	 * Get things started.
+	 */
+	public function __construct() {
+		$this->init();
+	}
+
+	/**
+	 * Load files and hook into WordPress.
+	 *
+	 * @return void
+	 */
+	public function init() {
+
+		// Parent class template.
+		require_once WPUM_PLUGIN_DIR . 'includes/abstracts/abstract-wpum-field.php';
+
+		// Load default fields on WP init
+		//add_action( 'init', array( $this, 'load' ) );
+
+		$this->load();
+
+	}
+
+	/**
+	 * Load registered field types classes.
+	 *
+	 * @return void
+	 */
+	public function load() {
+
+		$fields = apply_filters( 'wpum_load_fields', [
+			'text'
+		] );
+
+		foreach ( $fields as $field ) {
+			require_once WPUM_PLUGIN_DIR . 'includes/fields/types/class-wpum-field-' . $field . '.php';
+		}
+
+	}
+
+}
+
+new WPUM_Fields;

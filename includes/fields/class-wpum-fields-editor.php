@@ -182,6 +182,10 @@ class WPUM_Fields_Editor {
 
 		check_ajax_referer( 'wpum_update_fields_groups', 'nonce' );
 
+		if( ! current_user_can( 'manage_options' ) ) {
+			wp_send_json_error();
+		}
+
 		$groups = isset( $_POST['groups'] ) && is_array( $_POST['groups'] ) && ! empty( $_POST['groups'] ) ? $_POST['groups'] : false;
 
 		if( $groups ) {
@@ -207,6 +211,10 @@ class WPUM_Fields_Editor {
 	public function update_group() {
 
 		check_ajax_referer( 'wpum_update_fields_groups', 'nonce' );
+
+		if( ! current_user_can( 'manage_options' ) ) {
+			wp_send_json_error();
+		}
 
 		$group_id          = isset( $_POST['group_id'] ) && ! empty( $_POST['group_id'] ) ? (int) $_POST['group_id'] : false;
 		$group_name        = isset( $_POST['group_name'] ) && ! empty( $_POST['group_name'] ) ? sanitize_text_field( $_POST['group_name'] ) : false;
