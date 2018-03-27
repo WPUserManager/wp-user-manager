@@ -52,6 +52,13 @@ class WPUM_Field_Group {
 	protected $description = null;
 
 	/**
+	 * Number of fields contained within this group.
+	 *
+	 * @var integer
+	 */
+	protected $count = 0;
+
+	/**
 	 * The Database Abstraction
 	 */
 	protected $db;
@@ -127,6 +134,7 @@ class WPUM_Field_Group {
 		}
 
 		if ( ! empty( $this->id ) ) {
+			$this->count = $this->count_fields( $this->id );
 			return true;
 		}
 
@@ -168,6 +176,15 @@ class WPUM_Field_Group {
 	 */
 	public function is_primary() {
 		return $this->is_primary;
+	}
+
+	/**
+	 * Retrieve the amount of fields stored for the fields group.
+	 *
+	 * @return void
+	 */
+	public function get_count() {
+		return $this->count;
 	}
 
 	/**
@@ -296,6 +313,34 @@ class WPUM_Field_Group {
 		}
 
 		return $data;
+
+	}
+
+	/**
+	 * Count fields within a group.
+	 *
+	 * @param int $group_id
+	 * @return void
+	 */
+	public function count_fields( $group_id = false ) {
+
+		global $wpdb;
+
+		if( ! $group_id ) {
+			return false;
+		}
+
+		$table_name = WPUM()->fields->table_name;
+
+		$sql = "
+			SELECT COUNT(*) FROM {$table_name}
+			WHERE group_id = $group_id
+		";
+
+		$results = (array) $wpdb->get_results( $sql, ARRAY_A );
+		$count   = array_values($results[0])[0];
+
+		return $count;
 
 	}
 

@@ -13,7 +13,7 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 /**
  * Main class that handles registration of field types.
  */
-abstract class WPUM_Field {
+abstract class WPUM_Field_Type {
 
 	/**
 	 * Full name of the field type, eg "Paragraph Text".

@@ -13,7 +13,7 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 /**
  * Register a text field type.
  */
-class WPUM_Field_Text extends WPUM_Field {
+class WPUM_Field_Text extends WPUM_Field_Type {
 
 	/**
 	 * Hook into the main class and register a new field.

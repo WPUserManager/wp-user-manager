@@ -164,7 +164,7 @@ class WPUM_Fields_Editor {
 					'name'        => $group->get_name(),
 					'description' => $group->get_description(),
 					'default'     => $group->get_ID() === 1 ? true: false,
-					'fields'      => 0
+					'fields'      => $group->get_count()
 				];
 			}
 		}

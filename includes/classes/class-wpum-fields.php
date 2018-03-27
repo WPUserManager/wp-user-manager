@@ -30,7 +30,7 @@ class WPUM_Fields {
 	public function init() {
 
 		// Parent class template.
-		require_once WPUM_PLUGIN_DIR . 'includes/abstracts/abstract-wpum-field.php';
+		require_once WPUM_PLUGIN_DIR . 'includes/abstracts/abstract-wpum-field-type.php';
 
 		// Now load all registered field types.
 		$this->load();
