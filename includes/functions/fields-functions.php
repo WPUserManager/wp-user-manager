@@ -37,3 +37,5 @@ function wpum_get_registered_field_types() {
 	return $registered_fields;
 
 }
+
+print_r( wpum_get_registered_field_types() );

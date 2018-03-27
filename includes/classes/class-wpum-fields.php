@@ -32,9 +32,7 @@ class WPUM_Fields {
 		// Parent class template.
 		require_once WPUM_PLUGIN_DIR . 'includes/abstracts/abstract-wpum-field.php';
 
-		// Load default fields on WP init
-		//add_action( 'init', array( $this, 'load' ) );
-
+		// Now load all registered field types.
 		$this->load();
 
 	}
