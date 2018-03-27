@@ -366,7 +366,7 @@ export default {
 		margin-top: 16px;
 		margin-right: 10px;
 		&.dashicons-warning {
-			color: red;
+			color: green;
 		}
 	}
 }
