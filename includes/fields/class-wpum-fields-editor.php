@@ -32,6 +32,7 @@ class WPUM_Fields_Editor {
 		add_action( 'admin_enqueue_scripts', [ $this, 'load_scripts' ] );
 		add_action( 'wp_ajax_wpum_update_fields_groups_order', [ $this, 'update_groups_order' ] );
 		add_action( 'wp_ajax_wpum_update_fields_group', [ $this, 'update_group' ] );
+		add_action( 'wp_ajax_wpum_get_fields_from_group', [ $this, 'get_fields' ] );
 	}
 
 	/**
@@ -78,8 +79,8 @@ class WPUM_Fields_Editor {
 				'groups'             => $this->get_groups(),
 				'ajax'               => admin_url( 'admin-ajax.php' ),
 				'nonce'              => wp_create_nonce( 'wpum_update_fields_groups' ),
+				'get_fields_nonce'   => wp_create_nonce( 'wpum_get_fields' ),
 				'cf_addon_url'       => 'https://wpusermanager.com/addons/custom-fields/?ref=wp_admin',
-				'fields' => false
 			];
 
 			wp_localize_script( 'wpum-fields-editor', 'wpumFieldsEditor', $js_variables );
@@ -183,7 +184,7 @@ class WPUM_Fields_Editor {
 		check_ajax_referer( 'wpum_update_fields_groups', 'nonce' );
 
 		if( ! current_user_can( 'manage_options' ) ) {
-			wp_send_json_error();
+			wp_die( esc_html__( 'Something went wrong: could not update the groups order.' ), 403 );
 		}
 
 		$groups = isset( $_POST['groups'] ) && is_array( $_POST['groups'] ) && ! empty( $_POST['groups'] ) ? $_POST['groups'] : false;
@@ -213,7 +214,7 @@ class WPUM_Fields_Editor {
 		check_ajax_referer( 'wpum_update_fields_groups', 'nonce' );
 
 		if( ! current_user_can( 'manage_options' ) ) {
-			wp_send_json_error();
+			wp_die( esc_html__( 'Something went wrong: could not update the group details.' ), 403 );
 		}
 
 		$group_id          = isset( $_POST['group_id'] ) && ! empty( $_POST['group_id'] ) ? (int) $_POST['group_id'] : false;
@@ -235,6 +236,55 @@ class WPUM_Fields_Editor {
 			'id'          => $group_id,
 			'name'        => $group_name,
 			'description' => $group_description
+		] );
+
+	}
+
+	/**
+	 * Retrieve fields from the database given a group id.
+	 *
+	 * @return void
+	 */
+	public function get_fields() {
+
+		check_ajax_referer( 'wpum_get_fields', 'nonce' );
+
+		if( ! current_user_can( 'manage_options' ) ) {
+			wp_die( esc_html__( 'Something went wrong while retrieving the list of fields.' ), 403 );
+		}
+
+		$fields = [];
+
+		$group_id = isset( $_GET['group_id'] ) && ! empty( $_GET['group_id'] ) ? (int) $_GET['group_id'] : false;
+
+		if( $group_id ) {
+
+			$group_fields = WPUM()->fields->get_fields( [
+				'group_id' => 1
+			] );
+
+			foreach( $group_fields as $field ) {
+
+				$fields[] = [
+					'id'          => $field->get_ID(),
+					'group_id'    => $field->get_group_id(),
+					'field_order' => $field->get_field_order(),
+					'type'        => $field->get_type(),
+					'name'        => $field->get_name(),
+					'description' => $field->get_description(),
+					'visibility'  => $field->get_visibility(),
+					'editable'    => $field->get_editable()
+				];
+
+			}
+
+		} else {
+			wp_die( esc_html__( 'Something went wrong while retrieving the list of fields.' ), 403 );
+		}
+
+		wp_send_json_success( [
+			'fields'   => $fields,
+			'group_id' => $group_id
 		] );
 
 	}

@@ -28,7 +28,9 @@
 						<span class="dashicons dashicons-menu"></span>
 					</td>
 					<td class="column-primary">
-						{{field.name}}
+						<a href="">
+							<strong>{{field.name}}</strong>
+						</a>
 					</td>
 					<td>
 						{{field.type}}
@@ -65,6 +67,7 @@
 </template>
 
 <script>
+import axios from 'axios'
 import balloon from 'balloon-css'
 import findGroupIndex from 'lodash.findindex'
 import PremiumDialog from './dialogs/dialog-premium'
@@ -77,7 +80,7 @@ export default {
 			labels:         wpumFieldsEditor.labels,
 			group_id:       '',
 			group_name:     '',
-			fields:         wpumFieldsEditor.fields,
+			fields:         [],
 			loading:        false
 		}
 	},
@@ -89,6 +92,8 @@ export default {
 		const selectedGroup = findGroupIndex( wpumFieldsEditor.groups, function(o) { return o.id == group_id })
 		this.group_id       = group_id
 		this.group_name     = wpumFieldsEditor.groups[selectedGroup].name
+		// Load fields from the database.
+		this.getFields()
 	},
 	methods: {
 		/**
@@ -113,6 +118,32 @@ export default {
 		isDefault( is_default ) {
 			return is_default === true ? true : false
 		},
+		/**
+		 * Load fields from the database.
+		 */
+		getFields() {
+
+			this.loading = true
+
+			axios.get( wpumFieldsEditor.ajax, {
+				params: {
+					group_id: this.group_id,
+					nonce: wpumFieldsEditor.get_fields_nonce,
+					action: 'wpum_get_fields_from_group'
+				}
+			})
+			.then( response => {
+				this.loading = false
+				if ( typeof response.data.data.fields !== 'undefined' && response.data.data.fields.length > 0 ) {
+					this.fields = response.data.data.fields
+				}
+			})
+			.catch( error => {
+				this.loading = false
+				console.error(error);
+			})
+
+		}
 	}
 }
 </script>
@@ -175,6 +206,11 @@ export default {
 	td {
 		vertical-align: middle;
 	}
+
+	.spinner {
+		margin: 0;
+	}
+
 }
 
 </style>

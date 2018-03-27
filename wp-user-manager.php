@@ -347,7 +347,7 @@ if ( ! class_exists( 'WP_User_Manager' ) ) :
 
 			$requirements_check = new WP_Requirements_Check( array(
 				'title' => 'WP User Manager',
-				'php'   => '5.3',
+				'php'   => '5.4',
 				'wp'    => '4.7',
 				'file'  => __FILE__,
 			) );

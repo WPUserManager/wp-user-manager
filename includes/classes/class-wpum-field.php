@@ -47,6 +47,13 @@ class WPUM_Field {
 	protected $is_primary = false;
 
 	/**
+	 * The field type.
+	 *
+	 * @var boolean
+	 */
+	protected $type = false;
+
+	/**
 	 * Field Name.
 	 *
 	 * @access protected
@@ -61,6 +68,20 @@ class WPUM_Field {
 	 * @var string
 	 */
 	protected $description = null;
+
+	/**
+	 * Determine the visibility of this field.
+	 *
+	 * @var string
+	 */
+	protected $visibility = null;
+
+	/**
+	 * Determine the editability of this field.
+	 *
+	 * @var string
+	 */
+	protected $editable = null;
 
 	/**
 	 * The Database Abstraction
@@ -155,12 +176,39 @@ class WPUM_Field {
 	}
 
 	/**
+	 * Retrieve the group id assigned to the field.
+	 *
+	 * @return string
+	 */
+	public function get_group_id() {
+		return $this->group_id;
+	}
+
+	/**
+	 * Retrieve the order priority number of the field.
+	 *
+	 * @return string
+	 */
+	public function get_field_order() {
+		return $this->field_order;
+	}
+
+	/**
 	 * Retrieve the field name.
 	 *
 	 * @return void
 	 */
 	public function get_name() {
 		return $this->name;
+	}
+
+	/**
+	 * Retrieve the field type.
+	 *
+	 * @return void
+	 */
+	public function get_type() {
+		return $this->type;
 	}
 
 	/**
@@ -182,9 +230,27 @@ class WPUM_Field {
 	}
 
 	/**
+	 * Retrieve the visibility of the field.
+	 *
+	 * @return string
+	 */
+	public function get_visibility() {
+		return $this->visibility;
+	}
+
+	/**
+	 * Retrieve the editability of the field.
+	 *
+	 * @return string
+	 */
+	public function get_editable() {
+		return $this->editable;
+	}
+
+	/**
 	 * Check if a field exists.
 	 *
-	 * @return void
+	 * @return boolean
 	 */
 	public function exists() {
 		if ( ! $this->id > 0 ) {
