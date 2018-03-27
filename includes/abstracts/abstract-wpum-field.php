@@ -95,7 +95,7 @@ abstract class WPUM_Field {
 		$this->init();
 
 		// Add fields tab.
-		add_filter( 'wpum_fields_registered_field_types', array( $this, 'register_field_button' ), 15 );
+		add_filter( 'wpum_registered_field_types', array( $this, 'register_field' ), 15 );
 
 	}
 
@@ -107,12 +107,12 @@ abstract class WPUM_Field {
 	public function init() {}
 
 	/**
-	 * Create the button for the 'Add Fields' tab, inside the form editor.
+	 * Register fields into an array that can be easily retrieved.
 	 *
 	 * @param array $fields
 	 * @return void
 	 */
-	public function register_field_button( $fields ) {
+	public function register_field( $fields ) {
 
 		$fields[ $this->group ]['fields'][] = array(
 			'order' => $this->order,

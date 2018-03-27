@@ -32,10 +32,8 @@ function wpum_get_registered_field_types() {
 		],
 	);
 
-	$registered_fields = apply_filters( 'wpum_fields_registered_field_types', $fields );
+	$registered_fields = apply_filters( 'wpum_registered_field_types', $fields );
 
 	return $registered_fields;
 
 }
-
-print_r( wpum_get_registered_field_types() );
