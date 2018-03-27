@@ -29,6 +29,13 @@ class WPUM_Field_Group {
 	protected $group_order = 0;
 
 	/**
+	 * Wether the group is the primary group or not.
+	 *
+	 * @var boolean
+	 */
+	protected $is_primary = false;
+
+	/**
 	 * Group Name.
 	 *
 	 * @access protected
@@ -152,6 +159,15 @@ class WPUM_Field_Group {
 	 */
 	public function get_description() {
 		return $this->description;
+	}
+
+	/**
+	 * Check if this is the primary group.
+	 *
+	 * @return boolean
+	 */
+	public function is_primary() {
+		return $this->is_primary;
 	}
 
 	/**

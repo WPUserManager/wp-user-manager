@@ -44,6 +44,7 @@ class WPUM_DB_Fields_Groups extends WPUM_DB {
 		return array(
 			'id'          => '%d',
 			'group_order' => '%d',
+			'is_primary'  => '%s',
 			'name'        => '%s',
 			'description' => '%s',
 		);
@@ -59,6 +60,7 @@ class WPUM_DB_Fields_Groups extends WPUM_DB {
 		return array(
 			'id'          => 0,
 			'group_order' => 0,
+			'is_primary'  => 0,
 			'name'        => '',
 			'description' => '',
 		);
