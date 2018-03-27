@@ -86,6 +86,13 @@ if ( ! class_exists( 'WP_User_Manager' ) ) :
 		public $fields_groups;
 
 		/**
+		 * The fields handler.
+		 *
+		 * @var object
+		 */
+		public $fields;
+
+		/**
 		 * Main WPUM Instance.
 		 *
 		 * Ensures that only one instance of WPUM exists in memory at any one
@@ -153,6 +160,7 @@ if ( ! class_exists( 'WP_User_Manager' ) ) :
 			require_once WPUM_PLUGIN_DIR . 'includes/classes/class-wpum-db-table-fields-groups.php';
 			require_once WPUM_PLUGIN_DIR . 'includes/abstracts/abstract-wpum-db.php';
 			require_once WPUM_PLUGIN_DIR . 'includes/classes/class-wpum-db-fields-groups.php';
+			require_once WPUM_PLUGIN_DIR . 'includes/classes/class-wpum-db-fields.php';
 
 			require_once WPUM_PLUGIN_DIR . 'includes/actions/actions.php';
 			require_once WPUM_PLUGIN_DIR . 'includes/filters/global-filters.php';
@@ -255,6 +263,7 @@ if ( ! class_exists( 'WP_User_Manager' ) ) :
 			$this->templates     = new WPUM_Template_Loader();
 			$this->emails        = new WPUM_Emails();
 			$this->fields_groups = new WPUM_DB_Fields_Groups();
+			$this->fields        = new WPUM_DB_Fields();
 
 			/**
 			 * @todo document after_wpum_init
