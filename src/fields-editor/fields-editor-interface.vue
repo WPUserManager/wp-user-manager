@@ -205,6 +205,7 @@ export default {
 
 	td {
 		vertical-align: middle;
+		padding: 12px 10px;
 	}
 
 	.spinner {
