@@ -264,7 +264,7 @@ class WPUM_Fields_Editor {
 
 			$group_fields = WPUM()->fields->get_fields( [
 				'group_id' => 1,
-				'order_by' => 'field_order',
+				'orderby' => 'field_order',
 				'order'    => 'ASC'
 			] );
 
