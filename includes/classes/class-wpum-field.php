@@ -261,6 +261,122 @@ class WPUM_Field {
 	}
 
 	/**
+	 * Add a new field to the database.
+	 *
+	 * @param array $args
+	 * @return void
+	 */
+	public function add( $args ) {
+
+		if ( empty( $args['name'] ) || empty( $args['type'] ) || empty( $args['group_id'] ) ) {
+			return false;
+		}
+
+		if ( ! empty( $this->id ) && $this->exists() ) {
+
+			return $this->update( $args );
+
+		} else {
+
+			$args = apply_filters( 'wpum_insert_field', $args );
+			$args = $this->sanitize_columns( $args );
+
+			do_action( 'wpum_pre_insert_field', $args );
+
+			foreach ( $args as $key => $value ) {
+				$this->$key = $value;
+			}
+
+			if ( $id = $this->db->insert( $args ) ) {
+				$this->id = $id;
+				$this->setup_field( $id );
+			}
+
+		}
+
+		do_action( 'wpum_post_insert_field', $args, $this->id );
+
+		return $id;
+
+	}
+
+	/**
+	 * Update an existing field.
+	 *
+	 * @param array $args
+	 * @return void
+	 */
+	public function update( $args ) {
+
+		$ret  = false;
+		$args = apply_filters( 'wpum_update_field', $args, $this->id );
+		$args = $this->sanitize_columns( $args );
+
+		do_action( 'wpum_pre_update_field', $args, $this->id );
+
+		if ( count( array_intersect_key( $args, $this->db->get_columns() ) ) > 0 ) {
+			if ( $this->db->update( $this->id, $args ) ) {
+				$field = $this->db->get( $this->id );
+				$this->setup_field( $field );
+				$ret = true;
+			}
+		} elseif ( 0 === count( array_intersect_key( $args, $this->db->get_columns() ) ) ) {
+			$field = $this->db->get( $this->id );
+			$this->setup_field( $field );
+			$ret = true;
+		}
+
+		do_action( 'wpum_post_update_field', $args, $this->id );
+
+		return $ret;
+
+	}
+
+	/**
+	 * Sanitize columns before adding a field to the database.
+	 *
+	 * @param array $data
+	 * @return void
+	 */
+	private function sanitize_columns( $data ) {
+
+		$columns        = $this->db->get_columns();
+		$default_values = $this->db->get_column_defaults();
+
+		foreach ( $columns as $key => $type ) {
+
+			// Only sanitize data that we were provided
+			if ( ! array_key_exists( $key, $data ) ) {
+				continue;
+			}
+
+			switch( $type ) {
+				case '%s':
+					if( is_array( $data[$key] ) ) {
+						$data[$key] = json_encode( $data[$key] );
+					} else {
+						$data[$key] = sanitize_text_field( $data[$key] );
+					}
+				break;
+				case '%d':
+					if ( ! is_numeric( $data[$key] ) || (int) $data[$key] !== absint( $data[$key] ) ) {
+						$data[$key] = $default_values[$key];
+					} else {
+						$data[$key] = absint( $data[$key] );
+					}
+				break;
+				default:
+					$data[$key] = sanitize_text_field( $data[$key] );
+				break;
+			}
+
+		}
+
+		return $data;
+
+	}
+
+	/**
 	 * Retrieve field meta field for a field.
 	 *
 	 * @param   string $meta_key      The meta key to retrieve.

@@ -112,3 +112,149 @@ function wpum_install_default_field_group() {
 	}
 
 }
+
+/**
+ * Install the default primary fields within the default group.
+ *
+ * @return void
+ */
+function wpum_install_fields() {
+
+	//if( ! get_option( 'wpum_version_upgraded_from' ) ) {
+
+		$group_id = 1;
+
+		$fields = [
+			array(
+				'id'         => 1,
+				'group_id'   => $group_id,
+				'type'       => 'username',
+				'name'       => 'Username',
+				'metas'      => [
+					'required'      => true,
+					'visibility'    => 'public',
+					'user_meta_key' => 'username'
+				]
+			),
+			array(
+				'id'         => 2,
+				'group_id'   => $group_id,
+				'type'       => 'user_email',
+				'name'       => 'Email',
+				'metas'      => [
+					'required'      => true,
+					'visibility'    => 'public',
+					'editing'       => 'public',
+					'user_meta_key' => 'user_email'
+				]
+			),
+			array(
+				'id'         => 3,
+				'group_id'   => $group_id,
+				'type'       => 'user_password',
+				'name'       => 'Password',
+				'metas'      => [
+					'required'      => true,
+					'user_meta_key' => 'user_password'
+				]
+			),
+			array(
+				'id'         => 4,
+				'group_id'   => $group_id,
+				'type'       => 'user_firstname',
+				'name'       => 'First name',
+				'metas'      => [
+					'visibility'    => 'public',
+					'editing'       => 'public',
+					'user_meta_key' => 'firstname'
+				]
+			),
+			array(
+				'id'         => 5,
+				'group_id'   => $group_id,
+				'type'       => 'user_lastname',
+				'name'       => 'Last name',
+				'metas'      => [
+					'visibility'    => 'public',
+					'editing'       => 'public',
+					'user_meta_key' => 'lastname'
+				]
+			),
+			array(
+				'id'         => 6,
+				'group_id'   => $group_id,
+				'type'       => 'user_nickname',
+				'name'       => 'Nickname',
+				'metas'      => [
+					'required'      => true,
+					'visibility'    => 'public',
+					'editing'       => 'public',
+					'user_meta_key' => 'nickname'
+				]
+			),
+			array(
+				'id'         => 7,
+				'group_id'   => $group_id,
+				'type'       => 'user_displayname',
+				'name'       => 'Display name',
+				'metas'      => [
+					'required'      => true,
+					'visibility'    => 'public',
+					'editing'       => 'public',
+					'user_meta_key' => 'display_name'
+				]
+			),
+			array(
+				'id'         => 8,
+				'group_id'   => $group_id,
+				'type'       => 'user_website',
+				'name'       => 'Website',
+				'metas'      => [
+					'visibility'    => 'public',
+					'editing'       => 'public',
+					'user_meta_key' => 'user_url'
+				]
+			),
+			array(
+				'id'         => 9,
+				'group_id'   => $group_id,
+				'type'       => 'user_description',
+				'name'       => 'Description',
+				'metas'      => [
+					'visibility'    => 'public',
+					'editing'       => 'public',
+					'user_meta_key' => 'description'
+				]
+			),
+			array(
+				'id'         => 10,
+				'group_id'   => $group_id,
+				'type'       => 'user_avatar',
+				'name'       => 'Profile picture',
+				'metas'      => [
+					'visibility'    => 'public',
+					'editing'       => 'public',
+					'user_meta_key' => 'current_user_avatar'
+				]
+			)
+		];
+
+		$order = 0;
+
+		foreach( $fields as $field ) {
+
+			$order++;
+			$field['field_order'] = $order;
+
+			$save_field = new WPUM_Field();
+			$save_field->add( $field );
+
+			foreach( $field['metas'] as $meta_key => $meta_value ) {
+				$save_field->add_meta( $meta_key, $meta_value );
+			}
+
+		}
+
+	//}
+
+}
