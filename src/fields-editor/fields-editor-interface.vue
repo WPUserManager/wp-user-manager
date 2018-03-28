@@ -51,7 +51,7 @@
 					</td>
 					<td class="align-middle">
 						<button type="submit" class="button"><span class="dashicons dashicons-edit"></span> {{labels.fields_edit}}</button>
-						<button type="submit" class="button delete-btn"><span class="dashicons dashicons-trash"></span> {{labels.fields_delete}}</button>
+						<button type="submit" class="button delete-btn" @click="openDeleteFieldDialog( field.id, field.name )"><span class="dashicons dashicons-trash"></span> {{labels.fields_delete}}</button>
 					</td>
 				</tr>
 				<tr class="no-items" v-if="fields < 1 && ! loading"><td class="colspanchange" colspan="7"><strong>{{labels.fields_not_found}}</strong></td></tr>
@@ -71,6 +71,7 @@ import axios from 'axios'
 import balloon from 'balloon-css'
 import findGroupIndex from 'lodash.findindex'
 import PremiumDialog from './dialogs/dialog-premium'
+import DeleteFieldDialog from './dialogs/dialog-delete-field'
 
 export default {
 	name: 'fields-editor-interface',
@@ -143,6 +144,15 @@ export default {
 				console.error(error);
 			})
 
+		},
+		/**
+		 * Show the dialog asking the user to delete a field.
+		 */
+		openDeleteFieldDialog( id, name ) {
+			this.$modal.show( DeleteFieldDialog, {
+				field_id: id,
+				field_name: name
+			},{ height: '230px' })
 		}
 	}
 }
@@ -213,5 +223,73 @@ export default {
 	}
 
 }
+.v--modal-overlay {
+	background: rgba(0, 0, 0, 0.7);
+	z-index: 9999;
+}
 
+.v--modal {
+	box-shadow: 0 5px 15px rgba(0,0,0,.7);
+	background: #fcfcfc;
+	border-radius: 0;
+}
+
+.media-modal-content {
+	min-height: initial;
+	background: #efefef;
+}
+
+.media-frame-title,
+.media-frame-content,
+.media-frame-toolbar {
+	left: 0;
+}
+
+.media-frame-title {
+	.dashicons {
+		display: inline-block;
+		margin-top: 16px;
+		margin-right: 10px;
+		&.dashicons-warning {
+			color: green;
+			&.delete {
+				color: red;
+			}
+		}
+	}
+}
+
+.media-frame-content {
+	top: 50px;
+	padding: 10px 16px;
+	font-size: 13px;
+	line-height: 1.6em;
+}
+
+.wpum-dialog {
+	.spinner {
+		float: none;
+		margin-top: 20px;
+	}
+}
+
+.dialog-form {
+	padding-top: 10px;
+	label {
+		display: inline-block;
+		font-weight: bold;
+		color: #000;
+		margin-bottom: 5px;
+	}
+
+	input, textarea {
+		display: block;
+		width: 100%;
+		margin-bottom: 15px;
+		font-size: 13px !important;
+		&:last-child {
+			margin-bottom: 0;
+		}
+	}
+}
 </style>

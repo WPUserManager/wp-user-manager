@@ -119,7 +119,7 @@ class WPUM_Fields_Editor {
 			'table_default_tooltip'     => esc_html__( 'The default fields group cannot be deleted.' ),
 			'modal_group_delete'        => esc_html__( 'You are about to delete the group:' ),
 			'modal_delete'              => esc_html__( 'This action cannot be reversed. Are you sure you want to continue? All fields within this group will be deleted too.' ),
-			'confirm_delete'            => esc_html__( 'Confirm delete' ),
+			'confirm_delete'            => esc_html__( 'Confirm delete?' ),
 			'save'                      => esc_html__( 'Save changes' ),
 			'tooltip_group_name'        => esc_html__( 'Customize the name of group. This may be used in your theme.' ),
 			'tooltip_group_description' => esc_html__( 'Customize the description of the group. This may be used into your theme.' ),
@@ -140,7 +140,9 @@ class WPUM_Fields_Editor {
 			'fields_required_tooltip'   => esc_html__( 'Fields marked as required will be compulsory within the registration and account form.' ),
 			'fields_editable_tooltip'   => esc_html__( 'Fields marked as locked, can only be edited by an administrator and will not be visible in any form.' ),
 			'fields_visibility_tooltip' => esc_html__( 'Hidden fields are not publicly visible within profiles.' ),
-			'fields_not_found'          => esc_html__( 'This fields group is empty.' )
+			'fields_not_found'          => esc_html__( 'This fields group is empty.' ),
+			'fields_delete_1'           => esc_html__( 'You are about to delete the field:' ),
+			'fields_delete_2'           => esc_html__( 'This action cannot be reversed. Are you sure you want to continue? Please note any users data associated with this field will not be removed.' ),
 		];
 
 	}
