@@ -137,8 +137,9 @@ class WPUM_Fields_Editor {
 			'fields_delete'             => esc_html__( 'Delete field' ),
 			'fields_editable'           => esc_html__( 'Editable' ),
 			'fields_default_tooltip'    => esc_html__( 'Default fields cannot be deleted.' ),
-			'fields_required_tooltip'   => esc_html__( 'Fields marked as required will be mandatory within the registration and account form.' ),
+			'fields_required_tooltip'   => esc_html__( 'Fields marked as required will be compulsory within the registration and account form.' ),
 			'fields_editable_tooltip'   => esc_html__( 'Fields marked as locked, can only be edited by an administrator and will not be visible in any form.' ),
+			'fields_visibility_tooltip' => esc_html__( 'Hidden fields are not publicly visible within profiles.' ),
 			'fields_not_found'          => esc_html__( 'This fields group is empty.' )
 		];
 

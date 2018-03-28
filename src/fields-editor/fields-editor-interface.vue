@@ -17,7 +17,7 @@
 					<th scope="col" class="small-column">{{labels.fields_type}}</th>
 					<th scope="col" class="small-column" :data-balloon="labels.fields_required_tooltip" data-balloon-pos="up">{{labels.fields_required}}</th>
 					<th scope="col" class="small-column" :data-balloon="labels.fields_default_tooltip" data-balloon-pos="up">{{labels.table_default}}</th>
-					<th scope="col" class="small-column" >{{labels.fields_visibility}}</th>
+					<th scope="col" class="small-column" :data-balloon="labels.fields_visibility_tooltip" data-balloon-pos="up">{{labels.fields_visibility}}</th>
 					<th scope="col" class="small-column" :data-balloon="labels.fields_editable_tooltip" data-balloon-pos="up">{{labels.fields_editable}}</th>
 					<th scope="col">{{labels.table_actions}}</th>
 				</tr>
@@ -42,7 +42,7 @@
 						<span class="dashicons dashicons-yes" v-if="isDefault(field.default)"></span>
 					</td>
 					<td>
-						<span class="dashicons dashicons-visibility" v-if="field.visibility == 'public'"></span>
+						<span class="dashicons dashicons-yes" v-if="field.visibility == 'public'"></span>
 						<span class="dashicons dashicons-hidden" v-else></span>
 					</td>
 					<td>
