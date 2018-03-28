@@ -57,7 +57,7 @@
 						</td>
 						<td class="align-middle">
 							<button type="submit" class="button"><span class="dashicons dashicons-edit"></span> {{labels.fields_edit}}</button>
-							<button type="submit" class="button delete-btn" @click="openDeleteFieldDialog( field.id, field.name )"><span class="dashicons dashicons-trash"></span> {{labels.fields_delete}}</button>
+							<button type="submit" class="button delete-btn" v-if="! isDefault(field.default)" @click="openDeleteFieldDialog( field.id, field.name )"><span class="dashicons dashicons-trash"></span> {{labels.fields_delete}}</button>
 						</td>
 					</tr>
 				</draggable>
