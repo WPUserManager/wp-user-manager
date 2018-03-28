@@ -104,8 +104,8 @@ body.users_page_wpum-custom-fields .dialog-form {
     body.users_page_wpum-custom-fields .dialog-form input:last-child,
     body.users_page_wpum-custom-fields .dialog-form textarea:last-child {
       margin-bottom: 0; }
-body.users_page_wpum-custom-fields .vue-wp-notice {
+body.users_page_wpum-custom-fields #wpum-fields-editor-list .vue-wp-notice {
   margin-right: 0 !important;
-  margin-top: 20px !important; }
+  margin-top: 20px; }
 
 /*# sourceMappingURL=fields-editor.css.map */

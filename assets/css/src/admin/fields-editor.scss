@@ -178,9 +178,11 @@ body.users_page_wpum-custom-fields {
 		}
 	}
 
-	.vue-wp-notice {
-		margin-right: 0 !important;
-		margin-top: 20px !important;
+	#wpum-fields-editor-list {
+		.vue-wp-notice {
+			margin-right: 0 !important;
+			margin-top: 20px;
+		}
 	}
 
 }
