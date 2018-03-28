@@ -258,3 +258,27 @@ function wpum_install_fields() {
 	}
 
 }
+
+/**
+ * An array of primary field types.
+ *
+ * @return array
+ */
+function wpum_get_primary_field_types() {
+
+	$types = [
+		'username',
+		'user_email',
+		'user_password',
+		'user_firstname',
+		'user_lastname',
+		'user_nickname',
+		'user_displayname',
+		'user_website',
+		'user_description',
+		'user_avatar'
+	];
+
+	return apply_filters( 'wpum_get_primary_field_types', $types );
+
+}

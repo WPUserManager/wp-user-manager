@@ -91,6 +91,13 @@ class WPUM_Field {
 	protected $editable = null;
 
 	/**
+	 * Determine wether the field is required or not.
+	 *
+	 * @var boolean
+	 */
+	protected $required = false;
+
+	/**
 	 * The Database Abstraction
 	 */
 	protected $db;
@@ -168,6 +175,10 @@ class WPUM_Field {
 		if ( ! empty( $this->id ) ) {
 
 			$this->type_nicename = $this->get_field_type_name( $this->type );
+			$this->is_primary    = $this->set_as_primary_field( $this->type );
+			$this->required      = $this->get_meta( 'required' );
+			$this->visibility    = $this->get_meta( 'visibility' );
+			$this->editable      = $this->get_meta( 'editing' );
 
 			return true;
 		}
@@ -320,6 +331,33 @@ class WPUM_Field {
 	 */
 	public function get_type_nicename() {
 		return $this->type_nicename;
+	}
+
+	/**
+	 * Set a field as primary field when the type within a list of specific fields.
+	 *
+	 * @param string $type
+	 * @return void
+	 */
+	private function set_as_primary_field( $type ) {
+
+		$primary = false;
+
+		if( in_array( $type, wpum_get_primary_field_types() ) ) {
+			$primary = true;
+		}
+
+		return $primary;
+
+	}
+
+	/**
+	 * Check if the field is required or not.
+	 *
+	 * @return boolean
+	 */
+	public function is_required() {
+		return (bool) $this->required;
 	}
 
 	/**

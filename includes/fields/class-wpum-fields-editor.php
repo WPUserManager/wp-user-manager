@@ -276,7 +276,9 @@ class WPUM_Fields_Editor {
 					'name'          => $field->get_name(),
 					'description'   => $field->get_description(),
 					'visibility'    => $field->get_visibility(),
-					'editable'      => $field->get_editable()
+					'editable'      => $field->get_editable(),
+					'default'       => $field->is_primary(),
+					'required'      => $field->is_required()
 				];
 
 			}
