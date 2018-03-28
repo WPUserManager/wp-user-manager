@@ -120,7 +120,7 @@ function wpum_install_default_field_group() {
  */
 function wpum_install_fields() {
 
-	//if( ! get_option( 'wpum_version_upgraded_from' ) ) {
+	if( ! get_option( 'wpum_version_upgraded_from' ) ) {
 
 		$group_id = 1;
 
@@ -255,6 +255,6 @@ function wpum_install_fields() {
 
 		}
 
-	//}
+	}
 
 }

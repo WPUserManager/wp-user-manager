@@ -37,3 +37,22 @@ function wpum_get_registered_field_types() {
 	return $registered_fields;
 
 }
+
+/**
+ * Retrieve a list of the registered field types names.
+ *
+ * @return array
+ */
+function wpum_get_registered_field_types_names() {
+	$registered_types = [];
+
+	foreach( wpum_get_registered_field_types() as $status => $types ) {
+		if( ! empty( $types['fields'] ) ) {
+			foreach( $types['fields'] as $field_type ) {
+				$registered_types[ $field_type['type'] ] = $field_type['name'];
+			}
+		}
+	}
+
+	return $registered_types;
+}

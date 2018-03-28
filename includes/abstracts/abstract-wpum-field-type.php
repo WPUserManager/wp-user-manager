@@ -95,7 +95,7 @@ abstract class WPUM_Field_Type {
 		$this->init();
 
 		// Add fields tab.
-		add_filter( 'wpum_registered_field_types', array( $this, 'register_field' ), 15 );
+		add_filter( 'wpum_registered_field_types', array( $this, 'register_field_type' ), 15 );
 
 	}
 
@@ -112,7 +112,7 @@ abstract class WPUM_Field_Type {
 	 * @param array $fields
 	 * @return void
 	 */
-	public function register_field( $fields ) {
+	public function register_field_type( $fields ) {
 
 		$fields[ $this->group ]['fields'][] = array(
 			'order' => $this->order,

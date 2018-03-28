@@ -33,7 +33,7 @@
 						</a>
 					</td>
 					<td>
-						{{field.type}}
+						{{field.type_nicename}}
 					</td>
 					<td>
 						<span class="dashicons dashicons-yes" v-if="isRequired(field.required)"></span>

@@ -54,6 +54,13 @@ class WPUM_Field {
 	protected $type = false;
 
 	/**
+	 * The nicename of the field type.
+	 *
+	 * @var string
+	 */
+	protected $type_nicename = null;
+
+	/**
 	 * Field Name.
 	 *
 	 * @access protected
@@ -159,6 +166,9 @@ class WPUM_Field {
 		}
 
 		if ( ! empty( $this->id ) ) {
+
+			$this->type_nicename = $this->get_field_type_name( $this->type );
+
 			return true;
 		}
 
@@ -245,6 +255,71 @@ class WPUM_Field {
 	 */
 	public function get_editable() {
 		return $this->editable;
+	}
+
+	/**
+	 * Retrieve the name of the field type from it's class.
+	 *
+	 * @param string $type
+	 * @return void
+	 */
+	private function get_field_type_name( $type ) {
+
+		$registered_types = wpum_get_registered_field_types_names();
+		$type_name        = '';
+
+		if( array_key_exists( $type, $registered_types ) ) {
+			$type_name = $registered_types[ $type ];
+		} else {
+
+			switch ( $type ) {
+				case 'username':
+					$type_name = esc_html__( 'Username' );
+					break;
+				case 'user_email':
+					$type_name = esc_html__( 'User email' );
+					break;
+				case 'user_password':
+					$type_name = esc_html__( 'User password' );
+					break;
+				case 'user_firstname':
+					$type_name = esc_html__( 'First name' );
+					break;
+				case 'user_lastname':
+					$type_name = esc_html__( 'Last name' );
+					break;
+				case 'user_nickname':
+					$type_name = esc_html__( 'Nickname' );
+					break;
+				case 'user_displayname':
+					$type_name = esc_html__( 'Display name' );
+					break;
+				case 'user_website':
+					$type_name = esc_html__( 'Website' );
+					break;
+				case 'user_description':
+					$type_name = esc_html__( 'Description' );
+					break;
+				case 'user_avatar':
+					$type_name = esc_html__( 'Avatar' );
+					break;
+				default:
+					$type_name = $registered_types['text'];
+					break;
+			}
+
+		}
+
+		return $type_name;
+	}
+
+	/**
+	 * Retrieve the field's type nice name.
+	 *
+	 * @return string
+	 */
+	public function get_type_nicename() {
+		return $this->type_nicename;
 	}
 
 	/**
