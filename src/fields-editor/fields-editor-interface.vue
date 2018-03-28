@@ -4,6 +4,8 @@
 		<router-link to="/" class="page-title-action wpum-icon-button circular" :data-balloon="labels.fields_go_back" data-balloon-pos="down"><span class="dashicons dashicons-arrow-left-alt"></span></router-link>
 		<a href="#" class="page-title-action wpum-icon-button" @click="openCreateNewFieldDialog()"><span class="dashicons dashicons-plus-alt"></span> {{labels.fields_add_new}}</a>
 
+		<div class="spinner is-active" style="float:none; margin:-8px 0 0 10px" v-if="loading_sort"></div>
+
 		<v-dialog/>
 		<modals-container/>
 
@@ -16,7 +18,7 @@
 		<table class="wp-list-table widefat fixed striped wpum-fields-groups-table">
 			<thead>
 				<tr>
-					<th scope="col" class="order-column" :data-balloon="labels.table_drag_tooltip" data-balloon-pos="right" v-if="fields > 1"><span class="dashicons dashicons-menu"></span></th>
+					<th scope="col" class="order-column" :data-balloon="labels.table_drag_tooltip" data-balloon-pos="right" v-if="fields.length > 1"><span class="dashicons dashicons-menu"></span></th>
 					<th scope="col" class="column-primary">{{labels.fields_name}}</th>
 					<th scope="col" class="small-column">{{labels.fields_type}}</th>
 					<th scope="col" class="small-column" :data-balloon="labels.fields_required_tooltip" data-balloon-pos="up">{{labels.fields_required}}</th>
@@ -26,45 +28,45 @@
 					<th scope="col">{{labels.table_actions}}</th>
 				</tr>
 			</thead>
-			<tbody>
-				<tr v-if="fields && !loading" v-for="field in fields" :key="field.id">
-					<td class="order-anchor align-middle" v-if="fields > 1">
-						<span class="dashicons dashicons-menu"></span>
-					</td>
-					<td class="column-primary">
-						<a href="">
-							<strong>{{field.name}}</strong>
-						</a>
-					</td>
-					<td>
-						{{field.type_nicename}}
-					</td>
-					<td>
-						<span class="dashicons dashicons-yes" v-if="isRequired(field.required)"></span>
-					</td>
-					<td>
-						<span class="dashicons dashicons-yes" v-if="isDefault(field.default)"></span>
-					</td>
-					<td>
-						<span class="dashicons dashicons-yes" v-if="field.visibility == 'public'"></span>
-						<span class="dashicons dashicons-hidden" v-else></span>
-					</td>
-					<td>
-						<span class="dashicons dashicons-yes" v-if="field.editable == 'public'"></span>
-						<span class="dashicons dashicons-lock" v-else></span>
-					</td>
-					<td class="align-middle">
-						<button type="submit" class="button"><span class="dashicons dashicons-edit"></span> {{labels.fields_edit}}</button>
-						<button type="submit" class="button delete-btn" @click="openDeleteFieldDialog( field.id, field.name )"><span class="dashicons dashicons-trash"></span> {{labels.fields_delete}}</button>
-					</td>
-				</tr>
+				<draggable v-model="fields" :element="'tbody'" :options="{handle:'.order-anchor'}" @end="onSortingEnd">
+					<tr v-if="fields && !loading" v-for="field in fields" :key="field.id">
+						<td class="order-anchor align-middle" v-if="fields.length > 1">
+							<span class="dashicons dashicons-menu"></span>
+						</td>
+						<td class="column-primary">
+							<a href="">
+								<strong>{{field.name}}</strong>
+							</a>
+						</td>
+						<td>
+							{{field.type_nicename}}
+						</td>
+						<td>
+							<span class="dashicons dashicons-yes" v-if="isRequired(field.required)"></span>
+						</td>
+						<td>
+							<span class="dashicons dashicons-yes" v-if="isDefault(field.default)"></span>
+						</td>
+						<td>
+							<span class="dashicons dashicons-yes" v-if="field.visibility == 'public'"></span>
+							<span class="dashicons dashicons-hidden" v-else></span>
+						</td>
+						<td>
+							<span class="dashicons dashicons-yes" v-if="field.editable == 'public'"></span>
+							<span class="dashicons dashicons-lock" v-else></span>
+						</td>
+						<td class="align-middle">
+							<button type="submit" class="button"><span class="dashicons dashicons-edit"></span> {{labels.fields_edit}}</button>
+							<button type="submit" class="button delete-btn" @click="openDeleteFieldDialog( field.id, field.name )"><span class="dashicons dashicons-trash"></span> {{labels.fields_delete}}</button>
+						</td>
+					</tr>
+				</draggable>
 				<tr class="no-items" v-if="fields < 1 && ! loading"><td class="colspanchange" colspan="7"><strong>{{labels.fields_not_found}}</strong></td></tr>
 				<tr class="no-items" v-if="loading">
 					<td class="colspanchange" colspan="7">
 						<div class="spinner is-active"></div>
 					</td>
 				</tr>
-			</tbody>
 		</table>
 
 	</section>
@@ -72,6 +74,8 @@
 
 <script>
 import axios from 'axios'
+import qs from 'qs'
+import draggable from 'vuedraggable'
 import balloon from 'balloon-css'
 import findGroupIndex from 'lodash.findindex'
 import PremiumDialog from './dialogs/dialog-premium'
@@ -80,6 +84,9 @@ import removeFieldByID from 'lodash.remove'
 
 export default {
 	name: 'fields-editor-interface',
+	components: {
+		draggable,
+	},
 	data() {
 		return {
 			addonInstalled: wpumFieldsEditor.is_addon_installed,
@@ -88,6 +95,7 @@ export default {
 			group_name:     '',
 			fields:         [],
 			loading:        false,
+			loading_sort:   false,
 			showMessage:    false,
 			messageStatus:  'success',
 			messageText:    wpumFieldsEditor.success_message,
@@ -165,6 +173,34 @@ export default {
 			setInterval(function() {
 				self.$data.showMessage = false
 			}, 4000)
+		},
+		/**
+		 * Update fields order after sorting.
+		*/
+		onSortingEnd( event ) {
+
+			this.loading_sort = true
+
+			axios.post( wpumFieldsEditor.ajax,
+				qs.stringify({
+					nonce: wpumFieldsEditor.nonce,
+					fields: this.fields
+				}),
+				{
+					params: {
+						action: 'wpum_update_fields_order'
+					},
+				}
+			)
+			.then( response => {
+				this.loading_sort = false
+				this.showSuccess()
+			})
+			.catch( error => {
+				this.loading_sort = false
+				this.showError( error.response.data )
+			})
+
 		},
 		/**
 		 * Load fields from the database.

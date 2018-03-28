@@ -33,6 +33,7 @@ class WPUM_Fields_Editor {
 		add_action( 'wp_ajax_wpum_update_fields_groups_order', [ $this, 'update_groups_order' ] );
 		add_action( 'wp_ajax_wpum_update_fields_group', [ $this, 'update_group' ] );
 		add_action( 'wp_ajax_wpum_get_fields_from_group', [ $this, 'get_fields' ] );
+		add_action( 'wp_ajax_wpum_update_fields_order', [ $this, 'update_fields_order' ] );
 	}
 
 	/**
@@ -293,6 +294,36 @@ class WPUM_Fields_Editor {
 			'fields'   => $fields,
 			'group_id' => $group_id
 		] );
+
+	}
+
+	/**
+	 * Update the order of the fields into the database.
+	 *
+	 * @return void
+	 */
+	public function update_fields_order() {
+
+		check_ajax_referer( 'wpum_update_fields_groups', 'nonce' );
+
+		if( ! current_user_can( 'manage_options' ) ) {
+			wp_die( esc_html__( 'Something went wrong: could not update the fields order.' ), 403 );
+		}
+
+		$fields = isset( $_POST['fields'] ) && is_array( $_POST['fields'] ) && ! empty( $_POST['fields'] ) ? $_POST['fields'] : false;
+
+		if( $fields ) {
+			foreach ( $fields as $order => $field ) {
+				$field_id = (int) $field['id'];
+				if( $field_id ) {
+					$updated_field = WPUM()->fields->update( $field_id, [ 'field_order' => $order ] );
+				}
+			}
+		} else {
+			wp_die( esc_html__( 'Something went wrong: could not update the fields order.' ), 403 );
+		}
+
+		wp_send_json_success( $fields );
 
 	}
 
