@@ -76,6 +76,7 @@ import balloon from 'balloon-css'
 import findGroupIndex from 'lodash.findindex'
 import PremiumDialog from './dialogs/dialog-premium'
 import DeleteFieldDialog from './dialogs/dialog-delete-field'
+import removeFieldByID from 'lodash.remove'
 
 export default {
 	name: 'fields-editor-interface',
@@ -206,6 +207,9 @@ export default {
 					if( status == 'error' ) {
 						this.showError(id_or_message)
 					} else {
+						removeFieldByID(this.fields, {
+							id: id_or_message.data.data.field_id
+						})
 						this.showSuccess()
 					}
 				}
