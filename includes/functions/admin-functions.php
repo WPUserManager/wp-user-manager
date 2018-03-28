@@ -93,3 +93,22 @@ function wpum_get_roles( $force = false ) {
 	return $roles;
 
 }
+
+/**
+ * Installs the default fields group into the WordPress database.
+ *
+ * @return void
+ */
+function wpum_install_default_field_group() {
+
+	if( ! get_option( 'wpum_version_upgraded_from' ) ) {
+		$default_group = new WPUM_Field_Group();
+		$default_group->add(
+			[
+				'id'   => 1,
+				'name' => esc_html__( 'Primary fields' )
+			]
+		);
+	}
+
+}
