@@ -7,6 +7,10 @@
 		<v-dialog/>
 		<modals-container/>
 
+		<wp-notice :type="messageStatus" v-if="showMessage">
+			<strong>{{messageText}}</strong>
+		</wp-notice>
+
 		<br/>
 
 		<table class="wp-list-table widefat fixed striped wpum-fields-groups-table">
@@ -82,7 +86,10 @@ export default {
 			group_id:       '',
 			group_name:     '',
 			fields:         [],
-			loading:        false
+			loading:        false,
+			showMessage:    false,
+			messageStatus:  'success',
+			messageText:    wpumFieldsEditor.success_message,
 		}
 	},
 	/**
@@ -120,6 +127,45 @@ export default {
 			return is_default === true ? true : false
 		},
 		/**
+		 * Show the success status for the editor.
+		 *
+		 * - Disable loading spinner.
+		 * - Enable message.
+		 * - Set message status to success.
+		 * - Inject the status message.
+		 */
+		showSuccess() {
+			this.loading = false
+			this.showMessage = true
+			this.messageStatus = 'success'
+			this.messageText = wpumFieldsEditor.success_message
+			this.resetMessages()
+		},
+		/**
+		 * Show an error message within the app.
+		 *
+		 * - Disable loading spinner.
+		 * - Enable message.
+		 * - Set message status to error
+		 * - Inject the message from the server side.
+		 */
+		showError( message ) {
+			this.loading = false
+			this.showMessage = true
+			this.messageStatus = 'error'
+			this.messageText = message
+			this.resetMessages()
+		},
+		/**
+		 * Automatically hide the admin notice after 4 seconds.
+		 */
+		resetMessages() {
+			let self = this
+			setInterval(function() {
+				self.$data.showMessage = false
+			}, 4000)
+		},
+		/**
 		 * Load fields from the database.
 		 */
 		getFields() {
@@ -151,7 +197,18 @@ export default {
 		openDeleteFieldDialog( id, name ) {
 			this.$modal.show( DeleteFieldDialog, {
 				field_id: id,
-				field_name: name
+				field_name: name,
+				/**
+				 * Pass a function to the component so we can
+				 * then update the app status from the child component response.
+				 */
+				updateStatus:(status, id_or_message) => {
+					if( status == 'error' ) {
+						this.showError(id_or_message)
+					} else {
+						this.showSuccess()
+					}
+				}
 			},{ height: '230px' })
 		}
 	}
@@ -220,6 +277,7 @@ export default {
 
 	.spinner {
 		margin: 0;
+		float:none !important;
 	}
 
 }
@@ -292,4 +350,10 @@ export default {
 		}
 	}
 }
+
+.vue-wp-notice {
+	margin-right: 0 !important;
+	margin-top: 20px !important;
+}
+
 </style>
