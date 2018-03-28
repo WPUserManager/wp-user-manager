@@ -40,10 +40,11 @@ final class WPUM_DB_Table_Field_Meta extends WPUM_DB_Table {
 	protected function set_schema() {
 		$max_index_length = 191;
 		$this->schema     = "meta_id bigint(20) unsigned NOT NULL auto_increment,
-			field_id bigint(20) unsigned NOT NULL default '0',
+			wpum_field_id bigint(20) unsigned NOT NULL default '0',
 			meta_key varchar(255) DEFAULT NULL,
+			meta_value longtext DEFAULT NULL,
 			PRIMARY KEY (meta_id),
-			KEY field_id (field_id),
+			KEY wpum_field_id (wpum_field_id),
 			KEY meta_key (meta_key({$max_index_length}))";
 	}
 
