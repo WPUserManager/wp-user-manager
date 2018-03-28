@@ -80,6 +80,7 @@ import balloon from 'balloon-css'
 import findGroupIndex from 'lodash.findindex'
 import PremiumDialog from './dialogs/dialog-premium'
 import DeleteFieldDialog from './dialogs/dialog-delete-field'
+import CreateFieldDialog from './dialogs/dialog-create-field'
 import removeFieldByID from 'lodash.remove'
 
 export default {
