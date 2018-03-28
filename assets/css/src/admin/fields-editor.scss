@@ -43,6 +43,13 @@ body.users_page_wpum-custom-fields {
 	}
 
 	.wpum-fields-groups-table {
+		tbody {
+			tr {
+				&:hover {
+					background: #f5f5f5;
+				}
+			}
+		}
 		.button {
 			margin-right: 5px;
 			&:last-child {

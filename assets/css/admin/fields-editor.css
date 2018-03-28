@@ -25,6 +25,8 @@ body.users_page_wpum-custom-fields .order-anchor {
   text-align: center !important; }
 body.users_page_wpum-custom-fields .small-column {
   width: 100px; }
+body.users_page_wpum-custom-fields .wpum-fields-groups-table tbody tr:hover {
+  background: #f5f5f5; }
 body.users_page_wpum-custom-fields .wpum-fields-groups-table .button {
   margin-right: 5px; }
   body.users_page_wpum-custom-fields .wpum-fields-groups-table .button:last-child {
