@@ -1,0 +1,179 @@
+body.users_page_wpum-custom-fields {
+
+	#wpum-add-field-group {
+		span.dashicons {
+			width: 16px;
+			height: 16px;
+			font-size: 16px;
+			vertical-align: inherit;
+			position: relative;
+			top: 3px;
+			margin-right: 2px;
+		}
+	}
+
+	.wpum-icon-button {
+		&.circular {
+			padding: 4px !important;
+			border-radius: 9999px !important;
+		}
+		span.dashicons {
+			width: 16px;
+			height: 16px;
+			font-size: 16px;
+			vertical-align: inherit;
+			position: relative;
+			top: 3px;
+		}
+	}
+
+	.order-column {
+		width: 30px;
+		border-right: 1px solid #e1e1e1;
+		text-align: center !important;
+	}
+
+	.order-anchor {
+		border-right: 1px solid #e1e1e1;
+		text-align: center !important;
+	}
+
+	.small-column {
+		width: 100px;
+	}
+
+	.wpum-fields-groups-table {
+		.button {
+			margin-right: 5px;
+			&:last-child {
+				margin-right: 0;
+			}
+			span.dashicons {
+				position: relative;
+				top: 3px;
+				margin-right: 3px;
+			}
+			&.delete-btn {
+				&:hover {
+					span.dashicons {
+						color: red;
+					}
+				}
+			}
+		}
+		.dashicons-yes {
+			color: green;
+		}
+		.align-middle {
+			vertical-align: middle;
+		}
+		td {
+			vertical-align: middle;
+			padding: 12px 10px;
+		}
+		.spinner {
+			margin: 0;
+			float: none !important;
+		}
+	}
+
+	#wpum-fields-editor-wrapper {
+		.vue-wp-notice {
+			margin-right: 0;
+			margin-bottom: 20px;
+		}
+	}
+
+	.sortable-ghost {
+		background: #fffecc;
+	}
+
+	.sortable-chosen {
+		background: #fffecc;
+	}
+
+	.spinner {
+		float: none;
+		margin-top: -8px;
+	}
+
+	.dashicons-menu {
+		&:hover {
+			cursor: move;
+			color: #0073aa;
+		}
+	}
+
+	.v--modal-overlay {
+		background: rgba(0, 0, 0, 0.7);
+		z-index: 9999;
+	}
+
+	.v--modal {
+		box-shadow: 0 5px 15px rgba(0, 0, 0, .7);
+		background: #fcfcfc;
+		border-radius: 0;
+	}
+
+	.media-modal-content {
+		min-height: initial;
+		background: #efefef;
+	}
+
+	.media-frame-title,
+	.media-frame-content,
+	.media-frame-toolbar {
+		left: 0;
+	}
+
+	.media-frame-title {
+		.dashicons {
+			display: inline-block;
+			margin-top: 16px;
+			margin-right: 10px;
+			&.dashicons-warning {
+				color: green;
+			}
+		}
+	}
+
+	.media-frame-content {
+		top: 50px;
+		padding: 10px 16px;
+		font-size: 13px;
+		line-height: 1.6em;
+	}
+
+	.wpum-dialog {
+		.spinner {
+			float: none;
+			margin-top: 20px;
+		}
+	}
+
+	.dialog-form {
+		padding-top: 10px;
+		label {
+			display: inline-block;
+			font-weight: bold;
+			color: #000;
+			margin-bottom: 5px;
+		}
+		input,
+		textarea {
+			display: block;
+			width: 100%;
+			margin-bottom: 15px;
+			font-size: 13px !important;
+			&:last-child {
+				margin-bottom: 0;
+			}
+		}
+	}
+
+	.vue-wp-notice {
+		margin-right: 0 !important;
+		margin-top: 20px !important;
+	}
+
+}

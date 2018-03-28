@@ -71,6 +71,7 @@ class WPUM_Fields_Editor {
 			}
 
 			wp_enqueue_script( 'wpum-fields-editor' );
+			wp_enqueue_style( 'wpum-fields-editor', WPUM_PLUGIN_URL . 'assets/css/admin/fields-editor.css' , array(), WPUM_VERSION );
 
 			$js_variables = [
 				'is_addon_installed' => apply_filters( 'wpum_fields_editor_has_custom_fields_addon', false ),

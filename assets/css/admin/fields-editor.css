@@ -1,0 +1,109 @@
+body.users_page_wpum-custom-fields #wpum-add-field-group span.dashicons {
+  width: 16px;
+  height: 16px;
+  font-size: 16px;
+  vertical-align: inherit;
+  position: relative;
+  top: 3px;
+  margin-right: 2px; }
+body.users_page_wpum-custom-fields .wpum-icon-button.circular {
+  padding: 4px !important;
+  border-radius: 9999px !important; }
+body.users_page_wpum-custom-fields .wpum-icon-button span.dashicons {
+  width: 16px;
+  height: 16px;
+  font-size: 16px;
+  vertical-align: inherit;
+  position: relative;
+  top: 3px; }
+body.users_page_wpum-custom-fields .order-column {
+  width: 30px;
+  border-right: 1px solid #e1e1e1;
+  text-align: center !important; }
+body.users_page_wpum-custom-fields .order-anchor {
+  border-right: 1px solid #e1e1e1;
+  text-align: center !important; }
+body.users_page_wpum-custom-fields .small-column {
+  width: 100px; }
+body.users_page_wpum-custom-fields .wpum-fields-groups-table .button {
+  margin-right: 5px; }
+  body.users_page_wpum-custom-fields .wpum-fields-groups-table .button:last-child {
+    margin-right: 0; }
+  body.users_page_wpum-custom-fields .wpum-fields-groups-table .button span.dashicons {
+    position: relative;
+    top: 3px;
+    margin-right: 3px; }
+  body.users_page_wpum-custom-fields .wpum-fields-groups-table .button.delete-btn:hover span.dashicons {
+    color: red; }
+body.users_page_wpum-custom-fields .wpum-fields-groups-table .dashicons-yes {
+  color: green; }
+body.users_page_wpum-custom-fields .wpum-fields-groups-table .align-middle {
+  vertical-align: middle; }
+body.users_page_wpum-custom-fields .wpum-fields-groups-table td {
+  vertical-align: middle;
+  padding: 12px 10px; }
+body.users_page_wpum-custom-fields .wpum-fields-groups-table .spinner {
+  margin: 0;
+  float: none !important; }
+body.users_page_wpum-custom-fields #wpum-fields-editor-wrapper .vue-wp-notice {
+  margin-right: 0;
+  margin-bottom: 20px; }
+body.users_page_wpum-custom-fields .sortable-ghost {
+  background: #fffecc; }
+body.users_page_wpum-custom-fields .sortable-chosen {
+  background: #fffecc; }
+body.users_page_wpum-custom-fields .spinner {
+  float: none;
+  margin-top: -8px; }
+body.users_page_wpum-custom-fields .dashicons-menu:hover {
+  cursor: move;
+  color: #0073aa; }
+body.users_page_wpum-custom-fields .v--modal-overlay {
+  background: rgba(0, 0, 0, 0.7);
+  z-index: 9999; }
+body.users_page_wpum-custom-fields .v--modal {
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.7);
+  background: #fcfcfc;
+  border-radius: 0; }
+body.users_page_wpum-custom-fields .media-modal-content {
+  min-height: initial;
+  background: #efefef; }
+body.users_page_wpum-custom-fields .media-frame-title,
+body.users_page_wpum-custom-fields .media-frame-content,
+body.users_page_wpum-custom-fields .media-frame-toolbar {
+  left: 0; }
+body.users_page_wpum-custom-fields .media-frame-title .dashicons {
+  display: inline-block;
+  margin-top: 16px;
+  margin-right: 10px; }
+  body.users_page_wpum-custom-fields .media-frame-title .dashicons.dashicons-warning {
+    color: green; }
+body.users_page_wpum-custom-fields .media-frame-content {
+  top: 50px;
+  padding: 10px 16px;
+  font-size: 13px;
+  line-height: 1.6em; }
+body.users_page_wpum-custom-fields .wpum-dialog .spinner {
+  float: none;
+  margin-top: 20px; }
+body.users_page_wpum-custom-fields .dialog-form {
+  padding-top: 10px; }
+  body.users_page_wpum-custom-fields .dialog-form label {
+    display: inline-block;
+    font-weight: bold;
+    color: #000;
+    margin-bottom: 5px; }
+  body.users_page_wpum-custom-fields .dialog-form input,
+  body.users_page_wpum-custom-fields .dialog-form textarea {
+    display: block;
+    width: 100%;
+    margin-bottom: 15px;
+    font-size: 13px !important; }
+    body.users_page_wpum-custom-fields .dialog-form input:last-child,
+    body.users_page_wpum-custom-fields .dialog-form textarea:last-child {
+      margin-bottom: 0; }
+body.users_page_wpum-custom-fields .vue-wp-notice {
+  margin-right: 0 !important;
+  margin-top: 20px !important; }
+
+/*# sourceMappingURL=fields-editor.css.map */

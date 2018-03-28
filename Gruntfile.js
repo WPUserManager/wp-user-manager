@@ -76,6 +76,7 @@ module.exports = function( grunt ) {
 					'assets/css/admin/email-editor-control.css': 'assets/css/src/admin/email-editor-control.scss',
 					'assets/css/admin/shortcodes.css': 'assets/css/src/admin/shortcodes.scss',
 					'assets/css/admin/registration-status.css': 'assets/css/src/admin/registration-status.scss',
+					'assets/css/admin/fields-editor.css': 'assets/css/src/admin/fields-editor.scss',
 					'assets/css/wpum.css': 'assets/css/src/wpum.scss',
 				}
 			}
