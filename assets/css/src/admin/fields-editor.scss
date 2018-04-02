@@ -1,5 +1,14 @@
 body.users_page_wpum-custom-fields {
 
+	.wp-heading-inline {
+		img {
+			width: 26px;
+			float: left;
+			padding-right: 15px;
+			margin-top: -6px;
+		}
+	}
+
 	#wpum-add-field-group {
 		span.dashicons {
 			width: 16px;

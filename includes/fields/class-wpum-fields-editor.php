@@ -80,6 +80,7 @@ class WPUM_Fields_Editor {
 				'labels'             => $this->get_labels(),
 				'groups'             => $this->get_groups(),
 				'ajax'               => admin_url( 'admin-ajax.php' ),
+				'pluginURL'          => WPUM_PLUGIN_URL,
 				'nonce'              => wp_create_nonce( 'wpum_update_fields_groups' ),
 				'get_fields_nonce'   => wp_create_nonce( 'wpum_get_fields' ),
 				'cf_addon_url'       => 'https://wpusermanager.com/addons/custom-fields/?ref=wp_admin',

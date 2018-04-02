@@ -1,7 +1,10 @@
 <template>
 	<section id="wpum-fields-editor-wrapper">
 
-		<h1 class="wp-heading-inline" v-text="sanitized(pageTitle)"></h1>
+		<h1 class="wp-heading-inline">
+			<img :src="pluginURL + 'assets/images/logo.svg'" alt="WP User Manager">
+			{{pageTitle}}
+		</h1>
 		<a href="#" class="page-title-action" id="wpum-add-field-group" @click="showAddGroupDialog()"><span class="dashicons dashicons-plus-alt"></span> <span v-text="sanitized(labels.table_add_group)"></span></a>
 		<div class="spinner is-active" v-if="loading"></div>
 		<br/><br/>
@@ -87,6 +90,7 @@ export default {
 			showMessage: false,
 			messageStatus: 'success',
 			messageText: wpumFieldsEditor.success_message,
+			pluginURL: wpumFieldsEditor.pluginURL
 		}
 	},
 	methods: {

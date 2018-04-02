@@ -1,6 +1,9 @@
 <template>
 	<section id="wpum-fields-editor-list">
-		<h1 class="wp-heading-inline">{{labels.fields_page_title}} "{{group_name}}"</h1>
+		<h1 class="wp-heading-inline">
+			<img :src="pluginURL + 'assets/images/logo.svg'" alt="WP User Manager">
+			{{labels.fields_page_title}} "{{group_name}}"
+		</h1>
 		<router-link to="/" class="page-title-action wpum-icon-button circular" :data-balloon="labels.fields_go_back" data-balloon-pos="down"><span class="dashicons dashicons-arrow-left-alt"></span></router-link>
 		<a href="#" class="page-title-action wpum-icon-button" @click="openCreateNewFieldDialog()"><span class="dashicons dashicons-plus-alt"></span> {{labels.fields_add_new}}</a>
 
@@ -100,6 +103,7 @@ export default {
 			showMessage:    false,
 			messageStatus:  'success',
 			messageText:    wpumFieldsEditor.success_message,
+			pluginURL:      wpumFieldsEditor.pluginURL
 		}
 	},
 	/**
