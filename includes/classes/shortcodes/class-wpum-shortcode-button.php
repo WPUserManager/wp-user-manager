@@ -119,7 +119,7 @@ final class WPUM_Shortcode_Button {
 				// Check current WP version.
 				$img = ( version_compare( get_bloginfo( 'version' ), '3.5', '<' ) )
 					? '<img src="' . WPUM_PLUGIN_URL . 'assets/images/wpum-media.png" />'
-					: '<span class="wp-media-buttons-icon" id="wpum-media-button" style="background-image: url();"></span>';
+					: '<span class="wp-media-buttons-icon" id="wpum-media-button" style="background-image: url( '. WPUM_PLUGIN_URL .'assets/images/logo.svg ); background-repeat: no-repeat; background-position-x: 3px; background-position-y: -1px;"></span>';
 				reset( $shortcodes );
 				if ( 1 === count( $shortcodes ) ) {
 					$shortcode = key( $shortcodes );
