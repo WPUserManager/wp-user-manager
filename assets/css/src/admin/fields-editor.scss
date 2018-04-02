@@ -195,3 +195,19 @@ body.users_page_wpum-custom-fields {
 	}
 
 }
+
+#create-field-dialog {
+	.media-frame-router {
+		left: 10px;
+	}
+	.media-frame-content {
+		top: 84px;
+	}
+	.media-router {
+		a {
+			&:hover {
+				cursor: pointer;
+			}
+		}
+	}
+}

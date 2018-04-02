@@ -74,7 +74,7 @@ class WPUM_Fields_Editor {
 			wp_enqueue_style( 'wpum-fields-editor', WPUM_PLUGIN_URL . 'assets/css/admin/fields-editor.css' , array(), WPUM_VERSION );
 
 			$js_variables = [
-				'is_addon_installed' => apply_filters( 'wpum_fields_editor_has_custom_fields_addon', false ),
+				'is_addon_installed' => apply_filters( 'wpum_fields_editor_has_custom_fields_addon', true ),
 				'page_title'         => esc_html__( 'WP User Manager Fields Editor' ),
 				'success_message'    => esc_html__( 'Changes successfully saved.' ),
 				'labels'             => $this->get_labels(),
@@ -84,6 +84,7 @@ class WPUM_Fields_Editor {
 				'nonce'              => wp_create_nonce( 'wpum_update_fields_groups' ),
 				'get_fields_nonce'   => wp_create_nonce( 'wpum_get_fields' ),
 				'cf_addon_url'       => 'https://wpusermanager.com/addons/custom-fields/?ref=wp_admin',
+				'fields_types'        => wpum_get_registered_field_types()
 			];
 
 			wp_localize_script( 'wpum-fields-editor', 'wpumFieldsEditor', $js_variables );
@@ -132,6 +133,7 @@ class WPUM_Fields_Editor {
 			'fields_page_title'         => esc_html__( 'Editing:' ),
 			'fields_go_back'            => esc_html__( 'Back to the groups list' ),
 			'fields_add_new'            => esc_html__( 'Add new custom field' ),
+			'fields_create'             => esc_html__( 'Create custom field' ),
 			'fields_name'               => esc_html__( 'Field name' ),
 			'fields_type'               => esc_html__( 'Type' ),
 			'fields_required'           => esc_html__( 'Required' ),

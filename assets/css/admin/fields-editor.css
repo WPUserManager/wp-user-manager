@@ -113,4 +113,11 @@ body.users_page_wpum-custom-fields #wpum-fields-editor-list .vue-wp-notice {
   margin-right: 0 !important;
   margin-top: 20px; }
 
+#create-field-dialog .media-frame-router {
+  left: 10px; }
+#create-field-dialog .media-frame-content {
+  top: 84px; }
+#create-field-dialog .media-router a:hover {
+  cursor: pointer; }
+
 /*# sourceMappingURL=fields-editor.css.map */

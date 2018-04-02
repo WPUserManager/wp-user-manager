@@ -5,7 +5,7 @@
 			{{labels.fields_page_title}} "{{group_name}}"
 		</h1>
 		<router-link to="/" class="page-title-action wpum-icon-button circular" :data-balloon="labels.fields_go_back" data-balloon-pos="down"><span class="dashicons dashicons-arrow-left-alt"></span></router-link>
-		<a href="#" class="page-title-action wpum-icon-button" @click="openCreateNewFieldDialog()"><span class="dashicons dashicons-plus-alt"></span> {{labels.fields_add_new}}</a>
+		<a class="page-title-action wpum-icon-button" @click="openCreateNewFieldDialog()"><span class="dashicons dashicons-plus-alt"></span> {{labels.fields_add_new}}</a>
 
 		<div class="spinner is-active" style="float:none; margin:-8px 0 0 10px" v-if="loading_sort"></div>
 
@@ -123,7 +123,7 @@ export default {
 		 */
 		openCreateNewFieldDialog() {
 			if( wpumFieldsEditor.is_addon_installed ) {
-
+				this.$modal.show( CreateFieldDialog, {},{ height: '70%', width: '70%' })
 			} else {
 				this.$modal.show( PremiumDialog, {},{ height: '220px' })
 			}
