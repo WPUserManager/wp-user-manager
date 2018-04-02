@@ -20,7 +20,7 @@ function wpum_load_admin_logo_style() {
 	$screen = get_current_screen();
 
 	$allowed_screens = [
-		'users_page_wpum-settings'
+		'users_page_wpum-settings',
 	];
 
 	if( in_array( $screen->base, $allowed_screens ) ) {

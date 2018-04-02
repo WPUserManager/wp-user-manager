@@ -1,6 +1,9 @@
 <template>
 	<div id="wpum-emails-list">
-		<h1 v-text="sanitized(labels.title)"></h1>
+		<h1>
+			<img :src="url + 'assets/images/logo.svg'" alt="WP User Manager">
+			{{labels.title}}
+		</h1>
 
 		<div class="notice notice-success is-dismissible" v-if="success">
 			<p><strong v-text="sanitized(labels.success)"></strong></p>
@@ -73,6 +76,7 @@ export default {
 			test_email: wpumEmailsEditor.default_email,
 			emails: wpumEmailsEditor.emails,
 			labels: wpumEmailsEditor.labels,
+			url: wpumEmailsEditor.pluginURL
 		}
 	},
 	methods: {
@@ -194,6 +198,12 @@ export default {
 }
 
 #wpum-emails-list {
+	h1 img {
+		width: 26px;
+		float: left;
+		padding-right: 15px;
+		margin-top: -6px;
+	}
 	.wp-filter {
 		input[type="text"] {
 			margin: 0;
