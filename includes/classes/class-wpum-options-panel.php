@@ -33,6 +33,9 @@ class WPUM_Options_Panel {
 		$this->panel = new TDP\OptionsKit( 'wpum' );
 		$this->panel->set_page_title( 'WP User Manager Settings' );
 
+		// Add a logo to the options panel.
+		$this->panel->add_image( WPUM_PLUGIN_URL . 'assets/images/logo.svg' );
+
 		// Register action buttons for the header.
 		$this->register_action_buttons();
 

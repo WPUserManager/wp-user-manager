@@ -77,6 +77,7 @@ module.exports = function( grunt ) {
 					'assets/css/admin/shortcodes.css': 'assets/css/src/admin/shortcodes.scss',
 					'assets/css/admin/registration-status.css': 'assets/css/src/admin/registration-status.scss',
 					'assets/css/admin/fields-editor.css': 'assets/css/src/admin/fields-editor.scss',
+					'assets/css/admin/wpum-logo.css': 'assets/css/src/admin/wpum-logo.scss',
 					'assets/css/wpum.css': 'assets/css/src/wpum.scss',
 				}
 			}

@@ -11,28 +11,33 @@
 if ( ! defined( 'ABSPATH' ) ) exit;
 
 /**
+ * Load the custom logo's css style within the admin panel when needed.
+ *
+ * @return void
+ */
+function wpum_load_admin_logo_style() {
+
+	$screen = get_current_screen();
+
+	$allowed_screens = [
+		'users_page_wpum-settings'
+	];
+
+	if( in_array( $screen->base, $allowed_screens ) ) {
+		wp_enqueue_style( 'wpum-logo', WPUM_PLUGIN_URL . 'assets/css/admin/wpum-logo.css', array(), WPUM_VERSION );
+	}
+
+}
+add_action( 'admin_enqueue_scripts', 'wpum_load_admin_logo_style' );
+
+/**
  * Load WPUM scripts on the frontend.
  *
  * @return void
  */
 function wpum_load_scripts() {
 
-	// Determine wether vuejs is running in dev mode.
-	// If so, load all .js files into the "src" folder from the webpack server.
-	$is_vue_dev = defined( 'WPUM_VUE_DEV' ) && WPUM_VUE_DEV ? true : false;
-
-	if( $is_vue_dev ) {
-		$vuefiles = array();
-		foreach ( glob( WPUM_PLUGIN_DIR . 'src/*.js' ) as $file ) {
-			$vuefiles[] = basename( $file );
-		}
-		foreach( $vuefiles as $jsfile ) {
-			wp_register_script( $jsfile, 'http://localhost:8080/' . $jsfile, array(), WPUM_VERSION, true );
-			wp_enqueue_script( $jsfile );
-		}
-	}
-
-	// Load frontend styles and scripts.
+	// Load frontend styles.
 	wp_enqueue_style( 'wpum-frontend', WPUM_PLUGIN_URL . 'assets/css/wpum.min.css', array(), WPUM_VERSION );
 
 }
