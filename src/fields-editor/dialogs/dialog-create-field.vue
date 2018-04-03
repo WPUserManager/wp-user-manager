@@ -42,7 +42,7 @@
 				<div class="media-toolbar">
 					<div class="media-toolbar-primary search-form">
 						<div class="spinner is-active" v-if="loading"></div>
-						<button type="button" class="button media-button button-primary button-large media-button-insert" v-text="labels.fields_create" :disabled="loading" @click="createField()"></button>
+						<button type="button" class="button media-button button-primary button-large media-button-insert" v-text="labels.fields_create" :disabled="loading || ! canSubmit()" @click="createField()"></button>
 					</div>
 				</div>
 			</div>
@@ -82,6 +82,17 @@ export default {
 				'media-menu-item',
 				tab_id == this.selectedTypeTab ? 'active': false
 			]
+		},
+		/**
+		 * Verify that the name and field type are selected
+		 * before enabling the create button.
+		 */
+		canSubmit() {
+			if( this.newFieldName && this.newFieldName.trim().length ) {
+				return true
+			} else {
+				return false
+			}
 		}
 	}
 }
