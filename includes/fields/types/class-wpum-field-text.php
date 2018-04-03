@@ -30,6 +30,17 @@ class WPUM_Field_Text extends WPUM_Field_Type {
 
 	}
 
+	public function get_editor_settings() {
+		return [
+			'general' => [
+				array(
+					'title' => esc_html__( 'Another custom field' ),
+					'type'  => 'textarea'
+				)
+			]
+		];
+	}
+
 }
 
 new WPUM_Field_Text();

@@ -68,17 +68,17 @@ export default {
 		FieldTypeBox
 	},
 	props: {
-		group_id: '',
+		group_id:    '',
 		addNewField: '',
 	},
 	data() {
 		return {
-			loading: false,
-			labels: wpumFieldsEditor.labels,
-			types: wpumFieldsEditor.fields_types,
+			loading:         false,
+			labels:          wpumFieldsEditor.labels,
+			types:           wpumFieldsEditor.fields_types,
 			selectedTypeTab: 'standard',
-			newFieldName: '',
-			newFieldType: ''
+			newFieldName:    '',
+			newFieldType:    ''
 		}
 	},
 	methods: {

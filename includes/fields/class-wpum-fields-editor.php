@@ -149,7 +149,7 @@ class WPUM_Fields_Editor {
 			'fields_delete_1'           => esc_html__( 'You are about to delete the field:' ),
 			'fields_delete_2'           => esc_html__( 'This action cannot be reversed. Are you sure you want to continue? Please note any users data associated with this field will not be removed.' ),
 			'field_new_name'            => esc_html__( 'Field name' ),
-			'field_new_placeholder'     => esc_html__( 'Enter a name for this field' )
+			'field_new_placeholder'     => esc_html__( 'Enter a name for this field' ),
 		];
 
 	}

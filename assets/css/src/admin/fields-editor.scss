@@ -122,7 +122,7 @@ body.users_page_wpum-custom-fields {
 
 	.v--modal-overlay {
 		background: rgba(0, 0, 0, 0.7);
-		z-index: 9999;
+		z-index: 99999;
 	}
 
 	.v--modal {
@@ -268,5 +268,14 @@ body.users_page_wpum-custom-fields {
 		text-align: center;
 		vertical-align: middle;
 		width: 100%;
+	}
+}
+
+#edit-field-dialog {
+	&.media-modal-content {
+		background: #f3f3f3
+	}
+	.media-frame-title {
+		left: 200px;
 	}
 }

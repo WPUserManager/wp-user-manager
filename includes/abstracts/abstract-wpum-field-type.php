@@ -80,6 +80,13 @@ abstract class WPUM_Field_Type {
 	public $form_data;
 
 	/**
+	 * List of settings available for this field type.
+	 *
+	 * @var array
+	 */
+	public $settings;
+
+	/**
 	 * Primary class constructor.
 	 *
 	 * @since 2.0.0
@@ -107,6 +114,41 @@ abstract class WPUM_Field_Type {
 	public function init() {}
 
 	/**
+	 * Setup the editor settings for this field type.
+	 *
+	 * @return array
+	 */
+	public function get_editor_settings() {
+		return [];
+	}
+
+	/**
+	 * Setup the default settings for all field types.
+	 *
+	 * @return array
+	 */
+	protected function get_default_editor_settings() {
+
+		$settings = [
+			'general' => [
+				array(
+					'title' => esc_html__( 'Field name' ),
+					'type'  => 'text',
+					'id'    => 'field_name'
+				),
+				array(
+					'title' => esc_html__( 'Field description' ),
+					'type'  => 'textarea',
+					'id'    => 'field_description'
+				)
+			]
+		];
+
+		return $settings;
+
+	}
+
+	/**
 	 * Register fields into an array that can be easily retrieved.
 	 *
 	 * @param array $fields
@@ -115,10 +157,11 @@ abstract class WPUM_Field_Type {
 	public function register_field_type( $fields ) {
 
 		$fields[ $this->group ]['fields'][] = array(
-			'order' => $this->order,
-			'name'  => $this->name,
-			'type'  => $this->type,
-			'icon'  => $this->icon,
+			'order'    => $this->order,
+			'name'     => $this->name,
+			'type'     => $this->type,
+			'icon'     => $this->icon,
+			'settings' => array_merge_recursive( $this->get_default_editor_settings(), $this->get_editor_settings() )
 		);
 
 		return $fields;

@@ -59,7 +59,7 @@
 							<span class="dashicons dashicons-lock" v-else></span>
 						</td>
 						<td class="align-middle">
-							<button type="submit" class="button"><span class="dashicons dashicons-edit"></span> {{labels.fields_edit}}</button>
+							<button type="submit" class="button" @click="openEditFieldDialog( field.id, field.name )"><span class="dashicons dashicons-edit"></span> {{labels.fields_edit}}</button>
 							<button type="submit" class="button delete-btn" v-if="! isDefault(field.default)" @click="openDeleteFieldDialog( field.id, field.name )"><span class="dashicons dashicons-trash"></span> {{labels.fields_delete}}</button>
 						</td>
 					</tr>
@@ -84,6 +84,7 @@ import findGroupIndex from 'lodash.findindex'
 import PremiumDialog from './dialogs/dialog-premium'
 import DeleteFieldDialog from './dialogs/dialog-delete-field'
 import CreateFieldDialog from './dialogs/dialog-create-field'
+import EditFieldDialog from './dialogs/dialog-edit-field'
 import removeFieldByID from 'lodash.remove'
 
 export default {
@@ -265,6 +266,17 @@ export default {
 					}
 				}
 			},{ height: '230px' })
+		},
+		/**
+		 * Open the field editing dialog.
+		 */
+		openEditFieldDialog( id, name ) {
+
+			this.$modal.show( EditFieldDialog, {
+				field_id: id,
+				field_name: name
+			},{ height: '90%', width: '95%' })
+
 		}
 	}
 }
