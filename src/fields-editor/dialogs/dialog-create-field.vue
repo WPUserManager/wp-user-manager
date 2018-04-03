@@ -23,7 +23,7 @@
 					<label for="field-name">
 						{{labels.field_new_name}}
 					</label>
-					<input type="text" name="field-name" id="field-name" v-model="newFieldName" :placeholder="labels.field_new_placeholder">
+					<input type="text" name="field-name" id="field-name" :disabled="loading" v-model="newFieldName" :placeholder="labels.field_new_placeholder">
 				</form>
 				<!-- loop available fields within the selected tab -->
 				<div v-for="(type, type_id) in types" :key="type_id" v-if="selectedTypeTab == type_id" class="types-wrapper">
@@ -110,6 +110,12 @@ export default {
 			} else {
 				return false
 			}
+		},
+		/**
+		 * Create the new field into the database.
+		 */
+		createField() {
+			this.loading = true
 		}
 	}
 }
