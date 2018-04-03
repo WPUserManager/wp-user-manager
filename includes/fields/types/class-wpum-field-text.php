@@ -33,27 +33,3 @@ class WPUM_Field_Text extends WPUM_Field_Type {
 }
 
 new WPUM_Field_Text();
-
-/**
- * Register a text field type.
- */
-class WPUM_Field_Text2 extends WPUM_Field_Type {
-
-	/**
-	 * Hook into the main class and register a new field.
-	 *
-	 * @return void
-	 */
-	public function init() {
-
-		// Define field type information.
-		$this->name  = esc_html__( 'Text 2' );
-		$this->type  = 'text2';
-		$this->icon  = 'dashicons-editor-textcolor';
-		$this->order = 3;
-
-	}
-
-}
-
-new WPUM_Field_Text2();
