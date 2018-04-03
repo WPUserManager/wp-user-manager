@@ -124,7 +124,15 @@ export default {
 		openCreateNewFieldDialog() {
 			if( wpumFieldsEditor.is_addon_installed ) {
 				this.$modal.show( CreateFieldDialog, {
-					group_id: this.group_id
+					group_id: this.group_id,
+					addNewField: ( status, data_or_message ) => {
+						if( status == 'error' ) {
+							this.showError(data_or_message)
+						} else {
+							this.showSuccess()
+							this.groups.push(data_or_message)
+						}
+					}
 				},{ height: '80%', width: '80%' })
 			} else {
 				this.$modal.show( PremiumDialog, {},{ height: '220px' })

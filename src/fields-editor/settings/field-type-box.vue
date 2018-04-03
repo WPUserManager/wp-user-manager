@@ -28,12 +28,6 @@ export default {
 		type: '',
 		enabled: false
 	},
-	/*
-	data() {
-		return {
-			enabled: false
-		}
-	},*/
 	computed: {
 		classes() {
 			return [

@@ -13,6 +13,7 @@
 						:key="type_id"
 						:class="getActiveTypeTabClasses( type_id )"
 						@click="activateTypeTab( type_id )"
+						v-if="!isDefault(type_id)"
 						>
 						{{type.group_name}}
 					</a>
@@ -26,17 +27,21 @@
 					<input type="text" name="field-name" id="field-name" :disabled="loading" v-model="newFieldName" :placeholder="labels.field_new_placeholder">
 				</form>
 				<!-- loop available fields within the selected tab -->
-				<div v-for="(type, type_id) in types" :key="type_id" v-if="selectedTypeTab == type_id" class="types-wrapper">
-					<ul class="attachments">
-						<field-type-box
-							v-for="(field, index) in type.fields" :key="index"
-							:name="field.name"
-							:icon="field.icon"
-							:type="field.type"
-							:enabled="isTypeSelected(field.type)"
-							@click="selectFieldType(field.type)"
-						></field-type-box>
-					</ul>
+				<div
+					v-for="(type, type_id) in types"
+					:key="type_id"
+					v-if="selectedTypeTab == type_id && !isDefault(type_id)"
+					class="types-wrapper">
+						<ul class="attachments">
+							<field-type-box
+								v-for="(field, index) in type.fields" :key="index"
+								:name="field.name"
+								:icon="field.icon"
+								:type="field.type"
+								:enabled="isTypeSelected(field.type)"
+								@click="selectFieldType(field.type)"
+							></field-type-box>
+						</ul>
 				</div>
 				<!-- end fields loop -->
 			</div>
@@ -63,7 +68,8 @@ export default {
 		FieldTypeBox
 	},
 	props: {
-		group_id: ''
+		group_id: '',
+		addNewField: '',
 	},
 	data() {
 		return {
@@ -76,6 +82,12 @@ export default {
 		}
 	},
 	methods: {
+		/**
+		 * Hide the default group from the UI.
+		 */
+		isDefault( type_id ) {
+			return type_id == 'default' ? true : false
+		},
 		/**
 		 * Update the selected field type tab on click.
 		 */
@@ -138,10 +150,12 @@ export default {
 			)
 			.then( response => {
 				this.loading = false
+				this.addNewField( 'success', response.data.data )
 				this.$emit('close')
 			})
 			.catch( error => {
 				this.loading = false
+				this.addNewField( 'error', error.response.data )
 				this.$emit('close')
 			})
 
