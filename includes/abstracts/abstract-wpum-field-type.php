@@ -32,7 +32,7 @@ abstract class WPUM_Field_Type {
 	public $type;
 
 	/**
-	 * Icon for the editor button, eg "fa-list".
+	 * Icon for the editor button. This is a class name from the Dashicons set.
 	 *
 	 * @since 2.0.0
 	 * @var mixed
