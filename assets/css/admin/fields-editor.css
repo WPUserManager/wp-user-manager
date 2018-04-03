@@ -116,8 +116,48 @@ body.users_page_wpum-custom-fields #wpum-fields-editor-list .vue-wp-notice {
 #create-field-dialog .media-frame-router {
   left: 10px; }
 #create-field-dialog .media-frame-content {
-  top: 84px; }
+  top: 84px;
+  padding: 0; }
 #create-field-dialog .media-router a:hover {
   cursor: pointer; }
+#create-field-dialog form {
+  padding: 20px 15px;
+  border-bottom: 1px solid #ddd; }
+  #create-field-dialog form label {
+    display: block;
+    font-weight: 500;
+    margin-bottom: 0.5em;
+    font-size: 18px; }
+  #create-field-dialog form input {
+    padding: 3px 8px;
+    font-size: 1.7em;
+    line-height: 100%;
+    height: 1.7em;
+    width: 100%;
+    outline: 0;
+    margin: 0 0 3px;
+    background-color: #fff; }
+#create-field-dialog ul.attachments {
+  padding: 20px 10px; }
+  #create-field-dialog ul.attachments .attachment {
+    width: 13%;
+    padding: 10px; }
+  #create-field-dialog ul.attachments .dashicons {
+    font-size: 48px;
+    height: 48px;
+    width: 48px;
+    margin-top: -20px; }
+
+.table-fixed {
+  display: table;
+  height: 100%;
+  table-layout: fixed;
+  width: 100%; }
+  .table-fixed .table-cell {
+    display: table-cell;
+    height: 100%;
+    text-align: center;
+    vertical-align: middle;
+    width: 100%; }
 
 /*# sourceMappingURL=fields-editor.css.map */

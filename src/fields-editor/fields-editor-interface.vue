@@ -123,7 +123,7 @@ export default {
 		 */
 		openCreateNewFieldDialog() {
 			if( wpumFieldsEditor.is_addon_installed ) {
-				this.$modal.show( CreateFieldDialog, {},{ height: '70%', width: '70%' })
+				this.$modal.show( CreateFieldDialog, {},{ height: '80%', width: '80%' })
 			} else {
 				this.$modal.show( PremiumDialog, {},{ height: '220px' })
 			}

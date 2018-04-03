@@ -5,6 +5,7 @@
 			<div class="media-frame-title">
 				<h1>{{labels.fields_add_new}}</h1>
 			</div>
+			<!-- Field types navigation -->
 			<div class="media-frame-router">
 				<div class="media-router">
 					<a
@@ -18,9 +19,24 @@
 				</div>
 			</div>
 			<div class="media-frame-content">
-				<div v-for="(type, type_id) in types" :key="type_id" v-if="selectedTypeTab == type_id">
-					{{type_id}}
+				<form action="post">
+					<label for="field-name">
+						Field name
+					</label>
+					<input type="text" name="field-name" id="field-name" v-model="newFieldName" placeholder="Enter a name for this field">
+				</form>
+				<!-- loop available fields within the selected tab -->
+				<div v-for="(type, type_id) in types" :key="type_id" v-if="selectedTypeTab == type_id" class="types-wrapper">
+					<ul class="attachments">
+						<field-type-box
+							v-for="(field, index) in type.fields" :key="index"
+							:name="field.name"
+							:icon="field.icon"
+							:type="field.type"
+						></field-type-box>
+					</ul>
 				</div>
+				<!-- end fields loop -->
 			</div>
 			<div class="media-frame-toolbar">
 				<div class="media-toolbar">
@@ -35,14 +51,19 @@
 </template>
 
 <script>
+import FieldTypeBox from '../settings/field-type-box'
 export default {
 	name: 'dialog-create-field',
+	components: {
+		FieldTypeBox
+	},
 	data() {
 		return {
 			loading: false,
 			labels: wpumFieldsEditor.labels,
 			types: wpumFieldsEditor.fields_types,
-			selectedTypeTab: 'default',
+			selectedTypeTab: 'standard',
+			newFieldName: '',
 		}
 	},
 	methods: {

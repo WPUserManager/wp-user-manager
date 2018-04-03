@@ -25,7 +25,7 @@ class WPUM_Field_Text extends WPUM_Field_Type {
 		// Define field type information.
 		$this->name  = esc_html__( 'Single Line Text' );
 		$this->type  = 'text';
-		$this->icon  = 'fa-text-width';
+		$this->icon  = 'dashicons-editor-textcolor';
 		$this->order = 3;
 
 	}
