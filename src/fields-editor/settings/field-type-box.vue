@@ -51,7 +51,6 @@ export default {
 	methods: {
 		enable(event) {
 			this.$emit('click', event);
-			console.log('hhhhh')
 		},
 	}
 }

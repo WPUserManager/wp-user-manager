@@ -53,12 +53,17 @@
 </template>
 
 <script>
+import axios from 'axios'
+import qs from 'qs'
 import FieldTypeBox from '../settings/field-type-box'
 
 export default {
 	name: 'dialog-create-field',
 	components: {
 		FieldTypeBox
+	},
+	props: {
+		group_id: ''
 	},
 	data() {
 		return {
@@ -116,6 +121,30 @@ export default {
 		 */
 		createField() {
 			this.loading = true
+
+			// Make a call via ajax.
+			axios.post( wpumFieldsEditor.ajax,
+				qs.stringify({
+					nonce: wpumFieldsEditor.nonce,
+					field_name: this.newFieldName,
+					field_type: this.newFieldType,
+					group_id: this.group_id
+				}),
+				{
+					params: {
+						action: 'wpum_create_field'
+					},
+				}
+			)
+			.then( response => {
+				this.loading = false
+				this.$emit('close')
+			})
+			.catch( error => {
+				this.loading = false
+				this.$emit('close')
+			})
+
 		}
 	}
 }
