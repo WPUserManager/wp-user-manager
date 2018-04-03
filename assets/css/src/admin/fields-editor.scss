@@ -244,6 +244,13 @@ body.users_page_wpum-custom-fields {
 			width: 48px;
 			margin-top: -20px;
 		}
+		.check {
+			&:hover {
+				.media-modal-icon {
+					background-position: -21px 0;
+				}
+			}
+		}
 	}
 }
 

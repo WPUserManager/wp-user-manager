@@ -147,6 +147,8 @@ body.users_page_wpum-custom-fields #wpum-fields-editor-list .vue-wp-notice {
     height: 48px;
     width: 48px;
     margin-top: -20px; }
+  #create-field-dialog ul.attachments .check:hover .media-modal-icon {
+    background-position: -21px 0; }
 
 .table-fixed {
   display: table;

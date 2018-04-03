@@ -12,7 +12,7 @@
 				<div>{{name}}</div>
 			</div>
 		</div>
-		<button type="button" class="check" tabindex="-1" @click="disableBlock()">
+		<button type="button" class="check" tabindex="-1">
 			<span class="media-modal-icon"></span>
 			<span class="screen-reader-text">Deselect</span>
 		</button>
@@ -25,13 +25,15 @@ export default {
 	props: {
 		name: '',
 		icon: '',
-		type: ''
+		type: '',
+		enabled: false
 	},
+	/*
 	data() {
 		return {
 			enabled: false
 		}
-	},
+	},*/
 	computed: {
 		classes() {
 			return [
@@ -48,8 +50,8 @@ export default {
 	},
 	methods: {
 		enable(event) {
-			this.enabled = !this.enabled
 			this.$emit('click', event);
+			console.log('hhhhh')
 		},
 	}
 }

@@ -33,6 +33,8 @@
 							:name="field.name"
 							:icon="field.icon"
 							:type="field.type"
+							:enabled="isTypeSelected(field.type)"
+							@click="selectFieldType(field.type)"
 						></field-type-box>
 					</ul>
 				</div>
@@ -52,6 +54,7 @@
 
 <script>
 import FieldTypeBox from '../settings/field-type-box'
+
 export default {
 	name: 'dialog-create-field',
 	components: {
@@ -64,6 +67,7 @@ export default {
 			types: wpumFieldsEditor.fields_types,
 			selectedTypeTab: 'standard',
 			newFieldName: '',
+			newFieldType: ''
 		}
 	},
 	methods: {
@@ -84,11 +88,24 @@ export default {
 			]
 		},
 		/**
+		 * Verify if the field type is currently selected
+		 * so we can toggle the appropriate UI status.
+		 */
+		isTypeSelected( type ) {
+			return this.newFieldType == type ? true : false
+		},
+		/**
+		 * Save the selected field type.
+		 */
+		selectFieldType( type ) {
+			this.newFieldType = type
+		},
+		/**
 		 * Verify that the name and field type are selected
 		 * before enabling the create button.
 		 */
 		canSubmit() {
-			if( this.newFieldName && this.newFieldName.trim().length ) {
+			if( this.newFieldName && this.newFieldName.trim().length && this.newFieldType && this.newFieldType.trim().length ) {
 				return true
 			} else {
 				return false
