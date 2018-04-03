@@ -21,9 +21,9 @@
 			<div class="media-frame-content">
 				<form action="post">
 					<label for="field-name">
-						Field name
+						{{labels.field_new_name}}
 					</label>
-					<input type="text" name="field-name" id="field-name" v-model="newFieldName" placeholder="Enter a name for this field">
+					<input type="text" name="field-name" id="field-name" v-model="newFieldName" :placeholder="labels.field_new_placeholder">
 				</form>
 				<!-- loop available fields within the selected tab -->
 				<div v-for="(type, type_id) in types" :key="type_id" v-if="selectedTypeTab == type_id" class="types-wrapper">
