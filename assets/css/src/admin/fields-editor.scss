@@ -252,6 +252,9 @@ body.users_page_wpum-custom-fields {
 			}
 		}
 	}
+	button:disabled {
+		cursor: not-allowed
+	}
 }
 
 .table-fixed {
