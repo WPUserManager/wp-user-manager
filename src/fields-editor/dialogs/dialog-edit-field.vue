@@ -4,9 +4,7 @@
 		<div class="media-frame mode-select wp-core-ui">
 			<div class="media-frame-menu">
 				<div class="media-menu">
-					<a class="media-menu-item">{{labels.field_edit_general}}</a>
-					<a class="media-menu-item">{{labels.field_edit_privacy}}</a>
-					<a class="media-menu-item">{{labels.field_edit_customization}}</a>
+					<a class="media-menu-item" v-for="tab in tabs" :key="tab.id">{{tab.name}}</a>
 					<div class="separator"></div>
 				</div>
 			</div>
@@ -60,6 +58,7 @@ export default {
 			error:          false,
 			errorMessage:   wpumFieldsEditor.labels.field_edit_settings_error,
 			labels:         wpumFieldsEditor.labels,
+			tabs:           wpumFieldsEditor.edit_dialog_tabs,
 			settingsFields: '',
 			activeTab:      '',
 		}

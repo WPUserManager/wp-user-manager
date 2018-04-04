@@ -85,7 +85,8 @@ class WPUM_Fields_Editor {
 				'nonce'              => wp_create_nonce( 'wpum_update_fields_groups' ),
 				'get_fields_nonce'   => wp_create_nonce( 'wpum_get_fields' ),
 				'cf_addon_url'       => 'https://wpusermanager.com/addons/custom-fields/?ref=wp_admin',
-				'fields_types'        => wpum_get_registered_field_types()
+				'fields_types'       => wpum_get_registered_field_types(),
+				'edit_dialog_tabs'   => wpum_get_edit_field_dialog_tabs()
 			];
 
 			wp_localize_script( 'wpum-fields-editor', 'wpumFieldsEditor', $js_variables );

@@ -282,3 +282,29 @@ function wpum_get_primary_field_types() {
 	return apply_filters( 'wpum_get_primary_field_types', $types );
 
 }
+
+/**
+ * Setup the tabs for the edit field dialog in the admin panel.
+ *
+ * @return array
+ */
+function wpum_get_edit_field_dialog_tabs() {
+
+	$tabs = [
+		array(
+			'id'   => 'general',
+			'name' => esc_html__( 'General settings' )
+		),
+		array(
+			'id'   => 'privacy',
+			'name' => esc_html__( 'Privacy settings' )
+		),
+		array(
+			'id'   => 'editing',
+			'name' => esc_html__( 'Editing permissions' )
+		),
+	];
+
+	return apply_filters( 'wpum_get_fields_editor_edit_tabs', $tabs );
+
+}
