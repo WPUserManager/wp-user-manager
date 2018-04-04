@@ -293,15 +293,19 @@ function wpum_get_edit_field_dialog_tabs() {
 	$tabs = [
 		array(
 			'id'   => 'general',
-			'name' => esc_html__( 'General settings' )
+			'name' => esc_html__( 'General' )
+		),
+		array(
+			'id'   => 'validation',
+			'name' => esc_html__( 'Validation' )
 		),
 		array(
 			'id'   => 'privacy',
-			'name' => esc_html__( 'Privacy settings' )
+			'name' => esc_html__( 'Privacy' )
 		),
 		array(
-			'id'   => 'editing',
-			'name' => esc_html__( 'Editing permissions' )
+			'id'   => 'permissions',
+			'name' => esc_html__( 'Permissions' )
 		),
 	];
 

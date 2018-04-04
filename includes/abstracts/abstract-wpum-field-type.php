@@ -160,7 +160,7 @@ abstract class WPUM_Field_Type {
 	 * Helper function for internal fields.
 	 * If a field needs a placeholder setting, child classes can call this method.
 	 *
-	 * @return void
+	 * @return array
 	 */
 	protected function add_placeholder_setting() {
 
@@ -170,6 +170,26 @@ abstract class WPUM_Field_Type {
 			'label'     => esc_html__( 'Placeholder' ),
 			'model'     => 'placeholder',
 			'hint'      => esc_html__( 'This text will appear within the field when empty. Leave blank if not needed.' ),
+		);
+
+		return $setting;
+
+	}
+
+	/**
+	 * Helper function for internal fields.
+	 * If a field needs a "required" setting, child classes can call this method.
+	 *
+	 * @return array
+	 */
+	protected function add_requirement_setting() {
+
+		$setting = array(
+			'type'    => 'checkbox',
+			'label'   => esc_html__( 'Set as required' ),
+			'model'   => 'required',
+			'default' => false,
+			'hint'    => esc_html__( 'Enable this option so the field must be filled before the form can be processed.' ),
 		);
 
 		return $setting;
