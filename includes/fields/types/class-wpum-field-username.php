@@ -1,6 +1,6 @@
 <?php
 /**
- * Registers a text field for the forms.
+ * Registers a username field for the forms.
  *
  * @package     wp-user-manager
  * @copyright   Copyright (c) 2018, Alessandro Tesoro
@@ -13,7 +13,7 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 /**
  * Register a text field type.
  */
-class WPUM_Field_Text extends WPUM_Field_Type {
+class WPUM_Field_Username extends WPUM_Field_Text {
 
 	/**
 	 * Hook into the main class and register a new field.
@@ -23,8 +23,9 @@ class WPUM_Field_Text extends WPUM_Field_Type {
 	public function init() {
 
 		// Define field type information.
-		$this->name  = esc_html__( 'Single Line Text' );
-		$this->type  = 'text';
+		$this->group = 'default';
+		$this->name  = esc_html__( 'Username' );
+		$this->type  = 'username';
 		$this->icon  = 'dashicons-editor-textcolor';
 		$this->order = 3;
 
@@ -32,4 +33,4 @@ class WPUM_Field_Text extends WPUM_Field_Type {
 
 }
 
-new WPUM_Field_Text();
+new WPUM_Field_Username();

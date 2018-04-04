@@ -34,6 +34,7 @@ class WPUM_Fields_Editor {
 		add_action( 'wp_ajax_wpum_update_fields_group', [ $this, 'update_group' ] );
 		add_action( 'wp_ajax_wpum_get_fields_from_group', [ $this, 'get_fields' ] );
 		add_action( 'wp_ajax_wpum_update_fields_order', [ $this, 'update_fields_order' ] );
+		add_action( 'wp_ajax_wpum_get_field_settings', [ $this, 'get_field_settings' ] );
 	}
 
 	/**
@@ -137,7 +138,7 @@ class WPUM_Fields_Editor {
 			'fields_name'               => esc_html__( 'Field name' ),
 			'fields_type'               => esc_html__( 'Type' ),
 			'fields_required'           => esc_html__( 'Required' ),
-			'fields_visibility'         => esc_html__( 'Visibility' ),
+			'fields_visibility'         => esc_html__( 'Privacy' ),
 			'fields_edit'               => esc_html__( 'Edit field' ),
 			'fields_delete'             => esc_html__( 'Delete field' ),
 			'fields_editable'           => esc_html__( 'Editable' ),
@@ -150,6 +151,9 @@ class WPUM_Fields_Editor {
 			'fields_delete_2'           => esc_html__( 'This action cannot be reversed. Are you sure you want to continue? Please note any users data associated with this field will not be removed.' ),
 			'field_new_name'            => esc_html__( 'Field name' ),
 			'field_new_placeholder'     => esc_html__( 'Enter a name for this field' ),
+			'field_edit_general'        => esc_html__( 'General settings' ),
+			'field_edit_privacy'        => esc_html__( 'Privacy settings' ),
+			'field_edit_customization'  => esc_html__( 'Editing permissions' )
 		];
 
 	}
@@ -161,11 +165,11 @@ class WPUM_Fields_Editor {
 	 */
 	private function get_groups() {
 
+		$registered_groups = [];
 		$groups            = WPUM()->fields_groups->get_groups( [
 			'orderby' => 'group_order',
 			'order'   => 'ASC'
 		] );
-		$registered_groups = [];
 
 		if( ! empty( $groups ) && is_array( $groups ) ) {
 			foreach ( $groups as $group ) {
@@ -330,6 +334,74 @@ class WPUM_Fields_Editor {
 		}
 
 		wp_send_json_success( $fields );
+
+	}
+
+	/**
+	 * Retrieve the list of settings for a given field type.
+	 *
+	 * This will generate:
+	 * - Form schema for vuejs within the 'settings' key.
+	 * - Model data for vuejs within the 'model' key.
+	 *
+	 * @return void
+	 */
+	public function get_field_settings() {
+
+		check_ajax_referer( 'wpum_get_fields', 'nonce' );
+
+		if( ! current_user_can( 'manage_options' ) ) {
+			wp_send_json_error();
+		}
+
+		$field_type = $this->field_type_exists( $_POST['field_type'] );
+
+		if( is_array( $field_type ) && ! empty( $field_type ) ) {
+
+			// Let's grab the settings for this field.
+			$settings = $field_type[0]['settings'];
+
+			wp_send_json_success( [
+				'settings' => $settings
+			] );
+
+		} else {
+			wp_send_json_error( null, 403 );
+		}
+
+	}
+
+	/**
+	 * Determine if a given field type is a registered field type.
+	 *
+	 * @param string $type
+	 * @return mixed
+	 */
+	private function field_type_exists( $type = null ) {
+
+		$exists = false;
+
+		if( $type ) {
+
+			// Grab all registered field types.
+			$registered_fields = wpum_get_registered_field_types();
+			$criteria          = array( 'type' => $type );
+			$default_fields    = wp_list_filter( $registered_fields['default']['fields'], $criteria );
+			$standard_fields   = wp_list_filter( $registered_fields['standard']['fields'], $criteria );
+			$advanced_fields   = wp_list_filter( $registered_fields['advanced']['fields'], $criteria );
+
+			// If it's found in either the default, standard or advanced fields groups then it's a success!
+			if( is_array( $default_fields ) && ! empty( $default_fields ) ) {
+				$exists = $default_fields;
+			} else if( is_array( $standard_fields ) && ! empty( $standard_fields ) ) {
+				$exists = $standard_fields;
+			} else if( is_array( $advanced_fields ) && ! empty( $advanced_fields ) ) {
+				$exists = $advanced_fields;
+			}
+
+		}
+
+		return $exists;
 
 	}
 

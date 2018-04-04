@@ -166,7 +166,8 @@ body.users_page_wpum-custom-fields #wpum-fields-editor-list .vue-wp-notice {
 
 #edit-field-dialog.media-modal-content {
   background: #f3f3f3; }
-#edit-field-dialog .media-frame-title {
+#edit-field-dialog .media-frame-title,
+#edit-field-dialog .media-frame-content {
   left: 200px; }
 
 /*# sourceMappingURL=fields-editor.css.map */

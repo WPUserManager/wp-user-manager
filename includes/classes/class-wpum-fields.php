@@ -45,7 +45,8 @@ class WPUM_Fields {
 	public function load() {
 
 		$fields = apply_filters( 'wpum_load_fields', [
-			'text'
+			'text',
+			'username',
 		] );
 
 		foreach ( $fields as $field ) {

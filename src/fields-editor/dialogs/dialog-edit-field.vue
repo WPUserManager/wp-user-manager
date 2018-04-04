@@ -7,14 +7,14 @@
 					<a class="media-menu-item">{{labels.field_edit_general}}</a>
 					<a class="media-menu-item">{{labels.field_edit_privacy}}</a>
 					<a class="media-menu-item">{{labels.field_edit_customization}}</a>
-					<!-- for future use <div class="separator"></div> -->
+					<div class="separator"></div>
 				</div>
 			</div>
 			<div class="media-frame-title">
-				<h1>{{labels.fields_page_title}} "{{field_name}}"</h1>
+				<h1>{{field_name}}</h1>
 			</div>
 			<div class="media-frame-content">
-
+				<div class="spinner is-active" v-if="loadingFields"></div>
 			</div>
 			<div class="media-frame-toolbar">
 				<div class="media-toolbar">
@@ -29,20 +29,55 @@
 </template>
 
 <script>
+import axios from 'axios'
+import qs from 'qs'
+
 export default {
 	name: 'dialog-edit-field',
 	props: {
 		field_id: '',
+		field_type: '',
 		field_name: ''
 	},
 	data() {
 		return {
-			loading:   false,
-			labels:    wpumFieldsEditor.labels,
-			activeTab: '',
+			loading:        false,
+			loadingFields:  false,
+			labels:         wpumFieldsEditor.labels,
+			settingsFields: '',
+			activeTab:      '',
 		}
 	},
+	created() {
+		// Retrieve the settings for this field type via ajax.
+		this.getSettings()
+	},
 	methods: {
+		/**
+		 * Lookup the settings for this field.
+		 */
+		getSettings() {
+			this.loadingFields = true
+			// Make a call via ajax.
+			axios.post( wpumFieldsEditor.ajax,
+				qs.stringify({
+					nonce: wpumFieldsEditor.get_fields_nonce,
+					field_type: this.field_type
+				}),
+				{
+					params: {
+						action: 'wpum_get_field_settings'
+					},
+				}
+			)
+			.then( response => {
+				this.loadingFields  = false
+				this.settingsFields = response.data.data.settings
+			})
+			.catch( error => {
+				this.loadingFields = false
+			})
+		}
 	}
 }
 </script>
