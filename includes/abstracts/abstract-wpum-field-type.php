@@ -138,13 +138,15 @@ abstract class WPUM_Field_Type {
 					'model'       => 'field_title',
 					'required'    => true,
 					'placeholder' => esc_html__( 'Enter a title for this field' ),
+					'validator'   => [ 'string' ],
+					'min'         => 1
 				),
 				array(
 					'type'      => 'textArea',
 					'inputType' => 'text',
 					'label'     => esc_html__( 'Field description (optional)' ),
 					'model'     => 'field_description',
-					'rows'      => 4,
+					'rows'      => 3,
 					'hint'      => esc_html__( 'This is the text that appears as a description within the forms. Leave blank if not needed.' )
 				),
 			]

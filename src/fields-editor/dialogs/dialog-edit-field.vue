@@ -21,7 +21,7 @@
 				<wp-notice type="error" alternative v-if="error">{{errorMessage}}</wp-notice>
 				<!-- end error message -->
 
-				<vue-form-generator v-if="!loadingFields" :schema="schema" :model="model" :options="formOptions"></vue-form-generator>
+				<vue-form-generator v-if="!loadingFields" :schema="schema" :model="model" :options="formOptions" ref="vfg"></vue-form-generator>
 
 			</div>
 			<div class="media-frame-toolbar">
@@ -87,7 +87,11 @@ export default {
 		 * Lookup the settings for this field.
 		 */
 		getSettings() {
+			// Reset any previously updated statuses.
 			this.loadingFields = true
+			this.error         = false
+			this.schema.fields = []
+
 			// Make a call via ajax.
 			axios.post( wpumFieldsEditor.ajax,
 				qs.stringify({
@@ -103,8 +107,12 @@ export default {
 			)
 			.then( response => {
 				this.loadingFields = false
-				this.schema.fields = response.data.data.settings
-				this.model         = response.data.data.model
+				if( response.data.data.settings === null ) {
+					this.error = true
+				} else {
+					this.schema.fields = response.data.data.settings
+					this.model         = response.data.data.model
+				}
 			})
 			.catch( error => {
 				this.loadingFields = false
@@ -126,6 +134,11 @@ export default {
 				'media-menu-item',
 				this.activeTab == tab_id ? 'active' : ''
 			]
+		},
+		editField() {
+			console.log('Validating', this.$refs);
+				var errors = this.$refs.vfg.validate();
+				console.log('Validated', errors);
 		}
 	}
 }

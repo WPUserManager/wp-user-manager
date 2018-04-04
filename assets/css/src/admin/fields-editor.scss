@@ -300,6 +300,25 @@ body.users_page_wpum-custom-fields {
 				font-size: 12px;
 				color: #717171;
 			}
+			&.error {
+				margin: 0;
+				border:none;
+				border-bottom: 1px solid #f3f3f3;
+				box-shadow: none;
+			}
+
+			.errors {
+				background: #fbeaea;
+				border-left: 4px solid #dc3232;
+				margin: 5px 0px 2px 0;
+				padding: 1px 12px;
+				span {
+					display: block;
+					margin: 0.5em 0;
+					padding: 2px;
+					font-weight: bold;
+				}
+			}
 		}
 	}
 

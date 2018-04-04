@@ -275,7 +275,7 @@ export default {
 				field_id: id,
 				field_name: name,
 				field_type: type
-			},{ height: '70%', width: '70%' })
+			},{ height: '80%', width: '80%' })
 		}
 	}
 }
