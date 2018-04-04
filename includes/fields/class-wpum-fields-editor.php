@@ -356,15 +356,24 @@ class WPUM_Fields_Editor {
 			wp_send_json_error();
 		}
 
-		$field_type = $this->field_type_exists( $_POST['field_type'] );
+		$field_type        = $this->field_type_exists( $_POST['field_type'] );
+		$fields_type_group = sanitize_text_field( $_POST['group'] );
 
 		if( is_array( $field_type ) && ! empty( $field_type ) ) {
 
 			// Let's grab the settings for this field.
 			$settings = $field_type[0]['settings'];
+			$settings = $settings[ $fields_type_group ];
+			$model    = [];
+
+			// Generate the model array for vuejs.
+			foreach( $settings as $setting ) {
+				$model[ $setting['model'] ] = 'val';
+			}
 
 			wp_send_json_success( [
-				'settings' => $settings
+				'settings' => $settings,
+				'model'    => ( object ) $model
 			] );
 
 		} else {

@@ -4,7 +4,7 @@
 		<div class="media-frame mode-select wp-core-ui">
 			<div class="media-frame-menu">
 				<div class="media-menu">
-					<a class="media-menu-item" v-for="tab in tabs" :key="tab.id">{{tab.name}}</a>
+					<a v-for="tab in tabs" :key="tab.id" @click="activateTab( tab.id )" :class="getTabClasses( tab.id )">{{tab.name}}</a>
 					<div class="separator"></div>
 				</div>
 			</div>
@@ -60,7 +60,22 @@ export default {
 			labels:         wpumFieldsEditor.labels,
 			tabs:           wpumFieldsEditor.edit_dialog_tabs,
 			settingsFields: '',
-			activeTab:      '',
+			activeTab:      'general',
+
+			// Current field data.
+			model: {},
+
+			// Setup the settings fields for the current field.
+			schema: {
+      			fields: []
+			},
+
+			// Setup the options for the form.
+			formOptions: {
+				validateAfterLoad: true,
+				validateAfterChanged: true
+			}
+
 		}
 	},
 	created() {
@@ -76,7 +91,8 @@ export default {
 			// Make a call via ajax.
 			axios.post( wpumFieldsEditor.ajax,
 				qs.stringify({
-					nonce: wpumFieldsEditor.get_fields_nonce,
+					nonce:      wpumFieldsEditor.get_fields_nonce,
+					group:      this.activeTab,
 					field_type: this.field_type
 				}),
 				{
@@ -86,13 +102,30 @@ export default {
 				}
 			)
 			.then( response => {
-				this.loadingFields  = false
-				this.settingsFields = response.data.data.settings
+				this.loadingFields = false
+				this.schema.fields = response.data.data.settings
+				this.model         = response.data.data.model
 			})
 			.catch( error => {
 				this.loadingFields = false
 				this.error         = true
 			})
+		},
+		/**
+		 * Activate the selected tab and load the appropriate fields via ajax.
+		 */
+		activateTab( tab_id ) {
+			this.activeTab = tab_id
+			this.getSettings()
+		},
+		/**
+		 * Toggle the active class status if the active tab is the current one.
+		 */
+		getTabClasses( tab_id ) {
+			return [
+				'media-menu-item',
+				this.activeTab == tab_id ? 'active' : ''
+			]
 		}
 	}
 }

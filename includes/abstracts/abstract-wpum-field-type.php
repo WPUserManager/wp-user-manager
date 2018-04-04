@@ -132,15 +132,21 @@ abstract class WPUM_Field_Type {
 		$settings = [
 			'general' => [
 				array(
-					'title' => esc_html__( 'Field name' ),
-					'type'  => 'text',
-					'id'    => 'field_name'
+					'type'        => 'input',
+					'inputType'   => 'text',
+					'label'       => esc_html__( 'Field title' ),
+					'model'       => 'field_title',
+					'required'    => true,
+					'placeholder' => esc_html__( 'Enter a title for this field' ),
 				),
 				array(
-					'title' => esc_html__( 'Field description' ),
-					'type'  => 'textarea',
-					'id'    => 'field_description'
-				)
+					'type'      => 'textArea',
+					'inputType' => 'text',
+					'label'     => esc_html__( 'Field description (optional)' ),
+					'model'     => 'field_description',
+					'rows'      => 4,
+					'hint'      => esc_html__( 'This is the text that appears as a description within the forms. Leave blank if not needed.' )
+				),
 			]
 		];
 

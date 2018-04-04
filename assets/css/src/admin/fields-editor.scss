@@ -278,5 +278,29 @@ body.users_page_wpum-custom-fields {
 	.media-frame-title,
 	.media-frame-content {
 		left: 200px;
+		padding: 0;
 	}
+
+	.vue-form-generator {
+		.form-group {
+			padding: 20px 20px;
+			border-bottom: 1px solid #f3f3f3;
+			label {
+				display: block;
+				font-weight: 600;
+				margin-bottom: 0.4em;
+			}
+			input[type="text"],
+			textarea {
+				box-sizing: border-box;
+				width: 100%;
+				font-size: 13px;
+			}
+			.hint {
+				font-size: 12px;
+				color: #717171;
+			}
+		}
+	}
+
 }

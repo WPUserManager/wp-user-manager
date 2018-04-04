@@ -168,6 +168,22 @@ body.users_page_wpum-custom-fields #wpum-fields-editor-list .vue-wp-notice {
   background: #f3f3f3; }
 #edit-field-dialog .media-frame-title,
 #edit-field-dialog .media-frame-content {
-  left: 200px; }
+  left: 200px;
+  padding: 0; }
+#edit-field-dialog .vue-form-generator .form-group {
+  padding: 20px 20px;
+  border-bottom: 1px solid #f3f3f3; }
+  #edit-field-dialog .vue-form-generator .form-group label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 0.4em; }
+  #edit-field-dialog .vue-form-generator .form-group input[type="text"],
+  #edit-field-dialog .vue-form-generator .form-group textarea {
+    box-sizing: border-box;
+    width: 100%;
+    font-size: 13px; }
+  #edit-field-dialog .vue-form-generator .form-group .hint {
+    font-size: 12px;
+    color: #717171; }
 
 /*# sourceMappingURL=fields-editor.css.map */
