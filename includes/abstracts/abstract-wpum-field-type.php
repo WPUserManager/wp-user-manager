@@ -196,6 +196,25 @@ abstract class WPUM_Field_Type {
 
 	}
 
+	protected function add_visibility_setting() {
+
+		$setting = array(
+			'type'    => 'select',
+			'label'   => esc_html__( 'Profile visibility' ),
+			'model'   => 'visibility',
+			'hint'    => esc_html__( 'Set the visibility of this field on users profiles.' ),
+			'values' => [
+				[ 'id' => 'public', 'name' => esc_html__( 'Publicly visible' ) ],
+				[ 'id' => 'hidden', 'name' => esc_html__( 'Hidden' ) ]
+			],
+			'noneSelectedText'     => '',
+			'hideNoneSelectedText' =>  true,
+		);
+
+		return $setting;
+
+	}
+
 	/**
 	 * Register fields into an array that can be easily retrieved.
 	 *

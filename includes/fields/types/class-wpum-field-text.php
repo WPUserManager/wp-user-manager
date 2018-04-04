@@ -43,6 +43,9 @@ class WPUM_Field_Text extends WPUM_Field_Type {
 			],
 			'validation' => [
 				$this->add_requirement_setting()
+			],
+			'privacy' => [
+				$this->add_visibility_setting()
 			]
 		 );
 

@@ -185,6 +185,10 @@ body.users_page_wpum-custom-fields #wpum-fields-editor-list .vue-wp-notice {
     box-sizing: border-box;
     width: 100%;
     font-size: 13px; }
+  #edit-field-dialog .vue-form-generator .form-group select {
+    width: 100%;
+    height: 30px;
+    font-size: 13px; }
   #edit-field-dialog .vue-form-generator .form-group.field-checkbox .field-wrap {
     float: left; }
   #edit-field-dialog .vue-form-generator .form-group .hint {
