@@ -279,6 +279,10 @@ body.users_page_wpum-custom-fields {
 	.media-frame-content {
 		left: 200px;
 		padding: 0;
+
+		.spinner {
+			margin-left: 20px;
+		}
 	}
 
 	.vue-form-generator {

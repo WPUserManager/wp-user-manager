@@ -135,10 +135,11 @@ export default {
 				this.activeTab == tab_id ? 'active' : ''
 			]
 		},
+		/**
+		 * Process the settings and update the database.
+		 */
 		editField() {
-			console.log('Validating', this.$refs);
-				var errors = this.$refs.vfg.validate();
-				console.log('Validated', errors);
+			let errors = this.$refs.vfg.validate();
 		}
 	}
 }

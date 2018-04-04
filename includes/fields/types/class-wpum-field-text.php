@@ -30,6 +30,21 @@ class WPUM_Field_Text extends WPUM_Field_Type {
 
 	}
 
+	/**
+	 * Add field specific settings for this type.
+	 *
+	 * @return void
+	 */
+	public function get_editor_settings() {
+
+		return array(
+			'general' => [
+				$this->add_placeholder_setting()
+			]
+		 );
+
+	}
+
 }
 
 new WPUM_Field_Text();

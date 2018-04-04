@@ -127,7 +127,7 @@ abstract class WPUM_Field_Type {
 	 *
 	 * @return array
 	 */
-	protected function get_default_editor_settings() {
+	private function get_default_editor_settings() {
 
 		$settings = [
 			'general' => [
@@ -153,6 +153,26 @@ abstract class WPUM_Field_Type {
 		];
 
 		return $settings;
+
+	}
+
+	/**
+	 * Helper function for internal fields.
+	 * If a field needs a placeholder setting, child classes can call this method.
+	 *
+	 * @return void
+	 */
+	protected function add_placeholder_setting() {
+
+		$setting = array(
+			'type'      => 'input',
+			'inputType' => 'text',
+			'label'     => esc_html__( 'Placeholder' ),
+			'model'     => 'placeholder',
+			'hint'      => esc_html__( 'This text will appear within the field when empty. Leave blank if not needed.' ),
+		);
+
+		return $setting;
 
 	}
 
