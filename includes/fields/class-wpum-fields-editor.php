@@ -153,7 +153,8 @@ class WPUM_Fields_Editor {
 			'field_new_placeholder'     => esc_html__( 'Enter a name for this field' ),
 			'field_edit_general'        => esc_html__( 'General settings' ),
 			'field_edit_privacy'        => esc_html__( 'Privacy settings' ),
-			'field_edit_customization'  => esc_html__( 'Editing permissions' )
+			'field_edit_customization'  => esc_html__( 'Editing permissions' ),
+			'field_edit_settings_error' => esc_html__( 'Something went wrong, could not find the settings for this field type.' ),
 		];
 
 	}

@@ -14,8 +14,17 @@
 				<h1>{{field_name}}</h1>
 			</div>
 			<div class="media-frame-content">
+
+				<!-- loading indicator -->
 				<div class="spinner is-active" v-if="loadingFields"></div>
+				<!-- end loading indicator -->
+
+				<!-- error message if any -->
+				<wp-notice type="error" alternative v-if="error">{{errorMessage}}</wp-notice>
+				<!-- end error message -->
+
 				<vue-form-generator v-if="!loadingFields" :schema="schema" :model="model" :options="formOptions"></vue-form-generator>
+
 			</div>
 			<div class="media-frame-toolbar">
 				<div class="media-toolbar">
@@ -48,6 +57,8 @@ export default {
 		return {
 			loading:        false,
 			loadingFields:  false,
+			error:          false,
+			errorMessage:   wpumFieldsEditor.labels.field_edit_settings_error,
 			labels:         wpumFieldsEditor.labels,
 			settingsFields: '',
 			activeTab:      '',
@@ -81,6 +92,7 @@ export default {
 			})
 			.catch( error => {
 				this.loadingFields = false
+				this.error         = true
 			})
 		}
 	}
