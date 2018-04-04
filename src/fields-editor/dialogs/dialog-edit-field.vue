@@ -15,6 +15,7 @@
 			</div>
 			<div class="media-frame-content">
 				<div class="spinner is-active" v-if="loadingFields"></div>
+				<vue-form-generator v-if="!loadingFields" :schema="schema" :model="model" :options="formOptions"></vue-form-generator>
 			</div>
 			<div class="media-frame-toolbar">
 				<div class="media-toolbar">
@@ -31,6 +32,7 @@
 <script>
 import axios from 'axios'
 import qs from 'qs'
+import VueFormGenerator from 'vue-form-generator'
 
 export default {
 	name: 'dialog-edit-field',
@@ -39,6 +41,9 @@ export default {
 		field_type: '',
 		field_name: ''
 	},
+	components:{
+    	"vue-form-generator": VueFormGenerator.component
+  	},
 	data() {
 		return {
 			loading:        false,
