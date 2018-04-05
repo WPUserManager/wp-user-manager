@@ -154,7 +154,7 @@ abstract class WPUM_Field_Type {
 
 		// Automatically add the unique meta key setting,
 		// if the field type is not a primary field.
-		if( in_array( $this->type, wpum_get_primary_field_types() ) ) {
+		if( ! in_array( $this->type, wpum_get_primary_field_types() ) ) {
 
 			$settings['general'][] = array(
 				'type'      => 'input',
