@@ -149,8 +149,18 @@ export default {
 
 			// If there's validation errors - show another message within the editor.
 			if( valid === false ) {
+
 				this.error = true
 				this.errorMessage = this.labels.field_error_nosave
+
+			} else if( valid === true ) {
+
+				this.loading = true
+
+				// Hide the error messages and reset the default error message.
+				this.error = false
+				this.errorMessage = this.labels.field_edit_settings_error
+
 			}
 
 		}
