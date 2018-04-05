@@ -18,7 +18,7 @@
 				<!-- end loading indicator -->
 
 				<!-- error message if any -->
-				<wp-notice type="error" alternative v-if="error">{{errorMessage}}</wp-notice>
+				<wp-notice type="error" alternative v-if="error"><strong>{{errorMessage}}</strong></wp-notice>
 				<!-- end error message -->
 
 				<vue-form-generator v-if="!loadingFields" :schema="schema" :model="model" :options="formOptions" ref="vfg"></vue-form-generator>

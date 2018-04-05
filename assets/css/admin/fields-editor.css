@@ -173,6 +173,9 @@ body.users_page_wpum-custom-fields #wpum-fields-editor-list .vue-wp-notice {
   #edit-field-dialog .media-frame-title .spinner,
   #edit-field-dialog .media-frame-content .spinner {
     margin-left: 20px; }
+  #edit-field-dialog .media-frame-title .vue-wp-notice.notice-error,
+  #edit-field-dialog .media-frame-content .vue-wp-notice.notice-error {
+    margin-top: 0; }
 #edit-field-dialog .vue-form-generator .form-group {
   padding: 20px 20px;
   border-bottom: 1px solid #f3f3f3; }
