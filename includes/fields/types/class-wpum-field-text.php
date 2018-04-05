@@ -46,6 +46,10 @@ class WPUM_Field_Text extends WPUM_Field_Type {
 			],
 			'privacy' => [
 				$this->add_visibility_setting()
+			],
+			'permissions' => [
+				$this->add_editing_permissions_setting(),
+				$this->add_read_only_setting()
 			]
 		 );
 

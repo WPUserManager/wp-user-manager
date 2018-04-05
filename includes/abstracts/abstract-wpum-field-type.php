@@ -196,19 +196,68 @@ abstract class WPUM_Field_Type {
 
 	}
 
+	/**
+	 * Helper function for internal fields.
+	 * If a field needs a "visibility" setting, child classes can call this method.
+	 *
+	 * @return array
+	 */
 	protected function add_visibility_setting() {
 
 		$setting = array(
-			'type'    => 'select',
+			'type'    => 'radios',
 			'label'   => esc_html__( 'Profile visibility' ),
 			'model'   => 'visibility',
 			'hint'    => esc_html__( 'Set the visibility of this field on users profiles.' ),
 			'values' => [
-				[ 'id' => 'public', 'name' => esc_html__( 'Publicly visible' ) ],
-				[ 'id' => 'hidden', 'name' => esc_html__( 'Hidden' ) ]
+				[ 'value' => 'public', 'name' => esc_html__( 'Publicly visible' ) ],
+				[ 'value' => 'hidden', 'name' => esc_html__( 'Hidden' ) ]
 			],
 			'noneSelectedText'     => '',
 			'hideNoneSelectedText' =>  true,
+		);
+
+		return $setting;
+
+	}
+
+	/**
+	 * Helper function for internal fields.
+	 * If a field needs a "editing permission" setting, child classes can call this method.
+	 *
+	 * @return array
+	 */
+	protected function add_editing_permissions_setting() {
+
+		$setting = array(
+			'type'    => 'radios',
+			'label'   => esc_html__( 'Profile editing' ),
+			'model'   => 'editing',
+			'hint'    => esc_html__( 'Set who can edit this field. Hidden fields will not be editable within the front-end account page.' ),
+			'values' => [
+				[ 'value' => 'public', 'name' => esc_html__( 'Publicly editable' ) ],
+				[ 'value' => 'hidden', 'name' => esc_html__( 'Hidden (admins only)' ) ]
+			],
+		);
+
+		return $setting;
+
+	}
+
+	/**
+	 * Helper function for internal fields.
+	 * If a field needs a "read only" setting, child classes can call this method.
+	 *
+	 * @return array
+	 */
+	protected function add_read_only_setting() {
+
+		$setting = array(
+			'type'    => 'checkbox',
+			'label'   => esc_html__( 'Set as read only' ),
+			'model'   => 'read_only',
+			'default' => false,
+			'hint'    => esc_html__( 'Enable to prevent users from editing this field. Note: if the profile editing option is set to publicly editable, the field will still be visible within the account page but cannot be customized.' ),
 		);
 
 		return $setting;

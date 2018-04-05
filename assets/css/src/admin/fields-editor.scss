@@ -304,6 +304,9 @@ body.users_page_wpum-custom-fields {
 				width: 100%;
 				height: 30px;
 				font-size: 13px;
+				option:first-child {
+					display: none;
+				}
 			}
 			&.field-checkbox {
 				.field-wrap {
