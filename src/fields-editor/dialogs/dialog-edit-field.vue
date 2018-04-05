@@ -145,7 +145,14 @@ export default {
 		 * Process the settings and update the database.
 		 */
 		editField() {
-			let errors = this.$refs.vfg.validate();
+			let valid = this.$refs.vfg.validate();
+
+			// If there's validation errors - show another message within the editor.
+			if( valid === false ) {
+				this.error = true
+				this.errorMessage = this.labels.field_error_nosave
+			}
+
 		}
 	}
 }

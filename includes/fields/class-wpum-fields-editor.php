@@ -157,7 +157,8 @@ class WPUM_Fields_Editor {
 			'field_edit_customization'  => esc_html__( 'Editing permissions' ),
 			'field_edit_settings_error' => esc_html__( 'Something went wrong, could not find the settings for this field type.' ),
 			'field_error_required'      => esc_html__( 'Error: this setting is required.' ),
-			'field_error_special'       => esc_html__( 'Error: this setting cannot contain special characters.' )
+			'field_error_special'       => esc_html__( 'Error: this setting cannot contain special characters.' ),
+			'field_error_nosave'        => esc_html__( 'There are some errors with your changes. Please check the errors highlighted below.' )
 		];
 
 	}
