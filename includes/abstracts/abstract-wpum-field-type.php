@@ -152,6 +152,23 @@ abstract class WPUM_Field_Type {
 			]
 		];
 
+		// Automatically add the unique meta key setting,
+		// if the field type is not a primary field.
+		if( in_array( $this->type, wpum_get_primary_field_types() ) ) {
+
+			$settings['general'][] = array(
+				'type'      => 'input',
+				'inputType' => 'text',
+				'label'     => esc_html__( 'Unique meta key' ),
+				'model'     => 'meta_key',
+				'required'  => true,
+				'hint'      => esc_html__( 'The key must be unique for each field and written in lowercase with an underscore ( _ ) separating words e.g country_list or job_title. This will be used to store information about your users into the database of your website.' ),
+				'validator' => [ 'string', 'alphaNumeric' ],
+				'min'       => 1
+			);
+
+		}
+
 		return $settings;
 
 	}
