@@ -102,6 +102,7 @@ export default {
 				qs.stringify({
 					nonce:      wpumFieldsEditor.get_fields_nonce,
 					group:      this.activeTab,
+					field_id:   this.field_id,
 					field_type: this.field_type
 				}),
 				{

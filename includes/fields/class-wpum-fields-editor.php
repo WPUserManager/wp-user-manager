@@ -355,13 +355,14 @@ class WPUM_Fields_Editor {
 		check_ajax_referer( 'wpum_get_fields', 'nonce' );
 
 		if( ! current_user_can( 'manage_options' ) ) {
-			wp_send_json_error();
+			wp_send_json_error( null, 403 );
 		}
 
 		$field_type        = $this->field_type_exists( $_POST['field_type'] );
 		$fields_type_group = sanitize_text_field( $_POST['group'] );
+		$wpum_field_id     = absint( sanitize_text_field( $_POST['field_id'] ) );
 
-		if( is_array( $field_type ) && ! empty( $field_type ) ) {
+		if( is_array( $field_type ) && ! empty( $field_type ) && $wpum_field_id ) {
 
 			// Let's grab the settings for this field.
 			$settings = $field_type[0]['settings'];
@@ -370,7 +371,7 @@ class WPUM_Fields_Editor {
 
 			// Generate the model array for vuejs.
 			foreach( $settings as $setting ) {
-				$model[ $setting['model'] ] = 'val';
+				$model[ $setting['model'] ] = $this->get_setting_value( $wpum_field_id, $setting['model'] );
 			}
 
 			wp_send_json_success( [
@@ -415,6 +416,35 @@ class WPUM_Fields_Editor {
 		}
 
 		return $exists;
+
+	}
+
+	/**
+	 * Retrieve the value of field setting given the setting id.
+	 *
+	 * @param string $wpum_field_id
+	 * @param string $setting_id
+	 * @return void
+	 */
+	private function get_setting_value( $wpum_field_id, $setting_id ) {
+
+		$value = '';
+
+		if( $wpum_field_id && $setting_id ) {
+
+			$field = new WPUM_Field( $wpum_field_id );
+
+			if( $setting_id == 'field_title' ) {
+				$value = $field->get_name();
+			} else if( $setting_id == 'field_description' ) {
+				$value = $field->get_description();
+			} else {
+				$value = $field->get_meta( $setting_id );
+			}
+
+		}
+
+		return $value;
 
 	}
 

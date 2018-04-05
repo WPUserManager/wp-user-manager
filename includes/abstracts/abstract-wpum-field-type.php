@@ -160,7 +160,7 @@ abstract class WPUM_Field_Type {
 				'type'      => 'input',
 				'inputType' => 'text',
 				'label'     => esc_html__( 'Unique meta key' ),
-				'model'     => 'meta_key',
+				'model'     => 'user_meta_key',
 				'required'  => true,
 				'hint'      => esc_html__( 'The key must be unique for each field and written in lowercase with an underscore ( _ ) separating words e.g country_list or job_title. This will be used to store information about your users into the database of your website.' ),
 				'validator' => [ 'string' ],
