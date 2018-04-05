@@ -163,7 +163,7 @@ abstract class WPUM_Field_Type {
 				'model'     => 'meta_key',
 				'required'  => true,
 				'hint'      => esc_html__( 'The key must be unique for each field and written in lowercase with an underscore ( _ ) separating words e.g country_list or job_title. This will be used to store information about your users into the database of your website.' ),
-				'validator' => [ 'alphaNumeric' ],
+				'validator' => [ 'string' ],
 				'min'       => 1
 			);
 
