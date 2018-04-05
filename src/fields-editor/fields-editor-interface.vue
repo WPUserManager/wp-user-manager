@@ -275,7 +275,19 @@ export default {
 				field_id: id,
 				field_name: name,
 				field_type: type,
-				is_primary: is_primary
+				is_primary: is_primary,
+				/**
+				 * Pass a function to the component so we can
+				 * then update the app status from the child component response.
+				 */
+				updateStatus:(status) => {
+					if( status == 'error' ) {
+						this.showError( this.labels.error_general )
+					} else {
+						this.showSuccess()
+						this.getFields()
+					}
+				}
 			},{ height: '80%', width: '80%' })
 		}
 	}

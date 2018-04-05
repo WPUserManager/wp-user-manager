@@ -45,10 +45,11 @@ import lodashRemove from 'lodash.remove'
 export default {
 	name: 'dialog-edit-field',
 	props: {
-		field_id:   '',
-		field_type: '',
-		field_name: '',
-		is_primary: false
+		field_id:     '',
+		field_type:   '',
+		field_name:   '',
+		is_primary:   false,
+		updateStatus: '',
 	},
 	components:{
     	"vue-form-generator": VueFormGenerator.component
@@ -203,12 +204,13 @@ export default {
 				)
 				.then( response => {
 					this.loading = false
+					this.updateStatus( 'success' )
 					this.$emit('close')
 				})
 				.catch( error => {
-
 					this.loading = false
-
+					this.updateStatus( 'error' )
+					this.$emit('close')
 				})
 
 			}

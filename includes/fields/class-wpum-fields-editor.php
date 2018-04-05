@@ -160,6 +160,7 @@ class WPUM_Fields_Editor {
 			'field_error_required'      => esc_html__( 'Error: this setting is required.' ),
 			'field_error_special'       => esc_html__( 'Error: this setting cannot contain special characters.' ),
 			'field_error_nosave'        => esc_html__( 'There are some errors with your changes. Please check the errors highlighted below.' ),
+			'error_general'             => esc_html__( 'Something went wrong, no changes were saved.' )
 		];
 
 	}
@@ -483,6 +484,8 @@ class WPUM_Fields_Editor {
 					// Find the type of input for this setting.
 					$criteria       = array( 'model' => $setting_id );
 					$setting_config = wp_list_filter( $setting_fields, $criteria );
+
+					// Find the first key of the array within the setting config array.
 					reset( $setting_config );
 					$first_key      = key( $setting_config );
 					$setting_config = $setting_config[ $first_key ];
@@ -511,7 +514,9 @@ class WPUM_Fields_Editor {
 
 				}
 			}
+
 			wp_send_json_success( $data );
+
 		} else {
 			wp_send_json_error( null, 403 );
 		}
