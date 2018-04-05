@@ -466,14 +466,49 @@ class WPUM_Fields_Editor {
 
 		$field_id        = isset( $_POST['field_id'] ) ? absint( $_POST['field_id'] ) : false;
 		$data            = isset( $_POST['data'] ) ? $_POST['data'] : false;
+		$setting_fields  = isset( $_POST['settings'] ) ? $_POST['settings'] : false;
 		$field_to_update = new WPUM_Field( $field_id );
 
 		if( $field_to_update->exists() ) {
 			foreach( $data as $setting_id => $setting_data ) {
+
+				// Update the name and description.
 				if( $setting_id == 'field_title' ) {
-					print_r( $field_to_update->update( [ 'name' => sanitize_text_field( $setting_data ) ] ) );
+					$field_to_update->update( [ 'name' => sanitize_text_field( $setting_data ) ] );
 				} else if( $setting_id == 'field_description' ) {
 					$field_to_update->update( [ 'description' => wp_kses_post( $setting_data ) ] );
+				// Now update the meta data.
+				} else {
+
+					// Find the type of input for this setting.
+					$criteria       = array( 'model' => $setting_id );
+					$setting_config = wp_list_filter( $setting_fields, $criteria );
+					reset( $setting_config );
+					$first_key      = key( $setting_config );
+					$setting_config = $setting_config[ $first_key ];
+
+					if( is_array( $setting_config ) && array_key_exists( 'type', $setting_config ) ) {
+
+						$setting_type = $setting_config['type'];
+
+						switch ( $setting_type ) {
+							case 'input':
+							case 'radios':
+								$setting_data = sanitize_text_field( $setting_data );
+								break;
+							case 'textarea':
+								$setting_data = wp_kses_post( $setting_data );
+								break;
+							default:
+								$setting_data = sanitize_text_field( $setting_data );
+								break;
+						}
+
+						// Now finally save the data.
+						$field_to_update->update_meta( $setting_id, $setting_data );
+
+					}
+
 				}
 			}
 			wp_send_json_success( $data );

@@ -192,7 +192,8 @@ export default {
 					qs.stringify({
 						nonce:    wpumFieldsEditor.get_fields_nonce,
 						field_id: this.field_id,
-						data:     this.model
+						data:     this.model,
+						settings: this.schema.fields
 					}),
 					{
 						params: {
@@ -201,11 +202,8 @@ export default {
 					}
 				)
 				.then( response => {
-
 					this.loading = false
-
-					console.log( response )
-
+					this.$emit('close')
 				})
 				.catch( error => {
 
