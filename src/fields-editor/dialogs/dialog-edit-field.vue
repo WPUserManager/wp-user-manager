@@ -81,6 +81,11 @@ export default {
 	created() {
 		// Retrieve the settings for this field type via ajax.
 		this.getSettings()
+
+		// Translate the error messages part of the Vue Form Generator.
+		let res                        = VueFormGenerator.validators.resources;
+			res.fieldIsRequired        = this.labels.field_error_required
+			res.invalidTextContainSpec = this.labels.field_error_special
 	},
 	methods: {
 		/**
