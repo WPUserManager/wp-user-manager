@@ -40,13 +40,15 @@
 import axios from 'axios'
 import qs from 'qs'
 import VueFormGenerator from 'vue-form-generator'
+import lodashRemove from 'lodash.remove'
 
 export default {
 	name: 'dialog-edit-field',
 	props: {
-		field_id: '',
+		field_id:   '',
 		field_type: '',
-		field_name: ''
+		field_name: '',
+		is_primary: false
 	},
 	components:{
     	"vue-form-generator": VueFormGenerator.component
@@ -57,6 +59,8 @@ export default {
 			loadingFields:  false,
 			error:          false,
 			errorMessage:   wpumFieldsEditor.labels.field_edit_settings_error,
+			infoAvailable:  false,
+			infoMessage:    '',
 			labels:         wpumFieldsEditor.labels,
 			tabs:           wpumFieldsEditor.edit_dialog_tabs,
 			settingsFields: '',
@@ -81,6 +85,11 @@ export default {
 	created() {
 		// Retrieve the settings for this field type via ajax.
 		this.getSettings()
+
+		// Remove sidebar sections that aren't needed.
+		if( this.is_primary === true ) {
+			this.maybeRemoveSidebarTabs()
+		}
 
 		// Translate the error messages part of the Vue Form Generator.
 		let res                        = VueFormGenerator.validators.resources;
@@ -114,10 +123,13 @@ export default {
 			.then( response => {
 				this.loadingFields = false
 				if( response.data.data.settings === null ) {
-					this.error = true
+					this.error = true // Show an error if no settings found.
 				} else {
+
+					// Load the setting fields into the app.
 					this.schema.fields = response.data.data.settings
 					this.model         = response.data.data.model
+
 				}
 			})
 			.catch( error => {
@@ -140,6 +152,22 @@ export default {
 				'media-menu-item',
 				this.activeTab == tab_id ? 'active' : ''
 			]
+		},
+		/**
+		 * Check wether there are any sidebar tabs that need to be removed.
+		 * Sidebars are removed when they make no sense for specific field types.
+		 */
+		maybeRemoveSidebarTabs() {
+
+			if( this.is_primary === true ) {
+				// For the username field remove the following tabs:
+				// validation, permissions
+				if( this.field_type == 'username' ) {
+					lodashRemove(this.tabs, { id: 'validation' })
+					lodashRemove(this.tabs, { id: 'permissions' })
+				}
+			}
+
 		},
 		/**
 		 * Process the settings and update the database.
