@@ -274,7 +274,7 @@ abstract class WPUM_Field_Type {
 			'label'   => esc_html__( 'Set as read only' ),
 			'model'   => 'read_only',
 			'default' => false,
-			'hint'    => esc_html__( 'Enable to prevent users from editing this field. Note: if the profile editing option is set to publicly editable, the field will still be visible within the account page but cannot be customized.' ),
+			'hint'    => esc_html__( 'Enable to prevent users from editing this field. Note: if the profile editing option is set to publicly editable, the field will still be visible within the account page but will not be customizable.' ),
 		);
 
 		return $setting;
