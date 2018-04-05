@@ -160,8 +160,6 @@ export default {
 		maybeRemoveSidebarTabs() {
 
 			if( this.is_primary === true ) {
-				// For the username field remove the following tabs:
-				// validation, permissions
 				if( this.field_type == 'username' ) {
 					lodashRemove(this.tabs, { id: 'validation' })
 					lodashRemove(this.tabs, { id: 'permissions' })
@@ -188,6 +186,32 @@ export default {
 				// Hide the error messages and reset the default error message.
 				this.error = false
 				this.errorMessage = this.labels.field_edit_settings_error
+
+				// Make a call via ajax.
+				axios.post( wpumFieldsEditor.ajax,
+					qs.stringify({
+						nonce:    wpumFieldsEditor.get_fields_nonce,
+						field_id: this.field_id,
+						data:     this.model
+					}),
+					{
+						params: {
+							action: 'wpum_update_field'
+						},
+					}
+				)
+				.then( response => {
+
+					this.loading = false
+
+					console.log( response )
+
+				})
+				.catch( error => {
+
+					this.loading = false
+
+				})
 
 			}
 

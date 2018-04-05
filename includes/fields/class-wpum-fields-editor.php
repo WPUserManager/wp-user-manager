@@ -35,6 +35,7 @@ class WPUM_Fields_Editor {
 		add_action( 'wp_ajax_wpum_get_fields_from_group', [ $this, 'get_fields' ] );
 		add_action( 'wp_ajax_wpum_update_fields_order', [ $this, 'update_fields_order' ] );
 		add_action( 'wp_ajax_wpum_get_field_settings', [ $this, 'get_field_settings' ] );
+		add_action( 'wp_ajax_wpum_update_field', [ $this, 'update_field' ] );
 	}
 
 	/**
@@ -182,7 +183,7 @@ class WPUM_Fields_Editor {
 					'id'          => $group->get_ID(),
 					'name'        => $group->get_name(),
 					'description' => $group->get_description(),
-					'default'     => $group->get_ID() === 1 ? true: false,
+					'default'     => $group->get_ID() === 1 ? true : false,
 					'fields'      => $group->get_count()
 				];
 			}
@@ -446,6 +447,39 @@ class WPUM_Fields_Editor {
 		}
 
 		return $value;
+
+	}
+
+	/**
+	 * Update a field within the database.
+	 * Verify the field exists first, sanitize the given data and then update the db.
+	 *
+	 * @return void
+	 */
+	public function update_field() {
+
+		check_ajax_referer( 'wpum_get_fields', 'nonce' );
+
+		if( ! current_user_can( 'manage_options' ) ) {
+			wp_send_json_error( null, 403 );
+		}
+
+		$field_id        = isset( $_POST['field_id'] ) ? absint( $_POST['field_id'] ) : false;
+		$data            = isset( $_POST['data'] ) ? $_POST['data'] : false;
+		$field_to_update = new WPUM_Field( $field_id );
+
+		if( $field_to_update->exists() ) {
+			foreach( $data as $setting_id => $setting_data ) {
+				if( $setting_id == 'field_title' ) {
+					print_r( $field_to_update->update( [ 'name' => sanitize_text_field( $setting_data ) ] ) );
+				} else if( $setting_id == 'field_description' ) {
+					$field_to_update->update( [ 'description' => wp_kses_post( $setting_data ) ] );
+				}
+			}
+			wp_send_json_success( $data );
+		} else {
+			wp_send_json_error( null, 403 );
+		}
 
 	}
 
