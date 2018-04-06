@@ -49,6 +49,7 @@ class WPUM_Fields {
 			'email',
 			// Now start "primary fields"
 			'username',
+			'user-email'
 		] );
 
 		foreach ( $fields as $field ) {

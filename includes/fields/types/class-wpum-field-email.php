@@ -1,6 +1,6 @@
 <?php
 /**
- * Registers a text field for the forms.
+ * Registers an email field for the forms.
  *
  * @package     wp-user-manager
  * @copyright   Copyright (c) 2018, Alessandro Tesoro

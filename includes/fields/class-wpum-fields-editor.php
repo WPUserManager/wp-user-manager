@@ -368,9 +368,12 @@ class WPUM_Fields_Editor {
 		if( is_array( $field_type ) && ! empty( $field_type ) && $wpum_field_id ) {
 
 			// Let's grab the settings for this field.
-			$settings = $field_type[0]['settings'];
-			$settings = $settings[ $fields_type_group ];
-			$model    = [];
+			reset( $field_type );
+			$first_key = key( $field_type );
+
+			$settings  = $field_type[ $first_key ]['settings'];
+			$settings  = $settings[ $fields_type_group ];
+			$model     = [];
 
 			// Generate the model array for vuejs.
 			foreach( $settings as $setting ) {
