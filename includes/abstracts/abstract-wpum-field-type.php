@@ -285,7 +285,7 @@ abstract class WPUM_Field_Type {
 			$pass = false;
 		}
 
-		return $pass;
+		return apply_filters( 'wpum_field_type_needs_placeholder_setting', $pass );
 
 	}
 
