@@ -533,4 +533,19 @@ class WPUM_Field {
 		return WPUM()->field_meta->update_meta( $this->id, $meta_key, $meta_value, $prev_value );
 	}
 
+	/**
+	 * Delete field meta field based on field ID.
+	 *
+	 * @param   string $meta_key      Metadata key.
+	 * @param   mixed  $meta_value    Metadata value.
+	 * @param   mixed  $prev_value    Optional. Previous value to check before removing.
+	 * @return  bool                  False on failure, true if success.
+	 *
+	 * @access  public
+	 * @since   2.0
+	 */
+	public function delete_meta( $meta_key = '', $meta_value, $prev_value = '' ) {
+		return WPUM()->field_meta->delete_meta( $this->id, $meta_key, $meta_value, $prev_value );
+	}
+
 }

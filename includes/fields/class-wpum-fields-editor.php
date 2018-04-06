@@ -377,7 +377,7 @@ class WPUM_Fields_Editor {
 
 			// Generate the model array for vuejs.
 			foreach( $settings as $setting ) {
-				$model[ $setting['model'] ] = $this->get_setting_value( $wpum_field_id, $setting['model'] );
+				$model[ $setting['model'] ] = $this->get_setting_value( $wpum_field_id, $setting['model'], $setting['type'] );
 			}
 
 			wp_send_json_success( [
@@ -430,9 +430,10 @@ class WPUM_Fields_Editor {
 	 *
 	 * @param string $wpum_field_id
 	 * @param string $setting_id
+	 * @param string $type
 	 * @return void
 	 */
-	private function get_setting_value( $wpum_field_id, $setting_id ) {
+	private function get_setting_value( $wpum_field_id, $setting_id, $type ) {
 
 		$value = '';
 
@@ -445,7 +446,11 @@ class WPUM_Fields_Editor {
 			} else if( $setting_id == 'field_description' ) {
 				$value = $field->get_description();
 			} else {
-				$value = $field->get_meta( $setting_id );
+				if( $type == 'checkbox' ) {
+					$value = (bool) $field->get_meta( $setting_id );
+				} else {
+					$value = $field->get_meta( $setting_id );
+				}
 			}
 
 		}
@@ -505,13 +510,19 @@ class WPUM_Fields_Editor {
 							case 'textarea':
 								$setting_data = wp_kses_post( $setting_data );
 								break;
+							case 'checkbox':
+								$setting_data = $setting_data === 'true' ? true : false;
 							default:
 								$setting_data = sanitize_text_field( $setting_data );
 								break;
 						}
 
 						// Now finally save the data.
-						$field_to_update->update_meta( $setting_id, $setting_data );
+						if( $setting_data ) {
+							$field_to_update->update_meta( $setting_id, $setting_data );
+						} else {
+							$field_to_update->delete_meta( $setting_id );
+						}
 
 					}
 
