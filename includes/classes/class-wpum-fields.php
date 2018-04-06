@@ -46,6 +46,8 @@ class WPUM_Fields {
 
 		$fields = apply_filters( 'wpum_load_fields', [
 			'text',
+			'email',
+			// Now start "primary fields"
 			'username',
 		] );
 
