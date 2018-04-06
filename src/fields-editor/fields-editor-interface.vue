@@ -276,6 +276,7 @@ export default {
 				field_name: name,
 				field_type: type,
 				is_primary: is_primary,
+				all_tabs: wpumFieldsEditor.edit_dialog_tabs,
 				/**
 				 * Pass a function to the component so we can
 				 * then update the app status from the child component response.

@@ -4,7 +4,7 @@
 		<div class="media-frame mode-select wp-core-ui">
 			<div class="media-frame-menu">
 				<div class="media-menu">
-					<a v-for="tab in tabs" :key="tab.id" @click="activateTab( tab.id )" :class="getTabClasses( tab.id )">{{tab.name}}</a>
+					<a v-for="tab in tabs" :key="tab.id" v-if="! isTabDisabled( tab.id ) " @click="activateTab( tab.id )" :class="getTabClasses( tab.id )">{{tab.name}}</a>
 					<div class="separator"></div>
 				</div>
 			</div>
@@ -41,6 +41,7 @@ import axios from 'axios'
 import qs from 'qs'
 import VueFormGenerator from 'vue-form-generator'
 import lodashRemove from 'lodash.remove'
+import lodashIncludes from 'lodash.includes'
 
 export default {
 	name: 'dialog-edit-field',
@@ -49,6 +50,7 @@ export default {
 		field_type:   '',
 		field_name:   '',
 		is_primary:   false,
+		all_tabs:     '',
 		updateStatus: '',
 	},
 	components:{
@@ -63,9 +65,10 @@ export default {
 			infoAvailable:  false,
 			infoMessage:    '',
 			labels:         wpumFieldsEditor.labels,
-			tabs:           wpumFieldsEditor.edit_dialog_tabs,
+			tabs:           this.all_tabs,
 			settingsFields: '',
 			activeTab:      'general',
+			disabledTabs:   [],
 
 			// Current field data.
 			model: {},
@@ -159,14 +162,17 @@ export default {
 		 * Sidebars are removed when they make no sense for specific field types.
 		 */
 		maybeRemoveSidebarTabs() {
-
 			if( this.is_primary === true ) {
 				if( this.field_type == 'username' ) {
-					lodashRemove(this.tabs, { id: 'validation' })
-					lodashRemove(this.tabs, { id: 'permissions' })
+					this.disabledTabs = [ 'validation', 'permissions' ]
 				}
 			}
-
+		},
+		/**
+		 * Check if a given tab is disabled.
+		 */
+		isTabDisabled( tab_id ) {
+			return lodashIncludes( this.disabledTabs, tab_id )
 		},
 		/**
 		 * Process the settings and update the database.
