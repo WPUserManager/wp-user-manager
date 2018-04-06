@@ -169,27 +169,18 @@ abstract class WPUM_Field_Type {
 
 		}
 
+		// Detect if the field should have a placeholder setting or not.
+		if( $this->needs_placeholder_setting() ) {
+			$settings['general'][] = array(
+				'type'      => 'input',
+				'inputType' => 'text',
+				'label'     => esc_html__( 'Placeholder' ),
+				'model'     => 'placeholder',
+				'hint'      => esc_html__( 'This text will appear within the field when empty. Leave blank if not needed.' ),
+			);
+		}
+
 		return $settings;
-
-	}
-
-	/**
-	 * Helper function for internal fields.
-	 * If a field needs a placeholder setting, child classes can call this method.
-	 *
-	 * @return array
-	 */
-	protected function add_placeholder_setting() {
-
-		$setting = array(
-			'type'      => 'input',
-			'inputType' => 'text',
-			'label'     => esc_html__( 'Placeholder' ),
-			'model'     => 'placeholder',
-			'hint'      => esc_html__( 'This text will appear within the field when empty. Leave blank if not needed.' ),
-		);
-
-		return $setting;
 
 	}
 
@@ -278,6 +269,23 @@ abstract class WPUM_Field_Type {
 		);
 
 		return $setting;
+
+	}
+
+	/**
+	 * Determine if the field type needs a placeholder setting.
+	 *
+	 * @return void
+	 */
+	private function needs_placeholder_setting() {
+
+		$pass = true;
+
+		if( $this->type == 'username' ) {
+			$pass = false;
+		}
+
+		return $pass;
 
 	}
 

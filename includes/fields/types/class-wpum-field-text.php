@@ -38,9 +38,6 @@ class WPUM_Field_Text extends WPUM_Field_Type {
 	public function get_editor_settings() {
 
 		return array(
-			'general' => [
-				$this->add_placeholder_setting()
-			],
 			'validation' => [
 				$this->add_requirement_setting()
 			],
