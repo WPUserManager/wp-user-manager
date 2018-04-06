@@ -165,6 +165,8 @@ export default {
 			if( this.is_primary === true ) {
 				if( this.field_type == 'username' ) {
 					this.disabledTabs = [ 'validation', 'permissions' ]
+				} else if( this.field_type == 'user_email' ) {
+					this.disabledTabs = [ 'validation' ]
 				}
 			}
 		},
