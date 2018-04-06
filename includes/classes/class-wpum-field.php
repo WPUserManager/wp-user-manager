@@ -47,6 +47,13 @@ class WPUM_Field {
 	protected $is_primary = false;
 
 	/**
+	 * Holds a special ID for primary fields.
+	 *
+	 * @var string
+	 */
+	protected $primary_id = null;
+
+	/**
 	 * The field type.
 	 *
 	 * @var boolean
@@ -336,6 +343,9 @@ class WPUM_Field {
 	/**
 	 * Set a field as primary field when the type within a list of specific fields.
 	 *
+	 * Modify the filed type if it's a primary field so that we can still load a general field type
+	 * to define all the settings within the editor.
+	 *
 	 * @param string $type
 	 * @return void
 	 */
@@ -345,6 +355,14 @@ class WPUM_Field {
 
 		if( in_array( $type, wpum_get_primary_field_types() ) ) {
 			$primary = true;
+			$this->primary_id = $type;
+
+			switch ( $type ) {
+				case 'user_firstname':
+					$this->type = 'text';
+					break;
+			}
+
 		}
 
 		return $primary;

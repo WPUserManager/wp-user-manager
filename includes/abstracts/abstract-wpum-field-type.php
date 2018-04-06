@@ -297,12 +297,14 @@ abstract class WPUM_Field_Type {
 	 */
 	public function register_field_type( $fields ) {
 
+		$settings =  array_merge_recursive( $this->get_default_editor_settings(), $this->get_editor_settings() );
+
 		$fields[ $this->group ]['fields'][] = array(
 			'order'    => $this->order,
 			'name'     => $this->name,
 			'type'     => $this->type,
 			'icon'     => $this->icon,
-			'settings' => array_merge_recursive( $this->get_default_editor_settings(), $this->get_editor_settings() )
+			'settings' => apply_filters( 'wpum_register_field_type_settings', $settings, $this->type )
 		);
 
 		return $fields;
