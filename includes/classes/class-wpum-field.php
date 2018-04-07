@@ -258,6 +258,15 @@ class WPUM_Field {
 	}
 
 	/**
+	 * Return the primary id if this field is a primary field.
+	 *
+	 * @return mixed
+	 */
+	public function get_primary_id() {
+		return $this->primary_id;
+	}
+
+	/**
 	 * Retrieve the visibility of the field.
 	 *
 	 * @return string

@@ -59,7 +59,7 @@
 							<span class="dashicons dashicons-lock" v-else></span>
 						</td>
 						<td class="align-middle">
-							<button type="submit" class="button" @click="openEditFieldDialog( field.id, field.name, field.type, isDefault(field.default) )"><span class="dashicons dashicons-edit"></span> {{labels.fields_edit}}</button>
+							<button type="submit" class="button" @click="openEditFieldDialog( field.id, field.name, field.type, field.default_id )"><span class="dashicons dashicons-edit"></span> {{labels.fields_edit}}</button>
 							<button type="submit" class="button delete-btn" v-if="! isDefault(field.default)" @click="openDeleteFieldDialog( field.id, field.name )"><span class="dashicons dashicons-trash"></span> {{labels.fields_delete}}</button>
 						</td>
 					</tr>
@@ -270,13 +270,12 @@ export default {
 		/**
 		 * Open the field editing dialog.
 		 */
-		openEditFieldDialog( id, name, type, is_primary ) {
+		openEditFieldDialog( id, name, type, primary_id ) {
 			this.$modal.show( EditFieldDialog, {
 				field_id: id,
 				field_name: name,
 				field_type: type,
-				is_primary: is_primary,
-				all_tabs: wpumFieldsEditor.edit_dialog_tabs,
+				primary_id: primary_id,
 				/**
 				 * Pass a function to the component so we can
 				 * then update the app status from the child component response.

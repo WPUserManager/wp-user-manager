@@ -298,6 +298,7 @@ class WPUM_Fields_Editor {
 					'visibility'    => $field->get_visibility(),
 					'editable'      => $field->get_editable(),
 					'default'       => $field->is_primary(),
+					'default_id'    => $field->get_primary_id(),
 					'required'      => $field->is_required()
 				];
 

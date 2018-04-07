@@ -49,8 +49,7 @@ export default {
 		field_id:     '',
 		field_type:   '',
 		field_name:   '',
-		is_primary:   false,
-		all_tabs:     '',
+		primary_id:   '',
 		updateStatus: '',
 	},
 	components:{
@@ -65,7 +64,7 @@ export default {
 			infoAvailable:  false,
 			infoMessage:    '',
 			labels:         wpumFieldsEditor.labels,
-			tabs:           this.all_tabs,
+			tabs:           wpumFieldsEditor.edit_dialog_tabs,
 			settingsFields: '',
 			activeTab:      'general',
 			disabledTabs:   [],
@@ -91,9 +90,9 @@ export default {
 		this.getSettings()
 
 		// Remove sidebar sections that aren't needed.
-		if( this.is_primary === true ) {
+		/*if( this.is_primary === true ) {
 			this.maybeRemoveSidebarTabs()
-		}
+		}*/
 
 		// Translate the error messages part of the Vue Form Generator.
 		let res                        = VueFormGenerator.validators.resources;
@@ -162,7 +161,7 @@ export default {
 		 * Sidebars are removed when they make no sense for specific field types.
 		 */
 		maybeRemoveSidebarTabs() {
-			if( this.is_primary === true ) {
+			if( this.default_id ) {
 				if( this.field_type == 'username' ) {
 					this.disabledTabs = [ 'validation', 'permissions' ]
 				} else if( this.field_type == 'user_email' ) {
