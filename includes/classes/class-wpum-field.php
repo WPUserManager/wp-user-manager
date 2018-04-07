@@ -359,6 +359,7 @@ class WPUM_Field {
 
 			switch ( $type ) {
 				case 'user_firstname':
+				case 'username':
 					$this->type = 'text';
 					break;
 			}
