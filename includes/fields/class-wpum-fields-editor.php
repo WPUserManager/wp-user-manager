@@ -409,12 +409,15 @@ class WPUM_Fields_Editor {
 		if( ! empty( $primary_field_id ) ) {
 			switch ( $primary_field_id ) {
 				case 'username':
-					unset( $settings['user_meta_key'] );
+					unset( $settings['placeholder'] );
 					break;
 			}
 		}
 
-		return $settings;
+		// All primary fields do not need the meta key setting.
+		unset( $settings['user_meta_key'] );
+
+		return apply_filters( 'wpum_fields_editor_deregister_settings', $settings, $primary_field_id );
 
 	}
 
