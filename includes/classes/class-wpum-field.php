@@ -358,9 +358,27 @@ class WPUM_Field {
 			$this->primary_id = $type;
 
 			switch ( $type ) {
-				case 'user_firstname':
 				case 'username':
+				case 'user_firstname':
+				case 'user_lastname':
+				case 'user_nickname':
+				case 'user_website':
 					$this->type = 'text';
+					break;
+				case 'user_email':
+					$this->type = 'email';
+					break;
+				case 'user_password':
+					$this->type = 'password';
+					break;
+				case 'user_displayname':
+					$this->type = 'dropdown';
+					break;
+				case 'user_description':
+					$this->type = 'textarea';
+					break;
+				case 'user_avatar':
+					$this->type = 'file';
 					break;
 			}
 
