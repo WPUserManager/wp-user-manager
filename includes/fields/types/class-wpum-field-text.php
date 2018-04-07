@@ -30,28 +30,6 @@ class WPUM_Field_Text extends WPUM_Field_Type {
 
 	}
 
-	/**
-	 * Add field specific settings for this type.
-	 *
-	 * @return void
-	 */
-	public function get_editor_settings() {
-
-		return array(
-			'validation' => [
-				$this->add_requirement_setting()
-			],
-			'privacy' => [
-				$this->add_visibility_setting()
-			],
-			'permissions' => [
-				$this->add_editing_permissions_setting(),
-				$this->add_read_only_setting()
-			]
-		 );
-
-	}
-
 }
 
 new WPUM_Field_Text();

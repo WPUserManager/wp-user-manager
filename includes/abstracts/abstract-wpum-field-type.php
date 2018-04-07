@@ -131,7 +131,7 @@ abstract class WPUM_Field_Type {
 
 		$settings = [
 			'general' => [
-				array(
+				'field_title' => array(
 					'type'        => 'input',
 					'inputType'   => 'text',
 					'label'       => esc_html__( 'Field title' ),
@@ -141,7 +141,7 @@ abstract class WPUM_Field_Type {
 					'validator'   => [ 'string' ],
 					'min'         => 1
 				),
-				array(
+				'field_description' => array(
 					'type'      => 'textArea',
 					'inputType' => 'text',
 					'label'     => esc_html__( 'Field description (optional)' ),
@@ -149,143 +149,69 @@ abstract class WPUM_Field_Type {
 					'rows'      => 3,
 					'hint'      => esc_html__( 'This is the text that appears as a description within the forms. Leave blank if not needed.' )
 				),
+				'user_meta_key' => array(
+					'type'      => 'input',
+					'inputType' => 'text',
+					'label'     => esc_html__( 'Unique meta key' ),
+					'model'     => 'user_meta_key',
+					'required'  => true,
+					'hint'      => esc_html__( 'The key must be unique for each field and written in lowercase with an underscore ( _ ) separating words e.g country_list or job_title. This will be used to store information about your users into the database of your website.' ),
+					'validator' => [ 'string' ],
+					'min'       => 1
+				),
+				'placeholder' => array(
+					'type'      => 'input',
+					'inputType' => 'text',
+					'label'     => esc_html__( 'Placeholder' ),
+					'model'     => 'placeholder',
+					'hint'      => esc_html__( 'This text will appear within the field when empty. Leave blank if not needed.' ),
+				),
+			],
+			'validation' => [
+				'required' => array(
+					'type'    => 'checkbox',
+					'label'   => esc_html__( 'Set as required' ),
+					'model'   => 'required',
+					'default' => false,
+					'hint'    => esc_html__( 'Enable this option so the field must be filled before the form can be processed.' ),
+				)
+			],
+			'privacy' => [
+				'visibility' => array(
+					'type'    => 'radios',
+					'label'   => esc_html__( 'Profile visibility' ),
+					'model'   => 'visibility',
+					'hint'    => esc_html__( 'Set the visibility of this field on users profiles.' ),
+					'values' => [
+						[ 'value' => 'public', 'name' => esc_html__( 'Publicly visible' ) ],
+						[ 'value' => 'hidden', 'name' => esc_html__( 'Hidden' ) ]
+					],
+					'noneSelectedText'     => '',
+					'hideNoneSelectedText' =>  true,
+				)
+			],
+			'permissions' => [
+				'editing' => array(
+					'type'    => 'radios',
+					'label'   => esc_html__( 'Profile editing' ),
+					'model'   => 'editing',
+					'hint'    => esc_html__( 'Set who can edit this field. Hidden fields will not be editable within the front-end account page.' ),
+					'values' => [
+						[ 'value' => 'public', 'name' => esc_html__( 'Publicly editable' ) ],
+						[ 'value' => 'hidden', 'name' => esc_html__( 'Hidden (admins only)' ) ]
+					],
+				),
+				'read_only' => array(
+					'type'    => 'checkbox',
+					'label'   => esc_html__( 'Set as read only' ),
+					'model'   => 'read_only',
+					'default' => false,
+					'hint'    => esc_html__( 'Enable to prevent users from editing this field. Note: if the profile editing option is set to publicly editable, the field will still be visible within the account page but will not be customizable.' ),
+				)
 			]
 		];
 
-		// Automatically add the unique meta key setting,
-		// if the field type is not a primary field.
-		if( ! in_array( $this->type, wpum_get_primary_field_types() ) ) {
-
-			$settings['general'][] = array(
-				'type'      => 'input',
-				'inputType' => 'text',
-				'label'     => esc_html__( 'Unique meta key' ),
-				'model'     => 'user_meta_key',
-				'required'  => true,
-				'hint'      => esc_html__( 'The key must be unique for each field and written in lowercase with an underscore ( _ ) separating words e.g country_list or job_title. This will be used to store information about your users into the database of your website.' ),
-				'validator' => [ 'string' ],
-				'min'       => 1
-			);
-
-		}
-
-		// Detect if the field should have a placeholder setting or not.
-		if( $this->needs_placeholder_setting() ) {
-			$settings['general'][] = array(
-				'type'      => 'input',
-				'inputType' => 'text',
-				'label'     => esc_html__( 'Placeholder' ),
-				'model'     => 'placeholder',
-				'hint'      => esc_html__( 'This text will appear within the field when empty. Leave blank if not needed.' ),
-			);
-		}
-
-		return $settings;
-
-	}
-
-	/**
-	 * Helper function for internal fields.
-	 * If a field needs a "required" setting, child classes can call this method.
-	 *
-	 * @return array
-	 */
-	protected function add_requirement_setting() {
-
-		$setting = array(
-			'type'    => 'checkbox',
-			'label'   => esc_html__( 'Set as required' ),
-			'model'   => 'required',
-			'default' => false,
-			'hint'    => esc_html__( 'Enable this option so the field must be filled before the form can be processed.' ),
-		);
-
-		return $setting;
-
-	}
-
-	/**
-	 * Helper function for internal fields.
-	 * If a field needs a "visibility" setting, child classes can call this method.
-	 *
-	 * @return array
-	 */
-	protected function add_visibility_setting() {
-
-		$setting = array(
-			'type'    => 'radios',
-			'label'   => esc_html__( 'Profile visibility' ),
-			'model'   => 'visibility',
-			'hint'    => esc_html__( 'Set the visibility of this field on users profiles.' ),
-			'values' => [
-				[ 'value' => 'public', 'name' => esc_html__( 'Publicly visible' ) ],
-				[ 'value' => 'hidden', 'name' => esc_html__( 'Hidden' ) ]
-			],
-			'noneSelectedText'     => '',
-			'hideNoneSelectedText' =>  true,
-		);
-
-		return $setting;
-
-	}
-
-	/**
-	 * Helper function for internal fields.
-	 * If a field needs a "editing permission" setting, child classes can call this method.
-	 *
-	 * @return array
-	 */
-	protected function add_editing_permissions_setting() {
-
-		$setting = array(
-			'type'    => 'radios',
-			'label'   => esc_html__( 'Profile editing' ),
-			'model'   => 'editing',
-			'hint'    => esc_html__( 'Set who can edit this field. Hidden fields will not be editable within the front-end account page.' ),
-			'values' => [
-				[ 'value' => 'public', 'name' => esc_html__( 'Publicly editable' ) ],
-				[ 'value' => 'hidden', 'name' => esc_html__( 'Hidden (admins only)' ) ]
-			],
-		);
-
-		return $setting;
-
-	}
-
-	/**
-	 * Helper function for internal fields.
-	 * If a field needs a "read only" setting, child classes can call this method.
-	 *
-	 * @return array
-	 */
-	protected function add_read_only_setting() {
-
-		$setting = array(
-			'type'    => 'checkbox',
-			'label'   => esc_html__( 'Set as read only' ),
-			'model'   => 'read_only',
-			'default' => false,
-			'hint'    => esc_html__( 'Enable to prevent users from editing this field. Note: if the profile editing option is set to publicly editable, the field will still be visible within the account page but will not be customizable.' ),
-		);
-
-		return $setting;
-
-	}
-
-	/**
-	 * Determine if the field type needs a placeholder setting.
-	 *
-	 * @return void
-	 */
-	private function needs_placeholder_setting() {
-
-		$pass = true;
-
-		if( $this->type == 'username' ) {
-			$pass = false;
-		}
-
-		return apply_filters( 'wpum_field_type_needs_placeholder_setting', $pass );
+		return apply_filters( 'wpum_register_field_type_settings', $settings, $this->type, $this->type );
 
 	}
 

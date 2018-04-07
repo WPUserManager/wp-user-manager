@@ -381,6 +381,11 @@ class WPUM_Fields_Editor {
 				$model[ $setting['model'] ] = $this->get_setting_value( $wpum_field_id, $setting['model'], $setting['type'] );
 			}
 
+			// Deregister some settings from the editor.
+			$wpum_field = new WPUM_Field( $wpum_field_id );
+			$settings   = $this->deregister_settings( $settings, $wpum_field->get_primary_id() );
+
+			// Now send data to vuejs.
 			wp_send_json_success( [
 				'settings' => $settings,
 				'model'    => ( object ) $model
@@ -389,6 +394,27 @@ class WPUM_Fields_Editor {
 		} else {
 			wp_send_json_error( null, 403 );
 		}
+
+	}
+
+	/**
+	 * Deregister settings for fields that do not require all of them.
+	 *
+	 * @param array $settings
+	 * @param string $primary_field_id
+	 * @return void
+	 */
+	private function deregister_settings( $settings, $primary_field_id ) {
+
+		if( ! empty( $primary_field_id ) ) {
+			switch ( $primary_field_id ) {
+				case 'username':
+					unset( $settings['user_meta_key'] );
+					break;
+			}
+		}
+
+		return $settings;
 
 	}
 
