@@ -16,6 +16,13 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 class WPUM_Fields_Editor {
 
 	/**
+	 * Holds the disabled settings for each field.
+	 *
+	 * @var array
+	 */
+	public $deregistered_settings = [];
+
+	/**
 	 * Get things started.
 	 */
 	public function __construct() {
@@ -384,6 +391,7 @@ class WPUM_Fields_Editor {
 			// Deregister some settings from the editor.
 			$wpum_field = new WPUM_Field( $wpum_field_id );
 			$settings   = $this->deregister_settings( $settings, $wpum_field->get_primary_id() );
+			$model      = $this->deregister_model( $model );
 
 			// Now send data to vuejs.
 			wp_send_json_success( [
@@ -406,18 +414,44 @@ class WPUM_Fields_Editor {
 	 */
 	private function deregister_settings( $settings, $primary_field_id ) {
 
+		$this->deregistered_settings = [];
+
 		if( ! empty( $primary_field_id ) ) {
+			// All primary fields do not need the meta key setting.
+			$this->deregistered_settings[] = 'user_meta_key';
+
 			switch ( $primary_field_id ) {
 				case 'username':
-					unset( $settings['placeholder'] );
+					$this->deregistered_settings[] = 'placeholder';
 					break;
 			}
 		}
 
-		// All primary fields do not need the meta key setting.
-		unset( $settings['user_meta_key'] );
+		if( is_array( $this->deregistered_settings ) && ! empty( $this->deregistered_settings ) ) {
+			foreach ( $this->deregistered_settings as $setting_key ) {
+				unset( $settings[ $setting_key ] );
+			}
+		}
 
 		return apply_filters( 'wpum_fields_editor_deregister_settings', $settings, $primary_field_id );
+
+	}
+
+	/**
+	 * Deregister models for fields that are no longer required.
+	 *
+	 * @param array $model
+	 * @return void
+	 */
+	private function deregister_model( $model ) {
+
+		if( is_array( $this->deregistered_settings ) && ! empty( $this->deregistered_settings ) ) {
+			foreach( $this->deregistered_settings as $model_key ) {
+				unset( $model[ $model_key ] );
+			}
+		}
+
+		return apply_filters( 'wpum_fields_editor_deregister_model', $model, $primary_field_id );
 
 	}
 
