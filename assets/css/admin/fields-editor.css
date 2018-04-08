@@ -175,7 +175,7 @@ body.users_page_wpum-custom-fields #wpum-fields-editor-list .vue-wp-notice {
     margin-left: 20px; }
   #edit-field-dialog .media-frame-title .vue-wp-notice,
   #edit-field-dialog .media-frame-content .vue-wp-notice {
-    margin-top: 0; }
+    margin-top: 0 !important; }
 #edit-field-dialog .vue-form-generator .form-group {
   padding: 20px 20px;
   border-bottom: 1px solid #f3f3f3; }
