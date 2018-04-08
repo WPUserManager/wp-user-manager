@@ -47,6 +47,11 @@ class WPUM_Fields {
 		$fields = apply_filters( 'wpum_load_fields', [
 			'text',
 			'email',
+			'password',
+			'dropdown',
+			'url',
+			'textarea',
+			'file',
 		] );
 
 		foreach ( $fields as $field ) {

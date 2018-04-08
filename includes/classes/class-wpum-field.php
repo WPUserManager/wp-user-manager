@@ -371,8 +371,10 @@ class WPUM_Field {
 				case 'user_firstname':
 				case 'user_lastname':
 				case 'user_nickname':
-				case 'user_website':
 					$this->type = 'text';
+					break;
+				case 'user_website':
+					$this->type = 'url';
 					break;
 				case 'user_email':
 					$this->type = 'email';

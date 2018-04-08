@@ -37,7 +37,7 @@
 							<span class="dashicons dashicons-menu"></span>
 						</td>
 						<td class="column-primary">
-							<a href="">
+							<a @click="openEditFieldDialog( field.id, field.name, field.type, field.default_id )">
 								<strong>{{field.name}}</strong>
 							</a>
 						</td>

@@ -165,6 +165,12 @@ export default {
 				this.disabledTabs = [ 'validation', 'permissions' ]
 			} else if( this.primary_id == 'user_email' ) {
 				this.disabledTabs = [ 'validation' ]
+			} else if( this.primary_id == 'user_password' ) {
+				this.disabledTabs = [ 'validation', 'privacy', 'permissions' ]
+			} else if( this.primary_id == 'user_nickname' || this.primary_id == 'user_displayname' ) {
+				this.disabledTabs = [ 'validation' ]
+			} else if( this.primary_id == 'user_avatar' ) {
+				this.disabledTabs = [ 'privacy', 'permissions' ]
 			}
 		},
 		/**
