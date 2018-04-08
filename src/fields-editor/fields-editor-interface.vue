@@ -134,7 +134,7 @@ export default {
 							this.groups.push(data_or_message)
 						}
 					}
-				},{ height: '80%', width: '80%' })
+				},{ height: '80%', width: '70%' })
 			} else {
 				this.$modal.show( PremiumDialog, {},{ height: '220px' })
 			}
@@ -288,7 +288,7 @@ export default {
 						this.getFields()
 					}
 				}
-			},{ height: '80%', width: '80%' })
+			},{ height: '80%', width: '60%' })
 		}
 	}
 }

@@ -52,6 +52,11 @@ class WPUM_Fields {
 			'url',
 			'textarea',
 			'file',
+			'checkbox',
+			'multicheckbox',
+			'multiselect',
+			'radio',
+			'number'
 		] );
 
 		foreach ( $fields as $field ) {

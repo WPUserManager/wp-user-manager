@@ -1,6 +1,6 @@
 <?php
 /**
- * Registers a file field for the forms.
+ * Registers a number field for the forms.
  *
  * @package     wp-user-manager
  * @copyright   Copyright (c) 2018, Alessandro Tesoro
@@ -13,7 +13,7 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 /**
  * Register a text field type.
  */
-class WPUM_Field_File extends WPUM_Field_Type {
+class WPUM_Field_Number extends WPUM_Field_Type {
 
 	/**
 	 * Hook into the main class and register a new field.
@@ -23,14 +23,13 @@ class WPUM_Field_File extends WPUM_Field_Type {
 	public function init() {
 
 		// Define field type information.
-		$this->group = 'advanced';
-		$this->name  = esc_html__( 'File' );
-		$this->type  = 'file';
-		$this->icon  = 'dashicons-paperclip';
+		$this->name  = esc_html__( 'Number' );
+		$this->type  = 'number';
+		$this->icon  = 'dashicons-leftright';
 		$this->order = 3;
 
 	}
 
 }
 
-new WPUM_Field_File();
+new WPUM_Field_Number();
