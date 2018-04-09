@@ -171,16 +171,18 @@ if ( ! class_exists( 'WP_User_Manager' ) ) :
 			require_once WPUM_PLUGIN_DIR . 'includes/wpum-database/class-wpum-db-fields.php';
 			require_once WPUM_PLUGIN_DIR . 'includes/wpum-database/class-wpum-db-field-meta.php';
 
+			require_once WPUM_PLUGIN_DIR . 'includes/wpum-fields/class-wpum-fields.php';
+			require_once WPUM_PLUGIN_DIR . 'includes/wpum-fields/class-wpum-field-group.php';
+			require_once WPUM_PLUGIN_DIR . 'includes/wpum-fields/class-wpum-field.php';
+
 			require_once WPUM_PLUGIN_DIR . 'includes/actions/actions.php';
 			require_once WPUM_PLUGIN_DIR . 'includes/filters/global-filters.php';
 			require_once WPUM_PLUGIN_DIR . 'includes/classes/class-wpum-template-loader.php';
 			require_once WPUM_PLUGIN_DIR . 'includes/classes/class-wpum-avatars.php';
 			require_once WPUM_PLUGIN_DIR . 'includes/classes/class-wpum-options-panel.php';
-			require_once WPUM_PLUGIN_DIR . 'includes/classes/class-wpum-fields.php';
+
 			require_once WPUM_PLUGIN_DIR . 'includes/emails/class-wpum-emails.php';
 			require_once WPUM_PLUGIN_DIR . 'includes/classes/class-wpum-forms.php';
-			require_once WPUM_PLUGIN_DIR . 'includes/classes/class-wpum-field-group.php';
-			require_once WPUM_PLUGIN_DIR . 'includes/classes/class-wpum-field.php';
 
 			require_once WPUM_PLUGIN_DIR . 'includes/functions/admin-functions.php';
 			require_once WPUM_PLUGIN_DIR . 'includes/functions/global-functions.php';
@@ -196,7 +198,9 @@ if ( ! class_exists( 'WP_User_Manager' ) ) :
 				require_once WPUM_PLUGIN_DIR . 'includes/classes/class-wpum-notices.php';
 				require_once WPUM_PLUGIN_DIR . 'includes/classes/class-wpum-user-table.php';
 				require_once WPUM_PLUGIN_DIR . 'includes/emails/class-wpum-emails-list.php';
-				require_once WPUM_PLUGIN_DIR . 'includes/fields/class-wpum-fields-editor.php';
+
+				require_once WPUM_PLUGIN_DIR . 'includes/wpum-fields/class-wpum-fields-editor.php';
+
 				require_once WPUM_PLUGIN_DIR . 'includes/abstracts/abstract-shortcode-generator.php';
 				require_once WPUM_PLUGIN_DIR . 'includes/classes/shortcodes/class-wpum-shortcode-button.php';
 				require_once WPUM_PLUGIN_DIR . 'includes/classes/shortcodes/class-wpum-shortcode-login.php';
