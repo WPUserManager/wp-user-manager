@@ -161,14 +161,15 @@ if ( ! class_exists( 'WP_User_Manager' ) ) :
 		private function includes() {
 
 			require_once WPUM_PLUGIN_DIR . 'includes/abstracts/abstract-wp-db-table.php';
-			require_once WPUM_PLUGIN_DIR . 'includes/classes/class-wpum-db-table.php';
-			require_once WPUM_PLUGIN_DIR . 'includes/classes/class-wpum-db-table-fields.php';
-			require_once WPUM_PLUGIN_DIR . 'includes/classes/class-wpum-db-table-field-meta.php';
-			require_once WPUM_PLUGIN_DIR . 'includes/classes/class-wpum-db-table-fields-groups.php';
 			require_once WPUM_PLUGIN_DIR . 'includes/abstracts/abstract-wpum-db.php';
-			require_once WPUM_PLUGIN_DIR . 'includes/classes/class-wpum-db-fields-groups.php';
-			require_once WPUM_PLUGIN_DIR . 'includes/classes/class-wpum-db-fields.php';
-			require_once WPUM_PLUGIN_DIR . 'includes/classes/class-wpum-db-field-meta.php';
+
+			require_once WPUM_PLUGIN_DIR . 'includes/wpum-database/class-wpum-db-table.php';
+			require_once WPUM_PLUGIN_DIR . 'includes/wpum-database/class-wpum-db-table-fields.php';
+			require_once WPUM_PLUGIN_DIR . 'includes/wpum-database/class-wpum-db-table-field-meta.php';
+			require_once WPUM_PLUGIN_DIR . 'includes/wpum-database/class-wpum-db-table-fields-groups.php';
+			require_once WPUM_PLUGIN_DIR . 'includes/wpum-database/class-wpum-db-fields-groups.php';
+			require_once WPUM_PLUGIN_DIR . 'includes/wpum-database/class-wpum-db-fields.php';
+			require_once WPUM_PLUGIN_DIR . 'includes/wpum-database/class-wpum-db-field-meta.php';
 
 			require_once WPUM_PLUGIN_DIR . 'includes/actions/actions.php';
 			require_once WPUM_PLUGIN_DIR . 'includes/filters/global-filters.php';
