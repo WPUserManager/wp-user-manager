@@ -12,7 +12,8 @@ module.exports = {
   context: path.resolve(__dirname, '../'),
   entry: {
 	emails: './src/emails.js',
-	'fields-editor': './src/fields-editor/fields-editor.js'
+	'fields-editor': './src/fields-editor/fields-editor.js',
+	'registration-forms-editor': './src/registration-forms-editor/registration-editor.js'
   },
   output: {
     path: config.build.assetsRoot,

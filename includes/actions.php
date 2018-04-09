@@ -63,6 +63,14 @@ function wpum_admin_bar_menu( $wp_admin_bar ) {
 	$wp_admin_bar->add_node( $args );
 
 	$args = array(
+		'id'     => 'wpum_registration_forms',
+		'href'   => admin_url( 'users.php?page=wpum-registration-forms' ),
+		'title'  => esc_html__( 'Registration forms' ),
+		'parent' => 'wpum_node',
+	);
+	$wp_admin_bar->add_node( $args );
+
+	$args = array(
 		'id'     => 'wpum_settings',
 		'href'   => admin_url( 'users.php?page=wpum-settings' ),
 		'title'  => esc_html__( 'Settings' ),
