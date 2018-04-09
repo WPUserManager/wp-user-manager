@@ -66,7 +66,7 @@ class WPUM_Emails_Customizer {
 	 * @return void
 	 */
 	private function includes() {
-		require_once WPUM_PLUGIN_DIR . 'includes/emails/class-wpum-emails-customizer-editor-control.php';
+		require_once WPUM_PLUGIN_DIR . 'includes/wpum-emails/class-wpum-emails-customizer-editor-control.php';
 	}
 
 	/**
