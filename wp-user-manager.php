@@ -171,6 +171,7 @@ if ( ! class_exists( 'WP_User_Manager' ) ) :
 			require_once WPUM_PLUGIN_DIR . 'includes/wpum-database/class-wpum-db-fields.php';
 			require_once WPUM_PLUGIN_DIR . 'includes/wpum-database/class-wpum-db-field-meta.php';
 
+			require_once WPUM_PLUGIN_DIR . 'includes/wpum-fields/wpum-fields-functions.php';
 			require_once WPUM_PLUGIN_DIR . 'includes/wpum-fields/class-wpum-fields.php';
 			require_once WPUM_PLUGIN_DIR . 'includes/wpum-fields/class-wpum-field-group.php';
 			require_once WPUM_PLUGIN_DIR . 'includes/wpum-fields/class-wpum-field.php';
@@ -187,7 +188,6 @@ if ( ! class_exists( 'WP_User_Manager' ) ) :
 			require_once WPUM_PLUGIN_DIR . 'includes/functions/admin-functions.php';
 			require_once WPUM_PLUGIN_DIR . 'includes/functions/global-functions.php';
 			require_once WPUM_PLUGIN_DIR . 'includes/functions/email-functions.php';
-			require_once WPUM_PLUGIN_DIR . 'includes/functions/fields-functions.php';
 
 			require_once WPUM_PLUGIN_DIR . 'includes/shortcodes.php';
 			require_once WPUM_PLUGIN_DIR . 'includes/assets.php';
