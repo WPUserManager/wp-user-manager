@@ -186,7 +186,7 @@ if ( ! class_exists( 'WP_User_Manager' ) ) :
 			require_once WPUM_PLUGIN_DIR . 'includes/classes/class-wpum-avatars.php';
 			require_once WPUM_PLUGIN_DIR . 'includes/classes/class-wpum-options-panel.php';
 
-			require_once WPUM_PLUGIN_DIR . 'includes/classes/class-wpum-forms.php';
+			require_once WPUM_PLUGIN_DIR . 'includes/wpum-forms/class-wpum-forms.php';
 
 			require_once WPUM_PLUGIN_DIR . 'includes/functions/admin-functions.php';
 			require_once WPUM_PLUGIN_DIR . 'includes/functions/global-functions.php';
