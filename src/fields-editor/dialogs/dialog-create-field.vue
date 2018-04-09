@@ -137,7 +137,7 @@ export default {
 			// Make a call via ajax.
 			axios.post( wpumFieldsEditor.ajax,
 				qs.stringify({
-					nonce: wpumFieldsEditor.nonce,
+					nonce: wpumFieldsEditor.create_field_nonce,
 					field_name: this.newFieldName,
 					field_type: this.newFieldType,
 					group_id: this.group_id

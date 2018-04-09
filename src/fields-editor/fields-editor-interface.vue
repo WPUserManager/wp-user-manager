@@ -131,7 +131,14 @@ export default {
 							this.showError(data_or_message)
 						} else {
 							this.showSuccess()
-							this.groups.push(data_or_message)
+							this.getFields()
+
+							const field_id   = data_or_message.field_id
+							const field_name = data_or_message.field_name
+							const field_type = data_or_message.field_type
+							const default_id = data_or_message.default_id
+
+							this.openEditFieldDialog( field_id, field_name, field_type, default_id )
 						}
 					}
 				},{ height: '80%', width: '70%' })
