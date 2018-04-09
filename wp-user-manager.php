@@ -149,7 +149,7 @@ if ( ! class_exists( 'WP_User_Manager' ) ) :
 		 */
 		private function autoload_options() {
 			global $wpum_options;
-			require_once WPUM_PLUGIN_DIR . 'includes/functions/options-functions.php';
+			require_once WPUM_PLUGIN_DIR . 'includes/options.php';
 			$wpum_options = wpum_get_settings();
 		}
 
@@ -159,6 +159,11 @@ if ( ! class_exists( 'WP_User_Manager' ) ) :
 		 * @return void
 		 */
 		private function includes() {
+
+			require_once WPUM_PLUGIN_DIR . 'includes/functions.php';
+			require_once WPUM_PLUGIN_DIR . 'includes/actions.php';
+			require_once WPUM_PLUGIN_DIR . 'includes/filters.php';
+			require_once WPUM_PLUGIN_DIR . 'includes/assets.php';
 
 			require_once WPUM_PLUGIN_DIR . 'includes/abstracts/abstract-wp-db-table.php';
 			require_once WPUM_PLUGIN_DIR . 'includes/abstracts/abstract-wpum-db.php';
@@ -180,25 +185,14 @@ if ( ! class_exists( 'WP_User_Manager' ) ) :
 			require_once WPUM_PLUGIN_DIR . 'includes/wpum-emails/wpum-email-functions.php';
 			require_once WPUM_PLUGIN_DIR . 'includes/wpum-emails/class-wpum-emails.php';
 
-			require_once WPUM_PLUGIN_DIR . 'includes/actions/actions.php';
-			require_once WPUM_PLUGIN_DIR . 'includes/filters/global-filters.php';
-
 			require_once WPUM_PLUGIN_DIR . 'includes/wpum-admin/class-wpum-avatars.php';
 			require_once WPUM_PLUGIN_DIR . 'includes/wpum-admin/class-wpum-template-loader.php';
 			require_once WPUM_PLUGIN_DIR . 'includes/wpum-admin/class-wpum-options-panel.php';
-
 			require_once WPUM_PLUGIN_DIR . 'includes/wpum-forms/class-wpum-forms.php';
 
-			require_once WPUM_PLUGIN_DIR . 'includes/functions/admin-functions.php';
-			require_once WPUM_PLUGIN_DIR . 'includes/functions/global-functions.php';
-
 			require_once WPUM_PLUGIN_DIR . 'includes/wpum-shortcodes/shortcodes.php';
-			require_once WPUM_PLUGIN_DIR . 'includes/assets.php';
 
 			if ( is_admin() || ( defined( 'WP_CLI' ) && WP_CLI ) ) {
-				require_once WPUM_PLUGIN_DIR . 'includes/filters/admin-filters.php';
-				require_once WPUM_PLUGIN_DIR . 'includes/actions/admin-actions.php';
-
 				require_once WPUM_PLUGIN_DIR . 'includes/wpum-admin/class-wpum-notices.php';
 				require_once WPUM_PLUGIN_DIR . 'includes/wpum-admin/class-wpum-user-table.php';
 				require_once WPUM_PLUGIN_DIR . 'includes/wpum-fields/class-wpum-fields-editor.php';

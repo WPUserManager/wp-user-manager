@@ -1,8 +1,9 @@
 <?php
 /**
- * Set of functions that deals with the options of the plugin.
+ * Options management functions.
  *
  * @package     wp-user-manager
+ * @subpackage  Functions/Install
  * @copyright   Copyright (c) 2018, Alessandro Tesoro
  * @license     https://opensource.org/licenses/gpl-license GNU Public License
  * @since       1.0.0
