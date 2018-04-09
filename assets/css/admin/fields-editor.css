@@ -253,4 +253,7 @@ body.users_page_wpum-registration-forms #wpum-fields-editor-list .vue-wp-notice 
       padding: 2px;
       font-weight: bold; }
 
+.wpum-registration-forms-list .spinner {
+  margin: 0 !important; }
+
 /*# sourceMappingURL=fields-editor.css.map */

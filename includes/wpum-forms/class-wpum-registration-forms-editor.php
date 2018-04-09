@@ -27,6 +27,7 @@ class WPUM_Registration_Forms_Editor {
 	public function init_hooks() {
 		add_action( 'admin_menu', [ $this, 'setup_menu_page' ], 9 );
 		add_action( 'admin_enqueue_scripts', [ $this, 'load_scripts' ] );
+		add_action( 'wp_ajax_wpum_get_registration_forms', [ $this, 'get_forms' ] );
 	}
 
 	/**
@@ -76,8 +77,10 @@ class WPUM_Registration_Forms_Editor {
 			wp_enqueue_style( 'wpum-registration-forms-editor', WPUM_PLUGIN_URL . 'assets/css/admin/fields-editor.css' , array(), WPUM_VERSION );
 
 			$js_variables = [
-				'labels'    => $this->get_labels(),
-				'pluginURL' => WPUM_PLUGIN_URL,
+				'labels'        => $this->get_labels(),
+				'ajax'          => admin_url( 'admin-ajax.php' ),
+				'pluginURL'     => WPUM_PLUGIN_URL,
+				'getFormsNonce' => wp_create_nonce( 'wpum_get_registration_forms' )
 			];
 
 			wp_localize_script( 'wpum-registration-forms-editor', 'wpumRegistrationFormsEditor', $js_variables );
@@ -86,13 +89,33 @@ class WPUM_Registration_Forms_Editor {
 
 	}
 
+	/**
+	 * Setup the labels for translation.
+	 *
+	 * @return void
+	 */
 	private function get_labels() {
 
 		$labels = [
-			'page_title' => esc_html__( 'WP User Manager Registration Forms Editor' )
+			'page_title'    => esc_html__( 'WP User Manager Registration Forms Editor' ),
+			'table_name'    => esc_html__( 'Form name' ),
+			'table_fields'  => esc_html__( 'Fields' ),
+			'table_default' => esc_html__( 'Default' ),
+			'table_role'    => esc_html__( 'Registration role' )
 		];
 
 		return $labels;
+
+	}
+
+	/**
+	 * Retrieve the list of registration forms.
+	 *
+	 * @return void
+	 */
+	public function get_forms() {
+
+		check_ajax_referer( 'wpum_get_registration_forms', 'nonce' );
 
 	}
 
