@@ -266,7 +266,11 @@ if ( ! class_exists( 'WP_User_Manager' ) ) :
 			 * @todo document before_wpum_init
 			 */
 			do_action( 'before_wpum_init' );
+
+			// Start carbon fields and remove the sidebar manager scripts.
 			\Carbon_Fields\Carbon_Fields::boot();
+			$sidebar_manager = \Carbon_Fields\Carbon_Fields::resolve( 'sidebar_manager' );
+			remove_action( 'admin_enqueue_scripts', array( $sidebar_manager, 'enqueue_scripts' ) );
 
 			$this->notices       = TDP\WP_Notice::instance();
 			$this->templates     = new WPUM_Template_Loader();
