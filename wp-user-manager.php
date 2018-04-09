@@ -173,6 +173,8 @@ if ( ! class_exists( 'WP_User_Manager' ) ) :
 			require_once WPUM_PLUGIN_DIR . 'includes/wpum-database/class-wpum-db-table-fields.php';
 			require_once WPUM_PLUGIN_DIR . 'includes/wpum-database/class-wpum-db-table-field-meta.php';
 			require_once WPUM_PLUGIN_DIR . 'includes/wpum-database/class-wpum-db-table-fields-groups.php';
+			require_once WPUM_PLUGIN_DIR . 'includes/wpum-database/class-wpum-db-table-registration-forms.php';
+			require_once WPUM_PLUGIN_DIR . 'includes/wpum-database/class-wpum-db-table-registration-forms-meta.php';
 			require_once WPUM_PLUGIN_DIR . 'includes/wpum-database/class-wpum-db-fields-groups.php';
 			require_once WPUM_PLUGIN_DIR . 'includes/wpum-database/class-wpum-db-fields.php';
 			require_once WPUM_PLUGIN_DIR . 'includes/wpum-database/class-wpum-db-field-meta.php';
@@ -230,9 +232,11 @@ if ( ! class_exists( 'WP_User_Manager' ) ) :
 		 */
 		private function setup_database_tables() {
 			return array(
-				'fields'       => new WPUM_DB_Table_Fields(),
-				'fieldmeta'    => new WPUM_DB_Table_Field_Meta(),
-				'fieldsgroups' => new WPUM_DB_Table_Fields_Groups()
+				'fields'                => new WPUM_DB_Table_Fields(),
+				'fieldmeta'             => new WPUM_DB_Table_Field_Meta(),
+				'fieldsgroups'          => new WPUM_DB_Table_Fields_Groups(),
+				'registrationforms'     => new WPUM_DB_Table_Registration_Forms(),
+				'registrationformsmeta' => new WPUM_DB_Table_Registration_Forms_Meta()
 			);
 		}
 
