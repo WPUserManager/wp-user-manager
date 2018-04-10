@@ -238,4 +238,63 @@ class WPUM_Registration_Form {
 
 	}
 
+	/**
+	 * Retrieve metadata for this registration form.
+	 *
+	 * @param   string $meta_key      The meta key to retrieve.
+	 * @param   bool   $single        Whether to return a single value.
+	 * @return  mixed                 Will be an array if $single is false. Will be value of meta data field if $single is true.
+	 *
+	 * @access  public
+	 * @since   2.0
+	 */
+	public function get_meta( $meta_key = '', $single = true ) {
+		return WPUM()->registration_form_meta->get_meta( $this->id, $meta_key, $single );
+	}
+
+	/**
+	 * Add meta data for this registration form.
+	 *
+	 * @param   string $meta_key      Metadata name.
+	 * @param   mixed  $meta_value    Metadata value.
+	 * @param   bool   $unique        Optional, default is false. Whether the same key should not be added.
+	 * @return  bool                  False for failure. True for success.
+	 *
+	 * @access  public
+	 * @since   2.0
+	 */
+	public function add_meta( $meta_key = '', $meta_value, $unique = false ) {
+		return WPUM()->registration_form_meta->add_meta( $this->id, $meta_key, $meta_value, $unique );
+	}
+
+	/**
+	 * Update field meta for this registration form.
+	 *
+	 * @param   string $meta_key      Metadata key.
+	 * @param   mixed  $meta_value    Metadata value.
+	 * @param   mixed  $prev_value    Optional. Previous value to check before removing.
+	 * @return  bool                  False on failure, true if success.
+	 *
+	 * @access  public
+	 * @since   2.0
+	 */
+	public function update_meta( $meta_key = '', $meta_value, $prev_value = '' ) {
+		return WPUM()->registration_form_meta->update_meta( $this->id, $meta_key, $meta_value, $prev_value );
+	}
+
+	/**
+	 * Delete field meta for this registration form.
+	 *
+	 * @param   string $meta_key      Metadata key.
+	 * @param   mixed  $meta_value    Metadata value.
+	 * @param   mixed  $prev_value    Optional. Previous value to check before removing.
+	 * @return  bool                  False on failure, true if success.
+	 *
+	 * @access  public
+	 * @since   2.0
+	 */
+	public function delete_meta( $meta_key = '', $meta_value, $prev_value = '' ) {
+		return WPUM()->registration_form_meta->delete_meta( $this->id, $meta_key, $meta_value, $prev_value );
+	}
+
 }

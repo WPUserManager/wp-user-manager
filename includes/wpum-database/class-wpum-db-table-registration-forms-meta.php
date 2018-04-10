@@ -21,7 +21,7 @@ final class WPUM_DB_Table_Registration_Forms_Meta extends WPUM_DB_Table {
 	 * @access protected
 	 * @var string
 	 */
-	protected $name = 'wpum_registration_forms_meta';
+	protected $name = 'wpum_registration_formmeta';
 
 	/**
 	 * Database version
