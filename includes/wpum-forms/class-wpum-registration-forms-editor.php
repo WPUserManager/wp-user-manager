@@ -28,6 +28,7 @@ class WPUM_Registration_Forms_Editor {
 		add_action( 'admin_menu', [ $this, 'setup_menu_page' ], 9 );
 		add_action( 'admin_enqueue_scripts', [ $this, 'load_scripts' ] );
 		add_action( 'wp_ajax_wpum_get_registration_forms', [ $this, 'get_forms' ] );
+		add_action( 'wp_ajax_wpum_get_registration_form', [ $this, 'get_form' ] );
 	}
 
 	/**
@@ -84,7 +85,8 @@ class WPUM_Registration_Forms_Editor {
 				'labels'        => $this->get_labels(),
 				'ajax'          => admin_url( 'admin-ajax.php' ),
 				'pluginURL'     => WPUM_PLUGIN_URL,
-				'getFormsNonce' => wp_create_nonce( 'wpum_get_registration_forms' )
+				'getFormsNonce' => wp_create_nonce( 'wpum_get_registration_forms' ),
+				'getFormNonce' => wp_create_nonce( 'wpum_get_registration_form' )
 			];
 
 			wp_localize_script( 'wpum-registration-forms-editor', 'wpumRegistrationFormsEditor', $js_variables );
@@ -101,13 +103,18 @@ class WPUM_Registration_Forms_Editor {
 	private function get_labels() {
 
 		$labels = [
-			'page_title'            => esc_html__( 'WP User Manager Registration Forms Editor' ),
-			'table_name'            => esc_html__( 'Form name' ),
-			'table_fields'          => esc_html__( 'Fields' ),
-			'table_default'         => esc_html__( 'Default' ),
-			'table_role'            => esc_html__( 'Registration role' ),
-			'table_not_found'       => esc_html__( 'No registration forms have been found.' ),
-			'table_default_tooltip' => esc_html__( 'The default registration form cannot be deleted.' )
+			'page_title'             => esc_html__( 'WP User Manager Registration Forms Editor' ),
+			'table_name'             => esc_html__( 'Form name' ),
+			'table_fields'           => esc_html__( 'Fields' ),
+			'table_default'          => esc_html__( 'Default' ),
+			'table_role'             => esc_html__( 'Registration role' ),
+			'table_not_found'        => esc_html__( 'No registration forms have been found.' ),
+			'table_default_tooltip'  => esc_html__( 'The default registration form cannot be deleted.' ),
+			'table_customize'        => esc_html__( 'Customize fields' ),
+			'page_back'              => esc_html__( 'Return to the registration forms list' ),
+			'editor_available_title' => esc_html__( 'Available fields' ),
+			'editor_available_desc'  => esc_html__( 'To add a field to the form drag it into the container on the right.' ),
+			'table_field_name'       => esc_html__( 'Field name' )
 		];
 
 		return $labels;
@@ -145,6 +152,44 @@ class WPUM_Registration_Forms_Editor {
 
 		} else {
 			wp_send_json_error( null, 403 );
+		}
+
+	}
+
+	/**
+	 * Retrieve a single registration form given an ID.
+	 *
+	 * @return void
+	 */
+	public function get_form() {
+
+		check_ajax_referer( 'wpum_get_registration_form', 'nonce' );
+
+		if( current_user_can( 'manage_options' ) ) {
+
+			$form_id = isset( $_GET['form_id'] ) ? absint( $_GET['form_id'] ) : false;
+
+			if( $form_id ) {
+
+				$form = WPUM()->registration_forms->get( $form_id );
+				$form = new WPUM_Registration_Form( $form->id );
+
+				wp_send_json_success(
+					[
+						'name'   => $form->get_name(),
+					]
+				 );
+
+			} else {
+
+				wp_send_json_error( null, 403 );
+
+			}
+
+		} else {
+
+			wp_send_json_error( null, 403 );
+
 		}
 
 	}

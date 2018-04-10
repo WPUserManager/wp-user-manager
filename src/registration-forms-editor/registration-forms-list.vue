@@ -13,7 +13,7 @@
 				<tr>
 					<th scope="col" class="column-primary">{{labels.table_name}}</th>
 					<th scope="col">{{labels.table_fields}}</th>
-					<th scope="col" :data-balloon="labels.table_default_tooltip" data-balloon-pos="up">{{labels.table_default}}</th>
+					<th scope="col" :data-balloon="labels.table_default_tooltip" data-balloon-pos="left">{{labels.table_default}}</th>
 					<th scope="col">{{labels.table_role}}</th>
 				</tr>
 			</thead>
@@ -29,7 +29,7 @@
 						<strong>{{form.name}}</strong>
 						<div class="row-actions">
 							<span>
-								<a href="#">Customize fields</a>
+								<router-link :to="{ name: 'form', params: { id: id }}">{{labels.table_customize}}</router-link>
 							</span>
 						</div>
 					</td>
