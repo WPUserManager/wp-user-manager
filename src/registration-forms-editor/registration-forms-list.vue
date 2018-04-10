@@ -33,9 +33,15 @@
 							</span>
 						</div>
 					</td>
-					<td>Test</td>
-					<td>Test</td>
-					<td>Test</td>
+					<td>
+						asd
+					</td>
+					<td>
+						<span v-if="form.default === true" class="dashicons dashicons-yes"></span>
+					</td>
+					<td>
+						{{form.role}}
+					</td>
 				</tr>
 			</tbody>
 		</table>

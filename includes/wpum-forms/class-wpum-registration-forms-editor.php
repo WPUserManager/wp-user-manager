@@ -51,6 +51,10 @@ class WPUM_Registration_Forms_Editor {
 	 * @return void
 	 */
 	public function display_registration_forms_editor() {
+
+		//$form = new WPUM_Registration_Form( 1 );
+		//$form->add_meta( 'role', get_option( 'default_role' ) );
+
 		echo '<div class="wrap"><div id="wpum-registration-forms-editor"></div></div>';
 	}
 
@@ -125,7 +129,9 @@ class WPUM_Registration_Forms_Editor {
 
 			foreach ( $registration_forms as $form ) {
 				$forms[ $form->get_ID() ] = [
-					'name' => $form->get_name()
+					'name'    => $form->get_name(),
+					'default' => $form->is_default(),
+					'role'    => $form->get_role()
 				];
 			}
 

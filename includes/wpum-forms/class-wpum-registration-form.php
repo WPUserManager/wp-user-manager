@@ -39,6 +39,20 @@ class WPUM_Registration_Form {
 	protected $fields = [];
 
 	/**
+	 * Wether or not this form is the default form.
+	 *
+	 * @var boolean
+	 */
+	protected $is_default = false;
+
+	/**
+	 * Retrieve the user role assigned to this form.
+	 *
+	 * @var string
+	 */
+	protected $role = null;
+
+	/**
 	 * The Database Abstraction
 	 */
 	protected $db;
@@ -115,6 +129,8 @@ class WPUM_Registration_Form {
 
 		if ( ! empty( $this->id ) ) {
 			// $this->count = $this->count_fields( $this->id );
+			$this->is_default = $this->get_meta( 'default' );
+			$this->role       = $this->get_assigned_role();
 			return true;
 		}
 
@@ -150,6 +166,24 @@ class WPUM_Registration_Form {
 	}
 
 	/**
+	 * Check wether or not this is the default registration form.
+	 *
+	 * @return boolean
+	 */
+	public function is_default() {
+		return (bool) $this->is_default;
+	}
+
+	/**
+	 * Retrieve the assigned role for this form.
+	 *
+	 * @return void
+	 */
+	public function get_role() {
+		return $this->role;
+	}
+
+	/**
 	 * Check if a form exists.
 	 *
 	 * @return void
@@ -160,6 +194,30 @@ class WPUM_Registration_Form {
 		}
 
 		return true;
+	}
+
+	/**
+	 * Retrieve the human friendly name.
+	 *
+	 * @return void
+	 */
+	private function get_assigned_role() {
+
+		$role            = $this->get_meta( 'role' );
+		$available_roles = wpum_get_roles( true );
+
+		$criteria   = array( 'value' => $role );
+		$found_role = wp_list_filter( $available_roles, $criteria );
+
+		reset( $found_role );
+		$first_key = key( $found_role );
+
+		if( array_key_exists( $first_key, $available_roles ) ) {
+			$role = $available_roles[ $first_key ]['label'];
+		}
+
+		return $role;
+
 	}
 
 	/**
