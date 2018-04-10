@@ -97,11 +97,12 @@ class WPUM_Registration_Forms_Editor {
 	private function get_labels() {
 
 		$labels = [
-			'page_title'    => esc_html__( 'WP User Manager Registration Forms Editor' ),
-			'table_name'    => esc_html__( 'Form name' ),
-			'table_fields'  => esc_html__( 'Fields' ),
-			'table_default' => esc_html__( 'Default' ),
-			'table_role'    => esc_html__( 'Registration role' )
+			'page_title'      => esc_html__( 'WP User Manager Registration Forms Editor' ),
+			'table_name'      => esc_html__( 'Form name' ),
+			'table_fields'    => esc_html__( 'Fields' ),
+			'table_default'   => esc_html__( 'Default' ),
+			'table_role'      => esc_html__( 'Registration role' ),
+			'table_not_found' => esc_html__( 'No registration forms have been found.' )
 		];
 
 		return $labels;

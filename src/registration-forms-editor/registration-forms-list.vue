@@ -23,6 +23,7 @@
 						<div class="spinner is-active"></div>
 					</td>
 				</tr>
+				<tr class="no-items" v-if="forms.length < 1 && ! loading"><td class="colspanchange" colspan="4"><strong>{{labels.table_not_found}}</strong></td></tr>
 			</tbody>
 		</table>
 
@@ -44,9 +45,15 @@ export default {
 		}
 	},
 	created() {
+		/**
+		 * Retrieve forms on page load.
+		*/
 		this.getForms()
 	},
 	methods: {
+		/**
+		 * Retrieve the list of created registration forms.
+		 */
 		getForms() {
 
 			this.loading = true
