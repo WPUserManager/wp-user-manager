@@ -61,6 +61,65 @@ class WPUM_DB_Registration_Forms extends WPUM_DB {
 	}
 
 	/**
+	 * Insert a new registration form.
+	 *
+	 * @access public
+	 * @param array $data
+	 *
+	 * @return int ID of the inserted form.
+	 */
+	public function insert( $data, $type = '' ) {
+		$result = parent::insert( $data, $type );
+
+		if ( $result ) {
+			$this->set_last_changed();
+		}
+
+		return $result;
+	}
+
+	/**
+	 * Update a registration form.
+	 *
+	 * @access public
+	 * @param int   $row_id form ID.
+	 * @param array $data
+	 * @param mixed string|array $where Where clause to filter update.
+	 *
+	 * @return  bool
+	 */
+	public function update( $row_id, $data = array(), $where = '' ) {
+		$result = parent::update( $row_id, $data, $where );
+
+		if ( $result ) {
+			$this->set_last_changed();
+		}
+
+		return $result;
+	}
+
+	/**
+	 * Delete registration form.
+	 *
+	 * @access public
+	 * @param int $row_id ID of the form to delete.
+	 * @return bool True if deletion was successful, false otherwise.
+	 */
+	public function delete( $row_id = 0 ) {
+		if ( empty( $row_id ) ) {
+			return false;
+		}
+
+		$result = parent::delete( $row_id );
+
+		if ( $result ) {
+			$this->set_last_changed();
+		}
+
+		return $result;
+	}
+
+	/**
 	 * Sets the last_changed cache key for groups.
 	 *
 	 * @access public
@@ -104,7 +163,7 @@ class WPUM_DB_Registration_Forms extends WPUM_DB {
 		global $wpdb;
 
 		$defaults = array(
-			'number'  => 1,
+			'number'  => 20,
 			'offset'  => 0,
 			'search'  => '',
 			'orderby' => 'id',
@@ -152,6 +211,24 @@ class WPUM_DB_Registration_Forms extends WPUM_DB {
 		}
 
 		return $forms;
+	}
+
+	/**
+	 * Parse the `WHERE` clause for the SQL query.
+	 *
+	 * @param array $args
+	 * @return void
+	 */
+	private function parse_where( $args ) {
+
+		$where = '';
+
+		if ( ! empty( $where ) ) {
+			$where = ' WHERE 1=1 ' . $where;
+		}
+
+		return $where;
+
 	}
 
 }

@@ -118,6 +118,27 @@ class WPUM_Registration_Forms_Editor {
 
 		check_ajax_referer( 'wpum_get_registration_forms', 'nonce' );
 
+		if( current_user_can( 'manage_options' ) ) {
+
+			$registration_forms = WPUM()->registration_forms->get_forms();
+			$forms              = [];
+
+			foreach ( $registration_forms as $form ) {
+				$forms[ $form->get_ID() ] = [
+					'name' => $form->get_name()
+				];
+			}
+
+			if( is_array( $forms ) && ! empty( $forms ) ) {
+				wp_send_json_success( $forms );
+			} else {
+				wp_send_json_error( null, 403 );
+			}
+
+		} else {
+			wp_send_json_error( null, 403 );
+		}
+
 	}
 
 }
