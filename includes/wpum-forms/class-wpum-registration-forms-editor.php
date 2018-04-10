@@ -101,12 +101,13 @@ class WPUM_Registration_Forms_Editor {
 	private function get_labels() {
 
 		$labels = [
-			'page_title'      => esc_html__( 'WP User Manager Registration Forms Editor' ),
-			'table_name'      => esc_html__( 'Form name' ),
-			'table_fields'    => esc_html__( 'Fields' ),
-			'table_default'   => esc_html__( 'Default' ),
-			'table_role'      => esc_html__( 'Registration role' ),
-			'table_not_found' => esc_html__( 'No registration forms have been found.' )
+			'page_title'            => esc_html__( 'WP User Manager Registration Forms Editor' ),
+			'table_name'            => esc_html__( 'Form name' ),
+			'table_fields'          => esc_html__( 'Fields' ),
+			'table_default'         => esc_html__( 'Default' ),
+			'table_role'            => esc_html__( 'Registration role' ),
+			'table_not_found'       => esc_html__( 'No registration forms have been found.' ),
+			'table_default_tooltip' => esc_html__( 'The default registration form cannot be deleted.' )
 		];
 
 		return $labels;
@@ -131,7 +132,8 @@ class WPUM_Registration_Forms_Editor {
 				$forms[ $form->get_ID() ] = [
 					'name'    => $form->get_name(),
 					'default' => $form->is_default(),
-					'role'    => $form->get_role()
+					'role'    => $form->get_role(),
+					'count'   => $form->get_fields_count()
 				];
 			}
 

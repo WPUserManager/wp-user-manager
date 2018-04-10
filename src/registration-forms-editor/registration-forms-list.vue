@@ -13,7 +13,7 @@
 				<tr>
 					<th scope="col" class="column-primary">{{labels.table_name}}</th>
 					<th scope="col">{{labels.table_fields}}</th>
-					<th scope="col">{{labels.table_default}}</th>
+					<th scope="col" :data-balloon="labels.table_default_tooltip" data-balloon-pos="up">{{labels.table_default}}</th>
 					<th scope="col">{{labels.table_role}}</th>
 				</tr>
 			</thead>
@@ -34,7 +34,7 @@
 						</div>
 					</td>
 					<td>
-						asd
+						{{form.count}}
 					</td>
 					<td>
 						<span v-if="form.default === true" class="dashicons dashicons-yes"></span>
@@ -51,7 +51,7 @@
 
 <script>
 import axios from 'axios'
-import qs from 'qs'
+import balloon from 'balloon-css'
 
 export default {
 	name: 'registration-forms-list',

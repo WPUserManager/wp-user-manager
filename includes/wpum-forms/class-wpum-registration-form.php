@@ -166,6 +166,15 @@ class WPUM_Registration_Form {
 	}
 
 	/**
+	 * Retrieve the amount of fields within this registration form.
+	 *
+	 * @return int
+	 */
+	public function get_fields_count() {
+		return count( $this->fields );
+	}
+
+	/**
 	 * Check wether or not this is the default registration form.
 	 *
 	 * @return boolean

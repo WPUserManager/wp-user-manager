@@ -255,5 +255,7 @@ body.users_page_wpum-registration-forms #wpum-fields-editor-list .vue-wp-notice 
 
 .wpum-registration-forms-list .spinner {
   margin: 0 !important; }
+.wpum-registration-forms-list .dashicons {
+  color: #00be28; }
 
 /*# sourceMappingURL=fields-editor.css.map */
