@@ -6,6 +6,7 @@
 				<div class="media-menu">
 					<a v-for="tab in tabs" :key="tab.id" v-if="! isTabDisabled( tab.id ) " @click="activateTab( tab.id )" :class="getTabClasses( tab.id )">{{tab.name}}</a>
 					<div class="separator"></div>
+					<a @click="activateTab( 'registration' )" :class="getTabClasses( 'registration' )">Configure registration</a>
 				</div>
 			</div>
 			<div class="media-frame-title">
@@ -21,7 +22,9 @@
 				<wp-notice type="error" alternative v-if="error"><strong>{{errorMessage}}</strong></wp-notice>
 				<!-- end error message -->
 
-				<vue-form-generator v-if="!loadingFields" :schema="schema" :model="model" :options="formOptions" ref="vfg"></vue-form-generator>
+				<wp-notice type="info" alternative v-if="activeTab == 'registration'"><strong>Info message</strong></wp-notice>
+
+				<vue-form-generator v-if="!loadingFields && activeTab !== 'registration'" :schema="schema" :model="model" :options="formOptions" ref="vfg"></vue-form-generator>
 
 			</div>
 			<div class="media-frame-toolbar">
@@ -145,7 +148,17 @@ export default {
 		 */
 		activateTab( tab_id ) {
 			this.activeTab = tab_id
-			this.getSettings()
+			if( tab_id == 'registration' ) {
+				this.showRegistrationTab()
+			} else {
+				this.getSettings()
+			}
+		},
+		/**
+		 * Show the registration tab content.
+		 */
+		showRegistrationTab() {
+
 		},
 		/**
 		 * Toggle the active class status if the active tab is the current one.
