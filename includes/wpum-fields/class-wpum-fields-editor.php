@@ -43,6 +43,7 @@ class WPUM_Fields_Editor {
 		add_action( 'wp_ajax_wpum_update_fields_order', [ $this, 'update_fields_order' ] );
 		add_action( 'wp_ajax_wpum_get_field_settings', [ $this, 'get_field_settings' ] );
 		add_action( 'wp_ajax_wpum_update_field', [ $this, 'update_field' ] );
+		add_action( 'wp_ajax_wpum_get_registration_forms', [ $this, 'get_forms' ] );
 	}
 
 	/**
@@ -93,6 +94,7 @@ class WPUM_Fields_Editor {
 				'nonce'              => wp_create_nonce( 'wpum_update_fields_groups' ),
 				'get_fields_nonce'   => wp_create_nonce( 'wpum_get_fields' ),
 				'create_field_nonce' => wp_create_nonce( 'wpum_create_field' ),
+				'getFormsNonce'      => wp_create_nonce( 'wpum_get_registration_forms' ),
 				'cf_addon_url'       => 'https://wpusermanager.com/addons/custom-fields/?ref=wp_admin',
 				'fields_types'       => wpum_get_registered_field_types(),
 				'edit_dialog_tabs'   => wpum_get_edit_field_dialog_tabs()
@@ -168,7 +170,9 @@ class WPUM_Fields_Editor {
 			'field_error_required'      => esc_html__( 'Error: this setting is required.' ),
 			'field_error_special'       => esc_html__( 'Error: this setting cannot contain special characters.' ),
 			'field_error_nosave'        => esc_html__( 'There are some errors with your changes. Please check the errors highlighted below.' ),
-			'error_general'             => esc_html__( 'Something went wrong, no changes were saved.' )
+			'error_general'             => esc_html__( 'Something went wrong, no changes were saved.' ),
+			'registration_info'         => esc_html__( 'To display this field during signup, select one or more registration forms below.' ),
+			'registration_label'        => esc_html__( 'Available registration forms' )
 		];
 
 	}
@@ -597,6 +601,42 @@ class WPUM_Fields_Editor {
 			}
 
 			wp_send_json_success( $data );
+
+		} else {
+			wp_send_json_error( null, 403 );
+		}
+
+	}
+
+	/**
+	 * Retrieve the list of registration forms.
+	 *
+	 * @return void
+	 */
+	public function get_forms() {
+
+		check_ajax_referer( 'wpum_get_registration_forms', 'nonce' );
+
+		if( current_user_can( 'manage_options' ) ) {
+
+			$forms = [];
+			$registration_forms = WPUM()->registration_forms->get_forms();
+
+			// Get list of registered forms ready for display within vuejs.
+			if( is_array( $registration_forms ) && ! empty( $registration_forms ) ) {
+				foreach ( $registration_forms as $form ) {
+					$forms[] = [
+						'value' => $form->get_ID(),
+						'name'  => $form->get_name(),
+					];
+				}
+			}
+
+			if( ! empty( $forms ) ) {
+				wp_send_json_success( $forms );
+			} else {
+				wp_send_json_error( null, 403 );
+			}
 
 		} else {
 			wp_send_json_error( null, 403 );

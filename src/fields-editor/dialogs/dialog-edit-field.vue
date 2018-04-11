@@ -22,7 +22,25 @@
 				<wp-notice type="error" alternative v-if="error"><strong>{{errorMessage}}</strong></wp-notice>
 				<!-- end error message -->
 
-				<wp-notice type="info" alternative v-if="activeTab == 'registration'"><strong>Info message</strong></wp-notice>
+				<!-- registration form settings -->
+				<wp-notice type="info" alternative v-if="activeTab == 'registration' && !loadingFields"><strong>{{labels.registration_info}}</strong></wp-notice>
+
+				<form action="post" v-if="activeTab == 'registration' && !loadingFields" class="vue-form-generator">
+					<div class="form-group field-input">
+						<label for="registration-forms">{{labels.registration_label}}</label>
+						<div class="field-wrap">
+							<div class="wrapper">
+								<div class="reg-form" v-for="form in availableRegistrationForms" :key="form.value">
+									<label :for="form.value">
+										<input type="checkbox" :id="form.value" :value="form.value" v-model="selectedRegistrationForms">
+										{{form.name}}
+									</label>
+								</div>
+							</div>
+						</div>
+					</div>
+				</form>
+				<!-- end registration form settings -->
 
 				<vue-form-generator v-if="!loadingFields && activeTab !== 'registration'" :schema="schema" :model="model" :options="formOptions" ref="vfg"></vue-form-generator>
 
@@ -84,7 +102,11 @@ export default {
 			formOptions: {
 				validateAfterLoad: true,
 				validateAfterChanged: true
-			}
+			},
+
+			// Setup the registration forms enabled for the field.
+			availableRegistrationForms: [],
+			selectedRegistrationForms: []
 
 		}
 	},
@@ -158,6 +180,25 @@ export default {
 		 * Show the registration tab content.
 		 */
 		showRegistrationTab() {
+
+			this.loadingFields = true
+
+			axios.get( wpumFieldsEditor.ajax, {
+				params: {
+					nonce:  wpumFieldsEditor.getFormsNonce,
+					action: 'wpum_get_registration_forms'
+				}
+			})
+			.then( response => {
+
+				this.loadingFields = false
+				this.availableRegistrationForms = response.data.data
+
+			})
+			.catch( error => {
+				this.loadingFields = false
+				console.log(error)
+			})
 
 		},
 		/**
