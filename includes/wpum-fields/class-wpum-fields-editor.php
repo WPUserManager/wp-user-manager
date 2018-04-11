@@ -43,8 +43,6 @@ class WPUM_Fields_Editor {
 		add_action( 'wp_ajax_wpum_update_fields_order', [ $this, 'update_fields_order' ] );
 		add_action( 'wp_ajax_wpum_get_field_settings', [ $this, 'get_field_settings' ] );
 		add_action( 'wp_ajax_wpum_update_field', [ $this, 'update_field' ] );
-		add_action( 'wp_ajax_wpum_get_registration_forms', [ $this, 'get_forms' ] );
-		add_action( 'wp_ajax_wpum_update_registration_forms', [ $this, 'update_forms' ] );
 	}
 
 	/**
@@ -95,8 +93,6 @@ class WPUM_Fields_Editor {
 				'nonce'              => wp_create_nonce( 'wpum_update_fields_groups' ),
 				'get_fields_nonce'   => wp_create_nonce( 'wpum_get_fields' ),
 				'create_field_nonce' => wp_create_nonce( 'wpum_create_field' ),
-				'getFormsNonce'      => wp_create_nonce( 'wpum_get_registration_forms' ),
-				'updateFormsNonce'   => wp_create_nonce( 'wpum_update_forms_nonce' ),
 				'cf_addon_url'       => 'https://wpusermanager.com/addons/custom-fields/?ref=wp_admin',
 				'fields_types'       => wpum_get_registered_field_types(),
 				'edit_dialog_tabs'   => wpum_get_edit_field_dialog_tabs()
@@ -603,80 +599,6 @@ class WPUM_Fields_Editor {
 			}
 
 			wp_send_json_success( $data );
-
-		} else {
-			wp_send_json_error( null, 403 );
-		}
-
-	}
-
-	/**
-	 * Retrieve the list of registration forms.
-	 *
-	 * @return void
-	 */
-	public function get_forms() {
-
-		check_ajax_referer( 'wpum_get_registration_forms', 'nonce' );
-
-		if( current_user_can( 'manage_options' ) ) {
-
-			$forms = [];
-			$registration_forms = WPUM()->registration_forms->get_forms();
-
-			// Get list of registered forms ready for display within vuejs.
-			if( is_array( $registration_forms ) && ! empty( $registration_forms ) ) {
-				foreach ( $registration_forms as $form ) {
-					$forms[] = [
-						'value' => $form->get_ID(),
-						'name'  => $form->get_name(),
-					];
-				}
-			}
-
-			if( ! empty( $forms ) ) {
-				wp_send_json_success( $forms );
-			} else {
-				wp_send_json_error( null, 403 );
-			}
-
-		} else {
-			wp_send_json_error( null, 403 );
-		}
-
-	}
-
-	/**
-	 * Update the fields assigned to a registration form.
-	 *
-	 * @return void
-	 */
-	public function update_forms() {
-
-		check_ajax_referer( 'wpum_update_forms_nonce', 'nonce' );
-
-		if( current_user_can( 'manage_options' ) ) {
-
-			$field_id = isset( $_POST['field_id'] ) ? absint( $_POST['field_id'] ) : false;
-			$forms    = isset( $_POST['forms'] ) ? $_POST['forms'] : false;
-
-			if( $field_id ) {
-				foreach ( $forms as $form_id ) {
-					$registration_form = new WPUM_Registration_Form( $form_id );
-					$assigned_fields   = $registration_form->get_meta( 'fields' );
-
-					// If no fields found, create an empty array.
-					if( ! is_array( $assigned_fields ) ) {
-						$assigned_fields = [];
-					}
-					$new_fields        = array_merge( $assigned_fields, [ $field_id ] );
-
-					// Update the saved fields within the registration form.
-					$registration_form->update_meta( 'fields', $new_fields );
-				}
-			}
-
-			wp_send_json_success();
 
 		} else {
 			wp_send_json_error( null, 403 );
