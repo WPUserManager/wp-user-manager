@@ -237,33 +237,20 @@ export default {
 		 * Process the settings and update the database.
 		 */
 		editField() {
-			let valid = this.$refs.vfg.validate();
-
-			// If there's validation errors - show another message within the editor.
-			if( valid === false ) {
-
-				this.error = true
-				this.errorMessage = this.labels.field_error_nosave
-
-			} else if( valid === true ) {
+			if( this.activeTab == 'registration' ) {
 
 				this.loading = true
-
-				// Hide the error messages and reset the default error message.
-				this.error = false
-				this.errorMessage = this.labels.field_edit_settings_error
 
 				// Make a call via ajax.
 				axios.post( wpumFieldsEditor.ajax,
 					qs.stringify({
-						nonce:    wpumFieldsEditor.get_fields_nonce,
+						nonce:    wpumFieldsEditor.updateFormsNonce,
 						field_id: this.field_id,
-						data:     this.model,
-						settings: this.schema.fields
+						forms:    this.selectedRegistrationForms
 					}),
 					{
 						params: {
-							action: 'wpum_update_field'
+							action: 'wpum_update_registration_forms'
 						},
 					}
 				)
@@ -277,6 +264,51 @@ export default {
 					this.updateStatus( 'error' )
 					this.$emit('close')
 				})
+
+			} else {
+
+				let valid = this.$refs.vfg.validate();
+
+				// If there's validation errors - show another message within the editor.
+				if( valid === false ) {
+
+					this.error = true
+					this.errorMessage = this.labels.field_error_nosave
+
+				} else if( valid === true ) {
+
+					this.loading = true
+
+					// Hide the error messages and reset the default error message.
+					this.error = false
+					this.errorMessage = this.labels.field_edit_settings_error
+
+					// Make a call via ajax.
+					axios.post( wpumFieldsEditor.ajax,
+						qs.stringify({
+							nonce:    wpumFieldsEditor.get_fields_nonce,
+							field_id: this.field_id,
+							data:     this.model,
+							settings: this.schema.fields
+						}),
+						{
+							params: {
+								action: 'wpum_update_field'
+							},
+						}
+					)
+					.then( response => {
+						this.loading = false
+						this.updateStatus( 'success' )
+						this.$emit('close')
+					})
+					.catch( error => {
+						this.loading = false
+						this.updateStatus( 'error' )
+						this.$emit('close')
+					})
+
+				}
 
 			}
 
