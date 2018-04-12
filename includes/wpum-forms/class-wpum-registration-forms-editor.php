@@ -207,7 +207,18 @@ class WPUM_Registration_Forms_Editor {
 			'order'   => 'ASC'
 		] );
 
+		$non_allowed_fields = [
+			'user_avatar',
+			'user_nickname',
+			'user_displayname'
+		];
+
 		foreach ( $available_fields as $field ) {
+
+			if( ! empty( $field->get_primary_id() ) && in_array( $field->get_primary_id(), $non_allowed_fields ) ) {
+				continue;
+			}
+
 			$fields[] = [
 				'id'   => $field->get_ID(),
 				'name' => $field->get_name(),
