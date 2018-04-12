@@ -31,7 +31,7 @@
 					<th scope="col">{{labels.table_actions}}</th>
 				</tr>
 			</thead>
-				<draggable v-model="fields" :element="'tbody'" :options="{handle:'.order-anchor'}" @end="onSortingEnd">
+				<draggable v-model="fields" :element="'tbody'" :options="{handle:'.order-anchor', animation:150}" @end="onSortingEnd">
 					<tr v-if="fields && !loading" v-for="field in fields" :key="field.id">
 						<td class="order-anchor align-middle" v-if="fields.length > 1">
 							<span class="dashicons dashicons-menu"></span>
