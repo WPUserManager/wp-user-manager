@@ -170,12 +170,12 @@ class WPUM_DB_Fields extends WPUM_DB {
 		global $wpdb;
 
 		$defaults = array(
-			'number'   => -1,
-			'offset'   => 0,
-			'search'   => '',
-			'group_id' => false,
-			'orderby'  => 'id',
-			'order'    => 'DESC',
+			'number'        => -1,
+			'offset'        => 0,
+			'search'        => '',
+			'group_id'      => false,
+			'orderby'       => 'id',
+			'order'         => 'DESC',
 		);
 
 		$args = wp_parse_args( $args, $defaults );

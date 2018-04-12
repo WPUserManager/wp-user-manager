@@ -353,3 +353,25 @@ body.users_page_wpum-registration-forms {
 		color: #00be28;
 	}
 }
+
+.dragArea {
+	min-height: 50px;
+}
+
+.droppable-fields {
+	min-height: 50px;
+	border:2px dashed #eee;
+	padding: 20px;
+}
+
+.available-fields-holder {
+	height: 400px;
+	overflow: hidden;
+	overflow-y: visible;
+	padding: 20px;
+	border:2px dashed #ccc;
+}
+
+.empty-fields {
+	margin: 20px;
+}

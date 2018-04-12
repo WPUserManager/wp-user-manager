@@ -83,7 +83,7 @@ class WPUM_Fields_Editor {
 			wp_enqueue_style( 'wpum-fields-editor', WPUM_PLUGIN_URL . 'assets/css/admin/fields-editor.css' , array(), WPUM_VERSION );
 
 			$js_variables = [
-				'is_addon_installed' => apply_filters( 'wpum_fields_editor_has_custom_fields_addon', true ),
+				'is_addon_installed' => apply_filters( 'wpum_fields_editor_has_custom_fields_addon', false ),
 				'page_title'         => esc_html__( 'WP User Manager Fields Editor' ),
 				'success_message'    => esc_html__( 'Changes successfully saved.' ),
 				'labels'             => $this->get_labels(),

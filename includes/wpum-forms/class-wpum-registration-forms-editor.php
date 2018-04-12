@@ -52,10 +52,6 @@ class WPUM_Registration_Forms_Editor {
 	 * @return void
 	 */
 	public function display_registration_forms_editor() {
-
-		//$form = new WPUM_Registration_Form( 1 );
-		//$form->add_meta( 'role', get_option( 'default_role' ) );
-
 		echo '<div class="wrap"><div id="wpum-registration-forms-editor"></div></div>';
 	}
 
@@ -86,7 +82,7 @@ class WPUM_Registration_Forms_Editor {
 				'ajax'          => admin_url( 'admin-ajax.php' ),
 				'pluginURL'     => WPUM_PLUGIN_URL,
 				'getFormsNonce' => wp_create_nonce( 'wpum_get_registration_forms' ),
-				'getFormNonce' => wp_create_nonce( 'wpum_get_registration_form' )
+				'getFormNonce'  => wp_create_nonce( 'wpum_get_registration_form' )
 			];
 
 			wp_localize_script( 'wpum-registration-forms-editor', 'wpumRegistrationFormsEditor', $js_variables );
@@ -113,8 +109,10 @@ class WPUM_Registration_Forms_Editor {
 			'table_customize'        => esc_html__( 'Customize fields' ),
 			'page_back'              => esc_html__( 'Return to the registration forms list' ),
 			'editor_available_title' => esc_html__( 'Available fields' ),
-			'editor_available_desc'  => esc_html__( 'To add a field to the form drag it into the container on the right.' ),
-			'table_field_name'       => esc_html__( 'Field name' )
+			'editor_available_desc'  => esc_html__( 'To add a field to this form, drag it into the container on the right.' ),
+			'table_field_name'       => esc_html__( 'Field name' ),
+			'editor_used_fields'     => esc_html__( 'Add fields here to use them in this registration form.' ),
+			'editor_drag'            => esc_html__( 'This form does not have any fields yet. Drag and drop fields here.' )
 		];
 
 		return $labels;
@@ -176,7 +174,8 @@ class WPUM_Registration_Forms_Editor {
 
 				wp_send_json_success(
 					[
-						'name'   => $form->get_name(),
+						'name'             => $form->get_name(),
+						'available_fields' => $this->get_available_fields()
 					]
 				 );
 
@@ -191,6 +190,31 @@ class WPUM_Registration_Forms_Editor {
 			wp_send_json_error( null, 403 );
 
 		}
+
+	}
+
+	/**
+	 * Get fields available to be used within a registration form.
+	 *
+	 * @return array
+	 */
+	private function get_available_fields() {
+
+		$fields = [];
+
+		$available_fields = WPUM()->fields->get_fields( [
+			'orderby' => 'fields_order',
+			'order'   => 'ASC'
+		] );
+
+		foreach ( $available_fields as $field ) {
+			$fields[] = [
+				'id'   => $field->get_ID(),
+				'name' => $field->get_name(),
+			];
+		}
+
+		return $fields;
 
 	}
 
