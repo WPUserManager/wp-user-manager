@@ -18,7 +18,7 @@
 						<p class="description">{{labels.editor_available_desc}}</p>
 					</div>
 
-					<draggable v-model="availableFields" class="dragArea available-fields-holder" :options="{group:'formFields'}">
+					<draggable v-model="availableFields" class="dragArea available-fields-holder" :options="{group:'formFields', sort:false}">
 						<div class="widget ui-draggable" v-for="element in availableFields" :key="element.name">
 							<div class="widget-top">
 								<div class="widget-title ui-draggable-handle">
