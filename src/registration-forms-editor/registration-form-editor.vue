@@ -18,7 +18,7 @@
 						<p class="description">{{labels.editor_available_desc}}</p>
 					</div>
 
-					<draggable v-model="availableFields" class="dragArea available-fields-holder" :options="{group:'formFields', sort:false}">
+					<draggable v-model="availableFields" class="dragArea available-fields-holder" :options="{group:'formFields', sort:false, animation:150}">
 						<div class="widget ui-draggable" v-for="element in availableFields" :key="element.name">
 							<div class="widget-top">
 								<div class="widget-title ui-draggable-handle">
@@ -45,7 +45,7 @@
 								<p class="description">{{labels.editor_used_fields}}</p>
 							</div>
 							<!-- start fields list -->
-							<draggable v-model="selectedFields" class="droppable-fields" :options="{group:'formFields'}" @sort="saveFields">
+							<draggable v-model="selectedFields" class="droppable-fields" :options="{group:'formFields', animation:150}" @sort="saveFields">
 								<div class="widget" v-for="element in selectedFields" :key="element.name">
 									<div class="widget-top">
 										<div class="widget-title ui-sortable-handle">
