@@ -129,7 +129,8 @@ class WPUM_Form_Registration extends WPUM_Form {
 							'required'    => $field->get_meta( 'required' ),
 							'placeholder' => $field->get_meta( 'placeholder' ),
 							'description' => $field->get_description(),
-							'priority'    => 0
+							'priority'    => 0,
+							'primary_id'  => $field->get_primary_id()
 						);
 					}
 
