@@ -85,8 +85,72 @@ class WPUM_Form_Registration extends WPUM_Form {
 			return;
 		}
 
-		$this->fields = [];
+		$this->fields = [ 'register' => $this->get_registration_fields() ];
 
+	}
+
+	/**
+	 * Retrieve the registration form from the database.
+	 *
+	 * @return void
+	 */
+	private function get_registration_form() {
+
+		$form = WPUM()->registration_forms->get_forms();
+		$form = $form[0];
+
+		return $form;
+
+	}
+
+	/**
+	 * Retrieve the registration form fields.
+	 *
+	 * @return array
+	 */
+	private function get_registration_fields() {
+
+		$fields = [];
+		$registration_form = $this->get_registration_form();
+
+		if( $registration_form->exists() ) {
+
+			$stored_fields = $registration_form->get_meta( 'fields' );
+
+			if( is_array( $stored_fields ) && ! empty( $stored_fields ) ) {
+				foreach ( $stored_fields as $field ) {
+
+					$field = new WPUM_Field( $field );
+
+					if( $field->exists() ) {
+						$fields[ $this->get_parsed_id( $field->get_name() ) ] = array(
+							'label'       => $field->get_name(),
+							'type'        => $field->get_type(),
+							'required'    => $field->get_meta( 'required' ),
+							'placeholder' => $field->get_meta( 'placeholder' ),
+							'description' => $field->get_description(),
+							'priority'    => 0
+						);
+					}
+
+				}
+			}
+
+		}
+
+		return apply_filters( 'wpum_get_registration_fields', $fields );
+
+	}
+
+	/**
+	 * Retrieve a name value for the form by replacing whitespaces with underscores
+	 * and make everything lower case.
+	 *
+	 * @param string $name
+	 * @return void
+	 */
+	private function get_parsed_id( $name ) {
+		return str_replace(' ', '_', strtolower( $name ) );
 	}
 
 	/**
@@ -102,7 +166,7 @@ class WPUM_Form_Registration extends WPUM_Form {
 		$data = [
 			'form'    => $this->form_name,
 			'action'  => $this->get_action(),
-			'fields'  => [],
+			'fields'  => $this->get_fields( 'register' ),
 			'step'    => $this->get_step(),
 		];
 
