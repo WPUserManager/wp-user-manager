@@ -163,6 +163,35 @@ class WPUM_Form_Registration extends WPUM_Form {
 	}
 
 	/**
+	 * Detect wether to use a username or email to register a new account.
+	 * Scan for fields within the registration form and check which ones are available.
+	 *
+	 * If the username field is available we'll always use this.
+	 * If only the email field is available, we'll use the email as username.
+	 *
+	 * If no username or email field, we'll show an error.
+	 *
+	 * @return void
+	 */
+	private function get_register_by() {
+
+		$by = false;
+
+		$registered_fields = $this->get_fields( 'register' );
+
+		if( is_array( $registered_fields ) && ! empty( $registered_fields ) ) {
+			if( isset( $registered_fields['username'] ) ) {
+				$by = 'username';
+			} else if( isset( $registered_fields['user_email'] ) ) {
+				$by = 'email';
+			}
+		}
+
+		return $by;
+
+	}
+
+	/**
 	 * Display the first step of the registration form.
 	 *
 	 * @param array $atts
