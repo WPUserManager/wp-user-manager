@@ -243,6 +243,16 @@ class WPUM_Form_Registration extends WPUM_Form {
 				throw new Exception( $return->get_error_message() );
 			}
 
+			// Detect what we're going to use to register the new account.
+			$register_with = $this->get_register_by();
+			$username      = '';
+
+			if( $register_with == 'username' ) {
+				$username = $values['register']['username'];
+			} else if( $register_with == 'email' ) {
+				$username = $values['register']['user_email'];
+			}
+
 			// Successful, show next step.
 			$this->step ++;
 
