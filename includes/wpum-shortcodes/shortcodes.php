@@ -125,3 +125,26 @@ function wpum_logout_link( $atts, $content = null ) {
 
 }
 add_shortcode( 'wpum_logout', 'wpum_logout_link' );
+
+/**
+ * Show the registration form through a shortcode.
+ *
+ * @param array $atts
+ * @param string $content
+ * @return void
+ */
+function wpum_registration_form( $atts, $content = null ) {
+
+	extract( shortcode_atts( array(
+		'login_link' => '',
+		'psw_link'   => ''
+	), $atts ) );
+
+	ob_start();
+
+	$output = ob_get_clean();
+
+	return $output;
+
+}
+add_shortcode( 'wpum_register', 'wpum_registration_form' );
