@@ -116,9 +116,10 @@ export default {
 				}
 			})
 			.then( response => {
-				this.loading  = false
-				this.formName = response.data.data.name
+				this.loading         = false
+				this.formName        = response.data.data.name
 				this.availableFields = response.data.data.available_fields
+				this.selectedFields  = response.data.data.stored_fields
 			})
 			.catch( error => {
 				this.loading = false

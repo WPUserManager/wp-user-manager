@@ -179,7 +179,8 @@ class WPUM_Registration_Forms_Editor {
 				wp_send_json_success(
 					[
 						'name'             => $form->get_name(),
-						'available_fields' => $this->get_available_fields()
+						'available_fields' => $this->get_available_fields(),
+						'stored_fields'    => $this->get_stored_fields( $form_id )
 					]
 				 );
 
@@ -194,6 +195,47 @@ class WPUM_Registration_Forms_Editor {
 			$this->send_json_error();
 
 		}
+
+	}
+
+	/**
+	 * Get all the fields used within a form.
+	 *
+	 * @param string $form_id
+	 * @return array
+	 */
+	private function get_stored_fields( $form_id ) {
+
+		if( ! $form_id ) {
+			return;
+		}
+
+		$fields = [];
+
+		$form = new WPUM_Registration_Form( $form_id );
+
+		if( $form->exists() ) {
+
+			$stored_fields = $form->get_meta( 'fields' );
+
+			if( is_array( $stored_fields ) && ! empty( $stored_fields ) ) {
+				foreach ( $stored_fields as $field ) {
+
+					$stored_field = new WPUM_Field( $field );
+
+					if( $stored_field->exists() ) {
+						$fields[] = [
+							'id'   => $stored_field->get_ID(),
+							'name' => $stored_field->get_name()
+						];
+					}
+
+				}
+			}
+
+		}
+
+		return $fields;
 
 	}
 
