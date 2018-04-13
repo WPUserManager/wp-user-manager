@@ -200,6 +200,7 @@ class WPUM_Form_Registration extends WPUM_Form {
 	public function submit( $atts ) {
 
 		$this->init_fields();
+		$register_with = $this->get_register_by();
 
 		$data = [
 			'form'    => $this->form_name,
@@ -208,13 +209,23 @@ class WPUM_Form_Registration extends WPUM_Form {
 			'step'    => $this->get_step(),
 		];
 
-		WPUM()->templates
-			->set_template_data( $data )
-			->get_template_part( 'forms/form', 'registration' );
+		if( $register_with ) {
 
-		WPUM()->templates
-			->set_template_data( $atts )
-			->get_template_part( 'action-links' );
+			WPUM()->templates
+				->set_template_data( $data )
+				->get_template_part( 'forms/form', 'registration' );
+
+			WPUM()->templates
+				->set_template_data( $atts )
+				->get_template_part( 'action-links' );
+
+		} else {
+
+			WPUM()->templates
+				->set_template_data( [ 'message' => esc_html__( 'The registration form cannot be used because either a username or email field is required to process registrations. Please edit the form and add at least one of those fields.' ) ] )
+				->get_template_part( 'messages/general', 'error' );
+
+		}
 
 	}
 
