@@ -39,7 +39,9 @@
 					<div class="widgets-holder-wrap">
 						<div class="widgets-sortables ui-droppable ui-sortable">
 							<div class="sidebar-name">
-								<h2>{{formName}} <div class="spinner is-active" v-if="loading"></div></h2>
+								<h2>{{formName}}
+									<div class="spinner is-active" v-if="loading"></div>
+								</h2>
 							</div>
 							<div class="sidebar-description">
 								<p class="description">{{labels.editor_used_fields}}</p>

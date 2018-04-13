@@ -109,10 +109,10 @@ class WPUM_Registration_Forms_Editor {
 			'table_customize'        => esc_html__( 'Customize fields' ),
 			'page_back'              => esc_html__( 'Return to the registration forms list' ),
 			'editor_available_title' => esc_html__( 'Available fields' ),
-			'editor_available_desc'  => esc_html__( 'To add a field to this form, drag it into the container on the right.' ),
+			'editor_available_desc'  => esc_html__( 'To add a field to this form, drag it into the container on the right. To remove a field, place it back here.' ),
 			'table_field_name'       => esc_html__( 'Field name' ),
-			'editor_used_fields'     => esc_html__( 'Add fields here to use them in this registration form.' ),
-			'editor_drag'            => esc_html__( 'This form does not have any fields yet. Drag and drop fields here.' )
+			'editor_used_fields'     => esc_html__( 'Add fields here to use them in this registration form. Drag fields up and down to change their order within the form.' ),
+			'editor_drag'            => esc_html__( 'This form does not have any fields yet. Drag and drop fields here.' ),
 		];
 
 		return $labels;
