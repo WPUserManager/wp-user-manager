@@ -29,6 +29,7 @@ class WPUM_Registration_Forms_Editor {
 		add_action( 'admin_enqueue_scripts', [ $this, 'load_scripts' ] );
 		add_action( 'wp_ajax_wpum_get_registration_forms', [ $this, 'get_forms' ] );
 		add_action( 'wp_ajax_wpum_get_registration_form', [ $this, 'get_form' ] );
+		add_action( 'wp_ajax_wpum_save_registration_form', [ $this, 'save_form' ] );
 	}
 
 	/**
@@ -82,7 +83,8 @@ class WPUM_Registration_Forms_Editor {
 				'ajax'          => admin_url( 'admin-ajax.php' ),
 				'pluginURL'     => WPUM_PLUGIN_URL,
 				'getFormsNonce' => wp_create_nonce( 'wpum_get_registration_forms' ),
-				'getFormNonce'  => wp_create_nonce( 'wpum_get_registration_form' )
+				'getFormNonce'  => wp_create_nonce( 'wpum_get_registration_form' ),
+				'saveFormNonce' => wp_create_nonce( 'wpum_save_registration_form' )
 			];
 
 			wp_localize_script( 'wpum-registration-forms-editor', 'wpumRegistrationFormsEditor', $js_variables );
@@ -113,6 +115,8 @@ class WPUM_Registration_Forms_Editor {
 			'table_field_name'       => esc_html__( 'Field name' ),
 			'editor_used_fields'     => esc_html__( 'Add fields here to use them in this registration form. Drag fields up and down to change their order within the form.' ),
 			'editor_drag'            => esc_html__( 'This form does not have any fields yet. Drag and drop fields here.' ),
+			'success'                => esc_html__( 'Changes successfully saved.' ),
+			'error'                  => esc_html__( 'Something went wrong no changes saved.' )
 		];
 
 		return $labels;
@@ -128,7 +132,7 @@ class WPUM_Registration_Forms_Editor {
 
 		check_ajax_referer( 'wpum_get_registration_forms', 'nonce' );
 
-		if( current_user_can( 'manage_options' ) ) {
+		if( current_user_can( 'manage_options' ) && is_admin() ) {
 
 			$registration_forms = WPUM()->registration_forms->get_forms();
 			$forms              = [];
@@ -145,11 +149,11 @@ class WPUM_Registration_Forms_Editor {
 			if( is_array( $forms ) && ! empty( $forms ) ) {
 				wp_send_json_success( $forms );
 			} else {
-				wp_send_json_error( null, 403 );
+				$this->send_json_error();
 			}
 
 		} else {
-			wp_send_json_error( null, 403 );
+			$this->send_json_error();
 		}
 
 	}
@@ -163,7 +167,7 @@ class WPUM_Registration_Forms_Editor {
 
 		check_ajax_referer( 'wpum_get_registration_form', 'nonce' );
 
-		if( current_user_can( 'manage_options' ) ) {
+		if( current_user_can( 'manage_options' ) && is_admin() ) {
 
 			$form_id = isset( $_GET['form_id'] ) ? absint( $_GET['form_id'] ) : false;
 
@@ -181,13 +185,13 @@ class WPUM_Registration_Forms_Editor {
 
 			} else {
 
-				wp_send_json_error( null, 403 );
+				$this->send_json_error();
 
 			}
 
 		} else {
 
-			wp_send_json_error( null, 403 );
+			$this->send_json_error();
 
 		}
 
@@ -227,6 +231,54 @@ class WPUM_Registration_Forms_Editor {
 
 		return $fields;
 
+	}
+
+	/**
+	 * Save fields for this form to the database.
+	 *
+	 * @return void
+	 */
+	public function save_form() {
+
+		check_ajax_referer( 'wpum_save_registration_form', 'nonce' );
+
+		if( current_user_can( 'manage_options' ) && is_admin() ) {
+
+			$form_id = isset( $_POST['form_id'] ) ? absint( $_POST['form_id'] ) : false;
+			$fields  = isset( $_POST['fields'] ) && is_array( $_POST['fields'] ) && ! empty( $_POST['fields'] ) ? $_POST['fields'] : false;
+
+			if( $form_id ) {
+				$registration_form = new WPUM_Registration_Form( $form_id );
+				$fields_to_save    = [];
+
+				if( $registration_form->exists() ) {
+					foreach( $fields as $field ) {
+						$fields_to_save[] = absint( $field['id'] );
+					}
+				}
+
+				if( ! empty( $fields_to_save ) ) {
+					$registration_form->update_meta( 'fields', $fields_to_save );
+					wp_send_json_success();
+				}
+
+			}
+
+		} else {
+
+			$this->send_json_error();
+
+		}
+
+	}
+
+	/**
+	 * Send and error back to the ajax request.
+	 *
+	 * @return void
+	 */
+	private function send_json_error() {
+		wp_send_json_error( null, 403 );
 	}
 
 }

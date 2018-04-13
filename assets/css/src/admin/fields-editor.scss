@@ -375,3 +375,10 @@ body.users_page_wpum-registration-forms {
 .empty-fields {
 	margin: 20px;
 }
+
+.widgets-holder-wrap {
+	.vue-wp-notice {
+		margin: 0;
+		font-weight: bold;
+	}
+}

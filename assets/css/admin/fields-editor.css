@@ -276,4 +276,8 @@ body.users_page_wpum-registration-forms #wpum-fields-editor-list .vue-wp-notice 
 .empty-fields {
   margin: 20px; }
 
+.widgets-holder-wrap .vue-wp-notice {
+  margin: 0;
+  font-weight: bold; }
+
 /*# sourceMappingURL=fields-editor.css.map */

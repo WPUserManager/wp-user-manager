@@ -37,6 +37,9 @@
 
 				<div class="sidebars-column-1">
 					<div class="widgets-holder-wrap">
+
+						<wp-notice :type="messageStatus" alternative v-if="showMessage">{{messageContent}}</wp-notice>
+
 						<div class="widgets-sortables ui-droppable ui-sortable">
 							<div class="sidebar-name">
 								<h2>{{formName}}
@@ -69,6 +72,7 @@
 
 <script>
 import axios from 'axios'
+import qs from 'qs'
 import balloon from 'balloon-css'
 import draggable from 'vuedraggable'
 
@@ -86,6 +90,9 @@ export default {
 			formName:        '...',
 			availableFields: [],
 			selectedFields:  [],
+			showMessage:     false,
+			messageStatus:   'success',
+			messageContent:  ''
 		}
 	},
 	created() {
@@ -118,9 +125,50 @@ export default {
 				console.log(error)
 			})
 		},
+		/**
+		 * Automatically hide a notice after it's displayed.
+		*/
+		resetNotice() {
+			setTimeout( () => {
+				this.showMessage = false
+			}, 3000)
+		},
+		/**
+		 * Save fields to the form.
+		 */
 		saveFields() {
+
 			this.loading = true
-			console.log('test ')
+
+			axios.post( wpumRegistrationFormsEditor.ajax,
+				qs.stringify({
+					nonce:   wpumRegistrationFormsEditor.saveFormNonce,
+					action:  'wpum_save_registration_form',
+					form_id: this.formID,
+					fields:  this.selectedFields
+				}),
+				{
+					params: {
+						action: 'wpum_save_registration_form'
+					},
+				}
+			)
+			.then( response => {
+				this.loading        = false
+				this.showMessage    = true
+				this.messageStatus  = 'success'
+				this.messageContent =  wpumRegistrationFormsEditor.labels.success
+				this.resetNotice()
+			})
+			.catch( error => {
+				this.loading = false
+				this.showMessage    = true
+				this.messageStatus  = 'error'
+				this.messageContent =  wpumRegistrationFormsEditor.labels.error
+				this.resetNotice()
+				console.log(error)
+			})
+
 		}
 	}
 }
