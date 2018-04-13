@@ -123,7 +123,7 @@ class WPUM_Form_Registration extends WPUM_Form {
 					$field = new WPUM_Field( $field );
 
 					if( $field->exists() ) {
-						$fields[ $this->get_parsed_id( $field->get_name() ) ] = array(
+						$fields[ $this->get_parsed_id( $field->get_name(), $field->get_primary_id() ) ] = array(
 							'label'       => $field->get_name(),
 							'type'        => $field->get_type(),
 							'required'    => $field->get_meta( 'required' ),
@@ -147,10 +147,18 @@ class WPUM_Form_Registration extends WPUM_Form {
 	 * Retrieve a name value for the form by replacing whitespaces with underscores
 	 * and make everything lower case.
 	 *
+	 * If it's a primary field, get the primary id instead.
+	 *
 	 * @param string $name
+	 * @param string $nicename
 	 * @return void
 	 */
-	private function get_parsed_id( $name ) {
+	private function get_parsed_id( $name, $nicename ) {
+
+		if( ! empty( $nicename ) ) {
+			return str_replace(' ', '_', strtolower( $nicename ) );
+		}
+
 		return str_replace(' ', '_', strtolower( $name ) );
 	}
 
@@ -178,6 +186,41 @@ class WPUM_Form_Registration extends WPUM_Form {
 		WPUM()->templates
 			->set_template_data( $atts )
 			->get_template_part( 'action-links' );
+
+	}
+
+	/**
+	 * Process the registration form.
+	 *
+	 * @return void
+	 */
+	public function submit_handler() {
+
+		try {
+
+			$this->init_fields();
+
+			$values = $this->get_posted_fields();
+
+			if( ! wp_verify_nonce( $_POST['registration_nonce'], 'verify_registration_form' ) ) {
+				return;
+			}
+
+			if ( empty( $_POST['submit_registration'] ) ) {
+				return;
+			}
+
+			if ( is_wp_error( ( $return = $this->validate_fields( $values ) ) ) ) {
+				throw new Exception( $return->get_error_message() );
+			}
+
+			// Successful, show next step.
+			$this->step ++;
+
+		} catch ( Exception $e ) {
+			$this->add_error( $e->getMessage() );
+			return;
+		}
 
 	}
 
