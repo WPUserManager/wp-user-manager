@@ -128,9 +128,9 @@ class WPUM_Registration_Form {
 		}
 
 		if ( ! empty( $this->id ) ) {
-			// $this->count = $this->count_fields( $this->id );
 			$this->is_default = $this->get_meta( 'default' );
 			$this->role       = $this->get_assigned_role();
+			$this->fields     = $this->get_meta( 'fields' );
 			return true;
 		}
 
