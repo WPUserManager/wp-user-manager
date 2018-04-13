@@ -179,7 +179,7 @@ class WPUM_Registration_Forms_Editor {
 				wp_send_json_success(
 					[
 						'name'             => $form->get_name(),
-						'available_fields' => $this->get_available_fields(),
+						'available_fields' => $this->get_available_fields( $form_id ),
 						'stored_fields'    => $this->get_stored_fields( $form_id )
 					]
 				 );
@@ -244,7 +244,7 @@ class WPUM_Registration_Forms_Editor {
 	 *
 	 * @return array
 	 */
-	private function get_available_fields() {
+	private function get_available_fields( $form_id ) {
 
 		$fields = [];
 
@@ -259,9 +259,17 @@ class WPUM_Registration_Forms_Editor {
 			'user_displayname'
 		];
 
+		// Get fields already been used.
+		$form          = new WPUM_Registration_Form( $form_id );
+		$stored_fields = $form->get_meta( 'fields' );
+
 		foreach ( $available_fields as $field ) {
 
 			if( ! empty( $field->get_primary_id() ) && in_array( $field->get_primary_id(), $non_allowed_fields ) ) {
+				continue;
+			}
+
+			if( in_array( $field->get_ID(), $stored_fields ) ) {
 				continue;
 			}
 
