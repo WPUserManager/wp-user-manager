@@ -144,6 +144,25 @@ function wpum_registration_form( $atts, $content = null ) {
 
 	$output = ob_get_clean();
 
+	if( wpum_is_registration_enabled() ) {
+
+		if( is_user_logged_in() ) {
+			WPUM()->templates
+				->get_template_part( 'already-logged-in' );
+		} else {
+			echo WPUM()->forms->get_form( 'registration', $atts );
+		}
+
+	} else {
+
+		WPUM()->templates
+			->set_template_data( [
+				'message' => esc_html__( 'Registrations are currently disabled.' )
+			] )
+			->get_template_part( 'messages/general', 'error' );
+
+	}
+
 	return $output;
 
 }

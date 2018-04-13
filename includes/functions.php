@@ -264,3 +264,16 @@ function wpum_mask_email_address( $email_address ) {
     return wpum_starmid( $u ) . "@" . wpum_starmid( $d ) . ".$tld";
 
 }
+
+/**
+ * Check if registrations are enabled on the site.
+ *
+ * @return boolean
+ */
+function wpum_is_registration_enabled() {
+
+	$enabled = get_option( 'users_can_register' );
+
+	return $enabled;
+
+}

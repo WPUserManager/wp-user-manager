@@ -10,7 +10,7 @@
 // Exit if accessed directly
 if ( ! defined( 'ABSPATH' ) ) exit;
 
-class WPUM_Form_Register extends WPUM_Form {
+class WPUM_Form_Registration extends WPUM_Form {
 
 	/**
 	 * Form name.
@@ -85,7 +85,34 @@ class WPUM_Form_Register extends WPUM_Form {
 			return;
 		}
 
-		$this->fields = wpum_get_registration_fields();
+		$this->fields = [];
+
+	}
+
+	/**
+	 * Display the first step of the registration form.
+	 *
+	 * @param array $atts
+	 * @return void
+	 */
+	public function submit( $atts ) {
+
+		$this->init_fields();
+
+		$data = [
+			'form'    => $this->form_name,
+			'action'  => $this->get_action(),
+			'fields'  => [],
+			'step'    => $this->get_step(),
+		];
+
+		WPUM()->templates
+			->set_template_data( $data )
+			->get_template_part( 'forms/form', 'registration' );
+
+		WPUM()->templates
+			->set_template_data( $atts )
+			->get_template_part( 'action-links' );
 
 	}
 
