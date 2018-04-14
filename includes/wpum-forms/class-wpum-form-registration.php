@@ -180,6 +180,10 @@ class WPUM_Form_Registration extends WPUM_Form {
 		$registered_fields = $this->get_fields( 'register' );
 
 		if( is_array( $registered_fields ) && ! empty( $registered_fields ) ) {
+			// Bail if no email field.
+			if( ! isset( $registered_fields['user_email'] ) ) {
+				return false;
+			}
 			if( isset( $registered_fields['username'] ) ) {
 				$by = 'username';
 			} else if( isset( $registered_fields['user_email'] ) ) {
@@ -222,7 +226,7 @@ class WPUM_Form_Registration extends WPUM_Form {
 		} else {
 
 			WPUM()->templates
-				->set_template_data( [ 'message' => esc_html__( 'The registration form cannot be used because either a username or email field is required to process registrations. Please edit the form and add at least one of those fields.' ) ] )
+				->set_template_data( [ 'message' => esc_html__( 'The registration form cannot be used because either a username or email field is required to process registrations. Please edit the form and add at least the email field.' ) ] )
 				->get_template_part( 'messages/general', 'error' );
 
 		}
@@ -263,6 +267,28 @@ class WPUM_Form_Registration extends WPUM_Form {
 			} else if( $register_with == 'email' ) {
 				$username = $values['register']['user_email'];
 			}
+
+			// Detect if we're going to generate a password or use the one provided by the guest.
+			$password = '';
+			if( isset( $values['register']['user_password'] ) && ! empty( $values['register']['user_password'] ) ) {
+				$password = $values['register']['user_password'];
+			} else {
+				$password = wp_generate_password(  12, true, true );
+			}
+
+			$new_user_id = wp_create_user( $username, $password, $values['register']['user_email'] );
+
+			if( is_wp_error( $new_user_id ) ) {
+				throw new Exception( $new_user_id->get_error_message() );
+			}
+
+			$new_user_id = wp_update_user( [
+				'ID'          => $new_user_id,
+				'user_url'    => isset( $values['register']['user_website'] ) ? $values['register']['user_website']:     false,
+				'first_name'  => isset( $values['register']['user_firstname'] ) ? $values['register']['user_firstname']: false,
+				'last_name'   => isset( $values['register']['user_lastname'] ) ? $values['register']['user_lastname']:   false,
+				'description' => isset( $values['register']['user_description'] ) ? $values['register']['user_description']: false,
+			] );
 
 			// Successful, show next step.
 			$this->step ++;
