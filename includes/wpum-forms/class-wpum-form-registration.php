@@ -211,12 +211,25 @@ class WPUM_Form_Registration extends WPUM_Form {
 				}
 			}
 
+			// Add honeypot validation field.
 			$fields['robo'] = [
 				'label'       => esc_html__( 'If you\'re human leave this blank:' ),
 				'type'        => 'text',
 				'required'    => false,
 				'priority'    => 0,
 			];
+
+			// Add a terms field is enabled.
+			if( wpum_get_option( 'enable_terms' ) ) {
+				$terms_page = wpum_get_option( 'terms_page' );
+				$fields[ 'terms' ] = array(
+					'label'       => false,
+					'type'        => 'checkbox',
+					'description' => sprintf( __( 'By registering to this website you agree to the <a href="%s" target="_blank">terms &amp; conditions</a>.' ), get_permalink( $terms_page[0] ) ),
+					'required'    => true,
+					'priority'    => 9999,
+				);
+			}
 
 		}
 
