@@ -245,12 +245,6 @@ class WPUM_Options_Panel {
 			],
 			'registration' => [
 				array(
-					'id'   => 'custom_passwords',
-					'name' => __( 'Users custom passwords:', 'wpum' ),
-					'desc' => __('Enable to allow users to set custom passwords on the registration page.', 'wpum'),
-					'type' => 'checkbox'
-				),
-				array(
 					'id'   => 'login_after_registration',
 					'name' => __( 'Login after registration:', 'wpum' ),
 					'desc' => __('Enable this option to authenticate users after registration.', 'wpum'),
