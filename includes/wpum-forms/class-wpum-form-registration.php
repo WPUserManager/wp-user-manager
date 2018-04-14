@@ -54,6 +54,7 @@ class WPUM_Form_Registration extends WPUM_Form {
 
 		add_filter( 'submit_wpum_form_validate_fields', [ $this, 'validate_password' ], 10, 4 );
 		add_filter( 'submit_wpum_form_validate_fields', [ $this, 'validate_username' ], 10, 4 );
+		add_filter( 'submit_wpum_form_validate_fields', [ $this, 'validate_honeypot' ], 10, 4 );
 
 		$this->steps  = (array) apply_filters( 'registration_steps', array(
 			'submit' => array(
@@ -130,6 +131,27 @@ class WPUM_Form_Registration extends WPUM_Form {
 	}
 
 	/**
+	 * Validate the honeypot field.
+	 *
+	 * @param boolean $pass
+	 * @param array $fields
+	 * @param array $values
+	 * @param string $form
+	 * @return mixed
+	 */
+	public function validate_honeypot( $pass, $fields, $values, $form ) {
+
+		if( $form == $this->form_name && isset( $values['register']['robo'] ) ) {
+			if( ! empty( $values['register']['robo'] ) ) {
+				return new WP_Error( 'honeypot-validation-error', esc_html__( 'Failed honeypot validation.' ) );
+			}
+		}
+
+		return $pass;
+
+	}
+
+	/**
 	 * Initializes the fields used in the form.
 	 */
 	public function init_fields() {
@@ -188,6 +210,13 @@ class WPUM_Form_Registration extends WPUM_Form {
 
 				}
 			}
+
+			$fields['robo'] = [
+				'label'       => esc_html__( 'If you\'re human leave this blank:' ),
+				'type'        => 'text',
+				'required'    => false,
+				'priority'    => 0,
+			];
 
 		}
 
