@@ -53,6 +53,7 @@ class WPUM_Form_Registration extends WPUM_Form {
 		add_action( 'wp', array( $this, 'process' ) );
 
 		add_filter( 'submit_wpum_form_validate_fields', [ $this, 'validate_password' ], 10, 4 );
+		add_filter( 'submit_wpum_form_validate_fields', [ $this, 'validate_username' ], 10, 4 );
 
 		$this->steps  = (array) apply_filters( 'registration_steps', array(
 			'submit' => array(
@@ -86,7 +87,7 @@ class WPUM_Form_Registration extends WPUM_Form {
 	 * @param array $fields
 	 * @param array $values
 	 * @param string $form
-	 * @return void
+	 * @return mixed
 	 */
 	public function validate_password( $pass, $fields, $values, $form ) {
 
@@ -101,6 +102,27 @@ class WPUM_Form_Registration extends WPUM_Form {
 				return new WP_Error( 'password-validation-error', esc_html__( 'Password must be at least 8 characters long and contain at least 1 number, 1 uppercase letter and 1 special character.' ) );
 			}
 
+		}
+
+		return $pass;
+
+	}
+
+	/**
+	 * Make sure the chosen username is not part of the excluded list.
+	 *
+	 * @param boolean $pass
+	 * @param array $fields
+	 * @param array $values
+	 * @param string $form
+	 * @return mixed
+	 */
+	public function validate_username( $pass, $fields, $values, $form ) {
+
+		if( $form == $this->form_name && isset( $values['register']['username'] ) ) {
+			if( wpum_get_option('exclude_usernames') && array_key_exists( $values['register']['username'] , wpum_get_disabled_usernames() ) ) {
+				return new WP_Error( 'nickname-validation-error', __( 'This username cannot be used.' ) );
+			}
 		}
 
 		return $pass;

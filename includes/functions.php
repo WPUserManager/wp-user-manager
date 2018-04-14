@@ -277,3 +277,20 @@ function wpum_is_registration_enabled() {
 	return $enabled;
 
 }
+
+/**
+ * Retrieve an array of disabled usernames.
+ *
+ * @return array
+ */
+function wpum_get_disabled_usernames() {
+	$usernames = array();
+	if ( wpum_get_option( 'exclude_usernames' ) ) {
+		$list = trim( wpum_get_option( 'exclude_usernames' ) );
+		$list = explode( "\n", str_replace( "\r", "", $list ) );
+		foreach ( $list as $username ) {
+			$usernames[] = $username;
+		}
+	}
+	return array_flip( $usernames );
+}
