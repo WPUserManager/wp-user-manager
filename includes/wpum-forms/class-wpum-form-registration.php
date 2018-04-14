@@ -52,6 +52,8 @@ class WPUM_Form_Registration extends WPUM_Form {
 	public function __construct() {
 		add_action( 'wp', array( $this, 'process' ) );
 
+		add_filter( 'submit_wpum_form_validate_fields', [ $this, 'validate_password' ], 10, 4 );
+
 		$this->steps  = (array) apply_filters( 'registration_steps', array(
 			'submit' => array(
 				'name'     => esc_html__( 'Registration Details' ),
@@ -74,6 +76,34 @@ class WPUM_Form_Registration extends WPUM_Form {
 		} elseif ( ! empty( $_GET['step'] ) ) {
 			$this->step = is_numeric( $_GET['step'] ) ? max( absint( $_GET['step'] ), 0 ) : array_search( $_GET['step'], array_keys( $this->steps ) );
 		}
+
+	}
+
+	/**
+	 * Make sure the password is a strong one.
+	 *
+	 * @param boolean $pass
+	 * @param array $fields
+	 * @param array $values
+	 * @param string $form
+	 * @return void
+	 */
+	public function validate_password( $pass, $fields, $values, $form ) {
+
+		if( $form == $this->form_name && isset( $values['register']['user_password'] ) ) {
+
+			$password_1      = $values['register']['user_password'];
+			$containsLetter  = preg_match('/[A-Z]/', $password_1 );
+			$containsDigit   = preg_match('/\d/', $password_1 );
+			$containsSpecial = preg_match('/[^a-zA-Z\d]/', $password_1 );
+
+			if( ! $containsLetter || ! $containsDigit || ! $containsSpecial || strlen( $password_1 ) < 8 ) {
+				return new WP_Error( 'password-validation-error', esc_html__( 'Password must be at least 8 characters long and contain at least 1 number, 1 uppercase letter and 1 special character.' ) );
+			}
+
+		}
+
+		return $pass;
 
 	}
 
