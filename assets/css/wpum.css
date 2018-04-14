@@ -70,6 +70,8 @@
   .wpum-form fieldset.fieldset-user_avatar .wpum-uploaded-file-preview img {
     width: 70px;
     height: 70px; }
+  .wpum-form fieldset.fieldset-robo {
+    display: none; }
 
 .wpum-action-links {
   list-style: none;
