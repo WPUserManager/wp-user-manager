@@ -116,7 +116,11 @@ class WPUM_Registration_Forms_Editor {
 			'editor_used_fields'     => esc_html__( 'Add fields here to use them in this registration form. Drag fields up and down to change their order within the form.' ),
 			'editor_drag'            => esc_html__( 'This form does not have any fields yet. Drag and drop fields here.' ),
 			'success'                => esc_html__( 'Changes successfully saved.' ),
-			'error'                  => esc_html__( 'Something went wrong no changes saved.' )
+			'error'                  => esc_html__( 'Something went wrong no changes saved.' ),
+			'settings'               => esc_html__( 'Settings' ),
+			'role_label'             => esc_html__( 'Registration role' ),
+			'save'                   => esc_html__( 'Save changes' ),
+			'role_desc'              => esc_html__( 'Select the user role that will be assigned to users upon successfull registration.' )
 		];
 
 		return $labels;
@@ -180,7 +184,9 @@ class WPUM_Registration_Forms_Editor {
 					[
 						'name'             => $form->get_name(),
 						'available_fields' => $this->get_available_fields( $form_id ),
-						'stored_fields'    => $this->get_stored_fields( $form_id )
+						'stored_fields'    => $this->get_stored_fields( $form_id ),
+						'selected_role'    => $form->get_meta( 'role' ),
+						'allowed_roles'    => wpum_get_roles( true )
 					]
 				 );
 

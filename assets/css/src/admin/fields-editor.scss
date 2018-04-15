@@ -381,4 +381,16 @@ body.users_page_wpum-registration-forms {
 		margin: 0;
 		font-weight: bold;
 	}
+
+	.settings-wrapper {
+		padding: 0 8px;
+		label {
+			display: block;
+			font-weight: 600;
+			margin-bottom: 0.3em;
+		}
+		select {
+			width: 100%;
+		}
+	}
 }

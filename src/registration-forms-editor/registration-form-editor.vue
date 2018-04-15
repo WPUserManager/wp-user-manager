@@ -64,6 +64,31 @@
 					</div>
 				</div>
 
+				<div class="sidebars-column-2">
+					<div class="widgets-holder-wrap">
+						<form action="post">
+							<div class="widgets-sortables ui-droppable ui-sortable">
+								<div class="sidebar-name">
+									<h2>{{labels.settings}}</h2>
+								</div>
+								<div class="settings-wrapper">
+									<label for="role">{{labels.role_label}}</label>
+									<select name="role" id="role" :disabled="loading || loadingSettings" v-model="selectedRole">
+										<option v-for="role in allowedRoles" :key="role.value" :value="role.value">{{role.label}}</option>
+									</select>
+								</div>
+							</div>
+
+							<div id="major-publishing-actions">
+								<div id="publishing-action">
+									<input type="submit" :value="labels.save" :disabled="loading || loadingSettings" class="button button-primary button-large">
+								</div>
+								<div class="clear"></div>
+							</div>
+						</form>
+					</div>
+				</div>
+
 			</div>
 		</div>
 
@@ -90,6 +115,8 @@ export default {
 			formName:        '...',
 			availableFields: [],
 			selectedFields:  [],
+			selectedRole:    '',
+			allowedRoles:    [],
 			showMessage:     false,
 			messageStatus:   'success',
 			messageContent:  ''
@@ -120,6 +147,8 @@ export default {
 				this.formName        = response.data.data.name
 				this.availableFields = response.data.data.available_fields
 				this.selectedFields  = response.data.data.stored_fields
+				this.selectedRole    = response.data.data.selected_role,
+				this.allowedRoles    = response.data.data.allowed_roles
 			})
 			.catch( error => {
 				this.loading = false
