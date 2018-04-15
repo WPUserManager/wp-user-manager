@@ -250,21 +250,6 @@ class WPUM_Options_Panel {
 					'desc' => __('Enable this option to authenticate users after registration.', 'wpum'),
 					'type' => 'checkbox'
 				),
-				array(
-					'id'   => 'allow_role_select',
-					'name' => __( 'Allow role section:', 'wpum' ),
-					'desc' => __('Enable to allow users to select a user role on registration.', 'wpum'),
-					'type' => 'checkbox'
-				),
-				array(
-					'id'       => 'register_roles',
-					'name'     => __( 'Allowed Roles:', 'wpum' ),
-					'desc'     => __('Select which roles can be selected upon registration.', 'wpum'),
-					'type'     => 'multiselect',
-					'multiple' => true,
-					'labels'   => array( 'placeholder' => __( 'Select one or more user roles from the list.' ) ),
-					'options'  => wpum_get_roles()
-				),
 			],
 			'terms' => [
 				array(
