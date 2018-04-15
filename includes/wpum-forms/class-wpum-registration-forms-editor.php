@@ -348,7 +348,7 @@ class WPUM_Registration_Forms_Editor {
 
 				$form = new WPUM_Registration_Form( $form_id );
 
-				if( $form->exists() && get_role( $role ) ) {
+				if( $form->exists() && get_role( $role ) && $role !== 'administrator' ) {
 
 					$form->update_meta( 'role', $role );
 					wp_send_json_success();
