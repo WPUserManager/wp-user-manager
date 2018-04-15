@@ -35,6 +35,13 @@ class WPUM_Form_Registration extends WPUM_Form {
 	protected static $_instance = null;
 
 	/**
+	 * Store the role this form is going to use.
+	 *
+	 * @var string
+	 */
+	protected $role = null;
+
+	/**
 	 * Returns static instance of class.
 	 *
 	 * @return self
@@ -188,6 +195,8 @@ class WPUM_Form_Registration extends WPUM_Form {
 		$registration_form = $this->get_registration_form();
 
 		if( $registration_form->exists() ) {
+
+			$this->role = $registration_form->get_meta( 'role' );
 
 			$stored_fields = $registration_form->get_meta( 'fields' );
 
@@ -383,6 +392,10 @@ class WPUM_Form_Registration extends WPUM_Form {
 				'last_name'   => isset( $values['register']['user_lastname'] ) ? $values['register']['user_lastname']:   false,
 				'description' => isset( $values['register']['user_description'] ) ? $values['register']['user_description']: false,
 			] );
+
+			// Assign the role set into the registration form.
+			$user = new WP_User( $new_user_id );
+			$user->set_role( $this->role );
 
 			// Successful, show next step.
 			$this->step ++;
