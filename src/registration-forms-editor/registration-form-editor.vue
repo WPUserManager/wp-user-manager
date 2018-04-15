@@ -66,7 +66,8 @@
 
 				<div class="sidebars-column-2">
 					<div class="widgets-holder-wrap">
-						<form action="post">
+						<wp-notice :type="messageStatus" alternative v-if="showMessageSettings">{{messageContent}}</wp-notice>
+						<form action="post" @submit.prevent="saveSettings()">
 							<div class="widgets-sortables ui-droppable ui-sortable">
 								<div class="sidebar-name">
 									<h2>{{labels.settings}}</h2>
@@ -81,6 +82,7 @@
 
 							<div id="major-publishing-actions">
 								<div id="publishing-action">
+									<div class="spinner is-active" v-if="loadingSettings"></div>
 									<input type="submit" :value="labels.save" :disabled="loading || loadingSettings" class="button button-primary button-large">
 								</div>
 								<div class="clear"></div>
@@ -108,18 +110,20 @@ export default {
 	},
 	data() {
 		return {
-			labels:          wpumRegistrationFormsEditor.labels,
-			pluginURL:       wpumRegistrationFormsEditor.pluginURL,
-			loading:         false,
-			formID:          '',
-			formName:        '...',
-			availableFields: [],
-			selectedFields:  [],
-			selectedRole:    '',
-			allowedRoles:    [],
-			showMessage:     false,
-			messageStatus:   'success',
-			messageContent:  ''
+			labels:              wpumRegistrationFormsEditor.labels,
+			pluginURL:           wpumRegistrationFormsEditor.pluginURL,
+			loading:             false,
+			loadingSettings:     false,
+			formID:              '',
+			formName:            '...',
+			availableFields:     [],
+			selectedFields:      [],
+			selectedRole:        '',
+			allowedRoles:        [],
+			showMessage:         false,
+			showMessageSettings: false,
+			messageStatus:       'success',
+			messageContent:      ''
 		}
 	},
 	created() {
@@ -161,6 +165,7 @@ export default {
 		resetNotice() {
 			setTimeout( () => {
 				this.showMessage = false
+				this.showMessageSettings = false
 			}, 3000)
 		},
 		/**
@@ -195,6 +200,42 @@ export default {
 				this.showMessage    = true
 				this.messageStatus  = 'error'
 				this.messageContent =  wpumRegistrationFormsEditor.labels.error
+				this.resetNotice()
+				console.log(error)
+			})
+
+		},
+		/**
+		 * Save settings to the form.
+		 */
+		saveSettings() {
+
+			this.loadingSettings = true
+
+			axios.post( wpumRegistrationFormsEditor.ajax,
+				qs.stringify({
+					nonce:   wpumRegistrationFormsEditor.saveFormSettingsNonce,
+					form_id: this.formID,
+					role:    this.selectedRole
+				}),
+				{
+					params: {
+						action: 'wpum_save_registration_form_settings'
+					},
+				}
+			)
+			.then( response => {
+				this.loadingSettings     = false
+				this.showMessageSettings = true
+				this.messageStatus       = 'success'
+				this.messageContent      = wpumRegistrationFormsEditor.labels.success
+				this.resetNotice()
+			})
+			.catch( error => {
+				this.loadingSettings     = false
+				this.showMessageSettings = true
+				this.messageStatus       = 'error'
+				this.messageContent      = wpumRegistrationFormsEditor.labels.error
 				this.resetNotice()
 				console.log(error)
 			})

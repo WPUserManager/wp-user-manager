@@ -30,6 +30,7 @@ class WPUM_Registration_Forms_Editor {
 		add_action( 'wp_ajax_wpum_get_registration_forms', [ $this, 'get_forms' ] );
 		add_action( 'wp_ajax_wpum_get_registration_form', [ $this, 'get_form' ] );
 		add_action( 'wp_ajax_wpum_save_registration_form', [ $this, 'save_form' ] );
+		add_action( 'wp_ajax_wpum_save_registration_form_settings', [ $this, 'save_form_settings' ] );
 	}
 
 	/**
@@ -79,12 +80,13 @@ class WPUM_Registration_Forms_Editor {
 			wp_enqueue_style( 'wpum-registration-forms-editor', WPUM_PLUGIN_URL . 'assets/css/admin/fields-editor.css' , array(), WPUM_VERSION );
 
 			$js_variables = [
-				'labels'        => $this->get_labels(),
-				'ajax'          => admin_url( 'admin-ajax.php' ),
-				'pluginURL'     => WPUM_PLUGIN_URL,
-				'getFormsNonce' => wp_create_nonce( 'wpum_get_registration_forms' ),
-				'getFormNonce'  => wp_create_nonce( 'wpum_get_registration_form' ),
-				'saveFormNonce' => wp_create_nonce( 'wpum_save_registration_form' )
+				'labels'                => $this->get_labels(),
+				'ajax'                  => admin_url( 'admin-ajax.php' ),
+				'pluginURL'             => WPUM_PLUGIN_URL,
+				'getFormsNonce'         => wp_create_nonce( 'wpum_get_registration_forms' ),
+				'getFormNonce'          => wp_create_nonce( 'wpum_get_registration_form' ),
+				'saveFormNonce'         => wp_create_nonce( 'wpum_save_registration_form' ),
+				'saveFormSettingsNonce' => wp_create_nonce( 'wpum_save_registration_form_settings' )
 			];
 
 			wp_localize_script( 'wpum-registration-forms-editor', 'wpumRegistrationFormsEditor', $js_variables );
@@ -324,6 +326,43 @@ class WPUM_Registration_Forms_Editor {
 
 			$this->send_json_error();
 
+		}
+
+	}
+
+	/**
+	 * Save settings of the form.
+	 *
+	 * @return void
+	 */
+	public function save_form_settings() {
+
+		check_ajax_referer( 'wpum_save_registration_form_settings', 'nonce' );
+
+		if( current_user_can( 'manage_options' ) && is_admin() ) {
+
+			$form_id = isset( $_POST['form_id'] ) ? absint( $_POST['form_id'] ):        false;
+			$role    = isset( $_POST['role'] ) ? sanitize_text_field( $_POST['role'] ): false;
+
+			if( $form_id ) {
+
+				$form = new WPUM_Registration_Form( $form_id );
+
+				if( $form->exists() && get_role( $role ) ) {
+
+					$form->update_meta( 'role', $role );
+					wp_send_json_success();
+
+				} else {
+					$this->send_json_error();
+				}
+
+			} else {
+				$this->send_json_error();
+			}
+
+		} else {
+			$this->send_json_error();
 		}
 
 	}
