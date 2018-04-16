@@ -183,3 +183,17 @@ function wpum_registration_form( $atts, $content = null ) {
 
 }
 add_shortcode( 'wpum_register', 'wpum_registration_form' );
+
+/**
+ * Display the account page of the user.
+ *
+ * @param array $atts
+ * @param string $content
+ * @return void
+ */
+function wpum_account_page( $atts, $content = null ) {
+
+	return WPUM()->forms->get_form( 'account', $atts );
+
+}
+add_shortcode( 'wpum_account', 'wpum_account_page' );
