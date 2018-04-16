@@ -125,7 +125,7 @@ class WPUM_Form_Account extends WPUM_Form {
 
 			$field = new WPUM_Field( $field );
 
-			if( $field->exists() ) {
+			if( $field->exists() && $field->get_meta( 'editing' ) == 'public' && $field->get_primary_id() !== 'user_password' ) {
 				$fields[ $this->get_parsed_id( $field->get_name(), $field->get_primary_id() ) ] = array(
 					'label'       => $field->get_name(),
 					'type'        => $field->get_type(),
@@ -133,7 +133,6 @@ class WPUM_Form_Account extends WPUM_Form {
 					'placeholder' => $field->get_meta( 'placeholder' ),
 					'description' => $field->get_description(),
 					'priority'    => 0,
-					'primary_id'  => $field->get_primary_id()
 				);
 			}
 
