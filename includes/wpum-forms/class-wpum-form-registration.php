@@ -247,25 +247,6 @@ class WPUM_Form_Registration extends WPUM_Form {
 	}
 
 	/**
-	 * Retrieve a name value for the form by replacing whitespaces with underscores
-	 * and make everything lower case.
-	 *
-	 * If it's a primary field, get the primary id instead.
-	 *
-	 * @param string $name
-	 * @param string $nicename
-	 * @return void
-	 */
-	private function get_parsed_id( $name, $nicename ) {
-
-		if( ! empty( $nicename ) ) {
-			return str_replace(' ', '_', strtolower( $nicename ) );
-		}
-
-		return str_replace(' ', '_', strtolower( $name ) );
-	}
-
-	/**
 	 * Detect wether to use a username or email to register a new account.
 	 * Scan for fields within the registration form and check which ones are available.
 	 *

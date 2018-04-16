@@ -99,9 +99,47 @@ class WPUM_Form_Account extends WPUM_Form {
 		}
 
 		$this->fields = apply_filters( 'account_page_fields', array(
-			'account'  => [],
+			'account'  => $this->get_account_fields(),
 			'password' => [],
 		) );
+
+	}
+
+	/**
+	 * Retrieve the list of fields for the account page.
+	 *
+	 * @return array
+	 */
+	private function get_account_fields() {
+
+		$fields         = [];
+		$primary_group  = WPUM()->fields_groups->get_groups( [ 'primary' => true ] );
+		$primary_group  = $primary_group[0];
+		$account_fields = WPUM()->fields->get_fields( [
+			'group_id' => $primary_group->get_ID(),
+			'orderby'  => 'field_order',
+			'order'    => 'ASC'
+		] );
+
+		foreach ( $account_fields as $field ) {
+
+			$field = new WPUM_Field( $field );
+
+			if( $field->exists() ) {
+				$fields[ $this->get_parsed_id( $field->get_name(), $field->get_primary_id() ) ] = array(
+					'label'       => $field->get_name(),
+					'type'        => $field->get_type(),
+					'required'    => $field->get_meta( 'required' ),
+					'placeholder' => $field->get_meta( 'placeholder' ),
+					'description' => $field->get_description(),
+					'priority'    => 0,
+					'primary_id'  => $field->get_primary_id()
+				);
+			}
+
+		}
+
+		return $fields;
 
 	}
 
@@ -117,7 +155,7 @@ class WPUM_Form_Account extends WPUM_Form {
 		$data = [
 			'form'    => $this->form_name,
 			'action'  => $this->get_action(),
-			'fields'  => $this->get_fields( 'account' ),
+			'fields'  => $this->get_fields( $this->get_step_key( $this->get_step() ) ),
 			'step'    => $this->get_step(),
 			'steps'   => $this->get_steps(),
 			'current' => $this->get_step_key( $this->get_step() ),

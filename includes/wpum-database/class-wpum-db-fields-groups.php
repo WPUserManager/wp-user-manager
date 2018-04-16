@@ -182,6 +182,7 @@ class WPUM_DB_Fields_Groups extends WPUM_DB {
 			'number'  => 20,
 			'offset'  => 0,
 			'search'  => '',
+			'primary' => false,
 			'orderby' => 'id',
 			'order'   => 'DESC',
 		);
@@ -238,6 +239,10 @@ class WPUM_DB_Fields_Groups extends WPUM_DB {
 	private function parse_where( $args ) {
 
 		$where = '';
+
+		if ( ! empty( $args['primary'] ) && $args['primary'] === true ) {
+			$where .= " AND `is_primary` = 1 ";
+		}
 
 		if ( ! empty( $where ) ) {
 			$where = ' WHERE 1=1 ' . $where;

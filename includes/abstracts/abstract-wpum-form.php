@@ -484,4 +484,23 @@ abstract class WPUM_Form {
 		return apply_filters( 'submit_wpum_form_validate_fields', true, $this->fields, $values, $this->form_name );
 	}
 
+	/**
+	 * Retrieve a name value for the form by replacing whitespaces with underscores
+	 * and make everything lower case.
+	 *
+	 * If it's a primary field, get the primary id instead.
+	 *
+	 * @param string $name
+	 * @param string $nicename
+	 * @return void
+	 */
+	protected function get_parsed_id( $name, $nicename ) {
+
+		if( ! empty( $nicename ) ) {
+			return str_replace(' ', '_', strtolower( $nicename ) );
+		}
+
+		return str_replace(' ', '_', strtolower( $name ) );
+	}
+
 }

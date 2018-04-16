@@ -22,7 +22,6 @@ $first_key = key( $data->steps );
 ?>
 
 <nav id="wpum-account-forms-tabs" class="wpum-template wpum-account-navigation wpum_one_third">
-
 	<ul>
 		<?php foreach ( $data->steps as $step_key => $step ) : ?>
 			<li class="<?php if( wpum_is_account_tab_active( $step_key, $first_key ) ) : ?>active<?php endif; ?> tab-<?php echo esc_attr( $step_key ); ?>">
@@ -30,5 +29,4 @@ $first_key = key( $data->steps );
 			</li>
 		<?php endforeach; ?>
 	</ul>
-
 </nav>
