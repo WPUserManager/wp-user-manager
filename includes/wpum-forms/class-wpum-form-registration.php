@@ -397,6 +397,11 @@ class WPUM_Form_Registration extends WPUM_Form {
 			$user = new WP_User( $new_user_id );
 			$user->set_role( $this->role );
 
+			// Automatically log a user in if enabled.
+			if( wpum_get_option( 'login_after_registration' ) ) {
+				wpum_log_user_in( $new_user_id );
+			}
+
 			// Successful, show next step.
 			$this->step ++;
 
