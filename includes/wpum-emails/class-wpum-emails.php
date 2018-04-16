@@ -86,6 +86,13 @@ class WPUM_Emails {
 	private $password_reset_key;
 
 	/**
+	 * The password sent to the user upon signup.
+	 *
+	 * @var string
+	 */
+	private $plain_text_password;
+
+	/**
 	 * Get things started.
 	 */
 	public function __construct() {
@@ -381,6 +388,12 @@ class WPUM_Emails {
 				'function'    => 'wpum_email_tag_lastname'
 			),
 			array(
+				'name'        => esc_html__( 'Plain text password' ),
+				'description' => esc_html__( 'Display the password randomly generated at signup.' ),
+				'tag'         => 'password',
+				'function'    => 'wpum_email_tag_password'
+			),
+			array(
 				'name'        => esc_html__( 'Login page url' ),
 				'description' => esc_html__( 'Display the login page url.' ),
 				'tag'         => 'login_page_url',
@@ -411,7 +424,7 @@ class WPUM_Emails {
 		if ( ! $this->email_tag_exists( $tag ) ) {
 			return $m[0];
 		}
-		return call_user_func( $this->tags[ $tag ]['function'], $this->user_id, $this->password_reset_key, $tag );
+		return call_user_func( $this->tags[ $tag ]['function'], $this->user_id, $this->password_reset_key, $this->plain_text_password, $tag );
 	}
 
 	/**

@@ -376,7 +376,7 @@ class WPUM_Form_Registration extends WPUM_Form {
 			if( isset( $values['register']['user_password'] ) && ! empty( $values['register']['user_password'] ) ) {
 				$password = $values['register']['user_password'];
 			} else {
-				$password = wp_generate_password(  12, true, true );
+				$password = wp_generate_password( 24, true, true );
 			}
 
 			$new_user_id = wp_create_user( $username, $password, $values['register']['user_email'] );
@@ -401,6 +401,12 @@ class WPUM_Form_Registration extends WPUM_Form {
 			if( wpum_get_option( 'login_after_registration' ) ) {
 				wpum_log_user_in( $new_user_id );
 			}
+
+			// Now send a confirmation email to the user.
+			wpum_send_registration_confirmation_email( $new_user_id, $password );
+
+			// Allow developers to extend signup process.
+			do_action( 'wpum_after_registration', $new_user_id, $values );
 
 			// Successful, show next step.
 			$this->step ++;

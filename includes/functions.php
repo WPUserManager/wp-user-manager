@@ -320,3 +320,45 @@ function wpum_log_user_in( $email_or_id ) {
 	do_action( 'wp_login', $username );
 
 }
+
+/**
+ * Send the registration confirmation email to a given user id.
+ * Display the randomly generated password if any is given.
+ *
+ * @param int $user_id
+ * @param mixed $psw
+ * @return void
+ */
+function wpum_send_registration_confirmation_email( $user_id, $psw = false ) {
+
+	$registration_confirmation_email = wpum_get_email( 'registration_confirmation' );
+
+	if( ! $user_id ) {
+		return;
+	}
+
+	if( is_array( $registration_confirmation_email ) && ! empty( $registration_confirmation_email ) ) {
+
+		$user = get_user_by( 'id', $user_id );
+
+		if( $user instanceof WP_User ) {
+
+			$emails = new WPUM_Emails;
+			$emails->__set( 'user_id', $user_id );
+			$emails->__set( 'heading', $registration_confirmation_email['title'] );
+
+			if( ! empty( $psw ) ) {
+				$emails->__set( 'plain_text_password', $psw );
+			}
+
+			$email   = $user->data->user_email;
+			$subject = $registration_confirmation_email['subject'];
+			$message = $registration_confirmation_email['content'];
+			$emails->send( $email, $subject, $message );
+			$emails->__set( 'plain_text_password', null );
+
+		}
+
+	}
+
+}

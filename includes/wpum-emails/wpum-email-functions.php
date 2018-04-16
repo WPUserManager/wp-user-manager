@@ -133,6 +133,10 @@ function wpum_email_tag_login_page_url( $user_id = false ) {
 	return $url;
 }
 
+function wpum_email_tag_password( $user_id = false, $password_reset_key = false, $plain_text_password ) {
+	return sanitize_text_field( $plain_text_password );
+}
+
 /**
  * Parse the {recovery_url} tag into the email to display personalized password recovery url.
  *
