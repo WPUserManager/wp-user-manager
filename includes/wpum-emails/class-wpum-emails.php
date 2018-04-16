@@ -176,7 +176,7 @@ class WPUM_Emails {
 	public function get_templates() {
 		$templates    = array(
 			'default' => esc_html__( 'Default Template' ),
-			// 'none'	  => __( 'No template, plain text only' )
+			'none'	  => __( 'No template, plain text only' )
 		);
 		return apply_filters( 'wpum_email_templates', $templates );
 	}
@@ -211,7 +211,7 @@ class WPUM_Emails {
 	public function build_email( $message ) {
 
 		if ( false === $this->html ) {
-			return apply_filters( 'wpum_email_message', wp_strip_all_tags( $message ), $this );
+			return apply_filters( 'wpum_email_message', wp_strip_all_tags( preg_replace( '/<br(\s+)?\/?>/i', "\n", $message ) ), $this );
 		}
 
 		$message = $this->text_to_html( $message );

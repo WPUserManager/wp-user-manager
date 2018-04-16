@@ -128,7 +128,11 @@ function wpum_email_tag_login_page_url( $user_id = false ) {
 	$login_page_url = wpum_get_core_page_id( 'login' );
 	$login_page_url = get_permalink( $login_page_url );
 
-	$url = '<a href="'. esc_url( $login_page_url ) .'">' . esc_html( $login_page_url ) . '</a>';
+	$url = $login_page_url;
+
+	if( wpum_get_option( 'email_template' ) !== 'none' ) {
+		$url = '<a href="'. esc_url( $login_page_url ) .'">' . esc_html( $login_page_url ) . '</a>';
+	}
 
 	return $url;
 }
@@ -155,7 +159,13 @@ function wpum_email_tag_password_recovery_url( $user_id, $password_reset_key ) {
 
 	$link_color = apply_filters( 'wpum_email_tag_password_recovery_url_color', '#000' );
 
-	return '<a href="' . esc_url( $reset_page ) . '" style="color:' . $link_color . '">' . esc_html( $reset_page ) . '</a>';
+	$output = $reset_page;
+
+	if( wpum_get_option( 'email_template' ) !== 'none' ) {
+		$output = '<a href="' . esc_url( $reset_page ) . '" style="color:' . $link_color . '">' . esc_html( $reset_page ) . '</a>';
+	}
+
+	return $output;
 }
 
 /**
