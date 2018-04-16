@@ -234,7 +234,7 @@ class WPUM_Form_Registration extends WPUM_Form {
 				$fields[ 'terms' ] = array(
 					'label'       => false,
 					'type'        => 'checkbox',
-					'description' => sprintf( __( 'By registering to this website you agree to the <a href="%s" target="_blank">terms &amp; conditions</a>.' ), get_permalink( $terms_page[0] ) ),
+					'description' => apply_filters( 'wpum_terms_text', sprintf( __( 'By registering to this website you agree to the <a href="%s" target="_blank">terms &amp; conditions</a>.' ), get_permalink( $terms_page[0] ) ) ),
 					'required'    => true,
 					'priority'    => 9999,
 				);
