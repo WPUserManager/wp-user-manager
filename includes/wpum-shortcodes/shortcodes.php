@@ -140,17 +140,33 @@ function wpum_registration_form( $atts, $content = null ) {
 		'psw_link'   => ''
 	), $atts ) );
 
+	$is_success = isset( $_GET['registration'] ) && $_GET['registration'] == 'success' ? true : false;
+
 	ob_start();
 
 	$output = ob_get_clean();
 
 	if( wpum_is_registration_enabled() ) {
 
-		if( is_user_logged_in() ) {
+		if( is_user_logged_in() && ! $is_success ) {
+
 			WPUM()->templates
 				->get_template_part( 'already-logged-in' );
+
+		} else if( $is_success ) {
+
+			$success_message = apply_filters( 'wpum_registration_success_message', esc_html__( 'Registration complete. We have sent you a confirmation email with your details.' ) );
+
+			WPUM()->templates
+				->set_template_data( [
+					'message' => $success_message
+				] )
+				->get_template_part( 'messages/general', 'success' );
+
 		} else {
+
 			echo WPUM()->forms->get_form( 'registration', $atts );
+
 		}
 
 	} else {

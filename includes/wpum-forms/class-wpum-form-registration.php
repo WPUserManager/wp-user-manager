@@ -71,7 +71,7 @@ class WPUM_Form_Registration extends WPUM_Form {
 				'priority' => 10
 			),
 			'done' => array(
-				'name'     => esc_html__( 'Done' ),
+				'name'     => false,
 				'view'     => false,
 				'handler'  => array( $this, 'done' ),
 				'priority' => 30
@@ -196,7 +196,7 @@ class WPUM_Form_Registration extends WPUM_Form {
 
 		if( $registration_form->exists() ) {
 
-			$this->role = $registration_form->get_meta( 'role' );
+			$this->role    = $registration_form->get_meta( 'role' );
 
 			$stored_fields = $registration_form->get_meta( 'fields' );
 
@@ -408,6 +408,34 @@ class WPUM_Form_Registration extends WPUM_Form {
 		} catch ( Exception $e ) {
 			$this->add_error( $e->getMessage() );
 			return;
+		}
+
+	}
+
+	/**
+	 * Last step of the registration form.
+	 * Redirect user to the selected page in the admin panel or a show a success message.
+	 *
+	 * @return void
+	 */
+	public function done() {
+
+		$redirect_page = wpum_get_option( 'registration_redirect' );
+
+		if( ! empty( $redirect_page ) && is_array( $redirect_page ) ) {
+
+			$redirect_page = $redirect_page[0];
+			wp_safe_redirect( get_permalink( $redirect_page ) );
+			exit;
+
+		} else {
+
+			$registration_page = get_permalink( wpum_get_core_page_id( 'register' ) );
+			$registration_page = add_query_arg( [ 'registration' => 'success' ], $registration_page );
+
+			wp_safe_redirect( $registration_page );
+			exit;
+
 		}
 
 	}
