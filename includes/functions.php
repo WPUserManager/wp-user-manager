@@ -124,6 +124,15 @@ function wpum_get_core_page_id( $page = null ) {
 		case 'profile':
 			$id = wpum_get_option( 'profile_page' );
 			break;
+		case 'registration-confirmation':
+			$id = wpum_get_option( 'registration_redirect' );
+			break;
+		case 'login-redirect':
+			$id = wpum_get_option( 'login_redirect' );
+			break;
+		case 'logout-redirect':
+			$id = wpum_get_option( 'logout_redirect' );
+			break;
 	}
 
 	$id = is_array( $id ) ? $id[0] : false;

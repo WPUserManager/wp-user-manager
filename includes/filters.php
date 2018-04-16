@@ -175,3 +175,33 @@ function wpum_authentication( $user, $username, $password ) {
 
 }
 add_filter( 'authenticate', 'wpum_authentication', 20, 3 );
+
+/**
+ * Highlight all pages used by WPUM.
+ *
+ * @param array $post_states
+ * @param object $post
+ * @return void
+ */
+function wpum_highlight_pages( $post_states, $post ) {
+
+	$mark    = '<img style="width:13px;" src="'. WPUM_PLUGIN_URL .'/assets/images/logo.svg" title="WP User Manager Page">';
+	$post_id = $post->ID;
+
+	switch ( $post_id ) {
+		case wpum_get_core_page_id( 'login' ):
+		case wpum_get_core_page_id( 'register' ):
+		case wpum_get_core_page_id( 'password' ):
+		case wpum_get_core_page_id( 'account' ):
+		case wpum_get_core_page_id( 'profile' ):
+		case wpum_get_core_page_id( 'registration-confirmation' ):
+		case wpum_get_core_page_id( 'login-redirect' ):
+		case wpum_get_core_page_id( 'logout-redirect' ):
+			$post_states['wpum_page'] = $mark;
+			break;
+	}
+
+	return $post_states;
+
+}
+add_filter( 'display_post_states', 'wpum_highlight_pages', 10, 2 );
