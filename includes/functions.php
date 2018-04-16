@@ -350,6 +350,17 @@ function wpum_send_registration_confirmation_email( $user_id, $psw = false ) {
 
 		$user = get_user_by( 'id', $user_id );
 
+		// The blogname option is escaped with esc_html on the way into the database in sanitize_option
+		// we want to reverse this for the plain text arena of emails.
+		$blogname = wp_specialchars_decode( get_option( 'blogname' ), ENT_QUOTES );
+		// Send notification to admin if not disabled.
+		if ( ! wpum_get_option( 'disable_admin_register_email' ) ) {
+			$message  = sprintf( esc_html__( 'New user registration on your site %s:' ), $blogname ) . "\r\n\r\n";
+			$message .= sprintf( esc_html__( 'Username: %s' ), $user->user_login ) . "\r\n\r\n";
+			$message .= sprintf( esc_html__( 'E-mail: %s' ), $user->user_email ) . "\r\n";
+			wp_mail( get_option( 'admin_email' ), sprintf( esc_html__( '[%s] New User Registration' ), $blogname ), $message );
+		}
+
 		if( $user instanceof WP_User ) {
 
 			$emails = new WPUM_Emails;
