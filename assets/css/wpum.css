@@ -1,3 +1,119 @@
+.wpum_one_half,
+.wpum_one_third,
+.wpum_two_third,
+.wpum_two_fourth,
+.wpum_three_fourth,
+.wpum_one_fourth,
+.wpum_one_fifth,
+.wpum_two_fifth,
+.wpum_three_fifth,
+.wpum_four_fifth,
+.wpum_one_sixth,
+.wpum_five_sixth {
+  position: relative;
+  margin-right: 4%;
+  float: left; }
+
+.wpum_one_half {
+  width: 48%; }
+
+.wpum_one_third {
+  width: 30.6666%; }
+
+.wpum_two_third {
+  width: 65.3332%; }
+
+.wpum_one_fourth {
+  width: 22%; }
+
+.wpum_two_fourth {
+  width: 48%; }
+
+.wpum_three_fourth {
+  width: 74%; }
+
+.wpum_one_fifth {
+  width: 16.8%; }
+
+.wpum_two_fifth {
+  width: 37.6%; }
+
+.wpum_three_fifth {
+  width: 58.4%; }
+
+.wpum_four_fifth {
+  width: 79.2%; }
+
+.wpum_one_sixth {
+  width: 13.3333%; }
+
+.wpum_two_sixth {
+  width: 30.6666%; }
+
+.wpum_three_sixth {
+  width: 47.9998%; }
+
+.wpum_four_sixth {
+  width: 65.3332%; }
+
+.wpum_five_sixth {
+  width: 82.6665%; }
+
+.last {
+  margin-right: 0 !important;
+  clear: right; }
+
+/* Two level columns
+---------------------------------------------------------- */
+.wpum_one_half .wpum_one_half {
+  margin-right: 8.3333%;
+  width: 45.8333%; }
+
+.wpum_one_half .wpum_one_third {
+  margin-right: 8.3333%;
+  width: 27.7778%; }
+
+.wpum_one_half .wpum_two_third {
+  margin-right: 8.3333%;
+  width: 63.8889%; }
+
+.wpum_two_third .wpum_one_third {
+  margin-right: 6.1224%;
+  width: 29.2517%; }
+
+.wpum_two_third .wpum_two_third {
+  margin-right: 6.1224%;
+  width: 64.6258%; }
+
+.wpum_two_third .wpum_one_fourth {
+  margin-right: 6.1224%;
+  width: 20.4082%; }
+
+.wpum_clearfix::after {
+  content: "";
+  clear: both;
+  display: table; }
+
+#wpum-account-forms-tabs {
+  margin-bottom: 30px; }
+  #wpum-account-forms-tabs ul {
+    list-style: none;
+    margin: 0;
+    padding: 0; }
+    #wpum-account-forms-tabs ul li {
+      display: block;
+      margin: 0 0 5px;
+      padding: 10px 15px;
+      border-radius: 3px; }
+      #wpum-account-forms-tabs ul li:hover {
+        text-decoration: none;
+        background: #fcfcfc; }
+      #wpum-account-forms-tabs ul li.active {
+        background: #efefef;
+        text-decoration: none; }
+      #wpum-account-forms-tabs ul li a {
+        text-decoration: none; }
+
 .wpum-message {
   padding: 8px 35px 8px 14px;
   margin-bottom: 18px;
