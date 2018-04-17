@@ -35,11 +35,11 @@ class WPUM_Form_Account extends WPUM_Form {
 	protected static $_instance = null;
 
 	/**
-	 * Holds the currently logged in user ID.
+	 * Holds the currently logged in user.
 	 *
 	 * @var integer
 	 */
-	protected $user_id = null;
+	protected $user = null;
 
 	/**
 	 * Returns static instance of class.
@@ -57,6 +57,9 @@ class WPUM_Form_Account extends WPUM_Form {
 	 * Constructor.
 	 */
 	public function __construct() {
+
+		$this->user = wp_get_current_user();
+
 		add_action( 'wp', array( $this, 'process' ) );
 
 		$this->steps  = (array) apply_filters( 'wpum_account_tabs', array(
@@ -132,7 +135,8 @@ class WPUM_Form_Account extends WPUM_Form {
 					'required'    => $field->get_meta( 'required' ),
 					'placeholder' => $field->get_meta( 'placeholder' ),
 					'description' => $field->get_description(),
-					'options'     => $this->get_field_dropdown_options( $field ),
+					'options'     => $this->get_field_dropdown_options( $field, $this->user ),
+					'value'       => $this->get_user_field_value( $field ),
 					'priority'    => 0,
 				);
 			}
@@ -140,6 +144,45 @@ class WPUM_Form_Account extends WPUM_Form {
 		}
 
 		return $fields;
+
+	}
+
+	/**
+	 * Retrieve the value of a given field for the currently logged in user.
+	 *
+	 * @param object $field
+	 * @return void
+	 */
+	private function get_user_field_value( $field ) {
+
+		$value = false;
+
+		if( ! empty( $field->get_primary_id() ) ) {
+
+			switch ( $field->get_primary_id() ) {
+				case 'user_firstname':
+					$value = esc_html( $this->user->user_firstname );
+					break;
+				case 'user_lastname':
+					$value = esc_html( $this->user->user_lastname );
+					break;
+				case 'user_email':
+					$value = esc_html( $this->user->user_email );
+					break;
+				case 'user_nickname':
+					$value = esc_html( $this->user->user_nicename );
+					break;
+				case 'user_website':
+					$value = esc_html( $this->user->user_url );
+					break;
+				case 'user_description':
+					$value = esc_textarea( get_user_meta( $this->user->ID, 'description', true ) );
+					break;
+			}
+
+		}
+
+		return $value;
 
 	}
 

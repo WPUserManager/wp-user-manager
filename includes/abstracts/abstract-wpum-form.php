@@ -508,9 +508,8 @@ abstract class WPUM_Form {
 	 *
 	 * @return array
 	 */
-	protected function get_displayname_options() {
+	protected function get_displayname_options( $user ) {
 
-		$user    = wp_get_current_user();
 		$options = array();
 
 		// Generate the options
@@ -548,7 +547,7 @@ abstract class WPUM_Form {
 	 * @param object $field
 	 * @return array
 	 */
-	protected function get_field_dropdown_options( $field ) {
+	protected function get_field_dropdown_options( $field, $user ) {
 
 		$options = [];
 
@@ -556,7 +555,7 @@ abstract class WPUM_Form {
 
 			switch ( $field->get_primary_id() ) {
 				case 'user_displayname':
-					$options = $this->get_displayname_options();
+					$options = $this->get_displayname_options( $user );
 					break;
 			}
 
