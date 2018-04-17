@@ -32,6 +32,10 @@ class WPUM_Avatars {
 
 		global $pagenow;
 
+		if( ! wpum_get_option( 'custom_avatars' ) ) {
+			return;
+		}
+
 		add_action( 'carbon_fields_register_fields', [ $this, 'avatar_field' ] );
 		add_filter( 'get_avatar_url', [ $this, 'set_avatar_url' ], 10, 3 );
 

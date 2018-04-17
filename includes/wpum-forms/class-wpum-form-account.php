@@ -129,6 +129,12 @@ class WPUM_Form_Account extends WPUM_Form {
 			$field = new WPUM_Field( $field );
 
 			if( $field->exists() && $field->get_meta( 'editing' ) == 'public' && $field->get_primary_id() !== 'user_password' ) {
+
+				// Skip the avatar field if disabled.
+				if( $field->get_primary_id() == 'user_avatar' && ! wpum_get_option( 'custom_avatars' ) ) {
+					continue;
+				}
+
 				$fields[ $this->get_parsed_id( $field->get_name(), $field->get_primary_id() ) ] = array(
 					'label'       => $field->get_name(),
 					'type'        => $field->get_type(),
