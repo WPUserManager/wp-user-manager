@@ -43,7 +43,7 @@ if ( ! empty( $data->ajax ) && wpum_user_can_upload_file_via_ajax() ) {
 						->get_template_part( 'form-fields/file', 'uploaded' );
 				?>
 			<?php endforeach; ?>
-		<?php elseif ( $value = $field->value ) : ?>
+		<?php elseif ( $value = $data->value ) : ?>
 			<?php
 				WPUM()->templates
 					->set_template_data( [

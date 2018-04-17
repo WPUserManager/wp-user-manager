@@ -187,6 +187,10 @@ class WPUM_Form_Account extends WPUM_Form {
 				case 'user_displayname':
 					$value = $this->get_selected_displayname();
 					break;
+				case 'user_avatar':
+					//$value = get_user_meta( $this->user->ID, 'current_user_avatar', true );
+					$value = carbon_get_user_meta( $this->user->ID, 'current_user_avatar' );
+					break;
 			}
 
 		} else {
@@ -252,9 +256,6 @@ class WPUM_Form_Account extends WPUM_Form {
 				throw new Exception( $return->get_error_message() );
 			}
 
-			print_r( $values );
-			exit;
-
 			// Collect all the data to update the user.
 			$user_data = [
 				'ID' => $this->user->ID
@@ -298,6 +299,11 @@ class WPUM_Form_Account extends WPUM_Form {
 
 			if( is_wp_error( $updated_user_id ) ) {
 				throw new Exception( $updated_user_id->get_error_message() );
+			}
+
+			// Now update the avatar for the user.
+			if( wpum_get_option( 'custom_avatars' ) && isset( $values['account']['user_avatar'] ) ) {
+				carbon_set_user_meta( $updated_user_id, 'current_user_avatar', $values['account']['user_avatar'] );
 			}
 
 			do_action( 'wpum_after_user_update', $this, $values, $updated_user_id );
