@@ -193,7 +193,17 @@ add_shortcode( 'wpum_register', 'wpum_registration_form' );
  */
 function wpum_account_page( $atts, $content = null ) {
 
-	return WPUM()->forms->get_form( 'account', $atts );
+	ob_start();
+
+	$output = ob_get_clean();
+
+	WPUM()->templates
+		->set_template_data( [] )
+		->get_template_part( 'account' );
+
+	return $output;
+
+	//return WPUM()->forms->get_form( 'account', $atts );
 
 }
 add_shortcode( 'wpum_account', 'wpum_account_page' );

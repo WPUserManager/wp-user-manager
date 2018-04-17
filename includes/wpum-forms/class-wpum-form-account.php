@@ -69,18 +69,6 @@ class WPUM_Form_Account extends WPUM_Form {
 				'handler'  => array( $this, 'account_handler' ),
 				'priority' => 10
 			),
-			'password' => array(
-				'name'     => esc_html__( 'Change password' ),
-				'view'     => array( $this, 'show_form' ),
-				'handler'  => array( $this, 'password_handler' ),
-				'priority' => 11
-			),
-			'logout' => array(
-				'name'     => esc_html__( 'Logout' ),
-				'view'     => array( $this, 'logout_view' ),
-				'handler'  => false,
-				'priority' => 12
-			)
 		) );
 
 		uasort( $this->steps, array( $this, 'sort_by_priority' ) );
@@ -103,7 +91,6 @@ class WPUM_Form_Account extends WPUM_Form {
 
 		$this->fields = apply_filters( 'account_page_form_fields', array(
 			'account'  => $this->get_account_fields(),
-			'password' => [],
 		) );
 
 	}
@@ -215,10 +202,8 @@ class WPUM_Form_Account extends WPUM_Form {
 		$data = [
 			'form'    => $this->form_name,
 			'action'  => $this->get_action(),
-			'fields'  => $this->get_fields( $this->get_step_key( $this->get_step() ) ),
+			'fields'  => $this->get_fields( 'account' ),
 			'step'    => $this->get_step(),
-			'steps'   => $this->get_steps(),
-			'current' => $this->get_step_key( $this->get_step() ),
 		];
 
 		WPUM()->templates
@@ -240,11 +225,7 @@ class WPUM_Form_Account extends WPUM_Form {
 
 			$values = $this->get_posted_fields();
 
-			if ( ! isset( $_POST['current-form'] ) || $_POST['current-form'] !== 'account' ) {
-				return;
-			}
-
-			if( ! wp_verify_nonce( $_POST['account_' . $this->get_step_key( $this->get_step() ) . '_nonce' ], 'verify_account_form' ) ) {
+			if( ! wp_verify_nonce( $_POST['account_update_nonce' ], 'verify_account_form' ) ) {
 				return;
 			}
 
@@ -308,8 +289,14 @@ class WPUM_Form_Account extends WPUM_Form {
 
 			do_action( 'wpum_after_user_update', $this, $values, $updated_user_id );
 
-			// Successful, show next step.
-			$this->step ++;
+			// Successful, the success message now.
+			$redirect = get_permalink();
+			$redirect = add_query_arg( [
+				'updated' => 'success'
+			], $redirect );
+
+			wp_safe_redirect( $redirect );
+			exit;
 
 		} catch ( Exception $e ) {
 			$this->add_error( $e->getMessage() );

@@ -20,17 +20,15 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 
 <div class="wpum-template wpum-form wpum-account-form">
 
-	<!-- Account page navigation -->
-	<?php
-		WPUM()->templates
-			->set_template_data( $data )
-			->get_template_part( 'account', 'tabs' );
-	?>
-	<!-- end account page navigation -->
+	<?php if( isset( $_GET['updated'] ) && $_GET['updated'] == 'success' ) : ?>
+		<?php
+			WPUM()->templates
+				->set_template_data( [ 'message' => esc_html__( 'Profile successfully updated.' ) ] )
+				->get_template_part( 'messages/general', 'success' );
+		?>
+	<?php endif; ?>
 
-	<div class="wpum-account-form-container wpum_two_third last">
-
-		<?php do_action( 'wpum_before_account_form' ); ?>
+	<?php do_action( 'wpum_before_account_form' ); ?>
 
 		<form action="<?php echo esc_url( $data->action ); ?>" method="post" id="wpum-submit-account-form" enctype="multipart/form-data">
 
@@ -80,16 +78,11 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 
 			<input type="hidden" name="wpum_form" value="<?php echo $data->form; ?>" />
 			<input type="hidden" name="step" value="<?php echo esc_attr( $data->step ); ?>" />
-			<input type="hidden" name="current-form" value="<?php echo esc_attr( $data->current ); ?>" />
-			<?php wp_nonce_field( 'verify_account_form', 'account_' . esc_attr( $data->current ) . '_nonce' ); ?>
+			<?php wp_nonce_field( 'verify_account_form', 'account_update_nonce' ); ?>
 			<input type="submit" name="submit_account" class="button" value="<?php esc_html_e( 'Update profile' ); ?>" />
 
-			<?php do_action( 'wpum_after_account_form' ); ?>
+		<?php do_action( 'wpum_after_account_form' ); ?>
 
-		</form>
-
-	</div>
-
-	<div class="wpum_clearfix"></div>
+	</form>
 
 </div>
