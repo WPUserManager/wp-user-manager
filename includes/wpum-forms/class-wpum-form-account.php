@@ -297,6 +297,8 @@ class WPUM_Form_Account extends WPUM_Form {
 				throw new Exception( $updated_user_id->get_error_message() );
 			}
 
+			do_action( 'wpum_after_user_update', $this, $values, $updated_user_id );
+
 			// Successful, show next step.
 			$this->step ++;
 
