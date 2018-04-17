@@ -176,13 +176,16 @@ class WPUM_Form_Account extends WPUM_Form {
 					$value = esc_html( $this->user->user_email );
 					break;
 				case 'user_nickname':
-					$value = esc_html( $this->user->user_nicename );
+					$value = esc_html( get_user_meta( $this->user->ID, 'nickname', true ) );
 					break;
 				case 'user_website':
 					$value = esc_html( $this->user->user_url );
 					break;
 				case 'user_description':
 					$value = esc_textarea( get_user_meta( $this->user->ID, 'description', true ) );
+					break;
+				case 'user_displayname':
+					$value = $this->get_selected_displayname();
 					break;
 			}
 
@@ -283,6 +286,9 @@ class WPUM_Form_Account extends WPUM_Form {
 			}
 
 			// Update displayed name.
+			if( isset( $values['account']['user_displayname'] ) ) {
+				$user_data[ 'display_name' ] = $this->parse_displayname( $values['account'], $values['account']['user_displayname'] );
+			}
 
 			// Now update the user.
 			$updated_user_id = wp_update_user( $user_data );
@@ -298,6 +304,80 @@ class WPUM_Form_Account extends WPUM_Form {
 			$this->add_error( $e->getMessage() );
 			return;
 		}
+
+	}
+
+	/**
+	 * Prepare the correct value for the display name option.
+	 *
+	 * @param array $values
+	 * @param string $value
+	 * @return string
+	 */
+	private function parse_displayname( $values, $value ) {
+
+		$name = $this->user->user_login;
+
+		switch ( $value ) {
+			case 'display_nickname':
+				$name = $values['user_nickname'];
+				break;
+			case 'display_firstname':
+				$name = $values['user_firstname'];
+				break;
+			case 'display_lastname':
+				$name = $values['user_lastname'];
+				break;
+			case 'display_firstlast':
+				$name = $values['user_firstname'] . ' ' . $values['user_lastname'];
+				break;
+			case 'display_lastfirst':
+				$name = $values['user_lastname'] . ' ' . $values['user_firstname'];
+				break;
+		}
+
+		return $name;
+
+	}
+
+	/**
+	 * Retrieve the option currently selected for the display name setting.
+	 *
+	 * @return string
+	 */
+	private function get_selected_displayname() {
+
+		$selected_name  = $this->user->display_name;
+		$user_login     = $this->user->user_login;
+		$nickname       = $this->user->nickname;
+		$first_name     = $this->user->first_name;
+		$last_name      = $this->user->last_name;
+		$firstlast      = $this->user->first_name . ' ' . $this->user->last_name;
+		$lastfirst      = $this->user->last_name . ' ' . $this->user->first_name;
+		$selected_value = $user_login;
+
+		switch ( $selected_name ) {
+			case $nickname:
+				$selected_value = 'display_nickname';
+				break;
+			case $first_name:
+				$selected_value = 'display_firstname';
+				break;
+			case $last_name:
+				$selected_value = 'display_lastname';
+				break;
+			case $firstlast:
+				$selected_value = 'display_firstlast';
+				break;
+			case $lastfirst:
+				$selected_value = 'display_lastfirst';
+				break;
+			default:
+				$selected_value = $user_login;
+				break;
+		}
+
+		return $selected_value;
 
 	}
 
