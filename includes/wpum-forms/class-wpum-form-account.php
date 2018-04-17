@@ -98,7 +98,7 @@ class WPUM_Form_Account extends WPUM_Form {
 			return;
 		}
 
-		$this->fields = apply_filters( 'account_page_fields', array(
+		$this->fields = apply_filters( 'account_page_form_fields', array(
 			'account'  => $this->get_account_fields(),
 			'password' => [],
 		) );
@@ -132,6 +132,7 @@ class WPUM_Form_Account extends WPUM_Form {
 					'required'    => $field->get_meta( 'required' ),
 					'placeholder' => $field->get_meta( 'placeholder' ),
 					'description' => $field->get_description(),
+					'options'     => $this->get_field_dropdown_options( $field ),
 					'priority'    => 0,
 				);
 			}
