@@ -421,3 +421,115 @@ function wpum_is_account_tab_active( $step_key, $first_tab ) {
 	return $active;
 
 }
+
+/**
+ * Prepare file information for upload.
+ *
+ * @param array $file_data
+ * @return void
+ */
+function wpum_prepare_uploaded_files( $file_data ) {
+	$files_to_upload = array();
+	if ( is_array( $file_data['name'] ) ) {
+		foreach( $file_data['name'] as $file_data_key => $file_data_value ) {
+			if ( $file_data['name'][ $file_data_key ] ) {
+				$type              = wp_check_filetype( $file_data['name'][ $file_data_key ] ); // Map mime type to one WordPress recognises
+				$files_to_upload[] = array(
+					'name'     => $file_data['name'][ $file_data_key ],
+					'type'     => $type['type'],
+					'tmp_name' => $file_data['tmp_name'][ $file_data_key ],
+					'error'    => $file_data['error'][ $file_data_key ],
+					'size'     => $file_data['size'][ $file_data_key ]
+				);
+			}
+		}
+	} else {
+		$type              = wp_check_filetype( $file_data['name'] ); // Map mime type to one WordPress recognises
+		$file_data['type'] = $type['type'];
+		$files_to_upload[] = $file_data;
+	}
+	return apply_filters( 'wpum_prepare_uploaded_files', $files_to_upload );
+}
+
+/**
+ * Uploads a file using WordPress file API.
+ *
+ * @param  array|WP_Error      $file Array of $_FILE data to upload.
+ * @param  string|array|object $args Optional arguments
+ * @return stdClass|WP_Error Object containing file information, or error
+ */
+function wpum_upload_file( $file, $args = array() ) {
+	global $wpum_upload, $wpum_uploading_file;
+	include_once( ABSPATH . 'wp-admin/includes/file.php' );
+	include_once( ABSPATH . 'wp-admin/includes/media.php' );
+	$args = wp_parse_args( $args, array(
+		'file_key'           => '',
+		'file_label'         => '',
+		'allowed_mime_types' => '',
+	) );
+	$wpum_upload         = true;
+	$wpum_uploading_file = $args['file_key'];
+	$uploaded_file              = new stdClass();
+	if ( '' === $args['allowed_mime_types'] ) {
+		$allowed_mime_types = wpum_get_allowed_mime_types( $wpum_uploading_file );
+	} else {
+		$allowed_mime_types = $args['allowed_mime_types'];
+	}
+
+	$file = apply_filters( 'wpum_upload_file_pre_upload', $file, $args, $allowed_mime_types );
+
+	if ( is_wp_error( $file ) ) {
+		return $file;
+	}
+
+	if ( ! in_array( $file['type'], $allowed_mime_types ) ) {
+		if ( $args['file_label'] ) {
+			return new WP_Error( 'upload', sprintf( __( '"%s" (filetype %s) needs to be one of the following file types: %s' ), $args['file_label'], $file['type'], implode( ', ', array_keys( $allowed_mime_types ) ) ) );
+		} else {
+			return new WP_Error( 'upload', sprintf( __( 'Uploaded files need to be one of the following file types: %s' ), implode( ', ', array_keys( $allowed_mime_types ) ) ) );
+		}
+	} else {
+		$upload = wp_handle_upload( $file, apply_filters( 'submit_wpum_wp_handle_upload_overrides', array( 'test_form' => false ) ) );
+		if ( ! empty( $upload['error'] ) ) {
+			return new WP_Error( 'upload', $upload['error'] );
+		} else {
+			$uploaded_file->url       = $upload['url'];
+			$uploaded_file->file      = $upload['file'];
+			$uploaded_file->name      = basename( $upload['file'] );
+			$uploaded_file->type      = $upload['type'];
+			$uploaded_file->size      = $file['size'];
+			$uploaded_file->extension = substr( strrchr( $uploaded_file->name, '.' ), 1 );
+		}
+	}
+	$wpum_upload         = false;
+	$wpum_uploading_file = '';
+
+	return $uploaded_file;
+}
+
+/**
+ * Returns mime types specifically for WPUm.
+ *
+ * @param string $field
+ * @return void
+ */
+function wpum_get_allowed_mime_types( $field = '' ){
+	if ( 'company_logo' === $field ) {
+		$allowed_mime_types = array(
+			'jpg|jpeg|jpe' => 'image/jpeg',
+			'gif'          => 'image/gif',
+			'png'          => 'image/png',
+		);
+	} else {
+		$allowed_mime_types = array(
+			'jpg|jpeg|jpe' => 'image/jpeg',
+			'gif'          => 'image/gif',
+			'png'          => 'image/png',
+			'pdf'          => 'application/pdf',
+			'doc'          => 'application/msword',
+			'docx'         => 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+		);
+	}
+
+	return apply_filters( 'wpum_mime_types', $allowed_mime_types, $field );
+}

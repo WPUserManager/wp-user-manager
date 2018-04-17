@@ -252,6 +252,9 @@ class WPUM_Form_Account extends WPUM_Form {
 				throw new Exception( $return->get_error_message() );
 			}
 
+			print_r( $values );
+			exit;
+
 			// Collect all the data to update the user.
 			$user_data = [
 				'ID' => $this->user->ID
