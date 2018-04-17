@@ -80,6 +80,8 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 
 			<input type="hidden" name="wpum_form" value="<?php echo $data->form; ?>" />
 			<input type="hidden" name="step" value="<?php echo esc_attr( $data->step ); ?>" />
+			<input type="hidden" name="current-form" value="<?php echo esc_attr( $data->current ); ?>" />
+			<?php wp_nonce_field( 'verify_account_form', 'account_' . esc_attr( $data->current ) . '_nonce' ); ?>
 			<input type="submit" name="submit_account" class="button" value="<?php esc_html_e( 'Update profile' ); ?>" />
 
 			<?php do_action( 'wpum_after_account_form' ); ?>

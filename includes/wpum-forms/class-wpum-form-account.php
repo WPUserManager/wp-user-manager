@@ -186,6 +186,10 @@ class WPUM_Form_Account extends WPUM_Form {
 					break;
 			}
 
+		} else {
+
+			$value = esc_html( get_user_meta( $this->user->ID, $field->get_meta( 'user_meta_key' ), true ) );
+
 		}
 
 		return $value;
@@ -213,6 +217,87 @@ class WPUM_Form_Account extends WPUM_Form {
 		WPUM()->templates
 			->set_template_data( $data )
 			->get_template_part( 'forms/form', 'account' );
+
+	}
+
+	/**
+	 * Update the user profile.
+	 *
+	 * @return void
+	 */
+	public function account_handler() {
+
+		try {
+
+			$this->init_fields();
+
+			$values = $this->get_posted_fields();
+
+			if ( ! isset( $_POST['current-form'] ) || $_POST['current-form'] !== 'account' ) {
+				return;
+			}
+
+			if( ! wp_verify_nonce( $_POST['account_' . $this->get_step_key( $this->get_step() ) . '_nonce' ], 'verify_account_form' ) ) {
+				return;
+			}
+
+			if ( empty( $_POST['submit_account'] ) ) {
+				return;
+			}
+
+			if ( is_wp_error( ( $return = $this->validate_fields( $values ) ) ) ) {
+				throw new Exception( $return->get_error_message() );
+			}
+
+			// Collect all the data to update the user.
+			$user_data = [
+				'ID' => $this->user->ID
+			];
+
+			// Update first name and last name.
+			if( isset( $values['account']['user_firstname'] ) ) {
+				$user_data[ 'first_name' ] = $values['account']['user_firstname'];
+			}
+			if( isset( $values['account']['user_lastname'] ) ) {
+				$user_data[ 'last_name' ] = $values['account']['user_lastname'];
+			}
+
+			// Update email address.
+			if( isset( $values['account']['user_email'] ) ) {
+				$user_data[ 'user_email' ] = $values['account']['user_email'];
+			}
+
+			// Update nickname.
+			if( isset( $values['account']['user_nickname'] ) ) {
+				$user_data[ 'nickname' ] = $values['account']['user_nickname'];
+			}
+
+			// Update website.
+			if( isset( $values['account']['user_website'] ) ) {
+				$user_data[ 'user_url' ] = $values['account']['user_website'];
+			}
+
+			// Update description.
+			if( isset( $values['account']['user_description'] ) ) {
+				$user_data[ 'description' ] = $values['account']['user_description'];
+			}
+
+			// Update displayed name.
+
+			// Now update the user.
+			$updated_user_id = wp_update_user( $user_data );
+
+			if( is_wp_error( $updated_user_id ) ) {
+				throw new Exception( $updated_user_id->get_error_message() );
+			}
+
+			// Successful, show next step.
+			$this->step ++;
+
+		} catch ( Exception $e ) {
+			$this->add_error( $e->getMessage() );
+			return;
+		}
 
 	}
 
