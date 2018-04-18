@@ -538,9 +538,9 @@ function wpum_get_account_tab_url( $step_key ) {
  */
 function wpum_is_account_tab_active( $step_key, $first_tab ) {
 
-	$active = isset( $_GET['tab'] ) && $_GET['tab'] == $step_key ? true : false;
+	$active = ! empty( get_query_var( 'tab' ) ) && get_query_var( 'tab' ) == $step_key ? true : false;
 
-	if( ! isset( $_GET['tab'] ) && $step_key == $first_tab ) {
+	if( ! get_query_var( 'tab' ) && $step_key == $first_tab ) {
 		$active = true;
 	}
 

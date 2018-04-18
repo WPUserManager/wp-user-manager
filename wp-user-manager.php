@@ -173,6 +173,7 @@ if ( ! class_exists( 'WP_User_Manager' ) ) :
 		private function includes() {
 
 			require_once WPUM_PLUGIN_DIR . 'includes/functions.php';
+			require_once WPUM_PLUGIN_DIR . 'includes/permalinks.php';
 			require_once WPUM_PLUGIN_DIR . 'includes/actions.php';
 			require_once WPUM_PLUGIN_DIR . 'includes/filters.php';
 			require_once WPUM_PLUGIN_DIR . 'includes/assets.php';
@@ -288,6 +289,9 @@ if ( ! class_exists( 'WP_User_Manager' ) ) :
 			 */
 			do_action( 'before_wpum_init' );
 
+			// Boot the custom routing library.
+			Brain\Cortex::boot();
+
 			// Start carbon fields and remove the sidebar manager scripts.
 			\Carbon_Fields\Carbon_Fields::boot();
 			$sidebar_manager = \Carbon_Fields\Carbon_Fields::resolve( 'sidebar_manager' );
@@ -384,7 +388,7 @@ if ( ! class_exists( 'WP_User_Manager' ) ) :
 
 			$requirements_check = new WP_Requirements_Check( array(
 				'title' => 'WP User Manager',
-				'php'   => '5.4',
+				'php'   => '5.5',
 				'wp'    => '4.7',
 				'file'  => __FILE__,
 			) );

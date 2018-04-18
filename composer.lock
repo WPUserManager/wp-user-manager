@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "a087e1c9f3b04ef40746ec9e907bc5cf",
-    "content-hash": "92976ed70d46a760f077c196ca0408d0",
+    "hash": "b5e9ab2b407e34d822df0656f51dca2d",
+    "content-hash": "5d3f2e8ef4a4b420d01ea77d2872219c",
     "packages": [
         {
             "name": "alessandrotesoro/wp-notices",
@@ -90,6 +90,61 @@
                 "wordpress"
             ],
             "time": "2018-03-04 12:08:22"
+        },
+        {
+            "name": "brain/cortex",
+            "version": "1.0.0-alpha.7",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Brain-WP/Cortex.git",
+                "reference": "0f33ad8578fa051ab5e46e14c9478df4d728e49a"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/Brain-WP/Cortex/zipball/0f33ad8578fa051ab5e46e14c9478df4d728e49a",
+                "reference": "0f33ad8578fa051ab5e46e14c9478df4d728e49a",
+                "shasum": ""
+            },
+            "require": {
+                "nikic/fast-route": "~0.7.0",
+                "php": ">=5.5",
+                "psr/http-message": "*"
+            },
+            "require-dev": {
+                "brain/monkey": "~1.2.0",
+                "gmazzap/andrew": "~1.0.0",
+                "mockery/mockery": "0.9.3",
+                "phpunit/phpunit": "4.8.*"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Brain\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Giuseppe Mazzapica",
+                    "email": "giuseppe.mazzapica@gmail.com",
+                    "homepage": "http://gm.zoomlab.it",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Cortex is a package that implements a routing system in WordPress.",
+            "homepage": "https://github.com/Brain-WP/Cortex",
+            "keywords": [
+                "fast route",
+                "pretty permalink",
+                "rewrite rules",
+                "router",
+                "routing",
+                "wordpress"
+            ],
+            "time": "2016-07-14 19:53:27"
         },
         {
             "name": "composer/installers",
@@ -378,6 +433,99 @@
             "time": "2017-11-16 15:36:25"
         },
         {
+            "name": "nikic/fast-route",
+            "version": "v0.7.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/nikic/FastRoute.git",
+                "reference": "8164b4a0d8afde4eae5f1bfc39084972ba23ad36"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/nikic/FastRoute/zipball/8164b4a0d8afde4eae5f1bfc39084972ba23ad36",
+                "reference": "8164b4a0d8afde4eae5f1bfc39084972ba23ad36",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.4.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "FastRoute\\": "src/"
+                },
+                "files": [
+                    "src/functions.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Nikita Popov",
+                    "email": "nikic@php.net"
+                }
+            ],
+            "description": "Fast request router for PHP",
+            "keywords": [
+                "router",
+                "routing"
+            ],
+            "time": "2015-12-20 19:50:12"
+        },
+        {
+            "name": "psr/http-message",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/php-fig/http-message.git",
+                "reference": "f6561bf28d520154e4b0ec72be95418abe6d9363"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/php-fig/http-message/zipball/f6561bf28d520154e4b0ec72be95418abe6d9363",
+                "reference": "f6561bf28d520154e4b0ec72be95418abe6d9363",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Psr\\Http\\Message\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "PHP-FIG",
+                    "homepage": "http://www.php-fig.org/"
+                }
+            ],
+            "description": "Common interface for HTTP messages",
+            "homepage": "https://github.com/php-fig/http-message",
+            "keywords": [
+                "http",
+                "http-message",
+                "psr",
+                "psr-7",
+                "request",
+                "response"
+            ],
+            "time": "2016-08-06 14:39:51"
+        },
+        {
             "name": "wearerequired/wp-requirements-check",
             "version": "1.0.1",
             "source": {
@@ -429,7 +577,7 @@
     ],
     "packages-dev": [],
     "aliases": [],
-    "minimum-stability": "stable",
+    "minimum-stability": "dev",
     "stability-flags": [],
     "prefer-stable": false,
     "prefer-lowest": false,

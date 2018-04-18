@@ -194,26 +194,6 @@ function wpum_restrict_account_page() {
 add_action( 'template_redirect', 'wpum_restrict_account_page' );
 
 /**
- * Setup the query argument to detect the currently active account page tab.
- *
- * @return string
- */
-function wpum_account_page_set_active_tab() {
-
-	if( ! is_page( wpum_get_core_page_id( 'account' ) ) && ! is_user_logged_in() ) {
-		return;
-	}
-
-	$tabs      = wpum_get_account_page_tabs();
-	$first_tab = key( $tabs );
-	$step      = isset( $_GET['tab'] ) && array_key_exists( $_GET['tab'], $tabs ) ? sanitize_key( $_GET['tab'] ) : $first_tab;
-
-	set_query_var( 'tab', $step );
-
-}
-add_action( 'wp_head', 'wpum_account_page_set_active_tab' );
-
-/**
  * Display the appropriate content for the account page given the currently active tab.
  *
  * @return void
@@ -221,6 +201,11 @@ add_action( 'wp_head', 'wpum_account_page_set_active_tab' );
 function wpum_display_account_page_content() {
 
 	$active_tab = get_query_var('tab');
+
+	if( empty( $active_tab ) ) {
+		$tabs       = wpum_get_account_page_tabs();
+		$active_tab = key( $tabs );
+	}
 
 	if( $active_tab == 'account' || $active_tab == 'password' ) {
 		echo WPUM()->forms->get_form( $active_tab );

@@ -4,6 +4,8 @@
         "alessandrotesoro/wp-optionskit": "^1.0",
         "alessandrotesoro/wp-notices": "^1.0",
         "htmlburger/carbon-fields": "^2.1",
-        "gamajo/template-loader": "^1.3"
-    }
+        "gamajo/template-loader": "^1.3",
+        "brain/cortex": "~1.0.0"
+    },
+    "minimum-stability": "dev"
 }
