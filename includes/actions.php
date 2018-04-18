@@ -171,6 +171,29 @@ function wpum_restrict_wplogin() {
 // add_action( 'init', 'wpum_restrict_wplogin' );
 
 /**
+ * Restrict access to the account page only to logged in users.
+ * After login, redirect visitors back to the account page.
+ *
+ * @return void
+ */
+function wpum_restrict_account_page() {
+
+	if( is_page( wpum_get_core_page_id( 'account' ) ) && ! is_user_logged_in() ) {
+
+		$redirect = get_permalink( wpum_get_core_page_id( 'login' ) );
+		$redirect = add_query_arg( [
+			'redirect_to' => get_permalink()
+		], $redirect );
+
+		wp_safe_redirect( $redirect );
+		exit;
+
+	}
+
+}
+add_action( 'template_redirect', 'wpum_restrict_account_page' );
+
+/**
  * Setup the query argument to detect the currently active account page tab.
  *
  * @return string
