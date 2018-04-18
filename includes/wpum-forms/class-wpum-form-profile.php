@@ -10,14 +10,14 @@
 // Exit if accessed directly
 if ( ! defined( 'ABSPATH' ) ) exit;
 
-class WPUM_Form_Account extends WPUM_Form {
+class WPUM_Form_Profile extends WPUM_Form {
 
 	/**
 	 * Form name.
 	 *
 	 * @var string
 	 */
-	public $form_name = 'account';
+	public $form_name = 'profile';
 
 	/**
 	 * Determine if there's a referrer.

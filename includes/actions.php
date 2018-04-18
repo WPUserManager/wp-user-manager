@@ -207,7 +207,7 @@ function wpum_display_account_page_content() {
 		$active_tab = key( $tabs );
 	}
 
-	if( $active_tab == 'account' || $active_tab == 'password' ) {
+	if( $active_tab == 'profile' || $active_tab == 'password' ) {
 		echo WPUM()->forms->get_form( $active_tab );
 	} else {
 		do_action( 'wpum_account_page_content_' . $active_tab );
