@@ -50,6 +50,11 @@ class WPUM_Form_Password extends WPUM_Form {
 	 * Constructor.
 	 */
 	public function __construct() {
+
+		if( ! is_user_logged_in() ) {
+			return;
+		}
+
 		add_action( 'wp', array( $this, 'process' ) );
 
 		$this->steps  = (array) apply_filters( 'password_change_steps', array(
