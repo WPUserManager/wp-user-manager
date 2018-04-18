@@ -204,6 +204,7 @@ if ( ! class_exists( 'WP_User_Manager' ) ) :
 			require_once WPUM_PLUGIN_DIR . 'includes/wpum-emails/class-wpum-emails.php';
 
 			require_once WPUM_PLUGIN_DIR . 'includes/wpum-admin/class-wpum-avatars.php';
+			require_once WPUM_PLUGIN_DIR . 'includes/wpum-admin/class-wpum-prevent-password-change.php';
 			require_once WPUM_PLUGIN_DIR . 'includes/wpum-admin/class-wpum-template-loader.php';
 			require_once WPUM_PLUGIN_DIR . 'includes/wpum-admin/class-wpum-options-panel.php';
 			require_once WPUM_PLUGIN_DIR . 'includes/wpum-forms/class-wpum-forms.php';
