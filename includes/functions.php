@@ -533,3 +533,20 @@ function wpum_get_allowed_mime_types( $field = '' ){
 
 	return apply_filters( 'wpum_mime_types', $allowed_mime_types, $field );
 }
+
+/**
+ * Retrieve the list of tabs for the account page.
+ *
+ * @return array
+ */
+function wpum_get_account_page_tabs() {
+
+	$tabs = [
+		'account'  => esc_html__( 'Edit profile' ),
+		'password' => esc_html__( 'Change password' ),
+		'logout'   => esc_html__( 'Logout' )
+	];
+
+	return apply_filters( 'wpum_get_account_page_tabs', $tabs );
+
+}
