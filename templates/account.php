@@ -29,7 +29,7 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 	</div>
 
 	<div class="wpum_two_third last">
-		<?php echo WPUM()->forms->get_form( 'account' ); ?>
+		<?php do_action( 'wpum_account_page_content' ); ?>
 	</div>
 
 	<div class="wpum_clearfix"></div>

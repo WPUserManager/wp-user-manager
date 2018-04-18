@@ -169,3 +169,35 @@ function wpum_restrict_wplogin() {
 
 }
 // add_action( 'init', 'wpum_restrict_wplogin' );
+
+/**
+ * Setup the query argument to detect the currently active account page tab.
+ *
+ * @return string
+ */
+function wpum_account_page_set_active_tab() {
+
+	if( ! is_page( wpum_get_core_page_id( 'account' ) ) && ! is_user_logged_in() ) {
+		return;
+	}
+
+	$tabs      = wpum_get_account_page_tabs();
+	$first_tab = key( $tabs );
+	$step      = isset( $_GET['step'] ) && array_key_exists( $_GET['step'], $tabs ) ? sanitize_key( $_GET['step'] ) : $first_tab;
+
+	set_query_var( 'step', $step );
+
+}
+add_action( 'wp_head', 'wpum_account_page_set_active_tab' );
+
+/**
+ * Display the appropriate content for the account page.
+ *
+ * @return void
+ */
+function wpum_display_account_page_content() {
+
+	echo get_query_var('step');
+
+}
+add_action( 'wpum_account_page_content', 'wpum_display_account_page_content' );

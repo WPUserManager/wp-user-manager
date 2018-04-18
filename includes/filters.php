@@ -205,3 +205,20 @@ function wpum_highlight_pages( $post_states, $post ) {
 
 }
 add_filter( 'display_post_states', 'wpum_highlight_pages', 10, 2 );
+
+/**
+ * Undocumented function
+ *
+ * @param [type] $vars
+ * @return void
+ */
+function wpum_account_page_set_query_vars( $vars ) {
+
+	if( is_page( wpum_get_core_page_id( 'account' ) ) ) {
+		$vars[] = 'step';
+	}
+
+	return $vars;
+
+}
+add_filter( 'query_vars', 'wpum_account_page_set_query_vars' );

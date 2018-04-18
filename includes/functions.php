@@ -535,6 +535,20 @@ function wpum_get_allowed_mime_types( $field = '' ){
 }
 
 /**
+ * Sort an array by the priority key value.
+ *
+ * @param array $a
+ * @param array $b
+ * @return void
+ */
+function wpum_sort_array_by_priority( $a, $b ) {
+	if ( $a['priority'] == $b['priority'] ) {
+		return 0;
+	}
+	return ( $a['priority'] < $b['priority'] ) ? -1 : 1;
+}
+
+/**
  * Retrieve the list of tabs for the account page.
  *
  * @return array
@@ -542,10 +556,21 @@ function wpum_get_allowed_mime_types( $field = '' ){
 function wpum_get_account_page_tabs() {
 
 	$tabs = [
-		'account'  => esc_html__( 'Edit profile' ),
-		'password' => esc_html__( 'Change password' ),
-		'logout'   => esc_html__( 'Logout' )
+		'account'  => [
+			'name'     => esc_html__( 'Edit profile' ),
+			'priority' => 0
+		],
+		'password' => [
+			'name'     => esc_html__( 'Change password' ),
+			'priority' => 2,
+		],
+		'logout'   => [
+			'name'     => esc_html__( 'Logout' ),
+			'priority' => 3
+		]
 	];
+
+	uasort( $tabs, 'wpum_sort_array_by_priority' );
 
 	return apply_filters( 'wpum_get_account_page_tabs', $tabs );
 
