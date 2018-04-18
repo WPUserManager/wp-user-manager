@@ -203,7 +203,5 @@ function wpum_account_page( $atts, $content = null ) {
 
 	return $output;
 
-	//return WPUM()->forms->get_form( 'account', $atts );
-
 }
 add_shortcode( 'wpum_account', 'wpum_account_page' );

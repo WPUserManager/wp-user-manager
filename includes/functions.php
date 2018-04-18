@@ -384,45 +384,6 @@ function wpum_send_registration_confirmation_email( $user_id, $psw = false ) {
 }
 
 /**
- * Retrieve the url of a given account tab.
- *
- * @param string $step_key
- * @return string
- */
-function wpum_get_account_tab_url( $step_key ) {
-
-	$tab_url = get_permalink();
-
-	if( $step_key == 'logout' ) {
-		$tab_url = wp_logout_url();
-	} else {
-		$tab_url = add_query_arg( [ 'step' => $step_key ], $tab_url );
-	}
-
-	return $tab_url;
-
-}
-
-/**
- * Verify if a given account tab is currently active.
- *
- * @param string $step_key
- * @param string $first_tab
- * @return boolean
- */
-function wpum_is_account_tab_active( $step_key, $first_tab ) {
-
-	$active = isset( $_GET['step'] ) && $_GET['step'] == $step_key ? true : false;
-
-	if( ! isset( $_GET['step'] ) && $step_key == $first_tab ) {
-		$active = true;
-	}
-
-	return $active;
-
-}
-
-/**
  * Prepare file information for upload.
  *
  * @param array $file_data
@@ -546,6 +507,45 @@ function wpum_sort_array_by_priority( $a, $b ) {
 		return 0;
 	}
 	return ( $a['priority'] < $b['priority'] ) ? -1 : 1;
+}
+
+/**
+ * Retrieve the url of a given account tab.
+ *
+ * @param string $step_key
+ * @return string
+ */
+function wpum_get_account_tab_url( $step_key ) {
+
+	$tab_url = get_permalink();
+
+	if( $step_key == 'logout' ) {
+		$tab_url = wp_logout_url();
+	} else {
+		$tab_url = add_query_arg( [ 'tab' => $step_key ], $tab_url );
+	}
+
+	return $tab_url;
+
+}
+
+/**
+ * Verify if a given account tab is currently active.
+ *
+ * @param string $step_key
+ * @param string $first_tab
+ * @return boolean
+ */
+function wpum_is_account_tab_active( $step_key, $first_tab ) {
+
+	$active = isset( $_GET['tab'] ) && $_GET['tab'] == $step_key ? true : false;
+
+	if( ! isset( $_GET['tab'] ) && $step_key == $first_tab ) {
+		$active = true;
+	}
+
+	return $active;
+
 }
 
 /**

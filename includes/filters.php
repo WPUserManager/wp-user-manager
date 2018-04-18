@@ -215,7 +215,7 @@ add_filter( 'display_post_states', 'wpum_highlight_pages', 10, 2 );
 function wpum_account_page_set_query_vars( $vars ) {
 
 	if( is_page( wpum_get_core_page_id( 'account' ) ) ) {
-		$vars[] = 'step';
+		$vars[] = 'tab';
 	}
 
 	return $vars;

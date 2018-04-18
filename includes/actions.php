@@ -183,21 +183,27 @@ function wpum_account_page_set_active_tab() {
 
 	$tabs      = wpum_get_account_page_tabs();
 	$first_tab = key( $tabs );
-	$step      = isset( $_GET['step'] ) && array_key_exists( $_GET['step'], $tabs ) ? sanitize_key( $_GET['step'] ) : $first_tab;
+	$step      = isset( $_GET['tab'] ) && array_key_exists( $_GET['tab'], $tabs ) ? sanitize_key( $_GET['tab'] ) : $first_tab;
 
-	set_query_var( 'step', $step );
+	set_query_var( 'tab', $step );
 
 }
 add_action( 'wp_head', 'wpum_account_page_set_active_tab' );
 
 /**
- * Display the appropriate content for the account page.
+ * Display the appropriate content for the account page given the currently active tab.
  *
  * @return void
  */
 function wpum_display_account_page_content() {
 
-	echo get_query_var('step');
+	$active_tab = get_query_var('tab');
+
+	if( $active_tab == 'account' || $active_tab == 'password' ) {
+		echo WPUM()->forms->get_form( $active_tab );
+	} else {
+		do_action( 'wpum_account_page_content_' . $active_tab );
+	}
 
 }
 add_action( 'wpum_account_page_content', 'wpum_display_account_page_content' );
