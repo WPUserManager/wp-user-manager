@@ -58,6 +58,10 @@ class WPUM_Form_Account extends WPUM_Form {
 	 */
 	public function __construct() {
 
+		if( ! is_user_logged_in() ) {
+			return;
+		}
+
 		$this->user = wp_get_current_user();
 
 		add_action( 'wp', array( $this, 'process' ) );
