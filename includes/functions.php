@@ -522,10 +522,10 @@ function wpum_get_account_tab_url( $step_key ) {
 	if( $step_key == 'logout' ) {
 		$tab_url = wp_logout_url();
 	} else {
-		$tab_url = add_query_arg( [ 'tab' => $step_key ], $tab_url );
+		$tab_url = $tab_url . $step_key;
 	}
 
-	return $tab_url;
+	return apply_filters( 'wpum_get_account_tab_url', $tab_url, $step_key );
 
 }
 
