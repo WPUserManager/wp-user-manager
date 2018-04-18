@@ -47,6 +47,13 @@ class WPUM_Form_Password extends WPUM_Form {
 	}
 
 	/**
+	 * Holds the currently logged in user object.
+	 *
+	 * @var object
+	 */
+	protected $user;
+
+	/**
 	 * Constructor.
 	 */
 	public function __construct() {
@@ -55,7 +62,10 @@ class WPUM_Form_Password extends WPUM_Form {
 			return;
 		}
 
+		$this->user = wp_get_current_user();
+
 		add_action( 'wp', array( $this, 'process' ) );
+		add_filter( 'submit_wpum_form_validate_fields', [ $this, 'validate_password' ], 10, 4 );
 
 		$this->steps  = (array) apply_filters( 'password_change_steps', array(
 			'submit' => array(
@@ -128,6 +138,39 @@ class WPUM_Form_Password extends WPUM_Form {
 	}
 
 	/**
+	 * Make sure the password is a strong one and matches the confirmation.
+	 *
+	 * @param boolean $pass
+	 * @param array $fields
+	 * @param array $values
+	 * @param string $form
+	 * @return mixed
+	 */
+	public function validate_password( $pass, $fields, $values, $form ) {
+
+		if( $form == $this->form_name && isset( $values['password']['password'] ) ) {
+
+			$password_1      = $values['password']['password'];
+			$password_2      = $values['password']['password_repeat'];
+			$containsLetter  = preg_match('/[A-Z]/', $password_1 );
+			$containsDigit   = preg_match('/\d/', $password_1 );
+			$containsSpecial = preg_match('/[^a-zA-Z\d]/', $password_1 );
+
+			if( ! $containsLetter || ! $containsDigit || ! $containsSpecial || strlen( $password_1 ) < 8 ) {
+				return new WP_Error( 'password-validation-error', esc_html__( 'Password must be at least 8 characters long and contain at least 1 number, 1 uppercase letter and 1 special character.' ) );
+			}
+
+			if( $password_1 !== $password_2 ) {
+				return new WP_Error( 'password-validation-nomatch', esc_html__( 'Error: passwords do not match.' ) );
+			}
+
+		}
+
+		return $pass;
+
+	}
+
+	/**
 	 * Handle submission of the form.
 	 *
 	 * @return void
@@ -135,6 +178,55 @@ class WPUM_Form_Password extends WPUM_Form {
 	public function submit_handler() {
 
 		try {
+
+			$this->init_fields();
+
+			$values = $this->get_posted_fields();
+
+			if( ! wp_verify_nonce( $_POST['password_change_nonce'], 'verify_password_change_form' ) ) {
+				return;
+			}
+
+			if ( empty( $_POST['submit_password'] ) ) {
+				return;
+			}
+
+			if( ! is_user_logged_in() ) {
+				return;
+			}
+
+			if( ! $this->user ) {
+				return;
+			}
+
+			if ( is_wp_error( ( $return = $this->validate_fields( $values ) ) ) ) {
+				throw new Exception( $return->get_error_message() );
+			}
+
+			$updated_user_id = wp_update_user( [
+				'ID'        => $this->user->ID,
+				'user_pass' => $values['password']['password']
+			] );
+
+			if ( is_wp_error( $updated_user_id ) ) {
+				throw new Exception( $updated_user_id->get_error_message() );
+			} else {
+
+				$active_tab = get_query_var( 'tab' );
+				if( empty( $active_tab ) ) {
+					$active_tab = isset( $_GET['tab'] ) ? $_GET['tab'] : 'password';
+				}
+
+				$redirect = get_permalink();
+				$redirect = add_query_arg( [
+					'password-updated' => 'success',
+					'tab'              => $active_tab
+				], $redirect );
+
+				wp_safe_redirect( $redirect );
+				exit;
+
+			}
 
 		} catch ( Exception $e ) {
 			$this->add_error( $e->getMessage() );
