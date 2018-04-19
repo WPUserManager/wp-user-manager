@@ -220,8 +220,11 @@ function wpum_profile( $atts, $content = null ) {
 	$output = ob_get_clean();
 
 	WPUM()->templates
-		->set_template_data( [] )
-		->get_template_part( 'account' );
+		->set_template_data( [
+			'profile_id'      => wpum_get_current_profile_id(),
+			'current_user_id' => $current_user_id
+		] )
+		->get_template_part( 'profile' );
 
 	return $output;
 

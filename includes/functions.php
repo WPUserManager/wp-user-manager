@@ -602,3 +602,43 @@ function wpum_get_full_page_hierarchy( $page_id ) {
 	return $return;
 
 }
+
+/**
+ * Get a list of available permalink structures.
+ *
+ * @since 1.0.0
+ * @return array of all the structures.
+ */
+function wpum_get_permalink_structures() {
+
+	$structures = array(
+		'user_id' => array(
+			'name'   => 'user_id',
+			'label'  => _x( 'Display user ID', 'Permalink structure' ),
+			'sample' => '123'
+		),
+		'username' => array(
+			'name'   => 'username',
+			'label'  => _x( 'Display username', 'Permalink structure' ),
+			'sample' => _x( 'username', 'Example of permalink setting' )
+		),
+		'nickname' => array(
+			'name'   => 'nickname',
+			'label'  => _x( 'Display nickname', 'Permalink structure' ),
+			'sample' => _x( 'nickname', 'Example of permalink setting' )
+		),
+	);
+
+	return apply_filters( 'wpum_get_permalink_structures', $structures );
+}
+
+/**
+ * Retrieve the profile id of the currently active profile.
+ *
+ * @return mixed
+ */
+function wpum_get_current_profile_id() {
+
+	$profile_permalink_structure = '';
+
+}

@@ -28,7 +28,6 @@ add_action('cortex.routes', function( RouteCollectionInterface $routes ) {
 			$parent_page_slug = esc_attr( get_post_field( 'post_name', intval( $page['id'] ) ) );
 			$page_slug       .= $parent_page_slug . '/';
 		}
-
 	}
 
 	$routes->addRoute( new QueryRoute(
@@ -40,4 +39,33 @@ add_action('cortex.routes', function( RouteCollectionInterface $routes ) {
 		  	];
 		}
 	) );
+} );
+
+/**
+ * Register rewrite rules for the profile page.
+ */
+add_action('cortex.routes', function( RouteCollectionInterface $routes ) {
+
+	$profile_page_id = wpum_get_core_page_id( 'profile' );
+	$page_slug       = esc_attr( get_post_field( 'post_name', intval( $profile_page_id ) ) );
+	$hierarchy       = wpum_get_full_page_hierarchy( $profile_page_id );
+
+	if( ! empty( $hierarchy ) && is_array( $hierarchy ) ) {
+		$page_slug = '';
+		foreach ( array_reverse( $hierarchy )  as $page ) {
+			$parent_page_slug = esc_attr( get_post_field( 'post_name', intval( $page['id'] ) ) );
+			$page_slug       .= $parent_page_slug . '/';
+		}
+	}
+
+	$routes->addRoute( new QueryRoute(
+		$page_slug . '{profile:[a-z]+}',
+		function(array $matches) use( $profile_page_id ) {
+			return [
+		    	'profile' => $matches['profile'],
+				'page_id' => $profile_page_id,
+		  	];
+		}
+	) );
+
 } );

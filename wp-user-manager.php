@@ -214,6 +214,7 @@ if ( ! class_exists( 'WP_User_Manager' ) ) :
 			if ( is_admin() || ( defined( 'WP_CLI' ) && WP_CLI ) ) {
 				require_once WPUM_PLUGIN_DIR . 'includes/wpum-admin/class-wpum-notices.php';
 				require_once WPUM_PLUGIN_DIR . 'includes/wpum-admin/class-wpum-user-table.php';
+				require_once WPUM_PLUGIN_DIR . 'includes/wpum-admin/class-wpum-permalinks-settings.php';
 				require_once WPUM_PLUGIN_DIR . 'includes/wpum-fields/class-wpum-fields-editor.php';
 				require_once WPUM_PLUGIN_DIR . 'includes/wpum-forms/class-wpum-registration-forms-editor.php';
 				require_once WPUM_PLUGIN_DIR . 'includes/wpum-emails/class-wpum-emails-list.php';
