@@ -668,7 +668,7 @@ function wpum_get_queried_user_id() {
 			break;
 		case 'username':
 			$user    = get_user_by( 'login', $queried_user );
-			$user_id = $user instanceof WP_User ? $user->data->ID : false;
+			$user_id = $user instanceof WP_User ? absint( $user->data->ID ) : false;
 			break;
 		case 'nickname':
 			$args = array (
@@ -679,12 +679,12 @@ function wpum_get_queried_user_id() {
 			$user_query = $user_query->get_results();
 
 			if( is_array( $user_query ) && ! empty( $user_query ) ) {
-				$user_id = $user_query[0]->data->ID;
+				$user_id = absint( $user_query[0]->data->ID );
 			}
 
 		break;
 	}
 
-	return absint( $user_id );
+	return $user_id;
 
 }
