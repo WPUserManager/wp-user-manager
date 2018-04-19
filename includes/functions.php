@@ -664,7 +664,8 @@ function wpum_get_queried_user_id() {
 
 	switch ( $profile_permalink_structure ) {
 		case 'user_id':
-			$user_id = absint( $queried_user );
+			$user    = get_user_by( 'id', $queried_user );
+			$user_id = $user instanceof WP_User ? absint( $user->data->ID ) : false;
 			break;
 		case 'username':
 			$user    = get_user_by( 'login', $queried_user );

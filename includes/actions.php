@@ -216,6 +216,16 @@ function wpum_display_account_page_content() {
 }
 add_action( 'wpum_account_page_content', 'wpum_display_account_page_content' );
 
+function wpum_when_profile_not_found() {
+	if( is_page( wpum_get_core_page_id( 'profile' ) ) && ! wpum_get_queried_user_id() ) {
+		global $wp_query;
+		$wp_query->set_404();
+		status_header( 404 );
+		nocache_headers();
+	}
+}
+add_action( 'template_redirect', 'wpum_when_profile_not_found' );
+
 /**
  * Make nickname unique.
  *
