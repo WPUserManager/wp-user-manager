@@ -221,7 +221,7 @@ function wpum_profile( $atts, $content = null ) {
 
 	WPUM()->templates
 		->set_template_data( [
-			'profile_id'      => wpum_get_queried_user_id(),
+			'user'            => get_user_by( 'id', wpum_get_queried_user_id() ),
 			'current_user_id' => get_current_user_id()
 		] )
 		->get_template_part( 'profile' );
