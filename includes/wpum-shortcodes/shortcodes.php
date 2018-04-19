@@ -205,3 +205,25 @@ function wpum_account_page( $atts, $content = null ) {
 
 }
 add_shortcode( 'wpum_account', 'wpum_account_page' );
+
+/**
+ * Handles display of the profile shortcode.
+ *
+ * @param array $atts
+ * @param string $content
+ * @return void
+ */
+function wpum_profile( $atts, $content = null ) {
+
+	ob_start();
+
+	$output = ob_get_clean();
+
+	WPUM()->templates
+		->set_template_data( [] )
+		->get_template_part( 'account' );
+
+	return $output;
+
+}
+add_shortcode( 'wpum_profile', 'wpum_profile' );
