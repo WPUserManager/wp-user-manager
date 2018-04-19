@@ -18,11 +18,21 @@ use Brain\Cortex\Route\RouteCollectionInterface;
 use Brain\Cortex\Route\QueryRoute;
 add_action('cortex.routes', function( RouteCollectionInterface $routes ) {
 
-	$account_page_id   = wpum_get_core_page_id( 'account' );
-	$account_page_slug = esc_attr( get_post_field( 'post_name', intval( $account_page_id ) ) );
+	$account_page_id = wpum_get_core_page_id( 'account' );
+	$page_slug       = esc_attr( get_post_field( 'post_name', intval( $account_page_id ) ) );
+	$hierarchy       = wpum_get_full_page_hierarchy( $account_page_id );
+
+	if( ! empty( $hierarchy ) && is_array( $hierarchy ) ) {
+		$page_slug = '';
+		foreach ( array_reverse( $hierarchy )  as $page ) {
+			$parent_page_slug = esc_attr( get_post_field( 'post_name', intval( $page['id'] ) ) );
+			$page_slug       .= $parent_page_slug . '/';
+		}
+
+	}
 
 	$routes->addRoute( new QueryRoute(
-		$account_page_slug . '/{tab:[a-z]+}',
+		$page_slug . '{tab:[a-z]+}',
 		function(array $matches) use( $account_page_id ) {
 			return [
 		    	'tab'  => $matches['tab'],

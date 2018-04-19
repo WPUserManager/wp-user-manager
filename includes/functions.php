@@ -575,3 +575,30 @@ function wpum_get_account_page_tabs() {
 	return apply_filters( 'wpum_get_account_page_tabs', $tabs );
 
 }
+
+/**
+ * Retrieve the full hierarchy of a given page or post.
+ *
+ * @param int $page_id
+ * @return void
+ */
+function wpum_get_full_page_hierarchy( $page_id ) {
+
+	$page = get_post( $page_id );
+
+	if ( empty( $page ) || is_wp_error( $page ) ) {
+		return [];
+	}
+
+	$return         = [];
+	$page_obj       = [];
+	$page_obj['id'] = $page_id;
+	$return[]       = $page_obj;
+
+	if ( $page->post_parent > 0 ) {
+		$return = array_merge( $return, wpum_get_full_page_hierarchy( $page->post_parent ) );
+	}
+
+	return $return;
+
+}
