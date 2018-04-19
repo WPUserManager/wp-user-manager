@@ -21,7 +21,7 @@ class WPUM_Permalinks_Settings {
 	public function __construct() {
 		if ( is_admin() ) {
 			add_action( 'admin_init', array( $this, 'add_new_permalink_settings' ) );
-			add_action( 'wpum_save_permalink_structure', array( $this, 'save_structure' ) );
+			add_action( 'admin_init', array( $this, 'save_structure' ) );
 		}
 	}
 
@@ -97,6 +97,11 @@ class WPUM_Permalinks_Settings {
 		if ( ! is_admin() ) {
 			return;
 		}
+
+		if( ! isset( $_POST['user_permalink'] ) ) {
+			return;
+		}
+
 		if ( ! wp_verify_nonce( $_POST['_wpnonce'], 'update-permalink' ) ) {
 			return;
 		}
