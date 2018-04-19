@@ -215,3 +215,44 @@ function wpum_display_account_page_content() {
 
 }
 add_action( 'wpum_account_page_content', 'wpum_display_account_page_content' );
+
+/**
+ * Make nickname unique.
+ *
+ * @param int $user_id
+ * @return void
+ */
+function wpum_check_display_name( $user_id ) {
+
+	global $wpdb;
+
+	// Getting user data and user meta data.
+    $err['display'] = $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(ID) FROM $wpdb->users WHERE display_name = %s AND ID <> %d", $_POST['display_name'], $_POST['user_id'] ) );
+    $err['nick']    = $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(ID) FROM $wpdb->users as users, $wpdb->usermeta as meta WHERE users.ID = meta.user_id AND meta.meta_key = 'nickname' AND meta.meta_value = %s AND users.ID <> %d", $_POST['nickname'], $_POST['user_id'] ) );
+
+	foreach( $err as $key => $e ) {
+        if( $e >= 1 ) {
+            add_action( 'user_profile_update_errors', "wpum_check_{$key}_field", 10, 3 );
+        }
+    }
+}
+add_action( 'personal_options_update', 'wpum_check_display_name' );
+add_action( 'edit_user_profile_update', 'wpum_check_display_name' );
+
+/**
+ * Trigger the unique error for the display field.
+ *
+ * @return void
+ */
+function wpum_check_display_field( $errors, $update, $user ) {
+	$errors->add( 'display_name_error', esc_html__( 'This display name is already in use by someone else.' ) );
+}
+
+/**
+ * Trigger the unique error for the nickname field.
+ *
+ * @return void
+ */
+function wpum_check_nick_field( $errors, $update, $user ) {
+	$errors->add( 'display_nick_error', esc_html__( 'This nickname is already in use by someone else. Nicknames must be unique.' ) );
+}
