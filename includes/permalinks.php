@@ -59,7 +59,7 @@ add_action('cortex.routes', function( RouteCollectionInterface $routes ) {
 	}
 
 	$routes->addRoute( new QueryRoute(
-		$page_slug . '{profile:[a-z]+}',
+		$page_slug . '{profile:[a-zA-Z0-9_.-]+}',
 		function(array $matches) use( $profile_page_id ) {
 			return [
 		    	'profile' => $matches['profile'],

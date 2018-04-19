@@ -16,8 +16,6 @@
 // Exit if accessed directly
 if ( ! defined( 'ABSPATH' ) ) exit;
 
-echo $data->profile_id;
-
 ?>
 
 <div class="wpum-template wpum-profile-page">

@@ -633,12 +633,58 @@ function wpum_get_permalink_structures() {
 }
 
 /**
- * Retrieve the profile id of the currently active profile.
+ * Retrieve the currently queried profile.
+ * If no profile is queried and the user is currently logged in,
+ * retrieve the current user id.
  *
  * @return mixed
  */
-function wpum_get_current_profile_id() {
+function wpum_get_queried_user() {
 
-	$profile_permalink_structure = '';
+	$queried_user = get_query_var( 'profile', false );
+
+	if( ! $queried_user && is_user_logged_in() ) {
+		$queried_user = get_current_user_id();
+	}
+
+	return $queried_user;
+
+}
+
+/**
+ * Always retrieve the id of a queried user.
+ *
+ * @return mixed
+ */
+function wpum_get_queried_user_id() {
+
+	$queried_user                = wpum_get_queried_user();
+	$user_id                     = false;
+	$profile_permalink_structure = get_option( 'wpum_permalink', 'user_id' );
+
+	switch ( $profile_permalink_structure ) {
+		case 'user_id':
+			$user_id = absint( $queried_user );
+			break;
+		case 'username':
+			$user    = get_user_by( 'login', $queried_user );
+			$user_id = $user instanceof WP_User ? $user->data->ID : false;
+			break;
+		case 'nickname':
+			$args = array (
+				'meta_key'   => 'nickname',
+				'meta_value' => $queried_user
+			);
+			$user_query = new WP_User_Query( $args );
+			$user_query = $user_query->get_results();
+
+			if( is_array( $user_query ) && ! empty( $user_query ) ) {
+				$user_id = $user_query[0]->data->ID;
+			}
+
+		break;
+	}
+
+	return absint( $user_id );
 
 }

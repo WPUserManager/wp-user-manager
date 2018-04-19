@@ -219,10 +219,12 @@ function wpum_profile( $atts, $content = null ) {
 
 	$output = ob_get_clean();
 
+	var_dump( wpum_get_queried_user() );
+	var_dump( wpum_get_queried_user_id() );
+
 	WPUM()->templates
 		->set_template_data( [
-			'profile_id'      => wpum_get_current_profile_id(),
-			'current_user_id' => $current_user_id
+			'current_user_id' => get_current_user_id()
 		] )
 		->get_template_part( 'profile' );
 
