@@ -751,3 +751,35 @@ function wpum_get_registered_profile_tabs() {
 	return apply_filters( 'wpum_get_registered_profile_tabs', $tabs );
 
 }
+
+/**
+ * Retrieve the url a profile tab for the given user.
+ *
+ * @param object $user
+ * @param array $tab
+ * @return string
+ */
+function wpum_get_profile_tab_url( $user, $tab ) {
+
+	$url = wpum_get_profile_url( $user );
+	$url .= '/' . $tab;
+
+	return $url;
+
+}
+
+/**
+ * Retrieve the currently active profile tab.
+ * If no profile tab is found active, automatically set the first found tab as active.
+ *
+ * @param string $tab
+ * @return void
+ */
+function wpum_get_active_profile_tab() {
+
+	$first_tab   = key( wpum_get_registered_profile_tabs() );
+	$profile_tab = get_query_var( 'tab', $first_tab );
+
+	return $profile_tab;
+
+}

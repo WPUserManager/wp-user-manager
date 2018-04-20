@@ -19,7 +19,7 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 ?>
 
 <nav id="profile-navbar">
-	<?php foreach( $data->tabs as $tab ) : ?>
-		<a href=""><?php echo esc_html( $tab['name'] ); ?></a>
+	<?php foreach( $data->tabs as $tab_key => $tab ) : ?>
+		<a href="<?php echo esc_url( wpum_get_profile_tab_url( $data->user, $tab_key ) ); ?>" class="tab-<?php echo esc_attr( $tab_key ); ?> <?php if( wpum_get_active_profile_tab() == $tab_key ) : ?>active<?php endif; ?>"><?php echo esc_html( $tab['name'] ); ?></a>
 	<?php endforeach; ?>
 </nav>

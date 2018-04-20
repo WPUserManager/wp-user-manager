@@ -10,12 +10,13 @@
 
 if ( ! defined( 'ABSPATH' ) ) exit;
 
+use Brain\Cortex\Route\RouteCollectionInterface;
+use Brain\Cortex\Route\QueryRoute;
+
 /**
  * Register custom routing for the account page.
  * The routing will then decide which content to be displayed within that page.
  */
-use Brain\Cortex\Route\RouteCollectionInterface;
-use Brain\Cortex\Route\QueryRoute;
 add_action('cortex.routes', function( RouteCollectionInterface $routes ) {
 
 	$account_page_id = wpum_get_core_page_id( 'account' );
@@ -63,6 +64,17 @@ add_action('cortex.routes', function( RouteCollectionInterface $routes ) {
 		function(array $matches) use( $profile_page_id ) {
 			return [
 		    	'profile' => $matches['profile'],
+				'page_id' => $profile_page_id,
+		  	];
+		}
+	) );
+
+	$routes->addRoute( new QueryRoute(
+		$page_slug . '{profile:[a-zA-Z0-9_.-]+}/{tab:[a-zA-Z0-9_.-]+}',
+		function(array $matches) use( $profile_page_id ) {
+			return [
+				'profile' => $matches['profile'],
+				'tab'     => $matches['tab'],
 				'page_id' => $profile_page_id,
 		  	];
 		}

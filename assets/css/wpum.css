@@ -997,8 +997,9 @@
     display: block;
     padding: 10px 15px;
     text-decoration: none; }
-    #profile-navbar > a:hover,
-    #profile-navbar > button:hover {
+    #profile-navbar > a:hover, #profile-navbar > a.active,
+    #profile-navbar > button:hover,
+    #profile-navbar > button.active {
       background: #eee; }
 
 /*# sourceMappingURL=wpum.css.map */
