@@ -973,7 +973,7 @@
   left: 30px; }
 #header-avatar-container img {
   border: solid 5px #FFF;
-  background: rgba(255, 255, 255, 0.8); }
+  background: #fff; }
 
 #header-details-container {
   padding: 10px 10px 10px 30px; }
