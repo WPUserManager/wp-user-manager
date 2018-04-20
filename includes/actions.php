@@ -260,7 +260,7 @@ add_action( 'edit_user_profile_update', 'wpum_check_display_name' );
  * @return void
  */
 function wpum_check_display_field( $errors, $update, $user ) {
-	$errors->add( 'display_name_error', esc_html__( 'This display name is already in use by someone else.' ) );
+	$errors->add( 'display_name_error', esc_html__( 'This display name is already in use by someone else. Display names must be unique.' ) );
 }
 
 /**

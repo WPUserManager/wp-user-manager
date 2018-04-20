@@ -64,6 +64,8 @@ class WPUM_Form_Profile extends WPUM_Form {
 
 		$this->user = wp_get_current_user();
 
+		add_filter( 'submit_wpum_form_validate_fields', [ $this, 'validate_nickname' ], 10, 4 );
+
 		add_action( 'wp', array( $this, 'process' ) );
 
 		$this->steps  = (array) apply_filters( 'wpum_account_tabs', array(
@@ -96,6 +98,38 @@ class WPUM_Form_Profile extends WPUM_Form {
 		$this->fields = apply_filters( 'account_page_form_fields', array(
 			'account'  => $this->get_account_fields(),
 		) );
+
+	}
+
+	/**
+	 * Make sure the nickname and display name options are unique.
+	 *
+	 * @param boolean $pass
+	 * @param array $fields
+	 * @param array $values
+	 * @param string $form
+	 * @return mixed
+	 */
+	public function validate_nickname( $pass, $fields, $values, $form ) {
+
+		if( $form == $this->form_name && isset( $values['account']['user_nickname'] ) ) {
+
+			global $wpdb;
+
+			$displayname = $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(ID) FROM $wpdb->users WHERE display_name = %s AND ID <> %d", $values['account']['user_displayname'], $this->user->ID ) );
+			$nickname    = $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(ID) FROM $wpdb->users as users, $wpdb->usermeta as meta WHERE users.ID = meta.user_id AND meta.meta_key = 'nickname' AND meta.meta_value = %s AND users.ID <> %d", $values['account']['user_nickname'], $this->user->ID ) );
+
+			if( $displayname == '1' ) {
+				return new WP_Error( 'displayname-unique-validation-error', esc_html__( 'This display name is already in use by someone else. Display names must be unique.' ) );
+			}
+
+			if( $nickname == '1' ) {
+				return new WP_Error( 'displayname-unique-validation-error', esc_html__( 'This nickname is already in use by someone else. Nicknames must be unique.' ) );
+			}
+
+		}
+
+		return $pass;
 
 	}
 
