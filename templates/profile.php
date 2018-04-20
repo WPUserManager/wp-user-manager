@@ -38,7 +38,8 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 			WPUM()->templates
 				->set_template_data( [
 					'user'            => $data->user,
-					'current_user_id' => $data->current_user_id
+					'current_user_id' => $data->current_user_id,
+					'tabs'            => wpum_get_registered_profile_tabs()
 				] )
 				->get_template_part( 'profiles/navigation' );
 		?>

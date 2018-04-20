@@ -19,6 +19,7 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 ?>
 
 <nav id="profile-navbar">
-	<a href="">Test</a>
-	<a href="">Test 2</a>
+	<?php foreach( $data->tabs as $tab ) : ?>
+		<a href=""><?php echo esc_html( $tab['name'] ); ?></a>
+	<?php endforeach; ?>
 </nav>
