@@ -643,10 +643,6 @@ function wpum_get_queried_user() {
 
 	$queried_user = get_query_var( 'profile', false );
 
-	if( ! $queried_user && is_user_logged_in() ) {
-		$queried_user = get_current_user_id();
-	}
-
 	return $queried_user;
 
 }
@@ -661,6 +657,10 @@ function wpum_get_queried_user_id() {
 	$queried_user                = wpum_get_queried_user();
 	$user_id                     = false;
 	$profile_permalink_structure = get_option( 'wpum_permalink', 'user_id' );
+
+	if( ! $queried_user && is_user_logged_in() ) {
+		return get_current_user_id();
+	}
 
 	switch ( $profile_permalink_structure ) {
 		case 'user_id':
@@ -683,7 +683,7 @@ function wpum_get_queried_user_id() {
 				$user_id = absint( $user_query[0]->data->ID );
 			}
 
-		break;
+			break;
 	}
 
 	return $user_id;
@@ -691,15 +691,28 @@ function wpum_get_queried_user_id() {
 }
 
 /**
- * Retrieve the url of the currently displayed user.
+ * Retrieve the user url for a given user.
  *
+ * @param object $user instance of WP_User ( $user->data )
  * @return string
  */
-function wpum_get_displayed_user_url() {
+function wpum_get_profile_url( $user ) {
 
-	$pageurl      = get_permalink( wpum_get_core_page_id( 'profile' ) );
-	$queried_user = get_query_var( 'profile' );
+	$page_url            = get_permalink( wpum_get_core_page_id( 'profile' ) );
+	$permalink_structure = get_option( 'wpum_permalink', 'user_id' );
 
-	return $pageurl . $queried_user;
+	switch ( $permalink_structure ) {
+		case 'user_id':
+			$page_url .= $user->ID;
+			break;
+		case 'username':
+			$page_url .= $user->user_login;
+			break;
+		case 'nickname':
+			$page_url .= get_user_meta( $user->ID, 'nickname', true );
+			break;
+	}
+
+	return $page_url;
 
 }
