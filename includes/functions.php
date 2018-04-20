@@ -739,6 +739,13 @@ function wpum_get_registered_profile_tabs() {
 		],
 	];
 
+	if ( ! wpum_get_option( 'profile_posts' ) ) {
+		unset( $tabs['posts'] );
+	}
+	if ( ! wpum_get_option( 'profile_comments' ) ) {
+		unset( $tabs['comments'] );
+	}
+
 	uasort( $tabs, 'wpum_sort_array_by_priority' );
 
 	return apply_filters( 'wpum_get_registered_profile_tabs', $tabs );
