@@ -22,14 +22,25 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 
 	<?php do_action( 'wpum_before_profile' ); ?>
 
-	<div id="users-header">
+	<div id="profile-header-container">
 		<?php
 			WPUM()->templates
 				->set_template_data( [
-				'user'            => $data->user,
-				'current_user_id' => $data->current_user_id
+					'user'            => $data->user,
+					'current_user_id' => $data->current_user_id
 				] )
 				->get_template_part( 'profiles/cover' );
+		?>
+	</div>
+
+	<div id="profile-navigation">
+		<?php
+			WPUM()->templates
+				->set_template_data( [
+					'user'            => $data->user,
+					'current_user_id' => $data->current_user_id
+				] )
+				->get_template_part( 'profiles/navigation' );
 		?>
 	</div>
 

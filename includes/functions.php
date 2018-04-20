@@ -689,3 +689,17 @@ function wpum_get_queried_user_id() {
 	return $user_id;
 
 }
+
+/**
+ * Retrieve the url of the currently displayed user.
+ *
+ * @return string
+ */
+function wpum_get_displayed_user_url() {
+
+	$pageurl      = get_permalink( wpum_get_core_page_id( 'profile' ) );
+	$queried_user = get_query_var( 'profile' );
+
+	return $pageurl . $queried_user;
+
+}

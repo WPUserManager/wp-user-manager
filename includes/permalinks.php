@@ -52,7 +52,7 @@ add_action('cortex.routes', function( RouteCollectionInterface $routes ) {
 
 	if( ! empty( $hierarchy ) && is_array( $hierarchy ) ) {
 		$page_slug = '';
-		foreach ( array_reverse( $hierarchy )  as $page ) {
+		foreach ( array_reverse( $hierarchy ) as $page ) {
 			$parent_page_slug = esc_attr( get_post_field( 'post_name', intval( $page['id'] ) ) );
 			$page_slug       .= $parent_page_slug . '/';
 		}
