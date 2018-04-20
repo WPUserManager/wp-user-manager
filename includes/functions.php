@@ -716,3 +716,31 @@ function wpum_get_profile_url( $user ) {
 	return $page_url;
 
 }
+
+/**
+ * Retrieve the tabs for the profile page.
+ *
+ * @return array
+ */
+function wpum_get_registered_profile_tabs() {
+
+	$tabs = [
+		'about'  => [
+			'name'     => esc_html__( 'About' ),
+			'priority' => 0
+		],
+		'posts'  => [
+			'name'     => esc_html__( 'Posts' ),
+			'priority' => 0
+		],
+		'comments'  => [
+			'name'     => esc_html__( 'Comments' ),
+			'priority' => 0
+		],
+	];
+
+	uasort( $tabs, 'wpum_sort_array_by_priority' );
+
+	return apply_filters( 'wpum_get_registered_profile_tabs', $tabs );
+
+}
