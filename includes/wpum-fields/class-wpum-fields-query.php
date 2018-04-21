@@ -15,7 +15,6 @@ class WPUM_Fields_Query {
 	/**
 	 * The loop iterator.
 	 *
-	 * @since 1.2.0
 	 * @var int
 	 */
 	public $current_group = -1;
@@ -23,7 +22,6 @@ class WPUM_Fields_Query {
 	/**
 	 * The number of groups returned by the query.
 	 *
-	 * @since 1.2.0
 	 * @var int
 	 */
 	public $group_count;
@@ -31,7 +29,6 @@ class WPUM_Fields_Query {
 	/**
 	 * List of groups found by the query.
 	 *
-	 * @since 1.2.0
 	 * @var array
 	 */
 	public $groups;
@@ -39,7 +36,6 @@ class WPUM_Fields_Query {
 	/**
 	 * The current group object being iterated on.
 	 *
-	 * @since 1.2.0
 	 * @var object
 	 */
 	public $group;
@@ -47,7 +43,6 @@ class WPUM_Fields_Query {
 	/**
 	 * The current field.
 	 *
-	 * @since 1.2.0
 	 * @var int
 	 */
 	public $current_field = -1;
@@ -55,7 +50,6 @@ class WPUM_Fields_Query {
 	/**
 	 * The field count.
 	 *
-	 * @since 1.2.0
 	 * @var int
 	 */
 	public $field_count;
@@ -63,7 +57,6 @@ class WPUM_Fields_Query {
 	/**
 	 * Whether the field has data.
 	 *
-	 * @since 1.2.0
 	 * @var bool
 	 */
 	public $field_has_data;
@@ -71,7 +64,6 @@ class WPUM_Fields_Query {
 	/**
 	 * The field.
 	 *
-	 * @since 1.2.0
 	 * @var int
 	 */
 	public $field;
@@ -79,7 +71,6 @@ class WPUM_Fields_Query {
 	/**
 	 * Flag to check whether the loop is currently being iterated.
 	 *
-	 * @since 1.2.0
 	 * @var bool
 	 */
 	public $in_the_loop;
@@ -87,7 +78,6 @@ class WPUM_Fields_Query {
 	/**
 	 * The user id.
 	 *
-	 * @since 1.2.0
 	 * @var int
 	 */
 	public $user_id;
@@ -95,7 +85,6 @@ class WPUM_Fields_Query {
 	/**
 	 * Let's get things going.
 	 *
-	 * @since 1.2.0
 	 * @param array $args arguments.
 	 */
 	public function __construct( $args = '' ) {
