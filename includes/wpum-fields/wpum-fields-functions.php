@@ -276,6 +276,22 @@ function wpum_get_registered_field_types_names() {
 	return $registered_types;
 }
 
-function wpum_get_fields_groups( $args ) {
+/**
+ * Retrieve fields groups populated with fields and user data.
+ *
+ * @param array $args
+ * @return void
+ */
+function wpum_get_fields_groups( $args = array() ) {
+
+	$defaults = array(
+		'user_id'           => false,
+		'field_group_id'    => false,
+	);
+
+	// Parse incoming $args into an array and merge it with $defaults
+	$args = wp_parse_args( $args, $defaults );
+
+	return apply_filters( 'wpum_get_fields_groups', $args );
 
 }
