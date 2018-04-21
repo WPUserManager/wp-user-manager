@@ -59,6 +59,13 @@ class WPUM_Field_Group {
 	protected $count = 0;
 
 	/**
+	 * Holds fields for the current group.
+	 *
+	 * @var array
+	 */
+	protected $fields;
+
+	/**
 	 * The Database Abstraction
 	 */
 	protected $db;
@@ -106,6 +113,16 @@ class WPUM_Field_Group {
 	}
 
 	/**
+	 * Set properties of the class.
+	 *
+	 * @param string $key
+	 * @param mixed $value
+	 */
+	public function __set( $key, $value ) {
+		$this->$key = $value;
+	}
+
+	/**
 	 * Setup the field group.
 	 *
 	 * @param mixed $group
@@ -145,7 +162,7 @@ class WPUM_Field_Group {
 	/**
 	 * Retrieve the group id.
 	 *
-	 * @return void
+	 * @return string
 	 */
 	public function get_ID() {
 		return $this->id;
@@ -154,7 +171,7 @@ class WPUM_Field_Group {
 	/**
 	 * Retrieve the group name.
 	 *
-	 * @return void
+	 * @return string
 	 */
 	public function get_name() {
 		return $this->name;
@@ -163,7 +180,7 @@ class WPUM_Field_Group {
 	/**
 	 * Retrieve the group description.
 	 *
-	 * @return void
+	 * @return string
 	 */
 	public function get_description() {
 		return $this->description;
@@ -181,10 +198,19 @@ class WPUM_Field_Group {
 	/**
 	 * Retrieve the amount of fields stored for the fields group.
 	 *
-	 * @return void
+	 * @return int
 	 */
 	public function get_count() {
 		return $this->count;
+	}
+
+	/**
+	 * Retrive the fields stored for this group.
+	 *
+	 * @return array
+	 */
+	public function get_fields() {
+		return $this->fields;
 	}
 
 	/**

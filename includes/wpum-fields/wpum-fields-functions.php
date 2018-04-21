@@ -275,3 +275,7 @@ function wpum_get_registered_field_types_names() {
 
 	return $registered_types;
 }
+
+function wpum_get_fields_groups( $args ) {
+
+}

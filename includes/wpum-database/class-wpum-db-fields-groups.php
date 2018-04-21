@@ -183,6 +183,7 @@ class WPUM_DB_Fields_Groups extends WPUM_DB {
 			'offset'  => 0,
 			'search'  => '',
 			'primary' => false,
+			'fields'  => false,
 			'orderby' => 'id',
 			'order'   => 'DESC',
 		);
@@ -219,8 +220,24 @@ class WPUM_DB_Fields_Groups extends WPUM_DB {
 				", absint( $args['offset'] ), absint( $args['number'] ) ), 0 );
 
 			if ( ! empty( $groups ) ) {
+
 				foreach ( $groups as $key => $group ) {
-					$groups[ $key ] = new WPUM_Field_Group( $group );
+
+					$the_group  = new WPUM_Field_Group( $group );
+
+					if( isset( $args['fields'] ) && $args['fields'] === true ) {
+						$fields = WPUM()->fields->get_fields(
+							[
+								'group_id' => $group,
+								'order'    => 'DESC',
+								'orderby'  => 'field_order',
+							]
+						);
+						$the_group->__set( 'fields', $fields );
+					}
+
+					$groups[ $key ] = $the_group;
+
 				}
 
 				wp_cache_set( $cache_key, $groups, $this->cache_group, 3600 );
