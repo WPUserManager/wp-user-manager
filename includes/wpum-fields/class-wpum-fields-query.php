@@ -111,4 +111,153 @@ class WPUM_Fields_Query {
 
 	}
 
+	/**
+	 * Whether there are groups available.
+	 *
+	 * @access public
+	 * @return boolean
+	 */
+	public function has_groups() {
+		if( ! empty( $this->group_count ) ) {
+			return true;
+		}
+		return false;
+	}
+
+	/**
+	 * Get next group within the loop.
+	 *
+	 * @access public
+	 * @return array
+	 */
+	public function next_group() {
+
+		$this->current_group++;
+		$this->group       = $this->groups[ $this->current_group ];
+		$this->field_count = 0;
+		$this->group       = $this->group;
+
+		if( ! empty( $this->group->fields ) ) {
+			$this->group->fields = apply_filters( 'wpum_group_fields', $this->group->fields, $this->group->id );
+			$this->field_count = count( $this->group->fields );
+		}
+
+		return $this->group;
+
+	}
+
+	/**
+	 * Rewind groups.
+	 *
+	 * @return void
+	 */
+	public function rewind_groups() {
+		$this->current_group = -1;
+
+		if( $this->group_count > 0 ) {
+			$this->group = $this->groups[0];
+		}
+
+	}
+
+	/**
+	 * Check whether we've reached the end of the loop or keep looping.
+	 *
+	 * @return bool
+	 */
+	public function profile_groups() {
+		if( $this->current_group + 1 < $this->group_count ) {
+			return true;
+		} elseif ( $this->current_group + 1 == $this->group_count ) {
+			do_action( 'wpum_field_groups_loop_end' );
+			$this->rewind_groups();
+		}
+		$this->in_the_loop = false;
+		return false;
+	}
+
+	/**
+	 * Setup global variable for current group within the loop.
+	 *
+	 * @global $wpum_fields_group
+	 * @return void
+	 */
+	public function the_profile_group() {
+		global $wpum_fields_group;
+		$this->in_the_loop = true;
+		$wpum_fields_group = $this->next_group();
+		if( 0 === $this->current_group ) {
+			do_action( 'wpum_field_groups_loop_start' );
+		}
+	}
+
+	/**
+	 * Proceed to next field within the loop.
+	 *
+	 * @access public
+	 * @return object field details.
+	 */
+	public function next_field() {
+		$this->current_field++;
+		$this->field = $this->group->fields[ $this->current_field ];
+		return $this->field;
+	}
+
+	/**
+	 * Cleanup the fields loop once it ends.
+	 *
+	 * @access public
+	 * @return void
+	 */
+	public function rewind_fields() {
+		$this->current_field = -1;
+		if( $this->field_count > 0 ) {
+			$this->field = $this->group->fields[0];
+		}
+	}
+
+	/**
+	 * Start the fields loop.
+	 *
+	 * @access public
+	 * @return mixed
+	 */
+	public function profile_fields() {
+		if ( $this->current_field + 1 < $this->field_count ) {
+			return true;
+		} elseif ( $this->current_field + 1 == $this->field_count ) {
+			$this->rewind_fields();
+		}
+		return false;
+	}
+
+	/**
+	 * Setup global variable for field within the loop.
+	 *
+	 * @access public
+	 * @global $wpum_field
+	 */
+	public function the_profile_field() {
+		global $wpum_field;
+
+		$wpum_field = $this->next_field();
+
+		if ( ! empty( $wpum_field->value ) ) {
+			$value = maybe_unserialize( $wpum_field->value );
+		} else {
+			$value = false;
+		}
+
+		if ( ! empty( $value ) || ( '0' === $value ) ) {
+			$this->field_has_data = true;
+			// Now verify if the field is visible or not.
+			//if( false === $this->is_visible( $wpum_field ) )
+				//$this->field_has_data = false;
+		} else {
+			$this->field_has_data = false;
+		}
+
+	}
+
+
 }
