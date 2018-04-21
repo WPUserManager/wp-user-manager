@@ -101,14 +101,22 @@ class WPUM_Fields_Query {
 	public function __construct( $args = '' ) {
 
 		$defaults = array(
-			'user_id'           => false,
-			'field_group_id'    => false,
+			'user_id'       => wpum_get_queried_user_id(),
+			'number_groups' => 20
 		);
 
 		// Parse incoming $args into an array and merge it with $defaults
 		$args = wp_parse_args( $args, $defaults );
 
-		$this->groups      = wpum_get_fields_groups( $args );
+		// Retrieve groups.
+		$groups = WPUM()->fields_groups->get_groups( [
+			'orderby' => 'group_order',
+			'order'   => 'DESC',
+			'number'  => $args['number_groups'],
+			'fields'  => true
+		] );
+
+		$this->groups      = $groups;
 		$this->group_count = count( $this->groups );
 		$this->user_id     = $args['user_id'];
 

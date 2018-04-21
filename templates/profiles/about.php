@@ -16,6 +16,8 @@
 // Exit if accessed directly
 if ( ! defined( 'ABSPATH' ) ) exit;
 
+print_r( new WPUM_Fields_Query() );
+
 ?>
 
 <div id="profile-content-about">

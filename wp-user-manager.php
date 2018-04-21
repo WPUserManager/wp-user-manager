@@ -198,6 +198,7 @@ if ( ! class_exists( 'WP_User_Manager' ) ) :
 			require_once WPUM_PLUGIN_DIR . 'includes/wpum-fields/class-wpum-fields.php';
 			require_once WPUM_PLUGIN_DIR . 'includes/wpum-fields/class-wpum-field-group.php';
 			require_once WPUM_PLUGIN_DIR . 'includes/wpum-fields/class-wpum-field.php';
+			require_once WPUM_PLUGIN_DIR . 'includes/wpum-fields/class-wpum-fields-query.php';
 			require_once WPUM_PLUGIN_DIR . 'includes/wpum-forms/class-wpum-registration-form.php';
 
 			require_once WPUM_PLUGIN_DIR . 'includes/wpum-emails/wpum-email-functions.php';
