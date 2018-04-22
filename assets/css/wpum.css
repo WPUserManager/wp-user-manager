@@ -1008,7 +1008,8 @@
 #profile-content-about .profile-fields-table {
   width: 100%; }
   #profile-content-about .profile-fields-table td.label {
-    width: 30%; }
+    width: 30%;
+    font-weight: 600; }
   #profile-content-about .profile-fields-table tr {
     background: #fafafa; }
     #profile-content-about .profile-fields-table tr:last-child {
