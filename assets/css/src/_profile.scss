@@ -63,3 +63,27 @@
 		}
 	}
 }
+
+#profile-content-about {
+	h3.group-title {
+		border-bottom: 1px solid #eee;
+		margin-bottom: 15px;
+	}
+
+	.profile-fields-table {
+		width: 100%;
+
+		td.label {
+			width: 30%;
+		}
+
+		tr {
+			background: #fafafa;
+			&:last-child {
+				border-bottom: none;
+			}
+		}
+	}
+
+}
+

@@ -1002,4 +1002,16 @@
     #profile-navbar > button.active {
       background: #eee; }
 
+#profile-content-about h3.group-title {
+  border-bottom: 1px solid #eee;
+  margin-bottom: 15px; }
+#profile-content-about .profile-fields-table {
+  width: 100%; }
+  #profile-content-about .profile-fields-table td.label {
+    width: 30%; }
+  #profile-content-about .profile-fields-table tr {
+    background: #fafafa; }
+    #profile-content-about .profile-fields-table tr:last-child {
+      border-bottom: none; }
+
 /*# sourceMappingURL=wpum.css.map */

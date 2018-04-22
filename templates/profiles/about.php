@@ -34,13 +34,18 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 					<p><?php wpum_the_field_group_description(); ?></h3>
 				<?php endif; ?>
 
-				<?php while ( wpum_profile_fields() ) : wpum_the_profile_field(); ?>
-					<?php if ( wpum_field_has_data() ) : ?>
-						<?php wpum_the_field_name(); ?>
-						<?php wpum_the_field_value(); ?>
-					<?php endif; ?>
-
-				<?php endwhile; ?>
+				<table class="profile-fields-table">
+					<tbody>
+						<?php while ( wpum_profile_fields() ) : wpum_the_profile_field(); ?>
+							<?php if ( wpum_field_has_data() ) : ?>
+								<tr class="field_1 field_name required-field visibility-public field_type_textbox">
+									<td class="label"><?php wpum_the_field_name(); ?></td>
+									<td class="data"><?php wpum_the_field_value(); ?></td>
+								</tr>
+							<?php endif; ?>
+						<?php endwhile; ?>
+					</tbody>
+				</table>
 
 			<?php endif; ?>
 
