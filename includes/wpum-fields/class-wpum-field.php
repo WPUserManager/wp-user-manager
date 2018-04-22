@@ -568,13 +568,30 @@ class WPUM_Field {
 
 		if( $this->get_primary_id() ) {
 			switch ( $this->get_primary_id() ) {
-				case 'user_avatar':
-					$value = 'test';
+				case 'user_firstname':
+					$value = $user->first_name;
+					break;
+				case 'user_lastname':
+					$value = $user->last_name;
+					break;
+				case 'user_displayname':
+					$value = $user->data->display_name;
+					break;
+				case 'user_website':
+					$value = $user->data->user_url;
+					break;
+				case 'user_description':
+					$value = get_user_meta( $user_id, 'description', true );
+					break;
+				case 'user_nickname':
+					$value = get_user_meta( $user_id, 'nickname', true );
 					break;
 				case 'user_email':
 					$value = $user->data->user_email;
 					break;
 			}
+		} else {
+			$value = get_user_meta( $user_id, $this->get_meta( 'user_meta_key' ), true );
 		}
 
 		if( ! empty( $value ) ) {
