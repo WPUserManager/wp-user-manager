@@ -468,3 +468,117 @@ function wpum_get_field_name() {
 function wpum_the_field_name() {
 	echo wpum_get_field_name();
 }
+
+/**
+ * Retrieve the current field description within a loop.
+ *
+ * @global $wpum_field
+ * @return string description of the field.
+ */
+function wpum_get_field_description() {
+	global $wpum_field;
+	return apply_filters( 'wpum_get_field_description', $wpum_field->get_description(), $wpum_field->get_ID() );
+}
+
+/**
+ * Echo the current field description within a loop.
+ *
+ * @see wpum_get_field_description()
+ * @return void
+ */
+function wpum_the_field_description() {
+	echo wpum_get_field_description();
+}
+
+/**
+ * Verify whether the current field within the loop is required.
+ *
+ * @global $wpum_field
+ * @return bool
+ */
+function wpum_is_field_required() {
+	global $wpum_field;
+	return apply_filters( 'wpum_is_field_required', $wpum_field->is_required(), $wpum_field->get_ID() );
+}
+
+/**
+ * Retrieve the current field type within a loop.
+ *
+ * @global $wpum_field
+ * @return string the type of the field.
+ */
+function wpum_get_field_type() {
+	global $wpum_field;
+	return $wpum_field->get_type();
+}
+
+/**
+ * Retrieve the classes for the field element as an array.
+ *
+ * @param  string $class custom class to add to the field.
+ * @return array        list of all classes.
+ */
+function wpum_get_field_css_class( $class = false ) {
+
+	global $wpum_profile_fields;
+
+	$classes = array();
+
+	if ( ! empty( $class ) ) {
+		$classes[] = sanitize_title( esc_attr( $class ) );
+	}
+
+	// Add a class with the field id.
+	$classes[] = 'field_' . $wpum_profile_fields->field->get_ID();
+	// Add a class with the field name.
+	$classes[] = 'field_' . sanitize_title( $wpum_profile_fields->field->get_name() );
+	// Add a class with the field type.
+	$classes[] = 'field_type_' . sanitize_title( $wpum_profile_fields->field->get_type() );
+
+	// Sanitize all classes.
+	$classes = array_map( 'esc_attr', $classes );
+
+	return apply_filters( 'wpum_field_css_class', $classes, $class );
+
+}
+
+/**
+ * Display the css classes applied to a field.
+ *
+ * @param  string $class custom class to add to the fields.
+ * @return void
+ */
+function wpum_the_field_css_class( $class = false ) {
+	echo join( ' ', wpum_get_field_css_class( $class ) );
+}
+
+/**
+ * Verify if a field has user data.
+ *
+ * @return boolean
+ */
+function wpum_field_has_data() {
+	global $wpum_profile_fields;
+	return $wpum_profile_fields->field_has_data;
+}
+
+/**
+ * Retrieve the value of a field within the loop.
+ *
+ * @return mixed
+ */
+function wpum_get_the_field_value() {
+
+	global $wpum_field;
+
+	return apply_filters( 'wpum_get_the_field_value', $wpum_field->get_value(), $wpum_field );
+}
+
+/**
+ * Output the value of a field within the loop.
+ *
+ * @return void
+ */
+function wpum_the_field_value() {
+	echo wpum_get_the_field_value();
+}

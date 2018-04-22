@@ -138,9 +138,9 @@ class WPUM_Fields_Query {
 		$this->field_count = 0;
 		$this->group       = $this->group;
 
-		if( ! empty( $this->group->fields ) ) {
-			$this->group->fields = apply_filters( 'wpum_group_fields', $this->group->fields, $this->group->id );
-			$this->field_count = count( $this->group->fields );
+		if( ! empty( $this->group->get_fields() ) ) {
+			$this->group->fields = apply_filters( 'wpum_group_fields', $this->group->get_fields(), $this->group->get_ID() );
+			$this->field_count = count( $this->group->get_fields() );
 		}
 
 		return $this->group;
@@ -220,7 +220,7 @@ class WPUM_Fields_Query {
 	 */
 	public function next_field() {
 		$this->current_field++;
-		$this->field = $this->group->fields[ $this->current_field ];
+		$this->field = $this->group->get_fields()[ $this->current_field ];
 		return $this->field;
 	}
 
@@ -233,7 +233,8 @@ class WPUM_Fields_Query {
 	public function rewind_fields() {
 		$this->current_field = -1;
 		if( $this->field_count > 0 ) {
-			$this->field = $this->group->fields[0];
+			$fields      = $this->group->get_fields();
+			$this->field = $fields[0];
 		}
 	}
 
