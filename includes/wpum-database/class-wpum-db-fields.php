@@ -170,12 +170,13 @@ class WPUM_DB_Fields extends WPUM_DB {
 		global $wpdb;
 
 		$defaults = array(
-			'number'        => -1,
-			'offset'        => 0,
-			'search'        => '',
-			'group_id'      => false,
-			'orderby'       => 'id',
-			'order'         => 'DESC',
+			'number'   => -1,
+			'offset'   => 0,
+			'search'   => '',
+			'group_id' => false,
+			'orderby'  => 'id',
+			'order'    => 'DESC',
+			'user_id'  => false
 		);
 
 		$args = wp_parse_args( $args, $defaults );
@@ -211,7 +212,9 @@ class WPUM_DB_Fields extends WPUM_DB {
 
 			if ( ! empty( $fields ) ) {
 				foreach ( $fields as $key => $field ) {
-					$fields[ $key ] = new WPUM_Field( $field );
+					$field          = new WPUM_Field( $field );
+					$field->set_user_meta( $args['user_id'] );
+					$fields[ $key ] = $field;
 				}
 
 				wp_cache_set( $cache_key, $fields, $this->cache_group, 3600 );

@@ -184,6 +184,7 @@ class WPUM_DB_Fields_Groups extends WPUM_DB {
 			'search'  => '',
 			'primary' => false,
 			'fields'  => false,
+			'user_id' => false,
 			'orderby' => 'id',
 			'order'   => 'DESC',
 		);
@@ -231,6 +232,7 @@ class WPUM_DB_Fields_Groups extends WPUM_DB {
 								'group_id' => $group,
 								'order'    => 'DESC',
 								'orderby'  => 'field_order',
+								'user_id'  => $args['user_id']
 							]
 						);
 						$the_group->__set( 'fields', $fields );

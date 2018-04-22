@@ -16,10 +16,28 @@
 // Exit if accessed directly
 if ( ! defined( 'ABSPATH' ) ) exit;
 
-print_r( new WPUM_Fields_Query() );
-
 ?>
 
 <div id="profile-content-about">
+
+	<?php if ( wpum_has_profile_fields() ) : ?>
+
+		<?php while ( wpum_profile_field_groups() ) : wpum_the_profile_field_group(); ?>
+
+			<?php if ( wpum_field_group_has_fields() ) : ?>
+
+				<?php if( wpum_get_field_group_name() ) : ?>
+					<h3 class="group-title"><?php echo esc_html( wpum_get_field_group_name() ); ?></h3>
+				<?php endif; ?>
+
+				<?php if( ! empty( wpum_get_field_group_description() ) ) : ?>
+					<p><?php wpum_the_field_group_description(); ?></h3>
+				<?php endif; ?>
+
+			<?php endif; ?>
+
+		<?php endwhile; ?>
+
+	<?php endif; ?>
 
 </div>

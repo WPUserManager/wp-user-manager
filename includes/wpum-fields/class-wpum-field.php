@@ -105,6 +105,13 @@ class WPUM_Field {
 	protected $required = false;
 
 	/**
+	 * Holds the value of the field if a user ID is given for this field.
+	 *
+	 * @var mixed
+	 */
+	protected $value = null;
+
+	/**
 	 * The Database Abstraction
 	 */
 	protected $db;
@@ -282,6 +289,13 @@ class WPUM_Field {
 	 */
 	public function get_editable() {
 		return $this->editable;
+	}
+
+	/**
+	 * Get the value of this field.
+	 */
+	public function get_value() {
+		return $this->value;
 	}
 
 	/**
@@ -534,6 +548,38 @@ class WPUM_Field {
 		}
 
 		return $data;
+
+	}
+
+	/**
+	 * Retrieve the value of a custom field stored in the DB.
+	 *
+	 * @param int $user_id
+	 * @return void
+	 */
+	public function set_user_meta( $user_id ) {
+
+		if( ! $user_id ) {
+			return false;
+		}
+
+		$user  = get_user_by( 'id', $user_id );
+		$value = '';
+
+		if( $this->get_primary_id() ) {
+			switch ( $this->get_primary_id() ) {
+				case 'user_avatar':
+					$value = 'test';
+					break;
+				case 'user_email':
+					$value = $user->data->user_email;
+					break;
+			}
+		}
+
+		if( ! empty( $value ) ) {
+			$this->value = $value;
+		}
 
 	}
 

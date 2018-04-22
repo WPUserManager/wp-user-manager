@@ -102,7 +102,8 @@ class WPUM_Fields_Query {
 			'orderby' => 'group_order',
 			'order'   => 'DESC',
 			'number'  => $args['number_groups'],
-			'fields'  => true
+			'fields'  => true,
+			'user_id' => $args['user_id']
 		] );
 
 		$this->groups      = $groups;
@@ -192,6 +193,28 @@ class WPUM_Fields_Query {
 	}
 
 	/**
+	 * Verify whether the current group within the loop has fields.
+	 *
+	 * @access public
+	 * @return boolean
+	 */
+	public function has_fields() {
+		$has_data = false;
+
+		for ( $i = 0, $count = count( $this->group->fields ); $i < $count; ++$i ) {
+			$field = $this->group->fields[ $i ];
+
+
+			if ( ! empty( $field->get_value() ) || ( '0' === $field->get_value() ) ) {
+				$has_data = true;
+			}
+		}
+
+		return $has_data;
+	}
+
+
+	/**
 	 * Proceed to next field within the loop.
 	 *
 	 * @access public
@@ -242,8 +265,8 @@ class WPUM_Fields_Query {
 
 		$wpum_field = $this->next_field();
 
-		if ( ! empty( $wpum_field->value ) ) {
-			$value = maybe_unserialize( $wpum_field->value );
+		if ( ! empty( $wpum_field->get_value() ) ) {
+			$value = maybe_unserialize( $wpum_field->get_value() );
 		} else {
 			$value = false;
 		}
