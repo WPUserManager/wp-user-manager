@@ -295,7 +295,7 @@ class WPUM_Field {
 	 * Get the value of this field.
 	 */
 	public function get_value() {
-		return $this->value;
+		return $this->format_value( $this->value );
 	}
 
 	/**
@@ -597,6 +597,22 @@ class WPUM_Field {
 		if( ! empty( $value ) ) {
 			$this->value = $value;
 		}
+
+	}
+
+	/**
+	 * Format the value of the field for the output on profiles.
+	 *
+	 * @param mixed $value.
+	 * @return mixed
+	 */
+	private function format_value( $value ) {
+
+		if( ! $value ) {
+			return;
+		}
+
+		return call_user_func( "wpum_format_field_{$this->type}_output", $this );
 
 	}
 
