@@ -203,8 +203,6 @@ class WPUM_Fields_Query {
 
 		for ( $i = 0, $count = count( $this->group->fields ); $i < $count; ++$i ) {
 			$field = $this->group->fields[ $i ];
-
-
 			if ( ! empty( $field->get_value() ) || ( '0' === $field->get_value() ) ) {
 				$has_data = true;
 			}
