@@ -230,7 +230,7 @@ class WPUM_DB_Fields_Groups extends WPUM_DB {
 						$fields = WPUM()->fields->get_fields(
 							[
 								'group_id' => $group,
-								'order'    => 'DESC',
+								'order'    => 'ASC',
 								'orderby'  => 'field_order',
 								'user_id'  => $args['user_id']
 							]
