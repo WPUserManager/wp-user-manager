@@ -38,7 +38,7 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 					<tbody>
 						<?php while ( wpum_profile_fields() ) : wpum_the_profile_field(); ?>
 							<?php if ( wpum_field_has_data() ) : ?>
-								<tr class="field_1 field_name required-field visibility-public field_type_textbox">
+								<tr class="<?php wpum_the_field_css_class(); ?>">
 									<td class="label"><?php wpum_the_field_name(); ?></td>
 									<td class="data"><?php wpum_the_field_value(); ?></td>
 								</tr>

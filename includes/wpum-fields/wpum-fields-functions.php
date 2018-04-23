@@ -587,7 +587,8 @@ function wpum_the_field_value() {
  * Format the output onto the profiles for the text field.
  *
  * @param object $field
- * @return void
+ * @param mixed $value
+ * @return string
  */
 function wpum_format_field_text_output( $field, $value ) {
 	return esc_html( $value );
@@ -597,8 +598,20 @@ function wpum_format_field_text_output( $field, $value ) {
  * Format the output onto the profiles for the email field.
  *
  * @param object $field
- * @return void
+ * @param mixed $value
+ * @return string
  */
 function wpum_format_field_email_output( $field, $value ) {
 	return esc_html( antispambot( $value ) );
+}
+
+/**
+ * Format the output onto the profiles for the url field.
+ *
+ * @param object $field
+ * @param mixed $value
+ * @return string
+ */
+function wpum_format_field_url_output( $field, $value ) {
+	return '<a href="'. esc_url( $value ) .'" target="_blank" rel="noopener noreferrer">'. esc_html( $value ) .'</a>';
 }
