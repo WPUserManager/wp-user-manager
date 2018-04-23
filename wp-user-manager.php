@@ -182,6 +182,8 @@ if ( ! class_exists( 'WP_User_Manager' ) ) :
 			require_once WPUM_PLUGIN_DIR . 'includes/abstracts/abstract-wpum-db.php';
 			require_once WPUM_PLUGIN_DIR . 'includes/abstracts/abstract-shortcode-generator.php';
 
+			require_once WPUM_PLUGIN_DIR . 'includes/wpum-admin/class-wpum-user-meta-custom-datastore.php';
+
 			require_once WPUM_PLUGIN_DIR . 'includes/wpum-database/class-wpum-db-table.php';
 			require_once WPUM_PLUGIN_DIR . 'includes/wpum-database/class-wpum-db-table-fields.php';
 			require_once WPUM_PLUGIN_DIR . 'includes/wpum-database/class-wpum-db-table-field-meta.php';
