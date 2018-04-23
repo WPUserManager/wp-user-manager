@@ -427,6 +427,7 @@ class WPUM_Fields_Editor {
 				case 'username':
 				case 'user_displayname':
 				case 'user_avatar':
+				case 'user_cover':
 					$this->deregistered_settings[] = 'placeholder';
 					break;
 			}

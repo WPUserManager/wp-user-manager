@@ -344,6 +344,9 @@ class WPUM_Field {
 				case 'user_avatar':
 					$type_name = esc_html__( 'Avatar' );
 					break;
+				case 'user_cover':
+					$type_name = esc_html__( 'Cover Image' );
+					break;
 				default:
 					$type_name = $registered_types['text'];
 					break;
@@ -403,6 +406,7 @@ class WPUM_Field {
 					$this->type = 'textarea';
 					break;
 				case 'user_avatar':
+				case 'user_cover':
 					$this->type = 'file';
 					break;
 			}

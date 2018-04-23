@@ -216,6 +216,9 @@ class WPUM_Form_Profile extends WPUM_Form {
 					//$value = get_user_meta( $this->user->ID, 'current_user_avatar', true );
 					$value = carbon_get_user_meta( $this->user->ID, 'current_user_avatar' );
 					break;
+				case 'user_cover':
+					$value = carbon_get_user_meta( $this->user->ID, 'user_cover' );
+					break;
 			}
 
 		} else {
@@ -323,6 +326,11 @@ class WPUM_Form_Profile extends WPUM_Form {
 			// Now update the avatar for the user.
 			if( wpum_get_option( 'custom_avatars' ) && isset( $values['account']['user_avatar'] ) ) {
 				carbon_set_user_meta( $updated_user_id, 'current_user_avatar', $values['account']['user_avatar'] );
+			}
+
+			// Update cover image if available
+			if( isset( $values['account']['user_cover'] ) ) {
+				carbon_set_user_meta( $updated_user_id, 'user_cover', $values['account']['user_cover'] );
 			}
 
 			do_action( 'wpum_after_user_update', $this, $values, $updated_user_id );

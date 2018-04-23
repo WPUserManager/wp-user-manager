@@ -169,7 +169,7 @@ export default {
 				this.disabledTabs = [ 'validation', 'privacy', 'permissions' ]
 			} else if( this.primary_id == 'user_nickname' || this.primary_id == 'user_displayname' ) {
 				this.disabledTabs = [ 'validation' ]
-			} else if( this.primary_id == 'user_avatar' ) {
+			} else if( this.primary_id == 'user_avatar' || this.primary_id == 'user_cover' ) {
 				this.disabledTabs = [ 'privacy', 'permissions' ]
 			}
 		},

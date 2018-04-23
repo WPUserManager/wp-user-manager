@@ -263,6 +263,7 @@ class WPUM_Registration_Forms_Editor {
 
 		$non_allowed_fields = [
 			'user_avatar',
+			'user_cover',
 			'user_nickname',
 			'user_displayname'
 		];
