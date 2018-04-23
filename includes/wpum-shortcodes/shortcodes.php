@@ -263,3 +263,39 @@ function wpum_profile( $atts, $content = null ) {
 
 }
 add_shortcode( 'wpum_profile', 'wpum_profile' );
+
+/**
+ * Shortcode to display content to logged in users only.
+ *
+ * @param array $atts
+ * @param string $content
+ * @return void
+ */
+function wpum_restrict_logged_in( $atts, $content = null ) {
+
+	ob_start();
+
+	if ( is_user_logged_in() && ! is_null( $content ) && ! is_feed() ) {
+
+		echo do_shortcode( $content );
+
+	} else {
+
+		$login_page = get_permalink( wpum_get_core_page_id( 'login' ) );
+		$login_page = add_query_arg( [
+			'redirect_to' => get_permalink()
+		], $login_page );
+
+		WPUM()->templates
+			->set_template_data( [
+				'message' => sprintf( __( 'This content is available to members only. Please <a href="%s">login</a> or <a href="%s">register</a> to view this area.', 'wpum'), $login_page, get_permalink( wpum_get_core_page_id( 'register' ) )  ),
+			] )
+			->get_template_part( 'messages/general', 'warning' );
+
+	}
+
+	$output = ob_get_clean();
+
+	return $output;
+}
+add_shortcode( 'wpum_restrict_logged_in', 'wpum_restrict_logged_in' );
