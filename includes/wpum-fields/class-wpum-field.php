@@ -617,7 +617,9 @@ class WPUM_Field {
 			return call_user_func( "wpum_format_field_text_output", $this, $value );
 		}
 
-		return call_user_func( "wpum_format_field_{$this->type}_output", $this, $value );
+		$func_name = apply_filters( 'wpum_field_ouput_callback_function', "wpum_format_field_{$this->type}_output", $this, $value );
+
+		return call_user_func( $func_name, $this, $value );
 
 	}
 
