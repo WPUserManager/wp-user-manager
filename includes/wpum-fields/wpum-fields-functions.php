@@ -615,3 +615,14 @@ function wpum_format_field_email_output( $field, $value ) {
 function wpum_format_field_url_output( $field, $value ) {
 	return '<a href="'. esc_url( $value ) .'" target="_blank" rel="noopener noreferrer">'. esc_html( $value ) .'</a>';
 }
+
+/**
+ * Format the output of the textarea field onto profile pages.
+ *
+ * @param object $field
+ * @param mixed $value
+ * @return void
+ */
+function wpum_format_field_textarea_output( $field, $value ) {
+	return wp_kses_post( $value );
+}
