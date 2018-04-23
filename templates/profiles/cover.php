@@ -16,9 +16,11 @@
 // Exit if accessed directly
 if ( ! defined( 'ABSPATH' ) ) exit;
 
+$cover_image = get_user_meta( $data->user->ID, 'user_cover', true );
+
 ?>
 
-<div id="header-cover-image"></div>
+<div id="header-cover-image" style="background-image: url(<?php echo $cover_image ?>);"></div>
 
 <div id="header-profile-details">
 
