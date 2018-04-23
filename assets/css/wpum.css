@@ -1042,4 +1042,11 @@
     #profile-pagination a:first-child, #profile-pagination span:first-child {
       padding-left: 0; }
 
+#profile-comments .wpum-single-comment p {
+  border-bottom: 2px solid #f6f6f6;
+  margin: 0px;
+  padding: 15px 0px; }
+#profile-comments .wpum-single-comment:first-child p {
+  padding-top: 0px; }
+
 /*# sourceMappingURL=wpum.css.map */

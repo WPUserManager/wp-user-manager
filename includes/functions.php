@@ -809,3 +809,27 @@ function wpum_get_posts_for_profile( $user_id ) {
 	return $query;
 
 }
+
+/**
+ * Retrieve comments submitted by a given user.
+ *
+ * @param string $user_id
+ * @return void
+ */
+function wpum_get_comments_for_profile( $user_id ) {
+
+	if( ! $user_id ) {
+		return false;
+	}
+
+	$args = apply_filters( 'wpum_get_comments_for_profile', array(
+		'user_id' => $user_id,
+		'status'  => 'approve',
+		'number'  => '10'
+	) );
+
+	$comments = get_comments( $args );
+
+	return $comments;
+
+}

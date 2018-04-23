@@ -123,3 +123,16 @@
 		}
 	}
 }
+
+#profile-comments {
+	.wpum-single-comment {
+		p {
+			border-bottom: 2px solid #f6f6f6;
+			margin: 0px;
+			padding: 15px 0px;
+		}
+		&:first-child p {
+			padding-top: 0px;
+		}
+	}
+}
