@@ -90,6 +90,8 @@ class WPUM_Avatars {
 			->add_fields( array(
 				Field::make( 'image', 'current_user_avatar', esc_html__( 'Custom user avatar' ) )
 					->set_value_type( 'url' ),
+				Field::make( 'image', 'user_cover', esc_html__( 'Custom profile cover image' ) )
+					->set_value_type( 'url' ),
 			) );
 	}
 

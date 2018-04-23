@@ -176,6 +176,27 @@ function wpum_install_fields() {
 }
 
 /**
+ * Install the cover image field into the database.
+ *
+ * @return void
+ */
+function wpum_install_cover_image_field() {
+
+	$group_id = 1;
+
+	$field = array(
+		'group_id'   => $group_id,
+		'type'       => 'user_cover',
+		'name'       => 'Profile cover image',
+	);
+
+	$save_field = new WPUM_Field();
+	$save_field->add( $field );
+	$save_field->add_meta( 'user_meta_key', 'user_cover' );
+
+}
+
+/**
  * An array of primary field types.
  *
  * @return array
@@ -192,7 +213,8 @@ function wpum_get_primary_field_types() {
 		'user_displayname',
 		'user_website',
 		'user_description',
-		'user_avatar'
+		'user_avatar',
+		'user_cover'
 	];
 
 	return apply_filters( 'wpum_get_primary_field_types', $types );
