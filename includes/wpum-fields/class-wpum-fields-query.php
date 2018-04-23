@@ -273,8 +273,9 @@ class WPUM_Fields_Query {
 		if ( ! empty( $value ) || ( '0' === $value ) ) {
 			$this->field_has_data = true;
 			// Now verify if the field is visible or not.
-			//if( false === $this->is_visible( $wpum_field ) )
-				//$this->field_has_data = false;
+			if( $wpum_field->get_visibility() !== 'public' ) {
+				$this->field_has_data = false;
+			}
 		} else {
 			$this->field_has_data = false;
 		}
