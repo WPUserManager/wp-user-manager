@@ -783,3 +783,29 @@ function wpum_get_active_profile_tab() {
 	return $profile_tab;
 
 }
+
+/**
+ * Grab posts submitted by a user within a profile
+ *
+ * @param int $user_id
+ * @return void
+ */
+function wpum_get_posts_for_profile( $user_id ) {
+
+	if( ! $user_id ) {
+		return false;
+	}
+
+	$paged = ( get_query_var( 'paged' ) ) ? get_query_var( 'paged' ) : 1;
+
+	$args = apply_filters( 'wpum_get_posts_for_profile', [
+		'post_type' => 'post',
+		'author'    => $user_id,
+		'paged'     => $paged
+	] );
+
+	$query = new WP_Query( $args );
+
+	return $query;
+
+}

@@ -1015,4 +1015,17 @@
     #profile-content-about .profile-fields-table tr:last-child {
       border-bottom: none; }
 
+#profile-posts .wpum-post {
+  border-bottom: 2px solid #f6f6f6;
+  padding: 15px 0px; }
+  #profile-posts .wpum-post:first-child {
+    padding-top: 0px; }
+#profile-posts .wpum-post-meta {
+  margin: 0px;
+  padding: 0px; }
+  #profile-posts .wpum-post-meta li {
+    list-style: none;
+    margin: 0px;
+    display: inline-block; }
+
 /*# sourceMappingURL=wpum.css.map */
