@@ -295,7 +295,7 @@ class WPUM_Field {
 	 * Get the value of this field.
 	 */
 	public function get_value() {
-		return $this->format_value( $this->value );
+		return $this->value;
 	}
 
 	/**
@@ -595,6 +595,7 @@ class WPUM_Field {
 		}
 
 		if( ! empty( $value ) ) {
+			$value       = $this->format_value( $value );
 			$this->value = $value;
 		}
 
@@ -612,7 +613,11 @@ class WPUM_Field {
 			return;
 		}
 
-		return call_user_func( "wpum_format_field_{$this->type}_output", $this );
+		if( ! function_exists( "wpum_format_field_{$this->type}_output" ) ) {
+			return call_user_func( "wpum_format_field_text_output", $this, $value );
+		}
+
+		return call_user_func( "wpum_format_field_{$this->type}_output", $this, $value );
 
 	}
 
