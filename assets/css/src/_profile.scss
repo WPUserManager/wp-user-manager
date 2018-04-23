@@ -118,5 +118,8 @@
 		display: block;
 		padding: 10px 15px;
 		text-decoration: none;
+		&:first-child {
+			padding-left: 0;
+		}
 	}
 }

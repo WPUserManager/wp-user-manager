@@ -1039,5 +1039,7 @@
     display: block;
     padding: 10px 15px;
     text-decoration: none; }
+    #profile-pagination a:first-child, #profile-pagination span:first-child {
+      padding-left: 0; }
 
 /*# sourceMappingURL=wpum.css.map */
