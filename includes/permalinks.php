@@ -80,4 +80,16 @@ add_action('cortex.routes', function( RouteCollectionInterface $routes ) {
 		}
 	) );
 
+	$routes->addRoute( new QueryRoute(
+		$page_slug . '{profile:[a-zA-Z0-9_.-]+}/{tab:[a-zA-Z0-9_.-]+}/page/{paged:[a-zA-Z0-9_.-]+}',
+		function(array $matches) use( $profile_page_id ) {
+			return [
+				'profile' => $matches['profile'],
+				'tab'     => $matches['tab'],
+				'paged'   => $matches['paged'],
+				'page_id' => $profile_page_id,
+		  	];
+		}
+	) );
+
 } );
