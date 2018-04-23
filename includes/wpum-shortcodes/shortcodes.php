@@ -299,3 +299,47 @@ function wpum_restrict_logged_in( $atts, $content = null ) {
 	return $output;
 }
 add_shortcode( 'wpum_restrict_logged_in', 'wpum_restrict_logged_in' );
+
+/**
+ * Display content to a given list of users by ID.
+ *
+ * @param array $atts
+ * @param string $content
+ * @return void
+ */
+function wpum_restrict_to_users( $atts, $content = null ) {
+
+	extract( shortcode_atts( array(
+		'ids' => null,
+	), $atts ) );
+
+	ob_start();
+
+	$allowed_users = explode( ',', $ids );
+	$current_user  = get_current_user_id();
+
+	if( is_user_logged_in() && ! is_null( $content ) && ! is_feed() && in_array( $current_user , $allowed_users ) ) {
+
+		echo do_shortcode( $content );
+
+	} else {
+
+		$login_page = get_permalink( wpum_get_core_page_id( 'login' ) );
+		$login_page = add_query_arg( [
+			'redirect_to' => get_permalink()
+		], $login_page );
+
+		WPUM()->templates
+			->set_template_data( [
+				'message' => sprintf( __( 'This content is available to members only. Please <a href="%s">login</a> or <a href="%s">register</a> to view this area.', 'wpum'), $login_page, get_permalink( wpum_get_core_page_id( 'register' ) )  ),
+			] )
+			->get_template_part( 'messages/general', 'warning' );
+
+	}
+
+	$output = ob_get_clean();
+
+	return $output;
+
+}
+add_shortcode( 'wpum_restrict_to_users', 'wpum_restrict_to_users' );
