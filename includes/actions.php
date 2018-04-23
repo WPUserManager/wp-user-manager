@@ -271,3 +271,18 @@ function wpum_check_display_field( $errors, $update, $user ) {
 function wpum_check_nick_field( $errors, $update, $user ) {
 	$errors->add( 'display_nick_error', esc_html__( 'This nickname is already in use by someone else. Nicknames must be unique.' ) );
 }
+
+/**
+ * Add a "view profile" link to the admin user table.
+ *
+ * @param  array $actions     list of actions
+ * @param  object $user_object user details
+ * @return array              list of actions
+ */
+function wpum_admin_user_action_link( $actions, $user_object ) {
+	if( wpum_get_core_page_id( 'profile' ) ) {
+		$actions['view_profile'] = '<a href="'. wpum_get_profile_url( $user_object ) .'" target="_blank">'. esc_html__( 'View Profile' ) .'</a>';
+	}
+	return $actions;
+}
+add_filter( 'user_row_actions', 'wpum_admin_user_action_link', 10, 2 );
