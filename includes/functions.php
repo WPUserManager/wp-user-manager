@@ -691,6 +691,17 @@ function wpum_get_queried_user_id() {
 }
 
 /**
+ * Check if the profile current user is visiting his own profile.
+ *
+ * @return boolean
+ */
+function wpum_is_own_profile() {
+
+	return wpum_get_queried_user_id() == get_current_user_id() ? true : false;
+
+}
+
+/**
  * Retrieve the user url for a given user.
  *
  * @param object $user instance of WP_User ( $user->data )
@@ -832,4 +843,22 @@ function wpum_get_comments_for_profile( $user_id ) {
 
 	return $comments;
 
+}
+
+/**
+ * Checks if guests can view profiles.
+ *
+ * @return bool
+ */
+function wpum_guests_can_view_profiles() {
+	return wpum_get_option( 'guests_can_view_profiles' );
+}
+
+/**
+ * Checks if members can view profiles.
+ *
+ * @return bool
+ */
+function wpum_members_can_view_profiles() {
+	return wpum_get_option( 'members_can_view_profiles' );
 }

@@ -219,12 +219,45 @@ function wpum_profile( $atts, $content = null ) {
 
 	$output = ob_get_clean();
 
-	WPUM()->templates
-		->set_template_data( [
-			'user'            => get_user_by( 'id', wpum_get_queried_user_id() ),
-			'current_user_id' => get_current_user_id()
-		] )
-		->get_template_part( 'profile' );
+	$login_page        = get_permalink( wpum_get_core_page_id( 'login' ) );
+	$registration_page = get_permalink( wpum_get_core_page_id( 'register' ) );
+	$warning_message   = sprintf( __( 'This content is available to members only. Please <a href="%s">login</a> or <a href="%s">register</a> to view this area.', 'wpum' ), $login_page, $registration_page );
+
+	// Check if not logged in and on profile page - no given user
+	if ( ! is_user_logged_in() && ! wpum_get_queried_user_id() ) {
+
+		WPUM()->templates
+			->set_template_data( [
+				'message' => $warning_message
+			] )
+			->get_template_part( 'messages/general', 'warning' );
+
+	} else if( ! is_user_logged_in() && wpum_get_queried_user_id() && ! wpum_guests_can_view_profiles() ) {
+
+		WPUM()->templates
+			->set_template_data( [
+				'message' => $warning_message
+			] )
+			->get_template_part( 'messages/general', 'warning' );
+
+	} else if( is_user_logged_in() && wpum_get_queried_user_id() && ! wpum_members_can_view_profiles() && ! wpum_is_own_profile() ) {
+
+		WPUM()->templates
+			->set_template_data( [
+				'message' => esc_html__( 'You are not authorized to access this area.' )
+			] )
+			->get_template_part( 'messages/general', 'warning' );
+
+	} else {
+
+		WPUM()->templates
+			->set_template_data( [
+				'user'            => get_user_by( 'id', wpum_get_queried_user_id() ),
+				'current_user_id' => get_current_user_id()
+			] )
+			->get_template_part( 'profile' );
+
+	}
 
 	return $output;
 
