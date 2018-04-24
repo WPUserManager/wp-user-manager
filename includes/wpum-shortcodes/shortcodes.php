@@ -343,3 +343,47 @@ function wpum_restrict_to_users( $atts, $content = null ) {
 
 }
 add_shortcode( 'wpum_restrict_to_users', 'wpum_restrict_to_users' );
+
+/**
+ * Shortcode to display content to a set of user roles.
+ *
+ * @param array $atts
+ * @param string $content
+ * @return void
+ */
+function wpum_restrict_to_user_roles( $atts, $content = null ) {
+
+	extract( shortcode_atts( array(
+		'roles' => null,
+	), $atts ) );
+
+	ob_start();
+
+	$allowed_roles = explode( ',', $roles );
+	$allowed_roles = array_map( 'trim', $allowed_roles );
+	$current_user  = wp_get_current_user();
+
+	if( is_user_logged_in() && ! is_null( $content ) && ! is_feed() && array_intersect( $current_user->roles, $allowed_roles ) ) {
+
+		echo do_shortcode( $content );
+
+	} else {
+
+		$login_page = get_permalink( wpum_get_core_page_id( 'login' ) );
+		$login_page = add_query_arg( [
+			'redirect_to' => get_permalink()
+		], $login_page );
+
+		WPUM()->templates
+			->set_template_data( [
+				'message' => sprintf( __( 'This content is available to members only. Please <a href="%s">login</a> or <a href="%s">register</a> to view this area.', 'wpum'), $login_page, get_permalink( wpum_get_core_page_id( 'register' ) )  ),
+			] )
+			->get_template_part( 'messages/general', 'warning' );
+
+	}
+
+	$output = ob_get_clean();
+
+	return $output;
+}
+add_shortcode( 'wpum_restrict_to_user_roles', 'wpum_restrict_to_user_roles' );
