@@ -18,5 +18,6 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 function wpum_register_custom_widgets() {
 	register_widget( 'WPUM_Login_Form_Widget' );
 	register_widget( 'WPUM_Password_Recovery' );
+	register_widget( 'WPUM_Recently_Registered_Users' );
 }
 add_action( 'widgets_init', 'wpum_register_custom_widgets', 1 );
