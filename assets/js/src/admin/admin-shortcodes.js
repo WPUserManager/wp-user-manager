@@ -46,7 +46,7 @@ var wpumForm = {
 			}
 
 			if (response.body.length === 0) {
-				window.send_to_editor('[' + response.shortcode + ']');
+				window.send_to_editor('[' + response.shortcode + '][/' + response.shortcode + ']');
 
 				wpumForm.destroy();
 
@@ -118,7 +118,7 @@ var wpumForm = {
 					}
 
 					// Insert shortcode into the WP_Editor
-					window.send_to_editor('[' + response.shortcode + attributes + ']');
+					window.send_to_editor('[' + response.shortcode + attributes + '][/' + response.shortcode + ']');
 				},
 				onclose: function () {
 					wpumForm.destroy();
