@@ -1057,4 +1057,67 @@
     margin: 0px;
     padding: 0px; }
 
+#wpum-profile-card {
+  text-align: center;
+  position: relative;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  -ms-box-sizing: border-box;
+  box-sizing: border-box;
+  border-radius: 3px;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  -webkit-box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  -moz-box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(0, 0, 0, 0.1); }
+  #wpum-profile-card ul {
+    list-style: none;
+    margin: 0;
+    padding: 0; }
+    #wpum-profile-card ul li:last-child a {
+      margin-bottom: 0; }
+  #wpum-profile-card .wpum-profile-img {
+    position: relative;
+    border-radius: 999px;
+    margin-top: -48px; }
+    #wpum-profile-card .wpum-profile-img img {
+      border-radius: 999px;
+      box-shadow: none;
+      padding: 5px;
+      background-color: #fff;
+      border: 1px solid #eee; }
+  #wpum-profile-card a.wpum-card-button {
+    border: 1px solid #cecccc;
+    background: #eee;
+    padding: 5px 12px;
+    text-decoration: none;
+    outline: none;
+    border-radius: 3px;
+    display: inline-block;
+    margin: 10px 0; }
+    #wpum-profile-card a.wpum-card-button:hover {
+      background: #f5f5f5; }
+  #wpum-profile-card h4.wpum-card-name {
+    margin-top: 0px; }
+  #wpum-profile-card .wpum-profile-cover {
+    background-color: #c5c5c5;
+    background-position: center top;
+    background-repeat: no-repeat;
+    background-size: cover;
+    border: 0;
+    display: block;
+    left: 0;
+    margin: 0;
+    padding: 0;
+    top: 0;
+    width: 100%;
+    z-index: 1;
+    height: 200px; }
+  #wpum-profile-card .wpum-card-details {
+    padding: 0 15px 15px 15px; }
+
+.wpum-profile-card ~ .wpum-profile-card {
+  margin-top: 70px; }
+
 /*# sourceMappingURL=wpum.css.map */

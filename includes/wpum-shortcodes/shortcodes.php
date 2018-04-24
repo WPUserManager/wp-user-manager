@@ -388,6 +388,13 @@ function wpum_restrict_to_user_roles( $atts, $content = null ) {
 }
 add_shortcode( 'wpum_restrict_to_user_roles', 'wpum_restrict_to_user_roles' );
 
+/**
+ * Display the recently registered users list.
+ *
+ * @param array $atts
+ * @param string $content
+ * @return void
+ */
 function wpum_recently_registered( $atts, $content=null ) {
 
 	extract( shortcode_atts( array(
@@ -409,3 +416,41 @@ function wpum_recently_registered( $atts, $content=null ) {
 	return $output;
 }
 add_shortcode( 'wpum_recently_registered', 'wpum_recently_registered' );
+
+/**
+ * Display a profile card.
+ *
+ * @param array $atts
+ * @param string $content
+ * @return void
+ */
+function wpum_profile_card( $atts, $content = null ) {
+
+	extract( shortcode_atts( array(
+		'user_id'         => get_current_user_id(),
+		'link_to_profile' => 'yes',
+		'display_buttons' => 'yes',
+		'display_cover'   => 'yes',
+	), $atts ) );
+
+	ob_start();
+
+	if( empty( $user_id ) ) {
+		$user_id = get_current_user_id();
+	}
+
+	WPUM()->templates
+		->set_template_data( [
+			'user_id'         => $user_id,
+			'link_to_profile' => $link_to_profile,
+			'display_buttons' => $display_buttons,
+			'display_cover'   => $display_cover,
+		] )
+		->get_template_part( 'profile-card' );
+
+	$output = ob_get_clean();
+
+	return $output;
+
+}
+add_shortcode( 'wpum_profile_card', 'wpum_profile_card' );

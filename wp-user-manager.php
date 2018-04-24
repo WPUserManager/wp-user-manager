@@ -233,6 +233,7 @@ if ( ! class_exists( 'WP_User_Manager' ) ) :
 				require_once WPUM_PLUGIN_DIR . 'includes/wpum-shortcodes/class-wpum-shortcode-content-users.php';
 				require_once WPUM_PLUGIN_DIR . 'includes/wpum-shortcodes/class-wpum-shortcode-content-roles.php';
 				require_once WPUM_PLUGIN_DIR . 'includes/wpum-shortcodes/class-wpum-shortcode-recently-registered.php';
+				require_once WPUM_PLUGIN_DIR . 'includes/wpum-shortcodes/class-wpum-shortcode-profile-card.php';
 			}
 
 			if( defined( 'DOING_AJAX' ) || ( isset( $_GET['wpum_email_customizer'] ) && 'true' == $_GET['wpum_email_customizer'] ) ) {
