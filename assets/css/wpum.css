@@ -1049,4 +1049,12 @@
 #profile-comments .wpum-single-comment:first-child p {
   padding-top: 0px; }
 
+#wpum-recent-users ul.wpum-users-list {
+  list-style: none;
+  padding: 0;
+  margin: 0; }
+  #wpum-recent-users ul.wpum-users-list li {
+    margin: 0px;
+    padding: 0px; }
+
 /*# sourceMappingURL=wpum.css.map */

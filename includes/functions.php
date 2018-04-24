@@ -862,3 +862,26 @@ function wpum_guests_can_view_profiles() {
 function wpum_members_can_view_profiles() {
 	return wpum_get_option( 'members_can_view_profiles' );
 }
+
+/**
+ * Gets a list of users orderded by most recent registration date.
+ *
+ * @param int     $amount amount of users to load.
+ * @return void
+ */
+function wpum_get_recent_users( $amount ) {
+
+	$args = array(
+		'number'  => $amount,
+		'order'   => 'DESC',
+		'orderby' => 'registered'
+	);
+
+	// The Query
+	$user_query = new WP_User_Query( apply_filters( 'wpum_get_recent_users', $args ) );
+
+	// Get the results
+	$users = $user_query->get_results();
+
+	return $users;
+}

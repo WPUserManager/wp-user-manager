@@ -387,3 +387,25 @@ function wpum_restrict_to_user_roles( $atts, $content = null ) {
 	return $output;
 }
 add_shortcode( 'wpum_restrict_to_user_roles', 'wpum_restrict_to_user_roles' );
+
+function wpum_recently_registered( $atts, $content=null ) {
+
+	extract( shortcode_atts( array(
+		'amount'          => '1',
+		'link_to_profile' => 'yes'
+	), $atts ) );
+
+	ob_start();
+
+	WPUM()->templates
+		->set_template_data( [
+			'amount'          => $amount,
+			'link_to_profile' =>  $link_to_profile
+		] )
+		->get_template_part( 'recently-registered' );
+
+	$output = ob_get_clean();
+
+	return $output;
+}
+add_shortcode( 'wpum_recently_registered', 'wpum_recently_registered' );
