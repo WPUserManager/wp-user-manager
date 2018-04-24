@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "b5e9ab2b407e34d822df0656f51dca2d",
-    "content-hash": "5d3f2e8ef4a4b420d01ea77d2872219c",
+    "hash": "9abdc15b4819180c94a1a1dd45c9eb04",
+    "content-hash": "6e3bd0f8ad079235c25a0700157fe068",
     "packages": [
         {
             "name": "alessandrotesoro/wp-notices",
@@ -573,12 +573,54 @@
                 "wordpress"
             ],
             "time": "2017-10-23 09:14:03"
+        },
+        {
+            "name": "wpbp/widgets-helper",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/WPBP/Widgets-Helper.git",
+                "reference": "6aa0659e6a2cb73ccef5ba02da0e619b9d876d38"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/WPBP/Widgets-Helper/zipball/6aa0659e6a2cb73ccef5ba02da0e619b9d876d38",
+                "reference": "6aa0659e6a2cb73ccef5ba02da0e619b9d876d38",
+                "shasum": ""
+            },
+            "type": "library",
+            "autoload": {
+                "files": [
+                    "wph-widget.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-3.0"
+            ],
+            "authors": [
+                {
+                    "name": "Daniele Scasciafratte",
+                    "email": "mte90net@gmail.com",
+                    "homepage": "http://mte90.net"
+                }
+            ],
+            "description": "A class to ease creating powered Widgets on WordPress ",
+            "homepage": "https://github.com/WPBP/Widgets-Helper",
+            "keywords": [
+                "widget",
+                "widgets",
+                "wordpress"
+            ],
+            "time": "2018-03-06 17:28:54"
         }
     ],
     "packages-dev": [],
     "aliases": [],
     "minimum-stability": "dev",
-    "stability-flags": [],
+    "stability-flags": {
+        "wpbp/widgets-helper": 20
+    },
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": [],

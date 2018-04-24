@@ -227,3 +227,22 @@
 .wpum-profile-card~.wpum-profile-card {
 	margin-top: 70px;
 }
+
+#wpum-user-overview {
+	vertical-align: middle;
+	img {
+		border-radius: 999px;
+		box-shadow: none;
+		padding: 5px;
+		background-color: #fff;
+		border: 1px solid #eee;
+	}
+	ul {
+		margin: 0px 0px;
+		li {
+			display: inline-block;
+			margin-right: 5px;
+			border:0;
+		}
+	}
+}

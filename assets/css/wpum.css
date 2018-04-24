@@ -1120,4 +1120,19 @@
 .wpum-profile-card ~ .wpum-profile-card {
   margin-top: 70px; }
 
+#wpum-user-overview {
+  vertical-align: middle; }
+  #wpum-user-overview img {
+    border-radius: 999px;
+    box-shadow: none;
+    padding: 5px;
+    background-color: #fff;
+    border: 1px solid #eee; }
+  #wpum-user-overview ul {
+    margin: 0px 0px; }
+    #wpum-user-overview ul li {
+      display: inline-block;
+      margin-right: 5px;
+      border: 0; }
+
 /*# sourceMappingURL=wpum.css.map */
