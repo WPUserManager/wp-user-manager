@@ -58,6 +58,7 @@ function wpum_get_login_methods() {
 /**
  * Retrieve a list of all user roles and cache them into a transient.
  *
+ * @param boolean $force set to true if loading outside the wpum settings
  * @return array
  */
 function wpum_get_roles( $force = false ) {
@@ -68,7 +69,7 @@ function wpum_get_roles( $force = false ) {
 		return $roles;
 	}
 
-	$transient =  get_transient( 'wpum_get_roles' );
+	$transient = get_transient( 'wpum_get_roles' );
 
 	if ( $transient ) {
 		$roles = $transient;

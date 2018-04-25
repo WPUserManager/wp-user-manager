@@ -66,7 +66,7 @@ class WPUM_Menus {
 
 		$roles = [];
 
-		foreach( wpum_get_roles( true ) as $role ) {
+		foreach( wpum_get_roles( true, true ) as $role ) {
 			$roles[ $role['value'] ] = $role['label'];
 		}
 
@@ -141,11 +141,16 @@ class WPUM_Menus {
 			switch ( $status ) {
 				case 'in':
 					$visible = is_user_logged_in() ? true : false;
-					if( is_array( $roles ) && ! empty( $roles ) ) {
-						foreach ( $roles as $role ) {
-							if( ! current_user_can( $role ) ) {
-								$visible = false;
-							}
+					if( is_array( $roles ) && ! empty( $roles ) && is_user_logged_in() ) {
+						// Add the admin role for admins too.
+						array_push( $roles, 'administrator' );
+
+						$user         = wp_get_current_user();
+						$role         = ( array ) $user->roles;
+						$current_role = $role[0];
+
+						if( ! in_array( $current_role, $roles ) ) {
+							$visible = false;
 						}
 					}
 					break;
