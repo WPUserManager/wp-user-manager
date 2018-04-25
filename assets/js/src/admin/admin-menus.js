@@ -1,19 +1,33 @@
 jQuery(document).ready(function ($) {
+
+	jQuery('.wpum-link-visibility-toggle select option:selected').each(function () {
+		var selected_status = jQuery(this).val();
+		var locate_role = jQuery(this).parent().parent().next();
+		if (selected_status == 'in' || selected_status == 'out') {
+			jQuery(locate_role).show();
+		}
+	});
+
 	$('.wpum-link-visibility-toggle select').change(function () {
-		if( $(this).val() == 'in' ) {
-			$( '.wpum-link-visibility-roles' ).show();
+		var parent  = $(this).parent().parent().parent();
+		var closest = parent.find( '.wpum-link-visibility-roles' );
+		if ( $(this).val() == 'in' ) {
+			closest.show();
 		} else {
-			$('.wpum-link-visibility-roles').hide();
+			closest.hide();
 		}
 	});
 	$('.wpum-link-logout-toggle input').change(function () {
-		if( this.checked === true ) {
-			$('.wpum-link-visibility-toggle select').val( 'out' );
-			$('.wpum-link-visibility-toggle').hide();
-			$('.wpum-link-visibility-roles').hide();
+		var parent = $(this).parent().parent().parent().parent();
+		var closestToggle = parent.find('.wpum-link-visibility-toggle');
+		var closestRoles = parent.find('.wpum-link-visibility-roles');
+		if (this.checked === true) {
+			closestToggle.find('select').val('out');
+			closestToggle.hide();
+			closestRoles.hide();
 		} else {
-			$('.wpum-link-visibility-toggle select').val('');
-			$('.wpum-link-visibility-toggle').show();
+			closestToggle.find('select').val('');
+			closestToggle.show();
 		}
 	});
 });
