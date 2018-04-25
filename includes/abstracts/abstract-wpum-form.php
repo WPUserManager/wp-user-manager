@@ -435,7 +435,10 @@ abstract class WPUM_Form {
 				if ( is_wp_error( $uploaded_file ) ) {
 					throw new Exception( $uploaded_file->get_error_message() );
 				} else {
-					$file_urls[] = $uploaded_file->url;
+					$file_urls[] = [
+						'url'  => $uploaded_file->url,
+						'path' => $uploaded_file->file
+					];
 				}
 			}
 			if ( ! empty( $field['multiple'] ) ) {
