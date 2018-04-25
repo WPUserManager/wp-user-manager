@@ -564,7 +564,7 @@ function wpum_get_account_page_tabs() {
 			'priority' => 0
 		],
 		'password' => [
-			'name'     => esc_html__( 'Change password' ),
+			'name'     => esc_html__( 'Password' ),
 			'priority' => 0,
 		],
 		'view' => [

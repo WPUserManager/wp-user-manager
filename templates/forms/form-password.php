@@ -19,6 +19,8 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 ?>
 <div class="wpum-template wpum-form wpum-password-form">
 
+	<h2><?php echo esc_html( $data->step_name ); ?></h2>
+
 	<?php if( isset( $_GET['password-updated'] ) && $_GET['password-updated'] == 'success' ) : ?>
 		<?php
 			WPUM()->templates

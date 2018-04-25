@@ -20,6 +20,8 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 
 <div class="wpum-template wpum-form wpum-account-form">
 
+	<h2><?php echo esc_html( $data->step_name ); ?></h2>
+
 	<?php if( isset( $_GET['updated'] ) && $_GET['updated'] == 'success' ) : ?>
 		<?php
 			WPUM()->templates

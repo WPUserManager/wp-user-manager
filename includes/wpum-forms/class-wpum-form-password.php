@@ -69,7 +69,7 @@ class WPUM_Form_Password extends WPUM_Form {
 
 		$this->steps  = (array) apply_filters( 'password_change_steps', array(
 			'submit' => array(
-				'name'     => false,
+				'name'     => esc_html__( 'Change password' ),
 				'view'     => array( $this, 'submit' ),
 				'handler'  => array( $this, 'submit_handler' ),
 				'priority' => 10
@@ -125,10 +125,11 @@ class WPUM_Form_Password extends WPUM_Form {
 		$this->init_fields();
 
 		$data = [
-			'form'   => $this->form_name,
-			'action' => $this->get_action(),
-			'fields' => $this->get_fields( 'password' ),
-			'step'   => $this->get_step()
+			'form'      => $this->form_name,
+			'action'    => $this->get_action(),
+			'fields'    => $this->get_fields( 'password' ),
+			'step'      => $this->get_step(),
+			'step_name' => $this->steps[ $this->get_step_key( $this->get_step() ) ]['name']
 		];
 
 		WPUM()->templates

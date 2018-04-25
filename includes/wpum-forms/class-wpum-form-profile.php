@@ -70,7 +70,7 @@ class WPUM_Form_Profile extends WPUM_Form {
 
 		$this->steps  = (array) apply_filters( 'wpum_account_tabs', array(
 			'account' => array(
-				'name'     => esc_html__( 'Edit account' ),
+				'name'     => esc_html__( 'Profile settings' ),
 				'view'     => array( $this, 'show_form' ),
 				'handler'  => array( $this, 'account_handler' ),
 				'priority' => 10
@@ -241,10 +241,11 @@ class WPUM_Form_Profile extends WPUM_Form {
 		$this->init_fields();
 
 		$data = [
-			'form'    => $this->form_name,
-			'action'  => $this->get_action(),
-			'fields'  => $this->get_fields( 'account' ),
-			'step'    => $this->get_step(),
+			'form'      => $this->form_name,
+			'action'    => $this->get_action(),
+			'fields'    => $this->get_fields( 'account' ),
+			'step'      => $this->get_step(),
+			'step_name' => $this->steps[ $this->get_step_key( $this->get_step() ) ]['name']
 		];
 
 		WPUM()->templates

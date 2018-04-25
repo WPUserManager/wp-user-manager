@@ -1,5 +1,8 @@
 /* Form elements */
 .wpum-form {
+	> h2 {
+		margin-top: 0;
+	}
 	fieldset {
 		margin: 0;
 		padding: 0 0 1em 0;

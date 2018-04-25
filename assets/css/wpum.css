@@ -893,6 +893,8 @@
     color: #3a87ad; }
 
 /* Form elements */
+.wpum-form > h2 {
+  margin-top: 0; }
 .wpum-form fieldset {
   margin: 0;
   padding: 0 0 1em 0;
