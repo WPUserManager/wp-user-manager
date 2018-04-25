@@ -454,3 +454,38 @@ function wpum_profile_card( $atts, $content = null ) {
 
 }
 add_shortcode( 'wpum_profile_card', 'wpum_profile_card' );
+
+/**
+ * The shortcode to display the directory.
+ *
+ * @param array $atts
+ * @param array $content
+ * @return void
+ */
+function wpum_directory( $atts, $content = null ) {
+
+	extract( shortcode_atts( array(
+		'id' => '',
+	), $atts ) );
+
+	ob_start();
+
+	$output = ob_get_clean();
+
+	$directory_id = intval( $id );
+
+	// Check if directory exists
+	$check_directory = get_post_status( $directory_id );
+
+	if( $check_directory == 'publish' ) {
+		WPUM()->templates
+			->set_template_data( [
+
+			] )
+			->get_template_part( 'directory' );
+	}
+
+	return $output;
+
+}
+add_shortcode( 'wpum_user_directory', 'wpum_directory' );
