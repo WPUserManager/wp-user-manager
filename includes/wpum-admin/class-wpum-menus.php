@@ -121,13 +121,22 @@ class WPUM_Menus {
 
 	}
 
+	/**
+	 * Determine if the menu item should be visible or not.
+	 *
+	 * @param array $items
+	 * @param array $menu
+	 * @param array $args
+	 * @return void
+	 */
 	public function exclude_menu_items( $items, $menu, $args ) {
 
 		foreach( $items as $key => $item ) {
 
-			$status  = carbon_get_nav_menu_item_meta( $item->ID, 'link_visibility' );
-			$roles   = carbon_get_nav_menu_item_meta( $item->ID, 'link_roles' );
-			$visible = true;
+			$status    = carbon_get_nav_menu_item_meta( $item->ID, 'link_visibility' );
+			$roles     = carbon_get_nav_menu_item_meta( $item->ID, 'link_roles' );
+			$is_logout = carbon_get_nav_menu_item_meta( $item->ID, 'convert_to_logout' );
+			$visible   = true;
 
 			switch ( $status ) {
 				case 'in':
@@ -145,7 +154,7 @@ class WPUM_Menus {
 					break;
 			}
 			// Now exclude item if not visible.
-			if( ! $visible ) {
+			if( ! $visible && ! $is_logout ) {
 				unset( $items[ $key ] );
 			}
 
