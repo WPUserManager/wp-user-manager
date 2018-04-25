@@ -63,6 +63,6 @@ if ( ! empty( $data->ajax ) && wpum_user_can_upload_file_via_ajax() ) {
 	<?php if ( ! empty( $data->description ) ) : ?>
 		<?php echo $data->description; ?>
 	<?php else : ?>
-		<?php printf( __( 'Maximum file size: %s.' ), size_format( wp_max_upload_size() ) ); ?>
+		<?php printf( __( 'Maximum file size: %s.' ), size_format( wpum_max_upload_size() ) ); ?>
 	<?php endif; ?>
 </small>

@@ -650,3 +650,25 @@ function wpum_format_field_url_output( $field, $value ) {
 function wpum_format_field_textarea_output( $field, $value ) {
 	return wp_kses_post( $value );
 }
+
+/**
+ * Wrapper function for size_format - checks the max size of the avatar and cover field.
+ *
+ * @param array   $field
+ * @param string  $size  in bytes
+ * @return string
+ */
+function wpum_max_upload_size( $field_name = '' ) {
+
+	// Default max upload size,
+	$output = size_format( wp_max_upload_size() );
+
+	// Check if the field is the avatar upload field and max size is defined,
+	if ( $field_name == 'user_avatar' && defined( 'WPUM_MAX_AVATAR_SIZE' ) ) {
+		$output = size_format( WPUM_MAX_AVATAR_SIZE );
+	} else if( $field_name == 'user_cover' && defined( 'WPUM_MAX_COVER_SIZE' ) ) {
+		$output = size_format( WPUM_MAX_COVER_SIZE );
+	}
+
+	return $output;
+}
