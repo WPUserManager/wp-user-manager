@@ -557,8 +557,8 @@ function wpum_is_account_tab_active( $step_key, $first_tab ) {
 function wpum_get_account_page_tabs() {
 
 	$tabs = [
-		'profile'  => [
-			'name'     => esc_html__( 'Edit profile' ),
+		'settings'  => [
+			'name'     => esc_html__( 'Settings' ),
 			'priority' => 0
 		],
 		'password' => [
