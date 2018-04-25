@@ -205,24 +205,3 @@ function wpum_highlight_pages( $post_states, $post ) {
 
 }
 add_filter( 'display_post_states', 'wpum_highlight_pages', 10, 2 );
-
-/**
- * Modify a nav menu item url to a logout url if the option is enabled.
- *
- * @param array $atts
- * @param object $item
- * @param array $args
- * @param string $depth
- * @return void
- */
-function wpum_set_logout_url_for_nav_item( $atts, $item, $args, $depth ) {
-
-	$is_logout = carbon_get_nav_menu_item_meta( $item->ID, 'convert_to_logout' );
-
-	if( $is_logout ) {
-		$atts['href'] = wp_logout_url();
-	}
-
-	return $atts;
-}
-add_filter( 'nav_menu_link_attributes', 'wpum_set_logout_url_for_nav_item', 10, 4 );

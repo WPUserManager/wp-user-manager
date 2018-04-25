@@ -25,6 +25,10 @@ class WPUM_Menus {
 		add_action( 'carbon_fields_register_fields', [ $this, 'menu_settings' ] );
 		add_action( 'load-nav-menus.php', [ $this, 'cssjs' ] );
 		add_action( 'admin_enqueue_scripts', [ $this, 'js' ] );
+		add_filter( 'nav_menu_link_attributes', [ $this, 'set_nav_item_as_logout' ], 10, 4 );
+		if( ! is_admin() ) {
+			add_filter( 'wp_get_nav_menu_items', [ $this, 'exclude_menu_items' ], 10, 3 );
+		}
 	}
 
 	/**
@@ -94,6 +98,61 @@ class WPUM_Menus {
 		if( $screen->base == 'nav-menus' ) {
 			wp_enqueue_script( 'wpum-menu-editor', WPUM_PLUGIN_URL . '/assets/js/admin/admin-menus.min.js', false, WPUM_VERSION, true );
 		}
+	}
+
+	/**
+	 * Modify a nav menu item url to a logout url if the option is enabled.
+	 *
+	 * @param array $atts
+	 * @param object $item
+	 * @param array $args
+	 * @param string $depth
+	 * @return array
+	 */
+	public function set_nav_item_as_logout( $atts, $item, $args, $depth ) {
+
+		$is_logout = carbon_get_nav_menu_item_meta( $item->ID, 'convert_to_logout' );
+
+		if( $is_logout ) {
+			$atts['href'] = wp_logout_url();
+		}
+
+		return $atts;
+
+	}
+
+	public function exclude_menu_items( $items, $menu, $args ) {
+
+		foreach( $items as $key => $item ) {
+
+			$status  = carbon_get_nav_menu_item_meta( $item->ID, 'link_visibility' );
+			$roles   = carbon_get_nav_menu_item_meta( $item->ID, 'link_roles' );
+			$visible = true;
+
+			switch ( $status ) {
+				case 'in':
+					$visible = is_user_logged_in() ? true : false;
+					if( is_array( $roles ) && ! empty( $roles ) ) {
+						foreach ( $roles as $role ) {
+							if( ! current_user_can( $role ) ) {
+								$visible = false;
+							}
+						}
+					}
+					break;
+				case 'out':
+					$visible = ! is_user_logged_in() ? true : false;
+					break;
+			}
+			// Now exclude item if not visible.
+			if( ! $visible ) {
+				unset( $items[ $key ] );
+			}
+
+		}
+
+		return $items;
+
 	}
 
 }

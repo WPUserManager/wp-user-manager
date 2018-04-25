@@ -25,7 +25,7 @@ jQuery(document).ready(function ($) {
 		var closestToggle = parent.find('.wpum-link-visibility-toggle');
 		var closestRoles = parent.find('.wpum-link-visibility-roles');
 		if (this.checked === true) {
-			closestToggle.find('select').val('out');
+			closestToggle.find('select').val('in');
 			closestToggle.hide();
 			closestRoles.hide();
 		} else {
