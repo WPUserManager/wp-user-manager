@@ -218,6 +218,7 @@ if ( ! class_exists( 'WP_User_Manager' ) ) :
 			require_once WPUM_PLUGIN_DIR . 'includes/wpum-widgets/class-wpum-registration-form-widget.php';
 
 			require_once WPUM_PLUGIN_DIR . 'includes/wpum-admin/class-wpum-menus.php';
+			require_once WPUM_PLUGIN_DIR . 'includes/wpum-directories/class-wpum-directories-editor.php';
 
 			require_once WPUM_PLUGIN_DIR . 'includes/wpum-shortcodes/shortcodes.php';
 			require_once WPUM_PLUGIN_DIR . 'includes/widgets.php';

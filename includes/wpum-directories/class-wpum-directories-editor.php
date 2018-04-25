@@ -1,0 +1,252 @@
+<?php
+/**
+ * Handles all registration of users directories.
+ *
+ * @package     wp-user-manager
+ * @copyright   Copyright (c) 2018, Alessandro Tesoro
+ * @license     https://opensource.org/licenses/GPL-3.0 GNU Public License
+*/
+
+// Exit if accessed directly
+if ( ! defined( 'ABSPATH' ) ) exit;
+
+use Carbon_Fields\Container;
+use Carbon_Fields\Field;
+
+/**
+ * The class that handles the user directories.
+ */
+class WPUM_Directories_Editor {
+
+	/**
+	 * Get things started.
+	 */
+	public function __construct() {
+
+		add_action( 'init', [ $this, 'register_post_type' ], 0 );
+		add_action( 'carbon_fields_register_fields', [ $this, 'register_directory_settings' ] );
+		add_action( 'admin_footer', [ $this, 'css' ] );
+
+		if( is_admin() ) {
+  			add_filter( 'manage_edit-wpum_directory_columns', array( $this, 'post_type_columns' ) );
+  			add_action( 'manage_wpum_directory_posts_custom_column', array( $this, 'post_type_columns_content' ), 2 );
+  			add_filter( 'post_row_actions', array( $this, 'remove_action_rows'), 10, 2 );
+  			//add_filter( 'post_updated_messages', array( $this, 'post_updated_messages' ) );
+  			//add_filter( 'bulk_post_updated_messages', array( $this, 'bulk_post_updated_messages' ) );
+  		}
+
+	}
+
+	/**
+	 * Register the directory post type.
+	 *
+	 * @return void
+	 */
+	public function register_post_type() {
+
+		$labels = array(
+			'name'                  => _x( 'Users Directories', 'Post Type General Name', 'wp-user-manager' ),
+			'singular_name'         => _x( 'Directory', 'Post Type Singular Name', 'wp-user-manager' ),
+			'menu_name'             => __( 'Users Directories', 'wp-user-manager' ),
+			'name_admin_bar'        => __( 'Directory', 'wp-user-manager' ),
+			'archives'              => __( 'Directory Archives', 'wp-user-manager' ),
+			'attributes'            => __( 'Directory Attributes', 'wp-user-manager' ),
+			'parent_item_colon'     => __( 'Parent Directory:', 'wp-user-manager' ),
+			'all_items'             => __( 'Directories', 'wp-user-manager' ),
+			'add_new_item'          => __( 'Add new directory', 'wp-user-manager' ),
+			'add_new'               => __( 'Add New', 'wp-user-manager' ),
+			'new_item'              => __( 'New Directory', 'wp-user-manager' ),
+			'edit_item'             => __( 'Edit Directory', 'wp-user-manager' ),
+			'update_item'           => __( 'Update Directory', 'wp-user-manager' ),
+			'view_item'             => __( 'View Directory', 'wp-user-manager' ),
+			'view_items'            => __( 'View Directories', 'wp-user-manager' ),
+			'search_items'          => __( 'Search Directory', 'wp-user-manager' ),
+			'not_found'             => __( 'Not found', 'wp-user-manager' ),
+			'not_found_in_trash'    => __( 'Not found in Trash', 'wp-user-manager' ),
+			'featured_image'        => __( 'Featured Image', 'wp-user-manager' ),
+			'set_featured_image'    => __( 'Set featured image', 'wp-user-manager' ),
+			'remove_featured_image' => __( 'Remove featured image', 'wp-user-manager' ),
+			'use_featured_image'    => __( 'Use as featured image', 'wp-user-manager' ),
+			'insert_into_item'      => __( 'Insert into directory', 'wp-user-manager' ),
+			'uploaded_to_this_item' => __( 'Uploaded to this directory', 'wp-user-manager' ),
+			'items_list'            => __( 'Directories list', 'wp-user-manager' ),
+			'items_list_navigation' => __( 'Directories list navigation', 'wp-user-manager' ),
+			'filter_items_list'     => __( 'Filter directories list', 'wp-user-manager' ),
+		);
+		$args = array(
+			'label'               => __( 'Directory', 'wp-user-manager' ),
+			'labels'              => $labels,
+			'supports'            => array( 'title' ),
+			'hierarchical'        => false,
+			'public'              => true,
+			'show_ui'             => true,
+			'show_in_menu'        => 'users.php',
+			'menu_position'       => 5,
+			'show_in_admin_bar'   => false,
+			'show_in_nav_menus'   => false,
+			'can_export'          => true,
+			'has_archive'         => false,
+			'exclude_from_search' => true,
+			'publicly_queryable'  => true,
+			'capability_type'     => 'page',
+		);
+		register_post_type( 'wpum_directory', $args );
+
+	}
+
+	/**
+	 * Register settings for the directory
+	 *
+	 * @return void
+	 */
+	public function register_directory_settings() {
+
+		Container::make( 'post_meta', esc_html__( 'General settings' ) )
+			->where( 'post_type', '=', 'wpum_directory' )
+			->add_fields( array(
+				Field::make( "multiselect", "directory_assigned_roles", esc_html__( 'User roles' ) )
+					->set_help_text( esc_html__( 'Leave blank to display all user roles.' ) )
+					->add_options( $this->get_roles() ),
+				Field::make( 'checkbox', 'directory_search_form', esc_html__( 'Display search form' ) )
+					->set_option_value( 'yes' )
+					->set_help_text( esc_html__( 'Enable this option to display the user search form' ) ),
+				Field::make( 'text', 'directory_excluded_users', esc_html__( 'Exclude users' ) )
+					->set_attribute( 'placeholder', esc_html__( 'Example: 1, 6, 32' ) )
+					->set_help_text( esc_html__( 'Comma separated list of users id you wish to exclude.' ) ),
+				Field::make( 'text', 'directory_profiles_per_page', esc_html__( 'Profiles per page' ) )
+					->set_attribute( 'type', 'number' )
+					->set_attribute( 'min', 1 )
+					->set_help_text( esc_html__( 'Select how many profiles you wish to display per page.' ) )
+			) );
+
+		Container::make( 'post_meta', esc_html__( 'Sorting' ) )
+			->where( 'post_type', '=', 'wpum_directory' )
+			->add_fields( array(
+				Field::make( 'checkbox', 'directory_display_sorter', esc_html__( 'Display sorter' ) )
+					->set_option_value( 'yes' )
+					->set_help_text( esc_html__( 'Enable this setting to display a dropdown menu into the directory with the sorting options.' ) ),
+				Field::make( 'checkbox', 'directory_display_amount_filter', esc_html__( 'Display amount filter' ) )
+					->set_option_value( 'yes' )
+					->set_help_text( esc_html__( 'Enable this setting to display a dropdown menu into the directory with the results amount filter.' ) ),
+				Field::make( 'select', 'directory_sorting_method', esc_html__( 'Sorting method' ) )
+					->set_help_text( esc_html__( 'Select the sorting method for the directory. If the sorter field is visible, this will be used as default option.' ) )
+					->add_options( array(
+						'newest'    => esc_html__( 'Newest users first' ),
+						'oldest'    => esc_html__( 'Oldest users first' ),
+						'name'      => esc_html__( 'First name' ),
+						'last_name' => esc_html__( 'Last Name' )
+					) )
+			) );
+
+	}
+
+	/**
+	 * Return an array containing user roles.
+	 *
+	 * @return array
+	 */
+	private function get_roles() {
+
+		$roles = [];
+
+		foreach( wpum_get_roles( true, true ) as $role ) {
+			$roles[ $role['value'] ] = $role['label'];
+		}
+
+		return $roles;
+
+	}
+
+	/**
+	 * Adjust layout elements of the directory editor.
+	 *
+	 * @return void
+	 */
+	public function css() {
+
+		$screen = get_current_screen();
+
+		if( $screen->id !== 'wpum_directory' ) {
+			return;
+		}
+
+		?>
+		<style>
+		#edit-slug-box {display:none;}
+		</style>
+		<?php
+	}
+
+	/**
+	 * Modifies the list of columns available into the directory post type.
+	 *
+	 * @access public
+	 * @param mixed $columns
+	 * @return array $columns
+	 */
+	public function post_type_columns( $columns ) {
+		if ( ! is_array( $columns ) ) {
+			$columns = array();
+		}
+
+		unset( $columns['date'], $columns['author'] );
+
+		$columns["roles"]             = esc_html__( 'User Roles' );
+		$columns["search_form"]       = esc_html__( 'Search form' );
+		$columns["profiles_per_page"] = esc_html__( 'Profiles per page' );
+		$columns["shortcode"]         = esc_html__( 'Shortcode' );
+
+		return $columns;
+	}
+
+	/**
+	 * Adds the content to the custom columns for the directory post type
+	 *
+	 * @access public
+	 * @param mixed $column
+	 * @return void
+	 */
+	public function post_type_columns_content( $columns ) {
+		global $post;
+		switch ( $columns ) {
+			case 'roles':
+				$roles = carbon_get_post_meta( $post->ID, 'directory_assigned_roles' );
+				if( $roles ) {
+					echo implode( ', ', $roles );
+				} else {
+					echo esc_html__( 'All' );
+				}
+				break;
+			case 'search_form':
+				if( carbon_get_post_meta( $post->ID, 'directory_search_form' ) ) {
+					echo '<span class="dashicons dashicons-yes"></span>';
+				} else {
+					echo '<span class="dashicons dashicons-no"></span>';
+				}
+				break;
+			case 'profiles_per_page':
+				echo carbon_get_post_meta( $post->ID, 'directory_profiles_per_page' );
+				break;
+			case 'shortcode':
+				echo '[wpum_user_directory id="'.$post->ID.'"]';
+				break;
+		}
+	}
+	/**
+	 * Modifies the action links into the post type page.
+	 *
+	 * @access public
+	 * @return $actions array contains all action links.
+	 */
+	public function remove_action_rows( $actions, $post ) {
+		if ( $post->post_type == 'wpum_directory' ) {
+			unset( $actions['inline hide-if-no-js'] );
+			unset( $actions['view'] );
+		}
+		return $actions;
+	}
+
+
+}
+
+new WPUM_Directories_Editor;
