@@ -1,10 +1,13 @@
 jQuery(document).ready(function ($) {
 
-	jQuery('.wpum-link-visibility-toggle select option:selected').each(function () {
+	jQuery('.wpum-link-visibility-toggle select').each(function () {
 		var selected_status = jQuery(this).val();
-		var locate_role = jQuery(this).parent().parent().next();
-		if (selected_status == 'in' || selected_status == 'out') {
-			jQuery(locate_role).show();
+		var parent = $(this).parent().parent().parent();
+		var closest = parent.find('.wpum-link-visibility-roles');
+		if ( $(this).val() == 'in' ) {
+			closest.show();
+		} else {
+			closest.hide();
 		}
 	});
 
