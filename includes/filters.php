@@ -205,3 +205,33 @@ function wpum_highlight_pages( $post_states, $post ) {
 
 }
 add_filter( 'display_post_states', 'wpum_highlight_pages', 10, 2 );
+
+/**
+ * Filters the upload dir when $wpum_upload is true
+ *
+ * @param  array $pathdata
+ * @return array
+ */
+function wpum_upload_dir( $pathdata ) {
+	global $wpum_upload, $wpum_uploading_file;
+
+	if ( ! empty( $wpum_upload ) ) {
+
+		$dir = apply_filters( 'wpum_upload_dir', 'wp-user-manager-uploads' );
+
+		if ( empty( $pathdata['subdir'] ) ) {
+			$pathdata['path']   = $pathdata['path'] . '/' . $dir;
+			$pathdata['url']    = $pathdata['url'] . '/' . $dir;
+			$pathdata['subdir'] = '/' . $dir;
+		} else {
+			$new_subdir         = '/' . $dir . $pathdata['subdir'];
+			$pathdata['path']   = str_replace( $pathdata['subdir'], $new_subdir, $pathdata['path'] );
+			$pathdata['url']    = str_replace( $pathdata['subdir'], $new_subdir, $pathdata['url'] );
+			$pathdata['subdir'] = str_replace( $pathdata['subdir'], $new_subdir, $pathdata['subdir'] );
+		}
+
+	}
+
+	return $pathdata;
+}
+add_filter( 'upload_dir', 'wpum_upload_dir' );
