@@ -712,6 +712,7 @@ function wpum_get_profile_url( $user ) {
 
 	$page_url            = get_permalink( wpum_get_core_page_id( 'profile' ) );
 	$permalink_structure = get_option( 'wpum_permalink', 'user_id' );
+	$page_url            = rtrim( $page_url, '/') . '/';
 
 	switch ( $permalink_structure ) {
 		case 'user_id':
