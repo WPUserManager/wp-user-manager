@@ -522,6 +522,8 @@ function wpum_get_account_tab_url( $step_key ) {
 
 	if( $step_key == 'logout' ) {
 		$tab_url = wp_logout_url();
+	} else if( $step_key == 'view' ) {
+		$tab_url = get_permalink( wpum_get_core_page_id( 'profile' ) );
 	} else {
 		$tab_url = $tab_url . $step_key;
 	}
@@ -563,11 +565,15 @@ function wpum_get_account_page_tabs() {
 		],
 		'password' => [
 			'name'     => esc_html__( 'Change password' ),
-			'priority' => 2,
+			'priority' => 0,
+		],
+		'view' => [
+			'name'     => esc_html__( 'View profile' ),
+			'priority' => 0,
 		],
 		'logout'   => [
 			'name'     => esc_html__( 'Logout' ),
-			'priority' => 3
+			'priority' => 0
 		]
 	];
 
@@ -749,7 +755,7 @@ function wpum_get_registered_profile_tabs() {
 		'comments'  => [
 			'name'     => esc_html__( 'Comments' ),
 			'priority' => 0
-		],
+		]
 	];
 
 	if ( ! wpum_get_option( 'profile_posts' ) ) {
