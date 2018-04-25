@@ -424,6 +424,14 @@ abstract class WPUM_Form {
 					'file_key'           => $field_key,
 					'allowed_mime_types' => $allowed_mime_types,
 				) );
+				// Determine max file size for the avatar field.
+				$too_big_message = esc_html__( 'The uploaded file is too big.' );
+				if ( defined( 'WPUM_MAX_AVATAR_SIZE' ) && $field_key == 'user_avatar' && $file_to_upload['size'] > WPUM_MAX_AVATAR_SIZE ) {
+					throw new Exception( $too_big_message );
+				}
+				if ( defined( 'WPUM_MAX_COVER_SIZE' ) && $field_key == 'user_cover' && $file_to_upload['size'] > WPUM_MAX_COVER_SIZE ) {
+					throw new Exception( $too_big_message );
+				}
 				if ( is_wp_error( $uploaded_file ) ) {
 					throw new Exception( $uploaded_file->get_error_message() );
 				} else {
