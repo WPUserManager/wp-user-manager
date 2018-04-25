@@ -36,7 +36,8 @@ class WPUM_Menus {
 		Container::make( 'nav_menu_item', 'Menu Settings' )
 			->add_fields( array(
 				Field::make( 'checkbox', 'convert_to_logout', esc_html__( 'Set as logout url' ) )
-					->set_help_text( esc_html__( 'Enable to make this link a logout link.' ) ),
+					->set_help_text( esc_html__( 'Enable to make this link a logout link.' ) )
+					->set_classes( 'wpum-link-logout-toggle' ),
 				Field::make( 'select', 'link_visibility', esc_html__( 'Display to:' ) )
 					->add_options( array(
 						''    => esc_html__( 'Everyone' ),
