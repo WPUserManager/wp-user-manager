@@ -26,7 +26,6 @@ function wpum_load_admin_logo_style() {
 	if( in_array( $screen->base, $allowed_screens ) ) {
 		wp_enqueue_style( 'wpum-logo', WPUM_PLUGIN_URL . 'assets/css/admin/wpum-logo.css', array(), WPUM_VERSION );
 	}
-
 }
 add_action( 'admin_enqueue_scripts', 'wpum_load_admin_logo_style' );
 

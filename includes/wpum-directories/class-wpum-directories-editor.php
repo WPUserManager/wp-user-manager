@@ -26,7 +26,6 @@ class WPUM_Directories_Editor {
 		add_action( 'init', [ $this, 'register_post_type' ], 0 );
 		add_action( 'carbon_fields_register_fields', [ $this, 'register_directory_settings' ] );
 		add_action( 'admin_footer', [ $this, 'css' ] );
-
 		if( is_admin() ) {
   			add_filter( 'manage_edit-wpum_directory_columns', array( $this, 'post_type_columns' ) );
   			add_action( 'manage_wpum_directory_posts_custom_column', array( $this, 'post_type_columns_content' ), 2 );
@@ -135,7 +134,7 @@ class WPUM_Directories_Editor {
 						'oldest'    => esc_html__( 'Oldest users first' ),
 						'name'      => esc_html__( 'First name' ),
 						'last_name' => esc_html__( 'Last Name' )
-					) )
+					) ),
 			) );
 
 	}
