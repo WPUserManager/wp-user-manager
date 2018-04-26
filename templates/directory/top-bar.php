@@ -40,11 +40,19 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 		</div>
 		<?php endif; ?>
 
+		<?php if( $data->has_amount_modifier ) : ?>
 		<div class="wpum-col-xs">
 			<p>
 				<?php esc_html_e( 'Results per page:' ); ?>
+				<?php echo WPUM()->elements->select( [
+					'name'             => 'wpum-directory-amount',
+					'show_option_all'  => false,
+					'show_option_none' => false,
+					'options'          => wpum_get_directory_amount_modifier()
+				] ); ?>
 			</p>
 		</div>
+		<?php endif; ?>
 
 	</div>
 

@@ -95,6 +95,14 @@ ul.wpum-user-listings {
 	}
 }
 
+#wpum-directory-top-bar {
+	.wpum-col-xs {
+		&:last-child {
+			text-align: right;
+		}
+	}
+}
+
 #wpum-directory-search-form {
 	padding: 1em;
 	input {

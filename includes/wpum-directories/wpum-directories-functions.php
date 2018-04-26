@@ -27,3 +27,21 @@ function wpum_get_directory_sort_by_methods() {
 	return apply_filters( 'wpum_get_directory_sort_by_methods', $options );
 
 }
+
+/**
+ * Retrieve a list of options for the per page amount modifier for the directory.
+ *
+ * @return array
+ */
+function wpum_get_directory_amount_modifier() {
+
+	$amounts = [
+		''   => '',
+		'10' => '10',
+		'15' => '15',
+		'20' => '20',
+	];
+
+	return apply_filters( 'wpum_get_directory_amount_modifier', $amounts );
+
+}

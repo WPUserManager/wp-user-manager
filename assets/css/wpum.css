@@ -1219,6 +1219,9 @@ ul.wpum-user-listings {
   #wpum-directory-search-form div p {
     margin: 0px; }
 
+#wpum-directory-top-bar .wpum-col-xs:last-child {
+  text-align: right; }
+
 #wpum-directory-search-form {
   padding: 1em; }
   #wpum-directory-search-form input {

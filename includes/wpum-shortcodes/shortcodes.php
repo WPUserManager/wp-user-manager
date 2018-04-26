@@ -480,7 +480,8 @@ function wpum_directory( $atts, $content = null ) {
 	if( $check_directory == 'publish' ) {
 		WPUM()->templates
 			->set_template_data( [
-				'has_sort_by' => carbon_get_post_meta( $directory_id, 'directory_display_sorter' )
+				'has_sort_by'         => carbon_get_post_meta( $directory_id, 'directory_display_sorter' ),
+				'has_amount_modifier' => carbon_get_post_meta( $directory_id, 'directory_display_amount_filter' )
 			] )
 			->get_template_part( 'directory' );
 	}
