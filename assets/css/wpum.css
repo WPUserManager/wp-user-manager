@@ -1219,22 +1219,11 @@ ul.wpum-user-listings {
   #wpum-directory-search-form div p {
     margin: 0px; }
 
-.wpum-directory-search-form {
+#wpum-directory-search-form {
   padding: 1em; }
-  .wpum-directory-search-form input {
+  #wpum-directory-search-form input {
     width: 100%;
     display: block; }
-  .wpum-directory-search-form .form-fields,
-  .wpum-directory-search-form .form-submit {
-    position: relative;
-    margin-right: 4%;
-    float: left; }
-  .wpum-directory-search-form .form-fields {
-    width: 74%; }
-  .wpum-directory-search-form .form-submit {
-    width: 22%;
-    margin-right: 0;
-    clear: right; }
 
 .wpum-directory-pagination {
   padding: .5em 1em;

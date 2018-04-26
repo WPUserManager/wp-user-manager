@@ -95,25 +95,11 @@ ul.wpum-user-listings {
 	}
 }
 
-.wpum-directory-search-form {
+#wpum-directory-search-form {
 	padding: 1em;
 	input {
 		width: 100%;
 		display: block;
-	}
-	.form-fields,
-	.form-submit {
-		position: relative;
-		margin-right: 4%;
-		float: left;
-	}
-	.form-fields {
-		width: 74%;
-	}
-	.form-submit {
-		width: 22%;
-		margin-right: 0;
-		clear: right;
 	}
 }
 

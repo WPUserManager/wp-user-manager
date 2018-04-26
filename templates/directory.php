@@ -24,10 +24,9 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 
 	<?php
 		WPUM()->templates
-			->get_template_part( 'directory/top-bar' );
-
-		WPUM()->templates
 			->get_template_part( 'directory/search-form' );
+		WPUM()->templates
+			->get_template_part( 'directory/top-bar' );
 	?>
 
 	<?php do_action( 'wpum_after_user_directory' ); ?>
