@@ -29,6 +29,12 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 		<div class="wpum-col-xs">
 			<p>
 				<?php esc_html_e( 'Sort by:' ); ?>
+				<?php echo WPUM()->elements->select( [
+					'name'             => 'wpum-directory-sortby',
+					'show_option_all'  => false,
+					'show_option_none' => false,
+					'options'          => wpum_get_directory_sort_by_methods()
+				] ); ?>
 			</p>
 		</div>
 
