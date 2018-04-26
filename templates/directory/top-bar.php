@@ -26,6 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 			<?php echo sprintf( esc_html__( 'Found %s users.' ), 0 ) ?>
 		</div>
 
+		<?php if( $data->has_sort_by ) : ?>
 		<div class="wpum-col-xs">
 			<p>
 				<?php esc_html_e( 'Sort by:' ); ?>
@@ -37,6 +38,7 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 				] ); ?>
 			</p>
 		</div>
+		<?php endif; ?>
 
 		<div class="wpum-col-xs">
 			<p>
