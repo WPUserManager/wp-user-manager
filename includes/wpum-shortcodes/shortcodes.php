@@ -481,6 +481,7 @@ function wpum_directory( $atts, $content = null ) {
 		WPUM()->templates
 			->set_template_data( [
 				'has_sort_by'         => carbon_get_post_meta( $directory_id, 'directory_display_sorter' ),
+				'sort_by_default'     => carbon_get_post_meta( $directory_id, 'directory_sorting_method' ),
 				'has_amount_modifier' => carbon_get_post_meta( $directory_id, 'directory_display_amount_filter' )
 			] )
 			->get_template_part( 'directory' );
