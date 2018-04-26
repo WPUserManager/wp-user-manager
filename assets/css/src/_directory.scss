@@ -50,9 +50,6 @@
 	padding: 0;
 	margin: 0;
 	border-top: 1px solid #eee;
-	.wpum-directory-users-wrapper {
-		padding: .5em 1em;
-	}
 	.wpum-directory-single-user {
 		margin: 0;
 		border-bottom: 1px solid #eee;
@@ -60,9 +57,15 @@
 		position: relative;
 		line-height: 1.5em;
 		text-decoration: none;
+		padding: 1em 1em 1em 1em;
 		&:hover,
 		&:focus {
 			background-color: #fcfcfc;
 		}
 	}
+}
+
+#directory-avatar img {
+	@extend .wpum-avatar-img;
+	vertical-align: middle;
 }

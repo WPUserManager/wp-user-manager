@@ -1137,6 +1137,13 @@
       margin-right: 5px;
       border: 0; }
 
+.wpum-avatar-img, #directory-avatar img {
+  border-radius: 999px;
+  box-shadow: none;
+  padding: 5px;
+  background-color: #fff;
+  border: 1px solid #eee; }
+
 #wpum-user-directory {
   margin-bottom: 1em; }
   #wpum-user-directory ul.wpum-user-listings {
@@ -1174,16 +1181,18 @@
   padding: 0;
   margin: 0;
   border-top: 1px solid #eee; }
-  #wpum-directory-users-list .wpum-directory-users-wrapper {
-    padding: .5em 1em; }
   #wpum-directory-users-list .wpum-directory-single-user {
     margin: 0;
     border-bottom: 1px solid #eee;
     zoom: 1;
     position: relative;
     line-height: 1.5em;
-    text-decoration: none; }
+    text-decoration: none;
+    padding: 1em 1em 1em 1em; }
     #wpum-directory-users-list .wpum-directory-single-user:hover, #wpum-directory-users-list .wpum-directory-single-user:focus {
       background-color: #fcfcfc; }
+
+#directory-avatar img {
+  vertical-align: middle; }
 
 /*# sourceMappingURL=wpum.css.map */
