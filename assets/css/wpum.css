@@ -1142,74 +1142,6 @@
   #wpum-user-directory ul.wpum-user-listings {
     margin: 0; }
 
-ul.wpum-user-listings {
-  padding: 0;
-  margin: 0;
-  border-top: 1px solid #eee; }
-  ul.wpum-user-listings li.wpum-single-user {
-    list-style: none outside;
-    margin: 0;
-    border-bottom: 1px solid #eee;
-    display: block;
-    padding: 1em 1em 1em 2em;
-    overflow: hidden;
-    zoom: 1;
-    position: relative;
-    line-height: 1.5em;
-    text-decoration: none; }
-    ul.wpum-user-listings li.wpum-single-user:hover, ul.wpum-user-listings li.wpum-single-user:focus {
-      background-color: #fcfcfc; }
-    ul.wpum-user-listings li.wpum-single-user img.avatar {
-      width: 42px;
-      height: 42px;
-      position: absolute;
-      left: 1em;
-      float: left;
-      margin-right: 1em;
-      vertical-align: middle;
-      box-shadow: none; }
-    ul.wpum-user-listings li.wpum-single-user div.user,
-    ul.wpum-user-listings li.wpum-single-user div.contact-meta,
-    ul.wpum-user-listings li.wpum-single-user ul.meta {
-      -webkit-box-sizing: border-box;
-      /* Safari/Chrome, other WebKit */
-      -moz-box-sizing: border-box;
-      /* Firefox, other Gecko */
-      box-sizing: border-box;
-      /* Opera/IE 8+ */ }
-    ul.wpum-user-listings li.wpum-single-user div.user {
-      float: left;
-      width: 55%;
-      padding: 0 0 0 42px;
-      line-height: 1.5em; }
-      ul.wpum-user-listings li.wpum-single-user div.user h3 {
-        margin: 0;
-        padding: 0;
-        line-height: inherit;
-        font-size: inherit; }
-      ul.wpum-user-listings li.wpum-single-user div.user .description {
-        color: #999; }
-    ul.wpum-user-listings li.wpum-single-user div.contact-meta {
-      float: left;
-      text-align: left;
-      width: 25%;
-      padding: 0 0 0 1em;
-      color: #999;
-      line-height: 1.5em; }
-    ul.wpum-user-listings li.wpum-single-user .meta {
-      float: right;
-      text-align: right;
-      width: 20%;
-      padding: 0 0 0 1em;
-      margin: 0;
-      line-height: 1.5em;
-      color: #999;
-      list-style: none outside; }
-      ul.wpum-user-listings li.wpum-single-user .meta li {
-        list-style: none outside;
-        display: block;
-        margin: 0; }
-
 #wpum-directory-top-bar,
 #wpum-directory-search-form {
   padding: .5em 1em;
@@ -1237,5 +1169,21 @@ ul.wpum-user-listings {
     float: right; }
   .wpum-directory-pagination a.prev {
     float: left; }
+
+#wpum-directory-users-list {
+  padding: 0;
+  margin: 0;
+  border-top: 1px solid #eee; }
+  #wpum-directory-users-list .wpum-directory-users-wrapper {
+    padding: .5em 1em; }
+  #wpum-directory-users-list .wpum-directory-single-user {
+    margin: 0;
+    border-bottom: 1px solid #eee;
+    zoom: 1;
+    position: relative;
+    line-height: 1.5em;
+    text-decoration: none; }
+    #wpum-directory-users-list .wpum-directory-single-user:hover, #wpum-directory-users-list .wpum-directory-single-user:focus {
+      background-color: #fcfcfc; }
 
 /*# sourceMappingURL=wpum.css.map */

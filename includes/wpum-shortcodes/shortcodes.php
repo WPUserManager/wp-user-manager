@@ -477,12 +477,39 @@ function wpum_directory( $atts, $content = null ) {
 	// Check if directory exists
 	$check_directory = get_post_status( $directory_id );
 
+	// Directory settings.
+	$has_sort_by         = carbon_get_post_meta( $directory_id, 'directory_display_sorter' );
+	$sort_by_default     = carbon_get_post_meta( $directory_id, 'directory_sorting_method' );
+	$has_amount_modifier = carbon_get_post_meta( $directory_id, 'directory_display_amount_filter' );
+	$assigned_roles      = carbon_get_post_meta( $directory_id, 'directory_assigned_roles' );
+	$profiles_per_page   = carbon_get_post_meta( $directory_id, 'directory_profiles_per_page' ) ? carbon_get_post_meta( $directory_id, 'directory_profiles_per_page' ): 10;
+	$excluded_users      = carbon_get_post_meta( $directory_id, 'directory_excluded_users' );
+
+	// Prepare query arguments.
+	$args = [
+		'number' => $profiles_per_page
+	];
+
+	// Add specific roles if any assigned.
+	if( is_array( $assigned_roles ) && ! empty( $assigned_roles ) ) {
+		$args['role'] = $assigned_roles;
+	}
+
+	// Exclude users if anything specified.
+	if( $excluded_users && ! empty( $excluded_users ) ) {
+		$excluded_users  = trim( str_replace(' ','', $excluded_users ) );
+		$args['exclude'] = explode(',', $excluded_users );
+	}
+
+	$user_query = new WP_User_Query( $args );
+
 	if( $check_directory == 'publish' ) {
 		WPUM()->templates
 			->set_template_data( [
-				'has_sort_by'         => carbon_get_post_meta( $directory_id, 'directory_display_sorter' ),
-				'sort_by_default'     => carbon_get_post_meta( $directory_id, 'directory_sorting_method' ),
-				'has_amount_modifier' => carbon_get_post_meta( $directory_id, 'directory_display_amount_filter' )
+				'has_sort_by'         => $has_sort_by,
+				'sort_by_default'     => $sort_by_default,
+				'has_amount_modifier' => $has_amount_modifier,
+				'results'             => $user_query->get_results()
 			] )
 			->get_template_part( 'directory' );
 	}

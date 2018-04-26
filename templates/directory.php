@@ -31,6 +31,22 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 			->get_template_part( 'directory/top-bar' );
 	?>
 
+	<div id="wpum-directory-users-list">
+
+		<?php if( is_array( $data->results ) && ! empty( $data->results ) ) : ?>
+			<?php foreach( $data->results as $user ) : ?>
+				<?php
+					WPUM()->templates
+						->set_template_data( $user )
+						->get_template_part( 'directory/single', 'user' );
+				?>
+			<?php endforeach; ?>
+		<?php else : ?>
+
+		<?php endif; ?>
+
+	</div>
+
 	<?php do_action( 'wpum_after_user_directory' ); ?>
 
 </div>
