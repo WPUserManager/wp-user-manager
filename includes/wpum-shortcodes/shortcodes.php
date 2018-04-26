@@ -509,7 +509,8 @@ function wpum_directory( $atts, $content = null ) {
 				'has_sort_by'         => $has_sort_by,
 				'sort_by_default'     => $sort_by_default,
 				'has_amount_modifier' => $has_amount_modifier,
-				'results'             => $user_query->get_results()
+				'results'             => $user_query->get_results(),
+				'total'               => $user_query->get_total()
 			] )
 			->get_template_part( 'directory' );
 	}

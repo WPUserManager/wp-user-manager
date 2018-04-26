@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 	<div class="wpum-row">
 
 		<div class="wpum-col-xs">
-			<?php echo sprintf( esc_html__( 'Found %s users.' ), 0 ) ?>
+			<?php echo sprintf( esc_html__( 'Found %s users.' ), absint( $data->total ) ) ?>
 		</div>
 
 		<?php if( $data->has_sort_by ) : ?>
