@@ -16,15 +16,20 @@
 // Exit if accessed directly
 if ( ! defined( 'ABSPATH' ) ) exit;
 
+$user = $data->data;
 
 ?>
 <div class="wpum-directory-single-user">
 	<div class="wpum-row">
 		<div class="wpum-col-xs" id="directory-avatar">
-			<?php echo get_avatar( $data->data->ID, 50 ); ?>
+			<a href="<?php echo esc_url( wpum_get_profile_url( $user ) ); ?>">
+				<?php echo get_avatar( $user->ID, 50 ); ?>
+			</a>
 		</div>
 		<div class="wpum-col-xs">
-
+			<p>
+				<a href="<?php echo esc_url( wpum_get_profile_url( $user ) ); ?>"><?php echo esc_html( $user->display_name ); ?></a>
+			</p>
 		</div>
 		<div class="wpum-col-xs">
 
