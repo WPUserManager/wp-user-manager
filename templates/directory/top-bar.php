@@ -19,12 +19,25 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 ?>
 
 <div id="wpum-directory-top-bar">
+
 	<div class="wpum-row">
+
 		<div class="wpum-col-xs">
+			<?php echo sprintf( esc_html__( 'Found %s users.' ), 0 ) ?>
 		</div>
+
 		<div class="wpum-col-xs">
+			<p>
+				<?php esc_html_e( 'Sort by:' ); ?>
+			</p>
 		</div>
+
 		<div class="wpum-col-xs">
+			<p>
+				<?php esc_html_e( 'Results per page:' ); ?>
+			</p>
 		</div>
+
 	</div>
+
 </div>
