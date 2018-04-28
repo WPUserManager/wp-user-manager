@@ -19,6 +19,13 @@ use Carbon_Fields\Field;
 class WPUM_Directories_Editor {
 
 	/**
+	 * Holds the layout builder object.
+	 *
+	 * @var object
+	 */
+	protected $builder;
+
+	/**
 	 * Get things started.
 	 */
 	public function __construct() {
@@ -26,12 +33,19 @@ class WPUM_Directories_Editor {
 		add_action( 'init', [ $this, 'register_post_type' ], 0 );
 		add_action( 'carbon_fields_register_fields', [ $this, 'register_directory_settings' ] );
 		add_action( 'admin_footer', [ $this, 'css' ] );
+
 		if( is_admin() ) {
+
+			$this->builder = new Pressmodo_Builder();
+
   			add_filter( 'manage_edit-wpum_directory_columns', array( $this, 'post_type_columns' ) );
   			add_action( 'manage_wpum_directory_posts_custom_column', array( $this, 'post_type_columns_content' ), 2 );
   			add_filter( 'post_row_actions', array( $this, 'remove_action_rows'), 10, 2 );
   			add_filter( 'post_updated_messages', array( $this, 'post_updated_messages' ) );
-  			add_filter( 'bulk_post_updated_messages', array( $this, 'bulk_post_updated_messages' ) );
+			add_filter( 'bulk_post_updated_messages', array( $this, 'bulk_post_updated_messages' ) );
+
+			add_action( 'admin_enqueue_scripts', [ $this, 'builder_assets' ] );
+
   		}
 
 	}
@@ -136,6 +150,44 @@ class WPUM_Directories_Editor {
 						'last_name' => esc_html__( 'Last Name' )
 					) ),
 			) );
+
+		Container::make( 'post_meta', esc_html__( 'Directory layout builder' ) )
+			->set_context( 'side' )
+			->set_priority( 'default' )
+			->where( 'post_type', '=', 'wpum_directory' )
+			->add_fields( array(
+				Field::make( 'html', 'crb_information_text' )
+    				->set_html( $this->layout_builder_metabox() )
+			) );
+
+	}
+
+	/**
+	 * Generate layout builder metabox content.
+	 *
+	 * @return string
+	 */
+	private function layout_builder_metabox() {
+
+		global $post;
+
+		ob_start();
+
+		?>
+		<div class="wpum-builder-page-builder-widget" id="wpum-builder-page-builder-widget-<?php echo $post->ID; ?>" data-builder-id="<?php echo $post->ID; ?>" data-type="layout_widget">
+			<button class="button button-hero wpum-builder-panels-display-builder" style="width:100%;"><?php esc_html_e( 'Customize directory layout' ); ?></button>
+			<input data-panels-filter="json_parse" value="" class="panels-data" name="widget-wpum-builder-panels-builder[<?php echo $post->ID; ?>][panels_data]" id="widget-wpum-builder-panels-builder-<?php echo $post->ID; ?>-panels_data" type="hidden">
+			<script type="text/javascript">
+				( function( panelsData ){
+					// Create the panels_data input
+					document.getElementById('widget-wpum-builder-panels-builder-<?php echo $post->ID; ?>-panels_data').value = JSON.stringify( panelsData );
+				} )(  );
+			</script>
+			<input value="" name="widget-wpum-builder-panels-builder[<?php echo $post->ID; ?>][builder_id]" type="hidden">
+		</div>
+		<?php
+
+		return ob_get_clean();
 
 	}
 
@@ -293,6 +345,21 @@ class WPUM_Directories_Editor {
 			'untrashed' => _n( '%s directory restored from the Trash.', '%s directories restored from the Trash.', $bulk_counts['untrashed'], 'wprm', 'wpum' ),
 		);
 		return $bulk_messages;
+	}
+
+	/**
+	 * Enqueue the assets related to the builder.
+	 *
+	 * @return void
+	 */
+	public function builder_assets() {
+
+		$screen = get_current_screen();
+
+		if( $screen->id == 'wpum_directory' ) {
+			$this->builder->builder_assets();
+		}
+
 	}
 
 }
