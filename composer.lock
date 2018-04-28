@@ -4,9 +4,51 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "9abdc15b4819180c94a1a1dd45c9eb04",
-    "content-hash": "6e3bd0f8ad079235c25a0700157fe068",
+    "hash": "1e8dc35ff435703ce1a1b26c3b8802f6",
+    "content-hash": "e91c8beb12bfebe34cf40d62c2826729",
     "packages": [
+        {
+            "name": "alessandrotesoro/pressmodo-builder",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/alessandrotesoro/pressmodo-builder.git",
+                "reference": "f687cd64387ccf9b6d759e25f56dff0a69e26aaf"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/alessandrotesoro/pressmodo-builder/zipball/f687cd64387ccf9b6d759e25f56dff0a69e26aaf",
+                "reference": "f687cd64387ccf9b6d759e25f56dff0a69e26aaf",
+                "shasum": ""
+            },
+            "require": {
+                "composer/installers": "~1.0",
+                "php": ">=5.3.2"
+            },
+            "type": "library",
+            "autoload": {
+                "classmap": [
+                    "pressmodo-builder.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-3.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "Alessandro Tesoro",
+                    "homepage": "http://alessandrotesoro.me"
+                }
+            ],
+            "description": "A custom layout builder library.",
+            "homepage": "https://github.com/alessandrotesoro/pressmodo-builder/",
+            "keywords": [
+                "notices",
+                "wordpress"
+            ],
+            "time": "2018-04-28 19:16:52"
+        },
         {
             "name": "alessandrotesoro/wp-notices",
             "version": "1.0.1",
@@ -619,7 +661,8 @@
     "aliases": [],
     "minimum-stability": "dev",
     "stability-flags": {
-        "wpbp/widgets-helper": 20
+        "wpbp/widgets-helper": 20,
+        "alessandrotesoro/pressmodo-builder": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,
