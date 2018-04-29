@@ -37,16 +37,17 @@ class WPUM_Directories_Editor {
 		if( is_admin() ) {
 
 			$this->builder = new Pressmodo_Builder();
+			$this->builder->set_labels( $this->get_labels() );
 
   			add_filter( 'manage_edit-wpum_directory_columns', array( $this, 'post_type_columns' ) );
   			add_action( 'manage_wpum_directory_posts_custom_column', array( $this, 'post_type_columns_content' ), 2 );
   			add_filter( 'post_row_actions', array( $this, 'remove_action_rows'), 10, 2 );
   			add_filter( 'post_updated_messages', array( $this, 'post_updated_messages' ) );
 			add_filter( 'bulk_post_updated_messages', array( $this, 'bulk_post_updated_messages' ) );
-
+			add_filter( 'pressmodo_builder_js_templates_path', [ $this, 'overwrite_js_templates' ] );
 			add_action( 'admin_enqueue_scripts', [ $this, 'builder_assets' ] );
 
-  		}
+		}
 
 	}
 
@@ -359,6 +360,63 @@ class WPUM_Directories_Editor {
 		if( $screen->id == 'wpum_directory' ) {
 			$this->builder->builder_assets();
 		}
+
+	}
+
+	/**
+	 * Replace the existing js templates for the builder.
+	 *
+	 * @return string
+	 */
+	public function overwrite_js_templates() {
+		return WPUM_PLUGIN_DIR . '/includes/wpum-directories/js-templates.php';
+	}
+
+	/**
+	 * Setup the labels for the builder.
+	 *
+	 * @return array
+	 */
+	public function get_labels() {
+
+		$labels = array(
+			'layout_widget'        => __( 'Directory layout builder' ),
+			'dropdown_confirm'     => __( 'Are you sure?' ),
+			'contextual'           => array(
+				'add_widget_below'  => __( 'Add Field Below' ),
+				'add_widget_cell'   => __( 'Add Field to Cell' ),
+				'search_widgets'    => __( 'Search Fields' ),
+				'add_row'           => __( 'Add Row' ),
+				'column'            => __( 'Column' ),
+				'cell_actions'      => __( 'Cell Actions' ),
+				'cell_paste_widget' => __( 'Paste Field' ),
+				'widget_actions'    => __( 'Field Actions' ),
+				'widget_edit'       => __( 'Edit Field' ),
+				'widget_duplicate'  => __( 'Duplicate Field' ),
+				'widget_delete'     => __( 'Delete Field' ),
+				'widget_copy'       => __( 'Copy Field' ),
+				'widget_paste'      => __( 'Paste Field Below' ),
+				'row_actions'       => __( 'Row Actions' ),
+				'row_edit'          => __( 'Edit Row' ),
+				'row_duplicate'     => __( 'Duplicate Row' ),
+				'row_delete'        => __( 'Delete Row' ),
+				'row_copy'          => __( 'Copy Row' ),
+				'row_paste'         => __( 'Paste Row' ),
+			),
+			'row'      => array(
+				'add'  => __( 'New Row' ),
+				'edit' => __( 'Row' ),
+			),
+			'welcomeMessage' => array(
+				'addingDisabled'    => __( 'Hmmm... Adding layout elements is not enabled. Please check if Page Builder has been configured to allow adding elements.' ),
+                'oneEnabled'        => __( 'Add a {{%= items[0] %}} to get started.' ),
+                'twoEnabled'        => __( 'Add a {{%= items[0] %}} or {{%= items[1] %}} to get started.' ),
+                'addWidgetButton'   => "<a href='#' class='wpum-tool-button wpum-widget-add'>" . __( 'Field' ) . "</a>",
+                'addRowButton'      => "<a href='#' class='wpum-tool-button wpum-row-add'>" . __( 'Row' ) . "</a>",
+			),
+		);
+
+		return $labels;
 
 	}
 

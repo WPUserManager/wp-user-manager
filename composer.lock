@@ -13,12 +13,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/alessandrotesoro/pressmodo-builder.git",
-                "reference": "498ea8fcca0bda1c3e7a04809521681a474d02a6"
+                "reference": "99c88a82213e5bf0db0ed6409bc4e2ec12e2ce05"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/alessandrotesoro/pressmodo-builder/zipball/498ea8fcca0bda1c3e7a04809521681a474d02a6",
-                "reference": "498ea8fcca0bda1c3e7a04809521681a474d02a6",
+                "url": "https://api.github.com/repos/alessandrotesoro/pressmodo-builder/zipball/99c88a82213e5bf0db0ed6409bc4e2ec12e2ce05",
+                "reference": "99c88a82213e5bf0db0ed6409bc4e2ec12e2ce05",
                 "shasum": ""
             },
             "require": {
@@ -47,7 +47,7 @@
                 "notices",
                 "wordpress"
             ],
-            "time": "2018-04-28 19:24:32"
+            "time": "2018-04-29 10:18:58"
         },
         {
             "name": "alessandrotesoro/wp-notices",
