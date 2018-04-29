@@ -895,6 +895,21 @@ function wpum_get_recent_users( $amount ) {
 }
 
 /**
+ * Check if elementor plugin is active.
+ *
+ * @return boolean
+ */
+function wpum_is_elementor_installed() {
+
+	if ( ! did_action( 'elementor/loaded' ) ) {
+		return false;
+	}
+
+	return true;
+
+}
+
+/**
  * Inline css for the fancy WPUM admin notices.
  *
  * @return string

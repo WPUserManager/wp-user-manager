@@ -72,7 +72,8 @@ class WPUM_Admin_Notices {
 		global $pagenow;
 
 		if(
-			current_user_can( 'manage_options' )
+			wpum_is_elementor_installed()
+			&& current_user_can( 'manage_options' )
 			&& isset( $_GET['post'] )
 			&& 'page' === get_post_type( $_GET['post'] )
 			&& absint( $_GET['post'] ) == wpum_get_core_page_id( 'profile' ) ) {
