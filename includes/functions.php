@@ -893,3 +893,101 @@ function wpum_get_recent_users( $amount ) {
 
 	return $users;
 }
+
+/**
+ * Inline css for the fancy WPUM admin notices.
+ *
+ * @return string
+ */
+function wpum_custom_admin_notice_inline_css() {
+
+	?>
+	<style>
+		.notice.wpum-notice {
+				border-left-color: #008ec2 !important;
+				padding: 20px;
+		}
+		.rtl .notice.wpum-notice {
+			border-right-color: #008ec2 !important;
+		}
+		.notice.notice.wpum-notice .wpum-notice-inner {
+			display: table;
+			width: 100%;
+		}
+		.notice.wpum-notice .wpum-notice-inner .wpum-notice-icon,
+		.notice.wpum-notice .wpum-notice-inner .wpum-notice-content,
+		.notice.wpum-notice .wpum-notice-inner .wpum-install-now {
+			display: table-cell;
+			vertical-align: middle;
+		}
+		.notice.wpum-notice .wpum-notice-icon {
+			color: #509ed2;
+			font-size: 50px;
+			width: 32px;
+		}
+		.notice.wpum-notice .wpum-notice-icon img {
+			width: 32px;
+		}
+		.notice.wpum-notice .wpum-notice-content {
+			padding: 0 40px 0 20px;
+		}
+		.notice.wpum-notice p {
+			padding: 0;
+			margin: 0;
+		}
+		.notice.wpum-notice h3 {
+			margin: 0 0 5px;
+		}
+		.notice.wpum-notice .wpum-install-now {
+			text-align: center;
+		}
+		.notice.wpum-notice .wpum-install-now .wpum-install-button {
+			padding: 6px 50px;
+			height: auto;
+			line-height: 20px;
+		}
+		.notice.wpum-notice a.no-thanks {
+			display: block;
+			margin-top: 10px;
+			color: #72777c;
+			text-decoration: none;
+		}
+
+		.notice.wpum-notice a.no-thanks:hover {
+			color: #444;
+		}
+
+		@media (max-width: 767px) {
+
+			.notice.notice.wpum-notice .wpum-notice-inner {
+				display: block;
+			}
+			.notice.wpum-notice {
+				padding: 20px !important;
+			}
+			.notice.wpum-noticee .wpum-notice-inner {
+				display: block;
+			}
+			.notice.wpum-notice .wpum-notice-inner .wpum-notice-content {
+				display: block;
+				padding: 0;
+			}
+			.notice.wpum-notice .wpum-notice-inner .wpum-notice-icon {
+				display: none;
+			}
+
+			.notice.wpum-notice .wpum-notice-inner .wpum-install-now {
+				margin-top: 20px;
+				display: block;
+				text-align: left;
+			}
+
+			.notice.wpum-notice .wpum-notice-inner .no-thanks {
+				display: inline-block;
+				margin-left: 15px;
+			}
+		}
+	</style>
+	<?php
+
+}

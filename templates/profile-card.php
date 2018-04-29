@@ -27,7 +27,7 @@ $user = get_user_by( 'id', $data->user_id );
 	<?php endif; ?>
 
 	<div class="wpum-profile-img">
-		<?php echo get_avatar( $user->data->ID, 42 ); ?>
+		<?php echo get_avatar( $user->data->ID, 100 ); ?>
 	</div>
 
 	<div class="wpum-card-details">

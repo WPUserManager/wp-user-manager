@@ -6,8 +6,7 @@
         "htmlburger/carbon-fields": "^2.1",
         "gamajo/template-loader": "^1.3",
         "brain/cortex": "~1.0.0",
-        "wpbp/widgets-helper": "dev-master",
-        "alessandrotesoro/pressmodo-builder": "dev-master"
+        "wpbp/widgets-helper": "dev-master"
     },
     "minimum-stability": "dev"
 }
