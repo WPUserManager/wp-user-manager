@@ -901,11 +901,11 @@ function wpum_get_recent_users( $amount ) {
  */
 function wpum_is_elementor_installed() {
 
-	if ( ! did_action( 'elementor/loaded' ) ) {
-		return false;
+	if ( in_array( 'elementor/elementor.php', apply_filters( 'active_plugins', get_option( 'active_plugins' ) ) ) ) {
+		return true;
 	}
 
-	return true;
+	return false;
 
 }
 
