@@ -32,6 +32,9 @@ class WPUM_Elementor {
 	public function init() {
 		add_action( 'elementor/elements/categories_registered', [ $this, 'add_new_category' ] );
 		add_action( 'elementor/widgets/widgets_registered', [ $this, 'load_elements' ] );
+		add_action( 'elementor/editor/before_enqueue_scripts', function() {
+    		wp_enqueue_style( 'wpum-elementor', WPUM_PLUGIN_URL . 'assets/css/admin/logo-font.css' );
+		} );
 	}
 
 	/**

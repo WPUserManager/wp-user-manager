@@ -55,7 +55,7 @@ class WPUM_Elementor_Single_Profile_Cover extends Widget_Base {
 	 * @return string Widget icon.
 	 */
 	public function get_icon() {
-		return 'fa fa-code';
+		return 'wpum-logo-font-icon';
 	}
 
 	/**
