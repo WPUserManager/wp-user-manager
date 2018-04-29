@@ -44,6 +44,7 @@ class WPUM_Elementor {
 	 */
 	public function load_elements() {
 
+		require_once WPUM_PLUGIN_DIR . 'includes/wpum-elementor/widgets/single-profile-avatar.php';
 		require_once WPUM_PLUGIN_DIR . 'includes/wpum-elementor/widgets/single-profile-cover.php';
 
 	}
