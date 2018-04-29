@@ -30,6 +30,14 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 					'current_user_id' => $data->current_user_id
 				] )
 				->get_template_part( 'profiles/cover' );
+
+			WPUM()->templates
+				->set_template_data( [
+					'user'            => $data->user,
+					'current_user_id' => $data->current_user_id
+				] )
+				->get_template_part( 'profiles/intro' );
+
 		?>
 	</div>
 

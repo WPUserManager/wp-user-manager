@@ -75,8 +75,16 @@ class WPUM_Elementor_Single_Profile_Cover extends Widget_Base {
 	protected function render() {
 
 		$settings = $this->get_settings_for_display();
+		$user_id  = wpum_get_queried_user_id();
+		$user     = get_user_by( 'id', $user_id );
 
-		print_r( $settings );
+		WPUM()->templates
+			->set_template_data( [
+				'user'            => $user,
+				'current_user_id' => get_current_user_id()
+			] )
+			->get_template_part( 'profiles/cover' );
+
 
 	}
 

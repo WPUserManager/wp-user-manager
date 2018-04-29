@@ -21,28 +21,3 @@ $cover_image = get_user_meta( $data->user->ID, 'user_cover', true );
 ?>
 
 <div id="header-cover-image" style="background-image: url(<?php echo $cover_image ?>);"></div>
-
-<div id="header-profile-details">
-
-	<div class="wpum-row">
-		<div class="wpum-col-xs-2" id="header-avatar-container">
-			<a href="<?php echo esc_url( wpum_get_profile_url( $data->user ) ); ?>">
-				<?php echo get_avatar( $data->user->ID, 128 ); ?>
-			</a>
-		</div>
-		<div class="wpum-col-xs-10" id="header-details-container">
-			<div id="header-name-container">
-				<h2>
-					<?php echo esc_html( $data->user->display_name ); ?>
-					<?php if( $data->current_user_id === $data->user->ID ) : ?>
-						<a href="<?php echo esc_url( get_permalink( wpum_get_core_page_id( 'account' ) ) ); ?>"><small><?php esc_html_e( '( Edit account )' ); ?></small></a>
-					<?php endif; ?>
-				</h2>
-			</div>
-			<div id="header-description-container">
-				<?php echo wpautop( get_user_meta( $data->user->ID, 'description', true ) ); ?>
-			</div>
-		</div>
-	</div>
-
-</div>
