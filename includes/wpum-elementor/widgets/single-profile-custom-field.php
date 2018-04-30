@@ -196,19 +196,22 @@ class WPUM_Elementor_Single_Profile_Custom_Field extends Widget_Base {
 		$user_id  = wpum_get_queried_user_id();
 		$user     = get_user_by( 'id', $user_id );
 		$field    = new \WPUM_Field( $settings['custom_field'] );
-		$field->set_user_meta( $user_id );
 
-		WPUM()->templates
-			->set_template_data(
-				[
-					'user'            => $user,
-					'field'           => $field,
-					'label'           => $settings['show_label'],
-					'inline'          => $settings['show_inline'],
-					'settings'        => $settings
-				]
-			)
-			->get_template_part( 'elementor/custom-field' );
+		if( $field->exists() ) {
+			$field->set_user_meta( $user_id );
+
+			WPUM()->templates
+				->set_template_data(
+					[
+						'user'            => $user,
+						'field'           => $field,
+						'label'           => $settings['show_label'],
+						'inline'          => $settings['show_inline'],
+						'settings'        => $settings
+					]
+				)
+				->get_template_part( 'elementor/custom-field' );
+		}
 
 	}
 
