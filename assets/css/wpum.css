@@ -980,9 +980,9 @@
 #header-details-container {
   padding: 10px 10px 10px 30px; }
 
-#header-name-container h2 {
+#header-name-container h2, #wpum-single-profile-displayname h2 {
   font-size: 24px; }
-  #header-name-container h2 small {
+  #header-name-container h2 small, #wpum-single-profile-displayname h2 small {
     font-size: 14px;
     text-decoration: underline; }
 
@@ -1143,6 +1143,17 @@
   padding: 5px;
   background-color: #fff;
   border: 1px solid #eee; }
+
+#wpum-single-profile-avatar img {
+  padding: 5px;
+  background-color: #fff;
+  border: 1px solid #eee; }
+
+.wpum-custom-field p {
+  margin-bottom: 0.2em; }
+
+.wpum-elementor-label-inline {
+  display: inline-block; }
 
 #wpum-user-directory {
   margin-bottom: 1em; }
