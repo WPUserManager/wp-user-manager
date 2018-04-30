@@ -1,6 +1,7 @@
 <?php
 /**
- * Single profile avatar details element.
+ * Single profile navigation tabs.
+ * Displays the tabs for the profiles.
  *
  * @package     wp-user-manager
  * @copyright   Copyright (c) 2018, Alessandro Tesoro
@@ -11,10 +12,7 @@ namespace Elementor;
 // Exit if accessed directly
 if ( ! defined( 'ABSPATH' ) ) exit;
 
-/**
- * Single profile avatar.
- */
-class WPUM_Elementor_Single_Profile_Avatar extends Widget_Base {
+class WPUM_Elementor_Single_Profile_Navigation_Tabs extends Widget_Base {
 
 	/**
 	 * Retrieve widget name.
@@ -23,7 +21,7 @@ class WPUM_Elementor_Single_Profile_Avatar extends Widget_Base {
 	 * @return string Widget name.
 	 */
     public function get_name() {
-        return 'wpum-single-profile-avatar';
+        return 'wpum-single-profile-navigation-tabs';
     }
 
     /**
@@ -33,7 +31,7 @@ class WPUM_Elementor_Single_Profile_Avatar extends Widget_Base {
 	 * @return string Widget title.
 	 */
     public function get_title() {
-        return esc_html__( 'Profile Avatar' );
+        return esc_html__( 'Profile Navigation Tabs' );
     }
 
     /**
@@ -65,25 +63,6 @@ class WPUM_Elementor_Single_Profile_Avatar extends Widget_Base {
 	 */
 	protected function _register_controls() {
 
-		$this->start_controls_section(
-            'avatar_settings',
-            [
-                'label' => esc_html__( 'Avatar Settings' ),
-            ]
-		);
-
-		$this->add_control(
-            'avatar_size',
-            [
-                'label'     => esc_html__( 'Avatar size in px' ),
-                'type'      => Controls_Manager::NUMBER,
-                'default'   => 128,
-                'separator' => 'before',
-            ]
-		);
-
-		$this->end_controls_section();
-
 	}
 
 	/**
@@ -100,15 +79,14 @@ class WPUM_Elementor_Single_Profile_Avatar extends Widget_Base {
 		WPUM()->templates
 			->set_template_data( [
 				'user'            => $user,
-				'size'            => empty( $settings['avatar_size'] ) ? 128 : absint( $settings['avatar_size'] ),
 				'current_user_id' => get_current_user_id(),
+				'tabs'            => wpum_get_registered_profile_tabs(),
 				'settings'        => $settings
 			] )
-			->get_template_part( 'elementor/avatar' );
-
+			->get_template_part( 'elementor/navigation' );
 
 	}
 
 }
 
-Plugin::instance()->widgets_manager->register_widget_type( new WPUM_Elementor_Single_Profile_Avatar() );
+Plugin::instance()->widgets_manager->register_widget_type( new WPUM_Elementor_Single_Profile_Navigation_Tabs() );

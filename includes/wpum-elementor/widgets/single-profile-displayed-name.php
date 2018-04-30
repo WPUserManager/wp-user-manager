@@ -81,8 +81,9 @@ class WPUM_Elementor_Single_Profile_Displayed_Name extends Widget_Base {
 
 		WPUM()->templates
 			->set_template_data( [
-				'user'             => $user,
-				'current_user_id'  => get_current_user_id()
+				'user'            => $user,
+				'current_user_id' => get_current_user_id(),
+				'settings'        => $settings
 			] )
 			->get_template_part( 'elementor/displayed-name' );
 

@@ -81,7 +81,8 @@ class WPUM_Elementor_Single_Profile_Cover extends Widget_Base {
 		WPUM()->templates
 			->set_template_data( [
 				'user'            => $user,
-				'current_user_id' => get_current_user_id()
+				'current_user_id' => get_current_user_id(),
+				'settings'        => $settings
 			] )
 			->get_template_part( 'profiles/cover' );
 
