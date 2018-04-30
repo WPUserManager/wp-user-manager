@@ -36,7 +36,7 @@ class WPUM_Elementor {
     		wp_enqueue_style( 'wpum-elementor', WPUM_PLUGIN_URL . 'assets/css/admin/logo-font.css' );
 		} );
 		add_action( 'elementor/preview/enqueue_styles', function() {
-			wp_enqueue_script( 'wpum-preview-script', WPUM_PLUGIN_URL . 'assets/js/admin/elementor-preview.js' , array(), WPUM_VERSION, true );
+			wp_enqueue_script( 'wpum-preview-script', WPUM_PLUGIN_URL . 'assets/js/admin/elementor-preview.min.js' , array(), WPUM_VERSION, true );
 		} );
 		$this->register_tab_visibility_control();
 	}

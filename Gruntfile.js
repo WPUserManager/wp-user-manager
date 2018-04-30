@@ -53,7 +53,8 @@ module.exports = function( grunt ) {
 					'assets/js/admin/admin-email-customizer-preview.min.js': ['assets/js/src/admin/admin-email-customizer-preview.js'],
 					'assets/js/admin/admin-email-customizer-controls.min.js': ['assets/js/src/admin/admin-email-customizer-controls.js'],
 					'assets/js/admin/admin-email-customizer.min.js': ['assets/js/src/admin/admin-email-customizer.js'],
-					'assets/js/admin/admin-menus.min.js': ['assets/js/src/admin/admin-menus.js']
+					'assets/js/admin/admin-menus.min.js': ['assets/js/src/admin/admin-menus.js'],
+					'assets/js/admin/elementor-preview.min.js': ['assets/js/src/admin/elementor-preview.js']
 				},
 				options: {
 					banner: '/*! <%= pkg.title %> - v<%= pkg.version %>\n' +

@@ -76,8 +76,6 @@ class WPUM_Elementor_Single_Profile_Tabs_Content extends Widget_Base {
 		$user       = get_user_by( 'id', $user_id );
 		$active_tab = wpum_get_active_profile_tab();
 
-		print_r( $this->get_settings() );
-
 		WPUM()->templates
 			->set_template_data( [
 				'user'     => $user,
