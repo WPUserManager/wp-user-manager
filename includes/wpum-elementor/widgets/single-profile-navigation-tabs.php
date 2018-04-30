@@ -79,7 +79,6 @@ class WPUM_Elementor_Single_Profile_Navigation_Tabs extends Widget_Base {
 		WPUM()->templates
 			->set_template_data( [
 				'user'            => $user,
-				'current_user_id' => get_current_user_id(),
 				'tabs'            => wpum_get_registered_profile_tabs(),
 				'settings'        => $settings
 			] )

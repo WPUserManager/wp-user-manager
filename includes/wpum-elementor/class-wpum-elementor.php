@@ -49,6 +49,7 @@ class WPUM_Elementor {
 		require_once WPUM_PLUGIN_DIR . 'includes/wpum-elementor/widgets/single-profile-displayed-name.php';
 		require_once WPUM_PLUGIN_DIR . 'includes/wpum-elementor/widgets/single-profile-custom-field.php';
 		require_once WPUM_PLUGIN_DIR . 'includes/wpum-elementor/widgets/single-profile-navigation-tabs.php';
+		require_once WPUM_PLUGIN_DIR . 'includes/wpum-elementor/widgets/single-profile-tabs-content.php';
 
 	}
 

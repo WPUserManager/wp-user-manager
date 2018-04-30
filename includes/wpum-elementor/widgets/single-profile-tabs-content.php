@@ -1,6 +1,6 @@
 <?php
 /**
- * Single profile cover element.
+ * Single profile navigation tabs content.
  *
  * @package     wp-user-manager
  * @copyright   Copyright (c) 2018, Alessandro Tesoro
@@ -11,10 +11,7 @@ namespace Elementor;
 // Exit if accessed directly
 if ( ! defined( 'ABSPATH' ) ) exit;
 
-/**
- * Single profile cover.
- */
-class WPUM_Elementor_Single_Profile_Cover extends Widget_Base {
+class WPUM_Elementor_Single_Profile_Tabs_Content extends Widget_Base {
 
 	/**
 	 * Retrieve widget name.
@@ -23,7 +20,7 @@ class WPUM_Elementor_Single_Profile_Cover extends Widget_Base {
 	 * @return string Widget name.
 	 */
     public function get_name() {
-        return 'wpum-single-profile-cover';
+        return 'wpum-single-profile-tabs-content';
     }
 
     /**
@@ -33,7 +30,7 @@ class WPUM_Elementor_Single_Profile_Cover extends Widget_Base {
 	 * @return string Widget title.
 	 */
     public function get_title() {
-        return esc_html__( 'Profile Cover Image' );
+        return esc_html__( 'Profile Tabs Content' );
     }
 
     /**
@@ -74,20 +71,20 @@ class WPUM_Elementor_Single_Profile_Cover extends Widget_Base {
 	 */
 	protected function render() {
 
-		$settings = $this->get_settings_for_display();
-		$user_id  = wpum_get_queried_user_id();
-		$user     = get_user_by( 'id', $user_id );
+		$settings   = $this->get_settings_for_display();
+		$user_id    = wpum_get_queried_user_id();
+		$user       = get_user_by( 'id', $user_id );
+		$active_tab = wpum_get_active_profile_tab();
 
 		WPUM()->templates
 			->set_template_data( [
-				'user'            => $user,
-				'settings'        => $settings
+				'user'     => $user,
+				'settings' => $settings
 			] )
-			->get_template_part( 'profiles/cover' );
-
+			->get_template_part( "profiles/{$active_tab}" );
 
 	}
 
 }
 
-Plugin::instance()->widgets_manager->register_widget_type( new WPUM_Elementor_Single_Profile_Cover() );
+Plugin::instance()->widgets_manager->register_widget_type( new WPUM_Elementor_Single_Profile_Tabs_Content() );

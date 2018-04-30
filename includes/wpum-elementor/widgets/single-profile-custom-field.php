@@ -202,7 +202,6 @@ class WPUM_Elementor_Single_Profile_Custom_Field extends Widget_Base {
 			->set_template_data(
 				[
 					'user'            => $user,
-					'current_user_id' => get_current_user_id(),
 					'field'           => $field,
 					'label'           => $settings['show_label'],
 					'inline'          => $settings['show_inline'],

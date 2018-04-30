@@ -101,7 +101,6 @@ class WPUM_Elementor_Single_Profile_Avatar extends Widget_Base {
 			->set_template_data( [
 				'user'            => $user,
 				'size'            => empty( $settings['avatar_size'] ) ? 128 : absint( $settings['avatar_size'] ),
-				'current_user_id' => get_current_user_id(),
 				'settings'        => $settings
 			] )
 			->get_template_part( 'elementor/avatar' );
