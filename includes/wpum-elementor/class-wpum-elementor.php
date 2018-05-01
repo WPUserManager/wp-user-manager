@@ -108,32 +108,11 @@ class WPUM_Elementor {
 			return false;
 		}
 
-		add_action( 'elementor/documents/register_controls', function( $element ) {
+		$this->register_simulation_control();
 
-			$element->start_controls_section(
-				'simulate_profile_tab',
-				[
-					'label' => esc_html__( 'Profile tab simulation' ),
-					'tab' => \Elementor\Controls_Manager::TAB_SETTINGS
-				]
-			);
+		/*
+		add_action( 'elementor/element/before_section_start', function( $element, $section_id, $args ) use( $non_allowed_elements ) {
 
-			$element->add_control(
-				'simulated_tab',
-				[
-					'label'       => esc_html__( 'Simulate profile tab' ),
-					'label_block' => true,
-					'description' => esc_html__( 'Select a profile tab, to simulate it\'s activation. This allows you to add elements specific to that profile tab.' ),
-					'type'        => \Elementor\Controls_Manager::SELECT,
-					'options'     => $this->get_registered_profile_tabs()
-				]
-			);
-
-			$element->end_controls_section();
-
-		}, 10 );
-
-		add_action( 'elementor/element/before_section_start', function( $element, $section_id, $args ) {
 			if ( '_section_style' === $section_id ) {
 
 				$element->start_controls_section(
@@ -159,7 +138,44 @@ class WPUM_Elementor {
 				$element->end_controls_section();
 
 			}
-		}, 10, 3 );
+		}, 10, 3 );*/
+
+	}
+
+	/**
+	 * Register the profile tag simulation control.
+	 *
+	 * When a tab is switched, the preview is refreshed and it tells WPUM
+	 * to show a different profile tab.
+	 *
+	 * @return void
+	 */
+	private function register_simulation_control() {
+
+		add_action( 'elementor/documents/register_controls', function( $element ) {
+
+			$element->start_controls_section(
+				'simulate_profile_tab',
+				[
+					'label' => esc_html__( 'Profile tab simulation' ),
+					'tab' => \Elementor\Controls_Manager::TAB_SETTINGS
+				]
+			);
+
+			$element->add_control(
+				'simulated_tab',
+				[
+					'label'       => esc_html__( 'Simulate profile tab' ),
+					'label_block' => true,
+					'description' => esc_html__( 'Select a profile tab, to simulate it\'s activation. This allows you to add elements specific to that profile tab.' ),
+					'type'        => \Elementor\Controls_Manager::SELECT,
+					'options'     => $this->get_registered_profile_tabs()
+				]
+			);
+
+			$element->end_controls_section();
+
+		}, 10 );
 
 	}
 
