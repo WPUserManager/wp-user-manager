@@ -60,6 +60,7 @@ class WPUM_Elementor {
 		require_once WPUM_PLUGIN_DIR . 'includes/wpum-elementor/widgets/single-profile-navigation-tabs.php';
 		require_once WPUM_PLUGIN_DIR . 'includes/wpum-elementor/widgets/single-profile-tabs-content.php';
 		require_once WPUM_PLUGIN_DIR . 'includes/wpum-elementor/widgets/single-profile-posts.php';
+		require_once WPUM_PLUGIN_DIR . 'includes/wpum-elementor/widgets/single-profile-comments.php';
 
 	}
 
