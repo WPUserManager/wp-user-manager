@@ -192,21 +192,25 @@ class WPUM_Elementor {
 		add_action( 'elementor/widget/render_content', function( $content, $widget ) {
 
 			// Bail out if not on the profile page.
-			$page_id = get_the_ID();
-			if( $page_id && absint( $page_id ) !== absint( wpum_get_core_page_id( 'profile' ) ) ) {
-				return $content;
-			}
+			if( ! \Elementor\Plugin::$instance->editor->is_edit_mode() ) {
 
-			// Retrieve registered visibility setting.
-			$settings   = $widget->get_settings();
-			$visibility = isset( $settings[ 'selected_visible_tabs' ] ) ? $settings[ 'selected_visible_tabs' ] : false;
+				$page_id = get_the_ID();
+				if( $page_id && absint( $page_id ) !== absint( wpum_get_core_page_id( 'profile' ) ) ) {
+					return $content;
+				}
 
-			if( $visibility && is_array( $visibility ) && ! empty( $visibility ) ) {
+				// Retrieve registered visibility setting.
+				$settings   = $widget->get_settings();
+				$visibility = isset( $settings[ 'selected_visible_tabs' ] ) ? $settings[ 'selected_visible_tabs' ] : false;
 
-				$active_profile_tab = wpum_get_active_profile_tab();
+				if( $visibility && is_array( $visibility ) && ! empty( $visibility ) ) {
 
-				if( ! in_array( $active_profile_tab, $visibility ) ) {
-					return false;
+					$active_profile_tab = wpum_get_active_profile_tab();
+
+					if( ! in_array( $active_profile_tab, $visibility ) ) {
+						return false;
+					}
+
 				}
 
 			}
