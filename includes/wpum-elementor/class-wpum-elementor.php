@@ -110,10 +110,11 @@ class WPUM_Elementor {
 
 		$this->register_simulation_control();
 
-		/*
-		add_action( 'elementor/element/before_section_start', function( $element, $section_id, $args ) use( $non_allowed_elements ) {
-
-			if ( '_section_style' === $section_id ) {
+		add_action( 'elementor/element/after_section_end', function( $element, $section_id, $args ) {
+			if (
+				'section' === $element->get_name() && 'section_advanced' === $section_id
+				|| 'column' === $element->get_name() && 'section_advanced' === $section_id
+			) {
 
 				$element->start_controls_section(
 					'profile_tab_visibility_section',
@@ -126,9 +127,9 @@ class WPUM_Elementor {
 				$element->add_control(
 					'selected_visible_tabs',
 					[
-						'label'       => esc_html__( 'Profile tab visibility' ),
+						'label'       => esc_html__( 'Select profile tabs' ),
 						'label_block' => true,
-						'description' => esc_html__( 'This element will be displayed only for the selected tabs. Leave blank for all.' ),
+						'description' => esc_html__( 'Select on which profile tabs this element should be displayed.' ),
 						'type'        => \Elementor\Controls_Manager::SELECT2,
 						'multiple'    => true,
 						'options'     => $this->get_registered_profile_tabs()
@@ -138,7 +139,7 @@ class WPUM_Elementor {
 				$element->end_controls_section();
 
 			}
-		}, 10, 3 );*/
+		}, 10, 3 );
 
 	}
 
