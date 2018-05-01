@@ -192,27 +192,37 @@ class WPUM_Elementor {
 		add_action( 'elementor/widget/render_content', function( $content, $widget ) {
 
 			// Bail out if not on the profile page.
+			$page_id = get_the_ID();
+			if( $page_id && absint( $page_id ) !== absint( wpum_get_core_page_id( 'profile' ) ) ) {
+				return $content;
+			}
+
 			if( ! \Elementor\Plugin::$instance->editor->is_edit_mode() ) {
-
-				$page_id = get_the_ID();
-				if( $page_id && absint( $page_id ) !== absint( wpum_get_core_page_id( 'profile' ) ) ) {
-					return $content;
-				}
-
 				// Retrieve registered visibility setting.
 				$settings   = $widget->get_settings();
 				$visibility = isset( $settings[ 'selected_visible_tabs' ] ) ? $settings[ 'selected_visible_tabs' ] : false;
 
+				// Trigger the visibility on the frontend.
 				if( $visibility && is_array( $visibility ) && ! empty( $visibility ) ) {
-
 					$active_profile_tab = wpum_get_active_profile_tab();
-
 					if( ! in_array( $active_profile_tab, $visibility ) ) {
 						return false;
 					}
-
 				}
 
+			}
+
+			// Adjust visibility within the editor mode.
+			if( \Elementor\Plugin::instance()->editor->is_edit_mode() ) {
+				$page                   = \Elementor\PageSettings\Manager::get_page( $page_id );
+				$editor_active_tab      = $page->get_settings( 'simulated_tab' );
+				$editor_widget_settings = $widget->get_settings();
+				$editor_visibility      = isset( $editor_widget_settings[ 'selected_visible_tabs' ] ) ? $editor_widget_settings[ 'selected_visible_tabs' ]: false;
+				if( $widget->get_name() == 'image-box' ) {
+					if( ! in_array( $editor_active_tab, $editor_visibility ) ) {
+						return false;
+					}
+				}
 			}
 
 			return $content;

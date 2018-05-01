@@ -1,6 +1,16 @@
 jQuery(document).ready(function ($) {
-	elementor.pageSettings.addChangeCallback('simulated_tab', function (newValue) {
-		elementor.saver.saveEditor();
-		elementor.reloadPreview();
-	});
+
+	if (typeof elementor != "undefined" && typeof elementor.settings.page != "undefined") {
+		elementor.pageSettings.addChangeCallback('simulated_tab', function (newValue) {
+			elementor.saver.update({
+				onSuccess: function () {
+					elementor.reloadPreview();
+					elementor.once('preview:loaded', function () {
+						elementor.getPanelView().setPage('page_settings');
+					});
+				}
+			});
+		});
+	}
+
 });
