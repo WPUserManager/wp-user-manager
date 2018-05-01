@@ -59,6 +59,7 @@ class WPUM_Elementor {
 		require_once WPUM_PLUGIN_DIR . 'includes/wpum-elementor/widgets/single-profile-custom-field.php';
 		require_once WPUM_PLUGIN_DIR . 'includes/wpum-elementor/widgets/single-profile-navigation-tabs.php';
 		require_once WPUM_PLUGIN_DIR . 'includes/wpum-elementor/widgets/single-profile-tabs-content.php';
+		require_once WPUM_PLUGIN_DIR . 'includes/wpum-elementor/widgets/single-profile-posts.php';
 
 	}
 
@@ -113,9 +114,10 @@ class WPUM_Elementor {
 			return false;
 		}
 
-		$this->register_simulation_control();
+		//$this->register_simulation_control();
 
 		add_action( 'elementor/element/after_section_end', function( $element, $section_id, $args ) {
+
 			if ( '_section_style' === $section_id ) {
 
 				$element->start_controls_section(
