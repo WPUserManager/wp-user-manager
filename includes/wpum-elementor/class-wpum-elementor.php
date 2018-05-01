@@ -213,17 +213,17 @@ class WPUM_Elementor {
 			}
 
 			// Adjust visibility within the editor mode.
-			if( \Elementor\Plugin::instance()->editor->is_edit_mode() ) {
+			/*if( \Elementor\Plugin::instance()->editor->is_edit_mode() ) {
 				$page                   = \Elementor\PageSettings\Manager::get_page( $page_id );
 				$editor_active_tab      = $page->get_settings( 'simulated_tab' );
 				$editor_widget_settings = $widget->get_settings();
 				$editor_visibility      = isset( $editor_widget_settings[ 'selected_visible_tabs' ] ) ? $editor_widget_settings[ 'selected_visible_tabs' ]: false;
-				if( $widget->get_name() == 'image-box' ) {
-					if( ! in_array( $editor_active_tab, $editor_visibility ) ) {
-						return false;
-					}
+
+				if( is_array( $editor_visibility ) && ! empty( $editor_visibility ) ) {
+					return '<div class="wpum-profile-visibility-indicator"><span>' . $editor_visibility[0] . '</span>' . $content . '</div>';
 				}
-			}
+
+			}*/
 
 			return $content;
 		}, 10, 2 );
