@@ -58,46 +58,6 @@ class WPUM_Admin_Notices {
 			WPUM()->notices->register_notice( 'wpum_rating', 'success', $rating_message );
 		}
 
-		$this->page_builder_notice();
-
-	}
-
-	/**
-	 * Inform the user about integration with a page builder within the profile page.
-	 *
-	 * @return void
-	 */
-	public function page_builder_notice() {
-
-		global $pagenow;
-
-		if(
-			wpum_is_elementor_installed()
-			&& current_user_can( 'manage_options' )
-			&& isset( $_GET['post'] )
-			&& 'page' === get_post_type( $_GET['post'] )
-			&& absint( $_GET['post'] ) == wpum_get_core_page_id( 'profile' ) ) {
-
-				add_action( 'admin_head', 'wpum_custom_admin_notice_inline_css' );
-
-				$message = '
-				<div class="wpum-notice-inner">
-					<div class="wpum-notice-icon">
-						<img src="' . WPUM_PLUGIN_URL . '/assets/images/logo.svg">
-					</div>
-					<div class="wpum-notice-content">
-						<h3>' . esc_html__( 'WP User Manager & Elementor Page Builder' ) . '</h3>
-						<p>' . esc_html__( 'WPUM gives you complete freedom over your members profile page layout thanks to the integration with the Elementor plugin.' ) . '</p>
-					</div>
-					<div class="wpum-install-now">
-						<a href="#" class="button">Read documentation</a>
-					</div>
-				</div>';
-
-				WPUM()->notices->register_notice( 'wpum_profile_page_builder', 'info', $message, [ 'class' => 'wpum-notice' ] );
-
-		}
-
 	}
 
 }
