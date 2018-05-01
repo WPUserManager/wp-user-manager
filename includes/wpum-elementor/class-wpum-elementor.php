@@ -30,6 +30,7 @@ class WPUM_Elementor {
 	 * @return void
 	 */
 	public function init() {
+
 		add_action( 'elementor/elements/categories_registered', [ $this, 'add_new_category' ] );
 		add_action( 'elementor/widgets/widgets_registered', [ $this, 'load_elements' ] );
 		add_action( 'elementor/editor/before_enqueue_scripts', function() {
@@ -38,7 +39,11 @@ class WPUM_Elementor {
 		add_action( 'elementor/preview/enqueue_styles', function() {
 			wp_enqueue_script( 'wpum-preview-script', WPUM_PLUGIN_URL . 'assets/js/admin/elementor-preview.min.js' , array(), WPUM_VERSION, true );
 		} );
+
 		$this->register_tab_visibility_control();
+
+		$this->detect_visibility_for_widgets();
+
 	}
 
 	/**
@@ -111,10 +116,7 @@ class WPUM_Elementor {
 		$this->register_simulation_control();
 
 		add_action( 'elementor/element/after_section_end', function( $element, $section_id, $args ) {
-			if (
-				'section' === $element->get_name() && 'section_advanced' === $section_id
-				|| 'column' === $element->get_name() && 'section_advanced' === $section_id
-			) {
+			if ( '_section_style' === $section_id ) {
 
 				$element->start_controls_section(
 					'profile_tab_visibility_section',
@@ -177,6 +179,40 @@ class WPUM_Elementor {
 			$element->end_controls_section();
 
 		}, 10 );
+
+	}
+
+	/**
+	 * Detect the visibility assigned to the widget.
+	 *
+	 * @return string
+	 */
+	public function detect_visibility_for_widgets() {
+
+		add_action( 'elementor/widget/render_content', function( $content, $widget ) {
+
+			// Bail out if not on the profile page.
+			$page_id = get_the_ID();
+			if( $page_id && absint( $page_id ) !== absint( wpum_get_core_page_id( 'profile' ) ) ) {
+				return $content;
+			}
+
+			// Retrieve registered visibility setting.
+			$settings   = $widget->get_settings();
+			$visibility = isset( $settings[ 'selected_visible_tabs' ] ) ? $settings[ 'selected_visible_tabs' ] : false;
+
+			if( $visibility && is_array( $visibility ) && ! empty( $visibility ) ) {
+
+				$active_profile_tab = wpum_get_active_profile_tab();
+
+				if( ! in_array( $active_profile_tab, $visibility ) ) {
+					return false;
+				}
+
+			}
+
+			return $content;
+		}, 10, 2 );
 
 	}
 
