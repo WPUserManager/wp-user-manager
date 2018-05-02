@@ -22,16 +22,16 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 
 	<?php do_action( 'wpum_before_user_directory' ); ?>
 
-		<form action="<?php the_permalink(); ?>" method="POST" name="wpum-directory-search-form">
-			<?php
-				WPUM()->templates
-					->set_template_data( $data )
-					->get_template_part( 'directory/search-form' );
-				WPUM()->templates
-					->set_template_data( $data )
-					->get_template_part( 'directory/top-bar' );
-			?>
-		</form>
+	<form action="<?php the_permalink(); ?>" method="POST" name="wpum-directory-search-form">
+		<?php
+			WPUM()->templates
+				->set_template_data( $data )
+				->get_template_part( 'directory/search-form' );
+			WPUM()->templates
+				->set_template_data( $data )
+				->get_template_part( 'directory/top-bar' );
+		?>
+	</form>
 
 	<div id="wpum-directory-users-list">
 

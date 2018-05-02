@@ -1195,4 +1195,12 @@
 #directory-avatar img {
   vertical-align: middle; }
 
+.wpum-directory-single-user .wpum-description {
+  font-size: 13px;
+  margin: 0; }
+.wpum-directory-single-user .wpum-name {
+  margin: 0; }
+.wpum-directory-single-user .wpum-meta {
+  text-align: right; }
+
 /*# sourceMappingURL=wpum.css.map */
