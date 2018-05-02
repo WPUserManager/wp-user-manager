@@ -38,6 +38,9 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 		<?php if( is_array( $data->results ) && ! empty( $data->results ) ) : ?>
 			<?php foreach( $data->results as $user ) : ?>
 				<?php
+
+					$user_template = ( $data->user_template !== 'default' || ! $data->user_template ) ? $user_template : 'user';
+
 					WPUM()->templates
 						->set_template_data( $user )
 						->get_template_part( 'directory/single', 'user' );

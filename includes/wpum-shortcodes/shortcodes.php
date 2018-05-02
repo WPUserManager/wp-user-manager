@@ -507,7 +507,7 @@ function wpum_directory( $atts, $content = null ) {
 
 	if( $check_directory == 'publish' ) {
 
-		$directory_template = ( $directory_template !== 'default' ) ? $directory_template : 'directory';
+		$directory_template = ( $directory_template !== 'default' || ! $directory_template ) ? $directory_template : 'directory';
 
 		WPUM()->templates
 			->set_template_data( [
