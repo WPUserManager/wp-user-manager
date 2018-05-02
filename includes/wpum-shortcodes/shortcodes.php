@@ -503,7 +503,20 @@ function wpum_directory( $atts, $content = null ) {
 		$args['exclude'] = explode(',', $excluded_users );
 	}
 
+	// Update pagination and offset users.
+	$paged  = ( get_query_var('paged') ) ? get_query_var('paged') : 1;
+	if( $paged == 1 ) {
+		$offset = 0;
+	} else {
+		$offset = ( $paged -1 ) * $profiles_per_page;
+	}
+
+	$args['offset'] = $offset;
+
 	$user_query = new WP_User_Query( $args );
+
+	$total_users = $user_query->get_total();
+	$total_pages = ceil( $total_users / $profiles_per_page );
 
 	if( $check_directory == 'publish' ) {
 
@@ -518,6 +531,8 @@ function wpum_directory( $atts, $content = null ) {
 				'total'               => $user_query->get_total(),
 				'template'            => $directory_template,
 				'user_template'       => $directory_user_template,
+				'paged'               => $paged,
+				'total_pages'         => $total_pages
 			] )
 			->get_template_part( $directory_template );
 	}
