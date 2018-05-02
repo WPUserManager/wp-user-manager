@@ -348,7 +348,7 @@ class WPUM_Options_Panel {
 				array(
 					'id'      => 'login_redirect',
 					'name'    => __( 'After login', 'wpum' ),
-					'desc'    => __('Select the page where you want to redirect users after they login.', 'wpum'),
+					'desc'    => __( 'Select the page where you want to redirect users after they login. Leave blank to redirect users to the previously visited page.', 'wpum'),
 					'type'    => 'multiselect',
 					'options' => wpum_get_pages()
 				),

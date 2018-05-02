@@ -197,10 +197,17 @@ class WPUM_Form_Login extends WPUM_Form {
 				'remember'      => $values['login']['remember'] ? true : false
 			];
 
+			// Detect if a specific redirect has been set.
 			$referrer = isset( $_GET['redirect_to'] ) ? esc_url( $_GET['redirect_to'] ): false;
 
+			// If no redirect and there's a referrer and the login redirect option is blank, then redirect to the referrer.
 			if( ! $referrer && isset( $_POST['submit_referrer'] ) && ! empty( $_POST['submit_referrer'] ) && ! wpum_get_login_redirect() ) {
 				$referrer = esc_url( $_POST['submit_referrer'] );
+			}
+
+			// If no redirection at all, redirect to the login page which will show a message.
+			if( ! $referrer || empty( $referrer ) ) {
+				$referrer = get_permalink( wpum_get_core_page_id( 'login' ) );
 			}
 
 			$user = wp_signon( $creds );
