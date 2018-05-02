@@ -488,7 +488,9 @@ function wpum_directory( $atts, $content = null ) {
 	$directory_user_template = carbon_get_post_meta( $directory_id, 'directory_user_template' );
 
 	// Modify the number argument if changed from the search form.
-	if( isset( $_GET['amount'] ) && ! empty( $_GET['amount'] ) ) {
+	if( isset( $_POST['amount'] ) && ! empty( $_POST['amount'] ) ) {
+		$profiles_per_page = absint( $_POST['amount'] );
+	} elseif( isset( $_GET['amount'] ) && ! empty( $_GET['amount'] ) ) {
 		$profiles_per_page = absint( $_GET['amount'] );
 	}
 
