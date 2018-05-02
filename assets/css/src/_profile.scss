@@ -255,26 +255,3 @@
 	border: 1px solid #eee;
 }
 
-// Elementor Widgets Styling
-#wpum-single-profile-avatar {
-	img {
-		padding: 5px;
-		background-color: #fff;
-		border: 1px solid #eee;
-	}
-}
-
-
-#wpum-single-profile-displayname {
-	@extend #header-name-container;
-}
-
-.wpum-custom-field {
-	p {
-		margin-bottom: 0.2em;
-	}
-}
-
-.wpum-elementor-label-inline {
-	display: inline-block;
-}
