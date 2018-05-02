@@ -39,11 +39,11 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 			<?php foreach( $data->results as $user ) : ?>
 				<?php
 
-					$user_template = ( $data->user_template !== 'default' || ! $data->user_template ) ? $user_template : 'user';
+					$user_template = ( $data->user_template !== 'default' || ! $data->user_template ) ? $data->user_template : 'user';
 
 					WPUM()->templates
 						->set_template_data( $user )
-						->get_template_part( 'directory/single', 'user' );
+						->get_template_part( 'directory/single', $user_template );
 				?>
 			<?php endforeach; ?>
 		<?php else : ?>
