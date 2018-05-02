@@ -36,6 +36,7 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 	<div id="wpum-directory-users-list">
 
 		<?php if( is_array( $data->results ) && ! empty( $data->results ) ) : ?>
+
 			<?php foreach( $data->results as $user ) : ?>
 				<?php
 
@@ -46,7 +47,18 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 						->get_template_part( 'directory/single', $user_template );
 				?>
 			<?php endforeach; ?>
+
 		<?php else : ?>
+
+			<?php
+
+				WPUM()->templates
+					->set_template_data( [
+						'message' => esc_html__( 'No users found.' ),
+					] )
+					->get_template_part( 'messages/general', 'info' );
+
+			?>
 
 		<?php endif; ?>
 
