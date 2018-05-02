@@ -145,18 +145,6 @@ class WPUM_Directories_Editor {
 					) ),
 			) );
 
-		if( wpum_is_elementor_installed() ) {
-			Container::make( 'post_meta', esc_html__( 'Profile card template' ) )
-			->where( 'post_type', '=', 'wpum_directory' )
-			->set_context( 'side' )
-			->set_priority( 'default' )
-			->add_fields( array(
-				Field::make( 'select', 'directory_card_template', esc_html__( 'Card template' ) )
-					->set_help_text( esc_html__( 'Select a card template created with the Elementor plugin.' ) )
-					->add_options( $this->get_elementor_card_templates() ),
-			) );
-		}
-
 	}
 
 	/**
