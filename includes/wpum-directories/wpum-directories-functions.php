@@ -37,6 +37,7 @@ function wpum_get_directory_amount_modifier() {
 
 	$amounts = [
 		''   => '',
+		'1'  => '1',
 		'10' => '10',
 		'15' => '15',
 		'20' => '20',

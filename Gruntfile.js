@@ -15,11 +15,11 @@ module.exports = function( grunt ) {
 					' * Licensed GPLv2+' +
 					' */\n'
 			},
-			wp_user_manager_admin: {
+			wp_user_manager: {
 				src: [
-					'assets/js/src/wp_user_manager_admin.js'
+					'assets/js/src/wp-user-manager.js'
 				],
-				dest: 'assets/js/wp_user_manager_admin.js'
+				dest: 'assets/js/wp-user-manager.js'
 			}
 		},
 		jshint: {
@@ -54,7 +54,8 @@ module.exports = function( grunt ) {
 					'assets/js/admin/admin-email-customizer-controls.min.js': ['assets/js/src/admin/admin-email-customizer-controls.js'],
 					'assets/js/admin/admin-email-customizer.min.js': ['assets/js/src/admin/admin-email-customizer.js'],
 					'assets/js/admin/admin-menus.min.js': ['assets/js/src/admin/admin-menus.js'],
-					'assets/js/admin/elementor-preview.min.js': ['assets/js/src/admin/elementor-preview.js']
+					'assets/js/admin/elementor-preview.min.js': ['assets/js/src/admin/elementor-preview.js'],
+					'assets/js/wp-user-manager.min.js': ['assets/js/src/wp-user-manager.js']
 				},
 				options: {
 					banner: '/*! <%= pkg.title %> - v<%= pkg.version %>\n' +

@@ -16,6 +16,8 @@
 // Exit if accessed directly
 if ( ! defined( 'ABSPATH' ) ) exit;
 
+print_r( $_POST );
+
 ?>
 
 <div id="wpum-user-directory">
