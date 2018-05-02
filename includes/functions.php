@@ -228,7 +228,7 @@ function wpum_get_login_label() {
 function wpum_get_login_redirect() {
 
 	$redirect_to = wpum_get_option( 'login_redirect' );
-	$url         = home_url();
+	$url         = false;
 
 	if( ! empty( $redirect_to ) && is_array( $redirect_to ) ) {
 		$url = get_permalink( $redirect_to[0] );

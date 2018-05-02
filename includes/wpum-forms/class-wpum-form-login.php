@@ -198,7 +198,8 @@ class WPUM_Form_Login extends WPUM_Form {
 			];
 
 			$referrer = isset( $_GET['redirect_to'] ) ? esc_url( $_GET['redirect_to'] ): false;
-			if( ! $referrer && isset( $_POST['submit_referrer'] ) && ! empty( $_POST['submit_referrer'] ) ) {
+
+			if( ! $referrer && isset( $_POST['submit_referrer'] ) && ! empty( $_POST['submit_referrer'] ) && ! wpum_get_login_redirect() ) {
 				$referrer = esc_url( $_POST['submit_referrer'] );
 			}
 
