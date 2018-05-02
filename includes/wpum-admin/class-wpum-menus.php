@@ -163,6 +163,10 @@ class WPUM_Menus {
 				unset( $items[ $key ] );
 			}
 
+			if( $is_logout && ! is_user_logged_in() ) {
+				unset( $items[ $key ] );
+			}
+
 		}
 
 		return $items;

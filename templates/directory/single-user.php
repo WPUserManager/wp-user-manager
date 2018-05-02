@@ -21,18 +21,15 @@ $user = $data->data;
 ?>
 <div class="wpum-directory-single-user">
 	<div class="wpum-row">
-		<div class="wpum-col-xs" id="directory-avatar">
+		<div class="wpum-col-xs-1" id="directory-avatar">
 			<a href="<?php echo esc_url( wpum_get_profile_url( $user ) ); ?>">
 				<?php echo get_avatar( $user->ID, 50 ); ?>
 			</a>
 		</div>
-		<div class="wpum-col-xs">
+		<div class="wpum-col-xs-11">
 			<p>
 				<a href="<?php echo esc_url( wpum_get_profile_url( $user ) ); ?>"><?php echo esc_html( $user->display_name ); ?></a>
 			</p>
-		</div>
-		<div class="wpum-col-xs">
-
 		</div>
 	</div>
 </div>
