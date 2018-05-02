@@ -991,3 +991,15 @@ function wpum_custom_admin_notice_inline_css() {
 	<?php
 
 }
+
+/**
+ * Check if elementor plugin is active.
+ *
+ * @return boolean
+ */
+function wpum_is_elementor_installed() {
+	if ( in_array( 'elementor/elementor.php', apply_filters( 'active_plugins', get_option( 'active_plugins' ) ) ) ) {
+		return true;
+	}
+	return false;
+}

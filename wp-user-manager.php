@@ -184,13 +184,10 @@ if ( ! class_exists( 'WP_User_Manager' ) ) :
 			require_once WPUM_PLUGIN_DIR . 'includes/actions.php';
 			require_once WPUM_PLUGIN_DIR . 'includes/filters.php';
 			require_once WPUM_PLUGIN_DIR . 'includes/assets.php';
-
 			require_once WPUM_PLUGIN_DIR . 'includes/abstracts/abstract-wp-db-table.php';
 			require_once WPUM_PLUGIN_DIR . 'includes/abstracts/abstract-wpum-db.php';
 			require_once WPUM_PLUGIN_DIR . 'includes/abstracts/abstract-shortcode-generator.php';
-
 			require_once WPUM_PLUGIN_DIR . 'includes/wpum-admin/class-wpum-user-meta-custom-datastore.php';
-
 			require_once WPUM_PLUGIN_DIR . 'includes/wpum-database/class-wpum-db-table.php';
 			require_once WPUM_PLUGIN_DIR . 'includes/wpum-database/class-wpum-db-table-fields.php';
 			require_once WPUM_PLUGIN_DIR . 'includes/wpum-database/class-wpum-db-table-field-meta.php';
@@ -202,36 +199,33 @@ if ( ! class_exists( 'WP_User_Manager' ) ) :
 			require_once WPUM_PLUGIN_DIR . 'includes/wpum-database/class-wpum-db-field-meta.php';
 			require_once WPUM_PLUGIN_DIR . 'includes/wpum-database/class-wpum-db-registration-forms.php';
 			require_once WPUM_PLUGIN_DIR . 'includes/wpum-database/class-wpum-db-registration-form-meta.php';
-
 			require_once WPUM_PLUGIN_DIR . 'includes/wpum-admin/class-wpum-html-elements.php';
-
 			require_once WPUM_PLUGIN_DIR . 'includes/wpum-fields/wpum-fields-functions.php';
 			require_once WPUM_PLUGIN_DIR . 'includes/wpum-fields/class-wpum-fields.php';
 			require_once WPUM_PLUGIN_DIR . 'includes/wpum-fields/class-wpum-field-group.php';
 			require_once WPUM_PLUGIN_DIR . 'includes/wpum-fields/class-wpum-field.php';
 			require_once WPUM_PLUGIN_DIR . 'includes/wpum-fields/class-wpum-fields-query.php';
 			require_once WPUM_PLUGIN_DIR . 'includes/wpum-forms/class-wpum-registration-form.php';
-
 			require_once WPUM_PLUGIN_DIR . 'includes/wpum-emails/wpum-email-functions.php';
 			require_once WPUM_PLUGIN_DIR . 'includes/wpum-emails/class-wpum-emails.php';
-
 			require_once WPUM_PLUGIN_DIR . 'includes/wpum-admin/class-wpum-avatars.php';
 			require_once WPUM_PLUGIN_DIR . 'includes/wpum-admin/class-wpum-prevent-password-change.php';
 			require_once WPUM_PLUGIN_DIR . 'includes/wpum-admin/class-wpum-template-loader.php';
 			require_once WPUM_PLUGIN_DIR . 'includes/wpum-admin/class-wpum-options-panel.php';
 			require_once WPUM_PLUGIN_DIR . 'includes/wpum-forms/class-wpum-forms.php';
-
 			require_once WPUM_PLUGIN_DIR . 'includes/wpum-widgets/class-wpum-login-form-widget.php';
 			require_once WPUM_PLUGIN_DIR . 'includes/wpum-widgets/class-wpum-password-recovery-form-widget.php';
 			require_once WPUM_PLUGIN_DIR . 'includes/wpum-widgets/class-wpum-recent-users.php';
 			require_once WPUM_PLUGIN_DIR . 'includes/wpum-widgets/class-wpum-registration-form-widget.php';
-
 			require_once WPUM_PLUGIN_DIR . 'includes/wpum-admin/class-wpum-menus.php';
 			require_once WPUM_PLUGIN_DIR . 'includes/wpum-directories/class-wpum-directories-editor.php';
 			require_once WPUM_PLUGIN_DIR . 'includes/wpum-directories/wpum-directories-functions.php';
-
 			require_once WPUM_PLUGIN_DIR . 'includes/wpum-shortcodes/shortcodes.php';
 			require_once WPUM_PLUGIN_DIR . 'includes/widgets.php';
+
+			if( wpum_is_elementor_installed() ) {
+				require_once WPUM_PLUGIN_DIR . 'includes/wpum-elementor/class-wpum-elementor-loader.php';
+			}
 
 			if ( is_admin() || ( defined( 'WP_CLI' ) && WP_CLI ) ) {
 				require_once WPUM_PLUGIN_DIR . 'includes/wpum-admin/class-wpum-notices.php';
