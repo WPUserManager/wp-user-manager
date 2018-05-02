@@ -302,20 +302,6 @@ class WPUM_Directories_Editor {
 		);
 		return $bulk_messages;
 	}
-
-	/**
-	 * Retrieve a list of registered card templates.
-	 *
-	 * @return array
-	 */
-	private function get_elementor_card_templates() {
-
-		$templates = [];
-
-		return $templates;
-
-	}
-
 }
 
 new WPUM_Directories_Editor;

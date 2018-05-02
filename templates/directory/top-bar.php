@@ -31,7 +31,7 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 			<p>
 				<?php esc_html_e( 'Sort by:' ); ?>
 				<?php echo WPUM()->elements->select( [
-					'name'             => 'wpum-directory-sortby',
+					'name'             => 'sortby',
 					'show_option_all'  => false,
 					'show_option_none' => false,
 					'options'          => wpum_get_directory_sort_by_methods(),
@@ -46,7 +46,7 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 			<p>
 				<?php esc_html_e( 'Results per page:' ); ?>
 				<?php echo WPUM()->elements->select( [
-					'name'             => 'wpum-directory-amount',
+					'name'             => 'amount',
 					'show_option_all'  => false,
 					'show_option_none' => false,
 					'options'          => wpum_get_directory_amount_modifier()
