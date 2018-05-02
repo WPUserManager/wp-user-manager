@@ -45,3 +45,33 @@ function wpum_get_directory_amount_modifier() {
 	return apply_filters( 'wpum_get_directory_amount_modifier', $amounts );
 
 }
+
+/**
+ * Defines the list of available directory templates.
+ *
+ * @return array
+ */
+function wpum_get_directory_templates() {
+
+	$templates = [
+		'default' => esc_html__( 'Default template' )
+	];
+
+	return apply_filters( 'wpum_get_directory_templates', $templates );
+
+}
+
+/**
+ * Defines the list of available directory user templates.
+ *
+ * @return array
+ */
+function wpum_get_directory_user_templates() {
+
+	$templates = [
+		'default' => esc_html__( 'Default template' )
+	];
+
+	return apply_filters( 'wpum_get_directory_user_templates', $templates );
+
+}

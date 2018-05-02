@@ -145,6 +145,19 @@ class WPUM_Directories_Editor {
 					) ),
 			) );
 
+		Container::make( 'post_meta', esc_html__( 'Directory template' ) )
+			->where( 'post_type', '=', 'wpum_directory' )
+			->set_context( 'side' )
+			->set_priority( 'default' )
+			->add_fields( array(
+				Field::make( 'select', 'directory_template', esc_html__( 'Template' ) )
+					->set_help_text( esc_html__( 'Select a template for this directory.' ) )
+					->add_options( wpum_get_directory_templates() ),
+				Field::make( 'select', 'directory_user_template', esc_html__( 'User template' ) )
+					->set_help_text( esc_html__( 'Select a template for the users within this directory.' ) )
+					->add_options( wpum_get_directory_user_templates() ),
+			) );
+
 	}
 
 	/**

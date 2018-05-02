@@ -478,12 +478,14 @@ function wpum_directory( $atts, $content = null ) {
 	$check_directory = get_post_status( $directory_id );
 
 	// Directory settings.
-	$has_sort_by         = carbon_get_post_meta( $directory_id, 'directory_display_sorter' );
-	$sort_by_default     = carbon_get_post_meta( $directory_id, 'directory_sorting_method' );
-	$has_amount_modifier = carbon_get_post_meta( $directory_id, 'directory_display_amount_filter' );
-	$assigned_roles      = carbon_get_post_meta( $directory_id, 'directory_assigned_roles' );
-	$profiles_per_page   = carbon_get_post_meta( $directory_id, 'directory_profiles_per_page' ) ? carbon_get_post_meta( $directory_id, 'directory_profiles_per_page' ): 10;
-	$excluded_users      = carbon_get_post_meta( $directory_id, 'directory_excluded_users' );
+	$has_sort_by             = carbon_get_post_meta( $directory_id, 'directory_display_sorter' );
+	$sort_by_default         = carbon_get_post_meta( $directory_id, 'directory_sorting_method' );
+	$has_amount_modifier     = carbon_get_post_meta( $directory_id, 'directory_display_amount_filter' );
+	$assigned_roles          = carbon_get_post_meta( $directory_id, 'directory_assigned_roles' );
+	$profiles_per_page       = carbon_get_post_meta( $directory_id, 'directory_profiles_per_page' ) ? carbon_get_post_meta( $directory_id, 'directory_profiles_per_page' ): 10;
+	$excluded_users          = carbon_get_post_meta( $directory_id, 'directory_excluded_users' );
+	$directory_template      = carbon_get_post_meta( $directory_id, 'directory_template' );
+	$directory_user_template = carbon_get_post_meta( $directory_id, 'directory_user_template' );
 
 	// Prepare query arguments.
 	$args = [
@@ -504,15 +506,20 @@ function wpum_directory( $atts, $content = null ) {
 	$user_query = new WP_User_Query( $args );
 
 	if( $check_directory == 'publish' ) {
+
+		$directory_template = ( $directory_template !== 'default' ) ? $directory_template : 'directory';
+
 		WPUM()->templates
 			->set_template_data( [
 				'has_sort_by'         => $has_sort_by,
 				'sort_by_default'     => $sort_by_default,
 				'has_amount_modifier' => $has_amount_modifier,
 				'results'             => $user_query->get_results(),
-				'total'               => $user_query->get_total()
+				'total'               => $user_query->get_total(),
+				'template'            => $directory_template,
+				'user_template'       => $directory_user_template,
 			] )
-			->get_template_part( 'directory' );
+			->get_template_part( $directory_template );
 	}
 
 	return $output;
