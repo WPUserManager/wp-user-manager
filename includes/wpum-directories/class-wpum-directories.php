@@ -102,6 +102,20 @@ class WPUM_Directories {
 				}
 			}
 
+			// Keep assigned roles within the directory during the search query.
+			$assigned_roles = carbon_get_post_meta( $directory_id, 'directory_assigned_roles' );
+
+			if( is_array( $assigned_roles ) && ! empty( $assigned_roles ) ) {
+				foreach ( $user_ids as $user_id ) {
+					$user = get_user_by( 'id', $user_id );
+					if ( ! in_array( $assigned_roles, (array) $user->roles ) ) {
+						if ( ( $key = array_search( $user_id, $user_ids ) ) !== false ) {
+							unset( $user_ids[ $key ] );
+						}
+					}
+				}
+			}
+
 			if ( is_array( $user_ids ) && count( $user_ids ) ) {
 				// Combine the IDs into a comma separated list.
 				$id_string = implode( ',', $user_ids );
