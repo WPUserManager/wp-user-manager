@@ -993,13 +993,19 @@ function wpum_custom_admin_notice_inline_css() {
 }
 
 /**
- * Check if elementor plugin is active.
+ * Setup the default custom user meta field keys within the database
+ * for the directories.
  *
- * @return boolean
+ * @return void
  */
-function wpum_is_elementor_installed() {
-	if ( in_array( 'elementor/elementor.php', apply_filters( 'active_plugins', get_option( 'active_plugins' ) ) ) ) {
-		return true;
-	}
-	return false;
+function wpum_setup_default_custom_search_fields() {
+
+	WPUM()->search_meta->insert( [
+		'meta_key' => 'first_name',
+	] );
+
+	WPUM()->search_meta->insert( [
+		'meta_key' => 'last_name',
+	] );
+
 }

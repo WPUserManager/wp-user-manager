@@ -42,7 +42,7 @@ class WPUM_DB_Search_Fields extends WPUM_DB {
 	public function get_columns() {
 		return array(
 			'id'          => '%d',
-			'meta_key'    => '%d',
+			'meta_key'    => '%s',
 		);
 	}
 
@@ -55,7 +55,7 @@ class WPUM_DB_Search_Fields extends WPUM_DB {
 	public function get_column_defaults() {
 		return array(
 			'id'        => 0,
-			'meta_kery' => '',
+			'meta_key' => '',
 		);
 	}
 
