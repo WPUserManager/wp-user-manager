@@ -16,14 +16,14 @@
 // Exit if accessed directly
 if ( ! defined( 'ABSPATH' ) ) exit;
 
-$value = '';
+$value = isset( $_GET['directory-search'] ) && ! empty( $_GET['directory-search'] ) ? sanitize_text_field( $_GET['directory-search'] ) : false;
 
 ?>
 <div id="wpum-directory-search-form">
 	<div class="wpum-row">
 		<div class="form-fields wpum-col-xs-10">
 			<?php do_action( 'wpum_directory_search_form_top_fields'); ?>
-				<input type="text" name="directory-search" id="wpum-directory-search" placeholder="<?php echo esc_html_e( 'Search for users' ); ?>" value="<?php echo esc_attr( $value ); ?>">
+				<input type="text" name="directory-search" id="wpum-directory-search" placeholder="<?php echo esc_html_e( 'Search for users' ); ?>" value="<?php echo esc_html( $value ); ?>">
 			<?php do_action( 'wpum_directory_search_form_bottom_fields' ); ?>
 		</div>
 		<div class="form-submit wpum-col-xs-2">
