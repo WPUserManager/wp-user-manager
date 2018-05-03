@@ -33,10 +33,10 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 				<?php echo WPUM()->elements->select( [
 					'name'             => 'sortby',
 					'id'               => 'wpum-sortby',
+					'selected'         => isset( $_GET['sortby'] ) ? esc_attr( $_GET['sortby'] ) : $data->sort_by_default,
 					'show_option_all'  => false,
 					'show_option_none' => false,
 					'options'          => wpum_get_directory_sort_by_methods(),
-					'selected'         => $data->sort_by_default
 				] ); ?>
 			</p>
 		</div>
