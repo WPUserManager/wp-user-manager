@@ -16,6 +16,10 @@
 // Exit if accessed directly
 if ( ! defined( 'ABSPATH' ) ) exit;
 
+if( ! $data->has_search_form ) {
+	return;
+}
+
 $value = isset( $_GET['directory-search'] ) && ! empty( $_GET['directory-search'] ) ? sanitize_text_field( $_GET['directory-search'] ) : false;
 
 ?>

@@ -480,6 +480,7 @@ function wpum_directory( $atts, $content = null ) {
 	// Directory settings.
 	$has_sort_by             = carbon_get_post_meta( $directory_id, 'directory_display_sorter' );
 	$sort_by_default         = carbon_get_post_meta( $directory_id, 'directory_sorting_method' );
+	$has_search_form         = carbon_get_post_meta( $directory_id, 'directory_search_form' );
 	$has_amount_modifier     = carbon_get_post_meta( $directory_id, 'directory_display_amount_filter' );
 	$assigned_roles          = carbon_get_post_meta( $directory_id, 'directory_assigned_roles' );
 	$profiles_per_page       = carbon_get_post_meta( $directory_id, 'directory_profiles_per_page' ) ? carbon_get_post_meta( $directory_id, 'directory_profiles_per_page' ): 10;
@@ -582,6 +583,7 @@ function wpum_directory( $atts, $content = null ) {
 			->set_template_data( [
 				'has_sort_by'         => $has_sort_by,
 				'sort_by_default'     => $sort_by_default,
+				'has_search_form'     => $has_search_form,
 				'has_amount_modifier' => $has_amount_modifier,
 				'results'             => $user_query->get_results(),
 				'total'               => $user_query->get_total(),
