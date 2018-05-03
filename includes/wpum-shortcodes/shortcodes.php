@@ -583,7 +583,8 @@ function wpum_directory( $atts, $content = null ) {
 				'template'            => $directory_template,
 				'user_template'       => $directory_user_template,
 				'paged'               => $paged,
-				'total_pages'         => $total_pages
+				'total_pages'         => $total_pages,
+				'directory_id'        => $directory_id
 			] )
 			->get_template_part( $directory_template );
 	}

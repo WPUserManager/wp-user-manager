@@ -28,6 +28,7 @@ $value = isset( $_GET['directory-search'] ) && ! empty( $_GET['directory-search'
 		</div>
 		<div class="form-submit wpum-col-xs-2">
 			<?php wp_nonce_field( 'directory_search_action', '_wpnonce', false, true ); ?>
+			<input type="hidden" name="directory-id" value="<?php echo esc_attr( $data->directory_id ); ?>">
 			<input type="submit" id="wpum-submit-user-search" class="button wpum-button" value="<?php esc_html_e( 'Search' ); ?>">
 		</div>
 	</div>
