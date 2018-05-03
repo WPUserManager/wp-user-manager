@@ -29,18 +29,6 @@ class WPUM_Admin_Notices {
 	 */
 	public function register_notices() {
 
-		// Display plugin activation notice.
-		if( get_transient( 'wpum-activation-notice' ) ) {
-			$activation_message  = '<strong>' . sprintf( __( 'Welcome to WP User Manager %s', 'wpum' ), WPUM_VERSION ) . '</strong>';
-			$activation_message .= '<br/>';
-			$activation_message .= __( 'Thank you for installing the latest version! WP User Manager is ready to provide improved control over your WordPress powered community.', 'wpum' );
-			$activation_message .= '<br/>';
-			$activation_message .= __( 'WPUM has automatically installed it\'s required data and pages and it\'s now ready to be used.' );
-			$activation_message .= '<br/><br/>';
-			$activation_message .= '<a href="https://docs.wpusermanager.com/" target="_blank" class="button">' . __( 'Read documentation' ) . '</a>';
-			WPUM()->notices->register_notice( 'wpum_activated', 'success', $activation_message );
-		}
-
 		// Display a notice asking the user to leave a rating after 14 days.
 		$install_date = get_option( 'wpum_activation_date' );
 		$past_date    = strtotime( '-14 days' );
