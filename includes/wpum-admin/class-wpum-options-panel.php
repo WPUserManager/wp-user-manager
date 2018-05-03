@@ -242,6 +242,12 @@ class WPUM_Options_Panel {
 					'desc' => __('Enter the usernames that you wish to disable. Separate each username on a new line.', 'wpum'),
 					'type' => 'textarea'
 				),
+				array(
+					'id'   => 'remove_data',
+					'name' => __( 'Remove Data on Uninstall?', 'wpum' ),
+					'desc' => __('Check this box if you would like EDD to completely remove all of its data when the plugin is deleted.', 'wpum'),
+					'type' => 'checkbox'
+				),
 			],
 			'registration' => [
 				array(
