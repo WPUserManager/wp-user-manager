@@ -55,14 +55,13 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 			<?php wpum_user_directory_pagination( $data ); ?>
 
 		<?php else : ?>
-
 			<?php
 
 				WPUM()->templates
 					->set_template_data( [
 						'message' => esc_html__( 'No users have been found.' ),
 					] )
-					->get_template_part( 'messages/general', 'info' );
+					->get_template_part( 'messages/general', 'warning' );
 
 			?>
 

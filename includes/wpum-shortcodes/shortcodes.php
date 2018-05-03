@@ -518,8 +518,6 @@ function wpum_directory( $atts, $content = null ) {
 		$offset = ( $paged -1 ) * $profiles_per_page;
 	}
 
-	//
-
 	// Set sort by method if any specified from the search form.
 	if( isset( $_GET['sortby'] ) && ! empty( $_GET['sortby'] ) ) {
 		$sortby = esc_attr( $_GET['sortby'] );
@@ -527,6 +525,7 @@ function wpum_directory( $atts, $content = null ) {
 		$sortby = $sort_by_default;
 	}
 
+	// Now actually set the arguments for the sort query.
 	switch ( $sortby ) {
 		case 'newest':
 			$args['orderby'] = 'registered';
@@ -547,12 +546,22 @@ function wpum_directory( $atts, $content = null ) {
 			break;
 	}
 
+	// Setup search if anything specified.
+	if( isset( $_GET['directory-search'] ) && ! empty( $_GET['directory-search'] ) ) {
+		$search_string          = esc_attr( trim( $_GET['directory-search'] ) );
+		$args['search']         = '*'.esc_attr( $search_string ).'*';
+		$args['search_columns'] = array(
+			'user_login',
+			'user_nicename',
+			'user_email',
+			'user_url',
+		);
+	}
+
 	$args['offset'] = $offset;
-
-	$user_query = new WP_User_Query( $args );
-
-	$total_users = $user_query->get_total();
-	$total_pages = ceil( $total_users / $profiles_per_page );
+	$user_query     = new WP_User_Query( $args );
+	$total_users    = $user_query->get_total();
+	$total_pages    = ceil( $total_users / $profiles_per_page );
 
 	if( $check_directory == 'publish' ) {
 
