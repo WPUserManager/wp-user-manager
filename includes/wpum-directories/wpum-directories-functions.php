@@ -102,18 +102,3 @@ function wpum_user_directory_pagination( $data ) {
 	echo '</div>';
 
 }
-
-/**
- * Filter the search of a user directory to provide support for custom fields.
- *
- * @param object $user_query
- * @return void
- */
-function wpum_user_directory_search_custom_fields( $user_query ) {
-
-	if( isset( $_GET['directory-search'] ) && ! empty( $_GET['directory-search'] ) && ! is_admin() ) {
-
-	}
-
-}
-add_action( 'pre_user_query', 'wpum_user_directory_search_custom_fields', 100 );
