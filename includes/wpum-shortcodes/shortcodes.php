@@ -558,6 +558,12 @@ function wpum_directory( $atts, $content = null ) {
 		);
 	}
 
+	// Exclude users if any specified.
+	if( $excluded_users && ! empty( $excluded_users ) ) {
+		$excluded_users  = preg_replace( '/\s+/', '', explode( ",", $excluded_users ) );
+		$args['exclude'] = $excluded_users;
+	}
+
 	$args['offset'] = $offset;
 	$user_query     = new WP_User_Query( $args );
 	$total_users    = $user_query->get_total();
