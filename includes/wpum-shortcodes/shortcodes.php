@@ -518,6 +518,35 @@ function wpum_directory( $atts, $content = null ) {
 		$offset = ( $paged -1 ) * $profiles_per_page;
 	}
 
+	//
+
+	// Set sort by method if any specified from the search form.
+	if( isset( $_GET['sortby'] ) && ! empty( $_GET['sortby'] ) ) {
+		$sortby = esc_attr( $_GET['sortby'] );
+	} else {
+		$sortby = $sort_by_default;
+	}
+
+	switch ( $sortby ) {
+		case 'newest':
+			$args['orderby'] = 'registered';
+			$args['order']   = 'DESC';
+			break;
+		case 'oldest':
+			$args['orderby'] = 'registered';
+			break;
+		case 'name':
+			$args['meta_key'] = 'first_name';
+			$args['orderby']  = 'meta_value';
+			$args['order']    = 'ASC';
+			break;
+		case 'last_name':
+			$args['meta_key'] = 'last_name';
+			$args['orderby']  = 'meta_value';
+			$args['order']    = 'ASC';
+			break;
+	}
+
 	$args['offset'] = $offset;
 
 	$user_query = new WP_User_Query( $args );
