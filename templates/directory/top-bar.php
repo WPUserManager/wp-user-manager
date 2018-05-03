@@ -49,6 +49,7 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 				<?php echo WPUM()->elements->select( [
 					'name'             => 'amount',
 					'id'               => 'wpum-amount',
+					'selected'         => isset( $_GET['amount'] ) ? absint( $_GET['amount'] ): false,
 					'show_option_all'  => false,
 					'show_option_none' => false,
 					'options'          => wpum_get_directory_amount_modifier()
