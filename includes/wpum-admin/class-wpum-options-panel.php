@@ -244,8 +244,8 @@ class WPUM_Options_Panel {
 				),
 				array(
 					'id'   => 'remove_data',
-					'name' => __( 'Remove Data on Uninstall?', 'wpum' ),
-					'desc' => __('Check this box if you would like EDD to completely remove all of its data when the plugin is deleted.', 'wpum'),
+					'name' => __( 'Remove data on uninstall?', 'wpum' ),
+					'desc' => __( 'Check this box if you would like WPUM to completely remove all of its data when the plugin is deleted.', 'wpum' ),
 					'type' => 'checkbox'
 				),
 			],
