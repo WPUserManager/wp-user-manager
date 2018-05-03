@@ -27,7 +27,7 @@ $value = '';
 			<?php do_action( 'wpum_directory_search_form_bottom_fields' ); ?>
 		</div>
 		<div class="form-submit wpum-col-xs-2">
-			<?php wp_nonce_field(); ?>
+			<?php wp_nonce_field( 'directory_search_action', '_wpnonce', false, true ); ?>
 			<input type="submit" id="wpum-submit-user-search" class="button wpum-button" value="<?php esc_html_e( 'Search' ); ?>">
 		</div>
 	</div>

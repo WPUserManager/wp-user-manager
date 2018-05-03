@@ -16,7 +16,9 @@
 // Exit if accessed directly
 if ( ! defined( 'ABSPATH' ) ) exit;
 
-print_r( $_POST );
+//print_r( $_SERVER['QUERY_STRING'] );
+
+//print_r( add_query_arg( $_SERVER['QUERY_STRING'], '', get_permalink() ) );
 
 ?>
 
@@ -24,7 +26,7 @@ print_r( $_POST );
 
 	<?php do_action( 'wpum_before_user_directory' ); ?>
 
-	<form action="<?php the_permalink(); ?>" method="POST" name="wpum-directory-search-form">
+	<form action="<?php the_permalink(); ?>" method="GET" name="wpum-directory-search-form">
 		<?php
 			WPUM()->templates
 				->set_template_data( $data )
