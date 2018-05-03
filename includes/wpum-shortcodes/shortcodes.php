@@ -510,6 +510,11 @@ function wpum_directory( $atts, $content = null ) {
 		$args['exclude'] = explode(',', $excluded_users );
 	}
 
+	// Assign specific roles to the directory.
+	if( is_array( $assigned_roles ) && ! empty( $assigned_roles ) ) {
+		$args['role'] = $assigned_roles;
+	}
+
 	// Update pagination and offset users.
 	$paged  = ( get_query_var('paged') ) ? get_query_var('paged') : 1;
 	if( $paged == 1 ) {
