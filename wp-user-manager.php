@@ -114,6 +114,13 @@ if ( ! class_exists( 'WP_User_Manager' ) ) :
 		public $registration_form_meta;
 
 		/**
+		 * Holds the handler for the fields search meta keys.
+		 *
+		 * @var object
+		 */
+		public $search_meta;
+
+		/**
 		 * Holds the html input fields generator.
 		 *
 		 * @var object
@@ -200,6 +207,7 @@ if ( ! class_exists( 'WP_User_Manager' ) ) :
 			require_once WPUM_PLUGIN_DIR . 'includes/wpum-database/class-wpum-db-field-meta.php';
 			require_once WPUM_PLUGIN_DIR . 'includes/wpum-database/class-wpum-db-registration-forms.php';
 			require_once WPUM_PLUGIN_DIR . 'includes/wpum-database/class-wpum-db-registration-form-meta.php';
+			require_once WPUM_PLUGIN_DIR . 'includes/wpum-database/class-wpum-db-search-fields.php';
 			require_once WPUM_PLUGIN_DIR . 'includes/wpum-admin/class-wpum-html-elements.php';
 			require_once WPUM_PLUGIN_DIR . 'includes/wpum-fields/wpum-fields-functions.php';
 			require_once WPUM_PLUGIN_DIR . 'includes/wpum-fields/class-wpum-fields.php';
@@ -330,6 +338,7 @@ if ( ! class_exists( 'WP_User_Manager' ) ) :
 			$this->registration_forms     = new WPUM_DB_Registration_Forms();
 			$this->registration_form_meta = new WPUM_DB_Registration_Form_Meta();
 			$this->elements               = new WPUM_HTML_Elements();
+			$this->search_meta            = new WPUM_DB_Search_Fields();
 
 			/**
 			 * @todo document after_wpum_init
