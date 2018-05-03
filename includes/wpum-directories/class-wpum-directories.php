@@ -39,12 +39,13 @@ class WPUM_Directories {
 	 */
 	public function pre_user_query( $user_query ) {
 
-		if( isset( $_GET['directory-search'] ) && ! empty( $_GET['directory-search'] ) && ! is_admin() ) {
+		if( isset( $_GET['directory-search'] ) && ! empty( $_GET['directory-search'] ) && isset( $_GET['directory-id'] ) && ! empty( $_GET['directory-id'] ) && ! is_admin() ) {
 
 			global $wpdb;
 
 			$terms          = $this->get_search_terms();
 			$search_with_or = in_array( 'or', $terms );
+			$directory_id   = absint( $_GET['directory-id'] );
 
 			if ( $search_with_or ) {
 				$terms = array_diff( $terms, array( 'or', 'and' ) );
@@ -80,6 +81,26 @@ class WPUM_Directories {
 				GROUP BY user_id
 				HAVING COUNT(*) >= %d;
 			", $values ) );
+
+			// Exclude users from the directory that have been specified within the settings.
+			if( is_array( $user_ids ) ) {
+				// Retrieve any excluded user ids from the submitted directory.
+				$excluded_users = carbon_get_post_meta( $directory_id, 'directory_excluded_users' );
+
+				if( ! empty( $excluded_users ) ) {
+					$excluded_users = trim( str_replace(' ','', $excluded_users ) );
+					$excluded_users = explode(',', $excluded_users );
+				}
+
+				// Exclude users from the query.
+				if( is_array( $excluded_users ) && ! empty( $excluded_users ) ) {
+					foreach ( $excluded_users as $excluded_user_id ) {
+						if ( ( $key = array_search( $excluded_user_id, $user_ids ) ) !== false ) {
+							unset( $user_ids[ $key ] );
+						}
+					}
+				}
+			}
 
 			if ( is_array( $user_ids ) && count( $user_ids ) ) {
 				// Combine the IDs into a comma separated list.
