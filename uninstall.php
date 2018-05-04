@@ -22,7 +22,7 @@ foreach ( $wpum_post_types as $post_type ) {
 	$items = get_posts( array( 'post_type' => $post_type, 'post_status' => 'any', 'numberposts' => -1, 'fields' => 'ids' ) );
 	if ( $items ) {
 		foreach ( $items as $item ) {
-			wp_delete_post( $item, true);
+			wp_delete_post( $item, true );
 		}
 	}
 }
