@@ -415,8 +415,13 @@ class WPUM_Form_Registration extends WPUM_Form {
 			] );
 
 			// Assign the role set into the registration form.
-			$user = new WP_User( $new_user_id );
-			$user->set_role( $this->role );
+			if( wpum_get_option( 'allow_role_select' ) && isset( $values['register'][ 'role' ] ) ) {
+				$user = new WP_User( $new_user_id );
+				$user->set_role( $values['register'][ 'role' ] );
+			} else {
+				$user = new WP_User( $new_user_id );
+				$user->set_role( $this->role );
+			}
 
 			// Automatically log a user in if enabled.
 			if( wpum_get_option( 'login_after_registration' ) ) {
