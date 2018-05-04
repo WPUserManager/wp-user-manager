@@ -20,20 +20,11 @@ class WPUM_Addons_Page {
 	public $api;
 
 	/**
-	 * Holds the addons that have been found.
-	 *
-	 * @var array
-	 */
-	public $addons = [];
-
-	/**
 	 * Get things started.
 	 */
 	public function __construct() {
 
-		$this->api    = 'http://wpum.test/wp-json/wp/v2/edd-addons';
-		$this->addons = $this->get_addons();
-
+		$this->api = 'http://wpum.test/wp-json/wp/v2/edd-addons';
 		$this->hooks();
 
 	}
@@ -46,6 +37,8 @@ class WPUM_Addons_Page {
 	public function hooks() {
 		add_action( 'admin_menu', [ $this, 'add_addons_page' ] );
 		add_action( 'admin_enqueue_scripts', [ $this, 'scripts' ] );
+		add_filter( 'install_plugins_tabs', [ $this, 'add_addon_tab' ] );
+		add_action( 'install_plugins_wpum_addons', [ $this, 'view_addons' ] );
 	}
 
 	/**
@@ -53,22 +46,22 @@ class WPUM_Addons_Page {
 	 *
 	 * @return array
 	 */
-	private function get_addons() {
+	public function get_addons() {
 
 		$addons = [];
 
-		if( isset( $_GET['page'] ) && $_GET['page'] == 'wpum-addons' ) {
+		if( isset( $_GET['page'] ) && $_GET['page'] == 'wpum-addons' || isset( $_GET['tab'] ) && $_GET['tab'] == 'wpum_addons' ) {
 
 			$cached_feed = get_transient( 'wpum_addons_feed' );
 
 			if ( $cached_feed ) {
-				$this->addons = $cached_feed;
+				$addons = $cached_feed;
 			} else {
 				$feed = wp_remote_get( $this->api, array( 'sslverify' => false ) );
 				if ( ! is_wp_error( $feed ) ) {
 					$feed_content = wp_remote_retrieve_body( $feed );
-					set_transient( 'wpum_addons_feed', $feed_content, 3600 );
-					$addons = json_decode( $feed_content );
+					$addons       = json_decode( $feed_content );
+					set_transient( 'wpum_addons_feed', $addons, 3600 );
 				}
 			}
 
@@ -87,7 +80,7 @@ class WPUM_Addons_Page {
 
 		$screen = get_current_screen();
 
-		if( $screen->base == 'users_page_wpum-addons' ) {
+		if( $screen->base == 'users_page_wpum-addons' || $screen->base == 'plugin-install' && isset( $_GET['tab'] ) && $_GET['tab'] == 'wpum_addons' ) {
 			wp_enqueue_style( 'wpum-addons', WPUM_PLUGIN_URL . 'assets/css/admin/addons.css', false, WPUM_VERSION );
 		}
 
@@ -111,6 +104,16 @@ class WPUM_Addons_Page {
 
 		include WPUM_PLUGIN_DIR . 'includes/wpum-admin/views/addons.php';
 
+	}
+
+	/**
+	 * Adds a new tab to the install plugins page.
+	 *
+	 * @return void
+	 */
+	public function add_addon_tab( $tabs ) {
+		$tabs['wpum_addons'] = __( 'WP User Manager ' ) . '<span class="wpum-addons">'.__('Addons', 'wpum').'</span>' ;
+		return $tabs;
 	}
 
 }

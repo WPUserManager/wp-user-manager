@@ -10,7 +10,7 @@
 
 	<div id="wpum-addons-list">
 
-		<?php foreach( $this->addons as $addon ) : ?>
+		<?php foreach( $this->get_addons() as $addon ) : ?>
 
 			<div class="download type-download">
 				<div class="featured-img">
