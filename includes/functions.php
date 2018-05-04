@@ -1009,3 +1009,30 @@ function wpum_setup_default_custom_search_fields() {
 	] );
 
 }
+
+/**
+ * Retrieve a list of allowed users role on the registration page
+ *
+ * @since 1.0.0
+ * @return array $roles An array of the roles
+ */
+function wpum_get_allowed_user_roles() {
+
+	global $wp_roles;
+
+	if ( ! isset( $wp_roles ) ) {
+		$wp_roles = new WP_Roles();
+	}
+
+	$user_roles         = array();
+	$selected_roles     = wpum_get_option( 'register_roles' );
+
+	$allowed_user_roles = is_array( $selected_roles ) ? $selected_roles : array( $selected_roles );
+
+	foreach ( $allowed_user_roles as $role ) {
+		$user_roles[ $role ] = $wp_roles->roles[ $role ]['name'];
+	}
+
+	return $user_roles;
+
+}

@@ -16,13 +16,10 @@
  // Exit if accessed directly
 if ( ! defined( 'ABSPATH' ) ) exit;
 
-$data->default = empty( $data->default ) ? current( array_keys( $data->options ) ): $data->default;
-$default       = ! empty( $data->value ) ? $data->value : $data->default;
-
-foreach ( $data->options as $option_key => $value ) : ?>
-
-	<label><input type="radio" name="<?php echo esc_attr( isset( $data->name ) ? $data->name : $data->key ); ?>" value="<?php echo esc_attr( $option_key ); ?>" <?php checked( $default, $option_key ); ?> /> <?php echo esc_html( $value ); ?></label><br/>
-
-<?php endforeach; ?>
-
+?>
+<select name="<?php echo esc_attr( isset( $data->name ) ? $data->name : $data->key ); ?>" id="<?php echo esc_attr( $data->key ); ?>" <?php if ( ! empty( $data->required ) ) echo 'required'; ?>>
+	<?php foreach ( $data->options as $key => $value ) : ?>
+		<option value="<?php echo esc_attr( $key ); ?>" <?php if ( isset( $data->value ) || isset( $data->default ) ) selected( isset( $data->value ) ? $data->value : $data->default, $key ); ?>><?php echo esc_html( $value ); ?></option>
+	<?php endforeach; ?>
+</select>
 <?php if ( ! empty( $data->description ) ) : ?><small class="description"><?php echo $data->description; ?></small><?php endif; ?>

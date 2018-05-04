@@ -240,6 +240,18 @@ class WPUM_Form_Registration extends WPUM_Form {
 				);
 			}
 
+			if( wpum_get_option( 'allow_role_select' ) ) {
+				$fields[ 'role' ] = array(
+					'label'       => __('Select Role', 'wpum'),
+					'type'        => 'select',
+					'required'    => true,
+					'options'     => wpum_get_allowed_user_roles(),
+					'description' => __( 'Select your user role', 'wpum' ),
+					'priority'    => 9998,
+					'value'       => get_option( 'default_role' )
+				);
+			}
+
 		}
 
 		return apply_filters( 'wpum_get_registration_fields', $fields );

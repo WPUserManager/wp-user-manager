@@ -247,7 +247,7 @@ class WPUM_Options_Panel {
 				array(
 					'id'   => 'login_after_registration',
 					'name' => __( 'Login after registration:', 'wpum' ),
-					'desc' => __('Enable this option to authenticate users after registration.', 'wpum'),
+					'desc' => __('Enable this option to automatically authenticate users after registration.', 'wpum'),
 					'type' => 'checkbox'
 				),
 				array(
