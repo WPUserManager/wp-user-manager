@@ -41,9 +41,6 @@ function wp_user_manager_install( $network_wide = false ) {
  */
 function wpum_run_install() {
 
-	// Setup a transient to display the activation notice.
-	set_transient( 'wpum-activation-notice', true, 5 );
-
 	// Enable registrations on the site.
 	update_option( 'users_can_register', true );
 
@@ -58,5 +55,8 @@ function wpum_run_install() {
 
 	// Update current version.
 	update_option( 'wpum_version', WPUM_VERSION );
+
+	// Add the transient to redirect.
+	set_transient( '_wpum_activation_redirect', true, 30 );
 
 }
