@@ -62,6 +62,9 @@ class WPUM_Form_Registration extends WPUM_Form {
 		add_filter( 'submit_wpum_form_validate_fields', [ $this, 'validate_password' ], 10, 4 );
 		add_filter( 'submit_wpum_form_validate_fields', [ $this, 'validate_username' ], 10, 4 );
 		add_filter( 'submit_wpum_form_validate_fields', [ $this, 'validate_honeypot' ], 10, 4 );
+		if( wpum_get_option( 'allow_role_select' ) ) {
+			add_filter( 'submit_wpum_form_validate_fields', [ $this, 'validate_role' ], 10, 4 );
+		}
 
 		$this->steps  = (array) apply_filters( 'registration_steps', array(
 			'submit' => array(
@@ -152,6 +155,31 @@ class WPUM_Form_Registration extends WPUM_Form {
 			if( ! empty( $values['register']['robo'] ) ) {
 				return new WP_Error( 'honeypot-validation-error', esc_html__( 'Failed honeypot validation.' ) );
 			}
+		}
+
+		return $pass;
+
+	}
+
+	/**
+	 * Validate role on submission.
+	 *
+	 * @param boolean $pass
+	 * @param array $fields
+	 * @param array $values
+	 * @param string $form
+	 * @return mixed
+	 */
+	public function validate_role( $pass, $fields, $values, $form ) {
+
+		if( $form == $this->form_name && isset( $values['register']['role'] ) ) {
+
+			$role_field     = $values['register'][ 'role' ];
+			$selected_roles = array_flip( wpum_get_option( 'register_roles' ) );
+			if( ! array_key_exists( $role_field , $selected_roles ) ) {
+				return new WP_Error( 'role-validation-error', __( 'Select a valid role from the list.', 'wpum' ) );
+			}
+
 		}
 
 		return $pass;
