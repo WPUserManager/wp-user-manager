@@ -235,6 +235,7 @@ if ( ! class_exists( 'WP_User_Manager' ) ) :
 
 			if ( is_admin() || ( defined( 'WP_CLI' ) && WP_CLI ) ) {
 				require_once WPUM_PLUGIN_DIR . 'includes/wpum-admin/class-wpum-getting-started.php';
+				require_once WPUM_PLUGIN_DIR . 'includes/wpum-admin/class-wpum-addons-page.php';
 				require_once WPUM_PLUGIN_DIR . 'includes/wpum-admin/class-wpum-notices.php';
 				require_once WPUM_PLUGIN_DIR . 'includes/wpum-admin/class-wpum-user-table.php';
 				require_once WPUM_PLUGIN_DIR . 'includes/wpum-admin/class-wpum-permalinks-settings.php';
