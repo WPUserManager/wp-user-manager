@@ -1,0 +1,72 @@
+#wpum-addons-page a.button-primary {
+  margin-left: 10px;
+  position: relative;
+  top: -3px; }
+  #wpum-addons-page a.button-primary span {
+    width: 16px;
+    height: 16px;
+    font-size: 14px;
+    margin: 6px 0 0 6px; }
+
+#wpum-addons-list {
+  margin-top: 30px; }
+
+.type-download {
+  float: left;
+  margin: 0 1em 1em 0 !important;
+  padding: 0;
+  vertical-align: top;
+  width: 280px;
+  text-decoration: none;
+  color: inherit;
+  border: 1px solid #ddd;
+  display: block;
+  min-height: 365px;
+  overflow: hidden;
+  background: #f5f5f5;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), inset 0 -1px 0 rgba(0, 0, 0, 0.1);
+  transition-property: border, background, color;
+  transition-duration: .05s;
+  transition-timing-function: ease-in-out;
+  position: relative; }
+  .type-download a.button span {
+    width: 16px;
+    height: 16px;
+    font-size: 16px;
+    margin: 5px 0 0 0px; }
+
+.type-download:hover {
+  border: 1px solid #d1d1d1; }
+
+.type-download > .featured-img img {
+  border-bottom: 1px solid #ddd; }
+
+.type-download .addon-content {
+  *zoom: 1;
+  padding: 15px 20px; }
+
+.type-download .addon-content:after,
+.type-download .addon-content:before {
+  content: " ";
+  display: table; }
+
+.type-download .addon-content:after {
+  clear: both; }
+
+.type-download .addon-content .addon-heading {
+  margin: 0 0 10px; }
+
+.type-download .addon-content .addon-heading a {
+  outline: none;
+  text-decoration: none; }
+
+.type-download .addon-footer-wrap {
+  border-top: 1px solid #ddd;
+  position: absolute;
+  bottom: 2px;
+  left: 0;
+  width: 100%;
+  background-color: #fff;
+  padding: 15px 20px; }
+
+/*# sourceMappingURL=addons.css.map */
