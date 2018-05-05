@@ -51,16 +51,16 @@
         },
         {
             "name": "alessandrotesoro/wp-optionskit",
-            "version": "1.0.3",
+            "version": "1.0.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/alessandrotesoro/wp-optionskit.git",
-                "reference": "121f8f728d20ab42e5fcc53251ea9c42fc247ce2"
+                "reference": "73cc202af86ce5b0f0203da89a8a13f76a7ceb85"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/alessandrotesoro/wp-optionskit/zipball/121f8f728d20ab42e5fcc53251ea9c42fc247ce2",
-                "reference": "121f8f728d20ab42e5fcc53251ea9c42fc247ce2",
+                "url": "https://api.github.com/repos/alessandrotesoro/wp-optionskit/zipball/73cc202af86ce5b0f0203da89a8a13f76a7ceb85",
+                "reference": "73cc202af86ce5b0f0203da89a8a13f76a7ceb85",
                 "shasum": ""
             },
             "require": {
@@ -89,7 +89,7 @@
                 "optionskit",
                 "wordpress"
             ],
-            "time": "2018-03-04 12:08:22"
+            "time": "2018-05-05 15:52:37"
         },
         {
             "name": "brain/cortex",
