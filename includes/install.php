@@ -114,6 +114,59 @@ function wpum_generate_pages() {
 }
 
 /**
+ * Install the registration form into the database.
+ *
+ * @return void
+ */
+function wpum_install_registration_form() {
+
+	$default_form_id = WPUM()->registration_forms->insert(
+		[
+			'name' => esc_html__( 'Default registration form' )
+		]
+	);
+
+	$default_form_id->add_meta( 'default', true );
+	$default_form_id->add_meta( 'role', get_option( 'default_role' ) );
+	$default_form_id->add_meta( 'fields', [] );
+
+}
+
+/**
+ * Install emails into the database.
+ *
+ * @return void
+ */
+function wpum_install_emails() {
+
+	$emails = [
+		'registration_confirmation' => [
+			'title'   => 'Welcome to {sitename}',
+			'footer'  => '<a href="{siteurl}">{sitename}</a>',
+			'content' => '<p>Hello {username}, and welcome to {sitename}. We’re thrilled to have you on board. </p>
+<p>For reference, here\'s your login information:</p>
+<p>Username: {username}<br />Login page: {login_page_url}<br />Password: {password}</p>
+<p>Thanks,<br />{sitename}</p>',
+			'subject' => 'Welcome to {sitename}'
+		],
+
+		'password_recovery_request' => [
+			'subject' => 'Reset your {sitename} password',
+			'title' => 'Reset your {sitename} password',
+			'content' => '<p>Hello {username},</p>
+<p>You are receiving this message because you or somebody else has attempted to reset your password on {sitename}.</p>
+<p>If this was a mistake, just ignore this email and nothing will happen.</p>
+<p>To reset your password, visit the following address:</p>
+<p>{recovery_url}</p>',
+			'footer' => '<a href="{siteurl}">{sitename}</a>'
+		]
+	];
+
+	update_option( 'wpum_email', $emails );
+
+}
+
+/**
  * Run the installation process of the plugin.
  *
  * @return void
@@ -145,6 +198,8 @@ function wpum_run_install() {
 	wpum_install_cover_image_field();
 
 	wpum_setup_default_custom_search_fields();
+
+	wpum_install_registration_form();
 
 	// Clear the permalinks.
 	flush_rewrite_rules();

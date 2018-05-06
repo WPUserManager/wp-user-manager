@@ -23,7 +23,7 @@ function wpum_get_pages( $force = false ) {
 		return $pages;
 	}
 
-	$transient =  get_transient( 'wpum_get_pages' );
+	$transient = get_transient( 'wpum_get_pages' );
 
 	if ( $transient ) {
 		$pages = $transient;
