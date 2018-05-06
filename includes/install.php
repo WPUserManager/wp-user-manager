@@ -138,6 +138,14 @@ function wpum_run_install() {
 	// Install default pages
 	wpum_generate_pages();
 
+	wpum_install_default_field_group();
+
+	wpum_install_fields();
+
+	wpum_install_cover_image_field();
+
+	wpum_setup_default_custom_search_fields();
+
 	// Clear the permalinks.
 	flush_rewrite_rules();
 
