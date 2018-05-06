@@ -191,15 +191,14 @@ function wpum_run_install() {
 	// Install default pages
 	wpum_generate_pages();
 
-	wpum_install_default_field_group();
-
-	wpum_install_fields();
-
-	wpum_install_cover_image_field();
-
-	wpum_setup_default_custom_search_fields();
-
-	wpum_install_registration_form();
+	// Add some default options.
+	wpum_update_option( 'login_method', 'email' );
+	wpum_update_option( 'lock_wplogin', true );
+	wpum_update_option( 'email_template', 'default' );
+	wpum_update_option( 'from_email', get_option( 'admin_email' ) );
+	wpum_update_option( 'from_name', get_option( 'blogname' ) );
+	wpum_update_option( 'guests_can_view_profiles', true );
+	wpum_update_option( 'members_can_view_profiles', true );
 
 	// Clear the permalinks.
 	flush_rewrite_rules();
