@@ -35,6 +35,85 @@ function wp_user_manager_install( $network_wide = false ) {
 }
 
 /**
+ * Generates core pages and updates settings panel with the newly created pages.
+ *
+ * @since 1.0.0
+ * @return void
+ */
+function wpum_generate_pages() {
+	// Generate login page
+	if ( ! wpum_get_option( 'login_page' ) ) {
+		$login = wp_insert_post(
+			array(
+				'post_title'     => __( 'Login', 'wpum' ),
+				'post_content'   => '[wpum_login_form psw_link="yes" register_link="yes"]',
+				'post_status'    => 'publish',
+				'post_author'    => 1,
+				'post_type'      => 'page',
+				'comment_status' => 'closed'
+			)
+		);
+		wpum_update_option( 'login_page', [ $login ] );
+	}
+	// Generate password recovery page
+	if ( ! wpum_get_option( 'password_recovery_page' ) ) {
+		$psw = wp_insert_post(
+			array(
+				'post_title'     => __( 'Password Reset', 'wpum' ),
+				'post_content'   => '[wpum_password_recovery login_link="yes" register_link="yes"]',
+				'post_status'    => 'publish',
+				'post_author'    => 1,
+				'post_type'      => 'page',
+				'comment_status' => 'closed'
+			)
+		);
+		wpum_update_option( 'password_recovery_page', [ $psw ] );
+	}
+	// Generate password recovery page
+	if ( ! wpum_get_option( 'registration_page' ) ) {
+		$register = wp_insert_post(
+			array(
+				'post_title'     => __( 'Register', 'wpum' ),
+				'post_content'   => '[wpum_register login_link="yes" psw_link="yes"]',
+				'post_status'    => 'publish',
+				'post_author'    => 1,
+				'post_type'      => 'page',
+				'comment_status' => 'closed'
+			)
+		);
+		wpum_update_option( 'registration_page', [ $register ] );
+	}
+	// Generate account page
+	if ( ! wpum_get_option( 'account_page' ) ) {
+		$account = wp_insert_post(
+			array(
+				'post_title'     => __( 'Account', 'wpum' ),
+				'post_content'   => '[wpum_account]',
+				'post_status'    => 'publish',
+				'post_author'    => 1,
+				'post_type'      => 'page',
+				'comment_status' => 'closed'
+			)
+		);
+		wpum_update_option( 'account_page', [ $account ] );
+	}
+	// Generate password recovery page
+	if ( ! wpum_get_option( 'profile_page' ) ) {
+		$profile = wp_insert_post(
+			array(
+				'post_title'     => __( 'Profile', 'wpum' ),
+				'post_content'   => '[wpum_profile]',
+				'post_status'    => 'publish',
+				'post_author'    => 1,
+				'post_type'      => 'page',
+				'comment_status' => 'closed'
+			)
+		);
+		wpum_update_option( 'profile_page', [ $profile ] );
+	}
+}
+
+/**
  * Run the installation process of the plugin.
  *
  * @return void
@@ -55,6 +134,15 @@ function wpum_run_install() {
 
 	// Update current version.
 	update_option( 'wpum_version', WPUM_VERSION );
+
+	// Install default pages
+	wpum_generate_pages();
+
+	// Clear the permalinks.
+	flush_rewrite_rules();
+
+	// Setup permalinks for WPUM.
+	update_option( 'wpum_permalink', 'username' );
 
 	// Add the transient to redirect.
 	set_transient( '_wpum_activation_redirect', true, 30 );

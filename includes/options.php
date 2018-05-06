@@ -35,3 +35,46 @@ function wpum_get_option( $key = '', $default = false ) {
 	$value = apply_filters( 'wpum_get_option', $value, $key, $default );
 	return apply_filters( 'wpum_get_option_' . $key, $value, $key, $default );
 }
+
+/**
+ * Update an option
+ *
+ * Updates an wpum setting value in both the db and the global variable.
+ * Warning: Passing in an empty, false or null string value will remove
+ *          the key from the wpum_options array.
+ *
+ * @param string $key The Key to update
+ * @param string|bool|int $value The value to set the key to
+ * @return boolean True if updated, false if not.
+ */
+function wpum_update_option( $key = '', $value = false ) {
+
+	// If no key, exit.
+	if ( empty( $key ) ){
+		return false;
+	}
+
+	if ( empty( $value ) ) {
+		$remove_option = wpum_delete_option( $key );
+		return $remove_option;
+	}
+
+	// First let's grab the current settings.
+	$options = get_option( 'wpum_settings' );
+
+	// Let's let devs alter that value coming in.
+	$value = apply_filters( 'wpum_update_option', $value, $key );
+
+	// Next let's try to update the value.
+	$options[ $key ] = $value;
+	$did_update      = update_option( 'wpum_settings', $options );
+
+	// If it updated, let's update the global variable.
+	if ( $did_update ){
+		global $wpum_options;
+		$wpum_options[ $key ] = $value;
+	}
+
+	return $did_update;
+
+}
