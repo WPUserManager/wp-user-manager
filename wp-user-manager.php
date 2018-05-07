@@ -128,6 +128,13 @@ if ( ! class_exists( 'WP_User_Manager' ) ) :
 		public $elements;
 
 		/**
+		 * Async process object holder.
+		 *
+		 * @var object
+		 */
+		public $async_process;
+
+		/**
 		 * Main WPUM Instance.
 		 *
 		 * Ensures that only one instance of WPUM exists in memory at any one
@@ -191,6 +198,7 @@ if ( ! class_exists( 'WP_User_Manager' ) ) :
 			require_once WPUM_PLUGIN_DIR . 'includes/actions.php';
 			require_once WPUM_PLUGIN_DIR . 'includes/filters.php';
 			require_once WPUM_PLUGIN_DIR . 'includes/assets.php';
+			require_once WPUM_PLUGIN_DIR . 'includes/wpum-admin/class-wpum-async-process.php';
 			require_once WPUM_PLUGIN_DIR . 'includes/abstracts/abstract-wp-db-table.php';
 			require_once WPUM_PLUGIN_DIR . 'includes/abstracts/abstract-wpum-db.php';
 			require_once WPUM_PLUGIN_DIR . 'includes/abstracts/abstract-shortcode-generator.php';
@@ -232,6 +240,8 @@ if ( ! class_exists( 'WP_User_Manager' ) ) :
 			require_once WPUM_PLUGIN_DIR . 'includes/wpum-directories/wpum-directories-functions.php';
 			require_once WPUM_PLUGIN_DIR . 'includes/wpum-shortcodes/shortcodes.php';
 			require_once WPUM_PLUGIN_DIR . 'includes/widgets.php';
+
+			require_once WPUM_PLUGIN_DIR . 'includes/wpum-upgrades/class-wpum-updates.php';
 
 			if ( is_admin() || ( defined( 'WP_CLI' ) && WP_CLI ) ) {
 				require_once WPUM_PLUGIN_DIR . 'includes/wpum-admin/class-wpum-getting-started.php';
@@ -342,6 +352,7 @@ if ( ! class_exists( 'WP_User_Manager' ) ) :
 			$this->registration_form_meta = new WPUM_DB_Registration_Form_Meta();
 			$this->elements               = new WPUM_HTML_Elements();
 			$this->search_meta            = new WPUM_DB_Search_Fields();
+			$this->async_process          = new WPUM_Async_Process();
 
 			/**
 			 * @todo document after_wpum_init

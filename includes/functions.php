@@ -1036,3 +1036,109 @@ function wpum_get_allowed_user_roles() {
 	return $user_roles;
 
 }
+
+/**
+ * Get plugin info including status, type, and license validation.
+ *
+ * This is an enhanced version of get_plugins() that returns the status
+ * (`active` or `inactive`) of all plugins, type of plugin (`add-on` or `other`
+ * and license validation for WPUM add-ons (`true` or `false`). Does not include
+ * MU plugins.
+ *
+ * @return array Plugin info plus status, type, and license validation if
+ *               available.
+ */
+function wpum_get_plugins() {
+	$plugins             = get_plugins();
+	$active_plugin_paths = (array) get_option( 'active_plugins', array() );
+	if ( is_multisite() ) {
+		$network_activated_plugin_paths = array_keys( get_site_option( 'active_sitewide_plugins', array() ) );
+		$active_plugin_paths            = array_merge( $active_plugin_paths, $network_activated_plugin_paths );
+	}
+	foreach ( $plugins as $plugin_path => $plugin_data ) {
+		// Is plugin active?
+		if ( in_array( $plugin_path, $active_plugin_paths ) ) {
+			$plugins[ $plugin_path ]['Status'] = 'active';
+		} else {
+			$plugins[ $plugin_path ]['Status'] = 'inactive';
+		}
+		$dirname = strtolower( dirname( $plugin_path ) );
+		if ( strstr( $dirname, 'wpum-' ) && strstr( $plugin_data['AuthorURI'], 'wpusermanagerr.com' ) ) {
+			$plugins[ $plugin_path ]['Type'] = 'add-on';
+			$license_active = __wpum_get_active_license_info( WPUM_License::get_short_name( $plugin_data['Name'] ) );
+			if ( ! empty( $license_active ) && 'valid' === $license_active->license ) {
+				$plugins[ $plugin_path ]['License'] = true;
+			} else {
+				$plugins[ $plugin_path ]['License'] = false;
+			}
+		} else {
+			$plugins[ $plugin_path ]['Type'] = 'other';
+		}
+	}
+	return $plugins;
+}
+
+/**
+ * Check if the upgrade routine has been run for a specific action
+ *
+ * @param  string $upgrade_action The upgrade action to check completion for
+ * @return bool                   If the action has been added to the completed actions array
+ */
+function wpum_has_upgrade_completed( $upgrade_action = '' ) {
+	// Bailout.
+	if ( empty( $upgrade_action ) ) {
+		return false;
+	}
+	// Fresh install?
+	// If fresh install then all upgrades will be consider as completed.
+	$is_fresh_install = ! get_option( 'wpum_version' );
+	if ( $is_fresh_install ) {
+		return true;
+	}
+	$completed_upgrades = wpum_get_completed_upgrades();
+	return in_array( $upgrade_action, $completed_upgrades );
+}
+
+/**
+ * For use when doing 'stepped' upgrade routines, to see if we need to start somewhere in the middle
+ *
+ * @return mixed   When nothing to resume returns false, otherwise starts the upgrade where it left off
+ */
+function wpum_maybe_resume_upgrade() {
+	$doing_upgrade = get_option( 'wpum_doing_upgrade', false );
+	if ( empty( $doing_upgrade ) ) {
+		return false;
+	}
+	return $doing_upgrade;
+}
+
+/**
+ * Adds an upgrade action to the completed upgrades array
+ *
+ * @param  string $upgrade_action The action to add to the completed upgrades array
+ * @return bool                   If the function was successfully added
+ */
+function wpum_set_upgrade_complete( $upgrade_action = '' ) {
+	if ( empty( $upgrade_action ) ) {
+		return false;
+	}
+	$completed_upgrades   = wpum_get_completed_upgrades();
+	$completed_upgrades[] = $upgrade_action;
+	// Remove any blanks, and only show uniques.
+	$completed_upgrades = array_unique( array_values( $completed_upgrades ) );
+	/**
+	 * Fire the action when any upgrade set to complete.
+	 */
+	do_action( 'wpum_set_upgrade_completed', $upgrade_action, $completed_upgrades );
+	return update_option( 'wpum_completed_upgrades', $completed_upgrades, 'no' );
+}
+
+/**
+ * Get's the array of completed upgrade actions
+ *
+ * @since  1.0
+ * @return array The array of completed upgrades
+ */
+function wpum_get_completed_upgrades() {
+	return (array) get_option( 'wpum_completed_upgrades' );
+}

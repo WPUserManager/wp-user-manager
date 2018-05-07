@@ -54,7 +54,7 @@ module.exports = function( grunt ) {
 					'assets/js/admin/admin-email-customizer-controls.min.js': ['assets/js/src/admin/admin-email-customizer-controls.js'],
 					'assets/js/admin/admin-email-customizer.min.js': ['assets/js/src/admin/admin-email-customizer.js'],
 					'assets/js/admin/admin-menus.min.js': ['assets/js/src/admin/admin-menus.js'],
-					'assets/js/admin/elementor-preview.min.js': ['assets/js/src/admin/elementor-preview.js'],
+					'assets/js/admin/admin-upgrades.min.js': ['assets/js/src/admin/admin-upgrades.js'],
 					'assets/js/wp-user-manager.min.js': ['assets/js/src/wp-user-manager.js']
 				},
 				options: {
@@ -83,6 +83,7 @@ module.exports = function( grunt ) {
 					'assets/css/admin/wpum-logo.css': 'assets/css/src/admin/wpum-logo.scss',
 					'assets/css/admin/logo-font.css': 'assets/css/src/admin/logo-font.scss',
 					'assets/css/admin/addons.css': 'assets/css/src/admin/addons.scss',
+					'assets/css/admin/upgrades.css': 'assets/css/src/admin/upgrades.scss',
 					'assets/css/wpum.css': 'assets/css/src/wpum.scss',
 				}
 			}

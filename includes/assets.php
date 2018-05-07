@@ -26,6 +26,20 @@ function wpum_load_admin_logo_style() {
 	if( in_array( $screen->base, $allowed_screens ) ) {
 		wp_enqueue_style( 'wpum-logo', WPUM_PLUGIN_URL . 'assets/css/admin/wpum-logo.css', array(), WPUM_VERSION );
 	}
+
+	wp_enqueue_script( 'wpum-upgrades', WPUM_PLUGIN_URL . 'assets/js/admin/admin-upgrades.min.js' , array(), WPUM_VERSION, true );
+	wp_enqueue_style( 'wpum-upgrades-style', WPUM_PLUGIN_URL . 'assets/css/admin/upgrades.css' , array(), WPUM_VERSION );
+
+	$js_vars = [
+		'updates' => array(
+			'ajax_error' => __( 'Please reload this page and try again' ),
+		),
+		'db_update_confirmation_msg_button' => __( 'Run Updates' ),
+		'db_update_confirmation_msg'        => __( 'The following process will make updates to your site\'s database. Please create a database backup before proceeding with updates.' ),
+		'error_message'                     => __( 'Something went wrong kindly try again!' ),
+	];
+	wp_localize_script( 'wpum-upgrades', 'wpum_vars', $js_vars );
+
 }
 add_action( 'admin_enqueue_scripts', 'wpum_load_admin_logo_style' );
 
