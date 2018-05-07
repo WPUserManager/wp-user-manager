@@ -46,6 +46,12 @@ class WPUM_Admin_Notices {
 			WPUM()->notices->register_notice( 'wpum_rating', 'success', $rating_message );
 		}
 
+		// Display notice for 2.0 migration routine.
+		if( ! get_option( 'wpum_did_v2_migration' ) ) {
+			$migration_message = __( 'WP User Manager needs to upgrade the database. Before the upgrade, <strong><u>please ensure you have made a backup of your database.</u></strong>' ) . '<a href="#" class="button-primary" style="margin-left:10px;">'. esc_html__( 'Start upgrade' ) .'</a>';
+			WPUM()->notices->register_notice( 'wpum_v2_migration', 'warning', $migration_message, [ 'dismissible' => false ] );
+		}
+
 	}
 
 }
