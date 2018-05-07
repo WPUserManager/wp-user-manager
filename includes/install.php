@@ -126,9 +126,10 @@ function wpum_install_registration_form() {
 		]
 	);
 
-	$default_form_id->add_meta( 'default', true );
-	$default_form_id->add_meta( 'role', get_option( 'default_role' ) );
-	$default_form_id->add_meta( 'fields', [] );
+	$default_form = new WPUM_Registration_Form( $default_form_id );
+	$default_form->add_meta( 'default', true );
+	$default_form->add_meta( 'role', get_option( 'default_role' ) );
+	$default_form->add_meta( 'fields', [] );
 
 }
 
@@ -185,9 +186,6 @@ function wpum_run_install() {
 		update_option( 'wpum_version_upgraded_from', $current_version );
 	}
 
-	// Update current version.
-	update_option( 'wpum_version', WPUM_VERSION );
-
 	// Install default pages
 	wpum_generate_pages();
 
@@ -205,6 +203,9 @@ function wpum_run_install() {
 
 	// Setup permalinks for WPUM.
 	update_option( 'wpum_permalink', 'username' );
+
+	// Update current version.
+	update_option( 'wpum_version', WPUM_VERSION );
 
 	// Add the transient to redirect.
 	set_transient( '_wpum_activation_redirect', true, 30 );
