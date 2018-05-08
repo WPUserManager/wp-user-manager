@@ -70,6 +70,14 @@ function wpum_show_upgrade_notices( $wpum_updates ) {
 		)
 	);
 
+	$wpum_updates->register(
+		array(
+			'id'       => 'v2_migration_emails',
+			'version'  => '2.0.0',
+			'callback' => 'wpum_v200_upgrade_emails_callback',
+		)
+	);
+
 }
 add_action( 'wpum_register_updates', 'wpum_show_upgrade_notices' );
 
@@ -211,5 +219,59 @@ function wpum_v200_upgrade_install_registration_form_callback() {
 	wpum_install_registration_form();
 
 	wpum_set_upgrade_complete( 'v2_migration_install_registration_form' );
+
+}
+
+/**
+ * Migrate currently installed emails to the new format.
+ *
+ * @return void
+ */
+function wpum_v200_upgrade_emails_callback() {
+
+	$wpum_updates    = WPUM_Updates::get_instance();
+	$existing_emails = get_option( 'wpum_emails' );
+	$new_emails      = '';
+
+	if( ! empty( $existing_emails ) && is_array( $existing_emails ) ) {
+
+		// Grab the existing registration email and reformat it for the new emails.
+		if( array_key_exists( 'register', $existing_emails ) ) {
+
+			$existing_registration_email = $existing_emails[ 'register' ];
+			$existing_email_subject      = $existing_registration_email[ 'subject' ];
+			$existing_email_message      = $existing_registration_email[ 'message' ];
+
+			$new_emails[ 'registration_confirmation' ] = [
+				'title'   => $existing_email_subject,
+				'subject' => $existing_email_subject,
+				'content' => $existing_email_message,
+				'footer'  => '<a href="{siteurl}">{sitename}</a>'
+			];
+
+		}
+
+		if( array_key_exists( 'password', $existing_emails ) ) {
+
+			$existing_password_recovery_email = $existing_emails[ 'password' ];
+			$existing_email_subject           = $existing_password_recovery_email[ 'subject' ];
+			$existing_email_message           = $existing_password_recovery_email[ 'message' ];
+
+			$new_emails[ 'password_recovery_request' ] = [
+				'title'   => $existing_email_subject,
+				'subject' => $existing_email_subject,
+				'content' => $existing_email_message,
+				'footer'  => '<a href="{siteurl}">{sitename}</a>'
+			];
+
+		}
+
+	}
+
+	if( is_array( $new_emails ) && ! empty( $new_emails ) ) {
+		update_option( 'wpum_email', $new_emails );
+	}
+
+	wpum_set_upgrade_complete( 'v2_migration_emails' );
 
 }
