@@ -59,9 +59,10 @@ function wpum_get_login_methods() {
  * Retrieve a list of all user roles and cache them into a transient.
  *
  * @param boolean $force set to true if loading outside the wpum settings
+ * @param boolean $admin set to true to load the admin role too
  * @return array
  */
-function wpum_get_roles( $force = false ) {
+function wpum_get_roles( $force = false, $admin = false ) {
 
 	$roles = [];
 
@@ -71,7 +72,7 @@ function wpum_get_roles( $force = false ) {
 
 	$transient = get_transient( 'wpum_get_roles' );
 
-	if ( $transient ) {
+	if ( $transient && ! $force ) {
 		$roles = $transient;
 	} else {
 
@@ -79,7 +80,7 @@ function wpum_get_roles( $force = false ) {
 		$available_roles = $wp_roles->get_names();
 
 		foreach ( $available_roles as $role_id => $role ) {
-			if( $role_id == 'administrator' ) {
+			if( $role_id == 'administrator' && ! $admin ) {
 				continue;
 			}
 			$roles[] = array(

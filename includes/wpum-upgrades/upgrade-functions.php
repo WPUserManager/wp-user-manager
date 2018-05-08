@@ -86,6 +86,14 @@ function wpum_show_upgrade_notices( $wpum_updates ) {
 		)
 	);
 
+	$wpum_updates->register(
+		array(
+			'id'       => 'v2_migrate_directories',
+			'version'  => '2.0.0',
+			'callback' => 'wpum_v200_migrate_directories_callback',
+		)
+	);
+
 }
 add_action( 'wpum_register_updates', 'wpum_show_upgrade_notices' );
 
@@ -301,5 +309,71 @@ function wpum_v200_upgrade_install_search_fields_callback() {
 	$wpum_updates->set_percentage( 100, 100 );
 
 	wpum_set_upgrade_complete( 'v2_install_search_fields' );
+
+}
+
+/**
+ * Migrate all available directories to the new fields format.
+ *
+ * @return void
+ */
+function wpum_v200_migrate_directories_callback() {
+
+	$wpum_updates = WPUM_Updates::get_instance();
+
+	$directories = new WP_Query( array(
+			'paged'          => $wpum_updates->step,
+			'status'         => 'any',
+			'order'          => 'ASC',
+			'post_type'      => 'wpum_directory',
+			'posts_per_page' => 20,
+		)
+	);
+
+	if ( $directories->have_posts() ) {
+
+		$wpum_updates->set_percentage( $directories->found_posts, ( $wpum_updates->step * 20 ) );
+
+		while ( $directories->have_posts() ) {
+
+			$directories->the_post();
+
+			$directory_id = get_the_ID();
+
+			// Get all the existing custom fields.
+			$directory_roles        = get_post_meta( $directory_id, 'directory_roles', true );
+			$display_search_form    = get_post_meta( $directory_id, 'display_search_form', true );
+			$excluded_ids           = get_post_meta( $directory_id, 'excluded_ids', true );
+			$profiles_per_page      = get_post_meta( $directory_id, 'profiles_per_page', true );
+			$directory_template     = get_post_meta( $directory_id, 'directory_template', true );
+			$display_sorter         = get_post_meta( $directory_id, 'display_sorter', true );
+			$display_amount         = get_post_meta( $directory_id, 'display_amount', true );
+			$default_sorting_method = get_post_meta( $directory_id, 'default_sorting_method', true );
+
+			carbon_set_post_meta( $directory_id, 'directory_assigned_roles', $directory_roles );
+
+			if( $display_search_form ) {
+				carbon_set_post_meta( $directory_id, 'directory_search_form', 'yes' );
+			}
+
+			carbon_set_post_meta( $directory_id, 'directory_excluded_users', $excluded_ids );
+			carbon_set_post_meta( $directory_id, 'directory_profiles_per_page', $profiles_per_page );
+
+			if( $display_sorter ) {
+				carbon_set_post_meta( $directory_id, 'directory_display_sorter', 'yes' );
+			}
+			if( $display_amount ) {
+				carbon_set_post_meta( $directory_id, 'directory_display_amount_filter', 'yes' );
+			}
+
+			carbon_set_post_meta( $directory_id, 'directory_sorting_method', $default_sorting_method );
+
+		}
+
+		wp_reset_postdata();
+
+	} else {
+		wpum_set_upgrade_complete( 'v2_migrate_directories' );
+	}
 
 }
