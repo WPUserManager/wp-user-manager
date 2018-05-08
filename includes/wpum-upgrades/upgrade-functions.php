@@ -54,6 +54,14 @@ function wpum_show_upgrade_notices( $wpum_updates ) {
 		)
 	);
 
+	$wpum_updates->register(
+		array(
+			'id'       => 'v2_migration_cover_field',
+			'version'  => '2.0.0',
+			'callback' => 'wpum_v200_upgrade_cover_field_callback',
+		)
+	);
+
 }
 add_action( 'wpum_register_updates', 'wpum_show_upgrade_notices' );
 
@@ -83,6 +91,11 @@ function wpum_trigger_upgrades() {
 }
 add_action( 'wp_ajax_wpum_trigger_upgrades', 'wpum_trigger_upgrades' );
 
+/**
+ * Migration callback to move page options to the new array format.
+ *
+ * @return void
+ */
 function wpum_v200_upgrade_options_callback() {
 
 	$wpum_updates = WPUM_Updates::get_instance();
@@ -155,8 +168,25 @@ function wpum_v200_upgrade_options_callback() {
 		wpum_update_option( 'backend_profile_redirect', $backend_profile_redirect );
 	}
 
+	$wpum_updates->set_percentage( 10, $wpum_updates->step * 100 );
+
 	wpum_set_upgrade_complete( 'v2_migration_options' );
 
 }
 
-print_r( wpum_get_option( 'adminbar_roles' ) );
+/**
+ * Create the new cover field introduced with WPUM 2.0
+ *
+ * @return void
+ */
+function wpum_v200_upgrade_cover_field_callback() {
+
+	$wpum_updates = WPUM_Updates::get_instance();
+
+	wpum_install_cover_image_field();
+
+	$wpum_updates->set_percentage( 20, $wpum_updates->step * 100 );
+
+	wpum_set_upgrade_complete( 'v2_migration_cover_field' );
+
+}
