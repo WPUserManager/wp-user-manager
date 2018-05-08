@@ -184,7 +184,7 @@ function wpum_v200_upgrade_options_callback() {
 		wpum_update_option( 'backend_profile_redirect', $backend_profile_redirect );
 	}
 
-	$wpum_updates->set_percentage( 10, $wpum_updates->step * 100 );
+	$wpum_updates->set_percentage( 100, 100 );
 
 	wpum_set_upgrade_complete( 'v2_migration_options' );
 
@@ -201,7 +201,7 @@ function wpum_v200_upgrade_cover_field_callback() {
 
 	wpum_install_cover_image_field();
 
-	$wpum_updates->set_percentage( 20, $wpum_updates->step * 100 );
+	$wpum_updates->set_percentage( 100, 100 );
 
 	wpum_set_upgrade_complete( 'v2_migration_cover_field' );
 
@@ -217,6 +217,8 @@ function wpum_v200_upgrade_install_registration_form_callback() {
 	$wpum_updates = WPUM_Updates::get_instance();
 
 	wpum_install_registration_form();
+
+	$wpum_updates->set_percentage( 100, 100 );
 
 	wpum_set_upgrade_complete( 'v2_migration_install_registration_form' );
 
@@ -270,6 +272,7 @@ function wpum_v200_upgrade_emails_callback() {
 
 	if( is_array( $new_emails ) && ! empty( $new_emails ) ) {
 		update_option( 'wpum_email', $new_emails );
+		$wpum_updates->set_percentage( 100, 100 );
 	}
 
 	wpum_set_upgrade_complete( 'v2_migration_emails' );
