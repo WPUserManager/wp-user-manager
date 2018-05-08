@@ -78,6 +78,14 @@ function wpum_show_upgrade_notices( $wpum_updates ) {
 		)
 	);
 
+	$wpum_updates->register(
+		array(
+			'id'       => 'v2_install_search_fields',
+			'version'  => '2.0.0',
+			'callback' => 'wpum_v200_upgrade_install_search_fields_callback',
+		)
+	);
+
 }
 add_action( 'wpum_register_updates', 'wpum_show_upgrade_notices' );
 
@@ -276,5 +284,22 @@ function wpum_v200_upgrade_emails_callback() {
 	}
 
 	wpum_set_upgrade_complete( 'v2_migration_emails' );
+
+}
+
+/**
+ * Install search fields for version 2.0.0 during migration.
+ *
+ * @return void
+ */
+function wpum_v200_upgrade_install_search_fields_callback() {
+
+	$wpum_updates = WPUM_Updates::get_instance();
+
+	wpum_setup_default_custom_search_fields();
+
+	$wpum_updates->set_percentage( 100, 100 );
+
+	wpum_set_upgrade_complete( 'v2_install_search_fields' );
 
 }
