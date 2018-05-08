@@ -94,6 +94,14 @@ function wpum_show_upgrade_notices( $wpum_updates ) {
 		)
 	);
 
+	$wpum_updates->register(
+		array(
+			'id'       => 'v2_migrate_fields',
+			'version'  => '2.0.0',
+			'callback' => 'wpum_v200_migrate_fields_callback',
+		)
+	);
+
 }
 add_action( 'wpum_register_updates', 'wpum_show_upgrade_notices' );
 
@@ -375,5 +383,75 @@ function wpum_v200_migrate_directories_callback() {
 	} else {
 		wpum_set_upgrade_complete( 'v2_migrate_directories' );
 	}
+
+}
+
+/**
+ * Migrate all user custom fields generated with WPUM to the carbon fields script.
+ *
+ * @return void
+ */
+function wpum_v200_migrate_fields_callback() {
+
+	$wpum_updates = WPUM_Updates::get_instance();
+
+	$fields = WPUM()->fields->get_fields();
+
+	foreach( $fields as $field ) {
+
+		if( $field->get_primary_id() == 'user_cover' ) {
+			continue;
+		}
+
+		$field_id = $field->get_ID();
+
+		// Get previous required status and update the meta
+		$is_required = WPUM()->fields->get_column( 'is_required', $field_id );
+		if( $is_required ) {
+			$field->add_meta( 'required', true );
+		}
+
+		// Get the visibility setting.
+		$default_visibility = WPUM()->fields->get_column( 'default_visibility', $field_id );
+		$field->add_meta( 'visibility', $default_visibility );
+
+		// Get the assigned user meta key.
+		$meta = WPUM()->fields->get_column( 'meta', $field_id );
+		if( $meta == 'first_name' ) {
+			$field->add_meta( 'user_meta_key', 'firstname' );
+		} else if( $meta == 'last_name' ) {
+			$field->add_meta( 'user_meta_key', 'lastname' );
+		} else if( $meta == 'password' ) {
+			$field->add_meta( 'user_meta_key', 'user_password' );
+		} else if( $meta == 'user_avatar' ) {
+			$field->add_meta( 'user_meta_key', 'current_user_avatar' );
+		} else {
+			$field->add_meta( 'user_meta_key', $meta );
+		}
+
+		// Grab all the options available.
+		$options = WPUM()->fields->get_column( 'options', $field_id );
+
+		if( ! empty( $options ) ) {
+			$options = maybe_unserialize( $options );
+			if( is_array( $options ) && ! empty( $options ) ) {
+				if( array_key_exists( 'can_edit', $options ) ) {
+					$field->add_meta( 'editing', $options[ 'can_edit' ] );
+				}
+				foreach( $options as $option_id => $option ) {
+					if( $option_id == 'can_edit' ) {
+						$field->add_meta( 'editing', $option );
+					} else if( $option_id == 'selectable' ) {
+						$field->add_meta( 'selectable', maybe_unserialize( $option ) );
+					} else {
+						$field->add_meta( $option_id, $option );
+					}
+				}
+			}
+		}
+
+	}
+
+	wpum_set_upgrade_complete( 'v2_migrate_fields' );
 
 }
