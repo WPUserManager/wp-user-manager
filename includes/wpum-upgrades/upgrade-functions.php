@@ -46,14 +46,13 @@ add_action( 'wpum_upgrades', 'wpum_do_automatic_upgrades' );
  */
 function wpum_show_upgrade_notices( $wpum_updates ) {
 
-	/*
 	$wpum_updates->register(
 		array(
-			'id'       => 'upgrade_to_v2_test28',
+			'id'       => 'v2_migration_options',
 			'version'  => '2.0.0',
-			'callback' => 'wpum_upgrade_to_v2_test',
+			'callback' => 'wpum_v200_upgrade_options_callback',
 		)
-	);*/
+	);
 
 }
 add_action( 'wpum_register_updates', 'wpum_show_upgrade_notices' );
@@ -83,3 +82,41 @@ function wpum_trigger_upgrades() {
 	} // End if().
 }
 add_action( 'wp_ajax_wpum_trigger_upgrades', 'wpum_trigger_upgrades' );
+
+function wpum_v200_upgrade_options_callback() {
+
+	$wpum_updates = WPUM_Updates::get_instance();
+
+	// Get existing page options.
+	$login_page             = wpum_get_option( 'login_page' );
+	$password_recovery_page = wpum_get_option( 'password_recovery_page' );
+	$registration_page      = wpum_get_option( 'registration_page' );
+	$account_page           = wpum_get_option( 'account_page' );
+	$profile_page           = wpum_get_option( 'profile_page' );
+	$terms_page             = wpum_get_option( 'terms_page' );
+
+	// Create an array for each of the page options.
+	if( ! is_array( $login_page ) && ! is_array( $password_recovery_page ) && ! is_array( $registration_page ) && ! is_array( $account_page ) && ! is_array( $profile_page ) && ! is_array( $terms_page ) ) {
+
+		$login_page             = [ $login_page ];
+		$password_recovery_page = [ $password_recovery_page ];
+		$registration_page      = [ $registration_page ];
+		$account_page           = [ $account_page ];
+		$profile_page           = [ $profile_page ];
+		$terms_page             = [ $terms_page ];
+
+		// Now update the page options into the db with the newly generated array.
+		wpum_update_option( 'login_page', $login_page );
+		wpum_update_option( 'password_recovery_page', $password_recovery_page );
+		wpum_update_option( 'registration_page', $registration_page );
+		wpum_update_option( 'account_page', $account_page );
+		wpum_update_option( 'profile_page', $profile_page );
+		wpum_update_option( 'terms_page', $terms_page );
+
+	}
+
+	wpum_set_upgrade_complete( 'v2_migration_options' );
+
+}
+
+print_r( wpum_get_option( 'adminbar_roles' ) );
