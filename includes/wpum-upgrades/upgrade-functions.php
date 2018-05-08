@@ -115,6 +115,46 @@ function wpum_v200_upgrade_options_callback() {
 
 	}
 
+	// Migrate frontend redirects options.
+	$after_login        = wpum_get_option( 'login_redirect' );
+	$after_logout       = wpum_get_option( 'logout_redirect' );
+	$after_registration = wpum_get_option( 'registration_redirect' );
+
+	if( ! is_array( $after_login ) && ! empty( $after_login ) ) {
+		$after_login = [ $after_login ];
+		wpum_update_option( 'login_redirect', $after_login );
+	}
+
+	if( ! is_array( $after_logout ) && ! empty( $after_logout ) ) {
+		$after_logout = [ $after_logout ];
+		wpum_update_option( 'logout_redirect', $after_logout );
+	}
+
+	if( ! is_array( $after_registration ) && ! empty( $after_registration ) ) {
+		$after_registration = [ $after_registration ];
+		wpum_update_option( 'registration_redirect', $after_registration );
+	}
+
+	// Migrate backend redirects options.
+	$wp_login_signup_redirect   = wpum_get_option( 'wp_login_signup_redirect' );
+	$wp_login_password_redirect = wpum_get_option( 'wp_login_password_redirect' );
+	$backend_profile_redirect   = wpum_get_option( 'backend_profile_redirect' );
+
+	if( ! is_array( $wp_login_signup_redirect ) && ! empty( $wp_login_signup_redirect ) ) {
+		$wp_login_signup_redirect = [ $wp_login_signup_redirect ];
+		wpum_update_option( 'wp_login_signup_redirect', $wp_login_signup_redirect );
+	}
+
+	if( ! is_array( $wp_login_password_redirect ) && ! empty( $wp_login_password_redirect ) ) {
+		$wp_login_password_redirect = [ $wp_login_password_redirect ];
+		wpum_update_option( 'wp_login_password_redirect', $wp_login_password_redirect );
+	}
+
+	if( ! is_array( $backend_profile_redirect ) && ! empty( $backend_profile_redirect ) ) {
+		$backend_profile_redirect = [ $backend_profile_redirect ];
+		wpum_update_option( 'backend_profile_redirect', $backend_profile_redirect );
+	}
+
 	wpum_set_upgrade_complete( 'v2_migration_options' );
 
 }
