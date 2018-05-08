@@ -62,6 +62,14 @@ function wpum_show_upgrade_notices( $wpum_updates ) {
 		)
 	);
 
+	$wpum_updates->register(
+		array(
+			'id'       => 'v2_migration_install_registration_form',
+			'version'  => '2.0.0',
+			'callback' => 'wpum_v200_upgrade_install_registration_form_callback',
+		)
+	);
+
 }
 add_action( 'wpum_register_updates', 'wpum_show_upgrade_notices' );
 
@@ -188,5 +196,20 @@ function wpum_v200_upgrade_cover_field_callback() {
 	$wpum_updates->set_percentage( 20, $wpum_updates->step * 100 );
 
 	wpum_set_upgrade_complete( 'v2_migration_cover_field' );
+
+}
+
+/**
+ * Install the registration form within the database during migration.
+ *
+ * @return void
+ */
+function wpum_v200_upgrade_install_registration_form_callback() {
+
+	$wpum_updates = WPUM_Updates::get_instance();
+
+	wpum_install_registration_form();
+
+	wpum_set_upgrade_complete( 'v2_migration_install_registration_form' );
 
 }
