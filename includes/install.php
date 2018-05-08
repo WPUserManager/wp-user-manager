@@ -204,6 +204,24 @@ function wpum_run_install() {
 	// Setup permalinks for WPUM.
 	update_option( 'wpum_permalink', 'username' );
 
+	if ( ! $current_version ) {
+		require_once WPUM_PLUGIN_DIR . 'includes/wpum-upgrades/upgrade-functions.php';
+
+		// When new upgrade routines are added, mark them as complete on fresh install.
+		$upgrade_routines = array(
+			'v2_migration_options',
+			'v2_migration_cover_field',
+			'v2_migration_install_registration_form',
+			'v2_migration_emails',
+			'v2_install_search_fields',
+			'v2_migrate_directories',
+			'v2_migrate_fields'
+		);
+		foreach ( $upgrade_routines as $upgrade ) {
+			wpum_set_upgrade_complete( $upgrade );
+		}
+	}
+
 	// Update current version.
 	update_option( 'wpum_version', WPUM_VERSION );
 
