@@ -206,6 +206,10 @@ class WPUM_License {
 
 				update_option( $this->item_shortname . '_license_active', $license_data->license );
 
+				if( $license_data->success ) {
+					update_option( $this->item_shortname . '_license_expires', $license_data->expires );
+				}
+
 				if( ! (bool) $license_data->success ) {
 					update_option( $this->item_shortname . '_license_active', $license_data->error );
 				}
@@ -247,7 +251,7 @@ class WPUM_License {
 			case 'expired' :
 				$message = sprintf(
 						__( 'Your license key expired on %s.' ),
-						date_i18n( get_option( 'date_format' ), strtotime( $license_data->expires, current_time( 'timestamp' ) ) )
+						date_i18n( get_option( 'date_format' ), strtotime( get_option( $this->item_shortname . '_license_expires' ), current_time( 'timestamp' ) ) )
 					);
 				break;
 			case 'disabled' :
@@ -282,7 +286,8 @@ class WPUM_License {
 		}
 
 		if( $status == 'valid' ) {
-			$message = '<div class="wpum-license-message is-alt notice-success"><p>' . 'asdasd' . '</p></div>';
+			$inline = sprintf( __( 'License successfully activated. Expires on %s' ), date_i18n( get_option( 'date_format' ), strtotime( get_option( $this->item_shortname . '_license_expires' ), current_time( 'timestamp' ) ) ) );
+			$message = '<div class="wpum-license-message is-alt notice-success"><p>' . $inline . '</p></div>';
 		}
 
 		return $message;
