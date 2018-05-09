@@ -84,6 +84,7 @@ module.exports = function( grunt ) {
 					'assets/css/admin/logo-font.css': 'assets/css/src/admin/logo-font.scss',
 					'assets/css/admin/addons.css': 'assets/css/src/admin/addons.scss',
 					'assets/css/admin/upgrades.css': 'assets/css/src/admin/upgrades.scss',
+					'assets/css/admin/licensing.css': 'assets/css/src/admin/licensing.scss',
 					'assets/css/wpum.css': 'assets/css/src/wpum.scss',
 				}
 			}

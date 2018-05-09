@@ -1,0 +1,64 @@
+.wpum-license-message {
+  background: #fff;
+  border-left: 4px solid #fff;
+  box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.1);
+  margin: 5px 0px 2px 0;
+  padding: 1px 12px; }
+  .wpum-license-message p {
+    margin: 0.5em 0 !important;
+    padding: 2px !important;
+    font-weight: bold; }
+  .wpum-license-message--large {
+    padding: 10px 20px; }
+  .wpum-license-message.notice-success {
+    border-left-color: #46b450; }
+  .wpum-license-message.notice-warning {
+    border-left-color: #ffb900; }
+  .wpum-license-message.notice-error {
+    border-left-color: #dc3232; }
+    .wpum-license-message.notice-error a {
+      text-decoration: underline; }
+  .wpum-license-message.notice-info {
+    border-left-color: #00a0d2; }
+  .wpum-license-message .notice-dismiss {
+    position: absolute;
+    top: 0;
+    right: 1px;
+    border: none;
+    margin: 0;
+    padding: 9px;
+    background: none;
+    color: #72777c;
+    cursor: pointer; }
+    .wpum-license-message .notice-dismiss:before {
+      background: 0 0;
+      color: #72777c;
+      content: "\f153";
+      display: block;
+      font: 400 16px/20px dashicons;
+      speak: none;
+      height: 20px;
+      text-align: center;
+      width: 20px;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale; }
+    .wpum-license-message .notice-dismiss:focus {
+      outline: none;
+      box-shadow: 0 0 0 1px #5b9dd9, 0 0 2px 1px rgba(30, 140, 190, 0.8); }
+    .wpum-license-message .notice-dismiss:hover:before, .wpum-license-message .notice-dismiss:active:before, .wpum-license-message .notice-dismiss:focus:before {
+      color: #c00; }
+  .wpum-license-message.is-dismissible {
+    padding-right: 38px;
+    position: relative; }
+  .wpum-license-message.is-alt {
+    box-shadow: none; }
+    .wpum-license-message.is-alt.notice-success {
+      background-color: #ecf7ed; }
+    .wpum-license-message.is-alt.notice-warning {
+      background-color: #fff8e5; }
+    .wpum-license-message.is-alt.notice-error {
+      background-color: #fbeaea; }
+    .wpum-license-message.is-alt.notice-info {
+      background-color: #e5f5fa; }
+
+/*# sourceMappingURL=licensing.css.map */

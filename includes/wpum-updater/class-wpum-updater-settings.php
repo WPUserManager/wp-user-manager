@@ -31,6 +31,7 @@ class WPUM_Updater_Settings {
 	 * @return void
 	 */
 	public function hooks() {
+		add_action( 'admin_enqueue_scripts', [ $this, 'license_scripts' ] );
 		add_action( 'carbon_fields_register_fields', [ $this, 'license_settings_panel' ] );
 	}
 
@@ -54,11 +55,24 @@ class WPUM_Updater_Settings {
 	 */
 	private function get_registered_fields() {
 
-		$settings = [];
-		$registered_addons = apply_filters( 'wpum_licenses_register_addon', [] );
+		$settings = apply_filters( 'wpum_licenses_register_addon_settings', [] );
+
+		$settings[] = Field::make( 'hidden', 'wpum_license_submission' );
 
 		return $settings;
 
+	}
+
+	/**
+	 * Load custom styling on the licensing settings page.
+	 *
+	 * @return void
+	 */
+	public function license_scripts() {
+		$screen = get_current_screen();
+		if( $screen->base == 'settings_page_wpum-licenses' ) {
+			wp_enqueue_style( 'wpum-license-styles', WPUM_PLUGIN_URL . 'assets/css/admin/licensing.css', false, WPUM_VERSION );
+		}
 	}
 
 }
