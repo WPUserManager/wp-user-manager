@@ -41,7 +41,8 @@ $options_to_delete = [
 	'wpum_permalink',
 	'wpum_settings',
 	'wpum_version',
-	'wpum_version_upgraded_from'
+	'wpum_version_upgraded_from',
+	'wpum_completed_upgrades'
 ];
 
 foreach( $options_to_delete as $option ) {
