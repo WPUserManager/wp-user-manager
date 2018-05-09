@@ -162,13 +162,13 @@ function wpum_restrict_wplogin() {
 	if( 'wp-login.php' == $pagenow ) {
 		$login_page = wpum_get_core_page_id( 'login' );
 		if( $login_page && wpum_get_option( 'lock_wplogin' ) && ! isset( $_GET['action'] ) ) {
-			wp_safe_redirect( esc_url( get_permalink( $login_page[0] ) ) );
+			wp_safe_redirect( esc_url( get_permalink( $login_page ) ) );
 			exit;
 		}
 	}
 
 }
-// add_action( 'init', 'wpum_restrict_wplogin' );
+add_action( 'init', 'wpum_restrict_wplogin' );
 
 /**
  * Restrict access to the account page only to logged in users.
