@@ -153,6 +153,11 @@ class WPUM_License {
 
 	}
 
+	/**
+	 * Activate a license.
+	 *
+	 * @return void
+	 */
 	public function activate_license() {
 
 		// Detect if license submission.
@@ -220,10 +225,25 @@ class WPUM_License {
 
 	}
 
+	/**
+	 * Deactivate a license.
+	 *
+	 * @return void
+	 */
 	public function deactivate_license() {
+
+		if( isset( $_GET[ $this->item_shortname . '_deactivation' ] ) ) {
+			print_r( $_GET );
+			exit;
+		}
 
 	}
 
+	/**
+	 * Trigger updates for the plugin.
+	 *
+	 * @return void
+	 */
 	public function auto_updater() {
 
 		if ( 'valid' !== get_option( $this->item_shortname . '_license_active' ) )
@@ -240,6 +260,11 @@ class WPUM_License {
 
 	}
 
+	/**
+	 * Display a message related to the license.
+	 *
+	 * @return string
+	 */
 	public function get_status_message() {
 
 		$message = '';
@@ -288,9 +313,23 @@ class WPUM_License {
 		if( $status == 'valid' ) {
 			$inline = sprintf( __( 'License successfully activated. Expires on %s' ), date_i18n( get_option( 'date_format' ), strtotime( get_option( $this->item_shortname . '_license_expires' ), current_time( 'timestamp' ) ) ) );
 			$message = '<div class="wpum-license-message is-alt notice-success"><p>' . $inline . '</p></div>';
+			$message .= '<br/><a href="' . $this->get_license_deactivation_url() . '" class="button">' . esc_html__( 'Deactivate license' ) . '</a>';
 		}
 
 		return $message;
+
+	}
+
+	/**
+	 * Retrieve a deactivation url for a given plugin license.
+	 *
+	 * @return string
+	 */
+	private function get_license_deactivation_url() {
+
+		$url = wp_nonce_url( admin_url( 'options-general.php?page=wpum-licenses' ), $this->item_shortname, $this->item_shortname . '_deactivation' );
+
+		return $url;
 
 	}
 
