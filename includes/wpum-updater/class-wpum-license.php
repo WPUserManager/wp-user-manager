@@ -122,10 +122,8 @@ class WPUM_License {
 		// Register settings.
 		add_filter( 'wpum_licenses_register_addon_settings', array( $this, 'settings' ), 1 );
 
+		// Activate license.
 		add_action( 'carbon_fields_theme_options_container_saved', [ $this, 'activate_license' ] );
-
-		// Activate license key on settings save.
-		//add_action( 'admin_init', array( $this, 'activate_license' ) );
 
 		// Deactivate license key.
 		add_action( 'admin_init', array( $this, 'deactivate_license' ) );
@@ -232,9 +230,46 @@ class WPUM_License {
 	 */
 	public function deactivate_license() {
 
-		if( isset( $_GET[ $this->item_shortname . '_deactivation' ] ) ) {
-			print_r( $_GET );
-			exit;
+		if( isset( $_GET[ $this->item_shortname . '_deactivation' ] ) && current_user_can( 'manage_options' ) ) {
+			if ( ! wp_verify_nonce( $_GET[ $this->item_shortname . '_deactivation' ], $this->item_shortname ) ) {
+				return;
+			} else {
+
+				// data to send in our API request
+				$api_params = array(
+					'edd_action' => 'deactivate_license',
+					'license'    => $this->license,
+					'item_name'  => urlencode( $this->item_name ), // the name of our product in EDD
+					'url'        => home_url()
+				);
+
+				// Call the custom API.
+				$response = wp_remote_post( $this->api_url, array( 'timeout' => 15, 'sslverify' => false, 'body' => $api_params ) );
+
+				// make sure the response came back okay
+				if ( is_wp_error( $response ) || 200 !== wp_remote_retrieve_response_code( $response ) ) {
+
+					if ( is_wp_error( $response ) ) {
+						$message = $response->get_error_message();
+					} else {
+						$message = __( 'An error occurred, please try again.' );
+					}
+
+					wp_die( $message );
+
+				}
+
+				// decode the license data
+				$license_data = json_decode( wp_remote_retrieve_body( $response ) );
+
+				// $license_data->license will be either "deactivated" or "failed"
+				if( $license_data->license == 'deactivated' ) {
+					delete_option( $this->item_shortname . '_license_active' );
+					delete_option( $this->item_shortname . '_license_expires' );
+					wp_redirect( add_query_arg( [ 'license' => 'deactivated' ], admin_url( 'options-general.php?page=wpum-licenses' ) ) );
+				}
+
+			}
 		}
 
 	}
