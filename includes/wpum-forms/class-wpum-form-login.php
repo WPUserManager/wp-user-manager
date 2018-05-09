@@ -197,17 +197,14 @@ class WPUM_Form_Login extends WPUM_Form {
 				'remember'      => $values['login']['remember'] ? true : false
 			];
 
-			// Detect if a specific redirect has been set.
-			$referrer = isset( $_GET['redirect_to'] ) ? esc_url( $_GET['redirect_to'] ): false;
 
-			// If no redirect and there's a referrer and the login redirect option is blank, then redirect to the referrer.
-			if( ! $referrer && isset( $_POST['submit_referrer'] ) && ! empty( $_POST['submit_referrer'] ) && ! wpum_get_login_redirect() ) {
-				$referrer = esc_url( $_POST['submit_referrer'] );
-			}
-
-			// If no redirection at all, redirect to the login page which will show a message.
-			if( ! $referrer || empty( $referrer ) ) {
-				$referrer = get_permalink( wpum_get_core_page_id( 'login' ) );
+			$redirect = isset( $_GET['redirect_to'] ) ? esc_url( $_GET['redirect_to'] ) : false;
+			if( ! $redirect && ! empty( wp_get_referer() ) ) {
+				$redirect = wp_get_referer();
+			} else if( ! empty( wpum_get_login_redirect() ) ) {
+				$redirect = wpum_get_login_redirect();
+			} else {
+				get_permalink( wpum_get_core_page_id( 'login' ) );
 			}
 
 			$user = wp_signon( $creds );
@@ -215,11 +212,7 @@ class WPUM_Form_Login extends WPUM_Form {
 			if( is_wp_error( $user ) ) {
 				throw new Exception( $user->get_error_message() );
 			} else {
-				if( ! empty( $referrer ) && ! empty( wp_validate_redirect( $referrer ) ) ) {
-					wp_safe_redirect( wp_validate_redirect( $referrer ) );
-				} else {
-					wp_safe_redirect( wpum_get_login_redirect() );
-				}
+				wp_safe_redirect( $redirect );
 				exit;
 			}
 
