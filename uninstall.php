@@ -50,9 +50,9 @@ foreach( $options_to_delete as $option ) {
 }
 
 // Delete tables created by the plugin.
-$wpdb->query( "DROP TABLE IF EXISTS " . $wpdb->prefix . "wp_wpum_fieldmeta" );
-$wpdb->query( "DROP TABLE IF EXISTS " . $wpdb->prefix . "wp_wpum_fields" );
-$wpdb->query( "DROP TABLE IF EXISTS " . $wpdb->prefix . "wp_wpum_fieldsgroups" );
-$wpdb->query( "DROP TABLE IF EXISTS " . $wpdb->prefix . "wp_wpum_registration_formmeta" );
-$wpdb->query( "DROP TABLE IF EXISTS " . $wpdb->prefix . "wp_wpum_registration_forms" );
-$wpdb->query( "DROP TABLE IF EXISTS " . $wpdb->prefix . "wp_wpum_search_fields" );
+$wpdb->query( "DROP TABLE IF EXISTS " . $wpdb->prefix . "wpum_fieldmeta" );
+$wpdb->query( "DROP TABLE IF EXISTS " . $wpdb->prefix . "wpum_fields" );
+$wpdb->query( "DROP TABLE IF EXISTS " . $wpdb->prefix . "wpum_fieldsgroups" );
+$wpdb->query( "DROP TABLE IF EXISTS " . $wpdb->prefix . "wpum_registration_formmeta" );
+$wpdb->query( "DROP TABLE IF EXISTS " . $wpdb->prefix . "wpum_registration_forms" );
+$wpdb->query( "DROP TABLE IF EXISTS " . $wpdb->prefix . "wpum_search_fields" );

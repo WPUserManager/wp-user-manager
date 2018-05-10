@@ -102,6 +102,14 @@ function wpum_show_upgrade_notices( $wpum_updates ) {
 		)
 	);
 
+	$wpum_updates->register(
+		array(
+			'id'       => 'v2_migrate_fields_groups',
+			'version'  => '2.0.0',
+			'callback' => 'wpum_v200_migrate_fields_groups_callback',
+		)
+	);
+
 }
 add_action( 'wpum_register_updates', 'wpum_show_upgrade_notices' );
 
@@ -453,5 +461,41 @@ function wpum_v200_migrate_fields_callback() {
 	}
 
 	wpum_set_upgrade_complete( 'v2_migrate_fields' );
+
+}
+
+/**
+ * Migrate the existing fields groups to the new format.
+ *
+ * @return void
+ */
+function wpum_v200_migrate_fields_groups_callback() {
+
+	$wpum_updates = WPUM_Updates::get_instance();
+
+	global $wpdb;
+
+	$old_fields_groups = $wpdb->get_results( "SELECT * FROM " . $wpdb->prefix . "wpum_field_groups" );
+
+	if( ! empty( $old_fields_groups ) && is_array( $old_fields_groups ) ) {
+
+		foreach ( $old_fields_groups as $field_group ) {
+			$new_group = new WPUM_Field_Group();
+			$new_group->add(
+				[
+					'id'          => $field_group->id,
+					'name'        => esc_html( $field_group->name ),
+					'description' => $field_group->description,
+					'is_primary'  => $field_group->is_primary ? true : false,
+					'group_order' => $field_group->group_order
+				]
+			);
+		}
+
+		$wpdb->query( "DROP TABLE IF EXISTS " . $wpdb->prefix . "wpum_field_groups" );
+
+	}
+
+	wpum_set_upgrade_complete( 'v2_migrate_fields_groups' );
 
 }
