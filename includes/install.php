@@ -215,7 +215,8 @@ function wpum_run_install() {
 			'v2_migration_emails',
 			'v2_install_search_fields',
 			'v2_migrate_directories',
-			'v2_migrate_fields'
+			'v2_migrate_fields',
+			'v2_migrate_fields_groups'
 		);
 		foreach ( $upgrade_routines as $upgrade ) {
 			wpum_set_upgrade_complete( $upgrade );
