@@ -73,7 +73,13 @@ class WPUM_Registration_Forms_Editor {
 			if( $is_vue_dev ) {
 				wp_register_script( 'wpum-registration-forms-editor', 'http://localhost:8080/registration-forms-editor.js', array(), WPUM_VERSION, true );
 			} else {
-				wp_die( 'Vue build missing' );
+				wp_register_script( 'wpum-registration-forms-editor',  WPUM_PLUGIN_URL . 'dist/static/js/registration-forms-editor.js' , array(), WPUM_VERSION, true );
+			}
+
+			if( ! $is_vue_dev ) {
+				wp_enqueue_script( 'wpum-vue-manifest' );
+				wp_enqueue_script( 'wpum-vue-vendor' );
+				wp_enqueue_style( 'wpum-registration-forms-editor-css', WPUM_PLUGIN_URL . 'dist/static/css/registration-forms-editor.css' , array(), WPUM_VERSION );
 			}
 
 			wp_enqueue_script( 'wpum-registration-forms-editor' );
