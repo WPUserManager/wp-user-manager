@@ -256,6 +256,17 @@ class WPUM_Form_Registration extends WPUM_Form {
 				'priority'    => 0,
 			];
 
+			// Add privacy policy checkbox if enabled in WP.
+			if( get_option( 'wp_page_for_privacy_policy' ) ) {
+				$fields[ 'privacy' ] = array(
+					'label'       => false,
+					'type'        => 'checkbox',
+					'description' => apply_filters( 'wpum_privacy_text', sprintf( __( 'I have read and accept the <a href="%s" target="_blank">privacy policy</a>.' ), get_permalink( get_option( 'wp_page_for_privacy_policy' ) ) ) ),
+					'required'    => true,
+					'priority'    => 9999,
+				);
+			}
+
 			// Add a terms field is enabled.
 			if( wpum_get_option( 'enable_terms' ) ) {
 				$terms_page = wpum_get_option( 'terms_page' );

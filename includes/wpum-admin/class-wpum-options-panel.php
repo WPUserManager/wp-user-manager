@@ -121,7 +121,7 @@ class WPUM_Options_Panel {
 				'misc'  => __( 'Misc settings' )
 			],
 			'registration' => [
-				'terms' => __( 'Terms & Conditions' )
+				'terms'   => __( 'Terms & Conditions' )
 			],
 			'emails' => [
 				'admin_notifications' => __( 'Administration notifications' )
