@@ -197,14 +197,16 @@ class WPUM_Form_Login extends WPUM_Form {
 				'remember'      => $values['login']['remember'] ? true : false
 			];
 
-
-			$redirect = isset( $_GET['redirect_to'] ) ? esc_url( $_GET['redirect_to'] ) : false;
-			if( ! $redirect && ! empty( wp_get_referer() ) ) {
+			if( ! empty( wp_get_referer() ) ) {
 				$redirect = wp_get_referer();
-			} else if( ! empty( wpum_get_login_redirect() ) ) {
+			} else if( empty( wp_get_referer() ) && ! empty( wpum_get_login_redirect() ) ) {
 				$redirect = wpum_get_login_redirect();
 			} else {
-				get_permalink( wpum_get_core_page_id( 'login' ) );
+				$redirect = get_permalink( wpum_get_core_page_id( 'login' ) );
+			}
+
+			if( isset( $_GET['redirect_to'] ) && ! empty( $_GET['redirect_to'] ) ) {
+				$redirect = $_GET['redirect_to'];
 			}
 
 			$user = wp_signon( $creds );
