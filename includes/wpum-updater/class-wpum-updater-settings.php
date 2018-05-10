@@ -34,6 +34,7 @@ class WPUM_Updater_Settings {
 		add_action( 'admin_enqueue_scripts', [ $this, 'license_scripts' ] );
 		add_action( 'carbon_fields_register_fields', [ $this, 'license_settings_panel' ] );
 		add_action( 'admin_notices', [ $this, 'notices' ] );
+		add_action( 'admin_footer', [ $this, 'remove_query_args' ] );
 	}
 
 	/**
@@ -92,6 +93,57 @@ class WPUM_Updater_Settings {
 			<?php
 
 		}
+
+	}
+
+	/**
+	 * Remove url query arguments when on the license page.
+	 * Right now only removes the "license" argument.
+	 *
+	 * @return void
+	 */
+	public function remove_query_args() {
+
+		$screen = get_current_screen();
+		if( $screen->base !== 'settings_page_wpum-licenses' ) {
+			return;
+		}
+
+		?>
+		<script>
+			var wpum_location = $( location );
+
+			window.wpum_removeArguments = function() {
+				function removeParam(key, sourceURL) {
+					var rtn = sourceURL.split("?")[0],
+						param, params_arr = [],
+						queryString = (sourceURL.indexOf("?") !== -1) ? sourceURL.split("?")[1] : "";
+					if (queryString !== "") {
+						params_arr = queryString.split("&");
+						for (var i = params_arr.length - 1; i >= 0; i -= 1) {
+								param = params_arr[i].split("=")[0];
+								if ($.inArray(param, key) > -1) {
+										params_arr.splice(i, 1);
+								}
+						}
+						rtn = rtn + "?" + params_arr.join("&");
+					}
+					return rtn;
+				}
+
+				var remove_query_args = ['license'];
+
+				url = wpum_location.attr('href');
+				url = removeParam(remove_query_args, url);
+
+				if (typeof history.replaceState === 'function') {
+					history.replaceState({}, '', url);
+				}
+			};
+
+			window.wpum_removeArguments();
+		</script>
+		<?php
 
 	}
 
