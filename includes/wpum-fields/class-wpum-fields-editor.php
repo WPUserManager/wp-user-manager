@@ -76,7 +76,13 @@ class WPUM_Fields_Editor {
 			if( $is_vue_dev ) {
 				wp_register_script( 'wpum-fields-editor', 'http://localhost:8080/fields-editor.js', array(), WPUM_VERSION, true );
 			} else {
-				wp_die( 'Vue build missing' );
+				wp_register_script( 'wpum-fields-editor',  WPUM_PLUGIN_URL . 'dist/static/js/fields-editor.js' , array(), WPUM_VERSION, true );
+			}
+
+			if( ! $is_vue_dev ) {
+				wp_enqueue_script( 'wpum-vue-manifest' );
+				wp_enqueue_script( 'wpum-vue-vendor' );
+				wp_enqueue_style( 'wpum-fields-editor-css', WPUM_PLUGIN_URL . 'dist/static/css/fields-editor.css' , array(), WPUM_VERSION );
 			}
 
 			wp_enqueue_script( 'wpum-fields-editor' );
