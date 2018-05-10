@@ -472,18 +472,35 @@ function wpum_v200_migrate_fields_callback() {
 			$options = maybe_unserialize( $options );
 			if( is_array( $options ) && ! empty( $options ) ) {
 				if( array_key_exists( 'can_edit', $options ) ) {
-					$field->add_meta( 'editing', $options[ 'can_edit' ] );
+					unset( $options['can_edit'] );
 				}
 				foreach( $options as $option_id => $option ) {
-					if( $option_id == 'can_edit' ) {
-						$field->add_meta( 'editing', $option );
-					} else if( $option_id == 'selectable' ) {
+					if( $option_id == 'selectable' ) {
 						$field->add_meta( 'selectable', maybe_unserialize( $option ) );
 					} else {
 						$field->add_meta( $option_id, $option );
 					}
 				}
 			}
+		}
+
+		// Mark username field as non editable.
+		if( $field->get_primary_id() == 'username' ) {
+			$field->update_meta( 'editing', 'hidden' );
+		}
+
+		// Mark other fields as editable if needed.
+		if( $field->get_primary_id() !== 'username' ) {
+
+			$editing_option_exists = WPUM()->fields->get_column( 'options', $field_id );
+			$editing_option_exists = is_array( $editing_option_exists ) && ! empty( $editing_option_exists ) && array_key_exists( 'can_edit', maybe_unserialize( $editing_option_exists ) ) ? $editing_option_exists['can_edit'] : false;
+
+			if( $editing_option_exists ) {
+				$field->update_meta( 'editing', $editing_option_exists );
+			} else {
+				$field->update_meta( 'editing', 'public' );
+			}
+
 		}
 
 	}
