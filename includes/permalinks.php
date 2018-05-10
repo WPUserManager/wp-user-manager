@@ -32,7 +32,7 @@ add_action('cortex.routes', function( RouteCollectionInterface $routes ) {
 	}
 
 	$routes->addRoute( new QueryRoute(
-		$page_slug . '{tab:[a-z]+}',
+		$page_slug . '{tab:[a-zA-Z0-9_.-]+}',
 		function(array $matches) use( $account_page_id ) {
 			return [
 		    	'tab'  => $matches['tab'],

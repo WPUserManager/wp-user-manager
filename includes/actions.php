@@ -201,9 +201,9 @@ add_action( 'template_redirect', 'wpum_restrict_account_page' );
 function wpum_display_account_page_content() {
 
 	$active_tab = get_query_var('tab');
+	$tabs       = wpum_get_account_page_tabs();
 
 	if( empty( $active_tab ) ) {
-		$tabs       = wpum_get_account_page_tabs();
 		$active_tab = key( $tabs );
 	}
 
