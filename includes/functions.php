@@ -578,9 +578,11 @@ function wpum_get_account_page_tabs() {
 		]
 	];
 
+	$tabs = apply_filters( 'wpum_get_account_page_tabs', $tabs );
+
 	uasort( $tabs, 'wpum_sort_array_by_priority' );
 
-	return apply_filters( 'wpum_get_account_page_tabs', $tabs );
+	return $tabs;
 
 }
 
