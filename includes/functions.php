@@ -766,9 +766,11 @@ function wpum_get_registered_profile_tabs() {
 		unset( $tabs['comments'] );
 	}
 
+	$tabs = apply_filters( 'wpum_get_registered_profile_tabs', $tabs );
+
 	uasort( $tabs, 'wpum_sort_array_by_priority' );
 
-	return apply_filters( 'wpum_get_registered_profile_tabs', $tabs );
+	return $tabs;
 
 }
 
