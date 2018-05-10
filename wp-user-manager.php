@@ -356,10 +356,6 @@ if ( ! class_exists( 'WP_User_Manager' ) ) :
 			$this->elements               = new WPUM_HTML_Elements();
 			$this->search_meta            = new WPUM_DB_Search_Fields();
 			$this->async_process          = new WPUM_Async_Process();
-/*
-			$test = new WPUM_License(
-				__FILE__, 'Test download', 8, '1.8.0', 'test'
-			);*/
 
 			/**
 			 * @todo document after_wpum_init
