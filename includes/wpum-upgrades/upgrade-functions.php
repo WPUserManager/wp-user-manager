@@ -280,7 +280,6 @@ function wpum_v200_upgrade_emails_callback() {
 				'title'   => $existing_email_subject,
 				'subject' => $existing_email_subject,
 				'content' => $existing_email_message,
-				'footer'  => '<a href="{siteurl}">{sitename}</a>'
 			];
 
 		}
@@ -295,7 +294,6 @@ function wpum_v200_upgrade_emails_callback() {
 				'title'   => $existing_email_subject,
 				'subject' => $existing_email_subject,
 				'content' => $existing_email_message,
-				'footer'  => '<a href="{siteurl}">{sitename}</a>'
 			];
 
 		}
