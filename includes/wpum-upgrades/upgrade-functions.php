@@ -413,6 +413,34 @@ function wpum_v200_migrate_fields_callback() {
 
 		$field_id = $field->get_ID();
 
+		// Update the assigned type of the field.
+		// We need to check for the meta flag first.
+		$existing_meta = WPUM()->fields->get_column( 'meta', $field_id );
+
+		if( $existing_meta ) {
+
+			if( $existing_meta == 'user_email' ) {
+				$field->update( [ 'type' => 'user_email' ] );
+			} else if( $existing_meta == 'password' ) {
+				$field->update( [ 'type' => 'user_password' ] );
+			} else if( $existing_meta == 'first_name' ) {
+				$field->update( [ 'type' => 'user_firstname' ] );
+			} else if( $existing_meta == 'last_name' ) {
+				$field->update( [ 'type' => 'user_lastname' ] );
+			} else if( $existing_meta == 'nickname' ) {
+				$field->update( [ 'type' => 'user_nickname' ] );
+			} else if( $existing_meta == 'display_name' ) {
+				$field->update( [ 'type' => 'user_displayname' ] );
+			} else if( $existing_meta == 'user_url' ) {
+				$field->update( [ 'type' => 'user_website' ] );
+			} else if( $existing_meta == 'description' ) {
+				$field->update( [ 'type' => 'user_description' ] );
+			} else if( $existing_meta == 'user_avatar' ) {
+				$field->update( [ 'type' => 'user_avatar' ] );
+			}
+
+		}
+
 		// Get previous required status and update the meta
 		$is_required = WPUM()->fields->get_column( 'is_required', $field_id );
 		if( $is_required ) {
