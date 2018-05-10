@@ -43,11 +43,17 @@ class WPUM_Updater_Settings {
 	 * @return void
 	 */
 	public function license_settings_panel() {
-		Container::make( 'theme_options', esc_html__( 'WP User Manager add-ons licenses' ) )
+
+		$settings = $this->get_registered_fields();
+
+		if( ! empty( $settings ) ) {
+			Container::make( 'theme_options', esc_html__( 'WP User Manager add-ons licenses' ) )
 			->set_page_parent( 'options-general.php' )
 			->set_page_menu_title( esc_html__( 'WPUM Licenses' ) )
 			->set_page_file( 'wpum-licenses' )
-			->add_fields( $this->get_registered_fields() );
+			->add_fields( $settings );
+		}
+
 	}
 
 	/**
@@ -59,7 +65,9 @@ class WPUM_Updater_Settings {
 
 		$settings = apply_filters( 'wpum_licenses_register_addon_settings', [] );
 
-		$settings[] = Field::make( 'hidden', 'wpum_license_submission' );
+		if( ! empty( $settings ) ) {
+			$settings[] = Field::make( 'hidden', 'wpum_license_submission' );
+		}
 
 		return $settings;
 
