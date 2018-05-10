@@ -15,13 +15,16 @@ if ( ! defined( 'ABSPATH' ) ) exit;
  *
  * @return void
  */
-function wpum_load_admin_logo_style() {
+function wpum_load_admin_scripts() {
 
 	$screen = get_current_screen();
 
 	$allowed_screens = [
 		'users_page_wpum-settings',
 	];
+
+	wp_register_script( 'wpum-vue-manifest', WPUM_PLUGIN_URL . 'dist/static/js/manifest.js' , array(), WPUM_VERSION, true );
+	wp_register_script( 'wpum-vue-vendor', WPUM_PLUGIN_URL . 'dist/static/js/vendor.js' , array(), WPUM_VERSION, true );
 
 	if( in_array( $screen->base, $allowed_screens ) ) {
 		wp_enqueue_style( 'wpum-logo', WPUM_PLUGIN_URL . 'assets/css/admin/wpum-logo.css', array(), WPUM_VERSION );
@@ -41,7 +44,7 @@ function wpum_load_admin_logo_style() {
 	wp_localize_script( 'wpum-upgrades', 'wpum_vars', $js_vars );
 
 }
-add_action( 'admin_enqueue_scripts', 'wpum_load_admin_logo_style' );
+add_action( 'admin_enqueue_scripts', 'wpum_load_admin_scripts' );
 
 /**
  * Load WPUM scripts on the frontend.

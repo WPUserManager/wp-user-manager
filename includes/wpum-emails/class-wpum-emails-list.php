@@ -56,14 +56,23 @@ class WPUM_Emails_List {
 	public function load_scripts() {
 
 		if( isset( $_GET['page'] ) && $_GET['page'] == 'wpum-emails' ) {
+
 			$is_vue_dev = defined( 'WPUM_VUE_DEV' ) && WPUM_VUE_DEV ? true : false;
 
+			// Detect if vue deb mode or not and register the appropriate script url.
 			if( $is_vue_dev ) {
 				wp_register_script( 'wpum-emails-editor', 'http://localhost:8080/emails.js', array(), WPUM_VERSION, true );
-				wp_enqueue_script( 'wpum-emails-editor' );
 			} else {
-				wp_die( 'Vue build missing' );
+				wp_register_script( 'wpum-emails-editor',  WPUM_PLUGIN_URL . 'dist/static/js/emails.js' , array(), WPUM_VERSION, true );
 			}
+
+			if( ! $is_vue_dev ) {
+				wp_enqueue_script( 'wpum-vue-manifest' );
+				wp_enqueue_script( 'wpum-vue-vendor' );
+				wp_enqueue_style( 'wpum-emails-editor-css', WPUM_PLUGIN_URL . 'dist/static/css/emails.css' , array(), WPUM_VERSION );
+			}
+
+			wp_enqueue_script( 'wpum-emails-editor' );
 
 			$js_variables = [
 				'ajax'          => admin_url( 'admin-ajax.php' ),
