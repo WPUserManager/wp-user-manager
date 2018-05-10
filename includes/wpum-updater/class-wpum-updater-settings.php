@@ -33,6 +33,7 @@ class WPUM_Updater_Settings {
 	public function hooks() {
 		add_action( 'admin_enqueue_scripts', [ $this, 'license_scripts' ] );
 		add_action( 'carbon_fields_register_fields', [ $this, 'license_settings_panel' ] );
+		add_action( 'admin_notices', [ $this, 'notices' ] );
 	}
 
 	/**
@@ -73,6 +74,25 @@ class WPUM_Updater_Settings {
 		if( $screen->base == 'settings_page_wpum-licenses' ) {
 			wp_enqueue_style( 'wpum-license-styles', WPUM_PLUGIN_URL . 'assets/css/admin/licensing.css', false, WPUM_VERSION );
 		}
+	}
+
+	/**
+	 * Display a notice about the status of licenses.
+	 *
+	 * @return void
+	 */
+	public function notices() {
+
+		if( is_admin() && current_user_can( 'manage_options' ) && isset( $_GET[ 'license' ] ) && $_GET['license'] == 'deactivated' ) {
+
+			?>
+			<div class="notice notice-success is-dismissible">
+				<p><strong><?php esc_html_e( 'License successfully deactivated.' ); ?></strong></p>
+			</div>
+			<?php
+
+		}
+
 	}
 
 }
