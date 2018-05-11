@@ -57,8 +57,11 @@ function wpum_load_scripts() {
 	wp_enqueue_style( 'wpum-frontend', WPUM_PLUGIN_URL . 'assets/css/wpum.min.css', array(), WPUM_VERSION );
 
 	// Load frontend js.
-	wp_enqueue_script( 'jquery' );
-	wp_enqueue_script( 'wpum-frontend-js', WPUM_PLUGIN_URL . 'assets/js/wp-user-manager.min.js' , array( 'jquery' ), WPUM_VERSION, true );
+	// At the moment the only js required is on the account page.
+	if( is_page( wpum_get_core_page_id( 'account' ) ) ) {
+		wp_enqueue_script( 'jquery' );
+		wp_enqueue_script( 'wpum-frontend-js', WPUM_PLUGIN_URL . 'assets/js/wp-user-manager.min.js' , array( 'jquery' ), WPUM_VERSION, true );
+	}
 
 }
 add_action( 'wp_enqueue_scripts', 'wpum_load_scripts' );
