@@ -344,6 +344,18 @@ class WPUM_Form_Profile extends WPUM_Form {
 				update_user_meta( $updated_user_id, '_user_cover_path', $values['account']['user_cover']['path'] );
 			}
 
+			// This means the user has deleted his avatar so we're going to erase the meta too.
+			if( isset( $values['account']['user_avatar'] ) && ! isset( $values['account']['user_avatar']['url'] ) ) {
+				delete_user_meta( $updated_user_id, 'current_user_avatar' );
+				delete_user_meta( $updated_user_id, '_current_user_avatar_path' );
+			}
+
+			// This means the user has deleted his cover so we're going to erase the meta too.
+			if( isset( $values['account']['user_cover'] ) && ! isset( $values['account']['user_cover']['url'] ) ) {
+				delete_user_meta( $updated_user_id, 'user_cover' );
+				delete_user_meta( $updated_user_id, '_user_cover_path' );
+			}
+
 			do_action( 'wpum_after_user_update', $this, $values, $updated_user_id );
 
 			// Successful, the success message now.
