@@ -40,8 +40,8 @@ class WPUM_Emails_List {
 	 */
 	public function setup_menu_page() {
 		add_users_page(
-			esc_html__( 'WP User Manager Emails' ),
-			esc_html__( 'Emails' ),
+			esc_html__( 'WP User Manager Emails', 'wp-user-manager' ),
+			esc_html__( 'Emails', 'wp-user-manager' ),
 			'manage_options',
 			'wpum-emails',
 			[ $this, 'display_emails_list' ]
@@ -83,17 +83,17 @@ class WPUM_Emails_List {
 				'default_email' => get_option( 'admin_email' ),
 				'emails'        => wpum_get_registered_emails(),
 				'labels'        => [
-					'title'             => esc_html__( 'WP User Manager Emails Customization' ),
-					'email'             => esc_html__( 'Email' ),
-					'description'       => esc_html__( 'Description' ),
-					'recipients'        => esc_html__( 'Recipient(s)' ),
-					'tooltip_automatic' => esc_html__( 'Sent automatically' ),
-					'tooltip_manual'    => esc_html__( 'Manually triggered' ),
-					'placeholder'       => esc_html__( 'Enter email address...' ),
-					'customize'         => esc_html__( 'Customize' ),
-					'send'              => esc_html__( 'Send test email' ),
-					'success'           => esc_html__( 'Test email successfully sent.' ),
-					'error'             => esc_html__( 'Something went wrong while sending the test email. Please verify the email address you typed is correct or check your server logs.' )
+					'title'             => esc_html__( 'WP User Manager Emails Customization', 'wp-user-manager' ),
+					'email'             => esc_html__( 'Email', 'wp-user-manager' ),
+					'description'       => esc_html__( 'Description', 'wp-user-manager' ),
+					'recipients'        => esc_html__( 'Recipient(s)', 'wp-user-manager' ),
+					'tooltip_automatic' => esc_html__( 'Sent automatically', 'wp-user-manager' ),
+					'tooltip_manual'    => esc_html__( 'Manually triggered', 'wp-user-manager' ),
+					'placeholder'       => esc_html__( 'Enter email address...', 'wp-user-manager' ),
+					'customize'         => esc_html__( 'Customize', 'wp-user-manager' ),
+					'send'              => esc_html__( 'Send test email', 'wp-user-manager' ),
+					'success'           => esc_html__( 'Test email successfully sent.', 'wp-user-manager' ),
+					'error'             => esc_html__( 'Something went wrong while sending the test email. Please verify the email address you typed is correct or check your server logs.', 'wp-user-manager' )
 				]
 			];
 
@@ -126,7 +126,7 @@ class WPUM_Emails_List {
 		if( $email && is_email( $email ) && current_user_can( 'manage_options' ) && is_admin() ) {
 
 			$emails       = new WPUM_Emails;
-			$emails->__set( 'heading', esc_html__( 'Test email' ) );
+			$emails->__set( 'heading', esc_html__( 'Test email', 'wp-user-manager' ) );
 
 			$sitename = wp_specialchars_decode( get_option( 'blogname' ), ENT_QUOTES );
 			$subject  = sprintf( esc_html( 'Test email from: %s' ), $sitename );

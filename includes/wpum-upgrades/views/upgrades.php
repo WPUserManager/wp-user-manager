@@ -14,7 +14,7 @@ $wpum_updates = WPUM_Updates::get_instance();
 ?>
 <div class="wrap" id="poststuff">
 	<div id="wpum-updates">
-		<h1 id="wpum-updates-h1"><?php esc_html_e( 'WP User Manager - Updates' ); ?></h1>
+		<h1 id="wpum-updates-h1"><?php esc_html_e( 'WP User Manager - Updates', 'wp-user-manager' ); ?></h1>
 		<hr class="wp-header-end"
 
 		<?php $db_updates = $wpum_updates->get_pending_db_update_count(); ?>
@@ -26,43 +26,43 @@ $wpum_updates = WPUM_Updates::get_instance();
 			$width            = ! empty( $resume_updates ) ? $resume_updates['percentage'] : 0;
 			?>
 			<div class="wpum-update-panel-content">
-				<p><?php printf( __( 'WP User Manager regularly receives new features, bug fixes, and enhancements. It is important to always stay up-to-date with latest version of WPUM core and its add-ons. Please create a backup of your site before updating. To update add-ons be sure your <a href="%1$s">license keys</a> are activated.', 'wpum' ), 'https://wpumwp.com/my-account/' ); ?></p>
+				<p><?php printf( __( 'WP User Manager regularly receives new features, bug fixes, and enhancements. It is important to always stay up-to-date with latest version of WPUM core and its add-ons. Please create a backup of your site before updating. To update add-ons be sure your <a href="%1$s">license keys</a> are activated.', 'wp-user-manager' ), 'https://wpumwp.com/my-account/' ); ?></p>
 			</div>
 
 			<div id="wpum-db-updates" data-resume-update="<?php echo absint( $wpum_updates->is_doing_updates() ); ?>">
 				<div class="postbox-container">
 					<div class="postbox">
-						<h2 class="hndle"><?php _e( 'Database Updates', 'wpum' ); ?></h2>
+						<h2 class="hndle"><?php _e( 'Database Updates', 'wp-user-manager' ); ?></h2>
 						<div class="inside">
 							<div class="panel-content">
 								<p class="wpum-update-button">
 									<span class="wpum-doing-update-text-p" <?php echo WPUM_Updates::$background_updater->is_paused_process() ? 'style="display:none;"' : '';  ?>>
 										<?php echo sprintf(
-										__( '%1$s <a href="%2$s" class="wpum-update-now %3$s">%4$s</a>', 'wpum' ),
+										__( '%1$s <a href="%2$s" class="wpum-update-now %3$s">%4$s</a>', 'wp-user-manager' ),
 										$is_doing_updates ?
-											__( 'WP User Manager is currently updating the database in the background.', 'wpum' ) :
-											__( 'WP User Manager needs to update the database.', 'wpum' ),
+											__( 'WP User Manager is currently updating the database in the background.', 'wp-user-manager' ) :
+											__( 'WP User Manager needs to update the database.', 'wp-user-manager' ),
 										$db_update_url,
 										( $is_doing_updates ? 'wpum-hidden' : '' ),
-										__( 'Update now', 'wpum' )
+										__( 'Update now', 'wp-user-manager' )
 									);
 									?>
 									</span>
 									<span class="wpum-update-paused-text-p" <?php echo ! WPUM_Updates::$background_updater->is_paused_process()  ? 'style="display:none;"' : '';  ?>>
 										<?php if ( get_option( 'wpum_upgrade_error' ) ) : ?>
-											&nbsp;<?php _e( 'An unexpected issue occurred during the database update which caused it to stop automatically. Please contact support for assistance.', 'wpum' ); ?>
+											&nbsp;<?php _e( 'An unexpected issue occurred during the database update which caused it to stop automatically. Please contact support for assistance.', 'wp-user-manager' ); ?>
 										<?php else : ?>
-											<?php _e( 'The updates have been paused.', 'wpum' ); ?>
+											<?php _e( 'The updates have been paused.', 'wp-user-manager' ); ?>
 										<?php endif; ?>
 									</span>
 
 									<?php if ( WPUM_Updates::$background_updater->is_paused_process() ) : ?>
 										<?php  $is_disabled = isset( $_GET['wpum-restart-db-upgrades'] ) ? ' disabled' : ''; ?>
-										<button id="wpum-restart-upgrades" class="button button-primary alignright" data-redirect-url="<?php echo esc_url( admin_url( '/users.php?page=wpum-updates&wpum-restart-db-upgrades=1' ) ); ?>"<?php echo $is_disabled; ?>><?php _e( 'Restart Upgrades', 'wpum' ); ?></button>
+										<button id="wpum-restart-upgrades" class="button button-primary alignright" data-redirect-url="<?php echo esc_url( admin_url( '/users.php?page=wpum-updates&wpum-restart-db-upgrades=1' ) ); ?>"<?php echo $is_disabled; ?>><?php _e( 'Restart Upgrades', 'wp-user-manager' ); ?></button>
 									<?php elseif( $wpum_updates->is_doing_updates() ): ?>
 										<?php  $is_disabled = isset( $_GET['wpum-pause-db-upgrades'] ) ? ' disabled' : ''; ?>
 										<button id="wpum-pause-upgrades" class="button button-primary alignright" data-redirect-url="<?php echo esc_url( admin_url( '/users.php?page=wpum-updates&wpum-pause-db-upgrades=1' ) ); ?>"<?php echo $is_disabled; ?>>
-											<?php _e( 'Pause Upgrades', 'wpum' ); ?>
+											<?php _e( 'Pause Upgrades', 'wp-user-manager' ); ?>
 										</button>
 									<?php endif; ?>
 								</p>
@@ -72,7 +72,7 @@ $wpum_updates = WPUM_Updates::get_instance();
 									<strong>
 										<?php
 										echo sprintf(
-											__( 'Update %s of %s', 'wpum' ),
+											__( 'Update %s of %s', 'wp-user-manager' ),
 											$wpum_updates->get_running_db_update(),
 											$wpum_updates->get_total_new_db_update_count()
 										);
@@ -114,7 +114,7 @@ $wpum_updates = WPUM_Updates::get_instance();
 			<div id="wpum-plugin-updates">
 				<div class="postbox-container">
 					<div class="postbox">
-						<h2 class="hndle"><?php _e( 'Add-on Updates', 'wpum' ); ?></h2>
+						<h2 class="hndle"><?php _e( 'Add-on Updates', 'wp-user-manager' ); ?></h2>
 						<div class="inside">
 							<div class="panel-content">
 								<p>
@@ -124,7 +124,7 @@ $wpum_updates = WPUM_Updates::get_instance();
 											'There is %1$d WP User Manager addon that needs to be updated. <a href="%2$s">Update now</a>',
 											'There are %1$d WP User Manager addons that need to be updated. <a href="%2$s">Update now</a>',
 											$plugin_updates,
-											'wpum'
+											'wp-user-manager'
 										),
 										$plugin_updates,
 										$plugin_update_url

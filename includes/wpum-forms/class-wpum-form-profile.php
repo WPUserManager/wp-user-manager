@@ -70,7 +70,7 @@ class WPUM_Form_Profile extends WPUM_Form {
 
 		$this->steps  = (array) apply_filters( 'wpum_account_tabs', array(
 			'account' => array(
-				'name'     => esc_html__( 'Profile settings' ),
+				'name'     => esc_html__( 'Profile settings', 'wp-user-manager' ),
 				'view'     => array( $this, 'show_form' ),
 				'handler'  => array( $this, 'account_handler' ),
 				'priority' => 10
@@ -120,11 +120,11 @@ class WPUM_Form_Profile extends WPUM_Form {
 			$nickname    = $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(ID) FROM $wpdb->users as users, $wpdb->usermeta as meta WHERE users.ID = meta.user_id AND meta.meta_key = 'nickname' AND meta.meta_value = %s AND users.ID <> %d", $values['account']['user_nickname'], $this->user->ID ) );
 
 			if( $displayname == '1' ) {
-				return new WP_Error( 'displayname-unique-validation-error', esc_html__( 'This display name is already in use by someone else. Display names must be unique.' ) );
+				return new WP_Error( 'displayname-unique-validation-error', esc_html__( 'This display name is already in use by someone else. Display names must be unique.', 'wp-user-manager' ) );
 			}
 
 			if( $nickname == '1' ) {
-				return new WP_Error( 'displayname-unique-validation-error', esc_html__( 'This nickname is already in use by someone else. Nicknames must be unique.' ) );
+				return new WP_Error( 'displayname-unique-validation-error', esc_html__( 'This nickname is already in use by someone else. Nicknames must be unique.', 'wp-user-manager' ) );
 			}
 
 		}

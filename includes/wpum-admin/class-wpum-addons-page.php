@@ -92,7 +92,7 @@ class WPUM_Addons_Page {
 	 * @return void
 	 */
 	public function add_addons_page() {
-		add_users_page( esc_html__( 'WP User Manager Add-ons' ), esc_html__( 'Add-ons' ), 'manage_options', 'wpum-addons', [ $this, 'view_addons' ] );
+		add_users_page( esc_html__( 'WP User Manager Add-ons', 'wp-user-manager' ), esc_html__( 'Add-ons', 'wp-user-manager' ), 'manage_options', 'wpum-addons', [ $this, 'view_addons' ] );
 	}
 
 	/**
@@ -112,7 +112,7 @@ class WPUM_Addons_Page {
 	 * @return void
 	 */
 	public function add_addon_tab( $tabs ) {
-		$tabs['wpum_addons'] = __( 'WP User Manager ' ) . '<span class="wpum-addons">'.__('Addons', 'wpum').'</span>' ;
+		$tabs['wpum_addons'] = __( 'WP User Manager ', 'wp-user-manager' ) . '<span class="wpum-addons">'.__('Addons', 'wp-user-manager').'</span>' ;
 		return $tabs;
 	}
 

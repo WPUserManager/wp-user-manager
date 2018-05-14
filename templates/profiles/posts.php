@@ -30,12 +30,12 @@ $the_query = wpum_get_posts_for_profile( $data->user->ID );
 				<a href="<?php the_permalink();?>" class="wpum-post-title"><?php the_title();?></a>
 				<ul class="wpum-post-meta">
 					<li>
-						<strong><?php esc_html_e( 'Posted on:', 'wpum' ); ?></strong>
+						<strong><?php esc_html_e( 'Posted on:', 'wp-user-manager' ); ?></strong>
 						<?php echo get_the_date(); ?> -
 					</li>
 					<li>
-						<strong><?php esc_html_e( 'Comments:', 'wpum' ); ?></strong>
-						<?php comments_popup_link( esc_html__( 'No Comments', 'wpum' ), esc_html__( '1 Comment', 'wpum' ), esc_html__( '% Comments', 'wpum' ) ); ?>
+						<strong><?php esc_html_e( 'Comments:', 'wp-user-manager' ); ?></strong>
+						<?php comments_popup_link( esc_html__( 'No Comments', 'wp-user-manager' ), esc_html__( '1 Comment', 'wp-user-manager' ), esc_html__( '% Comments', 'wp-user-manager' ) ); ?>
 					</li>
 				</ul>
 			</div>
@@ -54,8 +54,8 @@ $the_query = wpum_get_posts_for_profile( $data->user->ID );
 					'end_size'     => 2,
 					'mid_size'     => 1,
 					'prev_next'    => true,
-					'prev_text'    => sprintf( '<i></i> %1$s', esc_html__( 'Newer Posts' ) ),
-					'next_text'    => sprintf( '%1$s <i></i>', esc_html__( 'Older Posts' ) ),
+					'prev_text'    => sprintf( '<i></i> %1$s', esc_html__( 'Newer Posts', 'wp-user-manager' ) ),
+					'next_text'    => sprintf( '%1$s <i></i>', esc_html__( 'Older Posts', 'wp-user-manager' ) ),
 					'add_args'     => false,
 					'add_fragment' => '',
 				) );
@@ -69,7 +69,7 @@ $the_query = wpum_get_posts_for_profile( $data->user->ID );
 		<?php
 			WPUM()->templates
 				->set_template_data( [
-					'message' => sprintf( esc_html__( '%s did not submit any posts yet.' ), $data->user->display_name )
+					'message' => sprintf( esc_html__( '%s did not submit any posts yet.', 'wp-user-manager' ), $data->user->display_name )
 				] )
 				->get_template_part( 'messages/general', 'warning' );
 		?>

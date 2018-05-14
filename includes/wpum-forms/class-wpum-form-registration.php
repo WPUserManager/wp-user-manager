@@ -68,7 +68,7 @@ class WPUM_Form_Registration extends WPUM_Form {
 
 		$this->steps  = (array) apply_filters( 'registration_steps', array(
 			'submit' => array(
-				'name'     => esc_html__( 'Registration Details' ),
+				'name'     => esc_html__( 'Registration Details', 'wp-user-manager' ),
 				'view'     => array( $this, 'submit' ),
 				'handler'  => array( $this, 'submit_handler' ),
 				'priority' => 10
@@ -110,7 +110,7 @@ class WPUM_Form_Registration extends WPUM_Form {
 			$containsSpecial = preg_match('/[^a-zA-Z\d]/', $password_1 );
 
 			if( ! $containsLetter || ! $containsDigit || ! $containsSpecial || strlen( $password_1 ) < 8 ) {
-				return new WP_Error( 'password-validation-error', esc_html__( 'Password must be at least 8 characters long and contain at least 1 number, 1 uppercase letter and 1 special character.' ) );
+				return new WP_Error( 'password-validation-error', esc_html__( 'Password must be at least 8 characters long and contain at least 1 number, 1 uppercase letter and 1 special character.', 'wp-user-manager' ) );
 			}
 
 		}
@@ -132,7 +132,7 @@ class WPUM_Form_Registration extends WPUM_Form {
 
 		if( $form == $this->form_name && isset( $values['register']['username'] ) ) {
 			if( wpum_get_option('exclude_usernames') && array_key_exists( $values['register']['username'] , wpum_get_disabled_usernames() ) ) {
-				return new WP_Error( 'nickname-validation-error', __( 'This username cannot be used.' ) );
+				return new WP_Error( 'nickname-validation-error', __( 'This username cannot be used.', 'wp-user-manager' ) );
 			}
 		}
 
@@ -153,7 +153,7 @@ class WPUM_Form_Registration extends WPUM_Form {
 
 		if( $form == $this->form_name && isset( $values['register']['robo'] ) ) {
 			if( ! empty( $values['register']['robo'] ) ) {
-				return new WP_Error( 'honeypot-validation-error', esc_html__( 'Failed honeypot validation.' ) );
+				return new WP_Error( 'honeypot-validation-error', esc_html__( 'Failed honeypot validation.', 'wp-user-manager' ) );
 			}
 		}
 
@@ -177,7 +177,7 @@ class WPUM_Form_Registration extends WPUM_Form {
 			$role_field     = $values['register'][ 'role' ];
 			$selected_roles = array_flip( wpum_get_option( 'register_roles' ) );
 			if( ! array_key_exists( $role_field , $selected_roles ) ) {
-				return new WP_Error( 'role-validation-error', __( 'Select a valid role from the list.', 'wpum' ) );
+				return new WP_Error( 'role-validation-error', __( 'Select a valid role from the list.', 'wp-user-manager' ) );
 			}
 
 		}
@@ -250,7 +250,7 @@ class WPUM_Form_Registration extends WPUM_Form {
 
 			// Add honeypot validation field.
 			$fields['robo'] = [
-				'label'       => esc_html__( 'If you\'re human leave this blank:' ),
+				'label'       => esc_html__( 'If you\'re human leave this blank:', 'wp-user-manager' ),
 				'type'        => 'text',
 				'required'    => false,
 				'priority'    => 0,
@@ -261,7 +261,7 @@ class WPUM_Form_Registration extends WPUM_Form {
 				$fields[ 'privacy' ] = array(
 					'label'       => false,
 					'type'        => 'checkbox',
-					'description' => apply_filters( 'wpum_privacy_text', sprintf( __( 'I have read and accept the <a href="%s" target="_blank">privacy policy</a>.' ), get_permalink( get_option( 'wp_page_for_privacy_policy' ) ) ) ),
+					'description' => apply_filters( 'wpum_privacy_text', sprintf( __( 'I have read and accept the <a href="%s" target="_blank">privacy policy</a>.', 'wp-user-manager' ), get_permalink( get_option( 'wp_page_for_privacy_policy' ) ) ) ),
 					'required'    => true,
 					'priority'    => 9999,
 				);
@@ -273,7 +273,7 @@ class WPUM_Form_Registration extends WPUM_Form {
 				$fields[ 'terms' ] = array(
 					'label'       => false,
 					'type'        => 'checkbox',
-					'description' => apply_filters( 'wpum_terms_text', sprintf( __( 'By registering to this website you agree to the <a href="%s" target="_blank">terms &amp; conditions</a>.' ), get_permalink( $terms_page[0] ) ) ),
+					'description' => apply_filters( 'wpum_terms_text', sprintf( __( 'By registering to this website you agree to the <a href="%s" target="_blank">terms &amp; conditions</a>.', 'wp-user-manager' ), get_permalink( $terms_page[0] ) ) ),
 					'required'    => true,
 					'priority'    => 9999,
 				);
@@ -281,11 +281,11 @@ class WPUM_Form_Registration extends WPUM_Form {
 
 			if( wpum_get_option( 'allow_role_select' ) ) {
 				$fields[ 'role' ] = array(
-					'label'       => __('Select Role', 'wpum'),
+					'label'       => __('Select Role', 'wp-user-manager'),
 					'type'        => 'select',
 					'required'    => true,
 					'options'     => wpum_get_allowed_user_roles(),
-					'description' => __( 'Select your user role', 'wpum' ),
+					'description' => __( 'Select your user role', 'wp-user-manager' ),
 					'priority'    => 9998,
 					'value'       => get_option( 'default_role' )
 				);
@@ -361,7 +361,7 @@ class WPUM_Form_Registration extends WPUM_Form {
 		} else {
 
 			WPUM()->templates
-				->set_template_data( [ 'message' => esc_html__( 'The registration form cannot be used because either a username or email field is required to process registrations. Please edit the form and add at least the email field.' ) ] )
+				->set_template_data( [ 'message' => esc_html__( 'The registration form cannot be used because either a username or email field is required to process registrations. Please edit the form and add at least the email field.', 'wp-user-manager' ) ] )
 				->get_template_part( 'messages/general', 'error' );
 
 		}

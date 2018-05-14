@@ -39,10 +39,10 @@ $user = get_user_by( 'id', $data->user_id );
 		<?php if ( $data->display_buttons == 'yes' ) : ?>
 			<ul>
 				<?php if ( $data->link_to_profile == 'yes' ) : ?>
-					<li><a href="#" class="wpum-card-button"><?php esc_html_e( 'View Profile' );?></a></li>
+					<li><a href="#" class="wpum-card-button"><?php esc_html_e( 'View Profile', 'wp-user-manager' );?></a></li>
 				<?php endif; ?>
 				<li>
-					<a href="<?php echo wp_logout_url(); ?>" class="wpum-card-button"><?php esc_html_e( 'Logout' ); ?></a>
+					<a href="<?php echo wp_logout_url(); ?>" class="wpum-card-button"><?php esc_html_e( 'Logout', 'wp-user-manager' ); ?></a>
 				</li>
 				<?php do_action( 'wpum_profile_card_buttons', $user ); ?>
 			</ul>

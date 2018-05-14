@@ -23,7 +23,7 @@ class WPUM_Field_MultiSelect extends WPUM_Field_Type {
 	public function init() {
 
 		// Define field type information.
-		$this->name  = esc_html__( 'Multi Select' );
+		$this->name  = esc_html__( 'Multi Select', 'wp-user-manager' );
 		$this->type  = 'multiselect';
 		$this->icon  = 'dashicons-editor-alignleft';
 		$this->order = 3;

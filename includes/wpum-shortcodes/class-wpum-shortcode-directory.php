@@ -16,8 +16,8 @@ class WPUM_Shortcode_Directory extends WPUM_Shortcode_Generator {
 	 * Inject the editor for this shortcode.
 	 */
 	public function __construct() {
-		$this->shortcode['title'] = esc_html__( 'Directory' );
-		$this->shortcode['label'] = esc_html__( 'Directory' );
+		$this->shortcode['title'] = esc_html__( 'Directory', 'wp-user-manager' );
+		$this->shortcode['label'] = esc_html__( 'Directory', 'wp-user-manager' );
 		parent::__construct( 'wpum_user_directory' );
 	}
 
@@ -31,7 +31,7 @@ class WPUM_Shortcode_Directory extends WPUM_Shortcode_Generator {
 			array(
 				'type'    => 'textbox',
 				'name'    => 'id',
-				'label'   => esc_html__( 'Directory ID' ),
+				'label'   => esc_html__( 'Directory ID', 'wp-user-manager' ),
 			)
 		];
 	}

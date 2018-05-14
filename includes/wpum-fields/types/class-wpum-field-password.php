@@ -23,7 +23,7 @@ class WPUM_Field_Password extends WPUM_Field_Type {
 	public function init() {
 
 		// Define field type information.
-		$this->name  = esc_html__( 'Password' );
+		$this->name  = esc_html__( 'Password', 'wp-user-manager' );
 		$this->type  = 'password';
 		$this->icon  = 'dashicons-admin-network';
 		$this->order = 3;

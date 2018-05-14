@@ -59,12 +59,12 @@ class WPUM_Options_Panel {
 	private function register_action_buttons() {
 
 		$this->panel->add_action_button( array(
-    		'title' => __( 'View Addons' ),
+    		'title' => __( 'View Addons', 'wp-user-manager' ),
     		'url'   => 'http://wpusermanager.com/addons/'
 		) );
 
 		$this->panel->add_action_button( array(
-    		'title' => __( 'Read documentation' ),
+    		'title' => __( 'Read documentation', 'wp-user-manager' ),
     		'url'   => 'https://docs.wpusermanager.com/'
 		) );
 
@@ -80,8 +80,8 @@ class WPUM_Options_Panel {
 
 		return array(
 			'parent'     => 'users.php',
-			'page_title' => __( 'WP User Manager Settings' ),
-			'menu_title' => __( 'Settings' ),
+			'page_title' => __( 'WP User Manager Settings', 'wp-user-manager' ),
+			'menu_title' => __( 'Settings', 'wp-user-manager' ),
 			'capability' => 'manage_options',
 		);
 
@@ -96,11 +96,11 @@ class WPUM_Options_Panel {
 	public function register_settings_tabs( $tabs ) {
 
 		$tabs = array(
-			'general'      => __( 'General' ),
-			'registration' => __( 'Registration' ),
-			'emails'       => __( 'Emails' ),
-			'profiles'     => __( 'Profiles' ),
-			'redirects'    => __( 'Redirects' ),
+			'general'      => __( 'General', 'wp-user-manager' ),
+			'registration' => __( 'Registration', 'wp-user-manager' ),
+			'emails'       => __( 'Emails', 'wp-user-manager' ),
+			'profiles'     => __( 'Profiles', 'wp-user-manager' ),
+			'redirects'    => __( 'Redirects', 'wp-user-manager' ),
 		);
 
 		return $tabs;
@@ -117,20 +117,20 @@ class WPUM_Options_Panel {
 
 		$sections = array(
 			'general' => [
-				'login' => __( 'Login settings' ),
-				'misc'  => __( 'Misc settings' )
+				'login' => __( 'Login settings', 'wp-user-manager' ),
+				'misc'  => __( 'Misc settings', 'wp-user-manager' )
 			],
 			'registration' => [
-				'terms'   => __( 'Terms & Conditions' )
+				'terms'   => __( 'Terms & Conditions', 'wp-user-manager' )
 			],
 			'emails' => [
-				'admin_notifications' => __( 'Administration notifications' )
+				'admin_notifications' => __( 'Administration notifications', 'wp-user-manager' )
 			],
 			'profiles' => [
-				'profiles_content' => __( 'Profiles content' )
+				'profiles_content' => __( 'Profiles content', 'wp-user-manager' )
 			],
 			'redirects' => [
-				'backend_redirects' => __( 'Backend redirects' )
+				'backend_redirects' => __( 'Backend redirects', 'wp-user-manager' )
 			]
 		);
 
@@ -147,17 +147,17 @@ class WPUM_Options_Panel {
 	public function register_labels( $labels ) {
 
 		$labels = array(
-			'save'         => __( 'Save Changes' ),
-			'success'      => __( 'Settings successfully saved.' ),
-			'upload'       => __( 'Select file' ),
-			'upload-title' => __( 'Insert file' ),
+			'save'         => __( 'Save Changes', 'wp-user-manager' ),
+			'success'      => __( 'Settings successfully saved.', 'wp-user-manager' ),
+			'upload'       => __( 'Select file', 'wp-user-manager' ),
+			'upload-title' => __( 'Insert file', 'wp-user-manager' ),
 			'multiselect'  => array(
-				'selectLabel'   => __( 'Press enter to select' ),
-				'SelectedLabel' => __( 'Selected' ),
-				'deselectLabel' => __( 'Press enter to remove' ),
-				'placeholder'   => __( 'Select option (type to search)' ),
+				'selectLabel'   => __( 'Press enter to select', 'wp-user-manager' ),
+				'SelectedLabel' => __( 'Selected', 'wp-user-manager' ),
+				'deselectLabel' => __( 'Press enter to remove', 'wp-user-manager' ),
+				'placeholder'   => __( 'Select option (type to search)', 'wp-user-manager' ),
 			),
-			'error'        => __( 'Whoops! Something went wrong. Please check the following fields for more info:' ),
+			'error'        => __( 'Whoops! Something went wrong. Please check the following fields for more info:', 'wp-user-manager' ),
 		);
 
 		return $labels;
@@ -177,36 +177,36 @@ class WPUM_Options_Panel {
 			'general' => [
 				array(
 					'id'       => 'login_page',
-					'name'     => __( 'Login page:' ),
-					'desc'     => __( 'Select the page where you have added the login shortcode.' ),
+					'name'     => __( 'Login page:', 'wp-user-manager' ),
+					'desc'     => __( 'Select the page where you have added the login shortcode.', 'wp-user-manager' ),
 					'type'     => 'multiselect',
 					'options'  => wpum_get_pages()
 				),
 				array(
 					'id'       => 'password_recovery_page',
-					'name'     => __( 'Password recovery page:' ),
-					'desc'     => __( 'Select the page where you have added the password recovery shortcode.' ),
+					'name'     => __( 'Password recovery page:', 'wp-user-manager' ),
+					'desc'     => __( 'Select the page where you have added the password recovery shortcode.', 'wp-user-manager' ),
 					'type'     => 'multiselect',
 					'options'  => wpum_get_pages()
 				),
 				array(
 					'id'       => 'registration_page',
-					'name'     => __( 'Registration page:' ),
-					'desc'     => __( 'Select the page where you have added the registration shortcode.' ),
+					'name'     => __( 'Registration page:', 'wp-user-manager' ),
+					'desc'     => __( 'Select the page where you have added the registration shortcode.', 'wp-user-manager' ),
 					'type'     => 'multiselect',
 					'options'  => wpum_get_pages()
 				),
 				array(
 					'id'       => 'account_page',
-					'name'     => __( 'Account page:' ),
-					'desc'     => __( 'Select the page where you have added the account shortcode.' ),
+					'name'     => __( 'Account page:', 'wp-user-manager' ),
+					'desc'     => __( 'Select the page where you have added the account shortcode.', 'wp-user-manager' ),
 					'type'     => 'multiselect',
 					'options'  => wpum_get_pages()
 				),
 				array(
 					'id'       => 'profile_page',
-					'name'     => __( 'Profile page:' ),
-					'desc'     => __( 'Select the page where you have added the profile shortcode.' ),
+					'name'     => __( 'Profile page:', 'wp-user-manager' ),
+					'desc'     => __( 'Select the page where you have added the profile shortcode.', 'wp-user-manager' ),
 					'type'     => 'multiselect',
 					'options'  => wpum_get_pages()
 				),
@@ -214,13 +214,13 @@ class WPUM_Options_Panel {
 			'login' => [
 				array(
 					'id'   => 'lock_wplogin',
-					'name' => __( 'Lock access to wp-login.php:', 'wpum' ),
-					'desc' => __('Enable to lock access to wp-login.php. Users will be redirected to the WPUM login page.', 'wpum'),
+					'name' => __( 'Lock access to wp-login.php:', 'wp-user-manager' ),
+					'desc' => __('Enable to lock access to wp-login.php. Users will be redirected to the WPUM login page.', 'wp-user-manager'),
 					'type' => 'checkbox'
 				),
 				array(
 					'id'      => 'login_method',
-					'name'    => __( 'Allow users to login with:', 'wpum' ),
+					'name'    => __( 'Allow users to login with:', 'wp-user-manager' ),
 					'type'    => 'select',
 					'std'     => 'email',
 					'options' => wpum_get_login_methods()
@@ -229,54 +229,54 @@ class WPUM_Options_Panel {
 			'misc' => [
 				array(
 					'id'       => 'adminbar_roles',
-					'name'     => __( 'Admin Bar:', 'wpum' ),
-					'desc'     => __('Hide WordPress admin bar for specific user roles.', 'wpum'),
+					'name'     => __( 'Admin Bar:', 'wp-user-manager' ),
+					'desc'     => __('Hide WordPress admin bar for specific user roles.', 'wp-user-manager'),
 					'type'     => 'multiselect',
 					'multiple' => true,
-					'labels'   => array( 'placeholder' => __( 'Select one or more user roles from the list.' ) ),
+					'labels'   => array( 'placeholder' => __( 'Select one or more user roles from the list.', 'wp-user-manager' ) ),
 					'options'  => wpum_get_roles()
 				),
 				array(
 					'id'   => 'exclude_usernames',
-					'name' => __( 'Excluded usernames:', 'wpum' ),
-					'desc' => __('Enter the usernames that you wish to disable. Separate each username on a new line.', 'wpum'),
+					'name' => __( 'Excluded usernames:', 'wp-user-manager' ),
+					'desc' => __('Enter the usernames that you wish to disable. Separate each username on a new line.', 'wp-user-manager'),
 					'type' => 'textarea'
 				)
 			],
 			'registration' => [
 				array(
 					'id'   => 'login_after_registration',
-					'name' => __( 'Login after registration:', 'wpum' ),
-					'desc' => __('Enable this option to automatically authenticate users after registration.', 'wpum'),
+					'name' => __( 'Login after registration:', 'wp-user-manager' ),
+					'desc' => __('Enable this option to automatically authenticate users after registration.', 'wp-user-manager'),
 					'type' => 'checkbox'
 				),
 				array(
 					'id'   => 'allow_role_select',
-					'name' => __( 'Allow role section:', 'wpum' ),
-					'desc' => __('Enable to allow users to select a user role on registration.', 'wpum'),
+					'name' => __( 'Allow role section:', 'wp-user-manager' ),
+					'desc' => __('Enable to allow users to select a user role on registration.', 'wp-user-manager'),
 					'type' => 'checkbox'
 				),
 				array(
 					'id'       => 'register_roles',
-					'name'     => __( 'Allowed Roles:', 'wpum' ),
-					'desc'     => __('Select which roles can be selected upon registration.', 'wpum'),
+					'name'     => __( 'Allowed Roles:', 'wp-user-manager' ),
+					'desc'     => __('Select which roles can be selected upon registration.', 'wp-user-manager'),
 					'type'     => 'multiselect',
 					'multiple' => true,
-					'labels'   => array( 'placeholder' => __( 'Select one or more user roles from the list.' ) ),
+					'labels'   => array( 'placeholder' => __( 'Select one or more user roles from the list.', 'wp-user-manager' ) ),
 					'options'  => wpum_get_roles()
 				),
 			],
 			'terms' => [
 				array(
 					'id'   => 'enable_terms',
-					'name' => __( 'Enable terms & conditions:', 'wpum' ),
-					'desc' => __('Enable to force users to agree to your terms before registering an account.', 'wpum'),
+					'name' => __( 'Enable terms & conditions:', 'wp-user-manager' ),
+					'desc' => __('Enable to force users to agree to your terms before registering an account.', 'wp-user-manager'),
 					'type' => 'checkbox'
 				),
 				array(
 					'id'      => 'terms_page',
-					'name'    => __( 'Terms Page:', 'wpum' ),
-					'desc'    => __('Select the page that contains your terms.', 'wpum'),
+					'name'    => __( 'Terms Page:', 'wp-user-manager' ),
+					'desc'    => __('Select the page that contains your terms.', 'wp-user-manager'),
 					'type'    => 'multiselect',
 					'options' => wpum_get_pages()
 				),
@@ -284,100 +284,100 @@ class WPUM_Options_Panel {
 			'emails' => [
 				array(
 					'id'   => 'from_name',
-					'name' => __( 'From Name:', 'wpum' ),
-					'desc' => __( 'The name emails are said to come from. This should probably be your site name.', 'wpum' ),
+					'name' => __( 'From Name:', 'wp-user-manager' ),
+					'desc' => __( 'The name emails are said to come from. This should probably be your site name.', 'wp-user-manager' ),
 					'type' => 'text',
 					'std'  => get_option( 'blogname' )
 				),
 				array(
 					'id'   => 'from_email',
-					'name' => __( 'From Email:', 'wpum' ),
-					'desc' => __( 'This will act as the "from" and "reply-to" address.', 'wpum' ),
+					'name' => __( 'From Email:', 'wp-user-manager' ),
+					'desc' => __( 'This will act as the "from" and "reply-to" address.', 'wp-user-manager' ),
 					'type' => 'text',
 					'std'  => get_option( 'admin_email' )
 				),
 				array(
 					'id'   => 'email_template',
-					'name' => __( 'Email template:', 'wpum' ),
-					'desc' => __( 'Select the email template you wish to use for all emails sent by WPUM.', 'wpum' ),
+					'name' => __( 'Email template:', 'wp-user-manager' ),
+					'desc' => __( 'Select the email template you wish to use for all emails sent by WPUM.', 'wp-user-manager' ),
 					'type' => 'select',
 					'std'  => 'default',
 					'options' => wpum_get_email_templates()
 				),
 				array(
 					'id'   => 'email_logo',
-					'name' => __( 'Logo', 'wpum' ),
-					'desc' => __( 'Upload or choose a logo to be displayed at the top of emails. Displayed on HTML emails only.', 'wpum' ),
+					'name' => __( 'Logo', 'wp-user-manager' ),
+					'desc' => __( 'Upload or choose a logo to be displayed at the top of emails. Displayed on HTML emails only.', 'wp-user-manager' ),
 					'type' => 'file'
 				),
 			],
 			'admin_notifications' => [
 				array(
 					'id'   => 'disable_admin_register_email',
-					'name' => __( 'Disable admin registration email:', 'wpum' ),
-					'desc' => __( 'Enable this option to stop receiving notifications when a new user registers.', 'wpum' ),
+					'name' => __( 'Disable admin registration email:', 'wp-user-manager' ),
+					'desc' => __( 'Enable this option to stop receiving notifications when a new user registers.', 'wp-user-manager' ),
 					'type' => 'checkbox'
 				),
 				array(
 					'id'   => 'disable_admin_password_recovery_email',
-					'name' => __( 'Disable admin password recovery email:', 'wpum' ),
-					'desc' => __( 'Enable this option to stop receiving notifications when a new user resets his password.', 'wpum' ),
+					'name' => __( 'Disable admin password recovery email:', 'wp-user-manager' ),
+					'desc' => __( 'Enable this option to stop receiving notifications when a new user resets his password.', 'wp-user-manager' ),
 					'type' => 'checkbox'
 				),
 			],
 			'profiles' => [
 				array(
 					'id'   => 'guests_can_view_profiles',
-					'name' => __( 'Allow guests to view profiles', 'wpum' ),
-					'desc' => __( 'Enable this option to allow guests to view users profiles.', 'wpum' ),
+					'name' => __( 'Allow guests to view profiles', 'wp-user-manager' ),
+					'desc' => __( 'Enable this option to allow guests to view users profiles.', 'wp-user-manager' ),
 					'type' => 'checkbox'
 				),
 				array(
 					'id'   => 'members_can_view_profiles',
-					'name' => __( 'Allow members to view profiles', 'wpum' ),
-					'desc' => __( 'Enable this option to allow members to view users profiles. If disabled, users can only see their own profile.', 'wpum' ),
+					'name' => __( 'Allow members to view profiles', 'wp-user-manager' ),
+					'desc' => __( 'Enable this option to allow members to view users profiles. If disabled, users can only see their own profile.', 'wp-user-manager' ),
 					'type' => 'checkbox'
 				),
 				array(
 					'id'   => 'custom_avatars',
-					'name' => __( 'Custom Avatars', 'wpum' ),
-					'desc' => __( 'Enable this option to allow users to upload custom avatars for their profiles.', 'wpum' ),
+					'name' => __( 'Custom Avatars', 'wp-user-manager' ),
+					'desc' => __( 'Enable this option to allow users to upload custom avatars for their profiles.', 'wp-user-manager' ),
 					'type' => 'checkbox'
 				),
 			],
 			'profiles_content' => [
 				array(
 					'id'   => 'profile_posts',
-					'name' => __( 'Display posts', 'wpum' ),
-					'desc' => __( 'Enable this option to display users submitted post on their profile page.', 'wpum' ),
+					'name' => __( 'Display posts', 'wp-user-manager' ),
+					'desc' => __( 'Enable this option to display users submitted post on their profile page.', 'wp-user-manager' ),
 					'type' => 'checkbox'
 				),
 				array(
 					'id'   => 'profile_comments',
-					'name' => __( 'Display comments', 'wpum' ),
-					'desc' => __( 'Enable this option to display users submitted comments on their profile page.', 'wpum' ),
+					'name' => __( 'Display comments', 'wp-user-manager' ),
+					'desc' => __( 'Enable this option to display users submitted comments on their profile page.', 'wp-user-manager' ),
 					'type' => 'checkbox'
 				),
 			],
 			'redirects' => [
 				array(
 					'id'      => 'login_redirect',
-					'name'    => __( 'After login', 'wpum' ),
-					'desc'    => __( 'Select the page where you want to redirect users after they login. Leave blank to redirect users to the previously visited page.', 'wpum'),
+					'name'    => __( 'After login', 'wp-user-manager' ),
+					'desc'    => __( 'Select the page where you want to redirect users after they login. Leave blank to redirect users to the previously visited page.', 'wp-user-manager'),
 					'type'    => 'multiselect',
 					'options' => wpum_get_pages()
 				),
 				array(
 					'id'      => 'logout_redirect',
-					'name'    => __( 'After logout', 'wpum' ),
-					'desc'    => __( 'Select the page where you want to redirect users after they logout. If empty will return to wp-login.php', 'wpum'),
+					'name'    => __( 'After logout', 'wp-user-manager' ),
+					'desc'    => __( 'Select the page where you want to redirect users after they logout. If empty will return to wp-login.php', 'wp-user-manager'),
 					'type'    => 'multiselect',
 					'options' => wpum_get_pages()
 				),
 				array(
 					'id'      => 'registration_redirect',
-					'name'    => __( 'After registration', 'wpum' ),
-					'desc'    => __( 'Select the page where you want to redirect users after they successfully register. If empty a message will be displayed instead.', 'wpum'),
+					'name'    => __( 'After registration', 'wp-user-manager' ),
+					'desc'    => __( 'Select the page where you want to redirect users after they successfully register. If empty a message will be displayed instead.', 'wp-user-manager'),
 					'type'    => 'multiselect',
 					'options' => wpum_get_pages()
 				),
@@ -385,22 +385,22 @@ class WPUM_Options_Panel {
 			'backend_redirects' => [
 				array(
 					'id'      => 'wp_login_signup_redirect',
-					'name'    => __( 'Backend register', 'wpum' ),
-					'desc'    => __( 'Select a page if you wish to redirect users who try to signup through wp-login.php', 'wpum'),
+					'name'    => __( 'Backend register', 'wp-user-manager' ),
+					'desc'    => __( 'Select a page if you wish to redirect users who try to signup through wp-login.php', 'wp-user-manager'),
 					'type'    => 'multiselect',
 					'options' => wpum_get_pages()
 				),
 				array(
 					'id'      => 'wp_login_password_redirect',
-					'name'    => __( 'Backend lost password', 'wpum' ),
-					'desc'    => __( 'Select a page if you wish to redirect users who try to recover a lost password through wp-login.php', 'wpum'),
+					'name'    => __( 'Backend lost password', 'wp-user-manager' ),
+					'desc'    => __( 'Select a page if you wish to redirect users who try to recover a lost password through wp-login.php', 'wp-user-manager'),
 					'type'    => 'multiselect',
 					'options' => wpum_get_pages()
 				),
 				array(
 					'id'      => 'backend_profile_redirect',
-					'name'    => __( 'Backend profile', 'wpum' ),
-					'desc'    => __( 'Select the page where you want to redirect users who try to access their profile on the backend.', 'wpum'),
+					'name'    => __( 'Backend profile', 'wp-user-manager' ),
+					'desc'    => __( 'Select the page where you want to redirect users who try to access their profile on the backend.', 'wp-user-manager'),
 					'type'    => 'multiselect',
 					'options' => wpum_get_pages()
 				),

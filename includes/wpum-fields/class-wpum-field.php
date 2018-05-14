@@ -154,7 +154,7 @@ class WPUM_Field {
 		if( method_exists( $this, 'get_' . $key ) ) {
 			return call_user_func( array( $this, 'get_' . $key ) );
 		} else {
-			return new WP_Error( 'wpum-field-invalid-property', sprintf( __( 'Can\'t get property %s' ), $key ) );
+			return new WP_Error( 'wpum-field-invalid-property', sprintf( __( 'Can\'t get property %s', 'wp-user-manager' ), $key ) );
 		}
 	}
 
@@ -315,37 +315,37 @@ class WPUM_Field {
 
 			switch ( $type ) {
 				case 'username':
-					$type_name = esc_html__( 'Username' );
+					$type_name = esc_html__( 'Username', 'wp-user-manager' );
 					break;
 				case 'user_email':
-					$type_name = esc_html__( 'User email' );
+					$type_name = esc_html__( 'User email', 'wp-user-manager' );
 					break;
 				case 'user_password':
-					$type_name = esc_html__( 'User password' );
+					$type_name = esc_html__( 'User password', 'wp-user-manager' );
 					break;
 				case 'user_firstname':
-					$type_name = esc_html__( 'First name' );
+					$type_name = esc_html__( 'First name', 'wp-user-manager' );
 					break;
 				case 'user_lastname':
-					$type_name = esc_html__( 'Last name' );
+					$type_name = esc_html__( 'Last name', 'wp-user-manager' );
 					break;
 				case 'user_nickname':
-					$type_name = esc_html__( 'Nickname' );
+					$type_name = esc_html__( 'Nickname', 'wp-user-manager' );
 					break;
 				case 'user_displayname':
-					$type_name = esc_html__( 'Display name' );
+					$type_name = esc_html__( 'Display name', 'wp-user-manager' );
 					break;
 				case 'user_website':
-					$type_name = esc_html__( 'Website' );
+					$type_name = esc_html__( 'Website', 'wp-user-manager' );
 					break;
 				case 'user_description':
-					$type_name = esc_html__( 'Description' );
+					$type_name = esc_html__( 'Description', 'wp-user-manager' );
 					break;
 				case 'user_avatar':
-					$type_name = esc_html__( 'Avatar' );
+					$type_name = esc_html__( 'Avatar', 'wp-user-manager' );
 					break;
 				case 'user_cover':
-					$type_name = esc_html__( 'Cover Image' );
+					$type_name = esc_html__( 'Cover Image', 'wp-user-manager' );
 					break;
 				default:
 					$type_name = $registered_types['text'];

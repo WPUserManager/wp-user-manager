@@ -67,10 +67,10 @@ class WPUM_Emails_Customizer_Scripts {
 
 		$js_variables = [
 			'labels'            => [
-				'open'             => esc_html__( 'Open email content editor' ),
-				'close'            => esc_html__( 'Close email content editor' ),
-				'addMerge'         => esc_html__( 'Add merge tags' ),
-				'addMergeTooltip'  => esc_html__( 'Merge tags allow you to dynamically add content to your email' )
+				'open'             => esc_html__( 'Open email content editor', 'wp-user-manager' ),
+				'close'            => esc_html__( 'Close email content editor', 'wp-user-manager' ),
+				'addMerge'         => esc_html__( 'Add merge tags', 'wp-user-manager' ),
+				'addMergeTooltip'  => esc_html__( 'Merge tags allow you to dynamically add content to your email', 'wp-user-manager' )
 			],
 			'email_content'     => wpum_get_email_field( $email_id, 'content' ),
 			'selected_email_id' => $selected_email_id,

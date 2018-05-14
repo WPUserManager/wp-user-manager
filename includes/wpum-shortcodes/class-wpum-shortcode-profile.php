@@ -19,8 +19,8 @@ class WPUM_Shortcode_Profile extends WPUM_Shortcode_Generator {
 	 * Inject the editor for this shortcode.
 	 */
 	public function __construct() {
-		$this->shortcode['title'] = esc_html__( 'Profile page' );
-		$this->shortcode['label'] = esc_html__( 'Profiles page' );
+		$this->shortcode['title'] = esc_html__( 'Profile page', 'wp-user-manager' );
+		$this->shortcode['label'] = esc_html__( 'Profiles page', 'wp-user-manager' );
 		parent::__construct( 'wpum_profile' );
 	}
 

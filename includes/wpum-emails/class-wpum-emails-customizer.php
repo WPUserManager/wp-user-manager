@@ -141,7 +141,7 @@ class WPUM_Emails_Customizer {
 				$wp_customize->add_panel( $email_id, [
 					'title'       => esc_html( $registered_email['name'] ),
 					'description' => sprintf(
-						esc_html__( 'The WP User Manager email editor allows you to customize the emails sent to your users by WPUM. You\'re currently editing the %s. %s %s Edit shortcuts are shown for some editable elements of the email.' ),
+						esc_html__( 'The WP User Manager email editor allows you to customize the emails sent to your users by WPUM. You\'re currently editing the %s. %s %s Edit shortcuts are shown for some editable elements of the email.', 'wp-user-manager' ),
 						'<strong>' . strtolower( $registered_email['name'] ) . '</strong>',
 						'<br/><br/>',
 						$registered_email['description'] . '<br/><br/>'
@@ -150,8 +150,8 @@ class WPUM_Emails_Customizer {
 				] );
 
 				$wp_customize->add_section( $email_id . '_settings' , [
-					'title'       => esc_html__( 'Email content settings' ),
-					'description' => '<a href="#" class="button" id="wpum-display-tags-btn"><span class="dashicons dashicons-editor-code"></span>' . esc_html__( 'View available email merge tags' ) . '</a><div class="wpum-email-tags-list"><strong>' . esc_html__( 'Available email merge tags:' ) . '</strong><br/>' . wpum_get_emails_tags_list() . '<hr/></div>',
+					'title'       => esc_html__( 'Email content settings', 'wp-user-manager' ),
+					'description' => '<a href="#" class="button" id="wpum-display-tags-btn"><span class="dashicons dashicons-editor-code"></span>' . esc_html__( 'View available email merge tags', 'wp-user-manager' ) . '</a><div class="wpum-email-tags-list"><strong>' . esc_html__( 'Available email merge tags:', 'wp-user-manager' ) . '</strong><br/>' . wpum_get_emails_tags_list() . '<hr/></div>',
 					'capability'  => 'manage_options',
 					'panel'       => $email_id,
 				] );
@@ -189,8 +189,8 @@ class WPUM_Emails_Customizer {
 		$wp_customize->add_control( 'wpum_email[' . $email_id . '][subject]', array(
 			'type'        => 'text',
 			'section'     => $email_id . '_settings',
-			'label'       => esc_html__( 'Email subject' ),
-			'description' => esc_html__( 'Customize the subject line of the email.' ),
+			'label'       => esc_html__( 'Email subject', 'wp-user-manager' ),
+			'description' => esc_html__( 'Customize the subject line of the email.', 'wp-user-manager' ),
 		) );
 
 		$wp_customize->add_setting( 'wpum_email[' . $email_id . '][title]', array(
@@ -204,8 +204,8 @@ class WPUM_Emails_Customizer {
 		$wp_customize->add_control( 'wpum_email[' . $email_id . '][title]', array(
 			'type'        => 'text',
 			'section'     => $email_id . '_settings',
-			'label'       => esc_html__( 'Email heading title' ),
-			'description' => esc_html__( 'Customize the heading title of the email.' ),
+			'label'       => esc_html__( 'Email heading title', 'wp-user-manager' ),
+			'description' => esc_html__( 'Customize the heading title of the email.', 'wp-user-manager' ),
 		) );
 
 		$wp_customize->add_setting( 'wpum_email[' . $email_id . '][content]', array(
@@ -217,8 +217,8 @@ class WPUM_Emails_Customizer {
 		) );
 
 		$wp_customize->add_control( new WPUM_Emails_Customizer_Editor_Control( $wp_customize, 'wpum_email[' . $email_id . '][content]', array(
-			'label'       => esc_html__( 'Email content' ),
-			'description' => esc_html__( 'Click the button to open the content customization editor.' ),
+			'label'       => esc_html__( 'Email content', 'wp-user-manager' ),
+			'description' => esc_html__( 'Click the button to open the content customization editor.', 'wp-user-manager' ),
 			'section'     => $email_id . '_settings',
 		) ) );
 
@@ -236,14 +236,14 @@ class WPUM_Emails_Customizer {
 		$default = false;
 
 		$defaults = apply_filters( 'wpum_email_customizer_settings_defaults', [
-			'registration_confirmation_title'   => esc_html__( 'Welcome to {sitename}!' ),
-			'registration_confirmation_subject' => esc_html__( 'Welcome to {sitename}!' ),
+			'registration_confirmation_title'   => esc_html__( 'Welcome to {sitename}!', 'wp-user-manager' ),
+			'registration_confirmation_subject' => esc_html__( 'Welcome to {sitename}!', 'wp-user-manager' ),
 			'registration_confirmation_content' => "<p>Hello {username}, and welcome to {sitename}. We’re thrilled to have you on board.</p>
 <p>For reference, here\'s your login information:</p>
 <p>Username: {username}<br />Login page: {login_page_url}</p>
 <p>Thanks,<br />{sitename}</p>",
-			'password_recovery_request_subject' => esc_html__( 'Reset your {sitename} password' ),
-			'password_recovery_request_title'   => esc_html__( 'Reset your {sitename} password' ),
+			'password_recovery_request_subject' => esc_html__( 'Reset your {sitename} password', 'wp-user-manager' ),
+			'password_recovery_request_title'   => esc_html__( 'Reset your {sitename} password', 'wp-user-manager' ),
 			'password_recovery_request_content' => '<p>Hello {username},</p>
 <p>You are receiving this message because you or somebody else has attempted to reset your password on {sitename}.</p>
 <p>If this was a mistake, just ignore this email and nothing will happen.</p>

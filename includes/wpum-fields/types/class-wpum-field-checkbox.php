@@ -23,7 +23,7 @@ class WPUM_Field_Checkbox extends WPUM_Field_Type {
 	public function init() {
 
 		// Define field type information.
-		$this->name  = esc_html__( 'Single checkbox' );
+		$this->name  = esc_html__( 'Single checkbox', 'wp-user-manager' );
 		$this->type  = 'checkbox';
 		$this->icon  = 'dashicons-yes';
 		$this->order = 3;

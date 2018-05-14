@@ -54,13 +54,13 @@ class WPUM_Form_Login extends WPUM_Form {
 
 		$this->steps  = (array) apply_filters( 'login_steps', array(
 			'submit' => array(
-				'name'     => __( 'Login Details' ),
+				'name'     => __( 'Login Details', 'wp-user-manager' ),
 				'view'     => array( $this, 'submit' ),
 				'handler'  => array( $this, 'submit_handler' ),
 				'priority' => 10
 			),
 			'done' => array(
-				'name'     => __( 'Done' ),
+				'name'     => __( 'Done', 'wp-user-manager' ),
 				'view'     => false,
 				'handler'  => array( $this, 'done' ),
 				'priority' => 30
@@ -95,14 +95,14 @@ class WPUM_Form_Login extends WPUM_Form {
 					'priority'    => 1
 				),
 				'password' => array(
-					'label'       => __( 'Password' ),
+					'label'       => __( 'Password', 'wp-user-manager' ),
 					'type'        => 'password',
 					'required'    => true,
 					'placeholder' => '',
 					'priority'    => 2
 				),
 				'remember' => array(
-					'label'       => __( 'Remember me' ),
+					'label'       => __( 'Remember me', 'wp-user-manager' ),
 					'type'        => 'checkbox',
 					'required'    => false,
 					'priority'    => 3

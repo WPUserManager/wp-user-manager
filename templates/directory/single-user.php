@@ -35,7 +35,7 @@ $user = $data->data;
 			</p>
 		</div>
 		<div class="wpum-col-xs-3 wpum-meta">
-			<a href="<?php echo esc_url( wpum_get_profile_url( $user ) ); ?>" class="button"><?php esc_html_e( 'View profile' ); ?></a>
+			<a href="<?php echo esc_url( wpum_get_profile_url( $user ) ); ?>" class="button"><?php esc_html_e( 'View profile', 'wp-user-manager' ); ?></a>
 		</div>
 	</div>
 </div>

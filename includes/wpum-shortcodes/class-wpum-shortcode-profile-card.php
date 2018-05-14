@@ -16,8 +16,8 @@ class WPUM_Shortcode_Profile_Card extends WPUM_Shortcode_Generator {
 	 * Inject the editor for this shortcode.
 	 */
 	public function __construct() {
-		$this->shortcode['title'] = esc_html__( 'Profile card' );
-		$this->shortcode['label'] = esc_html__( 'Profile card' );
+		$this->shortcode['title'] = esc_html__( 'Profile card', 'wp-user-manager' );
+		$this->shortcode['label'] = esc_html__( 'Profile card', 'wp-user-manager' );
 		parent::__construct( 'wpum_profile_card' );
 	}
 
@@ -31,25 +31,25 @@ class WPUM_Shortcode_Profile_Card extends WPUM_Shortcode_Generator {
 			array(
 				'type'    => 'textbox',
 				'name'    => 'user_id',
-				'label'   => esc_html__( 'User ID' ),
-				'tooltip' => esc_html__( 'Leave blank to display the currently logged in user.' )
+				'label'   => esc_html__( 'User ID', 'wp-user-manager' ),
+				'tooltip' => esc_html__( 'Leave blank to display the currently logged in user.', 'wp-user-manager' )
 			),
 			array(
 				'type'    => 'listbox',
 				'name'    => 'link_to_profile',
-				'label'   => esc_html__( 'Link to profile ?' ),
+				'label'   => esc_html__( 'Link to profile ?', 'wp-user-manager' ),
 				'options' => $this->get_yes_no(),
 			),
 			array(
 				'type'    => 'listbox',
 				'name'    => 'display_buttons',
-				'label'   => esc_html__( 'Display buttons ?' ),
+				'label'   => esc_html__( 'Display buttons ?', 'wp-user-manager' ),
 				'options' => $this->get_yes_no(),
 			),
 			array(
 				'type'    => 'listbox',
 				'name'    => 'display_cover',
-				'label'   => esc_html__( 'Display profile cover ?' ),
+				'label'   => esc_html__( 'Display profile cover ?', 'wp-user-manager' ),
 				'options' => $this->get_yes_no(),
 			),
 		];

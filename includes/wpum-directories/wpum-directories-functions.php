@@ -18,10 +18,10 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 function wpum_get_directory_sort_by_methods() {
 
 	$options = [
-		'newest'    => esc_html__( 'Newest users first' ),
-		'oldest'    => esc_html__( 'Oldest users first' ),
-		'name'      => esc_html__( 'First name' ),
-		'last_name' => esc_html__( 'Last Name' )
+		'newest'    => esc_html__( 'Newest users first', 'wp-user-manager' ),
+		'oldest'    => esc_html__( 'Oldest users first', 'wp-user-manager' ),
+		'name'      => esc_html__( 'First name', 'wp-user-manager' ),
+		'last_name' => esc_html__( 'Last Name', 'wp-user-manager' )
 	];
 
 	return apply_filters( 'wpum_get_directory_sort_by_methods', $options );
@@ -55,7 +55,7 @@ function wpum_get_directory_amount_modifier() {
 function wpum_get_directory_templates() {
 
 	$templates = [
-		'default' => esc_html__( 'Default template' )
+		'default' => esc_html__( 'Default template', 'wp-user-manager' )
 	];
 
 	return apply_filters( 'wpum_get_directory_templates', $templates );
@@ -70,7 +70,7 @@ function wpum_get_directory_templates() {
 function wpum_get_directory_user_templates() {
 
 	$templates = [
-		'default' => esc_html__( 'Default template' )
+		'default' => esc_html__( 'Default template', 'wp-user-manager' )
 	];
 
 	return apply_filters( 'wpum_get_directory_user_templates', $templates );
@@ -95,8 +95,8 @@ function wpum_user_directory_pagination( $data ) {
 			'base'      => str_replace( $search_for, $replace_with, esc_url( get_pagenum_link( $big ) ) ),
 			'current'   => $data->paged,
 			'total'     => $data->total_pages,
-			'prev_text' => __( 'Previous page', 'wpum' ),
-			'next_text' => __( 'Next page', 'wpum' )
+			'prev_text' => __( 'Previous page', 'wp-user-manager' ),
+			'next_text' => __( 'Next page', 'wp-user-manager' )
 		) );
 
 	echo '</div>';

@@ -31,11 +31,11 @@ $user = wp_get_current_user();
 			</span>
 			<ul>
 				<li>
-					<a href="<?php echo get_permalink( wpum_get_core_page_id( 'account' ) ); ?>"><?php echo esc_html__( 'Edit account' ); ?></a>
+					<a href="<?php echo get_permalink( wpum_get_core_page_id( 'account' ) ); ?>"><?php echo esc_html__( 'Edit account', 'wp-user-manager' ); ?></a>
 				</li>
 				<li>|</li>
 				<li>
-					<a href="<?php echo wp_logout_url(); ?>"><?php echo esc_html__( 'Logout' ); ?></a>
+					<a href="<?php echo wp_logout_url(); ?>"><?php echo esc_html__( 'Logout', 'wp-user-manager' ); ?></a>
 				</li>
 			</ul>
 		</div>

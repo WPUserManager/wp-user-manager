@@ -95,7 +95,7 @@ class WPUM_Registration_Form {
 		if( method_exists( $this, 'get_' . $key ) ) {
 			return call_user_func( array( $this, 'get_' . $key ) );
 		} else {
-			return new WP_Error( 'wpum-registration-form-invalid-property', sprintf( __( 'Can\'t get property %s' ), $key ) );
+			return new WP_Error( 'wpum-registration-form-invalid-property', sprintf( __( 'Can\'t get property %s', 'wp-user-manager' ), $key ) );
 		}
 	}
 

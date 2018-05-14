@@ -23,7 +23,7 @@ class WPUM_Field_Radio extends WPUM_Field_Type {
 	public function init() {
 
 		// Define field type information.
-		$this->name  = esc_html__( 'Radio buttons' );
+		$this->name  = esc_html__( 'Radio buttons', 'wp-user-manager' );
 		$this->type  = 'radio';
 		$this->icon  = 'dashicons-list-view';
 		$this->order = 3;

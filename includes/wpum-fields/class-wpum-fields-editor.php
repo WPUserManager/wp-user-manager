@@ -52,8 +52,8 @@ class WPUM_Fields_Editor {
 	 */
 	public function setup_menu_page() {
 		add_users_page(
-			esc_html__( 'WP User Manager Fields Editor' ),
-			esc_html__( 'Custom fields' ),
+			esc_html__( 'WP User Manager Fields Editor', 'wp-user-manager' ),
+			esc_html__( 'Custom fields', 'wp-user-manager' ),
 			'manage_options',
 			'wpum-custom-fields',
 			[ $this, 'display_fields_editor' ]
@@ -90,8 +90,8 @@ class WPUM_Fields_Editor {
 
 			$js_variables = [
 				'is_addon_installed' => apply_filters( 'wpum_fields_editor_has_custom_fields_addon', false ),
-				'page_title'         => esc_html__( 'WP User Manager Fields Editor' ),
-				'success_message'    => esc_html__( 'Changes successfully saved.' ),
+				'page_title'         => esc_html__( 'WP User Manager Fields Editor', 'wp-user-manager' ),
+				'success_message'    => esc_html__( 'Changes successfully saved.', 'wp-user-manager' ),
 				'labels'             => $this->get_labels(),
 				'groups'             => $this->get_groups(),
 				'ajax'               => admin_url( 'admin-ajax.php' ),
@@ -127,56 +127,56 @@ class WPUM_Fields_Editor {
 	private function get_labels() {
 
 		return [
-			'table_name'                => esc_html__( 'Group name' ),
-			'table_desc'                => esc_html__( 'Group description' ),
-			'table_default'             => esc_html__( 'Default' ),
-			'table_fields'              => esc_html__( 'Fields' ),
-			'table_actions'             => esc_html__( 'Actions' ),
-			'table_add_group'           => esc_html__( 'Add new field group' ),
-			'table_edit_group'          => esc_html__( 'Edit group settings' ),
-			'table_edit_fields'         => esc_html__( 'Customize fields' ),
-			'table_delete_group'        => esc_html__( 'Delete group' ),
-			'table_drag_tooltip'        => esc_html__( 'Drag and drop the rows below to change the order.' ),
-			'table_default_tooltip'     => esc_html__( 'The default fields group cannot be deleted.' ),
-			'modal_group_delete'        => esc_html__( 'You are about to delete the group:' ),
-			'modal_delete'              => esc_html__( 'This action cannot be reversed. Are you sure you want to continue? All fields within this group will be deleted too.' ),
-			'confirm_delete'            => esc_html__( 'Confirm delete?' ),
-			'save'                      => esc_html__( 'Save changes' ),
-			'tooltip_group_name'        => esc_html__( 'Customize the name of group. This may be used in your theme.' ),
-			'tooltip_group_description' => esc_html__( 'Customize the description of the group. This may be used into your theme.' ),
-			'purchase'                  => esc_html__( 'Purchase now' ),
-			'create_group'              => esc_html__( 'Create new fields group' ),
-			'premium_addon'             => sprintf( __( 'Create <a href="%1$s" target="_blank">unlimited custom fields and groups</a> for user profiles and registration forms with a drag & drop interface. The <a href="%1$s" target="_blank">custom fields</a> addon is required if you wish to extend your community.' ), 'https://wpusermanager.com/addons/custom-fields/?ref=wp_admin' ),
-			'fields_page_title'         => esc_html__( 'Editing:' ),
-			'fields_go_back'            => esc_html__( 'Back to the groups list' ),
-			'fields_add_new'            => esc_html__( 'Add new custom field' ),
-			'fields_create'             => esc_html__( 'Create custom field' ),
-			'fields_name'               => esc_html__( 'Field name' ),
-			'fields_type'               => esc_html__( 'Type' ),
-			'fields_required'           => esc_html__( 'Required' ),
-			'fields_visibility'         => esc_html__( 'Privacy' ),
-			'fields_edit'               => esc_html__( 'Edit field' ),
-			'fields_delete'             => esc_html__( 'Delete field' ),
-			'fields_editable'           => esc_html__( 'Editable' ),
-			'fields_default_tooltip'    => esc_html__( 'Default fields cannot be deleted.' ),
-			'fields_required_tooltip'   => esc_html__( 'Fields marked as required will be compulsory within the registration and account form.' ),
-			'fields_editable_tooltip'   => esc_html__( 'Fields marked as locked, can only be edited by an administrator and will not be visible in any form.' ),
-			'fields_visibility_tooltip' => esc_html__( 'Hidden fields are not publicly visible within profiles.' ),
-			'fields_not_found'          => esc_html__( 'This fields group is empty.' ),
-			'fields_delete_1'           => esc_html__( 'You are about to delete the field:' ),
-			'fields_delete_2'           => esc_html__( 'This action cannot be reversed. Are you sure you want to continue? Please note any users data associated with this field will not be removed.' ),
-			'field_new_name'            => esc_html__( 'Field name' ),
-			'field_new_placeholder'     => esc_html__( 'Enter a name for this field' ),
-			'field_edit_general'        => esc_html__( 'General settings' ),
-			'field_edit_privacy'        => esc_html__( 'Privacy settings' ),
-			'field_edit_customization'  => esc_html__( 'Editing permissions' ),
-			'field_edit_settings_error' => esc_html__( 'Something went wrong, could not find the settings for this field type.' ),
-			'field_error_required'      => esc_html__( 'Error: this setting is required.' ),
-			'field_error_special'       => esc_html__( 'Error: this setting cannot contain special characters.' ),
-			'field_error_nosave'        => esc_html__( 'There are some errors with your changes. Please check the errors highlighted below.' ),
-			'error_general'             => esc_html__( 'Something went wrong, no changes were saved.' ),
-			'registration_info'         => esc_html__( 'To display this field during signup, select one or more registration forms below.' ),
-			'registration_label'        => esc_html__( 'Available registration forms' )
+			'table_name'                => esc_html__( 'Group name', 'wp-user-manager' ),
+			'table_desc'                => esc_html__( 'Group description', 'wp-user-manager' ),
+			'table_default'             => esc_html__( 'Default', 'wp-user-manager' ),
+			'table_fields'              => esc_html__( 'Fields', 'wp-user-manager' ),
+			'table_actions'             => esc_html__( 'Actions', 'wp-user-manager' ),
+			'table_add_group'           => esc_html__( 'Add new field group', 'wp-user-manager' ),
+			'table_edit_group'          => esc_html__( 'Edit group settings', 'wp-user-manager' ),
+			'table_edit_fields'         => esc_html__( 'Customize fields', 'wp-user-manager' ),
+			'table_delete_group'        => esc_html__( 'Delete group', 'wp-user-manager' ),
+			'table_drag_tooltip'        => esc_html__( 'Drag and drop the rows below to change the order.', 'wp-user-manager' ),
+			'table_default_tooltip'     => esc_html__( 'The default fields group cannot be deleted.', 'wp-user-manager' ),
+			'modal_group_delete'        => esc_html__( 'You are about to delete the group:', 'wp-user-manager' ),
+			'modal_delete'              => esc_html__( 'This action cannot be reversed. Are you sure you want to continue? All fields within this group will be deleted too.', 'wp-user-manager' ),
+			'confirm_delete'            => esc_html__( 'Confirm delete?', 'wp-user-manager' ),
+			'save'                      => esc_html__( 'Save changes', 'wp-user-manager' ),
+			'tooltip_group_name'        => esc_html__( 'Customize the name of group. This may be used in your theme.', 'wp-user-manager' ),
+			'tooltip_group_description' => esc_html__( 'Customize the description of the group. This may be used into your theme.', 'wp-user-manager' ),
+			'purchase'                  => esc_html__( 'Purchase now', 'wp-user-manager' ),
+			'create_group'              => esc_html__( 'Create new fields group', 'wp-user-manager' ),
+			'premium_addon'             => sprintf( __( 'Create <a href="%1$s" target="_blank">unlimited custom fields and groups</a> for user profiles and registration forms with a drag & drop interface. The <a href="%1$s" target="_blank">custom fields</a> addon is required if you wish to extend your community.', 'wp-user-manager' ), 'https://wpusermanager.com/addons/custom-fields/?ref=wp_admin' ),
+			'fields_page_title'         => esc_html__( 'Editing:', 'wp-user-manager' ),
+			'fields_go_back'            => esc_html__( 'Back to the groups list', 'wp-user-manager' ),
+			'fields_add_new'            => esc_html__( 'Add new custom field', 'wp-user-manager' ),
+			'fields_create'             => esc_html__( 'Create custom field', 'wp-user-manager' ),
+			'fields_name'               => esc_html__( 'Field name', 'wp-user-manager' ),
+			'fields_type'               => esc_html__( 'Type', 'wp-user-manager' ),
+			'fields_required'           => esc_html__( 'Required', 'wp-user-manager' ),
+			'fields_visibility'         => esc_html__( 'Privacy', 'wp-user-manager' ),
+			'fields_edit'               => esc_html__( 'Edit field', 'wp-user-manager' ),
+			'fields_delete'             => esc_html__( 'Delete field', 'wp-user-manager' ),
+			'fields_editable'           => esc_html__( 'Editable', 'wp-user-manager' ),
+			'fields_default_tooltip'    => esc_html__( 'Default fields cannot be deleted.', 'wp-user-manager' ),
+			'fields_required_tooltip'   => esc_html__( 'Fields marked as required will be compulsory within the registration and account form.', 'wp-user-manager' ),
+			'fields_editable_tooltip'   => esc_html__( 'Fields marked as locked, can only be edited by an administrator and will not be visible in any form.', 'wp-user-manager' ),
+			'fields_visibility_tooltip' => esc_html__( 'Hidden fields are not publicly visible within profiles.', 'wp-user-manager' ),
+			'fields_not_found'          => esc_html__( 'This fields group is empty.', 'wp-user-manager' ),
+			'fields_delete_1'           => esc_html__( 'You are about to delete the field:', 'wp-user-manager' ),
+			'fields_delete_2'           => esc_html__( 'This action cannot be reversed. Are you sure you want to continue? Please note any users data associated with this field will not be removed.', 'wp-user-manager' ),
+			'field_new_name'            => esc_html__( 'Field name', 'wp-user-manager' ),
+			'field_new_placeholder'     => esc_html__( 'Enter a name for this field', 'wp-user-manager' ),
+			'field_edit_general'        => esc_html__( 'General settings', 'wp-user-manager' ),
+			'field_edit_privacy'        => esc_html__( 'Privacy settings', 'wp-user-manager' ),
+			'field_edit_customization'  => esc_html__( 'Editing permissions', 'wp-user-manager' ),
+			'field_edit_settings_error' => esc_html__( 'Something went wrong, could not find the settings for this field type.', 'wp-user-manager' ),
+			'field_error_required'      => esc_html__( 'Error: this setting is required.', 'wp-user-manager' ),
+			'field_error_special'       => esc_html__( 'Error: this setting cannot contain special characters.', 'wp-user-manager' ),
+			'field_error_nosave'        => esc_html__( 'There are some errors with your changes. Please check the errors highlighted below.', 'wp-user-manager' ),
+			'error_general'             => esc_html__( 'Something went wrong, no changes were saved.', 'wp-user-manager' ),
+			'registration_info'         => esc_html__( 'To display this field during signup, select one or more registration forms below.', 'wp-user-manager' ),
+			'registration_label'        => esc_html__( 'Available registration forms', 'wp-user-manager' )
 		];
 
 	}
@@ -220,7 +220,7 @@ class WPUM_Fields_Editor {
 		check_ajax_referer( 'wpum_update_fields_groups', 'nonce' );
 
 		if( ! current_user_can( 'manage_options' ) ) {
-			wp_die( esc_html__( 'Something went wrong: could not update the groups order.' ), 403 );
+			wp_die( esc_html__( 'Something went wrong: could not update the groups order.', 'wp-user-manager' ), 403 );
 		}
 
 		$groups = isset( $_POST['groups'] ) && is_array( $_POST['groups'] ) && ! empty( $_POST['groups'] ) ? $_POST['groups'] : false;
@@ -233,7 +233,7 @@ class WPUM_Fields_Editor {
 				}
 			}
 		} else {
-			wp_die( esc_html__( 'Something went wrong: could not update the groups order.' ), 403 );
+			wp_die( esc_html__( 'Something went wrong: could not update the groups order.', 'wp-user-manager' ), 403 );
 		}
 
 		wp_send_json_success( $groups );
@@ -250,7 +250,7 @@ class WPUM_Fields_Editor {
 		check_ajax_referer( 'wpum_update_fields_groups', 'nonce' );
 
 		if( ! current_user_can( 'manage_options' ) ) {
-			wp_die( esc_html__( 'Something went wrong: could not update the group details.' ), 403 );
+			wp_die( esc_html__( 'Something went wrong: could not update the group details.', 'wp-user-manager' ), 403 );
 		}
 
 		$group_id          = isset( $_POST['group_id'] ) && ! empty( $_POST['group_id'] ) ? (int) $_POST['group_id'] : false;
@@ -265,7 +265,7 @@ class WPUM_Fields_Editor {
 			] );
 
 		} else {
-			wp_die( esc_html__( 'Something went wrong: could not update the group details.' ), 403 );
+			wp_die( esc_html__( 'Something went wrong: could not update the group details.', 'wp-user-manager' ), 403 );
 		}
 
 		wp_send_json_success( [
@@ -286,7 +286,7 @@ class WPUM_Fields_Editor {
 		check_ajax_referer( 'wpum_get_fields', 'nonce' );
 
 		if( ! current_user_can( 'manage_options' ) ) {
-			wp_die( esc_html__( 'Something went wrong while retrieving the list of fields.' ), 403 );
+			wp_die( esc_html__( 'Something went wrong while retrieving the list of fields.', 'wp-user-manager' ), 403 );
 		}
 
 		$fields = [];
@@ -321,7 +321,7 @@ class WPUM_Fields_Editor {
 			}
 
 		} else {
-			wp_die( esc_html__( 'Something went wrong while retrieving the list of fields.' ), 403 );
+			wp_die( esc_html__( 'Something went wrong while retrieving the list of fields.', 'wp-user-manager' ), 403 );
 		}
 
 		wp_send_json_success( [
@@ -341,7 +341,7 @@ class WPUM_Fields_Editor {
 		check_ajax_referer( 'wpum_update_fields_groups', 'nonce' );
 
 		if( ! current_user_can( 'manage_options' ) ) {
-			wp_die( esc_html__( 'Something went wrong: could not update the fields order.' ), 403 );
+			wp_die( esc_html__( 'Something went wrong: could not update the fields order.', 'wp-user-manager' ), 403 );
 		}
 
 		$fields = isset( $_POST['fields'] ) && is_array( $_POST['fields'] ) && ! empty( $_POST['fields'] ) ? $_POST['fields'] : false;
@@ -354,7 +354,7 @@ class WPUM_Fields_Editor {
 				}
 			}
 		} else {
-			wp_die( esc_html__( 'Something went wrong: could not update the fields order.' ), 403 );
+			wp_die( esc_html__( 'Something went wrong: could not update the fields order.', 'wp-user-manager' ), 403 );
 		}
 
 		wp_send_json_success( $fields );

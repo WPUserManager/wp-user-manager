@@ -39,21 +39,21 @@ class WPUM_Menus {
 	public function menu_settings() {
 		Container::make( 'nav_menu_item', 'Menu Settings' )
 			->add_fields( array(
-				Field::make( 'checkbox', 'convert_to_logout', esc_html__( 'Set as logout url' ) )
-					->set_help_text( esc_html__( 'Enable to make this link a logout link.' ) )
+				Field::make( 'checkbox', 'convert_to_logout', esc_html__( 'Set as logout url', 'wp-user-manager' ) )
+					->set_help_text( esc_html__( 'Enable to make this link a logout link.', 'wp-user-manager' ) )
 					->set_classes( 'wpum-link-logout-toggle' ),
-				Field::make( 'select', 'link_visibility', esc_html__( 'Display to:' ) )
+				Field::make( 'select', 'link_visibility', esc_html__( 'Display to:', 'wp-user-manager' ) )
 					->add_options( array(
-						''    => esc_html__( 'Everyone' ),
-						'in'  => esc_html__( 'Logged in users' ),
-						'out' => esc_html__( 'Logged out users' ),
+						''    => esc_html__( 'Everyone', 'wp-user-manager' ),
+						'in'  => esc_html__( 'Logged in users', 'wp-user-manager' ),
+						'out' => esc_html__( 'Logged out users', 'wp-user-manager' ),
 					) )
 					->set_classes( 'wpum-link-visibility-toggle' )
-					->set_help_text( esc_html__( 'Set the visibility of this menu item.' ) ),
-				Field::make( 'multiselect', 'link_roles', esc_html__( 'Select roles:' ) )
+					->set_help_text( esc_html__( 'Set the visibility of this menu item.', 'wp-user-manager' ) ),
+				Field::make( 'multiselect', 'link_roles', esc_html__( 'Select roles:', 'wp-user-manager' ) )
 					->add_options( $this->get_roles() )
 					->set_classes( 'wpum-link-visibility-roles' )
-					->set_help_text( esc_html__( 'Select the roles that should see this menu item. Leave blank for all roles.' ) )
+					->set_help_text( esc_html__( 'Select the roles that should see this menu item. Leave blank for all roles.', 'wp-user-manager' ) )
 			) );
 	}
 

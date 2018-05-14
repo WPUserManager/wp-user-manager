@@ -35,11 +35,11 @@ function wpum_load_admin_scripts() {
 
 	$js_vars = [
 		'updates' => array(
-			'ajax_error' => __( 'Please reload this page and try again' ),
+			'ajax_error' => __( 'Please reload this page and try again', 'wp-user-manager' ),
 		),
-		'db_update_confirmation_msg_button' => __( 'Run Updates' ),
-		'db_update_confirmation_msg'        => __( 'The following process will make updates to your site\'s database. Please create a database backup before proceeding with updates.' ),
-		'error_message'                     => __( 'Something went wrong kindly try again!' ),
+		'db_update_confirmation_msg_button' => __( 'Run Updates', 'wp-user-manager' ),
+		'db_update_confirmation_msg'        => __( 'The following process will make updates to your site\'s database. Please create a database backup before proceeding with updates.', 'wp-user-manager' ),
+		'error_message'                     => __( 'Something went wrong kindly try again!', 'wp-user-manager' ),
 	];
 	wp_localize_script( 'wpum-upgrades', 'wpum_vars', $js_vars );
 

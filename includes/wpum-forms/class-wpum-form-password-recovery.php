@@ -51,25 +51,25 @@ class WPUM_Form_Password_Recovery extends WPUM_Form {
 
 		$this->steps  = (array) apply_filters( 'password_reset_steps', array(
 			'submit' => array(
-				'name'     => esc_html__( 'Password recovery details request' ),
+				'name'     => esc_html__( 'Password recovery details request', 'wp-user-manager' ),
 				'view'     => array( $this, 'submit' ),
 				'handler'  => array( $this, 'submit_handler' ),
 				'priority' => 10
 			),
 			'sent' => array(
-				'name'     => esc_html__( 'Instructions sent' ),
+				'name'     => esc_html__( 'Instructions sent', 'wp-user-manager' ),
 				'view'     => array( $this, 'instructions_sent' ),
 				'handler'  => false,
 				'priority' => 11
 			),
 			'reset' => array(
-				'name'     => esc_html__( 'Reset password' ),
+				'name'     => esc_html__( 'Reset password', 'wp-user-manager' ),
 				'view'     => array( $this, 'reset' ),
 				'handler'  => array( $this, 'reset_handler' ),
 				'priority' => 12
 			),
 			'done' => array(
-				'name'     => esc_html__( 'Done' ),
+				'name'     => esc_html__( 'Done', 'wp-user-manager' ),
 				'view'     => array( $this, 'done' ),
 				'handler'  => false,
 				'priority' => 12
@@ -97,7 +97,7 @@ class WPUM_Form_Password_Recovery extends WPUM_Form {
 		$this->fields = apply_filters( 'password_recover_form_fields', array(
 			'user' => array(
 				'username_email' => array(
-					'label'       => __( 'Username or email', 'wpum' ),
+					'label'       => __( 'Username or email', 'wp-user-manager' ),
 					'type'        => 'text',
 					'required'    => true,
 					'placeholder' => '',
@@ -106,14 +106,14 @@ class WPUM_Form_Password_Recovery extends WPUM_Form {
 			),
 			'password' => array(
 				'password' => array(
-					'label'       => __( 'New password', 'wpum' ),
+					'label'       => __( 'New password', 'wp-user-manager' ),
 					'type'        => 'password',
 					'required'    => true,
 					'placeholder' => '',
 					'priority'    => 1
 				),
 				'password_2' => array(
-					'label'       => __( 'Re-enter new password', 'wpum' ),
+					'label'       => __( 'Re-enter new password', 'wp-user-manager' ),
 					'type'        => 'password',
 					'required'    => true,
 					'placeholder' => '',
@@ -146,7 +146,7 @@ class WPUM_Form_Password_Recovery extends WPUM_Form {
 		if( $form == 'password-recovery' && isset( $values['user']['username_email'] ) ) {
 			$username = sanitize_text_field( $values['user']['username_email'] );
 			if( is_email( $username ) && !email_exists( $username ) || !is_email( $username ) && !username_exists( $username ) )
-				return new WP_Error( 'username-validation-error', esc_html__( 'A user with this username or email does not exist. Please check your entry and try again.', 'wpum' ) );
+				return new WP_Error( 'username-validation-error', esc_html__( 'A user with this username or email does not exist. Please check your entry and try again.', 'wp-user-manager' ) );
 		}
 
 		return $pass;
@@ -167,7 +167,7 @@ class WPUM_Form_Password_Recovery extends WPUM_Form {
 			'action'  => $this->get_action(),
 			'fields'  => $this->get_fields( 'user' ),
 			'step'    => $this->get_step(),
-			'message' => apply_filters( 'wpum_lost_password_message', esc_html__( 'Lost your password? Please enter your username or email address. You will receive a link to create a new password via email.', 'wpum' ) )
+			'message' => apply_filters( 'wpum_lost_password_message', esc_html__( 'Lost your password? Please enter your username or email address. You will receive a link to create a new password via email.', 'wp-user-manager' ) )
 		];
 
 		WPUM()->templates
@@ -239,7 +239,7 @@ class WPUM_Form_Password_Recovery extends WPUM_Form {
 				}
 
 			} else {
-				throw new Exception( esc_html__( 'Something went wrong.' ) );
+				throw new Exception( esc_html__( 'Something went wrong.', 'wp-user-manager' ) );
 			}
 
 			// Successful, show next step.
@@ -300,7 +300,7 @@ class WPUM_Form_Password_Recovery extends WPUM_Form {
 
 			if( is_wp_error( $verify_key ) ) {
 				$data = [
-					'message'  => esc_html__( 'The reset key is wrong or expired. Please check that you used the right reset link or request a new one.' ),
+					'message'  => esc_html__( 'The reset key is wrong or expired. Please check that you used the right reset link or request a new one.', 'wp-user-manager' ),
 				];
 
 				WPUM()->templates
@@ -313,7 +313,7 @@ class WPUM_Form_Password_Recovery extends WPUM_Form {
 					'action'  => $this->get_action(),
 					'fields'  => $this->get_fields( 'password' ),
 					'step'    => $this->get_step(),
-					'message' => apply_filters( 'wpum_new_password_message', esc_html__( 'Enter a new password below.', 'wpum' ) )
+					'message' => apply_filters( 'wpum_new_password_message', esc_html__( 'Enter a new password below.', 'wp-user-manager' ) )
 				];
 
 				WPUM()->templates
@@ -325,7 +325,7 @@ class WPUM_Form_Password_Recovery extends WPUM_Form {
 		} else {
 
 			$data = [
-				'message'  => esc_html__( 'The link you followed may be broken. Please check that you used the right reset link or request a new one.' ),
+				'message'  => esc_html__( 'The link you followed may be broken. Please check that you used the right reset link or request a new one.', 'wp-user-manager' ),
 			];
 
 			WPUM()->templates
@@ -353,7 +353,7 @@ class WPUM_Form_Password_Recovery extends WPUM_Form {
 			$password_2 = $values['password']['password_2'];
 
 			if ( $password_1 !== $password_2 ) {
-				return new WP_Error( 'password-validation-nomatch', esc_html__( 'Error: passwords do not match.' ) );
+				return new WP_Error( 'password-validation-nomatch', esc_html__( 'Error: passwords do not match.', 'wp-user-manager' ) );
 			}
 
 			$containsLetter  = preg_match('/[A-Z]/', $password_1 );
@@ -361,7 +361,7 @@ class WPUM_Form_Password_Recovery extends WPUM_Form {
 			$containsSpecial = preg_match('/[^a-zA-Z\d]/', $password_1 );
 
 			if( ! $containsLetter || ! $containsDigit || ! $containsSpecial || strlen( $password_1 ) < 8 ) {
-				return new WP_Error( 'password-validation-error', esc_html__( 'Password must be at least 8 characters long and contain at least 1 number and 1 uppercase letter and 1 special character.', 'wpum' ) );
+				return new WP_Error( 'password-validation-error', esc_html__( 'Password must be at least 8 characters long and contain at least 1 number and 1 uppercase letter and 1 special character.', 'wp-user-manager' ) );
 			}
 
 		}
@@ -423,7 +423,7 @@ class WPUM_Form_Password_Recovery extends WPUM_Form {
 	public function done() {
 
 		$data = [
-			'message' => esc_html__( 'Password successfully reset.' ) . ' ' . '<a href="' . get_permalink( wpum_get_core_page_id( 'login' ) ) . '">' . esc_html__( 'Login now &raquo;' ) . '</a>'
+			'message' => esc_html__( 'Password successfully reset.', 'wp-user-manager' ) . ' ' . '<a href="' . get_permalink( wpum_get_core_page_id( 'login' ) ) . '">' . esc_html__( 'Login now &raquo;', 'wp-user-manager' ) . '</a>'
 		];
 
 		WPUM()->templates

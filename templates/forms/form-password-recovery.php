@@ -75,7 +75,7 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 		<input type="hidden" name="wpum_form" value="<?php echo $data->form; ?>" />
 		<input type="hidden" name="step" value="<?php echo esc_attr( $data->step ); ?>" />
 		<?php wp_nonce_field( 'verify_password_recovery_form', 'password_recovery_nonce' ); ?>
-		<input type="submit" name="submit_password_recovery" class="button" value="<?php esc_html_e( 'Reset password' ); ?>" />
+		<input type="submit" name="submit_password_recovery" class="button" value="<?php esc_html_e( 'Reset password', 'wp-user-manager' ); ?>" />
 
 	</form>
 

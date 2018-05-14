@@ -19,8 +19,8 @@ class WPUM_Shortcode_Registration extends WPUM_Shortcode_Generator {
 	 * Inject the editor for this shortcode.
 	 */
 	public function __construct() {
-		$this->shortcode['title'] = esc_html__( 'Registration form' );
-		$this->shortcode['label'] = esc_html__( 'Registration form' );
+		$this->shortcode['title'] = esc_html__( 'Registration form', 'wp-user-manager' );
+		$this->shortcode['label'] = esc_html__( 'Registration form', 'wp-user-manager' );
 		parent::__construct( 'wpum_register' );
 	}
 
@@ -34,13 +34,13 @@ class WPUM_Shortcode_Registration extends WPUM_Shortcode_Generator {
 			array(
 				'type'    => 'listbox',
 				'name'    => 'login_link',
-				'label'   => esc_html__( 'Show login link:' ),
+				'label'   => esc_html__( 'Show login link:', 'wp-user-manager' ),
 				'options' => $this->get_yes_no(),
 			),
 			array(
 				'type'    => 'listbox',
 				'name'    => 'psw_link',
-				'label'   => esc_html__( 'Show password recovery link:' ),
+				'label'   => esc_html__( 'Show password recovery link:', 'wp-user-manager' ),
 				'options' => $this->get_yes_no(),
 			),
 		];

@@ -425,7 +425,7 @@ abstract class WPUM_Form {
 					'allowed_mime_types' => $allowed_mime_types,
 				) );
 				// Determine max file size for the avatar field.
-				$too_big_message = esc_html__( 'The uploaded file is too big.' );
+				$too_big_message = esc_html__( 'The uploaded file is too big.', 'wp-user-manager' );
 				if ( defined( 'WPUM_MAX_AVATAR_SIZE' ) && $field_key == 'user_avatar' && $file_to_upload['size'] > WPUM_MAX_AVATAR_SIZE ) {
 					throw new Exception( $too_big_message );
 				}
@@ -460,7 +460,7 @@ abstract class WPUM_Form {
 		foreach ( $this->fields as $group_key => $group_fields ) {
 			foreach ( $group_fields as $key => $field ) {
 				if ( $field['required'] && empty( $values[ $group_key ][ $key ] ) ) {
-					return new WP_Error( 'validation-error', sprintf( __( '%s is a required field' ), $field['label'] ) );
+					return new WP_Error( 'validation-error', sprintf( __( '%s is a required field', 'wp-user-manager' ), $field['label'] ) );
 				}
 				if ( ! empty( $field['taxonomy'] ) && in_array( $field['type'], array( 'term-checklist', 'term-select', 'term-multiselect' ) ) ) {
 					if ( is_array( $values[ $group_key ][ $key ] ) ) {
@@ -470,7 +470,7 @@ abstract class WPUM_Form {
 					}
 					foreach ( $check_value as $term ) {
 						if ( ! term_exists( $term, $field['taxonomy'] ) ) {
-							return new WP_Error( 'validation-error', sprintf( __( '%s is invalid' ), $field['label'] ) );
+							return new WP_Error( 'validation-error', sprintf( __( '%s is invalid', 'wp-user-manager' ), $field['label'] ) );
 						}
 					}
 				}
@@ -485,7 +485,7 @@ abstract class WPUM_Form {
 							$file_url  = current( explode( '?', $file_url ) );
 							$file_info = wp_check_filetype( $file_url );
 							if ( ! is_numeric( $file_url ) && $file_info && ! in_array( $file_info['type'], $field['allowed_mime_types'] ) ) {
-								throw new Exception( sprintf( __( '"%s" (filetype %s) needs to be one of the following file types: %s' ), $field['label'], $file_info['ext'], implode( ', ', array_keys( $field['allowed_mime_types'] ) ) ) );
+								throw new Exception( sprintf( __( '"%s" (filetype %s) needs to be one of the following file types: %s', 'wp-user-manager' ), $field['label'], $file_info['ext'], implode( ', ', array_keys( $field['allowed_mime_types'] ) ) ) );
 							}
 						}
 					}

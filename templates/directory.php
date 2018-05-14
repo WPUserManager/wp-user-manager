@@ -59,7 +59,7 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 
 				WPUM()->templates
 					->set_template_data( [
-						'message' => esc_html__( 'No users have been found.' ),
+						'message' => esc_html__( 'No users have been found.', 'wp-user-manager' ),
 					] )
 					->get_template_part( 'messages/general', 'warning' );
 

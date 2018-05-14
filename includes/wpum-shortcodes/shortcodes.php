@@ -86,7 +86,7 @@ function wpum_login_link( $atts, $content = null ) {
 
 	extract( shortcode_atts( array(
 		'redirect' => '',
-		'label'    => esc_html__( 'Login', 'wpum' )
+		'label'    => esc_html__( 'Login', 'wp-user-manager' )
 	), $atts ) );
 
 	if( is_user_logged_in() ) {
@@ -112,7 +112,7 @@ function wpum_logout_link( $atts, $content = null ) {
 
 	extract( shortcode_atts( array(
 		'redirect' => '',
-		'label'    => esc_html__( 'Logout' )
+		'label'    => esc_html__( 'Logout', 'wp-user-manager' )
 	), $atts ) );
 
 	$output = '';
@@ -155,7 +155,7 @@ function wpum_registration_form( $atts, $content = null ) {
 
 		} else if( $is_success ) {
 
-			$success_message = apply_filters( 'wpum_registration_success_message', esc_html__( 'Registration complete. We have sent you a confirmation email with your details.' ) );
+			$success_message = apply_filters( 'wpum_registration_success_message', esc_html__( 'Registration complete. We have sent you a confirmation email with your details.', 'wp-user-manager' ) );
 
 			WPUM()->templates
 				->set_template_data( [
@@ -173,7 +173,7 @@ function wpum_registration_form( $atts, $content = null ) {
 
 		WPUM()->templates
 			->set_template_data( [
-				'message' => esc_html__( 'Registrations are currently disabled.' )
+				'message' => esc_html__( 'Registrations are currently disabled.', 'wp-user-manager' )
 			] )
 			->get_template_part( 'messages/general', 'error' );
 
@@ -221,7 +221,7 @@ function wpum_profile( $atts, $content = null ) {
 
 	$login_page        = get_permalink( wpum_get_core_page_id( 'login' ) );
 	$registration_page = get_permalink( wpum_get_core_page_id( 'register' ) );
-	$warning_message   = sprintf( __( 'This content is available to members only. Please <a href="%s">login</a> or <a href="%s">register</a> to view this area.', 'wpum' ), $login_page, $registration_page );
+	$warning_message   = sprintf( __( 'This content is available to members only. Please <a href="%s">login</a> or <a href="%s">register</a> to view this area.', 'wp-user-manager' ), $login_page, $registration_page );
 
 	// Check if not logged in and on profile page - no given user
 	if ( ! is_user_logged_in() && ! wpum_get_queried_user_id() ) {
@@ -244,7 +244,7 @@ function wpum_profile( $atts, $content = null ) {
 
 		WPUM()->templates
 			->set_template_data( [
-				'message' => esc_html__( 'You are not authorized to access this area.' )
+				'message' => esc_html__( 'You are not authorized to access this area.', 'wp-user-manager' )
 			] )
 			->get_template_part( 'messages/general', 'warning' );
 
@@ -288,7 +288,7 @@ function wpum_restrict_logged_in( $atts, $content = null ) {
 
 		WPUM()->templates
 			->set_template_data( [
-				'message' => sprintf( __( 'This content is available to members only. Please <a href="%s">login</a> or <a href="%s">register</a> to view this area.', 'wpum'), $login_page, get_permalink( wpum_get_core_page_id( 'register' ) )  ),
+				'message' => sprintf( __( 'This content is available to members only. Please <a href="%s">login</a> or <a href="%s">register</a> to view this area.', 'wp-user-manager'), $login_page, get_permalink( wpum_get_core_page_id( 'register' ) )  ),
 			] )
 			->get_template_part( 'messages/general', 'warning' );
 
@@ -331,7 +331,7 @@ function wpum_restrict_to_users( $atts, $content = null ) {
 
 		WPUM()->templates
 			->set_template_data( [
-				'message' => sprintf( __( 'This content is available to members only. Please <a href="%s">login</a> or <a href="%s">register</a> to view this area.', 'wpum'), $login_page, get_permalink( wpum_get_core_page_id( 'register' ) )  ),
+				'message' => sprintf( __( 'This content is available to members only. Please <a href="%s">login</a> or <a href="%s">register</a> to view this area.', 'wp-user-manager'), $login_page, get_permalink( wpum_get_core_page_id( 'register' ) )  ),
 			] )
 			->get_template_part( 'messages/general', 'warning' );
 
@@ -376,7 +376,7 @@ function wpum_restrict_to_user_roles( $atts, $content = null ) {
 
 		WPUM()->templates
 			->set_template_data( [
-				'message' => sprintf( __( 'This content is available to members only. Please <a href="%s">login</a> or <a href="%s">register</a> to view this area.', 'wpum'), $login_page, get_permalink( wpum_get_core_page_id( 'register' ) )  ),
+				'message' => sprintf( __( 'This content is available to members only. Please <a href="%s">login</a> or <a href="%s">register</a> to view this area.', 'wp-user-manager'), $login_page, get_permalink( wpum_get_core_page_id( 'register' ) )  ),
 			] )
 			->get_template_part( 'messages/general', 'warning' );
 

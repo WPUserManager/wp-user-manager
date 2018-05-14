@@ -21,7 +21,7 @@ $masked_email = wpum_mask_email_address( $data->email );
 ?>
 
 <div class="wpum-password-reset-request-success wpum-message success">
-	<p><?php printf( esc_html__( 'We\'ve sent an email to %s with password reset instructions.' ), '<strong>' . $masked_email . '</strong>' ); ?></p>
+	<p><?php printf( esc_html__( 'We\'ve sent an email to %s with password reset instructions.', 'wp-user-manager' ), '<strong>' . $masked_email . '</strong>' ); ?></p>
 </div>
 
-<p><?php printf( esc_html__( 'If the email doesn\'t show up soon, check your spam folder. We sent it from %s.' ), '<strong>' . antispambot( $data->from ) . '</strong>' ); ?></p>
+<p><?php printf( esc_html__( 'If the email doesn\'t show up soon, check your spam folder. We sent it from %s.', 'wp-user-manager' ), '<strong>' . antispambot( $data->from ) . '</strong>' ); ?></p>

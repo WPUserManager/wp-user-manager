@@ -34,10 +34,10 @@ class WPUM_Prevent_Password_Change {
 	 * @return void
 	 */
 	public function register_custom_field() {
-		Container::make( 'user_meta', esc_html__( 'Prevent password change' ) )
+		Container::make( 'user_meta', esc_html__( 'Prevent password change', 'wp-user-manager' ) )
 			->add_fields( array(
-				Field::make( 'checkbox', 'prevent_password_change', esc_html__( 'Prevent password change' ) )
-					->set_help_text( esc_html__( 'Enable to prevent this user from changing his password from the front-end.' ) )
+				Field::make( 'checkbox', 'prevent_password_change', esc_html__( 'Prevent password change', 'wp-user-manager' ) )
+					->set_help_text( esc_html__( 'Enable to prevent this user from changing his password from the front-end.', 'wp-user-manager' ) )
 			) );
 	}
 
@@ -53,7 +53,7 @@ class WPUM_Prevent_Password_Change {
 			$user_id = get_current_user_id();
 
 			if( carbon_get_user_meta( $user_id, 'prevent_password_change' ) ) {
-				return new WP_Error( 'password-validation-error', esc_html__( 'Changing password for this account is currently disabled.' ) );
+				return new WP_Error( 'password-validation-error', esc_html__( 'Changing password for this account is currently disabled.', 'wp-user-manager' ) );
 			}
 
 		}

@@ -31,7 +31,7 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 				<h2>
 					<?php echo esc_html( $data->user->display_name ); ?>
 					<?php if( $data->current_user_id === $data->user->ID ) : ?>
-						<a href="<?php echo esc_url( get_permalink( wpum_get_core_page_id( 'account' ) ) ); ?>"><small><?php esc_html_e( '( Edit account )' ); ?></small></a>
+						<a href="<?php echo esc_url( get_permalink( wpum_get_core_page_id( 'account' ) ) ); ?>"><small><?php esc_html_e( '( Edit account )', 'wp-user-manager' ); ?></small></a>
 					<?php endif; ?>
 				</h2>
 			</div>

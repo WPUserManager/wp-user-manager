@@ -21,8 +21,8 @@ $current_user = wp_get_current_user();
 ?>
 
 <div class="wpum-already-logged-in wpum-message info">
-	<p><?php printf( __( 'You are currently logged in as %s.', 'wpum' ), $current_user->display_name );?>
-	<a href="<?php echo esc_url( get_permalink( wpum_get_core_page_id( 'profile' ) ) ); ?>"><?php esc_html_e( 'View Profile' ); ?></a> |
-	<a href="<?php echo esc_url( get_permalink( wpum_get_core_page_id( 'account' ) ) ); ?>"><?php esc_html_e( 'Account settings' ); ?></a> |
-	<a href="<?php echo esc_url( wp_logout_url() ); ?>"><?php esc_html_e( 'Logout' ); ?> &raquo;</a></p>
+	<p><?php printf( __( 'You are currently logged in as %s.', 'wp-user-manager' ), $current_user->display_name );?>
+	<a href="<?php echo esc_url( get_permalink( wpum_get_core_page_id( 'profile' ) ) ); ?>"><?php esc_html_e( 'View Profile', 'wp-user-manager' ); ?></a> |
+	<a href="<?php echo esc_url( get_permalink( wpum_get_core_page_id( 'account' ) ) ); ?>"><?php esc_html_e( 'Account settings', 'wp-user-manager' ); ?></a> |
+	<a href="<?php echo esc_url( wp_logout_url() ); ?>"><?php esc_html_e( 'Logout', 'wp-user-manager' ); ?> &raquo;</a></p>
 </div>

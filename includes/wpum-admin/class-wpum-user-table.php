@@ -33,7 +33,7 @@ class WPUM_User_Table {
 	 */
 	public function add_user_id_column( $columns ) {
 
-		$columns['user_id'] = __( 'ID', 'wpum' );
+		$columns['user_id'] = __( 'ID', 'wp-user-manager' );
 		return $columns;
 
 	}

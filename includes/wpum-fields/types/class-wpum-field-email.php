@@ -23,7 +23,7 @@ class WPUM_Field_Email extends WPUM_Field_Type {
 	public function init() {
 
 		// Define field type information.
-		$this->name  = esc_html__( 'Email' );
+		$this->name  = esc_html__( 'Email', 'wp-user-manager' );
 		$this->type  = 'email';
 		$this->icon  = 'dashicons-email-alt';
 		$this->order = 3;

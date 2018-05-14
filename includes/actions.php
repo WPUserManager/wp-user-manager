@@ -42,14 +42,14 @@ function wpum_admin_bar_menu( $wp_admin_bar ) {
 	$args = array(
 		'id'    => 'wpum_node',
 		'href'  => admin_url( 'users.php' ),
-		'title' => '<span class="ab-icon dashicons dashicons-admin-users" style="margin-top:2px"></span>' . esc_html__( ' Users' ),
+		'title' => '<span class="ab-icon dashicons dashicons-admin-users" style="margin-top:2px"></span>' . esc_html__( ' Users', 'wp-user-manager' ),
 	);
 	$wp_admin_bar->add_node( $args );
 
 	$args = array(
 		'id'     => 'wpum_emails',
 		'href'   => admin_url( 'users.php?page=wpum-emails' ),
-		'title'  => esc_html__( 'Emails' ),
+		'title'  => esc_html__( 'Emails', 'wp-user-manager' ),
 		'parent' => 'wpum_node',
 	);
 	$wp_admin_bar->add_node( $args );
@@ -57,7 +57,7 @@ function wpum_admin_bar_menu( $wp_admin_bar ) {
 	$args = array(
 		'id'     => 'wpum_custom_fields',
 		'href'   => admin_url( 'users.php?page=wpum-custom-fields' ),
-		'title'  => esc_html__( 'Custom fields' ),
+		'title'  => esc_html__( 'Custom fields', 'wp-user-manager' ),
 		'parent' => 'wpum_node',
 	);
 	$wp_admin_bar->add_node( $args );
@@ -65,7 +65,7 @@ function wpum_admin_bar_menu( $wp_admin_bar ) {
 	$args = array(
 		'id'     => 'wpum_registration_forms',
 		'href'   => admin_url( 'users.php?page=wpum-registration-forms' ),
-		'title'  => esc_html__( 'Registration forms' ),
+		'title'  => esc_html__( 'Registration forms', 'wp-user-manager' ),
 		'parent' => 'wpum_node',
 	);
 	$wp_admin_bar->add_node( $args );
@@ -73,7 +73,7 @@ function wpum_admin_bar_menu( $wp_admin_bar ) {
 	$args = array(
 		'id'     => 'wpum_settings',
 		'href'   => admin_url( 'users.php?page=wpum-settings' ),
-		'title'  => esc_html__( 'Settings' ),
+		'title'  => esc_html__( 'Settings', 'wp-user-manager' ),
 		'parent' => 'wpum_node',
 	);
 	$wp_admin_bar->add_node( $args );
@@ -263,7 +263,7 @@ add_action( 'edit_user_profile_update', 'wpum_check_display_name' );
  * @return void
  */
 function wpum_check_display_field( $errors, $update, $user ) {
-	$errors->add( 'display_name_error', esc_html__( 'This display name is already in use by someone else. Display names must be unique.' ) );
+	$errors->add( 'display_name_error', esc_html__( 'This display name is already in use by someone else. Display names must be unique.', 'wp-user-manager' ) );
 }
 
 /**
@@ -272,7 +272,7 @@ function wpum_check_display_field( $errors, $update, $user ) {
  * @return void
  */
 function wpum_check_nick_field( $errors, $update, $user ) {
-	$errors->add( 'display_nick_error', esc_html__( 'This nickname is already in use by someone else. Nicknames must be unique.' ) );
+	$errors->add( 'display_nick_error', esc_html__( 'This nickname is already in use by someone else. Nicknames must be unique.', 'wp-user-manager' ) );
 }
 
 /**
@@ -284,7 +284,7 @@ function wpum_check_nick_field( $errors, $update, $user ) {
  */
 function wpum_admin_user_action_link( $actions, $user_object ) {
 	if( wpum_get_core_page_id( 'profile' ) ) {
-		$actions['view_profile'] = '<a href="'. wpum_get_profile_url( $user_object ) .'" target="_blank">'. esc_html__( 'View Profile' ) .'</a>';
+		$actions['view_profile'] = '<a href="'. wpum_get_profile_url( $user_object ) .'" target="_blank">'. esc_html__( 'View Profile', 'wp-user-manager' ) .'</a>';
 	}
 	return $actions;
 }

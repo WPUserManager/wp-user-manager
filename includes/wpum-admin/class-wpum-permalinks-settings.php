@@ -34,7 +34,7 @@ class WPUM_Permalinks_Settings {
 	 */
 	public function add_new_permalink_settings() {
 		// Add a section to the permalinks page
-		add_settings_section( 'wpum-permalink', esc_html__( 'User profiles permalink base' ), array( $this, 'display_settings' ), 'permalink' );
+		add_settings_section( 'wpum-permalink', esc_html__( 'User profiles permalink base', 'wp-user-manager' ), array( $this, 'display_settings' ), 'permalink' );
 	}
 
 	/**
@@ -52,11 +52,11 @@ class WPUM_Permalinks_Settings {
 
 		<?php if ( get_option( 'permalink_structure' ) == '' ) { ?>
 
-		<p><?php printf( __( 'You must <a href="%s">change your permalinks</a> to anything else other than "default" for profiles to work.' ), admin_url( 'options-permalink.php' ) ) ?></p>
+		<p><?php printf( __( 'You must <a href="%s">change your permalinks</a> to anything else other than "default" for profiles to work.', 'wp-user-manager' ), admin_url( 'options-permalink.php' ) ) ?></p>
 
 		<?php } else { ?>
 
-			<p><?php _e( 'These settings control the permalinks used for users profiles. These settings only apply when <strong>not using "default" permalinks above</strong>.' ); ?></p>
+			<p><?php _e( 'These settings control the permalinks used for users profiles. These settings only apply when <strong>not using "default" permalinks above</strong>.', 'wp-user-manager' ); ?></p>
 
 			<table class="form-table">
 				<tbody>
@@ -107,7 +107,7 @@ class WPUM_Permalinks_Settings {
 		}
 		// Bail if no cap
 		if ( ! current_user_can( 'manage_options' ) ) {
-			_doing_it_wrong( __FUNCTION__ , _x( 'You have no rights to access this page', '_doing_it_wrong error message', 'wpum' ), '1.0.0' );
+			_doing_it_wrong( __FUNCTION__ , _x( 'You have no rights to access this page', '_doing_it_wrong error message', 'wp-user-manager' ), '1.0.0' );
 			return;
 		}
 		// Check that the saved permalink method is one of the registered structures.

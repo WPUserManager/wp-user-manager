@@ -23,13 +23,13 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 	<div class="wpum-row">
 
 		<div class="wpum-col-xs">
-			<?php echo sprintf( esc_html__( 'Found %s users.' ), absint( $data->total ) ) ?>
+			<?php echo sprintf( esc_html__( 'Found %s users.', 'wp-user-manager' ), absint( $data->total ) ) ?>
 		</div>
 
 		<?php if( $data->has_sort_by ) : ?>
 		<div class="wpum-col-xs">
 			<p>
-				<?php esc_html_e( 'Sort by:' ); ?>
+				<?php esc_html_e( 'Sort by:', 'wp-user-manager' ); ?>
 				<?php echo WPUM()->elements->select( [
 					'name'             => 'sortby',
 					'id'               => 'wpum-sortby',
@@ -45,7 +45,7 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 		<?php if( $data->has_amount_modifier ) : ?>
 		<div class="wpum-col-xs">
 			<p>
-				<?php esc_html_e( 'Results per page:' ); ?>
+				<?php esc_html_e( 'Results per page:', 'wp-user-manager' ); ?>
 				<?php echo WPUM()->elements->select( [
 					'name'             => 'amount',
 					'id'               => 'wpum-amount',

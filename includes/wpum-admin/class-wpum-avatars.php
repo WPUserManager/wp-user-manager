@@ -86,13 +86,13 @@ class WPUM_Avatars {
 	 * @return void
 	 */
 	public function avatar_field() {
-		Container::make( 'user_meta', esc_html__( 'Avatar' ) )
+		Container::make( 'user_meta', esc_html__( 'Avatar', 'wp-user-manager' ) )
 			->set_datastore( new WPUM_User_Meta_Custom_Datastore() )
 			->add_fields(
 				array(
-					Field::make( 'image', 'current_user_avatar', esc_html__( 'Custom user avatar' ) )
+					Field::make( 'image', 'current_user_avatar', esc_html__( 'Custom user avatar', 'wp-user-manager' ) )
 						->set_value_type( 'url' ),
-					Field::make( 'image', 'user_cover', esc_html__( 'Custom profile cover image' ) )
+					Field::make( 'image', 'user_cover', esc_html__( 'Custom profile cover image', 'wp-user-manager' ) )
 						->set_value_type( 'url' ),
 				)
 			);

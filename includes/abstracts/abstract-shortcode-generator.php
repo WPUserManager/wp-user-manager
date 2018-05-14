@@ -78,13 +78,13 @@ abstract class WPUM_Shortcode_Generator {
 			$fields = $this->get_fields();
 
 			$defaults = array(
-				'btn_close' => esc_html__( 'Close' ),
-				'btn_okay'  => esc_html__( 'Insert Shortcode' ),
+				'btn_close' => esc_html__( 'Close', 'wp-user-manager' ),
+				'btn_okay'  => esc_html__( 'Insert Shortcode', 'wp-user-manager' ),
 				'errors'    => $this->errors,
 				'fields'    => $fields,
 				'label'     => '[' . $this->shortcode_tag . ']',
 				'required'  => $this->required,
-				'title'     => esc_html__( 'Insert Shortcode' ),
+				'title'     => esc_html__( 'Insert Shortcode', 'wp-user-manager' ),
 			);
 
 			if ( user_can_richedit() ) {
@@ -218,7 +218,7 @@ abstract class WPUM_Shortcode_Generator {
 			}
 			// do not reindex array!
 			$field['options'] = array(
-				'' => ( $field['placeholder'] ? $field['placeholder'] : esc_attr__( '- Select -' ) ),
+				'' => ( $field['placeholder'] ? $field['placeholder'] : esc_attr__( '- Select -', 'wp-user-manager' ) ),
 			) + $field['options'];
 
 			foreach ( $field['options'] as $value => $text ) {
@@ -292,13 +292,13 @@ abstract class WPUM_Shortcode_Generator {
 				$this->errors[ $name ] = $this->generate_container( $error );
 			}
 			if ( ! ! $required || is_array( $required ) ) {
-				$alert = esc_html__( 'Some of the shortcode options are required.' );
+				$alert = esc_html__( 'Some of the shortcode options are required.', 'wp-user-manager' );
 				if ( isset( $required['alert'] ) ) {
 					$alert = $required['alert'];
 				} else if ( ! empty( $label ) ) {
 					$alert = sprintf(
 						/* translators: %s: option label */
-						esc_html__( 'The "%s" option is required.' ),
+						esc_html__( 'The "%s" option is required.', 'wp-user-manager' ),
 						str_replace( ':', '', $label )
 					);
 				}
@@ -315,7 +315,7 @@ abstract class WPUM_Shortcode_Generator {
 	 * @return array
 	 */
 	protected function get_yes_no() {
-		return [ 'yes' => esc_html__( 'Yes' ), 'no' => esc_html__( 'No' ) ];
+		return [ 'yes' => esc_html__( 'Yes', 'wp-user-manager' ), 'no' => esc_html__( 'No', 'wp-user-manager' ) ];
 	}
 
 }

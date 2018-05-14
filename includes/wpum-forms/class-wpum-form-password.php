@@ -69,7 +69,7 @@ class WPUM_Form_Password extends WPUM_Form {
 
 		$this->steps  = (array) apply_filters( 'password_change_steps', array(
 			'submit' => array(
-				'name'     => esc_html__( 'Change password' ),
+				'name'     => esc_html__( 'Change password', 'wp-user-manager' ),
 				'view'     => array( $this, 'submit' ),
 				'handler'  => array( $this, 'submit_handler' ),
 				'priority' => 10
@@ -97,14 +97,14 @@ class WPUM_Form_Password extends WPUM_Form {
 		$this->fields = apply_filters( 'password_change_form_fields', array(
 			'password' => array(
 				'password' => array(
-					'label'       => esc_html__( 'Password' ),
+					'label'       => esc_html__( 'Password', 'wp-user-manager' ),
 					'type'        => 'password',
 					'required'    => true,
 					'placeholder' => '',
 					'priority'    => 0
 				),
 				'password_repeat' => array(
-					'label'       => esc_html__( 'Repeat password' ),
+					'label'       => esc_html__( 'Repeat password', 'wp-user-manager' ),
 					'type'        => 'password',
 					'required'    => true,
 					'placeholder' => '',
@@ -158,11 +158,11 @@ class WPUM_Form_Password extends WPUM_Form {
 			$containsSpecial = preg_match('/[^a-zA-Z\d]/', $password_1 );
 
 			if( ! $containsLetter || ! $containsDigit || ! $containsSpecial || strlen( $password_1 ) < 8 ) {
-				return new WP_Error( 'password-validation-error', esc_html__( 'Password must be at least 8 characters long and contain at least 1 number, 1 uppercase letter and 1 special character.' ) );
+				return new WP_Error( 'password-validation-error', esc_html__( 'Password must be at least 8 characters long and contain at least 1 number, 1 uppercase letter and 1 special character.', 'wp-user-manager' ) );
 			}
 
 			if( $password_1 !== $password_2 ) {
-				return new WP_Error( 'password-validation-nomatch', esc_html__( 'Error: passwords do not match.' ) );
+				return new WP_Error( 'password-validation-nomatch', esc_html__( 'Error: passwords do not match.', 'wp-user-manager' ) );
 			}
 
 		}

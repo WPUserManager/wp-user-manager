@@ -22,7 +22,7 @@ function wpum_install_default_field_group() {
 		$default_group->add(
 			[
 				'id'   => 1,
-				'name' => esc_html__( 'Primary fields' )
+				'name' => esc_html__( 'Primary fields', 'wp-user-manager' )
 			]
 		);
 	}
@@ -233,19 +233,19 @@ function wpum_get_edit_field_dialog_tabs() {
 	$tabs = [
 		array(
 			'id'   => 'general',
-			'name' => esc_html__( 'General' )
+			'name' => esc_html__( 'General', 'wp-user-manager' )
 		),
 		array(
 			'id'   => 'validation',
-			'name' => esc_html__( 'Validation' )
+			'name' => esc_html__( 'Validation', 'wp-user-manager' )
 		),
 		array(
 			'id'   => 'privacy',
-			'name' => esc_html__( 'Privacy' )
+			'name' => esc_html__( 'Privacy', 'wp-user-manager' )
 		),
 		array(
 			'id'   => 'permissions',
-			'name' => esc_html__( 'Permissions' )
+			'name' => esc_html__( 'Permissions', 'wp-user-manager' )
 		),
 	];
 
@@ -262,15 +262,15 @@ function wpum_get_registered_field_types() {
 
 	$fields = array(
 		'default' => [
-			'group_name' => esc_html__( 'Default Fields' ),
+			'group_name' => esc_html__( 'Default Fields', 'wp-user-manager' ),
 			'fields'     => []
 		],
 		'standard' => [
-			'group_name' => esc_html__( 'Standard Fields' ),
+			'group_name' => esc_html__( 'Standard Fields', 'wp-user-manager' ),
 			'fields'     => []
 		],
 		'advanced' => [
-			'group_name' => esc_html__( 'Advanced Fields' ),
+			'group_name' => esc_html__( 'Advanced Fields', 'wp-user-manager' ),
 			'fields'     => []
 		],
 	);

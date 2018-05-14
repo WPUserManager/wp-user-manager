@@ -121,7 +121,7 @@ add_action( 'wpum_register_updates', 'wpum_show_upgrade_notices' );
  */
 function wpum_trigger_upgrades() {
 	if ( ! current_user_can( 'manage_options' ) ) {
-		wp_die( esc_html__( 'You do not have permission to do WPUM upgrades.' ), esc_html__( 'Error' ), array(
+		wp_die( esc_html__( 'You do not have permission to do WPUM upgrades.', 'wp-user-manager' ), esc_html__( 'Error', 'wp-user-manager' ), array(
 			'response' => 403,
 		) );
 	}

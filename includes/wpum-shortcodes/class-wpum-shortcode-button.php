@@ -128,7 +128,7 @@ final class WPUM_Shortcode_Button {
 						$shortcode,
 						sprintf( '%s %s %s',
 							$img,
-							__( 'Insert' ),
+							__( 'Insert', 'wp-user-manager' ),
 							self::$shortcodes[ $shortcode ]['label']
 						)
 					);
@@ -139,7 +139,7 @@ final class WPUM_Shortcode_Button {
 						'<div class="wpum-menu mce-menu">%s</div>' .
 						'</div>',
 						$img,
-						__( 'User Shortcodes' ),
+						__( 'User Shortcodes', 'wp-user-manager' ),
 						implode( '', array_values( $shortcodes ) )
 					);
 				}
@@ -158,7 +158,7 @@ final class WPUM_Shortcode_Button {
 		if ( $shortcode && array_key_exists( $shortcode, self::$shortcodes ) ) {
 			$data = self::$shortcodes[ $shortcode ];
 			if ( ! empty( $data['errors'] ) ) {
-				$data['btn_okay'] = array( esc_html__( 'Okay' ) );
+				$data['btn_okay'] = array( esc_html__( 'Okay', 'wp-user-manager' ) );
 			}
 			$response = array(
 				'body'      => $data['fields'],

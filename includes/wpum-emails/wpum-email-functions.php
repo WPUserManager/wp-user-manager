@@ -178,15 +178,15 @@ function wpum_get_registered_emails() {
 	$emails = [
 		'registration_confirmation' => [
 			'status'            => 'active',
-			'name'              => esc_html__( 'Registration confirmation' ),
-			'description'       => esc_html__( 'This is the email that is sent to the user upon successful registration.' ),
-			'recipient'         => esc_html__( 'User\'s email.' ),
+			'name'              => esc_html__( 'Registration confirmation', 'wp-user-manager' ),
+			'description'       => esc_html__( 'This is the email that is sent to the user upon successful registration.', 'wp-user-manager' ),
+			'recipient'         => esc_html__( 'User\'s email.', 'wp-user-manager' ),
 		],
 		'password_recovery_request' => [
 			'status'            => 'active',
-			'name'              => esc_html__( 'Password recovery request' ),
-			'description'       => esc_html__( 'This is the email that is sent to the visitor upon password reset request.' ),
-			'recipient'         => esc_html__( 'Email address of the requested user.' ),
+			'name'              => esc_html__( 'Password recovery request', 'wp-user-manager' ),
+			'description'       => esc_html__( 'This is the email that is sent to the visitor upon password reset request.', 'wp-user-manager' ),
+			'recipient'         => esc_html__( 'Email address of the requested user.', 'wp-user-manager' ),
 		]
 	];
 

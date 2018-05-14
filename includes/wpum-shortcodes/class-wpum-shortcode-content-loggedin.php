@@ -19,8 +19,8 @@ class WPUM_Shortcode_Content_Loggedin extends WPUM_Shortcode_Generator {
 	 * Inject the editor for this shortcode.
 	 */
 	public function __construct() {
-		$this->shortcode['title'] = esc_html__( 'Members only content' );
-		$this->shortcode['label'] = esc_html__( 'Members only content' );
+		$this->shortcode['title'] = esc_html__( 'Members only content', 'wp-user-manager' );
+		$this->shortcode['label'] = esc_html__( 'Members only content', 'wp-user-manager' );
 		parent::__construct( 'wpum_restrict_logged_in' );
 	}
 

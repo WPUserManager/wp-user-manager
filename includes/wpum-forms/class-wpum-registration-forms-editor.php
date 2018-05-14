@@ -40,8 +40,8 @@ class WPUM_Registration_Forms_Editor {
 	 */
 	public function setup_menu_page() {
 		add_users_page(
-			esc_html__( 'WP User Manager Registration Forms Editor' ),
-			esc_html__( 'Registration forms' ),
+			esc_html__( 'WP User Manager Registration Forms Editor', 'wp-user-manager' ),
+			esc_html__( 'Registration forms', 'wp-user-manager' ),
 			'manage_options',
 			'wpum-registration-forms',
 			[ $this, 'display_registration_forms_editor' ]
@@ -109,26 +109,26 @@ class WPUM_Registration_Forms_Editor {
 	private function get_labels() {
 
 		$labels = [
-			'page_title'             => esc_html__( 'WP User Manager Registration Forms Editor' ),
-			'table_name'             => esc_html__( 'Form name' ),
-			'table_fields'           => esc_html__( 'Fields' ),
-			'table_default'          => esc_html__( 'Default' ),
-			'table_role'             => esc_html__( 'Registration role' ),
-			'table_not_found'        => esc_html__( 'No registration forms have been found.' ),
-			'table_default_tooltip'  => esc_html__( 'The default registration form cannot be deleted.' ),
-			'table_customize'        => esc_html__( 'Customize fields' ),
-			'page_back'              => esc_html__( 'Return to the registration forms list' ),
-			'editor_available_title' => esc_html__( 'Available fields' ),
-			'editor_available_desc'  => esc_html__( 'To add a field to this form, drag it into the container on the right. To remove a field, place it back here.' ),
-			'table_field_name'       => esc_html__( 'Field name' ),
-			'editor_used_fields'     => esc_html__( 'Add fields here to use them in this registration form. Drag fields up and down to change their order within the form.' ),
-			'editor_drag'            => esc_html__( 'This form does not have any fields yet. Drag and drop fields here.' ),
-			'success'                => esc_html__( 'Changes successfully saved.' ),
-			'error'                  => esc_html__( 'Something went wrong no changes saved.' ),
-			'settings'               => esc_html__( 'Settings' ),
-			'role_label'             => esc_html__( 'Registration role' ),
-			'save'                   => esc_html__( 'Save changes' ),
-			'role_desc'              => esc_html__( 'Select the user role that will be assigned to users upon successfull registration.' )
+			'page_title'             => esc_html__( 'WP User Manager Registration Forms Editor', 'wp-user-manager' ),
+			'table_name'             => esc_html__( 'Form name', 'wp-user-manager' ),
+			'table_fields'           => esc_html__( 'Fields', 'wp-user-manager' ),
+			'table_default'          => esc_html__( 'Default', 'wp-user-manager' ),
+			'table_role'             => esc_html__( 'Registration role', 'wp-user-manager' ),
+			'table_not_found'        => esc_html__( 'No registration forms have been found.', 'wp-user-manager' ),
+			'table_default_tooltip'  => esc_html__( 'The default registration form cannot be deleted.', 'wp-user-manager' ),
+			'table_customize'        => esc_html__( 'Customize fields', 'wp-user-manager' ),
+			'page_back'              => esc_html__( 'Return to the registration forms list', 'wp-user-manager' ),
+			'editor_available_title' => esc_html__( 'Available fields', 'wp-user-manager' ),
+			'editor_available_desc'  => esc_html__( 'To add a field to this form, drag it into the container on the right. To remove a field, place it back here.', 'wp-user-manager' ),
+			'table_field_name'       => esc_html__( 'Field name', 'wp-user-manager' ),
+			'editor_used_fields'     => esc_html__( 'Add fields here to use them in this registration form. Drag fields up and down to change their order within the form.', 'wp-user-manager' ),
+			'editor_drag'            => esc_html__( 'This form does not have any fields yet. Drag and drop fields here.', 'wp-user-manager' ),
+			'success'                => esc_html__( 'Changes successfully saved.', 'wp-user-manager' ),
+			'error'                  => esc_html__( 'Something went wrong no changes saved.', 'wp-user-manager' ),
+			'settings'               => esc_html__( 'Settings', 'wp-user-manager' ),
+			'role_label'             => esc_html__( 'Registration role', 'wp-user-manager' ),
+			'save'                   => esc_html__( 'Save changes', 'wp-user-manager' ),
+			'role_desc'              => esc_html__( 'Select the user role that will be assigned to users upon successfull registration.', 'wp-user-manager' )
 		];
 
 		return $labels;

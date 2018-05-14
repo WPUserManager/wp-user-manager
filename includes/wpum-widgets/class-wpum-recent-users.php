@@ -28,22 +28,22 @@ class WPUM_Recently_Registered_Users extends WPH_Widget {
 
 		// Configure widget array
 		$args = array(
-			'label'       => __( '[WPUM] Recent Users', 'wpum' ),
-			'description' => __( 'Display a list of recently registered users.', 'wpum' ),
+			'label'       => __( '[WPUM] Recent Users', 'wp-user-manager' ),
+			'description' => __( 'Display a list of recently registered users.', 'wp-user-manager' ),
 		);
 
 		$args['fields'] = array(
 			array(
-				'name'   => __( 'Title', 'wpum' ),
+				'name'   => __( 'Title', 'wp-user-manager' ),
 				'id'     => 'title',
 				'type'   => 'text',
 				'class'  => 'widefat',
-				'std'    => __( 'Recent Users', 'wpum' ),
+				'std'    => __( 'Recent Users', 'wp-user-manager' ),
 				'filter' => 'strip_tags|esc_attr'
 			),
 			array(
-				'name'     => __( 'Amount', 'wpum' ),
-				'desc'     => __( 'Enter the amount of users you wish to display.', 'wpum' ),
+				'name'     => __( 'Amount', 'wp-user-manager' ),
+				'desc'     => __( 'Enter the amount of users you wish to display.', 'wp-user-manager' ),
 				'id'       => 'amount',
 				'type'     => 'text',
 				'class'    => 'widefat',
@@ -52,8 +52,8 @@ class WPUM_Recently_Registered_Users extends WPH_Widget {
 				'validate' => 'numeric',
 			),
 			array(
-				'name'   => __( 'Link to user profile', 'wpum' ),
-				'desc'   => __( 'Enable to link to the user profile.', 'wpum' ),
+				'name'   => __( 'Link to user profile', 'wp-user-manager' ),
+				'desc'   => __( 'Enable to link to the user profile.', 'wp-user-manager' ),
 				'id'     => 'profile',
 				'type'   =>'checkbox',
 				'std'    => 1,

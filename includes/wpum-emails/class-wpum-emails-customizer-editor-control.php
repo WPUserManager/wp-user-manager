@@ -39,7 +39,7 @@ class WPUM_Emails_Customizer_Editor_Control extends WP_Customize_Control {
 		<label class="customize-control-title"><?php echo esc_html( $this->label ); ?></label>
 		<a href="#" class="button button-hero" id="wpum-email-editor-btn">
 			<span class="dashicons dashicons-edit"></span>
-			<span><?php esc_html_e( 'Open email content editor' ); ?></span>
+			<span><?php esc_html_e( 'Open email content editor', 'wp-user-manager' ); ?></span>
 		</a>
 
 		<div id="wpum-editor-window" class="editor-window">

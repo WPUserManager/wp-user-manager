@@ -175,8 +175,8 @@ class WPUM_Emails {
 	 */
 	public function get_templates() {
 		$templates    = array(
-			'default' => esc_html__( 'Default Template' ),
-			'none'	  => __( 'No template, plain text only' )
+			'default' => esc_html__( 'Default Template', 'wp-user-manager' ),
+			'none'	  => __( 'No template, plain text only', 'wp-user-manager' )
 		);
 		return apply_filters( 'wpum_email_templates', $templates );
 	}
@@ -258,7 +258,7 @@ class WPUM_Emails {
 	public function send( $to, $subject, $message, $attachments = '' ) {
 
 		if ( ! did_action( 'init' ) && ! did_action( 'admin_init' ) ) {
-			_doing_it_wrong( __FUNCTION__, __( 'You cannot send emails with WPUM_Emails until init/admin_init has been reached' ), null );
+			_doing_it_wrong( __FUNCTION__, __( 'You cannot send emails with WPUM_Emails until init/admin_init has been reached', 'wp-user-manager' ), null );
 			return false;
 		}
 
@@ -352,56 +352,56 @@ class WPUM_Emails {
 
 		$email_tags = array(
 			array(
-				'name'        => esc_html__( 'Website name' ),
-				'description' => esc_html__( 'Display the name of the website.' ),
+				'name'        => esc_html__( 'Website name', 'wp-user-manager' ),
+				'description' => esc_html__( 'Display the name of the website.', 'wp-user-manager' ),
 				'tag'         => 'sitename',
 				'function'    => 'wpum_email_tag_sitename'
 			),
 			array(
-				'name'        => esc_html__( 'Website URL' ),
-				'description' => esc_html__( 'The website url.' ),
+				'name'        => esc_html__( 'Website URL', 'wp-user-manager' ),
+				'description' => esc_html__( 'The website url.', 'wp-user-manager' ),
 				'tag'         => 'website',
 				'function'    => 'wpum_email_tag_website'
 			),
 			array(
-				'name'        => esc_html__( 'Username' ),
-				'description' => esc_html__( 'Display the user\'s username.' ),
+				'name'        => esc_html__( 'Username', 'wp-user-manager' ),
+				'description' => esc_html__( 'Display the user\'s username.', 'wp-user-manager' ),
 				'tag'         => 'username',
 				'function'    => 'wpum_email_tag_username'
 			),
 			array(
-				'name'        => esc_html__( 'User email' ),
-				'description' => esc_html__( 'Display the user\'s email.' ),
+				'name'        => esc_html__( 'User email', 'wp-user-manager' ),
+				'description' => esc_html__( 'Display the user\'s email.', 'wp-user-manager' ),
 				'tag'         => 'email',
 				'function'    => 'wpum_email_tag_email'
 			),
 			array(
-				'name'        => esc_html__( 'User first name' ),
-				'description' => esc_html__( 'Display the user\'s first name.' ),
+				'name'        => esc_html__( 'User first name', 'wp-user-manager' ),
+				'description' => esc_html__( 'Display the user\'s first name.', 'wp-user-manager' ),
 				'tag'         => 'firstname',
 				'function'    => 'wpum_email_tag_firstname'
 			),
 			array(
-				'name'        => esc_html__( 'User last name' ),
-				'description' => esc_html__( 'Display the user\'s last name.' ),
+				'name'        => esc_html__( 'User last name', 'wp-user-manager' ),
+				'description' => esc_html__( 'Display the user\'s last name.', 'wp-user-manager' ),
 				'tag'         => 'lastname',
 				'function'    => 'wpum_email_tag_lastname'
 			),
 			array(
-				'name'        => esc_html__( 'Plain text password' ),
-				'description' => esc_html__( 'Display the password randomly generated at signup.' ),
+				'name'        => esc_html__( 'Plain text password', 'wp-user-manager' ),
+				'description' => esc_html__( 'Display the password randomly generated at signup.', 'wp-user-manager' ),
 				'tag'         => 'password',
 				'function'    => 'wpum_email_tag_password'
 			),
 			array(
-				'name'        => esc_html__( 'Login page url' ),
-				'description' => esc_html__( 'Display the login page url.' ),
+				'name'        => esc_html__( 'Login page url', 'wp-user-manager' ),
+				'description' => esc_html__( 'Display the login page url.', 'wp-user-manager' ),
 				'tag'         => 'login_page_url',
 				'function'    => 'wpum_email_tag_login_page_url'
 			),
 			array(
-				'name'        => esc_html__( 'Password recovery url' ),
-				'description' => esc_html__( 'Display the password recovery url.' ),
+				'name'        => esc_html__( 'Password recovery url', 'wp-user-manager' ),
+				'description' => esc_html__( 'Display the password recovery url.', 'wp-user-manager' ),
 				'tag'         => 'recovery_url',
 				'function'    => 'wpum_email_tag_password_recovery_url'
 			),

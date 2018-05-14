@@ -49,9 +49,9 @@ function wpum_get_pages( $force = false ) {
  */
 function wpum_get_login_methods() {
 	return apply_filters( 'wpum_get_login_methods', array(
-		'username'       => __( 'Username only', 'wpum' ),
-		'email'          => __( 'Email only', 'wpum' ),
-		'username_email' => __( 'Username or Email', 'wpum' ),
+		'username'       => __( 'Username only', 'wp-user-manager' ),
+		'email'          => __( 'Email only', 'wp-user-manager' ),
+		'username_email' => __( 'Username or Email', 'wp-user-manager' ),
 	) );
 }
 
@@ -208,13 +208,13 @@ function wpum_list_pluck( $list, $field, $index_key = null ) {
  */
 function wpum_get_login_label() {
 
-	$label        = esc_html__( 'Username' );
+	$label        = esc_html__( 'Username', 'wp-user-manager' );
 	$login_method = wpum_get_option( 'login_method' );
 
 	if( $login_method == 'email' ) {
-		$label = esc_html__( 'Email' );
+		$label = esc_html__( 'Email', 'wp-user-manager' );
 	} elseif( $login_method == 'username_email' ) {
-		$label = esc_html__( 'Username or email' );
+		$label = esc_html__( 'Username or email', 'wp-user-manager' );
 	}
 
 	return $label;
@@ -357,10 +357,10 @@ function wpum_send_registration_confirmation_email( $user_id, $psw = false ) {
 		$blogname = wp_specialchars_decode( get_option( 'blogname' ), ENT_QUOTES );
 		// Send notification to admin if not disabled.
 		if ( ! wpum_get_option( 'disable_admin_register_email' ) ) {
-			$message  = sprintf( esc_html__( 'New user registration on your site %s:' ), $blogname ) . "\r\n\r\n";
-			$message .= sprintf( esc_html__( 'Username: %s' ), $user->user_login ) . "\r\n\r\n";
-			$message .= sprintf( esc_html__( 'E-mail: %s' ), $user->user_email ) . "\r\n";
-			wp_mail( get_option( 'admin_email' ), sprintf( esc_html__( '[%s] New User Registration' ), $blogname ), $message );
+			$message  = sprintf( esc_html__( 'New user registration on your site %s:', 'wp-user-manager' ), $blogname ) . "\r\n\r\n";
+			$message .= sprintf( esc_html__( 'Username: %s', 'wp-user-manager' ), $user->user_login ) . "\r\n\r\n";
+			$message .= sprintf( esc_html__( 'E-mail: %s', 'wp-user-manager' ), $user->user_email ) . "\r\n";
+			wp_mail( get_option( 'admin_email' ), sprintf( esc_html__( '[%s] New User Registration', 'wp-user-manager' ), $blogname ), $message );
 		}
 
 		if( $user instanceof WP_User ) {
@@ -447,9 +447,9 @@ function wpum_upload_file( $file, $args = array() ) {
 
 	if ( ! in_array( $file['type'], $allowed_mime_types ) ) {
 		if ( $args['file_label'] ) {
-			return new WP_Error( 'upload', sprintf( __( '"%s" (filetype %s) needs to be one of the following file types: %s' ), $args['file_label'], $file['type'], implode( ', ', array_keys( $allowed_mime_types ) ) ) );
+			return new WP_Error( 'upload', sprintf( __( '"%s" (filetype %s) needs to be one of the following file types: %s', 'wp-user-manager' ), $args['file_label'], $file['type'], implode( ', ', array_keys( $allowed_mime_types ) ) ) );
 		} else {
-			return new WP_Error( 'upload', sprintf( __( 'Uploaded files need to be one of the following file types: %s' ), implode( ', ', array_keys( $allowed_mime_types ) ) ) );
+			return new WP_Error( 'upload', sprintf( __( 'Uploaded files need to be one of the following file types: %s', 'wp-user-manager' ), implode( ', ', array_keys( $allowed_mime_types ) ) ) );
 		}
 	} else {
 		$upload = wp_handle_upload( $file, apply_filters( 'submit_wpum_wp_handle_upload_overrides', array( 'test_form' => false ) ) );
@@ -561,19 +561,19 @@ function wpum_get_account_page_tabs() {
 
 	$tabs = [
 		'settings'  => [
-			'name'     => esc_html__( 'Settings' ),
+			'name'     => esc_html__( 'Settings', 'wp-user-manager' ),
 			'priority' => 0
 		],
 		'password' => [
-			'name'     => esc_html__( 'Password' ),
+			'name'     => esc_html__( 'Password', 'wp-user-manager' ),
 			'priority' => 0,
 		],
 		'view' => [
-			'name'     => esc_html__( 'View profile' ),
+			'name'     => esc_html__( 'View profile', 'wp-user-manager' ),
 			'priority' => 0,
 		],
 		'logout'   => [
-			'name'     => esc_html__( 'Logout' ),
+			'name'     => esc_html__( 'Logout', 'wp-user-manager' ),
 			'priority' => 0
 		]
 	];
@@ -624,18 +624,18 @@ function wpum_get_permalink_structures() {
 	$structures = array(
 		'user_id' => array(
 			'name'   => 'user_id',
-			'label'  => _x( 'Display user ID', 'Permalink structure' ),
+			'label'  => _x( 'Display user ID', 'Permalink structure', 'wp-user-manager' ),
 			'sample' => '123'
 		),
 		'username' => array(
 			'name'   => 'username',
-			'label'  => _x( 'Display username', 'Permalink structure' ),
-			'sample' => _x( 'username', 'Example of permalink setting' )
+			'label'  => _x( 'Display username', 'Permalink structure', 'wp-user-manager' ),
+			'sample' => _x( 'username', 'Example of permalink setting', 'wp-user-manager' )
 		),
 		'nickname' => array(
 			'name'   => 'nickname',
-			'label'  => _x( 'Display nickname', 'Permalink structure' ),
-			'sample' => _x( 'nickname', 'Example of permalink setting' )
+			'label'  => _x( 'Display nickname', 'Permalink structure', 'wp-user-manager' ),
+			'sample' => _x( 'nickname', 'Example of permalink setting', 'wp-user-manager' )
 		),
 	);
 
@@ -748,15 +748,15 @@ function wpum_get_registered_profile_tabs() {
 
 	$tabs = [
 		'about'  => [
-			'name'     => esc_html__( 'About' ),
+			'name'     => esc_html__( 'About', 'wp-user-manager' ),
 			'priority' => 0
 		],
 		'posts'  => [
-			'name'     => esc_html__( 'Posts' ),
+			'name'     => esc_html__( 'Posts', 'wp-user-manager' ),
 			'priority' => 0
 		],
 		'comments'  => [
-			'name'     => esc_html__( 'Comments' ),
+			'name'     => esc_html__( 'Comments', 'wp-user-manager' ),
 			'priority' => 0
 		]
 	];

@@ -23,7 +23,7 @@ class WPUM_Field_URL extends WPUM_Field_Type {
 	public function init() {
 
 		// Define field type information.
-		$this->name  = esc_html__( 'URL' );
+		$this->name  = esc_html__( 'URL', 'wp-user-manager' );
 		$this->type  = 'url';
 		$this->icon  = 'dashicons-admin-links';
 		$this->order = 3;

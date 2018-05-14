@@ -38,7 +38,7 @@ class WPUM_Admin_Notices {
 			$current_user = wp_get_current_user();
 			$current_user = $current_user->display_name;
 			$rating_message = sprintf(
-				__( "Hey %s, looks like you've been using the %s plugin for some time now - that's awesome! <br/> Could you please give it a review on wordpress.org? Just to help us spread the word and boost our motivation :) <br/> <br/><a href='%s' class='button button-primary' target='_blank'>Yes, you deserve it!</a>", 'wpum' ),
+				__( "Hey %s, looks like you've been using the %s plugin for some time now - that's awesome! <br/> Could you please give it a review on wordpress.org? Just to help us spread the word and boost our motivation :) <br/> <br/><a href='%s' class='button button-primary' target='_blank'>Yes, you deserve it!</a>", 'wp-user-manager' ),
 				$current_user,
 				'<b>WP User Manager</b>',
 				$url_rate

@@ -23,7 +23,7 @@ class WPUM_Field_Dropdown extends WPUM_Field_Type {
 	public function init() {
 
 		// Define field type information.
-		$this->name  = esc_html__( 'Dropdown' );
+		$this->name  = esc_html__( 'Dropdown', 'wp-user-manager' );
 		$this->type  = 'dropdown';
 		$this->icon  = 'dashicons-editor-ul';
 		$this->order = 3;

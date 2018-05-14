@@ -28,52 +28,52 @@ class WPUM_Login_Form_Widget extends WPH_Widget {
 
 		// Configure widget array
 		$args = array(
-			'label'       => __( '[WPUM] Login Form', 'wpum' ),
-			'description' => __( 'Display login form.', 'wpum' ),
+			'label'       => __( '[WPUM] Login Form', 'wp-user-manager' ),
+			'description' => __( 'Display login form.', 'wp-user-manager' ),
 		);
 
 		$args['fields'] = array(
 			array(
-				'name'   => __( 'Title', 'wpum' ),
+				'name'   => __( 'Title', 'wp-user-manager' ),
 				'id'     => 'title',
 				'type'   => 'text',
 				'class'  => 'widefat',
-				'std'    => __( 'Login', 'wpum' ),
+				'std'    => __( 'Login', 'wp-user-manager' ),
 				'filter' => 'strip_tags|esc_attr'
 			),
 			array(
-				'name'   => __( 'Logged In title', 'wpum' ),
-				'desc'   => __(' This title will be displayed when logged in.', 'wpum'),
+				'name'   => __( 'Logged In title', 'wp-user-manager' ),
+				'desc'   => __(' This title will be displayed when logged in.', 'wp-user-manager'),
 				'id'     => 'logged_in_title',
 				'type'   => 'text',
 				'class'  => 'widefat',
-				'std'    => __( 'My Account', 'wpum' ),
+				'std'    => __( 'My Account', 'wp-user-manager' ),
 				'filter' => 'strip_tags|esc_attr'
 			),
 			array(
-				'name'     => __( 'Display login link', 'wpum' ),
+				'name'     => __( 'Display login link', 'wp-user-manager' ),
 				'id'       => 'login_link',
 				'type'     =>'checkbox',
 				'std'      => 0,
 				'filter'   => 'strip_tags|esc_attr',
 			),
 			array(
-				'name'     => __( 'Display password recovery link', 'wpum' ),
+				'name'     => __( 'Display password recovery link', 'wp-user-manager' ),
 				'id'       => 'psw_link',
 				'type'     =>'checkbox',
 				'std'      => 1,
 				'filter'   => 'strip_tags|esc_attr',
 			),
 			array(
-				'name'     => __( 'Display registration link', 'wpum' ),
+				'name'     => __( 'Display registration link', 'wp-user-manager' ),
 				'id'       => 'register_link',
 				'type'     =>'checkbox',
 				'std'      => 1,
 				'filter'   => 'strip_tags|esc_attr',
 			),
 			array(
-				'name'   => __( 'Display profile overview', 'wpum' ),
-				'desc'   => __('If enabled, once logged in, an overview of the current user profile will appear.', 'wpum'),
+				'name'   => __( 'Display profile overview', 'wp-user-manager' ),
+				'desc'   => __('If enabled, once logged in, an overview of the current user profile will appear.', 'wp-user-manager'),
 				'id'     => 'current_profile',
 				'type'   =>'checkbox',
 				'std'    => 1,

@@ -16,8 +16,8 @@ class WPUM_Shortcode_Content_Roles extends WPUM_Shortcode_Generator {
 	 * Inject the editor for this shortcode.
 	 */
 	public function __construct() {
-		$this->shortcode['title'] = esc_html__( 'Specific roles only content' );
-		$this->shortcode['label'] = esc_html__( 'Specific roles only content' );
+		$this->shortcode['title'] = esc_html__( 'Specific roles only content', 'wp-user-manager' );
+		$this->shortcode['label'] = esc_html__( 'Specific roles only content', 'wp-user-manager' );
 		parent::__construct( 'wpum_restrict_to_user_roles' );
 	}
 
@@ -31,8 +31,8 @@ class WPUM_Shortcode_Content_Roles extends WPUM_Shortcode_Generator {
 			array(
 				'type'    => 'textbox',
 				'name'    => 'roles',
-				'label'   => esc_html__( 'Comma separated user role(s)' ),
-				'tooltip' => esc_html__( 'List of user roles for which the content will be available.' )
+				'label'   => esc_html__( 'Comma separated user role(s)', 'wp-user-manager' ),
+				'tooltip' => esc_html__( 'List of user roles for which the content will be available.', 'wp-user-manager' )
 			)
 		];
 	}

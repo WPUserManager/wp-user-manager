@@ -20,7 +20,7 @@ function wpum_admin_rate_us( $footer_text ) {
 	$screen = get_current_screen();
 	if ( $screen->base !== 'users_page_wpum-settings' )
 		return;
-	$rate_text = sprintf( __( 'Please support the future of <a href="%1$s" target="_blank">WP User Manager</a> by <a href="%2$s" target="_blank">rating us</a> on <a href="%2$s" target="_blank">WordPress.org</a>', 'wpum' ),
+	$rate_text = sprintf( __( 'Please support the future of <a href="%1$s" target="_blank">WP User Manager</a> by <a href="%2$s" target="_blank">rating us</a> on <a href="%2$s" target="_blank">WordPress.org</a>', 'wp-user-manager' ),
 		'https://wpusermanager.com',
 		'http://wordpress.org/support/view/plugin-reviews/wp-user-manager?filter=5#postform'
 	);
@@ -35,9 +35,9 @@ add_filter( 'admin_footer_text', 'wpum_admin_rate_us' );
  * @return array
  */
 function wpum_add_settings_link( $links ) {
-	$settings_link = '<a href="' . admin_url( 'users.php?page=wpum-settings' ) . '">' . __( 'Settings','wpum' ) . '</a>';
-	$docs_link     = '<a href="https://docs.wpusermanager.com/" target="_blank">' . __( 'Documentation','wpum' ) . '</a>';
-	$addons_link   = '<a href="http://wpusermanager.com/addons" target="_blank">' . __( 'Addons','wpum' ) . '</a>';
+	$settings_link = '<a href="' . admin_url( 'users.php?page=wpum-settings' ) . '">' . __( 'Settings','wp-user-manager' ) . '</a>';
+	$docs_link     = '<a href="https://docs.wpusermanager.com/" target="_blank">' . __( 'Documentation','wp-user-manager' ) . '</a>';
+	$addons_link   = '<a href="http://wpusermanager.com/addons" target="_blank">' . __( 'Addons','wp-user-manager' ) . '</a>';
 	array_unshift( $links, $settings_link );
 	array_unshift( $links, $docs_link );
 	array_unshift( $links, $addons_link );
@@ -147,7 +147,7 @@ function wpum_authentication( $user, $username, $password ) {
 	if( $authentication_method == 'username' ) {
 
 		if( is_email( $username ) ) {
-			return new WP_Error( 'username_only', __( 'Invalid username or incorrect password.' ) );
+			return new WP_Error( 'username_only', __( 'Invalid username or incorrect password.', 'wp-user-manager' ) );
 		}
 
 		return wp_authenticate_username_password( null, $username, $password );
@@ -165,7 +165,7 @@ function wpum_authentication( $user, $username, $password ) {
 
 		} else {
 
-			return new WP_Error( 'email_only', __( 'Invalid email address or incorrect password.' ) );
+			return new WP_Error( 'email_only', __( 'Invalid email address or incorrect password.', 'wp-user-manager' ) );
 
 		}
 

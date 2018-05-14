@@ -23,7 +23,7 @@ class WPUM_Field_Number extends WPUM_Field_Type {
 	public function init() {
 
 		// Define field type information.
-		$this->name  = esc_html__( 'Number' );
+		$this->name  = esc_html__( 'Number', 'wp-user-manager' );
 		$this->type  = 'number';
 		$this->icon  = 'dashicons-leftright';
 		$this->order = 3;

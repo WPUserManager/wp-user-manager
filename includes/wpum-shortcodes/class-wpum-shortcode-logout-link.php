@@ -19,8 +19,8 @@ class WPUM_Shortcode_Logout_Link extends WPUM_Shortcode_Generator {
 	 * Inject the editor for this shortcode.
 	 */
 	public function __construct() {
-		$this->shortcode['title'] = esc_html__( 'Logout link' );
-		$this->shortcode['label'] = esc_html__( 'Logout link' );
+		$this->shortcode['title'] = esc_html__( 'Logout link', 'wp-user-manager' );
+		$this->shortcode['label'] = esc_html__( 'Logout link', 'wp-user-manager' );
 		parent::__construct( 'wpum_logout' );
 	}
 
@@ -34,14 +34,14 @@ class WPUM_Shortcode_Logout_Link extends WPUM_Shortcode_Generator {
 			array(
 				'type'    => 'textbox',
 				'name'    => 'redirect',
-				'label'   => esc_html__( 'Redirect to' ),
-				'tooltip' => esc_html__( '(optional) must be a link within this website.' )
+				'label'   => esc_html__( 'Redirect to', 'wp-user-manager' ),
+				'tooltip' => esc_html__( '(optional) must be a link within this website.', 'wp-user-manager' )
 			),
 			array(
 				'type'  => 'textbox',
 				'name'  => 'label',
 				'value' => 'Logout',
-				'label' => esc_html__( 'Logout link label' ),
+				'label' => esc_html__( 'Logout link label', 'wp-user-manager' ),
 			)
 		];
 	}

@@ -134,57 +134,57 @@ abstract class WPUM_Field_Type {
 				'field_title' => array(
 					'type'        => 'input',
 					'inputType'   => 'text',
-					'label'       => esc_html__( 'Field title' ),
+					'label'       => esc_html__( 'Field title', 'wp-user-manager' ),
 					'model'       => 'field_title',
 					'required'    => true,
-					'placeholder' => esc_html__( 'Enter a title for this field' ),
+					'placeholder' => esc_html__( 'Enter a title for this field', 'wp-user-manager' ),
 					'validator'   => [ 'string' ],
 					'min'         => 1
 				),
 				'field_description' => array(
 					'type'      => 'textArea',
 					'inputType' => 'text',
-					'label'     => esc_html__( 'Field description (optional)' ),
+					'label'     => esc_html__( 'Field description (optional)', 'wp-user-manager' ),
 					'model'     => 'field_description',
 					'rows'      => 3,
-					'hint'      => esc_html__( 'This is the text that appears as a description within the forms. Leave blank if not needed.' )
+					'hint'      => esc_html__( 'This is the text that appears as a description within the forms. Leave blank if not needed.', 'wp-user-manager' )
 				),
 				'user_meta_key' => array(
 					'type'      => 'input',
 					'inputType' => 'text',
-					'label'     => esc_html__( 'Unique meta key' ),
+					'label'     => esc_html__( 'Unique meta key', 'wp-user-manager' ),
 					'model'     => 'user_meta_key',
 					'required'  => true,
-					'hint'      => esc_html__( 'The key must be unique for each field and written in lowercase with an underscore ( _ ) separating words e.g country_list or job_title. This will be used to store information about your users into the database of your website.' ),
+					'hint'      => esc_html__( 'The key must be unique for each field and written in lowercase with an underscore ( _ ) separating words e.g country_list or job_title. This will be used to store information about your users into the database of your website.', 'wp-user-manager' ),
 					'validator' => [ 'string' ],
 					'min'       => 1
 				),
 				'placeholder' => array(
 					'type'      => 'input',
 					'inputType' => 'text',
-					'label'     => esc_html__( 'Placeholder' ),
+					'label'     => esc_html__( 'Placeholder', 'wp-user-manager' ),
 					'model'     => 'placeholder',
-					'hint'      => esc_html__( 'This text will appear within the field when empty. Leave blank if not needed.' ),
+					'hint'      => esc_html__( 'This text will appear within the field when empty. Leave blank if not needed.', 'wp-user-manager' ),
 				),
 			],
 			'validation' => [
 				'required' => array(
 					'type'    => 'checkbox',
-					'label'   => esc_html__( 'Set as required' ),
+					'label'   => esc_html__( 'Set as required', 'wp-user-manager' ),
 					'model'   => 'required',
 					'default' => false,
-					'hint'    => esc_html__( 'Enable this option so the field must be filled before the form can be processed.' ),
+					'hint'    => esc_html__( 'Enable this option so the field must be filled before the form can be processed.', 'wp-user-manager' ),
 				)
 			],
 			'privacy' => [
 				'visibility' => array(
 					'type'    => 'radios',
-					'label'   => esc_html__( 'Profile visibility' ),
+					'label'   => esc_html__( 'Profile visibility', 'wp-user-manager' ),
 					'model'   => 'visibility',
-					'hint'    => esc_html__( 'Set the visibility of this field on users profiles.' ),
+					'hint'    => esc_html__( 'Set the visibility of this field on users profiles.', 'wp-user-manager' ),
 					'values' => [
-						[ 'value' => 'public', 'name' => esc_html__( 'Publicly visible' ) ],
-						[ 'value' => 'hidden', 'name' => esc_html__( 'Hidden' ) ]
+						[ 'value' => 'public', 'name' => esc_html__( 'Publicly visible', 'wp-user-manager' ) ],
+						[ 'value' => 'hidden', 'name' => esc_html__( 'Hidden', 'wp-user-manager' ) ]
 					],
 					'noneSelectedText'     => '',
 					'hideNoneSelectedText' =>  true,
@@ -193,20 +193,20 @@ abstract class WPUM_Field_Type {
 			'permissions' => [
 				'editing' => array(
 					'type'    => 'radios',
-					'label'   => esc_html__( 'Profile editing' ),
+					'label'   => esc_html__( 'Profile editing', 'wp-user-manager' ),
 					'model'   => 'editing',
-					'hint'    => esc_html__( 'Set who can edit this field. Hidden fields will not be editable within the front-end account page.' ),
+					'hint'    => esc_html__( 'Set who can edit this field. Hidden fields will not be editable within the front-end account page.', 'wp-user-manager' ),
 					'values' => [
-						[ 'value' => 'public', 'name' => esc_html__( 'Publicly editable' ) ],
-						[ 'value' => 'hidden', 'name' => esc_html__( 'Hidden (admins only)' ) ]
+						[ 'value' => 'public', 'name' => esc_html__( 'Publicly editable', 'wp-user-manager' ) ],
+						[ 'value' => 'hidden', 'name' => esc_html__( 'Hidden (admins only)', 'wp-user-manager' ) ]
 					],
 				),
 				'read_only' => array(
 					'type'    => 'checkbox',
-					'label'   => esc_html__( 'Set as read only' ),
+					'label'   => esc_html__( 'Set as read only', 'wp-user-manager' ),
 					'model'   => 'read_only',
 					'default' => false,
-					'hint'    => esc_html__( 'Enable to prevent users from editing this field. Note: if the profile editing option is set to publicly editable, the field will still be visible within the account page but will not be customizable.' ),
+					'hint'    => esc_html__( 'Enable to prevent users from editing this field. Note: if the profile editing option is set to publicly editable, the field will still be visible within the account page but will not be customizable.', 'wp-user-manager' ),
 				)
 			]
 		];

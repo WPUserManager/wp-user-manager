@@ -36,7 +36,7 @@ $comments = wpum_get_comments_for_profile( $data->user->ID );
 				$the_date        = get_comment_date( get_option( 'date_format' ), $comment->comment_ID );
 			?>
 
-			<p><?php printf( _x( '"%s" on <a href="%s">%s</a>, %s.', 'This text displays the comments left by the user on his profile page.' ), $comment_content, $the_permalink, $the_post, $the_date ); ?></p>
+			<p><?php printf( _x( '"%s" on <a href="%s">%s</a>, %s.', 'This text displays the comments left by the user on his profile page.', 'wp-user-manager' ), $comment_content, $the_permalink, $the_post, $the_date ); ?></p>
 
 			</div>
 
@@ -46,7 +46,7 @@ $comments = wpum_get_comments_for_profile( $data->user->ID );
 
 			WPUM()->templates
 				->set_template_data( [
-					'message' => sprintf( esc_html__( '%s has not made any comment yet.' ), $data->user->display_name )
+					'message' => sprintf( esc_html__( '%s has not made any comment yet.', 'wp-user-manager' ), $data->user->display_name )
 				] )
 				->get_template_part( 'messages/general', 'warning' );
 

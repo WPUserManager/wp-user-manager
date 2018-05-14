@@ -144,7 +144,7 @@ class WPUM_License {
 		$new_settings[] = Field::make(
 			'text',
 			$this->item_shortname . '_license_key',
-			sprintf( __( '%1$s License Key', 'wpum' ), $this->item_name )
+			sprintf( __( '%1$s License Key', 'wp-user-manager' ), $this->item_name )
 		)->set_help_text(  $this->get_status_message() );
 
 		return array_merge( $settings, $new_settings );
@@ -197,7 +197,7 @@ class WPUM_License {
 				if ( is_wp_error( $response ) ) {
 					$message = $response->get_error_message();
 				} else {
-					$message = __( 'An error occurred, please try again.' );
+					$message = __( 'An error occurred, please try again.', 'wp-user-manager' );
 				}
 
 			} else {
@@ -252,7 +252,7 @@ class WPUM_License {
 					if ( is_wp_error( $response ) ) {
 						$message = $response->get_error_message();
 					} else {
-						$message = __( 'An error occurred, please try again.' );
+						$message = __( 'An error occurred, please try again.', 'wp-user-manager' );
 					}
 
 					wp_die( $message );
@@ -310,26 +310,26 @@ class WPUM_License {
 		switch( $status ) {
 			case 'expired' :
 				$message = sprintf(
-						__( 'Your license key expired on %s.' ),
+						__( 'Your license key expired on %s.', 'wp-user-manager' ),
 						date_i18n( get_option( 'date_format' ), strtotime( get_option( $this->item_shortname . '_license_expires' ), current_time( 'timestamp' ) ) )
 					);
 				break;
 			case 'disabled' :
 			case 'revoked' :
-				$message = __( 'Your license key has been disabled.' );
+				$message = __( 'Your license key has been disabled.', 'wp-user-manager' );
 				break;
 			case 'missing' :
-				$message = __( 'Invalid license.' );
+				$message = __( 'Invalid license.', 'wp-user-manager' );
 				break;
 			case 'invalid' :
 			case 'site_inactive' :
-				$message = __( 'Your license is not active for this URL.' );
+				$message = __( 'Your license is not active for this URL.', 'wp-user-manager' );
 				break;
 			case 'item_name_mismatch' :
-				$message = sprintf( __( 'This appears to be an invalid license key for %s.' ), $this->item_name );
+				$message = sprintf( __( 'This appears to be an invalid license key for %s.', 'wp-user-manager' ), $this->item_name );
 				break;
 			case 'no_activations_left':
-				$message = __( 'Your license key has reached its activation limit.' );
+				$message = __( 'Your license key has reached its activation limit.', 'wp-user-manager' );
 				break;
 		}
 
@@ -346,9 +346,9 @@ class WPUM_License {
 		}
 
 		if( $status == 'valid' ) {
-			$inline = sprintf( __( 'License successfully activated. Expires on %s' ), date_i18n( get_option( 'date_format' ), strtotime( get_option( $this->item_shortname . '_license_expires' ), current_time( 'timestamp' ) ) ) );
+			$inline = sprintf( __( 'License successfully activated. Expires on %s', 'wp-user-manager' ), date_i18n( get_option( 'date_format' ), strtotime( get_option( $this->item_shortname . '_license_expires' ), current_time( 'timestamp' ) ) ) );
 			$message = '<div class="wpum-license-message is-alt notice-success"><p>' . $inline . '</p></div>';
-			$message .= '<br/><a href="' . $this->get_license_deactivation_url() . '" class="button">' . esc_html__( 'Deactivate license' ) . '</a>';
+			$message .= '<br/><a href="' . $this->get_license_deactivation_url() . '" class="button">' . esc_html__( 'Deactivate license', 'wp-user-manager' ) . '</a>';
 		}
 
 		return $message;

@@ -45,7 +45,7 @@ function wpum_generate_pages() {
 	if ( ! wpum_get_option( 'login_page' ) ) {
 		$login = wp_insert_post(
 			array(
-				'post_title'     => __( 'Login', 'wpum' ),
+				'post_title'     => __( 'Login', 'wp-user-manager' ),
 				'post_content'   => '[wpum_login_form psw_link="yes" register_link="yes"]',
 				'post_status'    => 'publish',
 				'post_author'    => 1,
@@ -59,7 +59,7 @@ function wpum_generate_pages() {
 	if ( ! wpum_get_option( 'password_recovery_page' ) ) {
 		$psw = wp_insert_post(
 			array(
-				'post_title'     => __( 'Password Reset', 'wpum' ),
+				'post_title'     => __( 'Password Reset', 'wp-user-manager' ),
 				'post_content'   => '[wpum_password_recovery login_link="yes" register_link="yes"]',
 				'post_status'    => 'publish',
 				'post_author'    => 1,
@@ -73,7 +73,7 @@ function wpum_generate_pages() {
 	if ( ! wpum_get_option( 'registration_page' ) ) {
 		$register = wp_insert_post(
 			array(
-				'post_title'     => __( 'Register', 'wpum' ),
+				'post_title'     => __( 'Register', 'wp-user-manager' ),
 				'post_content'   => '[wpum_register login_link="yes" psw_link="yes"]',
 				'post_status'    => 'publish',
 				'post_author'    => 1,
@@ -87,7 +87,7 @@ function wpum_generate_pages() {
 	if ( ! wpum_get_option( 'account_page' ) ) {
 		$account = wp_insert_post(
 			array(
-				'post_title'     => __( 'Account', 'wpum' ),
+				'post_title'     => __( 'Account', 'wp-user-manager' ),
 				'post_content'   => '[wpum_account]',
 				'post_status'    => 'publish',
 				'post_author'    => 1,
@@ -101,7 +101,7 @@ function wpum_generate_pages() {
 	if ( ! wpum_get_option( 'profile_page' ) ) {
 		$profile = wp_insert_post(
 			array(
-				'post_title'     => __( 'Profile', 'wpum' ),
+				'post_title'     => __( 'Profile', 'wp-user-manager' ),
 				'post_content'   => '[wpum_profile]',
 				'post_status'    => 'publish',
 				'post_author'    => 1,
@@ -122,7 +122,7 @@ function wpum_install_registration_form() {
 
 	$default_form_id = WPUM()->registration_forms->insert(
 		[
-			'name' => esc_html__( 'Default registration form' )
+			'name' => esc_html__( 'Default registration form', 'wp-user-manager' )
 		]
 	);
 

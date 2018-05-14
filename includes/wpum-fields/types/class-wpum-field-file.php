@@ -24,7 +24,7 @@ class WPUM_Field_File extends WPUM_Field_Type {
 
 		// Define field type information.
 		$this->group = 'advanced';
-		$this->name  = esc_html__( 'File' );
+		$this->name  = esc_html__( 'File', 'wp-user-manager' );
 		$this->type  = 'file';
 		$this->icon  = 'dashicons-paperclip';
 		$this->order = 3;

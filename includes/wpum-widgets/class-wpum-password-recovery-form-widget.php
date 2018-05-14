@@ -28,17 +28,17 @@ class WPUM_Password_Recovery extends WPH_Widget {
 
 		// Configure widget array
 		$args = array(
-			'label'       => __( '[WPUM] Password Recovery Form' ),
-			'description' => __( 'Display a form for users to recover their password.' ),
+			'label'       => __( '[WPUM] Password Recovery Form', 'wp-user-manager' ),
+			'description' => __( 'Display a form for users to recover their password.', 'wp-user-manager' ),
 		);
 
 		$args['fields'] = array(
 			array(
-				'name'   => __( 'Title' ),
+				'name'   => __( 'Title', 'wp-user-manager' ),
 				'id'     => 'title',
 				'type'   => 'text',
 				'class'  => 'widefat',
-				'std'    => __( 'Reset password' ),
+				'std'    => __( 'Reset password', 'wp-user-manager' ),
 				'filter' => 'strip_tags|esc_attr'
 			)
 		);

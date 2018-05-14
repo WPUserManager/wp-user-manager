@@ -23,7 +23,7 @@ class WPUM_Field_Text extends WPUM_Field_Type {
 	public function init() {
 
 		// Define field type information.
-		$this->name  = esc_html__( 'Single Line Text' );
+		$this->name  = esc_html__( 'Single Line Text', 'wp-user-manager' );
 		$this->type  = 'text';
 		$this->icon  = 'dashicons-editor-textcolor';
 		$this->order = 3;

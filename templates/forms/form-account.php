@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 	<?php if( isset( $_GET['updated'] ) && $_GET['updated'] == 'success' ) : ?>
 		<?php
 			WPUM()->templates
-				->set_template_data( [ 'message' => esc_html__( 'Profile successfully updated.' ) ] )
+				->set_template_data( [ 'message' => esc_html__( 'Profile successfully updated.', 'wp-user-manager' ) ] )
 				->get_template_part( 'messages/general', 'success' );
 		?>
 	<?php endif; ?>
@@ -81,7 +81,7 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 			<input type="hidden" name="wpum_form" value="<?php echo $data->form; ?>" />
 			<input type="hidden" name="step" value="<?php echo esc_attr( $data->step ); ?>" />
 			<?php wp_nonce_field( 'verify_account_form', 'account_update_nonce' ); ?>
-			<input type="submit" name="submit_account" class="button" value="<?php esc_html_e( 'Update profile' ); ?>" />
+			<input type="submit" name="submit_account" class="button" value="<?php esc_html_e( 'Update profile', 'wp-user-manager' ); ?>" />
 
 		<?php do_action( 'wpum_after_account_form' ); ?>
 

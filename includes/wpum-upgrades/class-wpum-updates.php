@@ -214,7 +214,7 @@ class WPUM_Updates {
 
 			$menu[ $index ][0] = sprintf(
 				'%1$s <span class="update-plugins"><span class="plugin-count wpum-update-progress-count">%2$s%3$s</span></span>',
-				__( 'Users' ),
+				__( 'Users', 'wp-user-manager' ),
 				$is_update ?
 					$this->get_db_update_processing_percentage() :
 					$this->get_total_update_count(),
@@ -251,7 +251,7 @@ class WPUM_Updates {
 			'WPUM Updates',
 			sprintf(
 				'%1$s <span class="update-plugins"%2$s><span class="plugin-count wpum-update-progress-count">%3$s%4$s</span></span>',
-				__( 'Updates' ),
+				__( 'Updates', 'wp-user-manager' ),
 				isset( $_GET['wpum-pause-db-upgrades'] ) ? ' style="display:none;"' : '',
 				$is_update ?
 					$this->get_db_update_processing_percentage() :
@@ -567,16 +567,16 @@ class WPUM_Updates {
 
 			$upgrade_error = get_option( 'wpum_upgrade_error' );
 			if ( ! $upgrade_error ) : ?>
-				<strong><?php _e( 'Database Update' ); ?></strong>
-				&nbsp;&#8211;&nbsp;<?php _e( 'WPUM needs to update your database to the latest version. The following process will make updates to your site\'s database. Please create a backup before proceeding.' ); ?>
+				<strong><?php _e( 'Database Update', 'wp-user-manager' ); ?></strong>
+				&nbsp;&#8211;&nbsp;<?php _e( 'WPUM needs to update your database to the latest version. The following process will make updates to your site\'s database. Please create a backup before proceeding.', 'wp-user-manager' ); ?>
 				<br>
 				<br>
 				<a href="<?php echo esc_url( add_query_arg( array( 'wpum-restart-db-upgrades' => 1 ), admin_url( 'users.php?page=wpum-updates' ) ) ); ?>" class="button button-primary wpum-restart-updater-btn">
-					<?php _e( 'Restart the updater' ); ?>
+					<?php _e( 'Restart the updater', 'wp-user-manager' ); ?>
 				</a>
 			<?php else: ?>
-				<strong><?php _e( 'Database Update' ); ?></strong>
-				&nbsp;&#8211;&nbsp;<?php _e( 'An unexpected issue occurred during the database update which caused it to stop automatically. Please contact support for assistance.' ); ?>
+				<strong><?php _e( 'Database Update', 'wp-user-manager' ); ?></strong>
+				&nbsp;&#8211;&nbsp;<?php _e( 'An unexpected issue occurred during the database update which caused it to stop automatically. Please contact support for assistance.', 'wp-user-manager' ); ?>
 			<?php
 			endif;
 			$desc_html = ob_get_clean();
@@ -593,7 +593,7 @@ class WPUM_Updates {
 		// Show db upgrade completed notice.
 		if ( ! empty( $_GET['wpum-db-update-completed'] ) ) {
 
-			$message = __( 'WP User Manager database update successfully completed. Thank you for updating to the latest version!' );
+			$message = __( 'WP User Manager database update successfully completed. Thank you for updating to the latest version!', 'wp-user-manager' );
 			WPUM()->notices->register_notice( 'wpum_db_upgrade_completed', 'success', $message );
 
 			// Start update.
@@ -605,11 +605,11 @@ class WPUM_Updates {
 			ob_start();
 			?>
 			<p>
-				<?php _e( '<strong>WP User Manager</strong> needs to update your database to the latest version. The following process will make updates to your site\'s database. <strong><u>Please create a complete backup before proceeding.</u></strong>' ); ?>
+				<?php _e( '<strong>WP User Manager</strong> needs to update your database to the latest version. The following process will make updates to your site\'s database. <strong><u>Please create a complete backup before proceeding.</u></strong>', 'wp-user-manager' ); ?>
 			</p>
 			<p>
 				<a href="<?php echo esc_url( add_query_arg( array( 'wpum-run-db-update' => 1 ), admin_url( 'users.php?page=wpum-updates' ) ) ); ?>" class="button button-primary wpum-run-update-now">
-					<?php _e( 'Update the database' ); ?>
+					<?php _e( 'Update the database', 'wp-user-manager' ); ?>
 				</a>
 			</p>
 			<?php
@@ -727,21 +727,21 @@ class WPUM_Updates {
 
 		if ( self::$background_updater->is_paused_process() ) {
 			$update_info = array(
-				'message'    => __( 'The updates have been paused.' ),
+				'message'    => __( 'The updates have been paused.', 'wp-user-manager' ),
 				'heading'    => '',
 				'percentage' => 0,
 			);
 
 			if ( get_option( 'wpum_upgrade_error' ) ) {
-				$update_info['message'] = __( 'An unexpected issue occurred during the database update which caused it to stop automatically. Please contact support for assistance.' );
+				$update_info['message'] = __( 'An unexpected issue occurred during the database update which caused it to stop automatically. Please contact support for assistance.', 'wp-user-manager' );
 			}
 
 			$response_type = 'error';
 
 		} elseif ( empty( $update_info ) || ! $this->get_total_new_db_update_count( true ) ) {
 			$update_info   = array(
-				'message'    => __( 'WPUM database updates completed successfully. Thank you for updating to the latest version!' ),
-				'heading'    => __( 'Updates Completed.' ),
+				'message'    => __( 'WPUM database updates completed successfully. Thank you for updating to the latest version!', 'wp-user-manager' ),
+				'heading'    => __( 'Updates Completed.', 'wp-user-manager' ),
 				'percentage' => 100,
 			);
 			$response_type = 'success';

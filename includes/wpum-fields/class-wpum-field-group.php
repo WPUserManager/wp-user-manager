@@ -108,7 +108,7 @@ class WPUM_Field_Group {
 		if( method_exists( $this, 'get_' . $key ) ) {
 			return call_user_func( array( $this, 'get_' . $key ) );
 		} else {
-			return new WP_Error( 'wpum-field-group-invalid-property', sprintf( __( 'Can\'t get property %s' ), $key ) );
+			return new WP_Error( 'wpum-field-group-invalid-property', sprintf( __( 'Can\'t get property %s', 'wp-user-manager' ), $key ) );
 		}
 	}
 

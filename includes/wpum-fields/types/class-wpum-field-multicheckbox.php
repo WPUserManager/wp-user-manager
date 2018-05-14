@@ -23,7 +23,7 @@ class WPUM_Field_MultiCheckbox extends WPUM_Field_Type {
 	public function init() {
 
 		// Define field type information.
-		$this->name  = esc_html__( 'Checkboxes' );
+		$this->name  = esc_html__( 'Checkboxes', 'wp-user-manager' );
 		$this->type  = 'multicheckbox';
 		$this->icon  = 'dashicons-editor-ol';
 		$this->order = 3;
