@@ -470,6 +470,10 @@
   #header-avatar-container {
     text-align: center; }
     #header-avatar-container a {
-      left: 0; } }
+      left: 0; }
+
+  #profile-navbar {
+    display: block;
+    border: 0; } }
 
 /*# sourceMappingURL=wpum.css.map */
