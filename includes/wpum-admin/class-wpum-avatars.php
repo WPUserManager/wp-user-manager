@@ -11,7 +11,9 @@ use Carbon_Fields\Container;
 use Carbon_Fields\Field;
 
 // Exit if accessed directly
-if ( ! defined( 'ABSPATH' ) ) exit;
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 
 /**
  * Avatar handler class.
@@ -32,7 +34,7 @@ class WPUM_Avatars {
 
 		global $pagenow;
 
-		if( ! wpum_get_option( 'custom_avatars' ) ) {
+		if ( ! wpum_get_option( 'custom_avatars' ) ) {
 			return;
 		}
 
@@ -64,7 +66,6 @@ class WPUM_Avatars {
 			if ( ! empty( $user ) ) {
 				$retval = $user->ID;
 			}
-
 		} elseif ( $id_or_email instanceof WP_User ) {
 			$user = $id_or_email->ID;
 		} elseif ( $id_or_email instanceof WP_Post ) {
@@ -87,12 +88,14 @@ class WPUM_Avatars {
 	public function avatar_field() {
 		Container::make( 'user_meta', esc_html__( 'Avatar' ) )
 			->set_datastore( new WPUM_User_Meta_Custom_Datastore() )
-			->add_fields( array(
-				Field::make( 'image', 'current_user_avatar', esc_html__( 'Custom user avatar' ) )
-					->set_value_type( 'url' ),
-				Field::make( 'image', 'user_cover', esc_html__( 'Custom profile cover image' ) )
-					->set_value_type( 'url' ),
-			) );
+			->add_fields(
+				array(
+					Field::make( 'image', 'current_user_avatar', esc_html__( 'Custom user avatar' ) )
+						->set_value_type( 'url' ),
+					Field::make( 'image', 'user_cover', esc_html__( 'Custom profile cover image' ) )
+						->set_value_type( 'url' ),
+				)
+			);
 	}
 
 	/**
@@ -117,11 +120,11 @@ class WPUM_Avatars {
 
 		$custom_avatar = carbon_get_user_meta( $this->get_user_id( $id_or_email ), 'current_user_avatar' );
 
-		if( $custom_avatar ) {
+		if ( $custom_avatar ) {
 			$url = $custom_avatar;
 		}
 
-		return $url;
+		return apply_filters( 'wpum_get_avatar_url', $url, $id_or_email );
 
 	}
 
