@@ -94,22 +94,6 @@
   clear: both;
   display: table; }
 
-@media only screen and (max-width: 767px) {
-  .wpum_one_half,
-  .wpum_one_third,
-  .wpum_two_third,
-  .wpum_two_fourth,
-  .wpum_three_fourth,
-  .wpum_one_fourth,
-  .wpum_one_fifth,
-  .wpum_two_fifth,
-  .wpum_three_fifth,
-  .wpum_four_fifth,
-  .wpum_one_sixth,
-  .wpum_five_sixth {
-    width: 100%;
-    float: none;
-    margin-left: 0; } }
 #wpum-account-forms-tabs {
   margin-bottom: 30px; }
   #wpum-account-forms-tabs ul {
@@ -241,7 +225,7 @@
   background: #fff; }
 
 #header-details-container {
-  padding: 10px 10px 10px 30px; }
+  padding: 10px 10px 10px 0; }
 
 #header-name-container h2 {
   font-size: 24px; }
@@ -465,5 +449,27 @@
   margin: 0; }
 .wpum-directory-single-user .wpum-meta {
   text-align: right; }
+
+@media only screen and (max-width: 767px) {
+  .wpum_one_half,
+  .wpum_one_third,
+  .wpum_two_third,
+  .wpum_two_fourth,
+  .wpum_three_fourth,
+  .wpum_one_fourth,
+  .wpum_one_fifth,
+  .wpum_two_fifth,
+  .wpum_three_fifth,
+  .wpum_four_fifth,
+  .wpum_one_sixth,
+  .wpum_five_sixth {
+    width: 100%;
+    float: none;
+    margin-left: 0; }
+
+  #header-avatar-container {
+    text-align: center; }
+    #header-avatar-container a {
+      left: 0; } }
 
 /*# sourceMappingURL=wpum.css.map */

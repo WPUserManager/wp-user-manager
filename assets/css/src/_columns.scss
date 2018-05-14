@@ -120,22 +120,3 @@
 		display: table;
 	}
 }
-
-@media only screen and (max-width: 767px) {
-	.wpum_one_half,
-	.wpum_one_third,
-	.wpum_two_third,
-	.wpum_two_fourth,
-	.wpum_three_fourth,
-	.wpum_one_fourth,
-	.wpum_one_fifth,
-	.wpum_two_fifth,
-	.wpum_three_fifth,
-	.wpum_four_fifth,
-	.wpum_one_sixth,
-	.wpum_five_sixth {
-		width: 100%;
-		float: none;
-		margin-left: 0;
-	}
-}

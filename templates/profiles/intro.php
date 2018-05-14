@@ -21,12 +21,12 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 <div id="header-profile-details">
 
 	<div class="wpum-row">
-		<div class="wpum-col-xs-2" id="header-avatar-container">
+		<div class="wpum_one_fifth" id="header-avatar-container">
 			<a href="<?php echo esc_url( wpum_get_profile_url( $data->user ) ); ?>">
 				<?php echo get_avatar( $data->user->ID, 128 ); ?>
 			</a>
 		</div>
-		<div class="wpum-col-xs-10" id="header-details-container">
+		<div class="wpum_four_fifth last" id="header-details-container">
 			<div id="header-name-container">
 				<h2>
 					<?php echo esc_html( $data->user->display_name ); ?>
@@ -39,6 +39,7 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 				<?php echo wpautop( get_user_meta( $data->user->ID, 'description', true ) ); ?>
 			</div>
 		</div>
+		<div class="wpum_clearfix"></div>
 	</div>
 
 </div>
