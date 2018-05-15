@@ -77,6 +77,9 @@ if( isset( $_GET['redirect_to'] ) ) {
 		<input type="hidden" name="wpum_form" value="<?php echo $data->form; ?>" />
 		<input type="hidden" name="step" value="<?php echo esc_attr( $data->step ); ?>" />
 		<input type="hidden" name="submit_referrer" value="<?php echo esc_url( $referrer ); ?>" />
+
+		<?php do_action( 'wpum_before_submit_button_login_form' ); ?>
+
 		<input type="submit" name="submit_login" class="button" value="<?php esc_html_e( 'Login', 'wp-user-manager' ); ?>" />
 
 	</form>
