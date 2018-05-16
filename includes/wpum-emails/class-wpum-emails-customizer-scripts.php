@@ -40,7 +40,7 @@ class WPUM_Emails_Customizer_Scripts {
 		wp_enqueue_script( 'wpum-email-customize-preview', WPUM_PLUGIN_URL . 'assets/js/admin/admin-email-customizer-preview.min.js', array( 'customize-preview' ), WPUM_VERSION, true );
 
 		$js_variables = [
-			'emails' => $this->registered_emails
+			'emails' => wpum_get_registered_emails()
 		];
 
 		wp_localize_script( 'wpum-email-customize-preview', 'wpumCustomizePreview', $js_variables );
