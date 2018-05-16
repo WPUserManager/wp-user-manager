@@ -62,7 +62,7 @@ class WPUM_Form_Registration extends WPUM_Form {
 		add_filter( 'submit_wpum_form_validate_fields', [ $this, 'validate_password' ], 10, 4 );
 		add_filter( 'submit_wpum_form_validate_fields', [ $this, 'validate_username' ], 10, 4 );
 		add_filter( 'submit_wpum_form_validate_fields', [ $this, 'validate_honeypot' ], 10, 4 );
-		if( wpum_get_option( 'allow_role_select' ) ) {
+		if ( wpum_get_option( 'allow_role_select' ) ) {
 			add_filter( 'submit_wpum_form_validate_fields', [ $this, 'validate_role' ], 10, 4 );
 		}
 
