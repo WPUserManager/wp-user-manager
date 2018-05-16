@@ -84,7 +84,7 @@ class WPUM_Emails_Customizer {
 		// Deactivate all other sections except the ones registered for emails.
 		if( isset( $_GET['wpum_email_customizer'] ) && $_GET['wpum_email_customizer'] == 'true' ) {
 			$sections = [];
-			foreach( $this->emails as $email_id => $registered_email ) {
+			foreach( wpum_get_registered_emails() as $email_id => $registered_email ) {
 				$sections[] = $email_id . '_settings';
 			}
 			if( in_array( $section->id, $sections ) ) {
@@ -108,7 +108,7 @@ class WPUM_Emails_Customizer {
 		// Deactivate all other panels except the ones registered for emails.
 		if( isset( $_GET['wpum_email_customizer'] ) && $_GET['wpum_email_customizer'] == 'true' ) {
 			$panels = [];
-			foreach( $this->emails as $email_id => $registered_email ) {
+			foreach( wpum_get_registered_emails() as $email_id => $registered_email ) {
 				$panels[] = $email_id;
 			}
 			if( in_array( $panel->id, $panels ) && $_GET['email'] == $panel->id ) {
@@ -128,7 +128,7 @@ class WPUM_Emails_Customizer {
 
 		$this->includes();
 
-		foreach( $this->emails as $email_id => $registered_email ) {
+		foreach( wpum_get_registered_emails() as $email_id => $registered_email ) {
 
 			if( isset( $_GET['email'] ) && $_GET['email'] !== $email_id ) {
 				continue;
