@@ -131,6 +131,10 @@ class WPUM_License {
 		// Updater.
 		add_action( 'admin_init', array( $this, 'auto_updater' ), 0 );
 
+		$plugin_name = explode( 'plugins/', $this->file );
+		$plugin_name = plugin_basename( $this->file );
+		add_action( "after_plugin_row_{$plugin_name}", array( $this, 'plugin_page_notices' ), 10, 3 );
+
 	}
 
 	/**
@@ -145,7 +149,7 @@ class WPUM_License {
 			'text',
 			$this->item_shortname . '_license_key',
 			sprintf( __( '%1$s License Key', 'wp-user-manager' ), $this->item_name )
-		)->set_help_text(  $this->get_status_message() );
+		)->set_help_text( $this->get_status_message() );
 
 		return array_merge( $settings, $new_settings );
 
@@ -159,9 +163,9 @@ class WPUM_License {
 	public function activate_license() {
 
 		// Detect if license submission.
-		if( isset( $_POST['_wpum_license_submission'] ) ) {
+		if ( isset( $_POST['_wpum_license_submission'] ) ) {
 
-			if( ! current_user_can( 'manage_options' ) ) {
+			if ( ! current_user_can( 'manage_options' ) ) {
 				return;
 			}
 
@@ -169,9 +173,9 @@ class WPUM_License {
 				return;
 			}
 
-			$license = sanitize_text_field( $_POST[ '_' . $this->item_shortname . '_license_key'] );
+			$license = sanitize_text_field( $_POST[ '_' . $this->item_shortname . '_license_key' ] );
 
-			if( empty( $license ) ) {
+			if ( empty( $license ) ) {
 				return;
 			}
 
@@ -179,7 +183,7 @@ class WPUM_License {
 				'edd_action' => 'activate_license',
 				'license'    => $license,
 				'item_name'  => urlencode( $this->item_name ), // the name of our product in EDD
-				'url'        => home_url()
+				'url'        => home_url(),
 			);
 
 			$response = wp_remote_post(
@@ -187,7 +191,7 @@ class WPUM_License {
 				array(
 					'timeout'   => 15,
 					'sslverify' => false,
-					'body'      => $api_params
+					'body'      => $api_params,
 				)
 			);
 
@@ -199,7 +203,6 @@ class WPUM_License {
 				} else {
 					$message = __( 'An error occurred, please try again.', 'wp-user-manager' );
 				}
-
 			} else {
 
 				$license_data = json_decode( wp_remote_retrieve_body( $response ) );
@@ -209,16 +212,14 @@ class WPUM_License {
 
 				update_option( $this->item_shortname . '_license_active', $license_data->license );
 
-				if( $license_data->success ) {
+				if ( $license_data->success ) {
 					update_option( $this->item_shortname . '_license_expires', $license_data->expires );
 				}
 
-				if( ! (bool) $license_data->success ) {
+				if ( ! (bool) $license_data->success ) {
 					update_option( $this->item_shortname . '_license_active', $license_data->error );
 				}
-
 			}
-
 		}
 
 	}
@@ -230,7 +231,7 @@ class WPUM_License {
 	 */
 	public function deactivate_license() {
 
-		if( isset( $_GET[ $this->item_shortname . '_deactivation' ] ) && current_user_can( 'manage_options' ) ) {
+		if ( isset( $_GET[ $this->item_shortname . '_deactivation' ] ) && current_user_can( 'manage_options' ) ) {
 			if ( ! wp_verify_nonce( $_GET[ $this->item_shortname . '_deactivation' ], $this->item_shortname ) ) {
 				return;
 			} else {
@@ -240,11 +241,17 @@ class WPUM_License {
 					'edd_action' => 'deactivate_license',
 					'license'    => $this->license,
 					'item_name'  => urlencode( $this->item_name ), // the name of our product in EDD
-					'url'        => home_url()
+					'url'        => home_url(),
 				);
 
 				// Call the custom API.
-				$response = wp_remote_post( $this->api_url, array( 'timeout' => 15, 'sslverify' => false, 'body' => $api_params ) );
+				$response = wp_remote_post(
+					$this->api_url, array(
+						'timeout'   => 15,
+						'sslverify' => false,
+						'body'      => $api_params,
+					)
+				);
 
 				// make sure the response came back okay
 				if ( is_wp_error( $response ) || 200 !== wp_remote_retrieve_response_code( $response ) ) {
@@ -263,12 +270,11 @@ class WPUM_License {
 				$license_data = json_decode( wp_remote_retrieve_body( $response ) );
 
 				// $license_data->license will be either "deactivated" or "failed"
-				if( $license_data->license == 'deactivated' ) {
+				if ( $license_data->license == 'deactivated' ) {
 					delete_option( $this->item_shortname . '_license_active' );
 					delete_option( $this->item_shortname . '_license_expires' );
 					wp_redirect( add_query_arg( [ 'license' => 'deactivated' ], admin_url( 'options-general.php?page=wpum-licenses' ) ) );
 				}
-
 			}
 		}
 
@@ -281,17 +287,20 @@ class WPUM_License {
 	 */
 	public function auto_updater() {
 
-		if ( 'valid' !== get_option( $this->item_shortname . '_license_active' ) )
+		if ( 'valid' !== get_option( $this->item_shortname . '_license_active' ) ) {
 			return;
+		}
 
-		$edd_updater = new EDD_SL_Plugin_Updater( $this->api_url, $this->file, array(
-			'version'   => $this->version,
-			'license'   => $this->license,
-			'item_id'   => $this->item_id,
-			'item_name' => $this->item_name,
-			'author'    => $this->author,
-			'url'       => home_url()
-    	) );
+		$edd_updater = new EDD_SL_Plugin_Updater(
+			$this->api_url, $this->file, array(
+				'version'   => $this->version,
+				'license'   => $this->license,
+				'item_id'   => $this->item_id,
+				'item_name' => $this->item_name,
+				'author'    => $this->author,
+				'url'       => home_url(),
+			)
+		);
 
 	}
 
@@ -307,25 +316,25 @@ class WPUM_License {
 
 		$status_class = 'notice-error';
 
-		switch( $status ) {
-			case 'expired' :
+		switch ( $status ) {
+			case 'expired':
 				$message = sprintf(
-						__( 'Your license key expired on %s.', 'wp-user-manager' ),
-						date_i18n( get_option( 'date_format' ), strtotime( get_option( $this->item_shortname . '_license_expires' ), current_time( 'timestamp' ) ) )
-					);
+					__( 'Your license key expired on %s.', 'wp-user-manager' ),
+					date_i18n( get_option( 'date_format' ), strtotime( get_option( $this->item_shortname . '_license_expires' ), current_time( 'timestamp' ) ) )
+				);
 				break;
-			case 'disabled' :
-			case 'revoked' :
+			case 'disabled':
+			case 'revoked':
 				$message = __( 'Your license key has been disabled.', 'wp-user-manager' );
 				break;
-			case 'missing' :
+			case 'missing':
 				$message = __( 'Invalid license.', 'wp-user-manager' );
 				break;
-			case 'invalid' :
-			case 'site_inactive' :
+			case 'invalid':
+			case 'site_inactive':
 				$message = __( 'Your license is not active for this URL.', 'wp-user-manager' );
 				break;
-			case 'item_name_mismatch' :
+			case 'item_name_mismatch':
 				$message = sprintf( __( 'This appears to be an invalid license key for %s.', 'wp-user-manager' ), $this->item_name );
 				break;
 			case 'no_activations_left':
@@ -333,21 +342,21 @@ class WPUM_License {
 				break;
 		}
 
-		if( $status == 'valid' ) {
+		if ( $status == 'valid' ) {
 			$status_class == 'notice-success';
 		}
 
-		if( empty( $message ) && $status !== 'valid' ) {
+		if ( empty( $message ) && $status !== 'valid' ) {
 			return false;
 		}
 
-		if( ! empty( $message ) ) {
-			$message = '<div class="wpum-license-message is-alt ' . $status_class . ' '. $status .'"><p>' . $message . '</p></div>';
+		if ( ! empty( $message ) ) {
+			$message = '<div class="wpum-license-message is-alt ' . $status_class . ' ' . $status . '"><p>' . $message . '</p></div>';
 		}
 
-		if( $status == 'valid' ) {
-			$inline = sprintf( __( 'License successfully activated. Expires on %s', 'wp-user-manager' ), date_i18n( get_option( 'date_format' ), strtotime( get_option( $this->item_shortname . '_license_expires' ), current_time( 'timestamp' ) ) ) );
-			$message = '<div class="wpum-license-message is-alt notice-success"><p>' . $inline . '</p></div>';
+		if ( $status == 'valid' ) {
+			$inline   = sprintf( __( 'License successfully activated. Expires on %s', 'wp-user-manager' ), date_i18n( get_option( 'date_format' ), strtotime( get_option( $this->item_shortname . '_license_expires' ), current_time( 'timestamp' ) ) ) );
+			$message  = '<div class="wpum-license-message is-alt notice-success"><p>' . $inline . '</p></div>';
 			$message .= '<br/><a href="' . $this->get_license_deactivation_url() . '" class="button">' . esc_html__( 'Deactivate license', 'wp-user-manager' ) . '</a>';
 		}
 
@@ -367,5 +376,48 @@ class WPUM_License {
 		return $url;
 
 	}
+
+	/**
+	 * Add a notice when the license has not been activated yet.
+	 *
+	 * @param string $plugin_file
+	 * @param array $plugin_data
+	 * @param string $status
+	 * @return void
+	 */
+	public function plugin_page_notices( $plugin_file, $plugin_data, $status ) {
+
+		// Bailout.
+		if ( get_option( 'wpum_' . $this->item_shortname . '_license_active' ) && get_option( 'wpum_' . $this->item_shortname . '_license_active' ) == 'valid' ) {
+			return false;
+		}
+
+		$update_notice_wrap = '<tr class="wpum-addon-notice-tr active"><td colspan="3" class="colspanchange"><div class="notice inline notice-error notice-alt wpum-invalid-license"><p><span class="dashicons dashicons-info" style="color:red;"></span> %s</p></div></td></tr>';
+		$message            = $this->license_state_message();
+
+		if ( ! empty( $message['message'] ) ) {
+			echo sprintf( $update_notice_wrap, $message['message'] );
+		}
+
+	}
+
+	/**
+	 * Get message related to license state.
+	 *
+	 * @access public
+	 * @return array
+	 */
+	public function license_state_message() {
+		$message_data = array();
+		if ( ! get_option( 'wpum_' . $this->item_shortname . '_license_active' ) || get_option( 'wpum_' . $this->item_shortname . '_license_active' ) !== 'valid' ) {
+			$message_data['message'] = sprintf(
+				__( 'Please <a href="%1$s">activate your license</a> to receive updates and support for the %2$s add-on.' ),
+				esc_url( admin_url( 'options-general.php?page=wpum-licenses' ) ),
+				'<strong>' . $this->item_name . '</strong>'
+			);
+		}
+		return $message_data;
+	}
+
 
 }
