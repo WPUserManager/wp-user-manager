@@ -8,7 +8,9 @@
 */
 
 // Exit if accessed directly
-if ( ! defined( 'ABSPATH' ) ) exit;
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 
 /**
  * The class that handles all the scripts of the email customizer.
@@ -36,11 +38,11 @@ class WPUM_Emails_Customizer_Scripts {
 	 */
 	public function customize_preview() {
 
-		wp_enqueue_script( 'wpum-sanitize-html', WPUM_PLUGIN_URL . 'assets/js/vendor/sanitize-html.min.js' , array( 'customize-preview' ), WPUM_VERSION, true );
+		wp_enqueue_script( 'wpum-sanitize-html', WPUM_PLUGIN_URL . 'assets/js/vendor/sanitize-html.min.js', array( 'customize-preview' ), WPUM_VERSION, true );
 		wp_enqueue_script( 'wpum-email-customize-preview', WPUM_PLUGIN_URL . 'assets/js/admin/admin-email-customizer-preview.min.js', array( 'customize-preview' ), WPUM_VERSION, true );
 
 		$js_variables = [
-			'emails' => wpum_get_registered_emails()
+			'emails' => wpum_get_registered_emails(),
 		];
 
 		wp_localize_script( 'wpum-email-customize-preview', 'wpumCustomizePreview', $js_variables );
@@ -67,15 +69,15 @@ class WPUM_Emails_Customizer_Scripts {
 
 		$js_variables = [
 			'labels'            => [
-				'open'             => esc_html__( 'Open email content editor', 'wp-user-manager' ),
-				'close'            => esc_html__( 'Close email content editor', 'wp-user-manager' ),
-				'addMerge'         => esc_html__( 'Add merge tags', 'wp-user-manager' ),
-				'addMergeTooltip'  => esc_html__( 'Merge tags allow you to dynamically add content to your email', 'wp-user-manager' )
+				'open'            => esc_html__( 'Open email content editor', 'wp-user-manager' ),
+				'close'           => esc_html__( 'Close email content editor', 'wp-user-manager' ),
+				'addMerge'        => esc_html__( 'Add merge tags', 'wp-user-manager' ),
+				'addMergeTooltip' => esc_html__( 'Merge tags allow you to dynamically add content to your email', 'wp-user-manager' ),
 			],
 			'email_content'     => wpum_get_email_field( $email_id, 'content' ),
 			'selected_email_id' => $selected_email_id,
 			'mergeTags'         => WPUM()->emails->get_tags(),
-			'sections'          => $sections
+			'sections'          => $sections,
 		];
 		wp_localize_script( 'wpum-email-customize-controls', 'wpumCustomizeControls', $js_variables );
 
