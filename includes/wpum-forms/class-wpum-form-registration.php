@@ -413,7 +413,7 @@ class WPUM_Form_Registration extends WPUM_Form {
 
 			$new_user_id = wp_create_user( $username, $password, $values['register']['user_email'] );
 
-			if( is_wp_error( $new_user_id ) ) {
+			if ( is_wp_error( $new_user_id ) ) {
 				throw new Exception( $new_user_id->get_error_message() );
 			}
 
@@ -444,7 +444,7 @@ class WPUM_Form_Registration extends WPUM_Form {
 			do_action( 'wpum_after_registration', $new_user_id, $values );
 
 			// Automatically log a user in if enabled.
-			if( wpum_get_option( 'login_after_registration' ) ) {
+			if ( wpum_get_option( 'login_after_registration' ) ) {
 				wpum_log_user_in( $new_user_id );
 			}
 
