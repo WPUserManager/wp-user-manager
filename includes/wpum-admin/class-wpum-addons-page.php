@@ -35,7 +35,7 @@ class WPUM_Addons_Page {
 	 * @return void
 	 */
 	public function hooks() {
-		add_action( 'admin_menu', [ $this, 'add_addons_page' ] );
+		add_action( 'admin_menu', [ $this, 'add_addons_page' ], 20 );
 		add_action( 'admin_enqueue_scripts', [ $this, 'scripts' ] );
 		add_filter( 'install_plugins_tabs', [ $this, 'add_addon_tab' ] );
 		add_action( 'install_plugins_wpum_addons', [ $this, 'view_addons' ] );
