@@ -29,7 +29,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<?php if ( ! empty( $data->value ) && is_array( $data->value ) ) checked( in_array( $opt_key, $data->value ), true ); ?>
 		value="<?php echo esc_attr( $opt_key ); ?>"
 	/>
-	<?php echo esc_html( $value ); ?></label>
+	<small class="description"><?php echo esc_html( $value ); ?></small></label>
 
 <?php endforeach; ?>
 
