@@ -8,7 +8,9 @@
 */
 
 // Exit if accessed directly
-if ( ! defined( 'ABSPATH' ) ) exit;
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 
 class WPUM_Form_Profile extends WPUM_Form {
 
@@ -58,7 +60,7 @@ class WPUM_Form_Profile extends WPUM_Form {
 	 */
 	public function __construct() {
 
-		if( ! is_user_logged_in() ) {
+		if ( ! is_user_logged_in() ) {
 			return;
 		}
 
@@ -68,14 +70,16 @@ class WPUM_Form_Profile extends WPUM_Form {
 
 		add_action( 'wp', array( $this, 'process' ) );
 
-		$this->steps  = (array) apply_filters( 'wpum_account_tabs', array(
-			'account' => array(
-				'name'     => esc_html__( 'Profile settings', 'wp-user-manager' ),
-				'view'     => array( $this, 'show_form' ),
-				'handler'  => array( $this, 'account_handler' ),
-				'priority' => 10
-			),
-		) );
+		$this->steps = (array) apply_filters(
+			'wpum_account_tabs', array(
+				'account' => array(
+					'name'     => esc_html__( 'Profile settings', 'wp-user-manager' ),
+					'view'     => array( $this, 'show_form' ),
+					'handler'  => array( $this, 'account_handler' ),
+					'priority' => 10,
+				),
+			)
+		);
 
 		uasort( $this->steps, array( $this, 'sort_by_priority' ) );
 
@@ -95,9 +99,11 @@ class WPUM_Form_Profile extends WPUM_Form {
 			return;
 		}
 
-		$this->fields = apply_filters( 'account_page_form_fields', array(
-			'account'  => $this->get_account_fields(),
-		) );
+		$this->fields = apply_filters(
+			'account_page_form_fields', array(
+				'account' => $this->get_account_fields(),
+			)
+		);
 
 	}
 
@@ -112,21 +118,20 @@ class WPUM_Form_Profile extends WPUM_Form {
 	 */
 	public function validate_nickname( $pass, $fields, $values, $form ) {
 
-		if( $form == $this->form_name && isset( $values['account']['user_nickname'] ) ) {
+		if ( $form == $this->form_name && isset( $values['account']['user_nickname'] ) ) {
 
 			global $wpdb;
 
 			$displayname = $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(ID) FROM $wpdb->users WHERE display_name = %s AND ID <> %d", $values['account']['user_displayname'], $this->user->ID ) );
 			$nickname    = $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(ID) FROM $wpdb->users as users, $wpdb->usermeta as meta WHERE users.ID = meta.user_id AND meta.meta_key = 'nickname' AND meta.meta_value = %s AND users.ID <> %d", $values['account']['user_nickname'], $this->user->ID ) );
 
-			if( $displayname == '1' ) {
+			if ( $displayname == '1' ) {
 				return new WP_Error( 'displayname-unique-validation-error', esc_html__( 'This display name is already in use by someone else. Display names must be unique.', 'wp-user-manager' ) );
 			}
 
-			if( $nickname == '1' ) {
+			if ( $nickname == '1' ) {
 				return new WP_Error( 'displayname-unique-validation-error', esc_html__( 'This nickname is already in use by someone else. Nicknames must be unique.', 'wp-user-manager' ) );
 			}
-
 		}
 
 		return $pass;
@@ -143,20 +148,22 @@ class WPUM_Form_Profile extends WPUM_Form {
 		$fields         = [];
 		$primary_group  = WPUM()->fields_groups->get_groups( [ 'primary' => true ] );
 		$primary_group  = $primary_group[0];
-		$account_fields = WPUM()->fields->get_fields( [
-			'group_id' => $primary_group->get_ID(),
-			'orderby'  => 'field_order',
-			'order'    => 'ASC'
-		] );
+		$account_fields = WPUM()->fields->get_fields(
+			[
+				'group_id' => $primary_group->get_ID(),
+				'orderby'  => 'field_order',
+				'order'    => 'ASC',
+			]
+		);
 
 		foreach ( $account_fields as $field ) {
 
 			$field = new WPUM_Field( $field );
 
-			if( $field->exists() && $field->get_meta( 'editing' ) == 'public' && $field->get_primary_id() !== 'user_password' ) {
+			if ( $field->exists() && $field->get_meta( 'editing' ) == 'public' && $field->get_primary_id() !== 'user_password' ) {
 
 				// Skip the avatar field if disabled.
-				if( $field->get_primary_id() == 'user_avatar' && ! wpum_get_option( 'custom_avatars' ) ) {
+				if ( $field->get_primary_id() == 'user_avatar' && ! wpum_get_option( 'custom_avatars' ) ) {
 					continue;
 				}
 
@@ -171,7 +178,6 @@ class WPUM_Form_Profile extends WPUM_Form {
 					'priority'    => 0,
 				);
 			}
-
 		}
 
 		return $fields;
@@ -188,7 +194,7 @@ class WPUM_Form_Profile extends WPUM_Form {
 
 		$value = false;
 
-		if( ! empty( $field->get_primary_id() ) ) {
+		if ( ! empty( $field->get_primary_id() ) ) {
 
 			switch ( $field->get_primary_id() ) {
 				case 'user_firstname':
@@ -220,7 +226,6 @@ class WPUM_Form_Profile extends WPUM_Form {
 					$value = carbon_get_user_meta( $this->user->ID, 'user_cover' );
 					break;
 			}
-
 		} else {
 
 			$value = esc_html( get_user_meta( $this->user->ID, $field->get_meta( 'user_meta_key' ), true ) );
@@ -245,7 +250,7 @@ class WPUM_Form_Profile extends WPUM_Form {
 			'action'    => $this->get_action(),
 			'fields'    => $this->get_fields( 'account' ),
 			'step'      => $this->get_step(),
-			'step_name' => $this->steps[ $this->get_step_key( $this->get_step() ) ]['name']
+			'step_name' => $this->steps[ $this->get_step_key( $this->get_step() ) ]['name'],
 		];
 
 		WPUM()->templates
@@ -267,7 +272,7 @@ class WPUM_Form_Profile extends WPUM_Form {
 
 			$values = $this->get_posted_fields();
 
-			if( ! wp_verify_nonce( $_POST['account_update_nonce' ], 'verify_account_form' ) ) {
+			if ( ! wp_verify_nonce( $_POST['account_update_nonce'], 'verify_account_form' ) ) {
 				return;
 			}
 
@@ -281,53 +286,55 @@ class WPUM_Form_Profile extends WPUM_Form {
 
 			// Collect all the data to update the user.
 			$user_data = [
-				'ID' => $this->user->ID
+				'ID' => $this->user->ID,
 			];
 
+			do_action( 'wpum_before_user_update', $this, $values, $this->user->ID );
+
 			// Update first name and last name.
-			if( isset( $values['account']['user_firstname'] ) ) {
-				$user_data[ 'first_name' ] = $values['account']['user_firstname'];
+			if ( isset( $values['account']['user_firstname'] ) ) {
+				$user_data['first_name'] = $values['account']['user_firstname'];
 			}
-			if( isset( $values['account']['user_lastname'] ) ) {
-				$user_data[ 'last_name' ] = $values['account']['user_lastname'];
+			if ( isset( $values['account']['user_lastname'] ) ) {
+				$user_data['last_name'] = $values['account']['user_lastname'];
 			}
 
 			// Update email address.
-			if( isset( $values['account']['user_email'] ) ) {
-				$user_data[ 'user_email' ] = $values['account']['user_email'];
+			if ( isset( $values['account']['user_email'] ) ) {
+				$user_data['user_email'] = $values['account']['user_email'];
 			}
 
 			// Update nickname.
-			if( isset( $values['account']['user_nickname'] ) ) {
-				$user_data[ 'nickname' ] = $values['account']['user_nickname'];
+			if ( isset( $values['account']['user_nickname'] ) ) {
+				$user_data['nickname'] = $values['account']['user_nickname'];
 			}
 
 			// Update website.
-			if( isset( $values['account']['user_website'] ) ) {
-				$user_data[ 'user_url' ] = $values['account']['user_website'];
+			if ( isset( $values['account']['user_website'] ) ) {
+				$user_data['user_url'] = $values['account']['user_website'];
 			}
 
 			// Update description.
-			if( isset( $values['account']['user_description'] ) ) {
-				$user_data[ 'description' ] = $values['account']['user_description'];
+			if ( isset( $values['account']['user_description'] ) ) {
+				$user_data['description'] = $values['account']['user_description'];
 			}
 
 			// Update displayed name.
-			if( isset( $values['account']['user_displayname'] ) ) {
-				$user_data[ 'display_name' ] = $this->parse_displayname( $values['account'], $values['account']['user_displayname'] );
+			if ( isset( $values['account']['user_displayname'] ) ) {
+				$user_data['display_name'] = $this->parse_displayname( $values['account'], $values['account']['user_displayname'] );
 			}
 
 			// Now update the user.
 			$updated_user_id = wp_update_user( $user_data );
 
-			if( is_wp_error( $updated_user_id ) ) {
+			if ( is_wp_error( $updated_user_id ) ) {
 				throw new Exception( $updated_user_id->get_error_message() );
 			}
 
 			// Now update the avatar for the user and delete the previous one if it exists.
-			if( wpum_get_option( 'custom_avatars' ) && isset( $values['account']['user_avatar']['url'] ) ) {
+			if ( wpum_get_option( 'custom_avatars' ) && isset( $values['account']['user_avatar']['url'] ) ) {
 				$previous_avatar = get_user_meta( $updated_user_id, '_current_user_avatar_path', true );
-				if( ! empty( $previous_avatar ) && file_exists( $previous_avatar ) ) {
+				if ( ! empty( $previous_avatar ) && file_exists( $previous_avatar ) ) {
 					wp_delete_file( $previous_avatar );
 				}
 				carbon_set_user_meta( $updated_user_id, 'current_user_avatar', $values['account']['user_avatar']['url'] );
@@ -335,9 +342,9 @@ class WPUM_Form_Profile extends WPUM_Form {
 			}
 
 			// Update cover image if available and delete the previous one if it exists.
-			if( isset( $values['account']['user_cover']['url'] ) ) {
+			if ( isset( $values['account']['user_cover']['url'] ) ) {
 				$previous_cover = get_user_meta( $updated_user_id, '_user_cover_path', true );
-				if( ! empty( $previous_cover ) && file_exists( $previous_cover ) ) {
+				if ( ! empty( $previous_cover ) && file_exists( $previous_cover ) ) {
 					wp_delete_file( $previous_cover );
 				}
 				carbon_set_user_meta( $updated_user_id, 'user_cover', $values['account']['user_cover']['url'] );
@@ -345,13 +352,13 @@ class WPUM_Form_Profile extends WPUM_Form {
 			}
 
 			// This means the user has deleted his avatar so we're going to erase the meta too.
-			if( isset( $values['account']['user_avatar'] ) && ! isset( $values['account']['user_avatar']['url'] ) ) {
+			if ( isset( $values['account']['user_avatar'] ) && ! isset( $values['account']['user_avatar']['url'] ) ) {
 				delete_user_meta( $updated_user_id, 'current_user_avatar' );
 				delete_user_meta( $updated_user_id, '_current_user_avatar_path' );
 			}
 
 			// This means the user has deleted his cover so we're going to erase the meta too.
-			if( isset( $values['account']['user_cover'] ) && ! isset( $values['account']['user_cover']['url'] ) ) {
+			if ( isset( $values['account']['user_cover'] ) && ! isset( $values['account']['user_cover']['url'] ) ) {
 				delete_user_meta( $updated_user_id, 'user_cover' );
 				delete_user_meta( $updated_user_id, '_user_cover_path' );
 			}
@@ -360,9 +367,11 @@ class WPUM_Form_Profile extends WPUM_Form {
 
 			// Successful, the success message now.
 			$redirect = get_permalink();
-			$redirect = add_query_arg( [
-				'updated' => 'success'
-			], $redirect );
+			$redirect = add_query_arg(
+				[
+					'updated' => 'success',
+				], $redirect
+			);
 
 			wp_safe_redirect( $redirect );
 			exit;
