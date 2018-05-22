@@ -20,8 +20,24 @@
 				<!-- error message if any -->
 				<wp-notice type="error" alternative v-if="error"><strong>{{errorMessage}}</strong></wp-notice>
 				<!-- end error message -->
-
 				<vue-form-generator v-if="!loadingFields" :schema="schema" :model="model" :options="formOptions" ref="vfg"></vue-form-generator>
+
+				<!-- Dropdown options generator -->
+				<div class="vue-form-generator" v-if="activeTab == 'general' && !loadingFields && needsOptions( field_type )">
+					<div class="form-group field-input">
+						<label for="placeholder">{{labels.field_options}}</label>
+						<div class="field-wrap">
+							<div class="wrapper">
+								<div class="dropdown-option" v-for="option in dropdownOptions" :key="option.value">
+									<label for="">{{labels.field_option_label}}</label>
+									<input type="text" name="option[label][]" :value="option.label">
+								</div>
+								<input type="button" :value="labels.field_add_option" class="button" @click="addOption">
+							</div>
+						</div>
+					</div>
+				</div>
+				<!-- end dropdown options generator -->
 
 			</div>
 			<div class="media-frame-toolbar">
@@ -42,6 +58,7 @@ import qs from 'qs'
 import VueFormGenerator from 'vue-form-generator'
 import lodashRemove from 'lodash.remove'
 import lodashIncludes from 'lodash.includes'
+import optionsInput from '../settings/options'
 
 export default {
 	name: 'dialog-edit-field',
@@ -81,7 +98,14 @@ export default {
 			formOptions: {
 				validateAfterLoad: true,
 				validateAfterChanged: true
-			}
+			},
+
+			dropdownOptions: [
+				{
+					value: '',
+					label: ''
+				}
+			]
 
 		}
 	},
@@ -226,6 +250,19 @@ export default {
 
 			}
 
+		},
+		/**
+		 * Verify if the field needs an options generator.
+		 */
+		needsOptions( field_type ) {
+			const allowedTypes = [ 'dropdown', 'multiselect', 'checkboxes', 'radio' ]
+			return ( allowedTypes.indexOf( field_type ) > -1 )
+		},
+		/**
+		 * Add a new option to the options generator.
+		 */
+		addOption() {
+      		this.dropdownOptions.push( { value: null, label: null } )
 		}
 	}
 }

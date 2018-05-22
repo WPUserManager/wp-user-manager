@@ -181,6 +181,10 @@ class WPUM_Fields_Editor {
 			'error_general'             => esc_html__( 'Something went wrong, no changes were saved.', 'wp-user-manager' ),
 			'registration_info'         => esc_html__( 'To display this field during signup, select one or more registration forms below.', 'wp-user-manager' ),
 			'registration_label'        => esc_html__( 'Available registration forms', 'wp-user-manager' ),
+			'field_options'             => esc_html__( 'Field options' ),
+			'field_add_option'          => esc_html__( 'Add option' ),
+			'field_option_label'        => esc_html__( 'Option label' ),
+			'field_option_value'        => esc_html__( 'Option value' ),
 		];
 
 	}
