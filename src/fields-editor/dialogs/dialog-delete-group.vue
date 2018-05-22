@@ -58,7 +58,7 @@ export default {
 			)
 			.then( response => {
 				this.loading = false
-				this.updateStatus('success')
+				this.updateStatus('success', response )
 				this.$emit('close')
 			})
 			.catch( error => {

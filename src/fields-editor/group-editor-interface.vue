@@ -196,8 +196,9 @@ export default {
 					if( status == 'error' ) {
 						this.showError(id_or_message)
 					} else {
+						console.log( id_or_message )
 						removeGroupByID(this.groups, {
-							id: id_or_message
+							id: id_or_message.data.data
 						})
 						this.showSuccess()
 					}
