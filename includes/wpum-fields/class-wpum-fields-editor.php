@@ -89,19 +89,20 @@ class WPUM_Fields_Editor {
 			wp_enqueue_style( 'wpum-fields-editor', WPUM_PLUGIN_URL . 'assets/css/admin/fields-editor.css' , array(), WPUM_VERSION );
 
 			$js_variables = [
-				'is_addon_installed' => apply_filters( 'wpum_fields_editor_has_custom_fields_addon', false ),
-				'page_title'         => esc_html__( 'WP User Manager Fields Editor', 'wp-user-manager' ),
-				'success_message'    => esc_html__( 'Changes successfully saved.', 'wp-user-manager' ),
-				'labels'             => $this->get_labels(),
-				'groups'             => $this->get_groups(),
-				'ajax'               => admin_url( 'admin-ajax.php' ),
-				'pluginURL'          => WPUM_PLUGIN_URL,
-				'nonce'              => wp_create_nonce( 'wpum_update_fields_groups' ),
-				'get_fields_nonce'   => wp_create_nonce( 'wpum_get_fields' ),
-				'create_field_nonce' => wp_create_nonce( 'wpum_create_field' ),
-				'cf_addon_url'       => 'https://wpusermanager.com/addons/custom-fields/?ref=wp_admin',
-				'fields_types'       => wpum_get_registered_field_types(),
-				'edit_dialog_tabs'   => wpum_get_edit_field_dialog_tabs()
+				'is_addon_installed'        => apply_filters( 'wpum_fields_editor_has_custom_fields_addon', false ),
+				'page_title'                => esc_html__( 'WP User Manager Fields Editor', 'wp-user-manager' ),
+				'success_message'           => esc_html__( 'Changes successfully saved.', 'wp-user-manager' ),
+				'labels'                    => $this->get_labels(),
+				'groups'                    => $this->get_groups(),
+				'ajax'                      => admin_url( 'admin-ajax.php' ),
+				'pluginURL'                 => WPUM_PLUGIN_URL,
+				'nonce'                     => wp_create_nonce( 'wpum_update_fields_groups' ),
+				'delete_fields_group_nonce' => wp_create_nonce( 'wpum_delete_fields_groups' ),
+				'get_fields_nonce'          => wp_create_nonce( 'wpum_get_fields' ),
+				'create_field_nonce'        => wp_create_nonce( 'wpum_create_field' ),
+				'cf_addon_url'              => 'https://wpusermanager.com/addons/custom-fields/?ref=wp_admin',
+				'fields_types'              => wpum_get_registered_field_types(),
+				'edit_dialog_tabs'          => wpum_get_edit_field_dialog_tabs()
 			];
 
 			wp_localize_script( 'wpum-fields-editor', 'wpumFieldsEditor', $js_variables );
