@@ -267,7 +267,7 @@ export default {
 						this.showError(id_or_message)
 					} else {
 						removeFieldByID(this.fields, {
-							id: id_or_message.data.data.field_id
+							id: id_or_message
 						})
 						this.showSuccess()
 					}
