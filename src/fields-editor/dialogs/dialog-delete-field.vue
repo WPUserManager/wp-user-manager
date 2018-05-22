@@ -49,7 +49,7 @@ export default {
 
 			axios.post( wpumFieldsEditor.ajax,
 				qs.stringify({
-					nonce: wpumFieldsEditor.nonce,
+					nonce: wpumFieldsEditor.delete_field_nonce,
 					field_id: this.field_id
 				}),
 				{

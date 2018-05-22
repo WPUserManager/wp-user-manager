@@ -102,6 +102,7 @@ class WPUM_Fields_Editor {
 				'delete_fields_group_nonce' => wp_create_nonce( 'wpum_delete_fields_groups' ),
 				'get_fields_nonce'          => wp_create_nonce( 'wpum_get_fields' ),
 				'create_field_nonce'        => wp_create_nonce( 'wpum_create_field' ),
+				'delete_field_nonce'        => wp_create_nonce( 'wpum_delete_field' ),
 				'cf_addon_url'              => 'https://wpusermanager.com/addons/custom-fields/?ref=wp_admin',
 				'fields_types'              => wpum_get_registered_field_types(),
 				'edit_dialog_tabs'          => wpum_get_edit_field_dialog_tabs(),
