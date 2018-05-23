@@ -503,15 +503,18 @@ abstract class WPUM_Form {
 	 *
 	 * @param string $name
 	 * @param string $nicename
+	 * @param object $field
 	 * @return void
 	 */
-	protected function get_parsed_id( $name, $nicename ) {
+	protected function get_parsed_id( $name, $nicename, $field ) {
 
-		if( ! empty( $nicename ) ) {
-			return str_replace(' ', '_', strtolower( $nicename ) );
+		if ( ! empty( $nicename ) ) {
+			return str_replace( ' ', '_', strtolower( $nicename ) );
+		} elseif ( empty( $nicename ) && $field->get_meta( 'user_meta_key' ) ) {
+			return $field->get_meta( 'user_meta_key' );
 		}
 
-		return str_replace(' ', '_', strtolower( $name ) );
+		return str_replace( ' ', '_', strtolower( $name ) );
 	}
 
 	/**

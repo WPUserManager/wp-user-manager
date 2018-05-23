@@ -222,19 +222,19 @@ class WPUM_Form_Registration extends WPUM_Form {
 		$fields = [];
 		$registration_form = $this->get_registration_form();
 
-		if( $registration_form->exists() ) {
+		if ( $registration_form->exists() ) {
 
 			$this->role    = $registration_form->get_meta( 'role' );
 
 			$stored_fields = $registration_form->get_meta( 'fields' );
 
-			if( is_array( $stored_fields ) && ! empty( $stored_fields ) ) {
+			if ( is_array( $stored_fields ) && ! empty( $stored_fields ) ) {
 				foreach ( $stored_fields as $field ) {
 
 					$field = new WPUM_Field( $field );
 
-					if( $field->exists() ) {
-						$fields[ $this->get_parsed_id( $field->get_name(), $field->get_primary_id() ) ] = array(
+					if ( $field->exists() ) {
+						$fields[ $this->get_parsed_id( $field->get_name(), $field->get_primary_id(), $field ) ] = array(
 							'label'       => $field->get_name(),
 							'type'        => $field->get_type(),
 							'required'    => $field->get_meta( 'required' ),
