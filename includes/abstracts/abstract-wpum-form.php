@@ -78,6 +78,16 @@ abstract class WPUM_Form {
 	}
 
 	/**
+	 * Set properties of the class.
+	 *
+	 * @param string $key
+	 * @param mixed $value
+	 */
+	public function __set( $key, $value ) {
+		$this->$key = $value;
+	}
+
+	/**
 	 * Process the form.
 	 *
 	 * @return void
