@@ -164,6 +164,12 @@ export default {
 			this.loadingFields = true
 			this.error         = false
 			this.schema.fields = []
+			this.dropdownOptions = [
+				{
+					value: '',
+					label: ''
+				}
+			]
 
 			// Make a call via ajax.
 			axios.post( wpumFieldsEditor.ajax,
@@ -186,8 +192,9 @@ export default {
 				} else {
 
 					// Load the setting fields into the app.
-					this.schema.fields = response.data.data.settings
-					this.model         = response.data.data.model
+					this.schema.fields   = response.data.data.settings
+					this.model           = response.data.data.model
+					this.dropdownOptions = response.data.data.dropdownOptions
 
 				}
 			})

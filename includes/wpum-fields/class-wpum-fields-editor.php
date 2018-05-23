@@ -415,15 +415,17 @@ class WPUM_Fields_Editor {
 			}
 
 			// Deregister some settings from the editor.
-			$wpum_field = new WPUM_Field( $wpum_field_id );
-			$settings   = $this->deregister_settings( $settings, $wpum_field->get_primary_id() );
-			$model      = $this->deregister_model( $model, $wpum_field->get_primary_id() );
+			$wpum_field       = new WPUM_Field( $wpum_field_id );
+			$settings         = $this->deregister_settings( $settings, $wpum_field->get_primary_id() );
+			$model            = $this->deregister_model( $model, $wpum_field->get_primary_id() );
+			$dropdown_options = $wpum_field->get_meta( 'dropdown_options' );
 
 			// Now send data to vuejs.
 			wp_send_json_success(
 				[
-					'settings' => $settings,
-					'model'    => (object) $model,
+					'settings'        => $settings,
+					'model'           => (object) $model,
+					'dropdownOptions' => (array) $dropdown_options,
 				]
 			);
 
