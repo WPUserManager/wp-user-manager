@@ -595,8 +595,6 @@ abstract class WPUM_Form {
 
 		$allowed_types = [ 'dropdown', 'multiselect', 'radio', 'multicheckbox' ];
 
-		echo $field->get_type();
-
 		if ( in_array( $field->get_type(), $allowed_types ) ) {
 			$stored_options = $field->get_meta( 'dropdown_options' );
 			if ( ! empty( $stored_options ) && is_array( $stored_options ) ) {
