@@ -309,7 +309,7 @@ class WPUM_Field {
 		$registered_types = wpum_get_registered_field_types_names();
 		$type_name        = '';
 
-		if( array_key_exists( $type, $registered_types ) ) {
+		if ( array_key_exists( $type, $registered_types ) ) {
 			$type_name = $registered_types[ $type ];
 		} else {
 
