@@ -574,8 +574,8 @@ function wpum_get_account_page_tabs() {
 		],
 		'logout'   => [
 			'name'     => esc_html__( 'Logout', 'wp-user-manager' ),
-			'priority' => 0
-		]
+			'priority' => 999,
+		],
 	];
 
 	$tabs = apply_filters( 'wpum_get_account_page_tabs', $tabs );
