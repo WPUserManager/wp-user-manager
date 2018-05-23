@@ -258,10 +258,11 @@ export default {
 				// Make a call via ajax.
 				axios.post( wpumFieldsEditor.ajax,
 					qs.stringify({
-						nonce:    wpumFieldsEditor.get_fields_nonce,
-						field_id: this.field_id,
-						data:     this.model,
-						settings: this.schema.fields
+						nonce:           wpumFieldsEditor.get_fields_nonce,
+						field_id:        this.field_id,
+						data:            this.model,
+						settings:        this.schema.fields,
+						dropdownOptions: this.dropdownOptions
 					}),
 					{
 						params: {

@@ -566,10 +566,11 @@ class WPUM_Fields_Editor {
 			wp_send_json_error( null, 403 );
 		}
 
-		$field_id        = isset( $_POST['field_id'] ) ? absint( $_POST['field_id'] ) : false;
-		$data            = isset( $_POST['data'] ) ? $_POST['data'] : false;
-		$setting_fields  = isset( $_POST['settings'] ) ? $_POST['settings'] : false;
-		$field_to_update = new WPUM_Field( $field_id );
+		$field_id         = isset( $_POST['field_id'] ) ? absint( $_POST['field_id'] ) : false;
+		$data             = isset( $_POST['data'] ) ? $_POST['data'] : false;
+		$setting_fields   = isset( $_POST['settings'] ) ? $_POST['settings'] : false;
+		$dropdown_options = isset( $_POST['dropdownOptions'] ) ? $_POST['dropdownOptions'] : false;
+		$field_to_update  = new WPUM_Field( $field_id );
 
 		if ( $field_to_update->exists() ) {
 			foreach ( $data as $setting_id => $setting_data ) {
@@ -618,6 +619,10 @@ class WPUM_Fields_Editor {
 						}
 					}
 				}
+			}
+
+			if ( is_array( $dropdown_options ) && ! empty( $dropdown_options ) ) {
+				$field_to_update->update_meta( 'dropdown_options', $dropdown_options );
 			}
 
 			wp_send_json_success( $data );
