@@ -579,4 +579,35 @@ abstract class WPUM_Form {
 
 	}
 
+	/**
+	 * Retrieve stored dropdown options from the db.
+	 *
+	 * @param object $field
+	 * @return void
+	 */
+	protected function get_custom_field_dropdown_options( $field ) {
+
+		if ( $field->is_primary() ) {
+			return;
+		}
+
+		$options = [];
+
+		$allowed_types = [ 'dropdown', 'multiselect', 'radio', 'multicheckbox' ];
+
+		echo $field->get_type();
+
+		if ( in_array( $field->get_type(), $allowed_types ) ) {
+			$stored_options = $field->get_meta( 'dropdown_options' );
+			if ( ! empty( $stored_options ) && is_array( $stored_options ) ) {
+				foreach ( $stored_options as $option ) {
+					$options[ $option['value'] ] = $option['label'];
+				}
+			}
+		}
+
+		return $options;
+
+	}
+
 }

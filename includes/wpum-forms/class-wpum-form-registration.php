@@ -8,7 +8,9 @@
 */
 
 // Exit if accessed directly
-if ( ! defined( 'ABSPATH' ) ) exit;
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 
 class WPUM_Form_Registration extends WPUM_Form {
 
@@ -66,20 +68,22 @@ class WPUM_Form_Registration extends WPUM_Form {
 			add_filter( 'submit_wpum_form_validate_fields', [ $this, 'validate_role' ], 10, 4 );
 		}
 
-		$this->steps  = (array) apply_filters( 'registration_steps', array(
-			'submit' => array(
-				'name'     => esc_html__( 'Registration Details', 'wp-user-manager' ),
-				'view'     => array( $this, 'submit' ),
-				'handler'  => array( $this, 'submit_handler' ),
-				'priority' => 10
-			),
-			'done' => array(
-				'name'     => false,
-				'view'     => false,
-				'handler'  => array( $this, 'done' ),
-				'priority' => 30
+		$this->steps = (array) apply_filters(
+			'registration_steps', array(
+				'submit' => array(
+					'name'     => esc_html__( 'Registration Details', 'wp-user-manager' ),
+					'view'     => array( $this, 'submit' ),
+					'handler'  => array( $this, 'submit_handler' ),
+					'priority' => 10,
+				),
+				'done'   => array(
+					'name'     => false,
+					'view'     => false,
+					'handler'  => array( $this, 'done' ),
+					'priority' => 30,
+				),
 			)
-		) );
+		);
 
 		uasort( $this->steps, array( $this, 'sort_by_priority' ) );
 
@@ -102,17 +106,16 @@ class WPUM_Form_Registration extends WPUM_Form {
 	 */
 	public function validate_password( $pass, $fields, $values, $form ) {
 
-		if( $form == $this->form_name && isset( $values['register']['user_password'] ) ) {
+		if ( $form == $this->form_name && isset( $values['register']['user_password'] ) ) {
 
 			$password_1      = $values['register']['user_password'];
-			$containsLetter  = preg_match('/[A-Z]/', $password_1 );
-			$containsDigit   = preg_match('/\d/', $password_1 );
-			$containsSpecial = preg_match('/[^a-zA-Z\d]/', $password_1 );
+			$containsLetter  = preg_match( '/[A-Z]/', $password_1 );
+			$containsDigit   = preg_match( '/\d/', $password_1 );
+			$containsSpecial = preg_match( '/[^a-zA-Z\d]/', $password_1 );
 
-			if( ! $containsLetter || ! $containsDigit || ! $containsSpecial || strlen( $password_1 ) < 8 ) {
+			if ( ! $containsLetter || ! $containsDigit || ! $containsSpecial || strlen( $password_1 ) < 8 ) {
 				return new WP_Error( 'password-validation-error', esc_html__( 'Password must be at least 8 characters long and contain at least 1 number, 1 uppercase letter and 1 special character.', 'wp-user-manager' ) );
 			}
-
 		}
 
 		return $pass;
@@ -130,8 +133,8 @@ class WPUM_Form_Registration extends WPUM_Form {
 	 */
 	public function validate_username( $pass, $fields, $values, $form ) {
 
-		if( $form == $this->form_name && isset( $values['register']['username'] ) ) {
-			if( wpum_get_option('exclude_usernames') && array_key_exists( $values['register']['username'] , wpum_get_disabled_usernames() ) ) {
+		if ( $form == $this->form_name && isset( $values['register']['username'] ) ) {
+			if ( wpum_get_option( 'exclude_usernames' ) && array_key_exists( $values['register']['username'], wpum_get_disabled_usernames() ) ) {
 				return new WP_Error( 'nickname-validation-error', __( 'This username cannot be used.', 'wp-user-manager' ) );
 			}
 		}
@@ -151,8 +154,8 @@ class WPUM_Form_Registration extends WPUM_Form {
 	 */
 	public function validate_honeypot( $pass, $fields, $values, $form ) {
 
-		if( $form == $this->form_name && isset( $values['register']['robo'] ) ) {
-			if( ! empty( $values['register']['robo'] ) ) {
+		if ( $form == $this->form_name && isset( $values['register']['robo'] ) ) {
+			if ( ! empty( $values['register']['robo'] ) ) {
 				return new WP_Error( 'honeypot-validation-error', esc_html__( 'Failed honeypot validation.', 'wp-user-manager' ) );
 			}
 		}
@@ -172,14 +175,13 @@ class WPUM_Form_Registration extends WPUM_Form {
 	 */
 	public function validate_role( $pass, $fields, $values, $form ) {
 
-		if( $form == $this->form_name && isset( $values['register']['role'] ) ) {
+		if ( $form == $this->form_name && isset( $values['register']['role'] ) ) {
 
-			$role_field     = $values['register'][ 'role' ];
+			$role_field     = $values['register']['role'];
 			$selected_roles = array_flip( wpum_get_option( 'register_roles' ) );
-			if( ! array_key_exists( $role_field , $selected_roles ) ) {
+			if ( ! array_key_exists( $role_field, $selected_roles ) ) {
 				return new WP_Error( 'role-validation-error', __( 'Select a valid role from the list.', 'wp-user-manager' ) );
 			}
-
 		}
 
 		return $pass;
@@ -219,13 +221,12 @@ class WPUM_Form_Registration extends WPUM_Form {
 	 */
 	private function get_registration_fields() {
 
-		$fields = [];
+		$fields            = [];
 		$registration_form = $this->get_registration_form();
 
 		if ( $registration_form->exists() ) {
 
 			$this->role    = $registration_form->get_meta( 'role' );
-
 			$stored_fields = $registration_form->get_meta( 'fields' );
 
 			if ( is_array( $stored_fields ) && ! empty( $stored_fields ) ) {
@@ -241,24 +242,24 @@ class WPUM_Form_Registration extends WPUM_Form {
 							'placeholder' => $field->get_meta( 'placeholder' ),
 							'description' => $field->get_description(),
 							'priority'    => 0,
-							'primary_id'  => $field->get_primary_id()
+							'primary_id'  => $field->get_primary_id(),
+							'options'     => $this->get_custom_field_dropdown_options( $field ),
 						);
 					}
-
 				}
 			}
 
 			// Add honeypot validation field.
 			$fields['robo'] = [
-				'label'       => esc_html__( 'If you\'re human leave this blank:', 'wp-user-manager' ),
-				'type'        => 'text',
-				'required'    => false,
-				'priority'    => 0,
+				'label'    => esc_html__( 'If you\'re human leave this blank:', 'wp-user-manager' ),
+				'type'     => 'text',
+				'required' => false,
+				'priority' => 0,
 			];
 
 			// Add privacy policy checkbox if enabled in WP.
-			if( get_option( 'wp_page_for_privacy_policy' ) ) {
-				$fields[ 'privacy' ] = array(
+			if ( get_option( 'wp_page_for_privacy_policy' ) ) {
+				$fields['privacy'] = array(
 					'label'       => false,
 					'type'        => 'checkbox',
 					'description' => apply_filters( 'wpum_privacy_text', sprintf( __( 'I have read and accept the <a href="%s" target="_blank">privacy policy</a>.', 'wp-user-manager' ), get_permalink( get_option( 'wp_page_for_privacy_policy' ) ) ) ),
@@ -268,9 +269,9 @@ class WPUM_Form_Registration extends WPUM_Form {
 			}
 
 			// Add a terms field is enabled.
-			if( wpum_get_option( 'enable_terms' ) ) {
-				$terms_page = wpum_get_option( 'terms_page' );
-				$fields[ 'terms' ] = array(
+			if ( wpum_get_option( 'enable_terms' ) ) {
+				$terms_page      = wpum_get_option( 'terms_page' );
+				$fields['terms'] = array(
 					'label'       => false,
 					'type'        => 'checkbox',
 					'description' => apply_filters( 'wpum_terms_text', sprintf( __( 'By registering to this website you agree to the <a href="%s" target="_blank">terms &amp; conditions</a>.', 'wp-user-manager' ), get_permalink( $terms_page[0] ) ) ),
@@ -279,18 +280,17 @@ class WPUM_Form_Registration extends WPUM_Form {
 				);
 			}
 
-			if( wpum_get_option( 'allow_role_select' ) ) {
-				$fields[ 'role' ] = array(
-					'label'       => __('Select Role', 'wp-user-manager'),
+			if ( wpum_get_option( 'allow_role_select' ) ) {
+				$fields['role'] = array(
+					'label'       => __( 'Select Role', 'wp-user-manager' ),
 					'type'        => 'select',
 					'required'    => true,
 					'options'     => wpum_get_allowed_user_roles(),
 					'description' => __( 'Select your user role', 'wp-user-manager' ),
 					'priority'    => 9998,
-					'value'       => get_option( 'default_role' )
+					'value'       => get_option( 'default_role' ),
 				);
 			}
-
 		}
 
 		return apply_filters( 'wpum_get_registration_fields', $fields );
@@ -314,14 +314,14 @@ class WPUM_Form_Registration extends WPUM_Form {
 
 		$registered_fields = $this->get_fields( 'register' );
 
-		if( is_array( $registered_fields ) && ! empty( $registered_fields ) ) {
+		if ( is_array( $registered_fields ) && ! empty( $registered_fields ) ) {
 			// Bail if no email field.
-			if( ! isset( $registered_fields['user_email'] ) ) {
+			if ( ! isset( $registered_fields['user_email'] ) ) {
 				return false;
 			}
-			if( isset( $registered_fields['username'] ) ) {
+			if ( isset( $registered_fields['username'] ) ) {
 				$by = 'username';
-			} else if( isset( $registered_fields['user_email'] ) ) {
+			} elseif ( isset( $registered_fields['user_email'] ) ) {
 				$by = 'email';
 			}
 		}
@@ -342,13 +342,13 @@ class WPUM_Form_Registration extends WPUM_Form {
 		$register_with = $this->get_register_by();
 
 		$data = [
-			'form'    => $this->form_name,
-			'action'  => $this->get_action(),
-			'fields'  => $this->get_fields( 'register' ),
-			'step'    => $this->get_step(),
+			'form'   => $this->form_name,
+			'action' => $this->get_action(),
+			'fields' => $this->get_fields( 'register' ),
+			'step'   => $this->get_step(),
 		];
 
-		if( $register_with ) {
+		if ( $register_with ) {
 
 			WPUM()->templates
 				->set_template_data( $data )
@@ -381,7 +381,7 @@ class WPUM_Form_Registration extends WPUM_Form {
 
 			$values = $this->get_posted_fields();
 
-			if( ! wp_verify_nonce( $_POST['registration_nonce'], 'verify_registration_form' ) ) {
+			if ( ! wp_verify_nonce( $_POST['registration_nonce'], 'verify_registration_form' ) ) {
 				return;
 			}
 
@@ -397,15 +397,15 @@ class WPUM_Form_Registration extends WPUM_Form {
 			$register_with = $this->get_register_by();
 			$username      = '';
 
-			if( $register_with == 'username' ) {
+			if ( $register_with == 'username' ) {
 				$username = $values['register']['username'];
-			} else if( $register_with == 'email' ) {
+			} elseif ( $register_with == 'email' ) {
 				$username = $values['register']['user_email'];
 			}
 
 			// Detect if we're going to generate a password or use the one provided by the guest.
 			$password = '';
-			if( isset( $values['register']['user_password'] ) && ! empty( $values['register']['user_password'] ) ) {
+			if ( isset( $values['register']['user_password'] ) && ! empty( $values['register']['user_password'] ) ) {
 				$password = $values['register']['user_password'];
 			} else {
 				$password = wp_generate_password( 24, true, true );
@@ -417,18 +417,20 @@ class WPUM_Form_Registration extends WPUM_Form {
 				throw new Exception( $new_user_id->get_error_message() );
 			}
 
-			$new_user_id = wp_update_user( [
-				'ID'          => $new_user_id,
-				'user_url'    => isset( $values['register']['user_website'] ) ? $values['register']['user_website']:     false,
-				'first_name'  => isset( $values['register']['user_firstname'] ) ? $values['register']['user_firstname']: false,
-				'last_name'   => isset( $values['register']['user_lastname'] ) ? $values['register']['user_lastname']:   false,
-				'description' => isset( $values['register']['user_description'] ) ? $values['register']['user_description']: false,
-			] );
+			$new_user_id = wp_update_user(
+				[
+					'ID'          => $new_user_id,
+					'user_url'    => isset( $values['register']['user_website'] ) ? $values['register']['user_website'] : false,
+					'first_name'  => isset( $values['register']['user_firstname'] ) ? $values['register']['user_firstname'] : false,
+					'last_name'   => isset( $values['register']['user_lastname'] ) ? $values['register']['user_lastname'] : false,
+					'description' => isset( $values['register']['user_description'] ) ? $values['register']['user_description'] : false,
+				]
+			);
 
 			// Assign the role set into the registration form.
-			if( wpum_get_option( 'allow_role_select' ) && isset( $values['register'][ 'role' ] ) ) {
+			if ( wpum_get_option( 'allow_role_select' ) && isset( $values['register']['role'] ) ) {
 				$user = new WP_User( $new_user_id );
-				$user->set_role( $values['register'][ 'role' ] );
+				$user->set_role( $values['register']['role'] );
 			} else {
 				$user = new WP_User( $new_user_id );
 				$user->set_role( $this->role );
@@ -468,7 +470,7 @@ class WPUM_Form_Registration extends WPUM_Form {
 
 		$redirect_page = wpum_get_option( 'registration_redirect' );
 
-		if( ! empty( $redirect_page ) && is_array( $redirect_page ) ) {
+		if ( ! empty( $redirect_page ) && is_array( $redirect_page ) ) {
 
 			$redirect_page = $redirect_page[0];
 			wp_safe_redirect( get_permalink( $redirect_page ) );
