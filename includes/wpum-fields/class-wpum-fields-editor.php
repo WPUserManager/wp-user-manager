@@ -425,7 +425,7 @@ class WPUM_Fields_Editor {
 				[
 					'settings'        => $settings,
 					'model'           => (object) $model,
-					'dropdownOptions' => (array) $dropdown_options,
+					'dropdownOptions' => ! empty( $dropdown_options ) && is_array( $dropdown_options ) ? (array) $dropdown_options : [],
 				]
 			);
 

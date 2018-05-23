@@ -29,7 +29,7 @@
 						<div class="field-wrap">
 							<div class="wrapper">
 								<draggable v-model="dropdownOptions" :options="{draggable:'.dragme', handle:'.option-sort', animation:150}">
-									<div class="dropdown-option dragme" v-for="(option, index) in dropdownOptions" :key="index">
+									<div class="dropdown-option dragme" v-for="(option, index) in dropdownOptions" :key="index" v-if="dropdownOptions.length > 0">
 										<div class="option-value wpum_one_fifth">
 											<span class="dashicons dashicons-move option-sort"></span>
 											<button type="button" class="button delete-btn" @click="deleteOption( index )"><span class="dashicons dashicons-trash"></span></button>
@@ -132,12 +132,7 @@ export default {
 				validateAfterChanged: true
 			},
 
-			dropdownOptions: [
-				{
-					value: '',
-					label: ''
-				}
-			]
+			dropdownOptions: []
 
 		}
 	},
@@ -164,12 +159,7 @@ export default {
 			this.loadingFields = true
 			this.error         = false
 			this.schema.fields = []
-			this.dropdownOptions = [
-				{
-					value: '',
-					label: ''
-				}
-			]
+			this.dropdownOptions = []
 
 			// Make a call via ajax.
 			axios.post( wpumFieldsEditor.ajax,
@@ -302,6 +292,9 @@ export default {
 		 * Add a new option to the options generator.
 		 */
 		addOption() {
+			if( ! this.dropdownOptions instanceof Array ) {
+				this.dropdownOptions = []
+			}
       		this.dropdownOptions.push( { value: null, label: null } )
 		},
 		/*
