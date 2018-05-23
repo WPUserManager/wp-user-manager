@@ -167,7 +167,7 @@ class WPUM_Form_Profile extends WPUM_Form {
 					continue;
 				}
 
-				$fields[ $this->get_parsed_id( $field->get_name(), $field->get_primary_id() ) ] = array(
+				$fields[ $this->get_parsed_id( $field->get_name(), $field->get_primary_id(), $field ) ] = array(
 					'label'       => $field->get_name(),
 					'type'        => $field->get_type(),
 					'required'    => $field->get_meta( 'required' ),

@@ -565,14 +565,12 @@ abstract class WPUM_Form {
 
 		$options = [];
 
-		if( ! empty( $field->get_primary_id() ) ) {
-
+		if ( ! empty( $field->get_primary_id() ) ) {
 			switch ( $field->get_primary_id() ) {
 				case 'user_displayname':
 					$options = $this->get_displayname_options( $user );
 					break;
 			}
-
 		}
 
 		return $options;
