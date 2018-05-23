@@ -8,7 +8,9 @@
  * @since       1.0.0
  */
 
-if ( ! defined( 'ABSPATH' ) ) exit;
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 
 /**
  * Delete cached list of pages when a page is updated or created.
@@ -19,8 +21,9 @@ if ( ! defined( 'ABSPATH' ) ) exit;
  */
 function wpum_delete_pages_transient( $post_id ) {
 
-	if ( wp_is_post_revision( $post_id ) )
+	if ( wp_is_post_revision( $post_id ) ) {
 		return;
+	}
 
 	delete_transient( 'wpum_get_pages' );
 
@@ -90,7 +93,7 @@ function wpum_remove_admin_bar() {
 	$excluded_roles = wpum_get_option( 'adminbar_roles' );
 	$user           = wp_get_current_user();
 
-	if( ! empty( $excluded_roles ) && is_user_logged_in() && in_array( $user->roles[0], $excluded_roles ) && ! is_admin() ) {
+	if ( ! empty( $excluded_roles ) && is_user_logged_in() && in_array( $user->roles[0], $excluded_roles ) && ! is_admin() ) {
 		if ( current_user_can( $user->roles[0] ) ) {
 			show_admin_bar( false );
 		}
@@ -108,7 +111,7 @@ function wpum_restrict_wp_registration() {
 
 	$registration_redirect = wpum_get_option( 'wp_login_signup_redirect' );
 
-	if( $registration_redirect ) {
+	if ( $registration_redirect ) {
 		wp_safe_redirect( esc_url( get_permalink( $registration_redirect[0] ) ) );
 		exit;
 	}
@@ -125,7 +128,7 @@ function wpum_restrict_wp_lostpassword() {
 
 	$password_redirect = wpum_get_option( 'wp_login_password_redirect' );
 
-	if( $password_redirect ) {
+	if ( $password_redirect ) {
 		wp_safe_redirect( esc_url( get_permalink( $password_redirect[0] ) ) );
 		exit;
 	}
@@ -159,9 +162,9 @@ function wpum_restrict_wplogin() {
 
 	global $pagenow;
 
-	if( 'wp-login.php' == $pagenow ) {
+	if ( 'wp-login.php' == $pagenow ) {
 		$login_page = wpum_get_core_page_id( 'login' );
-		if( $login_page && wpum_get_option( 'lock_wplogin' ) && ! isset( $_GET['action'] ) ) {
+		if ( $login_page && wpum_get_option( 'lock_wplogin' ) && ! isset( $_GET['action'] ) ) {
 			wp_safe_redirect( esc_url( get_permalink( $login_page ) ) );
 			exit;
 		}
@@ -178,12 +181,14 @@ add_action( 'init', 'wpum_restrict_wplogin' );
  */
 function wpum_restrict_account_page() {
 
-	if( is_page( wpum_get_core_page_id( 'account' ) ) && ! is_user_logged_in() ) {
+	if ( is_page( wpum_get_core_page_id( 'account' ) ) && ! is_user_logged_in() ) {
 
 		$redirect = get_permalink( wpum_get_core_page_id( 'login' ) );
-		$redirect = add_query_arg( [
-			'redirect_to' => get_permalink()
-		], $redirect );
+		$redirect = add_query_arg(
+			[
+				'redirect_to' => get_permalink(),
+			], $redirect
+		);
 
 		wp_safe_redirect( $redirect );
 		exit;
@@ -200,18 +205,20 @@ add_action( 'template_redirect', 'wpum_restrict_account_page' );
  */
 function wpum_display_account_page_content() {
 
-	$active_tab = get_query_var('tab');
+	$active_tab = get_query_var( 'tab' );
 	$tabs       = wpum_get_account_page_tabs();
 
-	if( empty( $active_tab ) ) {
+	if ( empty( $active_tab ) ) {
 		$active_tab = key( $tabs );
 	}
 
-	if( $active_tab == 'settings' || $active_tab == 'password' ) {
-		if( $active_tab == 'settings' ) {
+	if ( $active_tab == 'settings' || $active_tab == 'password' ) {
+		if ( $active_tab == 'settings' ) {
 			$active_tab = 'profile';
 		}
 		echo WPUM()->forms->get_form( $active_tab );
+	} elseif ( array_key_exists( 'group_id', $tabs[ $active_tab ] ) ) {
+		echo do_action( 'wpum_account_page_content_custom_fields', $tabs[ $active_tab ] );
 	} else {
 		do_action( 'wpum_account_page_content_' . $active_tab );
 	}
@@ -225,7 +232,7 @@ add_action( 'wpum_account_page_content', 'wpum_display_account_page_content' );
  * @return void
  */
 function wpum_when_profile_not_found() {
-	if( is_page( wpum_get_core_page_id( 'profile' ) ) && ! wpum_get_queried_user_id() ) {
+	if ( is_page( wpum_get_core_page_id( 'profile' ) ) && ! wpum_get_queried_user_id() ) {
 		global $wp_query;
 		$wp_query->set_404();
 		status_header( 404 );
@@ -245,14 +252,14 @@ function wpum_check_display_name( $user_id ) {
 	global $wpdb;
 
 	// Getting user data and user meta data.
-    $err['display'] = $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(ID) FROM $wpdb->users WHERE display_name = %s AND ID <> %d", $_POST['display_name'], $_POST['user_id'] ) );
-    $err['nick']    = $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(ID) FROM $wpdb->users as users, $wpdb->usermeta as meta WHERE users.ID = meta.user_id AND meta.meta_key = 'nickname' AND meta.meta_value = %s AND users.ID <> %d", $_POST['nickname'], $_POST['user_id'] ) );
+	$err['display'] = $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(ID) FROM $wpdb->users WHERE display_name = %s AND ID <> %d", $_POST['display_name'], $_POST['user_id'] ) );
+	$err['nick']    = $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(ID) FROM $wpdb->users as users, $wpdb->usermeta as meta WHERE users.ID = meta.user_id AND meta.meta_key = 'nickname' AND meta.meta_value = %s AND users.ID <> %d", $_POST['nickname'], $_POST['user_id'] ) );
 
-	foreach( $err as $key => $e ) {
-        if( $e >= 1 ) {
-            add_action( 'user_profile_update_errors', "wpum_check_{$key}_field", 10, 3 );
-        }
-    }
+	foreach ( $err as $key => $e ) {
+		if ( $e >= 1 ) {
+			add_action( 'user_profile_update_errors', "wpum_check_{$key}_field", 10, 3 );
+		}
+	}
 }
 add_action( 'personal_options_update', 'wpum_check_display_name' );
 add_action( 'edit_user_profile_update', 'wpum_check_display_name' );
@@ -283,8 +290,8 @@ function wpum_check_nick_field( $errors, $update, $user ) {
  * @return array              list of actions
  */
 function wpum_admin_user_action_link( $actions, $user_object ) {
-	if( wpum_get_core_page_id( 'profile' ) ) {
-		$actions['view_profile'] = '<a href="'. wpum_get_profile_url( $user_object ) .'" target="_blank">'. esc_html__( 'View Profile', 'wp-user-manager' ) .'</a>';
+	if ( wpum_get_core_page_id( 'profile' ) ) {
+		$actions['view_profile'] = '<a href="' . wpum_get_profile_url( $user_object ) . '" target="_blank">' . esc_html__( 'View Profile', 'wp-user-manager' ) . '</a>';
 	}
 	return $actions;
 }
@@ -299,7 +306,7 @@ function wpum_complete_setup() {
 
 	$is_setup_complete = get_option( 'wpum_setup_is_complete', false );
 
-	if( ! get_option( 'wpum_setup_is_complete' ) && ! get_option( 'wpum_version_upgraded_from' ) ) {
+	if ( ! get_option( 'wpum_setup_is_complete' ) && ! get_option( 'wpum_version_upgraded_from' ) ) {
 
 		wpum_install_default_field_group();
 
