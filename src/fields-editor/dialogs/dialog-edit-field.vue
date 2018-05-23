@@ -28,10 +28,21 @@
 						<label for="placeholder">{{labels.field_options}}</label>
 						<div class="field-wrap">
 							<div class="wrapper">
-								<div class="dropdown-option" v-for="option in dropdownOptions" :key="option.value">
-									<label for="">{{labels.field_option_label}}</label>
-									<input type="text" name="option[label][]" :value="option.label">
-								</div>
+								<draggable v-model="dropdownOptions" :options="{draggable:'.dragme', handle:'.option-sort', animation:150}">
+									<div class="dropdown-option dragme" v-for="(option, index) in dropdownOptions" :key="index">
+										<div class="option-value wpum_one_fifth">
+											<span class="dashicons dashicons-move option-sort"></span>
+											<button type="button" class="button delete-btn" @click="deleteOption( index )"><span class="dashicons dashicons-trash"></span></button>
+										</div>
+										<div class="option-label wpum_two_fifth">
+											<input type="text" :placeholder="labels.field_option_value" name="option[value][]" v-model="dropdownOptions[index].value">
+										</div>
+										<div class="option-label wpum_two_fifth last">
+											<input type="text" :placeholder="labels.field_option_label" name="option[label][]" v-model="dropdownOptions[index].label">
+										</div>
+										<div class="wpum_clearfix"></div>
+									</div>
+								</draggable>
 								<input type="button" :value="labels.field_add_option" class="button" @click="addOption">
 							</div>
 						</div>
@@ -52,13 +63,33 @@
 	</div>
 </template>
 
+<style lang="scss" scoped>
+	.dropdown-option {
+		margin-bottom: 10px;
+		.button {
+			&.delete-btn {
+				color: red;
+			}
+			span {
+				margin-top: 2px;
+			}
+		}
+		.option-sort {
+			margin-top: 5px;
+			margin-right: 10px;
+		}
+	}
+</style>
+
 <script>
 import axios from 'axios'
 import qs from 'qs'
 import VueFormGenerator from 'vue-form-generator'
+import draggable from 'vuedraggable'
 import lodashRemove from 'lodash.remove'
 import lodashIncludes from 'lodash.includes'
 import optionsInput from '../settings/options'
+import '../../../assets/css/src/_columns.scss'
 
 export default {
 	name: 'dialog-edit-field',
@@ -70,7 +101,8 @@ export default {
 		updateStatus: '',
 	},
 	components:{
-    	"vue-form-generator": VueFormGenerator.component
+    	"vue-form-generator": VueFormGenerator.component,
+		draggable
   	},
 	data() {
 		return {
@@ -263,6 +295,12 @@ export default {
 		 */
 		addOption() {
       		this.dropdownOptions.push( { value: null, label: null } )
+		},
+		/*
+		 * Delete an option from the dropdown field.
+		 */
+		deleteOption( index ) {
+			this.dropdownOptions.splice( index, 1 );
 		}
 	}
 }
