@@ -624,7 +624,14 @@ class WPUM_Fields_Editor {
 			}
 
 			if ( is_array( $dropdown_options ) && ! empty( $dropdown_options ) ) {
-				$field_to_update->update_meta( 'dropdown_options', $dropdown_options );
+				$options = [];
+				foreach ( $dropdown_options as $key => $value ) {
+					$options[ $key ] = [
+						'value' => sanitize_text_field( $value['value'] ),
+						'label' => sanitize_text_field( $value['label'] ),
+					];
+				}
+				$field_to_update->update_meta( 'dropdown_options', $options );
 			}
 
 			wp_send_json_success( $data );
