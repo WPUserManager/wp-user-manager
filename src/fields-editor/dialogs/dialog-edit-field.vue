@@ -23,7 +23,7 @@
 				<vue-form-generator v-if="!loadingFields" :schema="schema" :model="model" :options="formOptions" ref="vfg"></vue-form-generator>
 
 				<!-- Dropdown options generator -->
-				<div class="vue-form-generator" v-if="activeTab == 'general' && !loadingFields && needsOptions( field_type )">
+				<div class="vue-form-generator" v-if="activeTab == 'general' && !loadingFields && needsOptions( field_type ) && ! primary_id">
 					<div class="form-group field-input">
 						<label for="placeholder">{{labels.field_options}}</label>
 						<div class="field-wrap">
