@@ -287,7 +287,7 @@ export default {
 		 * Verify if the field needs an options generator.
 		 */
 		needsOptions( field_type ) {
-			const allowedTypes = [ 'dropdown', 'multiselect', 'checkboxes', 'radio' ]
+			const allowedTypes = [ 'dropdown', 'multiselect', 'multicheckbox', 'radio' ]
 			return ( allowedTypes.indexOf( field_type ) > -1 )
 		},
 		/**
