@@ -226,6 +226,10 @@ class WPUM_Form_Profile extends WPUM_Form {
 					$value = carbon_get_user_meta( $this->user->ID, 'user_cover' );
 					break;
 			}
+		} elseif ( strpos( $field->get_meta( 'user_meta_key' ), 'wpum_' ) === 0 ) {
+
+			$value = carbon_get_user_meta( $this->user->ID, $field->get_meta( 'user_meta_key' ) );
+
 		} else {
 
 			$value = esc_html( get_user_meta( $this->user->ID, $field->get_meta( 'user_meta_key' ), true ) );
