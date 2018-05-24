@@ -89,8 +89,8 @@ class WPUM_Forms {
 	public function get_form( $form_name, $atts = array() ) {
 		if ( $form = $this->load_form_class( $form_name ) ) {
 			ob_start();
-			if ( isset( $atts['fields'] ) ) {
-				$form->__set( 'fields', $atts['fields'] );
+			if ( isset( $atts['group_id'] ) ) {
+				$form->__set( 'fields_group_id', $atts['group_id'] );
 			}
 			$form->output( $atts );
 			return ob_get_clean();

@@ -217,8 +217,6 @@ function wpum_display_account_page_content() {
 			$active_tab = 'profile';
 		}
 		echo WPUM()->forms->get_form( $active_tab );
-	} elseif ( array_key_exists( 'group_id', $tabs[ $active_tab ] ) ) {
-		echo do_action( 'wpum_account_page_content_custom_fields', $tabs[ $active_tab ] );
 	} else {
 		do_action( 'wpum_account_page_content_' . $active_tab );
 	}
