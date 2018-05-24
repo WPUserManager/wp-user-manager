@@ -219,13 +219,6 @@ abstract class WPUM_Field_Type {
 				'model'     => 'extensions',
 				'hint'      => esc_html__( 'Enter the extension of the files that can be uploaded through this field, separated with a comma. Example: jpg, png, gif', 'wp-user-manager' ),
 			);
-			$settings['general']['multiple'] = array(
-				'type'      => 'checkbox',
-				'label'     => esc_html__( 'Allow multiple files' ),
-				'model'     => 'multiple',
-				'default'   => false,
-				'hint'      => esc_html__( 'Enable this option to allow users to upload multiple files through this field.', 'wp-user-manager' ),
-			);
 			$settings['general']['max_file_size'] = array(
 				'type'      => 'input',
 				'inputType' => 'text',
