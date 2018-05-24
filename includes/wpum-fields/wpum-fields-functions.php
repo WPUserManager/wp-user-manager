@@ -658,7 +658,7 @@ function wpum_format_field_textarea_output( $field, $value ) {
  * @param string  $size  in bytes
  * @return string
  */
-function wpum_max_upload_size( $field_name = '' ) {
+function wpum_max_upload_size( $field_name = '', $custom_size = false ) {
 
 	// Default max upload size,
 	$output = size_format( wp_max_upload_size() );
@@ -668,6 +668,10 @@ function wpum_max_upload_size( $field_name = '' ) {
 		$output = size_format( WPUM_MAX_AVATAR_SIZE );
 	} else if( $field_name == 'user_cover' && defined( 'WPUM_MAX_COVER_SIZE' ) ) {
 		$output = size_format( WPUM_MAX_COVER_SIZE );
+	}
+
+	if ( $custom_size ) {
+		$output = size_format( intval( $custom_size ), 0 );
 	}
 
 	return $output;

@@ -20,6 +20,7 @@ $classes            = array( 'input-text' );
 $allowed_mime_types = array_keys( ! empty( $data->allowed_mime_types ) ? $data->allowed_mime_types : get_allowed_mime_types() );
 $field_name         = isset( $data->name ) ? $data->name : $data->key;
 $field_name         .= ! empty( $data->multiple ) ? '[]' : '';
+$file_size = isset( $data->max_file_size ) ? $data->max_file_size : false;
 
 if ( ! empty( $data->ajax ) && wpum_user_can_upload_file_via_ajax() ) {
 	wp_enqueue_script( 'wpum-ajax-file-upload' );
@@ -62,7 +63,8 @@ if ( ! empty( $data->ajax ) && wpum_user_can_upload_file_via_ajax() ) {
 <small class="description">
 	<?php if ( ! empty( $data->description ) ) : ?>
 		<?php echo $data->description; ?>
-	<?php else : ?>
-		<?php printf( __( 'Maximum file size: %s.', 'wp-user-manager' ), size_format( wpum_max_upload_size() ) ); ?>
-	<?php endif; ?>
+	<?php endif ?>
+
+	<?php printf( __( 'Maximum file size: %s.', 'wp-user-manager' ), wpum_max_upload_size( '', $file_size ) ); ?>
+
 </small>
