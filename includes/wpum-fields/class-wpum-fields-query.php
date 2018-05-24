@@ -100,7 +100,7 @@ class WPUM_Fields_Query {
 		// Retrieve groups.
 		$groups = WPUM()->fields_groups->get_groups( [
 			'orderby' => 'group_order',
-			'order'   => 'DESC',
+			'order'   => 'ASC',
 			'number'  => $args['number_groups'],
 			'fields'  => true,
 			'user_id' => $args['user_id']
