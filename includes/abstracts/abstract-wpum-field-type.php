@@ -211,6 +211,30 @@ abstract class WPUM_Field_Type {
 			]
 		];
 
+		if ( $this->type == 'file' ) {
+			$settings['general']['extensions'] = array(
+				'type'      => 'input',
+				'inputType' => 'text',
+				'label'     => esc_html__( 'Allowed file types' ),
+				'model'     => 'extensions',
+				'hint'      => esc_html__( 'Enter the extension of the files that can be uploaded through this field, separated with a comma. Example: jpg, png, gif', 'wp-user-manager' ),
+			);
+			$settings['general']['multiple'] = array(
+				'type'      => 'checkbox',
+				'label'     => esc_html__( 'Allow multiple files' ),
+				'model'     => 'multiple',
+				'default'   => false,
+				'hint'      => esc_html__( 'Enable this option to allow users to upload multiple files through this field.', 'wp-user-manager' ),
+			);
+			$settings['general']['max_file_size'] = array(
+				'type'      => 'input',
+				'inputType' => 'text',
+				'label'     => esc_html__( 'Maximum file size' ),
+				'model'     => 'max_file_size',
+				'hint'      => esc_html__( 'Enter the maximum file size users can upload through this field. The amount must be in bytes.', 'wp-user-manager' ),
+			);
+		}
+
 		return apply_filters( 'wpum_register_field_type_settings', $settings, $this->type, $this->type );
 
 	}
