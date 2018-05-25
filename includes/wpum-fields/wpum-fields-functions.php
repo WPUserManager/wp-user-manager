@@ -698,15 +698,43 @@ function wpum_format_field_checkbox_output( $field, $value ) {
  */
 function wpum_format_field_dropdown_output( $field, $value ) {
 
-	$found_option = '';
-
-	foreach ( $field->get_meta( 'dropdown_options' ) as $key => $option ) {
-		if( $option['value'] == $value ) {
-			$found_option = $option['label'];
+	if ( ! $field->is_primary() ) {
+		$options = $field->get_meta( 'dropdown_options' );
+		if ( is_array( $options ) ) {
+			foreach ( $options as $key => $option ) {
+				if( $option['value'] == $value ) {
+					$value = $option['label'];
+				}
+			}
 		}
 	}
 
-	return $found_option;
+	return $value;
+}
+
+/**
+ * Determine output of multiselect field onto profile page.
+ *
+ * @param object $field
+ * @param array $value
+ * @return string
+ */
+function wpum_format_field_multiselect_output( $field, $value ) {
+
+	$stored_field_options = $field->get_meta( 'dropdown_options' );
+	$stored_options       = [];
+	$found_options_labels = [];
+
+	foreach ( $stored_field_options as $key => $stored_option ) {
+		$stored_options[ $stored_option['value'] ] = $stored_option['label'];
+	}
+
+	foreach ( $stored_options as $key => $label ) {
+		$found_options_labels[] = $label;
+	}
+
+	return implode( ', ', $found_options_labels );
+
 }
 
 /**
