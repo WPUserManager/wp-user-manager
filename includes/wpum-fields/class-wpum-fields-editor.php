@@ -608,6 +608,16 @@ class WPUM_Fields_Editor {
 				} elseif ( $setting_id == 'field_description' ) {
 					$field_to_update->update( [ 'description' => wp_kses_post( $setting_data ) ] );
 					// Now update the meta data.
+				} elseif ( $setting_id == 'user_meta_key' && ! $field_to_update->is_primary() ) {
+					if ( strpos( $setting_data, 'wpum_') !== 0 ) {
+						$setting_data = 'wpum_' . $setting_data;
+						if ( $field_to_update->get_type() == 'file' ) {
+							$append_key   = str_replace( 'wpum_field_file_', '', $setting_data );
+							$append_key   = str_replace( 'wpum_', '', $append_key );
+							$setting_data = 'wpum_field_file_' . $append_key;
+						}
+					}
+					$field_to_update->update_meta( $setting_id, $setting_data );
 				} else {
 
 					// Find the type of input for this setting.
