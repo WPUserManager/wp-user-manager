@@ -384,19 +384,22 @@ class WPUM_Form_Profile extends WPUM_Form {
 				}
 			}
 
-			// Update cover image if available and delete the previous one if it exists.
+			$currently_uploaded_cover = isset( $_POST[ 'current_user_cover' ] ) && ! empty( $_POST[ 'current_user_cover' ] ) ? esc_url_raw( $_POST[ 'current_user_cover' ] ): false;
+			$existing_cover_file_path = get_user_meta( $updated_user_id, '_user_cover_path', true );
+
 			if ( isset( $values['account']['user_cover']['url'] ) ) {
-				$previous_cover = get_user_meta( $updated_user_id, '_user_cover_path', true );
-				if ( ! empty( $previous_cover ) && file_exists( $previous_cover ) ) {
-					wp_delete_file( $previous_cover );
+				if ( $currently_uploaded_cover && $existing_cover_file_path && isset( $values['account']['user_cover']['url'] ) && $values['account']['user_cover']['url'] !== $currently_uploaded_cover ) {
+					wp_delete_file( $existing_cover_file_path );
 				}
-				carbon_set_user_meta( $updated_user_id, 'user_cover', $values['account']['user_cover']['url'] );
-				update_user_meta( $updated_user_id, '_user_cover_path', $values['account']['user_cover']['path'] );
+				if ( $currently_uploaded_cover !== $values['account']['user_cover']['url'] ) {
+					carbon_set_user_meta( $updated_user_id, 'user_cover', $values['account']['user_cover']['url'] );
+					update_user_meta( $updated_user_id, '_user_cover_path', $values['account']['user_cover']['path'] );
+				}
 			}
 
-			// This means the user has deleted his cover so we're going to erase the meta too.
-			if ( isset( $values['account']['user_cover'] ) && ! isset( $values['account']['user_cover']['url'] ) ) {
-				delete_user_meta( $updated_user_id, 'user_cover' );
+			if ( ! $currently_uploaded_cover && file_exists( $existing_cover_file_path ) && ! isset( $values['account']['user_cover']['url'] ) ) {
+				wp_delete_file( $existing_cover_file_path );
+				carbon_set_user_meta( $updated_user_id, 'user_cover', false );
 				delete_user_meta( $updated_user_id, '_user_cover_path' );
 			}
 
