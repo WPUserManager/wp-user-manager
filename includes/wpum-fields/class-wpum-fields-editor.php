@@ -541,6 +541,32 @@ class WPUM_Fields_Editor {
 				$value = $field->get_name();
 			} elseif ( $setting_id == 'field_description' ) {
 				$value = $field->get_description();
+			} elseif ( $setting_id == 'user_meta_key' ) {
+
+				if ( $field->get_type() == 'file' && strpos( $field->get_meta( $setting_id ), 'wpum_field_file_' ) === 0 ) {
+
+					$value = $field->get_meta( $setting_id );
+					$prefix = 'wpum_field_file_';
+					$str = $value;
+
+					if ( substr( $str, 0, strlen( $prefix ) ) == $prefix ) {
+						$str = substr( $str, strlen( $prefix ) );
+					}
+
+					$value = $str;
+
+				} else {
+					if ( strpos( $field->get_meta( $setting_id ), 'wpum_' ) === 0 && strpos( $field->get_meta( $setting_id ), 'wpum_field_file' ) !== 0 ) {
+						$value = $field->get_meta( $setting_id );
+						$prefix = 'wpum_';
+						$str = $value;
+						if ( substr( $str, 0, strlen( $prefix ) ) == $prefix ) {
+							$str = substr( $str, strlen( $prefix ) );
+						}
+						$value = $str;
+					}
+				}
+
 			} else {
 				if ( $type == 'checkbox' ) {
 					$value = (bool) $field->get_meta( $setting_id );
