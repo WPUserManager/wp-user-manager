@@ -3,4 +3,7 @@ jQuery(document).ready(function ($) {
 		$(this).closest('.wpum-uploaded-file').remove();
 		return false;
 	});
+	$('.wpum-multiselect').select2({
+		theme: 'default'
+	});
 });

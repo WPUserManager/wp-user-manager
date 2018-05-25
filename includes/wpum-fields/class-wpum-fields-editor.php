@@ -554,17 +554,16 @@ class WPUM_Fields_Editor {
 					}
 
 					$value = $str;
-
-				} else {
-					if ( strpos( $field->get_meta( $setting_id ), 'wpum_' ) === 0 && strpos( $field->get_meta( $setting_id ), 'wpum_field_file' ) !== 0 ) {
-						$value = $field->get_meta( $setting_id );
-						$prefix = 'wpum_';
-						$str = $value;
-						if ( substr( $str, 0, strlen( $prefix ) ) == $prefix ) {
-							$str = substr( $str, strlen( $prefix ) );
-						}
-						$value = $str;
+				} elseif ( $field->get_type() !== 'file' && strpos( $field->get_meta( $setting_id ), 'wpum_' ) === 0 ) {
+					$value = $field->get_meta( $setting_id );
+					$prefix = 'wpum_';
+					$str = $value;
+					if ( substr( $str, 0, strlen( $prefix ) ) == $prefix ) {
+						$str = substr( $str, strlen( $prefix ) );
 					}
+					$value = $str;
+				} else {
+					$value = $field->get_meta( $setting_id );
 				}
 
 			} else {

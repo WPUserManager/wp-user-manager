@@ -8,7 +8,9 @@
  * @since       1.0.0
  */
 
-if ( ! defined( 'ABSPATH' ) ) exit;
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 
 /**
  * Load the custom logo's css style within the admin panel when needed.
@@ -23,18 +25,18 @@ function wpum_load_admin_scripts() {
 		'users_page_wpum-settings',
 	];
 
-	wp_register_script( 'wpum-vue-manifest', WPUM_PLUGIN_URL . 'dist/static/js/manifest.js' , array(), WPUM_VERSION, true );
-	wp_register_script( 'wpum-vue-vendor', WPUM_PLUGIN_URL . 'dist/static/js/vendor.js' , array(), WPUM_VERSION, true );
+	wp_register_script( 'wpum-vue-manifest', WPUM_PLUGIN_URL . 'dist/static/js/manifest.js', array(), WPUM_VERSION, true );
+	wp_register_script( 'wpum-vue-vendor', WPUM_PLUGIN_URL . 'dist/static/js/vendor.js', array(), WPUM_VERSION, true );
 
-	if( in_array( $screen->base, $allowed_screens ) ) {
+	if ( in_array( $screen->base, $allowed_screens ) ) {
 		wp_enqueue_style( 'wpum-logo', WPUM_PLUGIN_URL . 'assets/css/admin/wpum-logo.css', array(), WPUM_VERSION );
 	}
 
-	wp_enqueue_script( 'wpum-upgrades', WPUM_PLUGIN_URL . 'assets/js/admin/admin-upgrades.min.js' , array(), WPUM_VERSION, true );
-	wp_enqueue_style( 'wpum-upgrades-style', WPUM_PLUGIN_URL . 'assets/css/admin/upgrades.css' , array(), WPUM_VERSION );
+	wp_enqueue_script( 'wpum-upgrades', WPUM_PLUGIN_URL . 'assets/js/admin/admin-upgrades.min.js', array(), WPUM_VERSION, true );
+	wp_enqueue_style( 'wpum-upgrades-style', WPUM_PLUGIN_URL . 'assets/css/admin/upgrades.css', array(), WPUM_VERSION );
 
 	$js_vars = [
-		'updates' => array(
+		'updates'                           => array(
 			'ajax_error' => __( 'Please reload this page and try again', 'wp-user-manager' ),
 		),
 		'db_update_confirmation_msg_button' => __( 'Run Updates', 'wp-user-manager' ),
@@ -57,10 +59,12 @@ function wpum_load_scripts() {
 	wp_enqueue_style( 'wpum-frontend', WPUM_PLUGIN_URL . 'assets/css/wpum.min.css', array(), WPUM_VERSION );
 
 	// Load frontend js.
-	// At the moment the only js required is on the account page.
-	if( is_page( wpum_get_core_page_id( 'account' ) ) ) {
-		wp_enqueue_script( 'jquery' );
-		wp_enqueue_script( 'wpum-frontend-js', WPUM_PLUGIN_URL . 'assets/js/wp-user-manager.min.js' , array( 'jquery' ), WPUM_VERSION, true );
+	wp_enqueue_script( 'jquery' );
+
+	if ( is_page( wpum_get_core_page_id( 'account' ) ) || is_page( wpum_get_core_page_id( 'register' ) ) ) {
+		wp_enqueue_style( 'wpum-select2-style', 'https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css', false, WPUM_VERSION );
+		wp_enqueue_script( 'wpum-select2', 'https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js', array( 'jquery' ), WPUM_VERSION, true );
+		wp_enqueue_script( 'wpum-frontend-js', WPUM_PLUGIN_URL . 'assets/js/wp-user-manager.min.js', array( 'jquery' ), WPUM_VERSION, true );
 	}
 
 }
