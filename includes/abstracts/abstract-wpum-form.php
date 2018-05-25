@@ -591,7 +591,6 @@ abstract class WPUM_Form {
 			}
 		} elseif ( ! $field->is_primary() && strpos( $field->get_meta( 'user_meta_key' ), 'wpum_' ) === 0 ) {
 			$stored_options = $field->get_meta( 'dropdown_options' );
-			print_r( $stored_options );
 			if ( ! empty( $stored_options ) && is_array( $stored_options ) ) {
 				foreach ( $stored_options as $option ) {
 					$options[ $option['value'] ] = $option['label'];
