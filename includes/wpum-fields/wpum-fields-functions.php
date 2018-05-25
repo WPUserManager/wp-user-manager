@@ -686,7 +686,7 @@ function wpum_format_field_file_output( $field, $value ) {
  * @return string
  */
 function wpum_format_field_checkbox_output( $field, $value ) {
-	return esc_html__( 'Yes' );
+	return esc_html__( 'Yes', 'wp-user-manager' );
 }
 
 /**
