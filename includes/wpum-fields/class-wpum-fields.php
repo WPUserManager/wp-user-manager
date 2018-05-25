@@ -56,7 +56,8 @@ class WPUM_Fields {
 			'multicheckbox',
 			'multiselect',
 			'radio',
-			'number'
+			'number',
+			'datepicker',
 		] );
 
 		foreach ( $fields as $field ) {
