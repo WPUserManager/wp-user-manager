@@ -679,6 +679,37 @@ function wpum_format_field_file_output( $field, $value ) {
 }
 
 /**
+ * Format the output onto the profiles for the checkbox field.
+ *
+ * @param object $field
+ * @param mixed $value
+ * @return string
+ */
+function wpum_format_field_checkbox_output( $field, $value ) {
+	return esc_html__( 'Yes' );
+}
+
+/**
+ * Format the output onto the profiles for the checkbox field.
+ *
+ * @param object $field
+ * @param mixed $value
+ * @return string
+ */
+function wpum_format_field_dropdown_output( $field, $value ) {
+
+	$found_option = '';
+
+	foreach ( $field->get_meta( 'dropdown_options' ) as $key => $option ) {
+		if( $option['value'] == $value ) {
+			$found_option = $option['label'];
+		}
+	}
+
+	return $found_option;
+}
+
+/**
  * Wrapper function for size_format - checks the max size of the avatar and cover field.
  *
  * @param array   $field
