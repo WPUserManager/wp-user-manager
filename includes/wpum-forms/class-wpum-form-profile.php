@@ -336,13 +336,52 @@ class WPUM_Form_Profile extends WPUM_Form {
 			}
 
 			// Now update the avatar for the user and delete the previous one if it exists.
-			if ( wpum_get_option( 'custom_avatars' ) && isset( $values['account']['user_avatar']['url'] ) ) {
-				$previous_avatar = get_user_meta( $updated_user_id, '_current_user_avatar_path', true );
-				if ( ! empty( $previous_avatar ) && file_exists( $previous_avatar ) ) {
-					wp_delete_file( $previous_avatar );
+			//if ( wpum_get_option( 'custom_avatars' ) && isset( $values['account']['user_avatar']['url'] ) ) {
+			//	$previous_avatar = get_user_meta( $updated_user_id, '_current_user_avatar_path', true );
+			//	print_r( $_POST['current_user_avatar'] );
+			//	exit;
+			//	if ( ! empty( $previous_avatar ) && file_exists( $previous_avatar ) && ! isset( $_POST['current_user_avatar'] ) ) {
+			//		wp_delete_file( $previous_avatar );
+			//		carbon_set_user_meta( $updated_user_id, 'current_user_avatar', false );
+			//		delete_user_meta( $updated_user_id, '_current_user_avatar_path' );
+			//	} else {
+			//		carbon_set_user_meta( $updated_user_id, 'current_user_avatar', $values['account']['user_avatar']['url'] );
+			//		update_user_meta( $updated_user_id, '_current_user_avatar_path', $values['account']['user_avatar']['path'] );
+			//	}
+			//}
+
+			if ( wpum_get_option( 'custom_avatars' ) ) {
+				$currently_uploaded_file   = isset( $_POST[ 'current_user_avatar' ] ) && ! empty( $_POST[ 'current_user_avatar' ] ) ? esc_url_raw( $_POST[ 'current_user_avatar' ] ): false;
+				$existing_avatar_file_path = get_user_meta( $updated_user_id, '_current_user_avatar_path', true );
+				if ( $currently_uploaded_file && $existing_avatar_file_path && isset( $values['account']['user_avatar']['url'] ) && $values['account']['user_avatar']['url'] !== $currently_uploaded_file ) {
+					wp_delete_file( $existing_avatar_file_path );
 				}
-				carbon_set_user_meta( $updated_user_id, 'current_user_avatar', $values['account']['user_avatar']['url'] );
-				update_user_meta( $updated_user_id, '_current_user_avatar_path', $values['account']['user_avatar']['path'] );
+				if ( isset( $values['account']['user_avatar']['url'] ) && $currently_uploaded_file !== $values['account']['user_avatar']['url'] ) {
+					carbon_set_user_meta( $updated_user_id, 'current_user_avatar', $values['account']['user_avatar']['url'] );
+					update_user_meta( $updated_user_id, '_current_user_avatar_path', $values['account']['user_avatar']['path'] );
+				}
+				if ( ! $currently_uploaded_file && file_exists( $existing_avatar_file_path ) ) {
+					wp_delete_file( $existing_avatar_file_path );
+					carbon_set_user_meta( $updated_user_id, 'current_user_avatar', false );
+					delete_user_meta( $updated_user_id, '_current_user_avatar_path' );
+				}
+			}
+
+			if ( wpum_get_option( 'custom_avatars' ) ) {
+				$currently_uploaded_file   = isset( $_POST[ 'current_user_avatar' ] ) && ! empty( $_POST[ 'current_user_avatar' ] ) ? esc_url_raw( $_POST[ 'current_user_avatar' ] ): false;
+				$existing_avatar_file_path = get_user_meta( $updated_user_id, '_current_user_avatar_path', true );
+				if ( $currently_uploaded_file && $existing_avatar_file_path && isset( $values['account']['user_avatar']['url'] ) && $values['account']['user_avatar']['url'] !== $currently_uploaded_file ) {
+					wp_delete_file( $existing_avatar_file_path );
+				}
+				if ( isset( $values['account']['user_avatar']['url'] ) && $currently_uploaded_file !== $values['account']['user_avatar']['url'] ) {
+					carbon_set_user_meta( $updated_user_id, 'current_user_avatar', $values['account']['user_avatar']['url'] );
+					update_user_meta( $updated_user_id, '_current_user_avatar_path', $values['account']['user_avatar']['path'] );
+				}
+				if ( ! $currently_uploaded_file && file_exists( $existing_avatar_file_path ) ) {
+					wp_delete_file( $existing_avatar_file_path );
+					carbon_set_user_meta( $updated_user_id, 'current_user_avatar', false );
+					delete_user_meta( $updated_user_id, '_current_user_avatar_path' );
+				}
 			}
 
 			// Update cover image if available and delete the previous one if it exists.
@@ -353,12 +392,6 @@ class WPUM_Form_Profile extends WPUM_Form {
 				}
 				carbon_set_user_meta( $updated_user_id, 'user_cover', $values['account']['user_cover']['url'] );
 				update_user_meta( $updated_user_id, '_user_cover_path', $values['account']['user_cover']['path'] );
-			}
-
-			// This means the user has deleted his avatar so we're going to erase the meta too.
-			if ( isset( $values['account']['user_avatar'] ) && ! isset( $values['account']['user_avatar']['url'] ) ) {
-				delete_user_meta( $updated_user_id, 'current_user_avatar' );
-				delete_user_meta( $updated_user_id, '_current_user_avatar_path' );
 			}
 
 			// This means the user has deleted his cover so we're going to erase the meta too.
