@@ -335,21 +335,6 @@ class WPUM_Form_Profile extends WPUM_Form {
 				throw new Exception( $updated_user_id->get_error_message() );
 			}
 
-			// Now update the avatar for the user and delete the previous one if it exists.
-			//if ( wpum_get_option( 'custom_avatars' ) && isset( $values['account']['user_avatar']['url'] ) ) {
-			//	$previous_avatar = get_user_meta( $updated_user_id, '_current_user_avatar_path', true );
-			//	print_r( $_POST['current_user_avatar'] );
-			//	exit;
-			//	if ( ! empty( $previous_avatar ) && file_exists( $previous_avatar ) && ! isset( $_POST['current_user_avatar'] ) ) {
-			//		wp_delete_file( $previous_avatar );
-			//		carbon_set_user_meta( $updated_user_id, 'current_user_avatar', false );
-			//		delete_user_meta( $updated_user_id, '_current_user_avatar_path' );
-			//	} else {
-			//		carbon_set_user_meta( $updated_user_id, 'current_user_avatar', $values['account']['user_avatar']['url'] );
-			//		update_user_meta( $updated_user_id, '_current_user_avatar_path', $values['account']['user_avatar']['path'] );
-			//	}
-			//}
-
 			if ( wpum_get_option( 'custom_avatars' ) ) {
 				$currently_uploaded_file   = isset( $_POST[ 'current_user_avatar' ] ) && ! empty( $_POST[ 'current_user_avatar' ] ) ? esc_url_raw( $_POST[ 'current_user_avatar' ] ): false;
 				$existing_avatar_file_path = get_user_meta( $updated_user_id, '_current_user_avatar_path', true );
