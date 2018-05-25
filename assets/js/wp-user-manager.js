@@ -9,4 +9,7 @@ jQuery(document).ready(function ($) {
 	$('.wpum-multiselect').select2({
 		theme: 'default'
 	});
+	$('.wpum-datepicker').flatpickr({
+		dateFormat: wpumFrontend.dateFormat
+	});
 });

@@ -198,6 +198,9 @@
   .wpum-action-links li {
     margin-bottom: 0.3em; }
 
+.wpum-datepicker {
+  width: 100%; }
+
 #cover-image-container {
   position: relative; }
 
