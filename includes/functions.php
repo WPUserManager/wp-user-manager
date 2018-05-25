@@ -477,7 +477,7 @@ function wpum_upload_file( $file, $args = array() ) {
  * @return void
  */
 function wpum_get_allowed_mime_types( $field = '' ){
-	if ( 'company_logo' === $field ) {
+	if ( 'current_user_avatar' === $field ) {
 		$allowed_mime_types = array(
 			'jpg|jpeg|jpe' => 'image/jpeg',
 			'gif'          => 'image/gif',
@@ -1146,4 +1146,26 @@ function wpum_set_upgrade_complete( $upgrade_action = '' ) {
  */
 function wpum_get_completed_upgrades() {
 	return (array) get_option( 'wpum_completed_upgrades' );
+}
+
+/**
+ * Retrieve a list of mime types options for the file fields editor.
+ *
+ * @return array
+ */
+function wpum_get_mime_types_for_selection() {
+
+	$types = [];
+
+	$mimes = get_allowed_mime_types();
+
+	foreach ( $mimes as $key => $type ) {
+		$types[] = [
+			'value' => $type,
+			'name' => $key,
+		];
+	}
+
+	return $types;
+
 }

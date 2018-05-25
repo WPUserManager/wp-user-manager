@@ -645,10 +645,37 @@ function wpum_format_field_url_output( $field, $value ) {
  *
  * @param object $field
  * @param mixed $value
- * @return void
+ * @return string
  */
 function wpum_format_field_textarea_output( $field, $value ) {
 	return wp_kses_post( $value );
+}
+
+/**
+ * Format the output of the file field onto profile pages.
+ *
+ * @param object $field
+ * @param string $value
+ * @return string
+ */
+function wpum_format_field_file_output( $field, $value ) {
+
+	if ( is_numeric( $value ) ) {
+		$image_src = wp_get_attachment_image_src( absint( $value ) );
+		$image_src = $image_src ? $image_src[0] : '';
+	} else {
+		$image_src = $value;
+	}
+	$extension = substr( strrchr( $image_src, '.' ), 1 );
+
+	if ( 'image' === wp_ext2type( $extension ) ) {
+		$value = '<span class="wpum-uploaded-file-name"><img src="' . $image_src . '"></span>';
+	} else {
+		$value = '<span class="wpum-uploaded-file-name"><code>' . $image_src . '</code></span>';
+	}
+
+	return $value;
+
 }
 
 /**

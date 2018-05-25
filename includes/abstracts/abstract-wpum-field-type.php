@@ -212,13 +212,6 @@ abstract class WPUM_Field_Type {
 		];
 
 		if ( $this->type == 'file' ) {
-			$settings['general']['extensions'] = array(
-				'type'      => 'input',
-				'inputType' => 'text',
-				'label'     => esc_html__( 'Allowed file types' ),
-				'model'     => 'extensions',
-				'hint'      => esc_html__( 'Enter the extension of the files that can be uploaded through this field, separated with a comma. Example: jpg, png, gif', 'wp-user-manager' ),
-			);
 			$settings['general']['max_file_size'] = array(
 				'type'      => 'input',
 				'inputType' => 'text',

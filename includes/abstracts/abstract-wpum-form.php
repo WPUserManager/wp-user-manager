@@ -431,13 +431,6 @@ abstract class WPUM_Form {
 			$files_to_upload = wpum_prepare_uploaded_files( $_FILES[ $field_key ] );
 			foreach ( $files_to_upload as $file_to_upload ) {
 
-				if ( isset( $field['extensions'] ) ) {
-					$check_file = wp_check_filetype( $field['value'] );
-					if ( ! in_array( $check_file['ext'], $field['extensions'] ) ) {
-						throw new Exception( sprintf( __( 'Uploaded files need to be one of the following file types: %s', 'wp-user-manager' ), implode( ', ', array_values( $field['extensions'] ) ) ) );
-					}
-				}
-
 				$uploaded_file = wpum_upload_file( $file_to_upload, array(
 					'file_key'           => $field_key,
 					'allowed_mime_types' => $allowed_mime_types,
