@@ -476,7 +476,7 @@ function wpum_upload_file( $file, $args = array() ) {
  * @param string $field
  * @return void
  */
-function wpum_get_allowed_mime_types( $field = '' ){
+function wpum_get_allowed_mime_types( $field = '' ) {
 	if ( 'current_user_avatar' === $field ) {
 		$allowed_mime_types = array(
 			'jpg|jpeg|jpe' => 'image/jpeg',

@@ -439,6 +439,15 @@ function wpum_v200_migrate_fields_callback() {
 
 		}
 
+		// Update the type of the field to match the new one.
+		$existing_type = WPUM()->fields->get_column( 'type', $field_id );
+
+		if ( $existing_type == 'select' ) {
+			$field->update( [ 'type' => 'dropdown' ] );
+		} elseif ( $existing_type == 'checkboxes' ) {
+			$field->update( [ 'type' => 'multicheckbox' ] );
+		}
+
 		// Get previous required status and update the meta
 		$is_required = WPUM()->fields->get_column( 'is_required', $field_id );
 		if( $is_required ) {
@@ -474,7 +483,17 @@ function wpum_v200_migrate_fields_callback() {
 				}
 				foreach( $options as $option_id => $option ) {
 					if( $option_id == 'selectable' ) {
-						$field->add_meta( 'selectable', maybe_unserialize( $option ) );
+						$dropdown_options = maybe_unserialize( $option );
+						$new_opts         = [];
+						if ( is_array( $dropdown_options ) && ! empty( $dropdown_options ) ) {
+							foreach ( $dropdown_options as $dropdown_option ) {
+								$new_opts[] = [
+									'value' => $dropdown_option['option-value'],
+									'label' => $dropdown_option['option-title']
+								];
+							}
+						}
+						$field->add_meta( 'dropdown_options', maybe_unserialize( $new_opts ) );
 					} else {
 						$field->add_meta( $option_id, $option );
 					}
