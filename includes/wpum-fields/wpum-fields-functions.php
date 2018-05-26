@@ -660,9 +660,13 @@ function wpum_format_field_textarea_output( $field, $value ) {
  */
 function wpum_format_field_file_output( $field, $value ) {
 
+	$value = maybe_unserialize( $value );
+
 	if ( is_numeric( $value ) ) {
 		$image_src = wp_get_attachment_image_src( absint( $value ) );
 		$image_src = $image_src ? $image_src[0] : '';
+	} elseif ( is_array( $value ) && isset( $value['url'] ) ) {
+		$image_src = $value['url'];
 	} else {
 		$image_src = $value;
 	}
