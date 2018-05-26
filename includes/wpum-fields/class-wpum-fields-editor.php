@@ -543,10 +543,10 @@ class WPUM_Fields_Editor {
 				$value = $field->get_description();
 			} elseif ( $setting_id == 'user_meta_key' ) {
 
-				if ( $field->get_type() == 'file' && strpos( $field->get_meta( $setting_id ), 'wpum_field_file_' ) === 0 ) {
+				if ( $field->get_type() == 'file' && strpos( $field->get_meta( $setting_id ), 'wpum_file_field_' ) === 0 ) {
 
 					$value = $field->get_meta( $setting_id );
-					$prefix = 'wpum_field_file_';
+					$prefix = 'wpum_file_field_';
 					$str = $value;
 
 					if ( substr( $str, 0, strlen( $prefix ) ) == $prefix ) {
@@ -612,9 +612,9 @@ class WPUM_Fields_Editor {
 					if ( strpos( $setting_data, 'wpum_') !== 0 ) {
 						$setting_data = 'wpum_' . $setting_data;
 						if ( $field_to_update->get_type() == 'file' ) {
-							$append_key   = str_replace( 'wpum_field_file_', '', $setting_data );
+							$append_key   = str_replace( 'wpum_file_field_', '', $setting_data );
 							$append_key   = str_replace( 'wpum_', '', $append_key );
-							$setting_data = 'wpum_field_file_' . $append_key;
+							$setting_data = 'wpum_file_field_' . $append_key;
 						}
 					}
 					$field_to_update->update_meta( $setting_id, $setting_data );
