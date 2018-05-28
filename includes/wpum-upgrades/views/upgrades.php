@@ -55,16 +55,6 @@ $wpum_updates = WPUM_Updates::get_instance();
 											<?php _e( 'The updates have been paused.', 'wp-user-manager' ); ?>
 										<?php endif; ?>
 									</span>
-
-									<?php if ( WPUM_Updates::$background_updater->is_paused_process() ) : ?>
-										<?php  $is_disabled = isset( $_GET['wpum-restart-db-upgrades'] ) ? ' disabled' : ''; ?>
-										<button id="wpum-restart-upgrades" class="button button-primary alignright" data-redirect-url="<?php echo esc_url( admin_url( '/users.php?page=wpum-updates&wpum-restart-db-upgrades=1' ) ); ?>"<?php echo $is_disabled; ?>><?php _e( 'Restart Upgrades', 'wp-user-manager' ); ?></button>
-									<?php elseif( $wpum_updates->is_doing_updates() ): ?>
-										<?php  $is_disabled = isset( $_GET['wpum-pause-db-upgrades'] ) ? ' disabled' : ''; ?>
-										<button id="wpum-pause-upgrades" class="button button-primary alignright" data-redirect-url="<?php echo esc_url( admin_url( '/users.php?page=wpum-updates&wpum-pause-db-upgrades=1' ) ); ?>"<?php echo $is_disabled; ?>>
-											<?php _e( 'Pause Upgrades', 'wp-user-manager' ); ?>
-										</button>
-									<?php endif; ?>
 								</p>
 							</div>
 							<div class="progress-container<?php echo $is_doing_updates ? '' : ' wpum-hidden'; ?>">
