@@ -684,7 +684,7 @@ class WPUM_Field {
 	 * @access  public
 	 * @since   2.0
 	 */
-	public function delete_meta( $meta_key = '', $meta_value, $prev_value = '' ) {
+	public function delete_meta( $meta_key = '', $meta_value = '', $prev_value = '' ) {
 		return WPUM()->field_meta->delete_meta( $this->id, $meta_key, $meta_value, $prev_value );
 	}
 
