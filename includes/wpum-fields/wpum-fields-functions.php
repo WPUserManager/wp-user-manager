@@ -733,11 +733,40 @@ function wpum_format_field_multiselect_output( $field, $value ) {
 		$stored_options[ $stored_option['value'] ] = $stored_option['label'];
 	}
 
-	foreach ( $stored_options as $key => $label ) {
-		$found_options_labels[] = $label;
+	$values = [];
+
+	foreach ( $value as $user_stored_value ) {
+		$values[] = $stored_options[ $user_stored_value ];
 	}
 
-	return implode( ', ', $found_options_labels );
+	return implode( ', ', $values );
+
+}
+
+/**
+ * Determine output of multicheckboxes field onto profile page.
+ *
+ * @param object $field
+ * @param array $value
+ * @return string
+ */
+function wpum_format_field_multicheckbox_output( $field, $value ) {
+
+	$stored_field_options = $field->get_meta( 'dropdown_options' );
+	$stored_options       = [];
+	$found_options_labels = [];
+
+	foreach ( $stored_field_options as $key => $stored_option ) {
+		$stored_options[ $stored_option['value'] ] = $stored_option['label'];
+	}
+
+	$values = [];
+
+	foreach ( $value as $user_stored_value ) {
+		$values[] = $stored_options[ $user_stored_value ];
+	}
+
+	return implode( ', ', $values );
 
 }
 
