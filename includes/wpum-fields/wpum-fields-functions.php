@@ -717,6 +717,29 @@ function wpum_format_field_dropdown_output( $field, $value ) {
 }
 
 /**
+ * Format the output onto the profiles for the radio field.
+ *
+ * @param object $field
+ * @param mixed $value
+ * @return string
+ */
+function wpum_format_field_radio_output( $field, $value ) {
+
+	if ( ! $field->is_primary() ) {
+		$options = $field->get_meta( 'dropdown_options' );
+		if ( is_array( $options ) ) {
+			foreach ( $options as $key => $option ) {
+				if( $option['value'] == $value ) {
+					$value = $option['label'];
+				}
+			}
+		}
+	}
+
+	return $value;
+}
+
+/**
  * Determine output of multiselect field onto profile page.
  *
  * @param object $field
