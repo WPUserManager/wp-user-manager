@@ -360,8 +360,10 @@ class WPUM_Form_Registration extends WPUM_Form {
 
 		} else {
 
+			$admin_url = admin_url( 'users.php?page=wpum-registration-forms#/' );
+
 			WPUM()->templates
-				->set_template_data( [ 'message' => esc_html__( 'The registration form cannot be used because either a username or email field is required to process registrations. Please edit the form and add at least the email field.', 'wp-user-manager' ) ] )
+				->set_template_data( [ 'message' => __( 'The registration form cannot be used because either a username or email field is required to process registrations. Please edit the form and add at least the email field.', 'wp-user-manager' ) . ' ' . '<a href="' . esc_url_raw( $admin_url ) . '">' . $admin_url . '</a>' ] )
 				->get_template_part( 'messages/general', 'error' );
 
 		}

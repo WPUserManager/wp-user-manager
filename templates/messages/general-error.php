@@ -18,5 +18,5 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 
 ?>
 <div class="wpum-message error">
-	<p><?php echo esc_html( $data->message ); ?></p>
+	<p><?php echo $data->message; ?></p>
 </div>
