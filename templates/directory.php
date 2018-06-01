@@ -32,7 +32,7 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 				->get_template_part( 'directory/top-bar' );
 		?>
 	</form>
-
+	<!-- start directory -->
 	<div id="wpum-directory-users-list">
 
 		<?php if( is_array( $data->results ) && ! empty( $data->results ) ) : ?>
@@ -64,7 +64,7 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 		<?php endif; ?>
 
 	</div>
-
+	<!-- end directory -->
 	<?php do_action( 'wpum_after_user_directory' ); ?>
 
 </div>
