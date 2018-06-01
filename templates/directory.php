@@ -16,10 +16,6 @@
 // Exit if accessed directly
 if ( ! defined( 'ABSPATH' ) ) exit;
 
-//print_r( $_SERVER['QUERY_STRING'] );
-
-//print_r( add_query_arg( $_SERVER['QUERY_STRING'], '', get_permalink() ) );
-
 ?>
 
 <div id="wpum-user-directory">

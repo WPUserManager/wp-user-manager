@@ -619,11 +619,11 @@ class WPUM_Field {
 			return;
 		}
 
-		if( ! function_exists( "wpum_format_field_{$this->type}_output" ) ) {
+		$func_name = apply_filters( 'wpum_field_ouput_callback_function', "wpum_format_field_{$this->type}_output", $this, $value );
+
+		if( ! function_exists( $func_name ) ) {
 			return call_user_func( "wpum_format_field_text_output", $this, $value );
 		}
-
-		$func_name = apply_filters( 'wpum_field_ouput_callback_function', "wpum_format_field_{$this->type}_output", $this, $value );
 
 		return call_user_func( $func_name, $this, $value );
 
