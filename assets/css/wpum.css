@@ -217,7 +217,7 @@
   top: 0;
   width: 100%;
   z-index: 1;
-  height: 280px; }
+  height: 350px; }
 
 #header-avatar-container a {
   position: relative;
@@ -240,8 +240,8 @@
   display: flex;
   flex-wrap: wrap;
   margin-bottom: 20px;
-  border-top: 1px solid #eee;
-  border-bottom: 1px solid #eee; }
+  border: 3px solid #eee;
+  border-radius: 3px; }
   #profile-navbar > a,
   #profile-navbar > button {
     background: none;
@@ -255,13 +255,22 @@
       background: #eee; }
 
 #profile-content-about h3.group-title {
-  border-bottom: 1px solid #eee;
-  margin-bottom: 15px; }
+  border: 3px solid #eee;
+  margin-bottom: 0;
+  padding: 15px 20px;
+  border-top-right-radius: 3px;
+  border-top-left-radius: 3px; }
 #profile-content-about .profile-fields-table {
-  width: 100%; }
+  width: 100%;
+  margin-top: 0;
+  border: 3px solid #eee;
+  border-top: 0;
+  border-bottom-right-radius: 3px;
+  border-bottom-left-radius: 3px; }
   #profile-content-about .profile-fields-table td.label {
     width: 30%;
-    font-weight: 600; }
+    font-weight: 600;
+    padding: 0 20px; }
   #profile-content-about .profile-fields-table tr {
     background: #fafafa; }
     #profile-content-about .profile-fields-table tr:last-child {
