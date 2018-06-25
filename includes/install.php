@@ -191,7 +191,6 @@ function wpum_run_install() {
 
 	// Add some default options.
 	wpum_update_option( 'login_method', 'email' );
-	wpum_update_option( 'lock_wplogin', true );
 	wpum_update_option( 'email_template', 'default' );
 	wpum_update_option( 'from_email', get_option( 'admin_email' ) );
 	wpum_update_option( 'from_name', get_option( 'blogname' ) );
