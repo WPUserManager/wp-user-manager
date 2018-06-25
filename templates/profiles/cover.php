@@ -20,4 +20,10 @@ $cover_image = get_user_meta( $data->user->ID, 'user_cover', true );
 
 ?>
 
-<div id="header-cover-image" style="background-image: url(<?php echo $cover_image ?>);"></div>
+<div id="header-cover-image" style="background-image: url(<?php echo $cover_image ?>);">
+	<div id="header-avatar-container">
+		<a href="<?php echo esc_url( wpum_get_profile_url( $data->user ) ); ?>">
+			<?php echo get_avatar( $data->user->ID, 128 ); ?>
+		</a>
+	</div>
+</div>

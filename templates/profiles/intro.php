@@ -21,11 +21,7 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 <div id="header-profile-details">
 
 	<div class="wpum-row">
-		<div class="wpum_one_fifth" id="header-avatar-container">
-			<a href="<?php echo esc_url( wpum_get_profile_url( $data->user ) ); ?>">
-				<?php echo get_avatar( $data->user->ID, 128 ); ?>
-			</a>
-		</div>
+
 		<div class="wpum_four_fifth last" id="header-details-container">
 			<div id="header-name-container">
 				<h2>

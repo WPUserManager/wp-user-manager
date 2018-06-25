@@ -7,6 +7,7 @@
 	background-position: center top;
 	background-repeat: no-repeat;
 	background-size: cover;
+	border-radius: 3px;
 	border: 0;
 	display: block;
 	left: 0;
@@ -16,17 +17,18 @@
 	width: 100%;
 	z-index: 1;
 	height: 350px;
+	position: relative;
 }
 
 #header-avatar-container {
-	a {
-		position: relative;
-		top:-65px;
-		left: 30px;
-	}
+	position: absolute;
+	bottom: 20px;
+	left: 20px;
 	img {
 		border: solid 5px #FFF;
 		background:#fff;
+		border-radius: 3px;
+		display: block;
 	}
 }
 
@@ -45,6 +47,7 @@
 }
 
 #profile-navbar {
+	margin-top: 50px;
 	display: flex;
 	flex-wrap: wrap;
 	margin-bottom: 20px;
@@ -263,3 +266,13 @@
 	border: 1px solid #eee;
 }
 
+.wpum-sidebar-widget {
+	h3 {
+		border: 3px solid #eee;
+		margin-bottom: 0;
+		padding: 10px 20px;
+		border-top-right-radius: 3px;
+		border-top-left-radius: 3px;
+		font-size: 18px;
+	}
+}
