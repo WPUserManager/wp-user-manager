@@ -61,7 +61,7 @@ class WPUM_Getting_Started {
 		.wpum-badge {
 			background: url('<?php echo $badge_url; ?>') center 24px/85px 85px no-repeat #fff;
 			-webkit-background-size: 85px 85px;
-			color: #7ec276;
+			color: #016afe;
 			font-size: 14px;
 			text-align: center;
 			font-weight: 600;
