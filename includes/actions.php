@@ -162,7 +162,7 @@ function wpum_restrict_wplogin() {
 
 	global $pagenow;
 
-	if ( 'wp-login.php' == $pagenow ) {
+	if ( 'wp-login.php' == $pagenow && ! defined( 'WPUM_UNLOCK_WP_LOGIN' ) ) {
 		$login_page = wpum_get_core_page_id( 'login' );
 		if ( $login_page && wpum_get_option( 'lock_wplogin' ) && ! isset( $_GET['action'] ) ) {
 			wp_safe_redirect( esc_url( get_permalink( $login_page ) ) );
