@@ -61,14 +61,14 @@ function wpum_password_recovery( $atts, $content = null ) {
 
 	ob_start();
 
-	$output = ob_get_clean();
-
 	if( is_user_logged_in() ) {
 		WPUM()->templates
 			->get_template_part( 'already-logged-in' );
 	} else {
 		echo WPUM()->forms->get_form( 'password-recovery', $atts );
 	}
+
+	$output = ob_get_clean();
 
 	return $output;
 
@@ -144,9 +144,7 @@ function wpum_registration_form( $atts, $content = null ) {
 
 	ob_start();
 
-	$output = ob_get_clean();
-
-	if( wpum_is_registration_enabled() ) {
+	if ( wpum_is_registration_enabled() ) {
 
 		if( is_user_logged_in() && ! $is_success ) {
 
@@ -179,6 +177,8 @@ function wpum_registration_form( $atts, $content = null ) {
 
 	}
 
+	$output = ob_get_clean();
+
 	return $output;
 
 }
@@ -195,11 +195,11 @@ function wpum_account_page( $atts, $content = null ) {
 
 	ob_start();
 
-	$output = ob_get_clean();
-
 	WPUM()->templates
 		->set_template_data( [] )
 		->get_template_part( 'account' );
+
+	$output = ob_get_clean();
 
 	return $output;
 
@@ -216,8 +216,6 @@ add_shortcode( 'wpum_account', 'wpum_account_page' );
 function wpum_profile( $atts, $content = null ) {
 
 	ob_start();
-
-	$output = ob_get_clean();
 
 	$login_page        = get_permalink( wpum_get_core_page_id( 'login' ) );
 	$registration_page = get_permalink( wpum_get_core_page_id( 'register' ) );
@@ -258,6 +256,8 @@ function wpum_profile( $atts, $content = null ) {
 			->get_template_part( 'profile' );
 
 	}
+
+	$output = ob_get_clean();
 
 	return $output;
 
@@ -470,8 +470,6 @@ function wpum_directory( $atts, $content = null ) {
 
 	ob_start();
 
-	$output = ob_get_clean();
-
 	$directory_id = intval( $id );
 
 	// Check if directory exists
@@ -595,6 +593,8 @@ function wpum_directory( $atts, $content = null ) {
 			] )
 			->get_template_part( $directory_template );
 	}
+
+	$output = ob_get_clean();
 
 	return $output;
 
