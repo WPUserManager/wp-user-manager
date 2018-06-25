@@ -36,7 +36,7 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 					'user'            => $data->user,
 					'current_user_id' => $data->current_user_id
 				] )
-				->get_template_part( 'profiles/intro' );
+				->get_template_part( 'profiles/header' );
 
 		?>
 	</div>
