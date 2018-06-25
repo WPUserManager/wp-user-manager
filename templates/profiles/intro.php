@@ -19,23 +19,23 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 ?>
 
 <div id="header-profile-details">
-
-	<div class="wpum-row">
-
-		<div class="wpum_four_fifth last" id="header-details-container">
-			<div id="header-name-container">
-				<h2>
-					<?php echo esc_html( $data->user->display_name ); ?>
-					<?php if( $data->current_user_id === $data->user->ID ) : ?>
-						<a href="<?php echo esc_url( get_permalink( wpum_get_core_page_id( 'account' ) ) ); ?>"><small><?php esc_html_e( '( Edit account )', 'wp-user-manager' ); ?></small></a>
-					<?php endif; ?>
-				</h2>
-			</div>
-			<div id="header-description-container">
-				<?php echo wpautop( get_user_meta( $data->user->ID, 'description', true ) ); ?>
-			</div>
-		</div>
-		<div class="wpum_clearfix"></div>
+	<div id="header-name-container">
+		<h2>
+			<?php echo esc_html( $data->user->display_name ); ?>
+			<?php if( $data->current_user_id === $data->user->ID ) : ?>
+				<a href="<?php echo esc_url( get_permalink( wpum_get_core_page_id( 'account' ) ) ); ?>"><small><?php esc_html_e( '( Edit account )', 'wp-user-manager' ); ?></small></a>
+			<?php endif; ?>
+		</h2>
 	</div>
-
+	<div id="profile-navigation">
+		<?php
+			WPUM()->templates
+				->set_template_data( [
+					'user'            => $data->user,
+					'current_user_id' => $data->current_user_id,
+					'tabs'            => wpum_get_registered_profile_tabs()
+				] )
+				->get_template_part( 'profiles/navigation' );
+		?>
+	</div>
 </div>
