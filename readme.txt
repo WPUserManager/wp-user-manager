@@ -98,7 +98,10 @@ Here [http://docs.wpusermanager.com/](http://docs.wpusermanager.com/)
 4. Registration forms fields editor: add, remove, edit fields and setup custom user role for the form.
 5. Emails editor
 6. Live emails editor.
-7. User directories editor.
+7. Emails editor dynamic tags.
+8. User directories editor.
+9. Single member profile example.
+10. Example of a directory.
 
 == Changelog ==
 
