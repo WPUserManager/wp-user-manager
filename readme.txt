@@ -80,15 +80,15 @@ Please read our detailed documentation here [http://docs.wpusermanager.com/categ
 
 == Frequently Asked Questions ==
 
-= Where can I find the documentation =
+= Install instructions =
 
-Here [http://docs.wpusermanager.com/](http://docs.wpusermanager.com/)
+Please refer to the [official documentation](https://docs.wpusermanager.com/category/13-installation).
 
-= FAQ & Tutorials =
-[http://docs.wpusermanager.com/category/66-faq-tutorials](http://docs.wpusermanager.com/category/66-faq-tutorials)
+= Does WPUM work with any theme? =
+ WP User Manager has been designed and coded to seamlessly integrate with any properly coded WordPress theme. However, each theme is coded differently and the quality of the code can vary. To avoid potential issues and conflicts, WPUM adds very little css and js to your website. If your theme is properly coded, WPUM should adapt itself to your site layout. Although we cannot guarantee that the plugin works with all themes.
 
-= General questions =
-[https://wpusermanager.com/faq/](https://wpusermanager.com/faq/)
+= My emails aren't delivering =
+Please refer to the [official documentation](https://docs.wpusermanager.com/article/73-my-emails-arent-delivering).
 
 == Screenshots ==
 
