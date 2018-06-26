@@ -65,9 +65,21 @@
 	}
 }
 
+#directory-avatar a {
+	width: 68px;
+	height: 68px;
+	display: inline-flex;
+	overflow: hidden;
+	border-radius: 999px;
+	box-shadow: none;
+}
+
 #directory-avatar img {
-	@extend .wpum-avatar-img;
-	vertical-align: middle;
+	display: block;
+	width: 100%;
+	min-height: 100%;
+	object-fit: cover;
+	object-position: center;
 }
 
 .wpum-directory-single-user {

@@ -25,11 +25,21 @@
 	position: absolute;
 	bottom: 20px;
 	left: 20px;
-	img {
+	a {
+		width: 128px;
+		height: 128px;
+		display: inline-block;
+		overflow: hidden;
 		border: solid 5px #FFF;
 		background:#fff;
 		border-radius: 3px;
+	}
+	img {
 		display: block;
+		width: 100%;
+		min-height: 100%;
+		object-fit: cover;
+		object-position: center;
 	}
 }
 
