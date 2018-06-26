@@ -46,34 +46,33 @@ Managing your members, creating front-end profiles and custom login and registra
 
 Read more about our features on [wpusermanager.com](https://wpusermanager.com/features/)
 
+= Paid Extensions =
+
+- [Custom Fields](https://wpusermanager.com/addons/custom-fields/): Add custom fields to members profiles and registration forms.
+- [User Verification](https://wpusermanager.com/addons/user-verification): Send a verification link via email upon registration or manually approve users before they can login.
+- [Social Login & Registration](https://wpusermanager.com/addons/social-login): Allow your users to quickly login and register with their favorite social network account, Facebook, Twitter, Instagram, LinkedIn & Instagram.
+- [MailChimp](https://wpusermanager.com/addons/mailchimp/): Sync users with MailChimp upon registration & more.
+
 = Free Extensions =
 
 - [Google reCAPTCHA](https://wpusermanager.com/addons/recaptcha): Stop spam registrations on your website for free.
-- [Username Length](https://wordpress.org/plugins/wpum-username-length/): Set minimum and maximum characters length for usernames.
-
-= Paid Extensions =
-
-- [Custom Fields](https://wpusermanager.com/addons/custom-fields/): Add custom fields to user profiles and registration form.
-- [User Verification](https://wpusermanager.com/addons/user-verification): Send a verification link via email upon registration or manually approve users before they can login.
-- [MailChimp](https://wpusermanager.com/addons/mailchimp/): Sync users with MailChimp upon registration & more.
+- [Username Length](https://wpusermanager.com/addons/username-length): Set minimum and maximum characters length for usernames.
+- [Personal Data](https://wpusermanager.com/addons/personal-data): Allows the user to request an export of personal data and request erasure of personal data from the account page for GDPR compliance.
+- [Delete Account](https://wpusermanager.com/addons/delete-account): Allows the user to delete their own profile from the frontend account page.
 
 [View all extensions](https://wpusermanager.com/addons)
 
-= Languages =
+= Translations =
 
-- English
-- Russian (thanks to Ctajleh)
-- French (thanks to Doxtra)
-- German (thanks to Tobias)
-- Simplified Chinese ( thanks to Changmeng )
-- Dutch ( thanks to Patrick )
-- Portuguese ( thanks to Fernando )
+Want to add a new language to WP User Manager? Awesome! You can contribute via [translate.wordpress.org](https://translate.wordpress.org/projects/wp-plugins/wp-user-manager). Please read the official [translation tutorial](https://docs.wpusermanager.com/article/67-translate-wp-user-manager) for more information.
 
 = Support =
 
-Support is provided only through our [support forum](https://wpusermanager.com/support/). Join our [support forum](https://wpusermanager.com/register/) to ask questions and get help regarding WP User Manager. Free support is provided exclusively for bugs and help using the plugin. Please read the support policy [https://wpusermanager.com/support-policy/](https://wpusermanager.com/support-policy/).
+Support is provided only through the [support forum](https://wordpress.org/support/plugin/wp-user-manager). Join the [support forum](https://wordpress.org/support/plugin/wp-user-manager) to ask questions and get help regarding WP User Manager. Free support is provided exclusively for bugs and help using the plugin. Please read the support policy [https://wpusermanager.com/support-policy/](https://wpusermanager.com/support-policy/).
 
-Before opening a [support topic](https://wpusermanager.com/support/) please read the [faqs](http://docs.wpusermanager.com/category/66-faq-tutorials) and [documentation](http://docs.wpusermanager.com/).
+Before opening a [support topic](https://wordpress.org/support/plugin/wp-user-manager) please read the [faqs](http://docs.wpusermanager.com/category/66-faq-tutorials) and [documentation](http://docs.wpusermanager.com/).
+
+Support for premium addons is provided exclusively [through the premium support platform](https://wpusermanager.com/support/). Support for premium addons cannot be provided through WordPress.org due to the rules put in place by the WordPress.org team.
 
 == Installation ==
 
