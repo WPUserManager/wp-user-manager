@@ -257,14 +257,15 @@ class WPUM_Form_Registration extends WPUM_Form {
 				'priority' => 0,
 			];
 
-			// Add privacy policy checkbox if enabled in WP.
-			if ( get_option( 'wp_page_for_privacy_policy' ) ) {
-				$fields['privacy'] = array(
-					'label'       => false,
-					'type'        => 'checkbox',
-					'description' => apply_filters( 'wpum_privacy_text', sprintf( __( 'I have read and accept the <a href="%s" target="_blank">privacy policy</a>.', 'wp-user-manager' ), get_permalink( get_option( 'wp_page_for_privacy_policy' ) ) ) ),
+			if ( wpum_get_option( 'allow_role_select' ) ) {
+				$fields['role'] = array(
+					'label'       => __( 'Select Role', 'wp-user-manager' ),
+					'type'        => 'select',
 					'required'    => true,
-					'priority'    => 9999,
+					'options'     => wpum_get_allowed_user_roles(),
+					'description' => __( 'Select your user role', 'wp-user-manager' ),
+					'priority'    => 9998,
+					'value'       => get_option( 'default_role' ),
 				);
 			}
 
@@ -280,17 +281,17 @@ class WPUM_Form_Registration extends WPUM_Form {
 				);
 			}
 
-			if ( wpum_get_option( 'allow_role_select' ) ) {
-				$fields['role'] = array(
-					'label'       => __( 'Select Role', 'wp-user-manager' ),
-					'type'        => 'select',
+			// Add privacy policy checkbox if enabled in WP.
+			if ( get_option( 'wp_page_for_privacy_policy' ) ) {
+				$fields['privacy'] = array(
+					'label'       => false,
+					'type'        => 'checkbox',
+					'description' => apply_filters( 'wpum_privacy_text', sprintf( __( 'I have read and accept the <a href="%s" target="_blank">privacy policy</a> and allow "%s" to collect and store the data I submit through this form.', 'wp-user-manager' ), get_permalink( get_option( 'wp_page_for_privacy_policy' ) ), get_bloginfo( 'name' ) ) ),
 					'required'    => true,
-					'options'     => wpum_get_allowed_user_roles(),
-					'description' => __( 'Select your user role', 'wp-user-manager' ),
-					'priority'    => 9998,
-					'value'       => get_option( 'default_role' ),
+					'priority'    => 9999,
 				);
 			}
+
 		}
 
 		return apply_filters( 'wpum_get_registration_fields', $fields );
