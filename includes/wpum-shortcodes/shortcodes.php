@@ -569,18 +569,13 @@ function wpum_directory( $atts, $content = null ) {
 
 	// Add specific roles if any assigned.
 	if ( is_array( $assigned_roles ) && ! empty( $assigned_roles ) ) {
-		$args['role'] = $assigned_roles;
+		$args['role__in'] = $assigned_roles;
 	}
 
 	// Exclude users if anything specified.
 	if ( $excluded_users && ! empty( $excluded_users ) ) {
 		$excluded_users  = trim( str_replace( ' ', '', $excluded_users ) );
 		$args['exclude'] = explode( ',', $excluded_users );
-	}
-
-	// Assign specific roles to the directory.
-	if ( is_array( $assigned_roles ) && ! empty( $assigned_roles ) ) {
-		$args['role'] = $assigned_roles;
 	}
 
 	// Update pagination and offset users.
@@ -629,12 +624,6 @@ function wpum_directory( $atts, $content = null ) {
 			'user_email',
 			'user_url',
 		);
-	}
-
-	// Exclude users if any specified.
-	if ( $excluded_users && ! empty( $excluded_users ) ) {
-		$excluded_users  = preg_replace( '/\s+/', '', explode( ',', $excluded_users ) );
-		$args['exclude'] = $excluded_users;
 	}
 
 	$args['offset'] = $offset;
