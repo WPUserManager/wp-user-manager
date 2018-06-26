@@ -8,7 +8,9 @@
 */
 
 // Exit if accessed directly
-if ( ! defined( 'ABSPATH' ) ) exit;
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 
 use Carbon_Fields\Container;
 use Carbon_Fields\Field;
@@ -34,11 +36,11 @@ class WPUM_Directories_Editor {
 		add_action( 'carbon_fields_register_fields', [ $this, 'register_directory_settings' ] );
 		add_action( 'admin_footer', [ $this, 'css' ] );
 
-		if( is_admin() ) {
-  			add_filter( 'manage_edit-wpum_directory_columns', array( $this, 'post_type_columns' ) );
-  			add_action( 'manage_wpum_directory_posts_custom_column', array( $this, 'post_type_columns_content' ), 2 );
-  			add_filter( 'post_row_actions', array( $this, 'remove_action_rows'), 10, 2 );
-  			add_filter( 'post_updated_messages', array( $this, 'post_updated_messages' ) );
+		if ( is_admin() ) {
+			add_filter( 'manage_edit-wpum_directory_columns', array( $this, 'post_type_columns' ) );
+			add_action( 'manage_wpum_directory_posts_custom_column', array( $this, 'post_type_columns_content' ), 2 );
+			add_filter( 'post_row_actions', array( $this, 'remove_action_rows' ), 10, 2 );
+			add_filter( 'post_updated_messages', array( $this, 'post_updated_messages' ) );
 			add_filter( 'bulk_post_updated_messages', array( $this, 'bulk_post_updated_messages' ) );
 		}
 
@@ -80,7 +82,7 @@ class WPUM_Directories_Editor {
 			'items_list_navigation' => __( 'Directories list navigation', 'wp-user-manager' ),
 			'filter_items_list'     => __( 'Filter directories list', 'wp-user-manager' ),
 		);
-		$args = array(
+		$args   = array(
 			'label'               => __( 'Directory', 'wp-user-manager' ),
 			'labels'              => $labels,
 			'supports'            => array( 'title' ),
@@ -110,53 +112,61 @@ class WPUM_Directories_Editor {
 
 		Container::make( 'post_meta', esc_html__( 'General settings', 'wp-user-manager' ) )
 			->where( 'post_type', '=', 'wpum_directory' )
-			->add_fields( array(
-				Field::make( "multiselect", "directory_assigned_roles", esc_html__( 'User roles', 'wp-user-manager' ) )
-					->set_help_text( esc_html__( 'Leave blank to display all user roles.', 'wp-user-manager' ) )
-					->add_options( $this->get_roles() ),
-				Field::make( 'checkbox', 'directory_search_form', esc_html__( 'Display search form', 'wp-user-manager' ) )
-					->set_option_value( 'yes' )
-					->set_help_text( esc_html__( 'Enable this option to display the user search form', 'wp-user-manager' ) ),
-				Field::make( 'text', 'directory_excluded_users', esc_html__( 'Exclude users', 'wp-user-manager' ) )
-					->set_attribute( 'placeholder', esc_html__( 'Example: 1, 6, 32', 'wp-user-manager' ) )
-					->set_help_text( esc_html__( 'Comma separated list of users id you wish to exclude.', 'wp-user-manager' ) ),
-				Field::make( 'text', 'directory_profiles_per_page', esc_html__( 'Profiles per page', 'wp-user-manager' ) )
-					->set_attribute( 'type', 'number' )
-					->set_attribute( 'min', 1 )
-					->set_help_text( esc_html__( 'Select how many profiles you wish to display per page.', 'wp-user-manager' ) )
-			) );
+			->add_fields(
+				array(
+					Field::make( 'multiselect', 'directory_assigned_roles', esc_html__( 'User roles', 'wp-user-manager' ) )
+						->set_help_text( esc_html__( 'Leave blank to display all user roles.', 'wp-user-manager' ) )
+						->add_options( $this->get_roles() ),
+					Field::make( 'checkbox', 'directory_search_form', esc_html__( 'Display search form', 'wp-user-manager' ) )
+						->set_option_value( 'yes' )
+						->set_help_text( esc_html__( 'Enable this option to display the user search form', 'wp-user-manager' ) ),
+					Field::make( 'text', 'directory_excluded_users', esc_html__( 'Exclude users', 'wp-user-manager' ) )
+						->set_attribute( 'placeholder', esc_html__( 'Example: 1, 6, 32', 'wp-user-manager' ) )
+						->set_help_text( esc_html__( 'Comma separated list of users id you wish to exclude.', 'wp-user-manager' ) ),
+					Field::make( 'text', 'directory_profiles_per_page', esc_html__( 'Profiles per page', 'wp-user-manager' ) )
+						->set_attribute( 'type', 'number' )
+						->set_attribute( 'min', 1 )
+						->set_help_text( esc_html__( 'Select how many profiles you wish to display per page.', 'wp-user-manager' ) ),
+				)
+			);
 
 		Container::make( 'post_meta', esc_html__( 'Sorting', 'wp-user-manager' ) )
 			->where( 'post_type', '=', 'wpum_directory' )
-			->add_fields( array(
-				Field::make( 'checkbox', 'directory_display_sorter', esc_html__( 'Display sorter', 'wp-user-manager' ) )
-					->set_option_value( 'yes' )
-					->set_help_text( esc_html__( 'Enable this setting to display a dropdown menu into the directory with the sorting options.', 'wp-user-manager' ) ),
-				Field::make( 'checkbox', 'directory_display_amount_filter', esc_html__( 'Display amount filter', 'wp-user-manager' ) )
-					->set_option_value( 'yes' )
-					->set_help_text( esc_html__( 'Enable this setting to display a dropdown menu into the directory with the results amount filter.', 'wp-user-manager' ) ),
-				Field::make( 'select', 'directory_sorting_method', esc_html__( 'Sorting method', 'wp-user-manager' ) )
+			->add_fields(
+				array(
+					Field::make( 'checkbox', 'directory_display_sorter', esc_html__( 'Display sorter', 'wp-user-manager' ) )
+						->set_option_value( 'yes' )
+						->set_help_text( esc_html__( 'Enable this setting to display a dropdown menu into the directory with the sorting options.', 'wp-user-manager' ) ),
+					Field::make( 'checkbox', 'directory_display_amount_filter', esc_html__( 'Display amount filter', 'wp-user-manager' ) )
+						->set_option_value( 'yes' )
+						->set_help_text( esc_html__( 'Enable this setting to display a dropdown menu into the directory with the results amount filter.', 'wp-user-manager' ) ),
+					Field::make( 'select', 'directory_sorting_method', esc_html__( 'Sorting method', 'wp-user-manager' ) )
 					->set_help_text( esc_html__( 'Select the sorting method for the directory. If the sorter field is visible, this will be used as default option.', 'wp-user-manager' ) )
-					->add_options( array(
-						'newest'    => esc_html__( 'Newest users first', 'wp-user-manager' ),
-						'oldest'    => esc_html__( 'Oldest users first', 'wp-user-manager' ),
-						'name'      => esc_html__( 'First name', 'wp-user-manager' ),
-						'last_name' => esc_html__( 'Last Name', 'wp-user-manager' )
-					) ),
-			) );
+					->add_options(
+						array(
+							'newest'    => esc_html__( 'Newest users first', 'wp-user-manager' ),
+							'oldest'    => esc_html__( 'Oldest users first', 'wp-user-manager' ),
+							'name'      => esc_html__( 'First name', 'wp-user-manager' ),
+							'last_name' => esc_html__( 'Last Name', 'wp-user-manager' ),
+						)
+					),
+				)
+			);
 
 		Container::make( 'post_meta', esc_html__( 'Directory template', 'wp-user-manager' ) )
 			->where( 'post_type', '=', 'wpum_directory' )
 			->set_context( 'side' )
 			->set_priority( 'default' )
-			->add_fields( array(
-				Field::make( 'select', 'directory_template', esc_html__( 'Template', 'wp-user-manager' ) )
-					->set_help_text( esc_html__( 'Select a template for this directory.', 'wp-user-manager' ) )
-					->add_options( wpum_get_directory_templates() ),
-				Field::make( 'select', 'directory_user_template', esc_html__( 'User template', 'wp-user-manager' ) )
-					->set_help_text( esc_html__( 'Select a template for the users within this directory.', 'wp-user-manager' ) )
-					->add_options( wpum_get_directory_user_templates() ),
-			) );
+			->add_fields(
+				array(
+					Field::make( 'select', 'directory_template', esc_html__( 'Template', 'wp-user-manager' ) )
+						->set_help_text( esc_html__( 'Select a template for this directory.', 'wp-user-manager' ) )
+						->add_options( wpum_get_directory_templates() ),
+					Field::make( 'select', 'directory_user_template', esc_html__( 'User template', 'wp-user-manager' ) )
+						->set_help_text( esc_html__( 'Select a template for the users within this directory.', 'wp-user-manager' ) )
+						->add_options( wpum_get_directory_user_templates() ),
+				)
+			);
 
 	}
 
@@ -169,7 +179,7 @@ class WPUM_Directories_Editor {
 
 		$roles = [];
 
-		foreach( wpum_get_roles( true, true ) as $role ) {
+		foreach ( wpum_get_roles( true, true ) as $role ) {
 			$roles[ $role['value'] ] = $role['label'];
 		}
 
@@ -186,7 +196,7 @@ class WPUM_Directories_Editor {
 
 		$screen = get_current_screen();
 
-		if( $screen->id !== 'wpum_directory' ) {
+		if ( $screen->id !== 'wpum_directory' ) {
 			return;
 		}
 
@@ -211,10 +221,10 @@ class WPUM_Directories_Editor {
 
 		unset( $columns['date'], $columns['author'] );
 
-		$columns["roles"]             = esc_html__( 'User Roles', 'wp-user-manager' );
-		$columns["search_form"]       = esc_html__( 'Search form', 'wp-user-manager' );
-		$columns["profiles_per_page"] = esc_html__( 'Profiles per page', 'wp-user-manager' );
-		$columns["shortcode"]         = esc_html__( 'Shortcode', 'wp-user-manager' );
+		$columns['roles']             = esc_html__( 'User Roles', 'wp-user-manager' );
+		$columns['search_form']       = esc_html__( 'Search form', 'wp-user-manager' );
+		$columns['profiles_per_page'] = esc_html__( 'Profiles per page', 'wp-user-manager' );
+		$columns['shortcode']         = esc_html__( 'Shortcode', 'wp-user-manager' );
 
 		return $columns;
 	}
@@ -231,14 +241,14 @@ class WPUM_Directories_Editor {
 		switch ( $columns ) {
 			case 'roles':
 				$roles = carbon_get_post_meta( $post->ID, 'directory_assigned_roles' );
-				if( $roles ) {
+				if ( $roles ) {
 					echo implode( ', ', $roles );
 				} else {
 					echo esc_html__( 'All', 'wp-user-manager' );
 				}
 				break;
 			case 'search_form':
-				if( carbon_get_post_meta( $post->ID, 'directory_search_form' ) ) {
+				if ( carbon_get_post_meta( $post->ID, 'directory_search_form' ) ) {
 					echo '<span class="dashicons dashicons-yes"></span>';
 				} else {
 					echo '<span class="dashicons dashicons-no"></span>';
@@ -248,7 +258,7 @@ class WPUM_Directories_Editor {
 				echo carbon_get_post_meta( $post->ID, 'directory_profiles_per_page' );
 				break;
 			case 'shortcode':
-				echo '[wpum_user_directory id="'.$post->ID.'"]';
+				echo '[wpum_user_directory id="' . $post->ID . '"]';
 				break;
 		}
 	}
@@ -276,16 +286,16 @@ class WPUM_Directories_Editor {
 	function post_updated_messages( $messages ) {
 		global $post, $post_ID;
 		$messages['wpum_directory'] = array(
-			0  => '', // Unused. Messages start at index 1.
-			1  => __( 'Directory updated.', 'wp-user-manager' ),
-			2  => __( 'Custom field updated.', 'wp-user-manager' ),
-			3  => __( 'Custom field deleted.', 'wp-user-manager'),
-			4  => __( 'Directory updated.', 'wp-user-manager' ),
+			0 => '', // Unused. Messages start at index 1.
+			1 => __( 'Directory updated.', 'wp-user-manager' ),
+			2 => __( 'Custom field updated.', 'wp-user-manager' ),
+			3 => __( 'Custom field deleted.', 'wp-user-manager' ),
+			4 => __( 'Directory updated.', 'wp-user-manager' ),
 			/* translators: %s: date and time of the revision */
-			5  => isset( $_GET['revision'] ) ? sprintf( __( 'Directory restored to revision from %s', 'wp-user-manager' ), wp_post_revision_title( (int) $_GET['revision'], false ) ) : false,
-			6  => sprintf( __( 'Directory created. Use the following shortcode to display this directory %s', 'wp-user-manager' ), '<code>[wpum_user_directory id="'.$post_ID.'"]</code>' ),
-			7  => __( 'Directory saved.', 'wp-user-manager' ),
-			8  => __( 'Directory submitted.', 'wp-user-manager' ),
+			5 => isset( $_GET['revision'] ) ? sprintf( __( 'Directory restored to revision from %s', 'wp-user-manager' ), wp_post_revision_title( (int) $_GET['revision'], false ) ) : false,
+			6 => sprintf( __( 'Directory created. Use the following shortcode to display this directory %s', 'wp-user-manager' ), '<code>[wpum_user_directory id="' . $post_ID . '"]</code>' ),
+			7 => __( 'Directory saved.', 'wp-user-manager' ),
+			8 => __( 'Directory submitted.', 'wp-user-manager' ),
 		);
 		return $messages;
 	}
@@ -299,11 +309,11 @@ class WPUM_Directories_Editor {
 	 */
 	public function bulk_post_updated_messages( $bulk_messages ) {
 		global $post, $post_ID;
-		$bulk_counts = array(
-			'updated'   => isset( $_REQUEST['updated'] )   ? absint( $_REQUEST['updated'] )   : 0,
-			'locked'    => isset( $_REQUEST['locked'] )    ? absint( $_REQUEST['locked'] )    : 0,
-			'deleted'   => isset( $_REQUEST['deleted'] )   ? absint( $_REQUEST['deleted'] )   : 0,
-			'trashed'   => isset( $_REQUEST['trashed'] )   ? absint( $_REQUEST['trashed'] )   : 0,
+		$bulk_counts                     = array(
+			'updated'   => isset( $_REQUEST['updated'] ) ? absint( $_REQUEST['updated'] ) : 0,
+			'locked'    => isset( $_REQUEST['locked'] ) ? absint( $_REQUEST['locked'] ) : 0,
+			'deleted'   => isset( $_REQUEST['deleted'] ) ? absint( $_REQUEST['deleted'] ) : 0,
+			'trashed'   => isset( $_REQUEST['trashed'] ) ? absint( $_REQUEST['trashed'] ) : 0,
 			'untrashed' => isset( $_REQUEST['untrashed'] ) ? absint( $_REQUEST['untrashed'] ) : 0,
 		);
 		$bulk_messages['wpum_directory'] = array(
