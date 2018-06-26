@@ -8,7 +8,9 @@
  * @since       1.0.0
  */
 
-if ( ! defined( 'ABSPATH' ) ) exit;
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 
 /**
  * Login form shortcode.
@@ -20,14 +22,18 @@ if ( ! defined( 'ABSPATH' ) ) exit;
  */
 function wpum_login_form( $atts, $content = null ) {
 
-	extract( shortcode_atts( array(
-		'psw_link'       => '',
-		'register_link'  => ''
-	), $atts ) );
+	extract(
+		shortcode_atts(
+			array(
+				'psw_link'      => '',
+				'register_link' => '',
+			), $atts
+		)
+	);
 
 	ob_start();
 
-	if( is_user_logged_in() ) {
+	if ( is_user_logged_in() ) {
 		WPUM()->templates
 			->get_template_part( 'already-logged-in' );
 	} else {
@@ -54,14 +60,18 @@ add_shortcode( 'wpum_login_form', 'wpum_login_form' );
  */
 function wpum_password_recovery( $atts, $content = null ) {
 
-	extract( shortcode_atts( array(
-		'login_link'    => '',
-		'register_link' => ''
-	), $atts ) );
+	extract(
+		shortcode_atts(
+			array(
+				'login_link'    => '',
+				'register_link' => '',
+			), $atts
+		)
+	);
 
 	ob_start();
 
-	if( is_user_logged_in() ) {
+	if ( is_user_logged_in() ) {
 		WPUM()->templates
 			->get_template_part( 'already-logged-in' );
 	} else {
@@ -84,16 +94,20 @@ add_shortcode( 'wpum_password_recovery', 'wpum_password_recovery' );
  */
 function wpum_login_link( $atts, $content = null ) {
 
-	extract( shortcode_atts( array(
-		'redirect' => '',
-		'label'    => esc_html__( 'Login', 'wp-user-manager' )
-	), $atts ) );
+	extract(
+		shortcode_atts(
+			array(
+				'redirect' => '',
+				'label'    => esc_html__( 'Login', 'wp-user-manager' ),
+			), $atts
+		)
+	);
 
-	if( is_user_logged_in() ) {
+	if ( is_user_logged_in() ) {
 		$output = '';
 	} else {
 		$url    = wp_login_url( $redirect );
-		$output = '<a href="'. esc_url( $url ) .'" class="wpum-login-link">'.esc_html( $label ).'</a>';
+		$output = '<a href="' . esc_url( $url ) . '" class="wpum-login-link">' . esc_html( $label ) . '</a>';
 	}
 
 	return $output;
@@ -110,14 +124,18 @@ add_shortcode( 'wpum_login', 'wpum_login_link' );
  */
 function wpum_logout_link( $atts, $content = null ) {
 
-	extract( shortcode_atts( array(
-		'redirect' => '',
-		'label'    => esc_html__( 'Logout', 'wp-user-manager' )
-	), $atts ) );
+	extract(
+		shortcode_atts(
+			array(
+				'redirect' => '',
+				'label'    => esc_html__( 'Logout', 'wp-user-manager' ),
+			), $atts
+		)
+	);
 
 	$output = '';
 
-	if( is_user_logged_in() ) {
+	if ( is_user_logged_in() ) {
 		$output = '<a href="' . esc_url( wp_logout_url( $redirect ) ) . '">' . esc_html( $label ) . '</a>';
 	}
 
@@ -135,10 +153,14 @@ add_shortcode( 'wpum_logout', 'wpum_logout_link' );
  */
 function wpum_registration_form( $atts, $content = null ) {
 
-	extract( shortcode_atts( array(
-		'login_link' => '',
-		'psw_link'   => ''
-	), $atts ) );
+	extract(
+		shortcode_atts(
+			array(
+				'login_link' => '',
+				'psw_link'   => '',
+			), $atts
+		)
+	);
 
 	$is_success = isset( $_GET['registration'] ) && $_GET['registration'] == 'success' ? true : false;
 
@@ -146,19 +168,21 @@ function wpum_registration_form( $atts, $content = null ) {
 
 	if ( wpum_is_registration_enabled() ) {
 
-		if( is_user_logged_in() && ! $is_success ) {
+		if ( is_user_logged_in() && ! $is_success ) {
 
 			WPUM()->templates
 				->get_template_part( 'already-logged-in' );
 
-		} else if( $is_success ) {
+		} elseif ( $is_success ) {
 
 			$success_message = apply_filters( 'wpum_registration_success_message', esc_html__( 'Registration complete. We have sent you a confirmation email with your details.', 'wp-user-manager' ) );
 
 			WPUM()->templates
-				->set_template_data( [
-					'message' => $success_message
-				] )
+				->set_template_data(
+					[
+						'message' => $success_message,
+					]
+				)
 				->get_template_part( 'messages/general', 'success' );
 
 		} else {
@@ -166,13 +190,14 @@ function wpum_registration_form( $atts, $content = null ) {
 			echo WPUM()->forms->get_form( 'registration', $atts );
 
 		}
-
 	} else {
 
 		WPUM()->templates
-			->set_template_data( [
-				'message' => esc_html__( 'Registrations are currently disabled.', 'wp-user-manager' )
-			] )
+			->set_template_data(
+				[
+					'message' => esc_html__( 'Registrations are currently disabled.', 'wp-user-manager' ),
+				]
+			)
 			->get_template_part( 'messages/general', 'error' );
 
 	}
@@ -219,40 +244,48 @@ function wpum_profile( $atts, $content = null ) {
 
 	$login_page        = get_permalink( wpum_get_core_page_id( 'login' ) );
 	$registration_page = get_permalink( wpum_get_core_page_id( 'register' ) );
-	$warning_message   = sprintf( __( 'This content is available to members only. Please <a href="%s">login</a> or <a href="%s">register</a> to view this area.', 'wp-user-manager' ), $login_page, $registration_page );
+	$warning_message   = sprintf( __( 'This content is available to members only. Please <a href="%1$s">login</a> or <a href="%2$s">register</a> to view this area.', 'wp-user-manager' ), $login_page, $registration_page );
 
 	// Check if not logged in and on profile page - no given user
 	if ( ! is_user_logged_in() && ! wpum_get_queried_user_id() ) {
 
 		WPUM()->templates
-			->set_template_data( [
-				'message' => $warning_message
-			] )
+			->set_template_data(
+				[
+					'message' => $warning_message,
+				]
+			)
 			->get_template_part( 'messages/general', 'warning' );
 
-	} else if( ! is_user_logged_in() && wpum_get_queried_user_id() && ! wpum_guests_can_view_profiles() ) {
+	} elseif ( ! is_user_logged_in() && wpum_get_queried_user_id() && ! wpum_guests_can_view_profiles() ) {
 
 		WPUM()->templates
-			->set_template_data( [
-				'message' => $warning_message
-			] )
+			->set_template_data(
+				[
+					'message' => $warning_message,
+				]
+			)
 			->get_template_part( 'messages/general', 'warning' );
 
-	} else if( is_user_logged_in() && wpum_get_queried_user_id() && ! wpum_members_can_view_profiles() && ! wpum_is_own_profile() ) {
+	} elseif ( is_user_logged_in() && wpum_get_queried_user_id() && ! wpum_members_can_view_profiles() && ! wpum_is_own_profile() ) {
 
 		WPUM()->templates
-			->set_template_data( [
-				'message' => esc_html__( 'You are not authorized to access this area.', 'wp-user-manager' )
-			] )
+			->set_template_data(
+				[
+					'message' => esc_html__( 'You are not authorized to access this area.', 'wp-user-manager' ),
+				]
+			)
 			->get_template_part( 'messages/general', 'warning' );
 
 	} else {
 
 		WPUM()->templates
-			->set_template_data( [
-				'user'            => get_user_by( 'id', wpum_get_queried_user_id() ),
-				'current_user_id' => get_current_user_id()
-			] )
+			->set_template_data(
+				[
+					'user'            => get_user_by( 'id', wpum_get_queried_user_id() ),
+					'current_user_id' => get_current_user_id(),
+				]
+			)
 			->get_template_part( 'profile' );
 
 	}
@@ -282,14 +315,18 @@ function wpum_restrict_logged_in( $atts, $content = null ) {
 	} else {
 
 		$login_page = get_permalink( wpum_get_core_page_id( 'login' ) );
-		$login_page = add_query_arg( [
-			'redirect_to' => get_permalink()
-		], $login_page );
+		$login_page = add_query_arg(
+			[
+				'redirect_to' => get_permalink(),
+			], $login_page
+		);
 
 		WPUM()->templates
-			->set_template_data( [
-				'message' => sprintf( __( 'This content is available to members only. Please <a href="%s">login</a> or <a href="%s">register</a> to view this area.', 'wp-user-manager'), $login_page, get_permalink( wpum_get_core_page_id( 'register' ) )  ),
-			] )
+			->set_template_data(
+				[
+					'message' => sprintf( __( 'This content is available to members only. Please <a href="%1$s">login</a> or <a href="%2$s">register</a> to view this area.', 'wp-user-manager' ), $login_page, get_permalink( wpum_get_core_page_id( 'register' ) ) ),
+				]
+			)
 			->get_template_part( 'messages/general', 'warning' );
 
 	}
@@ -309,30 +346,38 @@ add_shortcode( 'wpum_restrict_logged_in', 'wpum_restrict_logged_in' );
  */
 function wpum_restrict_to_users( $atts, $content = null ) {
 
-	extract( shortcode_atts( array(
-		'ids' => null,
-	), $atts ) );
+	extract(
+		shortcode_atts(
+			array(
+				'ids' => null,
+			), $atts
+		)
+	);
 
 	ob_start();
 
 	$allowed_users = explode( ',', $ids );
 	$current_user  = get_current_user_id();
 
-	if( is_user_logged_in() && ! is_null( $content ) && ! is_feed() && in_array( $current_user , $allowed_users ) ) {
+	if ( is_user_logged_in() && ! is_null( $content ) && ! is_feed() && in_array( $current_user, $allowed_users ) ) {
 
 		echo do_shortcode( $content );
 
 	} else {
 
 		$login_page = get_permalink( wpum_get_core_page_id( 'login' ) );
-		$login_page = add_query_arg( [
-			'redirect_to' => get_permalink()
-		], $login_page );
+		$login_page = add_query_arg(
+			[
+				'redirect_to' => get_permalink(),
+			], $login_page
+		);
 
 		WPUM()->templates
-			->set_template_data( [
-				'message' => sprintf( __( 'This content is available to members only. Please <a href="%s">login</a> or <a href="%s">register</a> to view this area.', 'wp-user-manager'), $login_page, get_permalink( wpum_get_core_page_id( 'register' ) )  ),
-			] )
+			->set_template_data(
+				[
+					'message' => sprintf( __( 'This content is available to members only. Please <a href="%1$s">login</a> or <a href="%2$s">register</a> to view this area.', 'wp-user-manager' ), $login_page, get_permalink( wpum_get_core_page_id( 'register' ) ) ),
+				]
+			)
 			->get_template_part( 'messages/general', 'warning' );
 
 	}
@@ -353,9 +398,13 @@ add_shortcode( 'wpum_restrict_to_users', 'wpum_restrict_to_users' );
  */
 function wpum_restrict_to_user_roles( $atts, $content = null ) {
 
-	extract( shortcode_atts( array(
-		'roles' => null,
-	), $atts ) );
+	extract(
+		shortcode_atts(
+			array(
+				'roles' => null,
+			), $atts
+		)
+	);
 
 	ob_start();
 
@@ -363,21 +412,25 @@ function wpum_restrict_to_user_roles( $atts, $content = null ) {
 	$allowed_roles = array_map( 'trim', $allowed_roles );
 	$current_user  = wp_get_current_user();
 
-	if( is_user_logged_in() && ! is_null( $content ) && ! is_feed() && array_intersect( $current_user->roles, $allowed_roles ) ) {
+	if ( is_user_logged_in() && ! is_null( $content ) && ! is_feed() && array_intersect( $current_user->roles, $allowed_roles ) ) {
 
 		echo do_shortcode( $content );
 
 	} else {
 
 		$login_page = get_permalink( wpum_get_core_page_id( 'login' ) );
-		$login_page = add_query_arg( [
-			'redirect_to' => get_permalink()
-		], $login_page );
+		$login_page = add_query_arg(
+			[
+				'redirect_to' => get_permalink(),
+			], $login_page
+		);
 
 		WPUM()->templates
-			->set_template_data( [
-				'message' => sprintf( __( 'This content is available to members only. Please <a href="%s">login</a> or <a href="%s">register</a> to view this area.', 'wp-user-manager'), $login_page, get_permalink( wpum_get_core_page_id( 'register' ) )  ),
-			] )
+			->set_template_data(
+				[
+					'message' => sprintf( __( 'This content is available to members only. Please <a href="%1$s">login</a> or <a href="%2$s">register</a> to view this area.', 'wp-user-manager' ), $login_page, get_permalink( wpum_get_core_page_id( 'register' ) ) ),
+				]
+			)
 			->get_template_part( 'messages/general', 'warning' );
 
 	}
@@ -395,20 +448,26 @@ add_shortcode( 'wpum_restrict_to_user_roles', 'wpum_restrict_to_user_roles' );
  * @param string $content
  * @return void
  */
-function wpum_recently_registered( $atts, $content=null ) {
+function wpum_recently_registered( $atts, $content = null ) {
 
-	extract( shortcode_atts( array(
-		'amount'          => '1',
-		'link_to_profile' => 'yes'
-	), $atts ) );
+	extract(
+		shortcode_atts(
+			array(
+				'amount'          => '1',
+				'link_to_profile' => 'yes',
+			), $atts
+		)
+	);
 
 	ob_start();
 
 	WPUM()->templates
-		->set_template_data( [
-			'amount'          => $amount,
-			'link_to_profile' =>  $link_to_profile
-		] )
+		->set_template_data(
+			[
+				'amount'          => $amount,
+				'link_to_profile' => $link_to_profile,
+			]
+		)
 		->get_template_part( 'recently-registered' );
 
 	$output = ob_get_clean();
@@ -426,26 +485,32 @@ add_shortcode( 'wpum_recently_registered', 'wpum_recently_registered' );
  */
 function wpum_profile_card( $atts, $content = null ) {
 
-	extract( shortcode_atts( array(
-		'user_id'         => get_current_user_id(),
-		'link_to_profile' => 'yes',
-		'display_buttons' => 'yes',
-		'display_cover'   => 'yes',
-	), $atts ) );
+	extract(
+		shortcode_atts(
+			array(
+				'user_id'         => get_current_user_id(),
+				'link_to_profile' => 'yes',
+				'display_buttons' => 'yes',
+				'display_cover'   => 'yes',
+			), $atts
+		)
+	);
 
 	ob_start();
 
-	if( empty( $user_id ) ) {
+	if ( empty( $user_id ) ) {
 		$user_id = get_current_user_id();
 	}
 
 	WPUM()->templates
-		->set_template_data( [
-			'user_id'         => $user_id,
-			'link_to_profile' => $link_to_profile,
-			'display_buttons' => $display_buttons,
-			'display_cover'   => $display_cover,
-		] )
+		->set_template_data(
+			[
+				'user_id'         => $user_id,
+				'link_to_profile' => $link_to_profile,
+				'display_buttons' => $display_buttons,
+				'display_cover'   => $display_cover,
+			]
+		)
 		->get_template_part( 'profile-card' );
 
 	$output = ob_get_clean();
@@ -464,9 +529,13 @@ add_shortcode( 'wpum_profile_card', 'wpum_profile_card' );
  */
 function wpum_directory( $atts, $content = null ) {
 
-	extract( shortcode_atts( array(
-		'id' => '',
-	), $atts ) );
+	extract(
+		shortcode_atts(
+			array(
+				'id' => '',
+			), $atts
+		)
+	);
 
 	ob_start();
 
@@ -481,49 +550,49 @@ function wpum_directory( $atts, $content = null ) {
 	$has_search_form         = carbon_get_post_meta( $directory_id, 'directory_search_form' );
 	$has_amount_modifier     = carbon_get_post_meta( $directory_id, 'directory_display_amount_filter' );
 	$assigned_roles          = carbon_get_post_meta( $directory_id, 'directory_assigned_roles' );
-	$profiles_per_page       = carbon_get_post_meta( $directory_id, 'directory_profiles_per_page' ) ? carbon_get_post_meta( $directory_id, 'directory_profiles_per_page' ): 10;
+	$profiles_per_page       = carbon_get_post_meta( $directory_id, 'directory_profiles_per_page' ) ? carbon_get_post_meta( $directory_id, 'directory_profiles_per_page' ) : 10;
 	$excluded_users          = carbon_get_post_meta( $directory_id, 'directory_excluded_users' );
 	$directory_template      = carbon_get_post_meta( $directory_id, 'directory_template' );
 	$directory_user_template = carbon_get_post_meta( $directory_id, 'directory_user_template' );
 
 	// Modify the number argument if changed from the search form.
-	if( isset( $_POST['amount'] ) && ! empty( $_POST['amount'] ) ) {
+	if ( isset( $_POST['amount'] ) && ! empty( $_POST['amount'] ) ) {
 		$profiles_per_page = absint( $_POST['amount'] );
-	} elseif( isset( $_GET['amount'] ) && ! empty( $_GET['amount'] ) ) {
+	} elseif ( isset( $_GET['amount'] ) && ! empty( $_GET['amount'] ) ) {
 		$profiles_per_page = absint( $_GET['amount'] );
 	}
 
 	// Prepare query arguments.
 	$args = [
-		'number' => $profiles_per_page
+		'number' => $profiles_per_page,
 	];
 
 	// Add specific roles if any assigned.
-	if( is_array( $assigned_roles ) && ! empty( $assigned_roles ) ) {
+	if ( is_array( $assigned_roles ) && ! empty( $assigned_roles ) ) {
 		$args['role'] = $assigned_roles;
 	}
 
 	// Exclude users if anything specified.
-	if( $excluded_users && ! empty( $excluded_users ) ) {
-		$excluded_users  = trim( str_replace(' ','', $excluded_users ) );
-		$args['exclude'] = explode(',', $excluded_users );
+	if ( $excluded_users && ! empty( $excluded_users ) ) {
+		$excluded_users  = trim( str_replace( ' ', '', $excluded_users ) );
+		$args['exclude'] = explode( ',', $excluded_users );
 	}
 
 	// Assign specific roles to the directory.
-	if( is_array( $assigned_roles ) && ! empty( $assigned_roles ) ) {
+	if ( is_array( $assigned_roles ) && ! empty( $assigned_roles ) ) {
 		$args['role'] = $assigned_roles;
 	}
 
 	// Update pagination and offset users.
-	$paged  = ( get_query_var('paged') ) ? get_query_var('paged') : 1;
-	if( $paged == 1 ) {
+	$paged = ( get_query_var( 'paged' ) ) ? get_query_var( 'paged' ) : 1;
+	if ( $paged == 1 ) {
 		$offset = 0;
 	} else {
-		$offset = ( $paged -1 ) * $profiles_per_page;
+		$offset = ( $paged - 1 ) * $profiles_per_page;
 	}
 
 	// Set sort by method if any specified from the search form.
-	if( isset( $_GET['sortby'] ) && ! empty( $_GET['sortby'] ) ) {
+	if ( isset( $_GET['sortby'] ) && ! empty( $_GET['sortby'] ) ) {
 		$sortby = esc_attr( $_GET['sortby'] );
 	} else {
 		$sortby = $sort_by_default;
@@ -551,9 +620,9 @@ function wpum_directory( $atts, $content = null ) {
 	}
 
 	// Setup search if anything specified.
-	if( isset( $_GET['directory-search'] ) && ! empty( $_GET['directory-search'] ) ) {
+	if ( isset( $_GET['directory-search'] ) && ! empty( $_GET['directory-search'] ) ) {
 		$search_string          = sanitize_text_field( esc_attr( trim( $_GET['directory-search'] ) ) );
-		$args['search']         = '*'.esc_attr( $search_string ).'*';
+		$args['search']         = '*' . esc_attr( $search_string ) . '*';
 		$args['search_columns'] = array(
 			'user_login',
 			'user_nicename',
@@ -563,8 +632,8 @@ function wpum_directory( $atts, $content = null ) {
 	}
 
 	// Exclude users if any specified.
-	if( $excluded_users && ! empty( $excluded_users ) ) {
-		$excluded_users  = preg_replace( '/\s+/', '', explode( ",", $excluded_users ) );
+	if ( $excluded_users && ! empty( $excluded_users ) ) {
+		$excluded_users  = preg_replace( '/\s+/', '', explode( ',', $excluded_users ) );
 		$args['exclude'] = $excluded_users;
 	}
 
@@ -573,24 +642,26 @@ function wpum_directory( $atts, $content = null ) {
 	$total_users    = $user_query->get_total();
 	$total_pages    = ceil( $total_users / $profiles_per_page );
 
-	if( $check_directory == 'publish' ) {
+	if ( $check_directory == 'publish' ) {
 
 		$directory_template = ( $directory_template !== 'default' || ! $directory_template ) ? $directory_template : 'directory';
 
 		WPUM()->templates
-			->set_template_data( [
-				'has_sort_by'         => $has_sort_by,
-				'sort_by_default'     => $sort_by_default,
-				'has_search_form'     => $has_search_form,
-				'has_amount_modifier' => $has_amount_modifier,
-				'results'             => $user_query->get_results(),
-				'total'               => $user_query->get_total(),
-				'template'            => $directory_template,
-				'user_template'       => $directory_user_template,
-				'paged'               => $paged,
-				'total_pages'         => $total_pages,
-				'directory_id'        => $directory_id
-			] )
+			->set_template_data(
+				[
+					'has_sort_by'         => $has_sort_by,
+					'sort_by_default'     => $sort_by_default,
+					'has_search_form'     => $has_search_form,
+					'has_amount_modifier' => $has_amount_modifier,
+					'results'             => $user_query->get_results(),
+					'total'               => $user_query->get_total(),
+					'template'            => $directory_template,
+					'user_template'       => $directory_user_template,
+					'paged'               => $paged,
+					'total_pages'         => $total_pages,
+					'directory_id'        => $directory_id,
+				]
+			)
 			->get_template_part( $directory_template );
 	}
 
