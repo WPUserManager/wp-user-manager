@@ -10,20 +10,15 @@ License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Stable tag: 2.0.0
 
-WP User Manager is the best solution to manage your users and create front-end profiles for your members.
+The most customizable profiles & community builder WordPress plugin with front-end login, registration, profile customization and content restriction.
 
 == Description ==
 
-= WP User Manager =
+= The most customizable profiles & community builder WordPress plugin =
 
-Managing your members, creating front-end profiles and custom login and registration pages should be easy. With this plugin, it finally is.
-
-[WP User Manager](https://wpusermanager.com) lets you create highly customizable user profiles. You easily add custom user registration, login and password recovery forms to your WordPress website. [WP User Manager](https://wpusermanager.com) is the best solution to manage your users.
+[WP User Manager](https://wpusermanager.com) lets you create highly customizable user profiles together with custom user registration, login, password recovery and account customization forms to your WordPress website. [WP User Manager](https://wpusermanager.com) is the best solution to manage your community. Powerful and flexible, yet easy to setup and use. With WP User Manager you can create almost any type of website where your visitors can join and become members.
 
 [website](https://wpusermanager.com) | [addons](https://wpusermanager.com/addons) | [documentation](http://docs.wpusermanager.com/) | [support](https://wpusermanager.com/support/)
-
-= Smart & Effective =
-[WP User Manager](https://wpusermanager.com) is a simple-to-use solution to manage your WordPress community and create beautiful user profiles. Powerful and flexible, yet easy to setup and use, WPUM takes care of all your users needs and saves you time.
 
 = Features included =
 
@@ -46,12 +41,9 @@ Managing your members, creating front-end profiles and custom login and registra
 
 Read more about our features on [wpusermanager.com](https://wpusermanager.com/features/)
 
-= Paid Extensions =
+= Add-ons =
 
-- [Custom Fields](https://wpusermanager.com/addons/custom-fields/): Add custom fields to members profiles and registration forms.
-- [User Verification](https://wpusermanager.com/addons/user-verification): Send a verification link via email upon registration or manually approve users before they can login.
-- [Social Login & Registration](https://wpusermanager.com/addons/social-login): Allow your users to quickly login and register with their favorite social network account, Facebook, Twitter, Instagram, LinkedIn & Instagram.
-- [MailChimp](https://wpusermanager.com/addons/mailchimp/): Sync users with MailChimp upon registration & more.
+For more functionality check out [the add-ons page](https://wpusermanager.com/addons/).
 
 = Free Extensions =
 
@@ -59,6 +51,13 @@ Read more about our features on [wpusermanager.com](https://wpusermanager.com/fe
 - [Username Length](https://wpusermanager.com/addons/username-length): Set minimum and maximum characters length for usernames.
 - [Personal Data](https://wpusermanager.com/addons/personal-data): Allows the user to request an export of personal data and request erasure of personal data from the account page for GDPR compliance.
 - [Delete Account](https://wpusermanager.com/addons/delete-account): Allows the user to delete their own profile from the frontend account page.
+
+= Paid Addons =
+
+- [Custom Fields](https://wpusermanager.com/addons/custom-fields/): Add custom fields to members profiles and registration forms.
+- [User Verification](https://wpusermanager.com/addons/user-verification): Send a verification link via email upon registration or manually approve users before they can login.
+- [Social Login & Registration](https://wpusermanager.com/addons/social-login): Allow your users to quickly login and register with their favorite social network account, Facebook, Twitter, Instagram, LinkedIn & Instagram.
+- [MailChimp](https://wpusermanager.com/addons/mailchimp/): Sync users with MailChimp upon registration & more.
 
 [View all extensions](https://wpusermanager.com/addons)
 
@@ -89,6 +88,14 @@ Please refer to the [official documentation](https://docs.wpusermanager.com/cate
 
 = My emails aren't delivering =
 Please refer to the [official documentation](https://docs.wpusermanager.com/article/73-my-emails-arent-delivering).
+
+= Is WP User Manager GDPR compliant? =
+
+Please refer to the [official documentation for gdpr compliance](https://docs.wpusermanager.com/article/427-gdpr-compliance).
+
+WP User Manager provides add-ons to comply with the right of erasure and the right
+
+Please note that using WPUM and the mentioned add-ons does NOT guarantee compliance to GDPR. WPUM gives you general information and tools, but is NOT meant to serve as complete compliance package. As the owner of your website, it is your responsibility to ensure that your site is compliant with the regulations. Please always contact an attorney for accurate information, we are not responsible for your website GDPR compliance and we can’t be held accountable for any legal issues.
 
 == Screenshots ==
 
