@@ -1,4 +1,4 @@
-=== WP User Manager ===
+=== WP User Manager - User Profile Builder & Membership ===
 Author URI: https://wpusermanager.com
 Plugin URI: https://wpusermanager.com
 Contributors: alessandro.tesoro, wpusermanager
