@@ -109,6 +109,9 @@ Please note that using WPUM and the mentioned add-ons does NOT guarantee complia
 8. User directories editor.
 9. Single member profile example.
 10. Example of a directory.
+11. Account customization page.
+12. Registration form.
+13. Login form.
 
 == Changelog ==
 
