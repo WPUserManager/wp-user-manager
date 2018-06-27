@@ -855,6 +855,8 @@
     height: 70px; }
   .wpum-form fieldset.fieldset-robo {
     display: none; }
+.wpum-form .select2-container {
+  width: 100%; }
 
 .wpum-action-links {
   list-style: none;
