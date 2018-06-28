@@ -12,3 +12,4 @@ yarn.lock
 yarn-error.log
 .sass-cache
 dist
+deploy.sh
