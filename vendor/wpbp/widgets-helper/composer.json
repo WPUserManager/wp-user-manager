@@ -1,0 +1,31 @@
+{
+  "name": "wpbp/widgets-helper",
+  "description": "A class to ease creating powered Widgets on WordPress ",
+  "license": "GPL-3.0",
+  "keywords": [
+    "wordpress",
+    "widget",
+    "widgets"
+  ],
+  "homepage": "https://github.com/WPBP/Widgets-Helper",
+  "type": "library",
+  "authors": [
+    {
+      "name": "Daniele Scasciafratte",
+      "email": "mte90net@gmail.com",
+      "homepage": "http://mte90.net"
+    }
+  ],
+  "minimum-stability": "stable",
+  "repositories": [
+    {
+      "type": "vcs",
+      "url": "https://github.com/WPBP/Widgets-Helper.git"
+    }
+  ],
+  "autoload": {
+    "files": [
+      "wph-widget.php"
+    ]
+  }
+}

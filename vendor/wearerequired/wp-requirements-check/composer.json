@@ -1,0 +1,32 @@
+{
+  "name":        "wearerequired/wp-requirements-check",
+  "description": "Simple requirements checking class",
+  "license":     "GPL-2.0+",
+  "authors":     [
+    {
+      "name":     "required",
+      "email":    "support@required.ch",
+      "homepage": "https://required.com",
+      "role":     "Company"
+    },
+    {
+      "name":  "Pascal Birchler",
+      "email": "pascal@required.ch",
+      "role":  "Developer"
+    },
+    {
+      "name":  "Ulrich Pogson",
+      "email": "ulrich@required.ch",
+      "role":  "Developer"
+    }
+  ],
+  "keywords": [
+    "wordpress",
+    "requirements"
+  ],
+  "autoload":    {
+    "classmap": [
+      "WP_Requirements_Check.php"
+    ]
+  }
+}
