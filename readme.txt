@@ -115,6 +115,10 @@ Please note that using WPUM and the mentioned add-ons does NOT guarantee complia
 
 == Changelog ==
 
+= 2.0.1 ( 29th June 2018 )
+- Fix: too many parameters sent to the menu editor hook
+- Fix: redirect loop when required pages aren't setup as they're supposed to
+
 = 2.0.0 ( 28th June 2018 ) =
 - Complete rewrite of the plugin read more here: [https://wpusermanager.com/wpum-2-0-0-release/](https://wpusermanager.com/wpum-2-0-0-release/)
 
