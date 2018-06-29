@@ -25,7 +25,7 @@ class WPUM_Menus {
 		add_action( 'carbon_fields_register_fields', [ $this, 'menu_settings' ] );
 		add_action( 'load-nav-menus.php', [ $this, 'cssjs' ] );
 		add_action( 'admin_enqueue_scripts', [ $this, 'js' ] );
-		add_filter( 'nav_menu_link_attributes', [ $this, 'set_nav_item_as_logout' ], 10, 4 );
+		add_filter( 'nav_menu_link_attributes', [ $this, 'set_nav_item_as_logout' ], 10, 3 );
 		if( ! is_admin() ) {
 			add_filter( 'wp_get_nav_menu_items', [ $this, 'exclude_menu_items' ], 10, 3 );
 		}
@@ -106,10 +106,9 @@ class WPUM_Menus {
 	 * @param array $atts
 	 * @param object $item
 	 * @param array $args
-	 * @param string $depth
 	 * @return array
 	 */
-	public function set_nav_item_as_logout( $atts, $item, $args, $depth ) {
+	public function set_nav_item_as_logout( $atts, $item, $args ) {
 
 		$is_logout = carbon_get_nav_menu_item_meta( $item->ID, 'convert_to_logout' );
 
