@@ -181,9 +181,11 @@ add_action( 'init', 'wpum_restrict_wplogin' );
  */
 function wpum_restrict_account_page() {
 
-	if ( is_page( wpum_get_core_page_id( 'account' ) ) && ! is_user_logged_in() ) {
+	$account_page = wpum_get_core_page_id( 'account' );
 
-		$redirect = get_permalink( wpum_get_core_page_id( 'login' ) );
+	if ( $account_page && is_page( $account_page ) && ! is_user_logged_in() ) {
+
+		$redirect = get_permalink( $account_page );
 		$redirect = add_query_arg(
 			[
 				'redirect_to' => get_permalink(),
@@ -230,7 +232,10 @@ add_action( 'wpum_account_page_content', 'wpum_display_account_page_content' );
  * @return void
  */
 function wpum_when_profile_not_found() {
-	if ( is_page( wpum_get_core_page_id( 'profile' ) ) && ! wpum_get_queried_user_id() ) {
+
+	$profile_page = wpum_get_core_page_id( 'profile' );
+
+	if ( $profile_page && is_page( $profile_page ) && ! wpum_get_queried_user_id() ) {
 		global $wp_query;
 		$wp_query->set_404();
 		status_header( 404 );
