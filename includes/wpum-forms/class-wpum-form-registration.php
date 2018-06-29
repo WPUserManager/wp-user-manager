@@ -230,7 +230,7 @@ class WPUM_Form_Registration extends WPUM_Form {
 			$stored_fields = $registration_form->get_meta( 'fields' );
 
 			if ( is_array( $stored_fields ) && ! empty( $stored_fields ) ) {
-				foreach ( $stored_fields as $field ) {
+				foreach ( $stored_fields as $key => $field ) {
 
 					$field = new WPUM_Field( $field );
 
@@ -241,7 +241,7 @@ class WPUM_Form_Registration extends WPUM_Form {
 							'required'    => $field->get_meta( 'required' ),
 							'placeholder' => $field->get_meta( 'placeholder' ),
 							'description' => $field->get_description(),
-							'priority'    => 0,
+							'priority'    => $key,
 							'primary_id'  => $field->get_primary_id(),
 							'options'     => $this->get_custom_field_dropdown_options( $field ),
 						);
