@@ -566,11 +566,11 @@ function wpum_get_account_page_tabs() {
 		],
 		'password' => [
 			'name'     => esc_html__( 'Password', 'wp-user-manager' ),
-			'priority' => 0,
+			'priority' => 1,
 		],
 		'view' => [
 			'name'     => esc_html__( 'View profile', 'wp-user-manager' ),
-			'priority' => 0,
+			'priority' => 2,
 		],
 		'logout'   => [
 			'name'     => esc_html__( 'Logout', 'wp-user-manager' ),
@@ -753,11 +753,11 @@ function wpum_get_registered_profile_tabs() {
 		],
 		'posts'  => [
 			'name'     => esc_html__( 'Posts', 'wp-user-manager' ),
-			'priority' => 0
+			'priority' => 1
 		],
 		'comments'  => [
 			'name'     => esc_html__( 'Comments', 'wp-user-manager' ),
-			'priority' => 0
+			'priority' => 2
 		]
 	];
 
