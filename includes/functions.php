@@ -8,7 +8,9 @@
  * @since       1.0.0
  */
 
-if ( ! defined( 'ABSPATH' ) ) exit;
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 
 /**
  * Retrieve pages from the database and cache them as transient.
@@ -33,7 +35,7 @@ function wpum_get_pages( $force = false ) {
 			foreach ( $available_pages as $page ) {
 				$pages[] = array(
 					'value' => $page->ID,
-					'label' => $page->post_title
+					'label' => $page->post_title,
 				);
 			}
 			set_transient( 'wpum_get_pages', $pages, DAY_IN_SECONDS );
@@ -48,11 +50,13 @@ function wpum_get_pages( $force = false ) {
  * @return array
  */
 function wpum_get_login_methods() {
-	return apply_filters( 'wpum_get_login_methods', array(
-		'username'       => __( 'Username only', 'wp-user-manager' ),
-		'email'          => __( 'Email only', 'wp-user-manager' ),
-		'username_email' => __( 'Username or Email', 'wp-user-manager' ),
-	) );
+	return apply_filters(
+		'wpum_get_login_methods', array(
+			'username'       => __( 'Username only', 'wp-user-manager' ),
+			'email'          => __( 'Email only', 'wp-user-manager' ),
+			'username_email' => __( 'Username or Email', 'wp-user-manager' ),
+		)
+	);
 }
 
 /**
@@ -80,7 +84,7 @@ function wpum_get_roles( $force = false, $admin = false ) {
 		$available_roles = $wp_roles->get_names();
 
 		foreach ( $available_roles as $role_id => $role ) {
-			if( $role_id == 'administrator' && ! $admin ) {
+			if ( $role_id == 'administrator' && ! $admin ) {
 				continue;
 			}
 			$roles[] = array(
@@ -104,13 +108,13 @@ function wpum_get_roles( $force = false, $admin = false ) {
  */
 function wpum_get_core_page_id( $page = null ) {
 
-	if( ! $page ) {
+	if ( ! $page ) {
 		return;
 	}
 
 	$id = null;
 
-	switch( $page ) {
+	switch ( $page ) {
 		case 'login':
 			$id = wpum_get_option( 'login_page' );
 			break;
@@ -211,9 +215,9 @@ function wpum_get_login_label() {
 	$label        = esc_html__( 'Username', 'wp-user-manager' );
 	$login_method = wpum_get_option( 'login_method' );
 
-	if( $login_method == 'email' ) {
+	if ( $login_method == 'email' ) {
 		$label = esc_html__( 'Email', 'wp-user-manager' );
-	} elseif( $login_method == 'username_email' ) {
+	} elseif ( $login_method == 'username_email' ) {
 		$label = esc_html__( 'Username or email', 'wp-user-manager' );
 	}
 
@@ -231,7 +235,7 @@ function wpum_get_login_redirect() {
 	$redirect_to = wpum_get_option( 'login_redirect' );
 	$url         = false;
 
-	if( ! empty( $redirect_to ) && is_array( $redirect_to ) ) {
+	if ( ! empty( $redirect_to ) && is_array( $redirect_to ) ) {
 		$url = get_permalink( $redirect_to[0] );
 	}
 
@@ -246,12 +250,16 @@ function wpum_get_login_redirect() {
  * @return void
  */
 function wpum_starmid( $str ) {
-    switch ( strlen( $str ) ) {
-        case 0: return false;
-        case 1: return $str;
-        case 2: return $str[0] . "*";
-        default: return $str[0] . str_repeat( "*", strlen($str) - 2 ) . substr($str, -1);
-    }
+	switch ( strlen( $str ) ) {
+		case 0:
+			return false;
+		case 1:
+			return $str;
+		case 2:
+			return $str[0] . '*';
+		default:
+			return $str[0] . str_repeat( '*', strlen( $str ) - 2 ) . substr( $str, -1 );
+	}
 }
 
 /**
@@ -263,16 +271,16 @@ function wpum_starmid( $str ) {
 function wpum_mask_email_address( $email_address ) {
 
 	if ( ! filter_var( $email_address, FILTER_VALIDATE_EMAIL ) ) {
-        return false;
-    }
+		return false;
+	}
 
-	list( $u, $d ) = explode( "@", $email_address );
+	list( $u, $d ) = explode( '@', $email_address );
 
-	$d   = explode( ".", $d );
+	$d   = explode( '.', $d );
 	$tld = array_pop( $d );
-	$d   = implode( ".", $d );
+	$d   = implode( '.', $d );
 
-    return wpum_starmid( $u ) . "@" . wpum_starmid( $d ) . ".$tld";
+	return wpum_starmid( $u ) . '@' . wpum_starmid( $d ) . ".$tld";
 
 }
 
@@ -298,7 +306,7 @@ function wpum_get_disabled_usernames() {
 	$usernames = array();
 	if ( wpum_get_option( 'exclude_usernames' ) ) {
 		$list = trim( wpum_get_option( 'exclude_usernames' ) );
-		$list = explode( "\n", str_replace( "\r", "", $list ) );
+		$list = explode( "\n", str_replace( "\r", '', $list ) );
 		foreach ( $list as $username ) {
 			$usernames[] = $username;
 		}
@@ -318,7 +326,7 @@ function wpum_log_user_in( $email_or_id ) {
 
 	$get_by = 'id';
 
-	if( is_email( $email_or_id ) ) {
+	if ( is_email( $email_or_id ) ) {
 		$get_by = 'email';
 	}
 
@@ -344,11 +352,11 @@ function wpum_send_registration_confirmation_email( $user_id, $psw = false ) {
 
 	$registration_confirmation_email = wpum_get_email( 'registration_confirmation' );
 
-	if( ! $user_id ) {
+	if ( ! $user_id ) {
 		return;
 	}
 
-	if( is_array( $registration_confirmation_email ) && ! empty( $registration_confirmation_email ) ) {
+	if ( is_array( $registration_confirmation_email ) && ! empty( $registration_confirmation_email ) ) {
 
 		$user = get_user_by( 'id', $user_id );
 
@@ -363,13 +371,13 @@ function wpum_send_registration_confirmation_email( $user_id, $psw = false ) {
 			wp_mail( get_option( 'admin_email' ), sprintf( esc_html__( '[%s] New User Registration', 'wp-user-manager' ), $blogname ), $message );
 		}
 
-		if( $user instanceof WP_User ) {
+		if ( $user instanceof WP_User ) {
 
 			$emails = new WPUM_Emails;
 			$emails->__set( 'user_id', $user_id );
 			$emails->__set( 'heading', $registration_confirmation_email['title'] );
 
-			if( ! empty( $psw ) ) {
+			if ( ! empty( $psw ) ) {
 				$emails->__set( 'plain_text_password', $psw );
 			}
 
@@ -380,7 +388,6 @@ function wpum_send_registration_confirmation_email( $user_id, $psw = false ) {
 			$emails->__set( 'plain_text_password', null );
 
 		}
-
 	}
 
 }
@@ -394,7 +401,7 @@ function wpum_send_registration_confirmation_email( $user_id, $psw = false ) {
 function wpum_prepare_uploaded_files( $file_data ) {
 	$files_to_upload = array();
 	if ( is_array( $file_data['name'] ) ) {
-		foreach( $file_data['name'] as $file_data_key => $file_data_value ) {
+		foreach ( $file_data['name'] as $file_data_key => $file_data_value ) {
 			if ( $file_data['name'][ $file_data_key ] ) {
 				$type              = wp_check_filetype( $file_data['name'][ $file_data_key ] ); // Map mime type to one WordPress recognises
 				$files_to_upload[] = array(
@@ -402,7 +409,7 @@ function wpum_prepare_uploaded_files( $file_data ) {
 					'type'     => $type['type'],
 					'tmp_name' => $file_data['tmp_name'][ $file_data_key ],
 					'error'    => $file_data['error'][ $file_data_key ],
-					'size'     => $file_data['size'][ $file_data_key ]
+					'size'     => $file_data['size'][ $file_data_key ],
 				);
 			}
 		}
@@ -425,14 +432,16 @@ function wpum_upload_file( $file, $args = array() ) {
 	global $wpum_upload, $wpum_uploading_file;
 	include_once( ABSPATH . 'wp-admin/includes/file.php' );
 	include_once( ABSPATH . 'wp-admin/includes/media.php' );
-	$args = wp_parse_args( $args, array(
-		'file_key'           => '',
-		'file_label'         => '',
-		'allowed_mime_types' => '',
-	) );
+	$args                = wp_parse_args(
+		$args, array(
+			'file_key'           => '',
+			'file_label'         => '',
+			'allowed_mime_types' => '',
+		)
+	);
 	$wpum_upload         = true;
 	$wpum_uploading_file = $args['file_key'];
-	$uploaded_file              = new stdClass();
+	$uploaded_file       = new stdClass();
 	if ( '' === $args['allowed_mime_types'] ) {
 		$allowed_mime_types = wpum_get_allowed_mime_types( $wpum_uploading_file );
 	} else {
@@ -447,7 +456,7 @@ function wpum_upload_file( $file, $args = array() ) {
 
 	if ( ! in_array( $file['type'], $allowed_mime_types ) ) {
 		if ( $args['file_label'] ) {
-			return new WP_Error( 'upload', sprintf( __( '"%s" (filetype %s) needs to be one of the following file types: %s', 'wp-user-manager' ), $args['file_label'], $file['type'], implode( ', ', array_keys( $allowed_mime_types ) ) ) );
+			return new WP_Error( 'upload', sprintf( __( '"%1$s" (filetype %2$s) needs to be one of the following file types: %3$s', 'wp-user-manager' ), $args['file_label'], $file['type'], implode( ', ', array_keys( $allowed_mime_types ) ) ) );
 		} else {
 			return new WP_Error( 'upload', sprintf( __( 'Uploaded files need to be one of the following file types: %s', 'wp-user-manager' ), implode( ', ', array_keys( $allowed_mime_types ) ) ) );
 		}
@@ -521,9 +530,9 @@ function wpum_get_account_tab_url( $step_key ) {
 
 	$tab_url = get_permalink();
 
-	if( $step_key == 'logout' ) {
+	if ( $step_key == 'logout' ) {
 		$tab_url = wp_logout_url();
-	} else if( $step_key == 'view' ) {
+	} elseif ( $step_key == 'view' ) {
 		$tab_url = get_permalink( wpum_get_core_page_id( 'profile' ) );
 	} else {
 		$tab_url = $tab_url . $step_key;
@@ -544,7 +553,7 @@ function wpum_is_account_tab_active( $step_key, $first_tab ) {
 
 	$active = ! empty( get_query_var( 'tab' ) ) && get_query_var( 'tab' ) == $step_key ? true : false;
 
-	if( ! get_query_var( 'tab' ) && $step_key == $first_tab ) {
+	if ( ! get_query_var( 'tab' ) && $step_key == $first_tab ) {
 		$active = true;
 	}
 
@@ -560,15 +569,15 @@ function wpum_is_account_tab_active( $step_key, $first_tab ) {
 function wpum_get_account_page_tabs() {
 
 	$tabs = [
-		'settings'  => [
+		'settings' => [
 			'name'     => esc_html__( 'Settings', 'wp-user-manager' ),
-			'priority' => 0
+			'priority' => 0,
 		],
 		'password' => [
 			'name'     => esc_html__( 'Password', 'wp-user-manager' ),
 			'priority' => 1,
 		],
-		'view' => [
+		'view'     => [
 			'name'     => esc_html__( 'View profile', 'wp-user-manager' ),
 			'priority' => 2,
 		],
@@ -622,20 +631,20 @@ function wpum_get_full_page_hierarchy( $page_id ) {
 function wpum_get_permalink_structures() {
 
 	$structures = array(
-		'user_id' => array(
+		'user_id'  => array(
 			'name'   => 'user_id',
 			'label'  => _x( 'Display user ID', 'Permalink structure', 'wp-user-manager' ),
-			'sample' => '123'
+			'sample' => '123',
 		),
 		'username' => array(
 			'name'   => 'username',
 			'label'  => _x( 'Display username', 'Permalink structure', 'wp-user-manager' ),
-			'sample' => _x( 'username', 'Example of permalink setting', 'wp-user-manager' )
+			'sample' => _x( 'username', 'Example of permalink setting', 'wp-user-manager' ),
 		),
 		'nickname' => array(
 			'name'   => 'nickname',
 			'label'  => _x( 'Display nickname', 'Permalink structure', 'wp-user-manager' ),
-			'sample' => _x( 'nickname', 'Example of permalink setting', 'wp-user-manager' )
+			'sample' => _x( 'nickname', 'Example of permalink setting', 'wp-user-manager' ),
 		),
 	);
 
@@ -668,7 +677,7 @@ function wpum_get_queried_user_id() {
 	$user_id                     = false;
 	$profile_permalink_structure = get_option( 'wpum_permalink', 'user_id' );
 
-	if( ! $queried_user && is_user_logged_in() ) {
+	if ( ! $queried_user && is_user_logged_in() ) {
 		return get_current_user_id();
 	}
 
@@ -682,14 +691,14 @@ function wpum_get_queried_user_id() {
 			$user_id = $user instanceof WP_User ? absint( $user->data->ID ) : false;
 			break;
 		case 'nickname':
-			$args = array (
+			$args       = array(
 				'meta_key'   => 'nickname',
-				'meta_value' => $queried_user
+				'meta_value' => $queried_user,
 			);
 			$user_query = new WP_User_Query( $args );
 			$user_query = $user_query->get_results();
 
-			if( is_array( $user_query ) && ! empty( $user_query ) ) {
+			if ( is_array( $user_query ) && ! empty( $user_query ) ) {
 				$user_id = absint( $user_query[0]->data->ID );
 			}
 
@@ -721,7 +730,7 @@ function wpum_get_profile_url( $user ) {
 
 	$page_url            = get_permalink( wpum_get_core_page_id( 'profile' ) );
 	$permalink_structure = get_option( 'wpum_permalink', 'user_id' );
-	$page_url            = rtrim( $page_url, '/') . '/';
+	$page_url            = rtrim( $page_url, '/' ) . '/';
 
 	switch ( $permalink_structure ) {
 		case 'user_id':
@@ -747,18 +756,18 @@ function wpum_get_profile_url( $user ) {
 function wpum_get_registered_profile_tabs() {
 
 	$tabs = [
-		'about'  => [
+		'about'    => [
 			'name'     => esc_html__( 'About', 'wp-user-manager' ),
-			'priority' => 0
+			'priority' => 0,
 		],
-		'posts'  => [
+		'posts'    => [
 			'name'     => esc_html__( 'Posts', 'wp-user-manager' ),
-			'priority' => 1
+			'priority' => 1,
 		],
-		'comments'  => [
+		'comments' => [
 			'name'     => esc_html__( 'Comments', 'wp-user-manager' ),
-			'priority' => 2
-		]
+			'priority' => 2,
+		],
 	];
 
 	if ( ! wpum_get_option( 'profile_posts' ) ) {
@@ -785,7 +794,7 @@ function wpum_get_registered_profile_tabs() {
  */
 function wpum_get_profile_tab_url( $user, $tab ) {
 
-	$url = wpum_get_profile_url( $user );
+	$url  = wpum_get_profile_url( $user );
 	$url .= '/' . $tab;
 
 	return $url;
@@ -816,17 +825,19 @@ function wpum_get_active_profile_tab() {
  */
 function wpum_get_posts_for_profile( $user_id ) {
 
-	if( ! $user_id ) {
+	if ( ! $user_id ) {
 		return false;
 	}
 
 	$paged = ( get_query_var( 'paged' ) ) ? get_query_var( 'paged' ) : 1;
 
-	$args = apply_filters( 'wpum_get_posts_for_profile', [
-		'post_type' => 'post',
-		'author'    => $user_id,
-		'paged'     => $paged
-	] );
+	$args = apply_filters(
+		'wpum_get_posts_for_profile', [
+			'post_type' => 'post',
+			'author'    => $user_id,
+			'paged'     => $paged,
+		]
+	);
 
 	$query = new WP_Query( $args );
 
@@ -842,15 +853,17 @@ function wpum_get_posts_for_profile( $user_id ) {
  */
 function wpum_get_comments_for_profile( $user_id ) {
 
-	if( ! $user_id ) {
+	if ( ! $user_id ) {
 		return false;
 	}
 
-	$args = apply_filters( 'wpum_get_comments_for_profile', array(
-		'user_id' => $user_id,
-		'status'  => 'approve',
-		'number'  => '10'
-	) );
+	$args = apply_filters(
+		'wpum_get_comments_for_profile', array(
+			'user_id' => $user_id,
+			'status'  => 'approve',
+			'number'  => '10',
+		)
+	);
 
 	$comments = get_comments( $args );
 
@@ -887,7 +900,7 @@ function wpum_get_recent_users( $amount ) {
 	$args = array(
 		'number'  => $amount,
 		'order'   => 'DESC',
-		'orderby' => 'registered'
+		'orderby' => 'registered',
 	);
 
 	// The Query
@@ -1005,13 +1018,17 @@ function wpum_custom_admin_notice_inline_css() {
  */
 function wpum_setup_default_custom_search_fields() {
 
-	WPUM()->search_meta->insert( [
-		'meta_key' => 'first_name',
-	] );
+	WPUM()->search_meta->insert(
+		[
+			'meta_key' => 'first_name',
+		]
+	);
 
-	WPUM()->search_meta->insert( [
-		'meta_key' => 'last_name',
-	] );
+	WPUM()->search_meta->insert(
+		[
+			'meta_key' => 'last_name',
+		]
+	);
 
 }
 
@@ -1029,8 +1046,8 @@ function wpum_get_allowed_user_roles() {
 		$wp_roles = new WP_Roles();
 	}
 
-	$user_roles         = array();
-	$selected_roles     = wpum_get_option( 'register_roles' );
+	$user_roles     = array();
+	$selected_roles = wpum_get_option( 'register_roles' );
 
 	$allowed_user_roles = is_array( $selected_roles ) ? $selected_roles : array( $selected_roles );
 
@@ -1070,7 +1087,7 @@ function wpum_get_plugins() {
 		$dirname = strtolower( dirname( $plugin_path ) );
 		if ( strstr( $dirname, 'wpum-' ) && strstr( $plugin_data['AuthorURI'], 'wpusermanagerr.com' ) ) {
 			$plugins[ $plugin_path ]['Type'] = 'add-on';
-			$license_active = __wpum_get_active_license_info( WPUM_License::get_short_name( $plugin_data['Name'] ) );
+			$license_active                  = __wpum_get_active_license_info( WPUM_License::get_short_name( $plugin_data['Name'] ) );
 			if ( ! empty( $license_active ) && 'valid' === $license_active->license ) {
 				$plugins[ $plugin_path ]['License'] = true;
 			} else {
@@ -1162,7 +1179,7 @@ function wpum_get_mime_types_for_selection() {
 	foreach ( $mimes as $key => $type ) {
 		$types[] = [
 			'value' => $type,
-			'name' => $key,
+			'name'  => $key,
 		];
 	}
 
