@@ -24,7 +24,7 @@ class WPUM_Addons_Page {
 	 */
 	public function __construct() {
 
-		$this->api = 'http://wpum.test/wp-json/wp/v2/edd-addons';
+		$this->api = 'https://wpusermanager.com/wp-json/wp/v2/edd-addons';
 		$this->hooks();
 
 	}
