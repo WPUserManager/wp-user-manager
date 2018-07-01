@@ -579,7 +579,7 @@ function wpum_get_account_page_tabs() {
 		],
 		'view'     => [
 			'name'     => esc_html__( 'View profile', 'wp-user-manager' ),
-			'priority' => 2,
+			'priority' => 10,
 		],
 		'logout'   => [
 			'name'     => esc_html__( 'Logout', 'wp-user-manager' ),
