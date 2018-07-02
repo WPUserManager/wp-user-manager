@@ -9,7 +9,9 @@
  * @since       1.0.0
  */
 
-if ( ! defined( 'ABSPATH' ) ) exit;
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 
 /**
  * Retrieve all options from WPUM.
@@ -50,7 +52,7 @@ function wpum_get_option( $key = '', $default = false ) {
 function wpum_update_option( $key = '', $value = false ) {
 
 	// If no key, exit.
-	if ( empty( $key ) ){
+	if ( empty( $key ) ) {
 		return false;
 	}
 
@@ -70,11 +72,40 @@ function wpum_update_option( $key = '', $value = false ) {
 	$did_update      = update_option( 'wpum_settings', $options );
 
 	// If it updated, let's update the global variable.
-	if ( $did_update ){
+	if ( $did_update ) {
 		global $wpum_options;
 		$wpum_options[ $key ] = $value;
 	}
 
 	return $did_update;
 
+}
+
+/**
+ * Remove an option
+ *
+ * Removes an wpum setting value in both the db and the global variable.
+ *
+ * @since 1.0.0
+ * @param string $key The Key to delete
+ * @return boolean True if updated, false if not.
+ */
+function wpum_delete_option( $key = '' ) {
+	// If no key, exit
+	if ( empty( $key ) ) {
+		return false;
+	}
+	// First let's grab the current settings
+	$options = get_option( 'wpum_settings' );
+	// Next let's try to update the value
+	if ( isset( $options[ $key ] ) ) {
+		unset( $options[ $key ] );
+	}
+	$did_update = update_option( 'wpum_settings', $options );
+	// If it updated, let's update the global variable
+	if ( $did_update ) {
+		global $wpum_options;
+		$wpum_options = $options;
+	}
+	return $did_update;
 }
