@@ -204,25 +204,23 @@ function wpum_run_install() {
 	update_option( 'wpum_permalink', 'username' );
 
 	if ( ! $current_version ) {
-		require_once WPUM_PLUGIN_DIR . 'includes/wpum-upgrades/upgrade-functions.php';
-
-		// When new upgrade routines are added, mark them as complete on fresh install.
-		$upgrade_routines = array(
-			'v2_migration_options',
-			'v2_migration_cover_field',
-			'v2_migration_install_registration_form',
-			'v2_migration_emails',
-			'v2_install_search_fields',
-			'v2_migrate_directories',
-			'v2_migrate_fields',
-			'v2_migrate_fields_groups'
-		);
-		foreach ( $upgrade_routines as $upgrade ) {
-			wpum_set_upgrade_complete( $upgrade );
-		}
-
 		update_option( 'v202_upgrade', true );
+	}
 
+	// Check if all tables are there.
+	$tables = array(
+		'fields'                => new WPUM_DB_Table_Fields(),
+		'fieldmeta'             => new WPUM_DB_Table_Field_Meta(),
+		'fieldsgroups'          => new WPUM_DB_Table_Fields_Groups(),
+		'registrationforms'     => new WPUM_DB_Table_Registration_Forms(),
+		'registrationformsmeta' => new WPUM_DB_Table_Registration_Forms_Meta(),
+		'searchfields'          => new WPUM_DB_Table_Search_Fields(),
+	);
+
+	foreach ( $tables as $key => $table ) {
+		if ( ! $table->exists() ) {
+			$table->create();
+		}
 	}
 
 	// Update current version.
