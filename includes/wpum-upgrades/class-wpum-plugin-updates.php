@@ -157,10 +157,8 @@ class WPUM_Plugin_Updates {
 			);
 		}
 
-		if ( is_array( $groups ) ) {
-			$default_group = new WPUM_Field_Group( 1 );
-			$default_group->update( [ 'is_primary' => true ] );
-		}
+		$default_group = new WPUM_Field_Group( 1 );
+		$default_group->update( [ 'is_primary' => true ] );
 
 	}
 

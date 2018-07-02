@@ -39,7 +39,7 @@ class WPUM_Directories {
 	 */
 	public function pre_user_query( $user_query ) {
 
-		if( isset( $_GET['directory-search'] ) && ! empty( $_GET['directory-search'] ) && isset( $_GET['directory-id'] ) && ! empty( $_GET['directory-id'] ) && ! is_admin() ) {
+		if ( isset( $_GET['directory-search'] ) && ! empty( $_GET['directory-search'] ) && isset( $_GET['directory-id'] ) && ! empty( $_GET['directory-id'] ) && ! is_admin() ) {
 
 			global $wpdb;
 
