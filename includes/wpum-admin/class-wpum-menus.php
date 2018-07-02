@@ -23,7 +23,7 @@ class WPUM_Menus {
 	 */
 	public function __construct() {
 		add_action( 'carbon_fields_register_fields', [ $this, 'menu_settings' ] );
-		add_action( 'load-nav-menus.php', [ $this, 'cssjs' ] );
+		add_action( 'admin_head', [ $this, 'cssjs' ] );
 		add_action( 'admin_enqueue_scripts', [ $this, 'js' ] );
 		add_filter( 'nav_menu_link_attributes', [ $this, 'set_nav_item_as_logout' ], 10, 3 );
 		if( ! is_admin() ) {
