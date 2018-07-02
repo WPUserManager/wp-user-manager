@@ -34,8 +34,8 @@ function wpum_do_automatic_upgrades() {
 		update_option( 'wpum_version', preg_replace( '/[^0-9.].*/', '', WPUM_VERSION ) );
 	}
 }
-add_action( 'admin_init', 'wpum_do_automatic_upgrades' );
-add_action( 'wpum_upgrades', 'wpum_do_automatic_upgrades' );
+//add_action( 'admin_init', 'wpum_do_automatic_upgrades' );
+//add_action( 'wpum_upgrades', 'wpum_do_automatic_upgrades' );
 
 /**
  * Display Upgrade Notices.
@@ -111,7 +111,7 @@ function wpum_show_upgrade_notices( $wpum_updates ) {
 	);
 
 }
-add_action( 'wpum_register_updates', 'wpum_show_upgrade_notices' );
+//add_action( 'wpum_register_updates', 'wpum_show_upgrade_notices' );
 
 /**
  * Triggers all upgrade functions
@@ -137,7 +137,7 @@ function wpum_trigger_upgrades() {
 		die( 'complete' );
 	} // End if().
 }
-add_action( 'wp_ajax_wpum_trigger_upgrades', 'wpum_trigger_upgrades' );
+//add_action( 'wp_ajax_wpum_trigger_upgrades', 'wpum_trigger_upgrades' );
 
 /**
  * Migration callback to move page options to the new array format.
@@ -146,7 +146,7 @@ add_action( 'wp_ajax_wpum_trigger_upgrades', 'wpum_trigger_upgrades' );
  */
 function wpum_v200_upgrade_options_callback() {
 
-	$wpum_updates = WPUM_Updates::get_instance();
+	//$wpum_updates = WPUM_Updates::get_instance();
 
 	// Get existing page options.
 	$login_page             = wpum_get_option( 'login_page' );
@@ -216,9 +216,9 @@ function wpum_v200_upgrade_options_callback() {
 		wpum_update_option( 'backend_profile_redirect', $backend_profile_redirect );
 	}
 
-	$wpum_updates->set_percentage( 100, 100 );
+	//$wpum_updates->set_percentage( 100, 100 );
 
-	wpum_set_upgrade_complete( 'v2_migration_options' );
+	//wpum_set_upgrade_complete( 'v2_migration_options' );
 
 }
 
@@ -229,13 +229,13 @@ function wpum_v200_upgrade_options_callback() {
  */
 function wpum_v200_upgrade_cover_field_callback() {
 
-	$wpum_updates = WPUM_Updates::get_instance();
+	//$wpum_updates = WPUM_Updates::get_instance();
 
 	wpum_install_cover_image_field();
 
-	$wpum_updates->set_percentage( 100, 100 );
+	//$wpum_updates->set_percentage( 100, 100 );
 
-	wpum_set_upgrade_complete( 'v2_migration_cover_field' );
+	//wpum_set_upgrade_complete( 'v2_migration_cover_field' );
 
 }
 
@@ -246,13 +246,13 @@ function wpum_v200_upgrade_cover_field_callback() {
  */
 function wpum_v200_upgrade_install_registration_form_callback() {
 
-	$wpum_updates = WPUM_Updates::get_instance();
+	//$wpum_updates = WPUM_Updates::get_instance();
 
 	wpum_install_registration_form();
 
-	$wpum_updates->set_percentage( 100, 100 );
+	//$wpum_updates->set_percentage( 100, 100 );
 
-	wpum_set_upgrade_complete( 'v2_migration_install_registration_form' );
+	//wpum_set_upgrade_complete( 'v2_migration_install_registration_form' );
 
 }
 
@@ -263,7 +263,7 @@ function wpum_v200_upgrade_install_registration_form_callback() {
  */
 function wpum_v200_upgrade_emails_callback() {
 
-	$wpum_updates    = WPUM_Updates::get_instance();
+	//$wpum_updates    = WPUM_Updates::get_instance();
 	$existing_emails = get_option( 'wpum_emails' );
 	$new_emails      = '';
 
@@ -302,10 +302,10 @@ function wpum_v200_upgrade_emails_callback() {
 
 	if( is_array( $new_emails ) && ! empty( $new_emails ) ) {
 		update_option( 'wpum_email', $new_emails );
-		$wpum_updates->set_percentage( 100, 100 );
+		//$wpum_updates->set_percentage( 100, 100 );
 	}
 
-	wpum_set_upgrade_complete( 'v2_migration_emails' );
+	//wpum_set_upgrade_complete( 'v2_migration_emails' );
 
 }
 
@@ -316,13 +316,13 @@ function wpum_v200_upgrade_emails_callback() {
  */
 function wpum_v200_upgrade_install_search_fields_callback() {
 
-	$wpum_updates = WPUM_Updates::get_instance();
+	//$wpum_updates = WPUM_Updates::get_instance();
 
 	wpum_setup_default_custom_search_fields();
 
-	$wpum_updates->set_percentage( 100, 100 );
+	//$wpum_updates->set_percentage( 100, 100 );
 
-	wpum_set_upgrade_complete( 'v2_install_search_fields' );
+	//wpum_set_upgrade_complete( 'v2_install_search_fields' );
 
 }
 
@@ -333,10 +333,9 @@ function wpum_v200_upgrade_install_search_fields_callback() {
  */
 function wpum_v200_migrate_directories_callback() {
 
-	$wpum_updates = WPUM_Updates::get_instance();
+	//$wpum_updates = WPUM_Updates::get_instance();
 
 	$directories = new WP_Query( array(
-			'paged'          => $wpum_updates->step,
 			'status'         => 'any',
 			'order'          => 'ASC',
 			'post_type'      => 'wpum_directory',
@@ -345,8 +344,6 @@ function wpum_v200_migrate_directories_callback() {
 	);
 
 	if ( $directories->have_posts() ) {
-
-		$wpum_updates->set_percentage( $directories->found_posts, ( $wpum_updates->step * 20 ) );
 
 		while ( $directories->have_posts() ) {
 
@@ -386,8 +383,6 @@ function wpum_v200_migrate_directories_callback() {
 
 		wp_reset_postdata();
 
-	} else {
-		wpum_set_upgrade_complete( 'v2_migrate_directories' );
 	}
 
 }
@@ -399,7 +394,7 @@ function wpum_v200_migrate_directories_callback() {
  */
 function wpum_v200_migrate_fields_callback() {
 
-	$wpum_updates = WPUM_Updates::get_instance();
+	//$wpum_updates = WPUM_Updates::get_instance();
 
 	$fields = WPUM()->fields->get_fields();
 
@@ -522,7 +517,7 @@ function wpum_v200_migrate_fields_callback() {
 
 	}
 
-	wpum_set_upgrade_complete( 'v2_migrate_fields' );
+	//wpum_set_upgrade_complete( 'v2_migrate_fields' );
 
 }
 
@@ -533,7 +528,7 @@ function wpum_v200_migrate_fields_callback() {
  */
 function wpum_v200_migrate_fields_groups_callback() {
 
-	$wpum_updates = WPUM_Updates::get_instance();
+	//$wpum_updates = WPUM_Updates::get_instance();
 
 	global $wpdb;
 
@@ -558,6 +553,6 @@ function wpum_v200_migrate_fields_groups_callback() {
 
 	}
 
-	wpum_set_upgrade_complete( 'v2_migrate_fields_groups' );
+	//wpum_set_upgrade_complete( 'v2_migrate_fields_groups' );
 
 }

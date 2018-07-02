@@ -220,6 +220,9 @@ function wpum_run_install() {
 		foreach ( $upgrade_routines as $upgrade ) {
 			wpum_set_upgrade_complete( $upgrade );
 		}
+
+		update_option( 'v202_upgrade', true );
+
 	}
 
 	// Update current version.
