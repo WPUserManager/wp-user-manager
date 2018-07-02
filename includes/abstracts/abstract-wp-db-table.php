@@ -273,7 +273,7 @@ abstract class WP_DB_Table {
 	 *
 	 * @since 1.1.0
 	 */
-	private function create() {
+	public function create() {
 		// Include file with dbDelta() for create/upgrade usages
 		if ( ! function_exists( 'dbDelta' ) ) {
 			require_once ABSPATH . 'wp-admin/includes/upgrade.php';
@@ -295,7 +295,7 @@ abstract class WP_DB_Table {
 	 *
 	 * @return bool
 	 */
-	private function exists() {
+	public function exists() {
 		$query       = "SHOW TABLES LIKE %s";
 		$like        = $this->db->esc_like( $this->table_name );
 		$prepared    = $this->db->prepare( $query, $like );
