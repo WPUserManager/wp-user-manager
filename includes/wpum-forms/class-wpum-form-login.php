@@ -197,12 +197,10 @@ class WPUM_Form_Login extends WPUM_Form {
 				'remember'      => $values['login']['remember'] ? true : false
 			];
 
-			if( ! empty( wp_get_referer() ) ) {
-				$redirect = wp_get_referer();
-			} else if( empty( wp_get_referer() ) && ! empty( wpum_get_login_redirect() ) ) {
+			$redirect = get_permalink( wpum_get_core_page_id( 'login' ) );
+
+			if ( ! empty( wpum_get_login_redirect() ) ) {
 				$redirect = wpum_get_login_redirect();
-			} else {
-				$redirect = get_permalink( wpum_get_core_page_id( 'login' ) );
 			}
 
 			if( isset( $_GET['redirect_to'] ) && ! empty( $_GET['redirect_to'] ) ) {
@@ -217,7 +215,6 @@ class WPUM_Form_Login extends WPUM_Form {
 				wp_safe_redirect( $redirect );
 				exit;
 			}
-
 		} catch ( Exception $e ) {
 			$this->add_error( $e->getMessage() );
 			return;
