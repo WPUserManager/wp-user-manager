@@ -13,3 +13,4 @@ yarn-error.log
 .sass-cache
 dist
 deploy.sh
+wp-user-manager

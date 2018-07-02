@@ -161,7 +161,7 @@ if ( ! class_exists( 'WP_User_Manager' ) ) :
 			$this->autoload();
 			$this->autoload_options();
 			$this->includes();
-			$this->setup_database_tables();
+
 			$this->init_hooks();
 
 		}
@@ -216,6 +216,9 @@ if ( ! class_exists( 'WP_User_Manager' ) ) :
 			require_once WPUM_PLUGIN_DIR . 'includes/wpum-database/class-wpum-db-registration-forms.php';
 			require_once WPUM_PLUGIN_DIR . 'includes/wpum-database/class-wpum-db-registration-form-meta.php';
 			require_once WPUM_PLUGIN_DIR . 'includes/wpum-database/class-wpum-db-search-fields.php';
+
+			$this->setup_database_tables();
+
 			require_once WPUM_PLUGIN_DIR . 'includes/wpum-admin/class-wpum-html-elements.php';
 			require_once WPUM_PLUGIN_DIR . 'includes/wpum-fields/wpum-fields-functions.php';
 			require_once WPUM_PLUGIN_DIR . 'includes/wpum-fields/class-wpum-fields.php';
@@ -241,7 +244,8 @@ if ( ! class_exists( 'WP_User_Manager' ) ) :
 			require_once WPUM_PLUGIN_DIR . 'includes/wpum-shortcodes/shortcodes.php';
 			require_once WPUM_PLUGIN_DIR . 'includes/widgets.php';
 
-			require_once WPUM_PLUGIN_DIR . 'includes/wpum-upgrades/class-wpum-updates.php';
+			//require_once WPUM_PLUGIN_DIR . 'includes/wpum-upgrades/class-wpum-updates.php';
+			require_once WPUM_PLUGIN_DIR . 'includes/wpum-upgrades/class-wpum-plugin-updates.php';
 
 			if ( is_admin() || ( defined( 'WP_CLI' ) && WP_CLI ) ) {
 				require_once WPUM_PLUGIN_DIR . 'includes/wpum-admin/class-wpum-getting-started.php';
