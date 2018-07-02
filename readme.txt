@@ -115,6 +115,12 @@ Please note that using WPUM and the mentioned add-ons does NOT guarantee complia
 
 == Changelog ==
 
+= 2.0.2 ( 2nd July 2018 )
+
+- Fix: migration routine not working in some cases.
+- Fix: login redirect not working in some cases.
+- Fix: compatibility of some functionalities with older php versions.
+
 = 2.0.1 ( 29th June 2018 )
 - Fix: too many parameters sent to the menu editor hook
 - Fix: redirect loop when required pages aren't setup as they're supposed to
