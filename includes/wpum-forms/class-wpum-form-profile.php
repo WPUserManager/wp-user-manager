@@ -156,7 +156,11 @@ class WPUM_Form_Profile extends WPUM_Form {
 			]
 		);
 
+		$priority = 0;
+
 		foreach ( $account_fields as $field ) {
+
+			$priority ++;
 
 			$field = new WPUM_Field( $field );
 
@@ -175,7 +179,7 @@ class WPUM_Form_Profile extends WPUM_Form {
 					'description' => $field->get_description(),
 					'options'     => $this->get_field_dropdown_options( $field, $this->user ),
 					'value'       => $this->get_user_field_value( $field ),
-					'priority'    => 0,
+					'priority'    => $priority,
 				);
 			}
 		}
