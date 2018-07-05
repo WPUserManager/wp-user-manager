@@ -336,7 +336,7 @@ function wpum_log_user_in( $email_or_id ) {
 
 	wp_set_current_user( $user_id, $username );
 	wp_set_auth_cookie( $user_id );
-	do_action( 'wp_login', $username );
+	do_action( 'wp_login', $username, $user );
 
 }
 
