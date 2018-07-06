@@ -72,7 +72,7 @@ class WPUM_Form_Password_Recovery extends WPUM_Form {
 				'name'     => esc_html__( 'Done', 'wp-user-manager' ),
 				'view'     => array( $this, 'done' ),
 				'handler'  => false,
-				'priority' => 12
+				'priority' => 13
 			)
 		) );
 
@@ -129,6 +129,12 @@ class WPUM_Form_Password_Recovery extends WPUM_Form {
 		} elseif( $this->step === 2 ) {
 			unset( $this->fields['user'] );
 		}
+
+		if ( isset( $_GET['user_id'] ) && isset( $_GET['key'] ) && isset( $_GET['step'] ) && $_GET['step'] == 'reset' ) {
+			unset( $this->fields['user'] );
+		}
+
+		print_r( $this->fields );
 
 	}
 
