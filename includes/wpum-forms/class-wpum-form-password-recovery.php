@@ -134,8 +134,6 @@ class WPUM_Form_Password_Recovery extends WPUM_Form {
 			unset( $this->fields['user'] );
 		}
 
-		print_r( $this->fields );
-
 	}
 
 	/**
