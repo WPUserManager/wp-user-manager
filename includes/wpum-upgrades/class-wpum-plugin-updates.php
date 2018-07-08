@@ -49,7 +49,7 @@ class WPUM_Plugin_Updates {
 
 		$update_url = add_query_arg( [ 'wpum-plugin-updates' => 'v202' ], admin_url() );
 		$message    = '<p><strong>WP User Manager</strong> needs to update your database to the latest version. The following process will make updates to your site\'s database. <strong><u>Please create a complete backup before proceeding.</u></strong></p>';
-		$message   .= '<p><a href="' . $update_url . '" class="button-primary">' . esc_html__( 'Upgrade database' ) . '</a></p>';
+		$message   .= '<p><a href="' . $update_url . '" class="button-primary">' . esc_html__( 'Upgrade database', 'wp-user-manager' ) . '</a></p>';
 		WPUM()->notices->register_notice( 'wpumv2_upgrade_required_notice', 'warning', $message, [ 'dismissible' => false ] );
 
 	}
@@ -548,7 +548,7 @@ class WPUM_Plugin_Updates {
 
 			update_option( 'v202_upgrade', true );
 
-			$message = __( 'Database upgrade completed. <a href="' . admin_url() . '">Go back to your admin panel.</a>' );
+			$message = __( 'Database upgrade completed. <a href="' . admin_url() . '">Go back to your admin panel.</a>', 'wp-user-manager' );
 
 			wp_die( $message, 'WPUM DB Update' );
 
