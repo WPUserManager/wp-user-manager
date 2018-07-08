@@ -108,7 +108,7 @@ class WPUM_Form_Password extends WPUM_Form {
 					'type'        => 'password',
 					'required'    => true,
 					'placeholder' => '',
-					'priority'    => 0
+					'priority'    => 1
 				),
 			)
 		) );
