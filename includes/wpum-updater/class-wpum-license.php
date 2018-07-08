@@ -71,7 +71,7 @@ class WPUM_License {
 	 *
 	 * @var string
 	 */
-	private $api_url = 'http://wpum.test';
+	private $api_url = 'https://wpusermanager.com';
 
 	/**
 	 * Construction function.
