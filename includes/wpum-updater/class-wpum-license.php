@@ -409,7 +409,7 @@ class WPUM_License {
 	 */
 	public function license_state_message() {
 		$message_data = array();
-		if ( ! get_option( 'wpum_' . $this->item_shortname . '_license_active' ) || get_option( 'wpum_' . $this->item_shortname . '_license_active' ) !== 'valid' ) {
+		if ( ! get_option( $this->item_shortname . '_license_active' ) || get_option( $this->item_shortname . '_license_active' ) !== 'valid' ) {
 			$message_data['message'] = sprintf(
 				__( 'Please <a href="%1$s">activate your license</a> to receive updates and support for the %2$s add-on.', 'wp-user-manager' ),
 				esc_url( admin_url( 'options-general.php?page=wpum-licenses' ) ),
