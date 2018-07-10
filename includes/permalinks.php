@@ -58,6 +58,10 @@ add_action(
 		$page_slug       = esc_attr( get_post_field( 'post_name', intval( $profile_page_id ) ) );
 		$hierarchy       = wpum_get_full_page_hierarchy( $profile_page_id );
 
+		if ( ! $profile_page_id ) {
+			return;
+		}
+
 		if ( ! empty( $hierarchy ) && is_array( $hierarchy ) ) {
 			$page_slug = '';
 			foreach ( array_reverse( $hierarchy ) as $page ) {

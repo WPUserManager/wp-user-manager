@@ -587,6 +587,10 @@ function wpum_get_account_page_tabs() {
 		],
 	];
 
+	if ( ! wpum_get_core_page_id( 'profile' ) ) {
+		unset( $tabs['view'] );
+	}
+
 	$tabs = apply_filters( 'wpum_get_account_page_tabs', $tabs );
 
 	uasort( $tabs, 'wpum_sort_array_by_priority' );
