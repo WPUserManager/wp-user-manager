@@ -2,9 +2,9 @@
 # This file is distributed under the GPLv3+.
 msgid ""
 msgstr ""
-"Project-Id-Version: WP User Manager 2.0.2\n"
+"Project-Id-Version: WP User Manager 2.0.3\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/wp-user-manager\n"
-"POT-Creation-Date: 2018-07-08 10:43:28+00:00\n"
+"POT-Creation-Date: 2018-07-10 11:16:55+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -390,15 +390,15 @@ msgstr ""
 msgid "Logout"
 msgstr ""
 
-#: includes/functions.php:760 wp-user-manager/includes/functions.php:760
+#: includes/functions.php:764 wp-user-manager/includes/functions.php:760
 msgid "About"
 msgstr ""
 
-#: includes/functions.php:764 wp-user-manager/includes/functions.php:764
+#: includes/functions.php:768 wp-user-manager/includes/functions.php:764
 msgid "Posts"
 msgstr ""
 
-#: includes/functions.php:768 wp-user-manager/includes/functions.php:768
+#: includes/functions.php:772 wp-user-manager/includes/functions.php:768
 msgid "Comments"
 msgstr ""
 
@@ -2888,8 +2888,7 @@ msgid "Your license key has reached its activation limit."
 msgstr ""
 
 #: includes/wpum-updater/class-wpum-license.php:358
-#: wp-user-manager/includes/wpum-updater/class-wpum-license.php:358
-msgid "License successfully activated. Expires on %s"
+msgid "License successfully activated."
 msgstr ""
 
 #: includes/wpum-updater/class-wpum-license.php:360
@@ -3616,9 +3615,13 @@ msgstr ""
 msgid "No options are available for this widget."
 msgstr ""
 
+#: wp-user-manager/includes/wpum-updater/class-wpum-license.php:358
+msgid "License successfully activated. Expires on %s"
+msgstr ""
+
 #: wp-user-manager/wp-user-manager.php:383
-#: wp-user-manager/wp-user-manager.php:395 wp-user-manager.php:383
-#: wp-user-manager.php:395
+#: wp-user-manager/wp-user-manager.php:395 wp-user-manager.php:382
+#: wp-user-manager.php:394
 msgid "Cheatin&#8217; huh?"
 msgstr ""
 
@@ -3645,27 +3648,27 @@ msgstr ""
 msgid "https://wpusermanager.com"
 msgstr ""
 
-#: includes/functions.php:636 wp-user-manager/includes/functions.php:636
+#: includes/functions.php:640 wp-user-manager/includes/functions.php:636
 msgctxt "Permalink structure"
 msgid "Display user ID"
 msgstr ""
 
-#: includes/functions.php:641 wp-user-manager/includes/functions.php:641
+#: includes/functions.php:645 wp-user-manager/includes/functions.php:641
 msgctxt "Permalink structure"
 msgid "Display username"
 msgstr ""
 
-#: includes/functions.php:646 wp-user-manager/includes/functions.php:646
+#: includes/functions.php:650 wp-user-manager/includes/functions.php:646
 msgctxt "Permalink structure"
 msgid "Display nickname"
 msgstr ""
 
-#: includes/functions.php:642 wp-user-manager/includes/functions.php:642
+#: includes/functions.php:646 wp-user-manager/includes/functions.php:642
 msgctxt "Example of permalink setting"
 msgid "username"
 msgstr ""
 
-#: includes/functions.php:647 wp-user-manager/includes/functions.php:647
+#: includes/functions.php:651 wp-user-manager/includes/functions.php:647
 msgctxt "Example of permalink setting"
 msgid "nickname"
 msgstr ""
