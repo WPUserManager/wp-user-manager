@@ -616,8 +616,21 @@ function wpum_directory( $atts, $content = null ) {
 
 	// Setup search if anything specified.
 	if ( isset( $_GET['directory-search'] ) && ! empty( $_GET['directory-search'] ) ) {
-		$search_string  = sanitize_text_field( esc_attr( trim( $_GET['directory-search'] ) ) );
-		$args['search'] = '*' . esc_attr( $search_string ) . '*';
+		$search_string      = sanitize_text_field( esc_attr( trim( $_GET['directory-search'] ) ) );
+		$args['search']     = '*' . esc_attr( $search_string ) . '*';
+		$args['meta_query'] = array(
+			'relation' => 'OR',
+			array(
+				'key'     => 'first_name',
+				'value'   => esc_attr( $search_string ),
+				'compare' => 'LIKE',
+			),
+			array(
+				'key'     => 'last_name',
+				'value'   => esc_attr( $search_string ),
+				'compare' => 'LIKE',
+			),
+		);
 	}
 
 	$args['offset'] = $offset;
