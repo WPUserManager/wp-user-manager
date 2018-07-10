@@ -355,7 +355,7 @@ class WPUM_License {
 		}
 
 		if ( $status == 'valid' ) {
-			$inline   = sprintf( __( 'License successfully activated. Expires on %s', 'wp-user-manager' ), date_i18n( get_option( 'date_format' ), strtotime( get_option( $this->item_shortname . '_license_expires' ), current_time( 'timestamp' ) ) ) );
+			$inline   = __( 'License successfully activated.', 'wp-user-manager' );
 			$message  = '<div class="wpum-license-message is-alt notice-success"><p>' . $inline . '</p></div>';
 			$message .= '<br/><a href="' . $this->get_license_deactivation_url() . '" class="button">' . esc_html__( 'Deactivate license', 'wp-user-manager' ) . '</a>';
 		}
