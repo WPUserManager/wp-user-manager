@@ -228,24 +228,6 @@ function wpum_display_account_page_content() {
 add_action( 'wpum_account_page_content', 'wpum_display_account_page_content' );
 
 /**
- * Trigger a 404 page when no profile is found.
- *
- * @return void
- */
-function wpum_when_profile_not_found() {
-
-	$profile_page = wpum_get_core_page_id( 'profile' );
-
-	if ( $profile_page && is_page( $profile_page ) && ! wpum_get_queried_user_id() ) {
-		global $wp_query;
-		$wp_query->set_404();
-		status_header( 404 );
-		nocache_headers();
-	}
-}
-add_action( 'template_redirect', 'wpum_when_profile_not_found' );
-
-/**
  * Make nickname unique.
  *
  * @param int $user_id
