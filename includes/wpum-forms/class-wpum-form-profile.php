@@ -146,7 +146,7 @@ class WPUM_Form_Profile extends WPUM_Form {
 	private function get_account_fields() {
 
 		$fields         = [];
-		$primary_group  = WPUM()->fields_groups->get_groups( [ 'primary' => true ] );
+		$primary_group  = WPUM()->fields_groups->get_groups();
 		$primary_group  = $primary_group[0];
 		$account_fields = WPUM()->fields->get_fields(
 			[

@@ -182,10 +182,11 @@ add_action( 'init', 'wpum_restrict_wplogin' );
 function wpum_restrict_account_page() {
 
 	$account_page = wpum_get_core_page_id( 'account' );
+	$login_page   = wpum_get_core_page_id( 'login' );
 
-	if ( $account_page && is_page( $account_page ) && ! is_user_logged_in() ) {
+	if ( $account_page && is_page( $account_page ) && ! is_user_logged_in() && $login_page ) {
 
-		$redirect = get_permalink( $account_page );
+		$redirect = get_permalink( $login_page );
 		$redirect = add_query_arg(
 			[
 				'redirect_to' => get_permalink(),
