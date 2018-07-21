@@ -240,7 +240,6 @@ if ( ! class_exists( 'WP_User_Manager' ) ) :
 			require_once WPUM_PLUGIN_DIR . 'includes/wpum-admin/class-wpum-menus.php';
 			require_once WPUM_PLUGIN_DIR . 'includes/wpum-directories/class-wpum-directories-editor.php';
 			require_once WPUM_PLUGIN_DIR . 'includes/wpum-directories/wpum-directories-functions.php';
-			require_once WPUM_PLUGIN_DIR . 'includes/wpum-shortcodes/shortcodes.php';
 			require_once WPUM_PLUGIN_DIR . 'includes/widgets.php';
 
 			//require_once WPUM_PLUGIN_DIR . 'includes/wpum-upgrades/class-wpum-updates.php';
@@ -359,6 +358,8 @@ if ( ! class_exists( 'WP_User_Manager' ) ) :
 			$this->elements               = new WPUM_HTML_Elements();
 			$this->search_meta            = new WPUM_DB_Search_Fields();
 			$this->async_process          = new WPUM_Async_Process();
+
+			require_once WPUM_PLUGIN_DIR . 'includes/wpum-shortcodes/shortcodes.php';
 
 			/**
 			 * @todo document after_wpum_init
