@@ -190,7 +190,7 @@ function wpum_run_install() {
 	wpum_generate_pages();
 
 	// Add some default options.
-	wpum_update_option( 'login_method', 'email' );
+	wpum_update_option( 'login_method', 'username_email' );
 	wpum_update_option( 'email_template', 'default' );
 	wpum_update_option( 'from_email', get_option( 'admin_email' ) );
 	wpum_update_option( 'from_name', get_option( 'blogname' ) );
