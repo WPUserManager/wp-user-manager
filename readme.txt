@@ -8,7 +8,7 @@ Tested up to: 4.9
 Requires PHP: 5.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
-Stable tag: 2.0.3
+Stable tag: 2.0.4
 
 The most customizable profiles & community builder WordPress plugin with front-end login, registration, profile customization and content restriction.
 
@@ -114,6 +114,16 @@ Please note that using WPUM and the mentioned add-ons does NOT guarantee complia
 13. Login form.
 
 == Changelog ==
+
+= 2.0.4 ( 23th July 2018 ) =
+
+- Tweak: make "username and email" default login method on plugin first install
+- Tweak: no longer show 404 error when accessing the profile page and not logged in
+- Fix: redirect loop with the account page when not logged in
+- Fix: pages disappearing in some instances when the profile page is not properly configured
+- Fix: avatar upload not working on some setups
+- Fix: fatal error on plugin activation when using Yoast SEO
+- Fix: settings page empty or showing error in some cases
 
 = 2.0.3 ( 10th July 2018 ) =
 - Fix: error when automatic login after registration is enabled which caused an issue with WooCommerce
