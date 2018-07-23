@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: WP User Manager 2.0.3\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/wp-user-manager\n"
-"POT-Creation-Date: 2018-07-10 11:16:55+00:00\n"
+"POT-Creation-Date: 2018-07-23 14:15:08+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -236,7 +236,7 @@ msgstr ""
 msgid "Settings"
 msgstr ""
 
-#: includes/actions.php:276 includes/wpum-forms/class-wpum-form-profile.php:129
+#: includes/actions.php:259 includes/wpum-forms/class-wpum-form-profile.php:129
 #: wp-user-manager/includes/actions.php:276
 #: wp-user-manager/includes/wpum-forms/class-wpum-form-profile.php:129
 msgid ""
@@ -244,13 +244,13 @@ msgid ""
 "unique."
 msgstr ""
 
-#: includes/actions.php:285 includes/wpum-forms/class-wpum-form-profile.php:133
+#: includes/actions.php:268 includes/wpum-forms/class-wpum-form-profile.php:133
 #: wp-user-manager/includes/actions.php:285
 #: wp-user-manager/includes/wpum-forms/class-wpum-form-profile.php:133
 msgid "This nickname is already in use by someone else. Nicknames must be unique."
 msgstr ""
 
-#: includes/actions.php:297 templates/already-logged-in.php:25
+#: includes/actions.php:280 templates/already-logged-in.php:25
 #: templates/profile-card.php:42 wp-user-manager/includes/actions.php:297
 #: wp-user-manager/templates/already-logged-in.php:25
 #: wp-user-manager/templates/profile-card.php:42
@@ -3620,8 +3620,8 @@ msgid "License successfully activated. Expires on %s"
 msgstr ""
 
 #: wp-user-manager/wp-user-manager.php:383
-#: wp-user-manager/wp-user-manager.php:395 wp-user-manager.php:382
-#: wp-user-manager.php:394
+#: wp-user-manager/wp-user-manager.php:395 wp-user-manager.php:383
+#: wp-user-manager.php:395
 msgid "Cheatin&#8217; huh?"
 msgstr ""
 
