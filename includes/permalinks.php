@@ -23,6 +23,11 @@ add_action(
 	'cortex.routes', function( RouteCollectionInterface $routes ) {
 
 		$account_page_id = wpum_get_core_page_id( 'account' );
+
+		if ( ! $account_page_id ) {
+			return;
+		}
+
 		$page_slug       = esc_attr( get_post_field( 'post_name', intval( $account_page_id ) ) );
 		$hierarchy       = wpum_get_full_page_hierarchy( $account_page_id );
 
@@ -55,12 +60,13 @@ add_action(
 	'cortex.routes', function( RouteCollectionInterface $routes ) {
 
 		$profile_page_id = wpum_get_core_page_id( 'profile' );
-		$page_slug       = esc_attr( get_post_field( 'post_name', intval( $profile_page_id ) ) );
-		$hierarchy       = wpum_get_full_page_hierarchy( $profile_page_id );
 
 		if ( ! $profile_page_id ) {
 			return;
 		}
+
+		$page_slug       = esc_attr( get_post_field( 'post_name', intval( $profile_page_id ) ) );
+		$hierarchy       = wpum_get_full_page_hierarchy( $profile_page_id );
 
 		if ( ! empty( $hierarchy ) && is_array( $hierarchy ) ) {
 			$page_slug = '';

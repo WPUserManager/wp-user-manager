@@ -145,9 +145,16 @@ class WPUM_Form_Profile extends WPUM_Form {
 	 */
 	private function get_account_fields() {
 
-		$fields         = [];
-		$primary_group  = WPUM()->fields_groups->get_groups();
-		$primary_group  = $primary_group[0];
+		$fields        = [];
+		$primary_group = WPUM()->fields_groups->get_groups(
+			[
+				'orderby' => 'group_order',
+				'order'   => 'ASC',
+			]
+		);
+
+		$primary_group = $primary_group[0];
+
 		$account_fields = WPUM()->fields->get_fields(
 			[
 				'group_id' => $primary_group->get_ID(),
@@ -184,7 +191,7 @@ class WPUM_Form_Profile extends WPUM_Form {
 			}
 		}
 
-		if ( ! wpum_get_option( 'custom_avatars' ) && isset( $fields[ 'user_avatar' ] ) ) {
+		if ( ! wpum_get_option( 'custom_avatars' ) && isset( $fields['user_avatar'] ) ) {
 			unset( $fields['user_avatar'] );
 		}
 
@@ -344,7 +351,7 @@ class WPUM_Form_Profile extends WPUM_Form {
 			}
 
 			if ( wpum_get_option( 'custom_avatars' ) ) {
-				$currently_uploaded_file   = isset( $_POST[ 'current_user_avatar' ] ) && ! empty( $_POST[ 'current_user_avatar' ] ) ? esc_url_raw( $_POST[ 'current_user_avatar' ] ): false;
+				$currently_uploaded_file   = isset( $_POST['current_user_avatar'] ) && ! empty( $_POST['current_user_avatar'] ) ? esc_url_raw( $_POST['current_user_avatar'] ) : false;
 				$existing_avatar_file_path = get_user_meta( $updated_user_id, '_current_user_avatar_path', true );
 				if ( $currently_uploaded_file && $existing_avatar_file_path && isset( $values['account']['user_avatar']['url'] ) && $values['account']['user_avatar']['url'] !== $currently_uploaded_file ) {
 					wp_delete_file( $existing_avatar_file_path );
@@ -360,7 +367,7 @@ class WPUM_Form_Profile extends WPUM_Form {
 				}
 			}
 
-			$currently_uploaded_cover = isset( $_POST[ 'current_user_cover' ] ) && ! empty( $_POST[ 'current_user_cover' ] ) ? esc_url_raw( $_POST[ 'current_user_cover' ] ): false;
+			$currently_uploaded_cover = isset( $_POST['current_user_cover'] ) && ! empty( $_POST['current_user_cover'] ) ? esc_url_raw( $_POST['current_user_cover'] ) : false;
 			$existing_cover_file_path = get_user_meta( $updated_user_id, '_user_cover_path', true );
 
 			if ( isset( $values['account']['user_cover']['url'] ) ) {
