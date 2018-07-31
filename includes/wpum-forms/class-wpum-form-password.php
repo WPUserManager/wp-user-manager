@@ -149,7 +149,7 @@ class WPUM_Form_Password extends WPUM_Form {
 	 */
 	public function validate_password( $pass, $fields, $values, $form ) {
 
-		if( $form == $this->form_name && isset( $values['password']['password'] ) ) {
+		if( $form == $this->form_name && isset( $values['password']['password'] ) && ! wpum_get_option( 'disable_strong_passwords' ) ) {
 
 			$password_1      = $values['password']['password'];
 			$password_2      = $values['password']['password_repeat'];

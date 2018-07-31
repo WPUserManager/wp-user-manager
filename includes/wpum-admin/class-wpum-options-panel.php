@@ -350,6 +350,12 @@ class WPUM_Options_Panel {
 					'desc' => __( 'Enable this option to allow users to upload custom avatars for their profiles.', 'wp-user-manager' ),
 					'type' => 'checkbox',
 				),
+				array(
+					'id'   => 'disable_strong_passwords',
+					'name' => __( 'Disable strong passwords', 'wp-user-manager' ),
+					'desc' => __( 'Enable this option to disable the built-in strong passwords validation system of WP User Manager.', 'wp-user-manager' ),
+					'type' => 'checkbox',
+				),
 			],
 			'profiles_content'    => [
 				array(

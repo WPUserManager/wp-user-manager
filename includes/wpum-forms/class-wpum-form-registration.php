@@ -106,7 +106,7 @@ class WPUM_Form_Registration extends WPUM_Form {
 	 */
 	public function validate_password( $pass, $fields, $values, $form ) {
 
-		if ( $form == $this->form_name && isset( $values['register']['user_password'] ) ) {
+		if ( $form == $this->form_name && isset( $values['register']['user_password'] ) && ! wpum_get_option( 'disable_strong_passwords' ) ) {
 
 			$password_1      = $values['register']['user_password'];
 			$containsLetter  = preg_match( '/[A-Z]/', $password_1 );
