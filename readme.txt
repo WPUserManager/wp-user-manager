@@ -8,7 +8,7 @@ Tested up to: 4.9
 Requires PHP: 5.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
-Stable tag: 2.0.4
+Stable tag: 2.0.5
 
 The most customizable profiles & community builder WordPress plugin with front-end login, registration, profile customization and content restriction.
 
@@ -114,6 +114,14 @@ Please note that using WPUM and the mentioned add-ons does NOT guarantee complia
 13. Login form.
 
 == Changelog ==
+
+= 2.0.5 ( 31st July 2018 ) =
+
+- Added: option to disable the built-in strong passwords verification - Users -> settings -> profiles
+- Fixed: password update confirmation notice not visible
+- Fixed: default emails content not installed during plugin's first installation
+- Fixed: profile picture sizing within the account page
+- Tweak: updated language files
 
 = 2.0.4 ( 23th July 2018 ) =
 
