@@ -223,6 +223,8 @@ function wpum_run_install() {
 		}
 	}
 
+	wpum_install_emails();
+
 	// Update current version.
 	update_option( 'wpum_version', WPUM_VERSION );
 
