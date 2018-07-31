@@ -30,6 +30,14 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 		?>
 	<?php endif; ?>
 
+	<?php if( isset( $_GET['password-updated'] ) && $_GET['password-updated'] == 'success' ) : ?>
+		<?php
+			WPUM()->templates
+				->set_template_data( [ 'message' => esc_html__( 'Password successfully updated.', 'wp-user-manager' ) ] )
+				->get_template_part( 'messages/general', 'success' );
+		?>
+	<?php endif; ?>
+
 	<?php do_action( 'wpum_before_account_form' ); ?>
 
 		<form action="<?php echo esc_url( $data->action ); ?>" method="post" id="wpum-submit-account-form" enctype="multipart/form-data">
