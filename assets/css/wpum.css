@@ -852,7 +852,11 @@
     display: inline; }
   .wpum-form fieldset.fieldset-user_avatar .wpum-uploaded-file-preview img {
     width: 70px;
-    height: 70px; }
+    height: 70px;
+    display: block;
+    min-height: 100%;
+    object-fit: cover;
+    object-position: center; }
   .wpum-form fieldset.fieldset-robo {
     display: none; }
 .wpum-form .select2-container {
