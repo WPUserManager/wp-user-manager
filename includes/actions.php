@@ -277,7 +277,7 @@ function wpum_check_nick_field( $errors, $update, $user ) {
  */
 function wpum_admin_user_action_link( $actions, $user_object ) {
 	if ( wpum_get_core_page_id( 'profile' ) ) {
-		$actions['view_profile'] = '<a href="' . wpum_get_profile_url( $user_object ) . '" target="_blank">' . esc_html__( 'View Profile', 'wp-user-manager' ) . '</a>';
+		$actions['view_profile'] = '<a href="' . esc_url( wpum_get_profile_url( $user_object ) ) . '" target="_blank">' . esc_html__( 'View Profile', 'wp-user-manager' ) . '</a>';
 	}
 	return $actions;
 }

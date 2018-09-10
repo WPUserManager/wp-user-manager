@@ -738,13 +738,13 @@ function wpum_get_profile_url( $user ) {
 
 	switch ( $permalink_structure ) {
 		case 'user_id':
-			$page_url .= $user->ID;
+			$page_url .= urlencode( $user->ID );
 			break;
 		case 'username':
-			$page_url .= $user->user_login;
+			$page_url .= urlencode( $user->user_login );
 			break;
 		case 'nickname':
-			$page_url .= get_user_meta( $user->ID, 'nickname', true );
+			$page_url .= urlencode( get_user_meta( $user->ID, 'nickname', true ) );
 			break;
 	}
 
