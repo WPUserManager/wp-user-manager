@@ -677,7 +677,8 @@ function wpum_get_queried_user() {
  */
 function wpum_get_queried_user_id() {
 
-	$queried_user                = wpum_get_queried_user();
+	$queried_user = urldecode( wpum_get_queried_user() );
+
 	$user_id                     = false;
 	$profile_permalink_structure = get_option( 'wpum_permalink', 'user_id' );
 
