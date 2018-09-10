@@ -11,7 +11,9 @@ use Carbon_Fields\Container;
 use Carbon_Fields\Field;
 
 // Exit if accessed directly
-if ( ! defined( 'ABSPATH' ) ) exit;
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 
 /**
  * Define the settings for the menu items.
@@ -26,7 +28,7 @@ class WPUM_Menus {
 		add_action( 'admin_head', [ $this, 'cssjs' ] );
 		add_action( 'admin_enqueue_scripts', [ $this, 'js' ] );
 		add_filter( 'nav_menu_link_attributes', [ $this, 'set_nav_item_as_logout' ], 10, 3 );
-		if( ! is_admin() ) {
+		if ( ! is_admin() ) {
 			add_filter( 'wp_get_nav_menu_items', [ $this, 'exclude_menu_items' ], 10, 3 );
 		}
 	}
@@ -38,23 +40,27 @@ class WPUM_Menus {
 	 */
 	public function menu_settings() {
 		Container::make( 'nav_menu_item', 'Menu Settings' )
-			->add_fields( array(
-				Field::make( 'checkbox', 'convert_to_logout', esc_html__( 'Set as logout url', 'wp-user-manager' ) )
-					->set_help_text( esc_html__( 'Enable to make this link a logout link.', 'wp-user-manager' ) )
-					->set_classes( 'wpum-link-logout-toggle' ),
-				Field::make( 'select', 'link_visibility', esc_html__( 'Display to:', 'wp-user-manager' ) )
-					->add_options( array(
-						''    => esc_html__( 'Everyone', 'wp-user-manager' ),
-						'in'  => esc_html__( 'Logged in users', 'wp-user-manager' ),
-						'out' => esc_html__( 'Logged out users', 'wp-user-manager' ),
-					) )
+			->add_fields(
+				array(
+					Field::make( 'checkbox', 'convert_to_logout', esc_html__( 'Set as logout url', 'wp-user-manager' ) )
+						->set_help_text( esc_html__( 'Enable to make this link a logout link.', 'wp-user-manager' ) )
+						->set_classes( 'wpum-link-logout-toggle' ),
+					Field::make( 'select', 'link_visibility', esc_html__( 'Display to:', 'wp-user-manager' ) )
+					->add_options(
+						array(
+							''    => esc_html__( 'Everyone', 'wp-user-manager' ),
+							'in'  => esc_html__( 'Logged in users', 'wp-user-manager' ),
+							'out' => esc_html__( 'Logged out users', 'wp-user-manager' ),
+						)
+					)
 					->set_classes( 'wpum-link-visibility-toggle' )
 					->set_help_text( esc_html__( 'Set the visibility of this menu item.', 'wp-user-manager' ) ),
-				Field::make( 'multiselect', 'link_roles', esc_html__( 'Select roles:', 'wp-user-manager' ) )
-					->add_options( $this->get_roles() )
-					->set_classes( 'wpum-link-visibility-roles' )
-					->set_help_text( esc_html__( 'Select the roles that should see this menu item. Leave blank for all roles.', 'wp-user-manager' ) )
-			) );
+					Field::make( 'multiselect', 'link_roles', esc_html__( 'Select roles:', 'wp-user-manager' ) )
+							->add_options( $this->get_roles() )
+							->set_classes( 'wpum-link-visibility-roles' )
+							->set_help_text( esc_html__( 'Select the roles that should see this menu item. Leave blank for all roles.', 'wp-user-manager' ) ),
+				)
+			);
 	}
 
 	/**
@@ -66,7 +72,7 @@ class WPUM_Menus {
 
 		$roles = [];
 
-		foreach( wpum_get_roles( true, true ) as $role ) {
+		foreach ( wpum_get_roles( true, true ) as $role ) {
 			$roles[ $role['value'] ] = $role['label'];
 		}
 
@@ -95,7 +101,7 @@ class WPUM_Menus {
 	 */
 	public function js() {
 		$screen = get_current_screen();
-		if( $screen->base == 'nav-menus' ) {
+		if ( $screen->base == 'nav-menus' ) {
 			wp_enqueue_script( 'wpum-menu-editor', WPUM_PLUGIN_URL . '/assets/js/admin/admin-menus.min.js', false, WPUM_VERSION, true );
 		}
 	}
@@ -112,7 +118,7 @@ class WPUM_Menus {
 
 		$is_logout = carbon_get_nav_menu_item_meta( $item->ID, 'convert_to_logout' );
 
-		if( $is_logout ) {
+		if ( $is_logout ) {
 			$atts['href'] = wp_logout_url();
 		}
 
@@ -130,7 +136,7 @@ class WPUM_Menus {
 	 */
 	public function exclude_menu_items( $items, $menu, $args ) {
 
-		foreach( $items as $key => $item ) {
+		foreach ( $items as $key => $item ) {
 
 			$status    = carbon_get_nav_menu_item_meta( $item->ID, 'link_visibility' );
 			$roles     = carbon_get_nav_menu_item_meta( $item->ID, 'link_roles' );
@@ -140,15 +146,15 @@ class WPUM_Menus {
 			switch ( $status ) {
 				case 'in':
 					$visible = is_user_logged_in() ? true : false;
-					if( is_array( $roles ) && ! empty( $roles ) && is_user_logged_in() ) {
+					if ( is_array( $roles ) && ! empty( $roles ) && is_user_logged_in() ) {
 						// Add the admin role for admins too.
 						array_push( $roles, 'administrator' );
 
 						$user         = wp_get_current_user();
-						$role         = ( array ) $user->roles;
+						$role         = (array) $user->roles;
 						$current_role = $role[0];
 
-						if( ! in_array( $current_role, $roles ) ) {
+						if ( ! array_intersect( (array) $user->roles, $roles ) ) {
 							$visible = false;
 						}
 					}
@@ -158,14 +164,13 @@ class WPUM_Menus {
 					break;
 			}
 			// Now exclude item if not visible.
-			if( ! $visible && ! $is_logout ) {
+			if ( ! $visible && ! $is_logout ) {
 				unset( $items[ $key ] );
 			}
 
-			if( $is_logout && ! is_user_logged_in() ) {
+			if ( $is_logout && ! is_user_logged_in() ) {
 				unset( $items[ $key ] );
 			}
-
 		}
 
 		return $items;
