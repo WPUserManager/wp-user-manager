@@ -78,7 +78,7 @@ add_action(
 
 		$routes->addRoute(
 			new QueryRoute(
-				$page_slug . '{profile:[a-zA-Z0-9_.-@+%-]+}',
+				$page_slug . '{profile:[\w,.!?+%]+}',
 				function( array $matches ) use ( $profile_page_id ) {
 					return [
 						'profile' => $matches['profile'],
@@ -90,7 +90,7 @@ add_action(
 
 		$routes->addRoute(
 			new QueryRoute(
-				$page_slug . '{profile:[a-zA-Z0-9_.-@+%-]+}/{tab:[a-zA-Z0-9_.-]+}',
+				$page_slug . '{profile:[\w,.!?+%]+}/{tab:[a-zA-Z0-9_.-]+}',
 				function( array $matches ) use ( $profile_page_id ) {
 					return [
 						'profile' => $matches['profile'],
@@ -103,7 +103,7 @@ add_action(
 
 		$routes->addRoute(
 			new QueryRoute(
-				$page_slug . '{profile:[a-zA-Z0-9_.-@+%-]+}/{tab:[a-zA-Z0-9_.-]+}/page/{paged:[a-zA-Z0-9_.-]+}',
+				$page_slug . '{profile:[\w,.!?+%]+}/{tab:[a-zA-Z0-9_.-]+}/page/{paged:[a-zA-Z0-9_.-]+}',
 				function( array $matches ) use ( $profile_page_id ) {
 					return [
 						'profile' => $matches['profile'],
