@@ -42,10 +42,10 @@ final class WPUM_DB_Table_Fields_Groups extends WPUM_DB_Table {
 		$this->schema     = "id bigint(20) unsigned NOT NULL auto_increment,
 			group_order bigint(20) unsigned NOT NULL default '0',
 			is_primary bool NOT NULL DEFAULT '0',
-			name varchar(255) NOT NULL default '',
+			name varchar(190) NOT NULL default '',
 			description longtext DEFAULT NULL,
 			PRIMARY KEY (id),
-			KEY name (name(255)),
+			KEY name (name(190)),
 			KEY group_order (group_order)";
 	}
 
