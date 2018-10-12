@@ -195,7 +195,7 @@ class WPUM_Form_Profile extends WPUM_Form {
 			unset( $fields['user_avatar'] );
 		}
 
-		return $fields;
+		return apply_filters( 'wpum_get_account_fields', $fields );
 
 	}
 
