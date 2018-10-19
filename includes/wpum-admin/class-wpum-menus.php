@@ -24,15 +24,12 @@ class WPUM_Menus {
 	 * Get things started.
 	 */
 	public function __construct() {
-		$show_wpum_menu_controls = apply_filters( 'pno_menus_controller_enabled', true );
-		if ( $show_wpum_menu_controls ) {
-			add_action( 'carbon_fields_register_fields', [ $this, 'menu_settings' ] );
-			add_action( 'admin_head', [ $this, 'cssjs' ] );
-			add_action( 'admin_enqueue_scripts', [ $this, 'js' ] );
-			add_filter( 'nav_menu_link_attributes', [ $this, 'set_nav_item_as_logout' ], 10, 3 );
-			if ( ! is_admin() ) {
-				add_filter( 'wp_get_nav_menu_items', [ $this, 'exclude_menu_items' ], 10, 3 );
-			}
+		add_action( 'carbon_fields_register_fields', [ $this, 'menu_settings' ] );
+		add_action( 'admin_head', [ $this, 'cssjs' ] );
+		add_action( 'admin_enqueue_scripts', [ $this, 'js' ] );
+		add_filter( 'nav_menu_link_attributes', [ $this, 'set_nav_item_as_logout' ], 10, 3 );
+		if ( ! is_admin() ) {
+			add_filter( 'wp_get_nav_menu_items', [ $this, 'exclude_menu_items' ], 10, 3 );
 		}
 	}
 
