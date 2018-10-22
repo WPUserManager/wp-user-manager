@@ -24,6 +24,11 @@ class WPUM_Menus {
 	 * Get things started.
 	 */
 	public function __construct() {
+
+		if ( defined( 'WPUM_DISABLE_MENUS_CONTROLLER' ) && WPUM_DISABLE_MENUS_CONTROLLER === true ) {
+			return;
+		}
+
 		add_action( 'carbon_fields_register_fields', [ $this, 'menu_settings' ] );
 		add_action( 'admin_head', [ $this, 'cssjs' ] );
 		add_action( 'admin_enqueue_scripts', [ $this, 'js' ] );
