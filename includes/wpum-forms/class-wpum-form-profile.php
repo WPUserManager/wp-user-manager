@@ -191,11 +191,13 @@ class WPUM_Form_Profile extends WPUM_Form {
 			}
 		}
 
+		$fields = apply_filters( 'wpum_get_account_fields', $fields );
+
 		if ( ! wpum_get_option( 'custom_avatars' ) && isset( $fields['user_avatar'] ) ) {
 			unset( $fields['user_avatar'] );
 		}
 
-		return apply_filters( 'wpum_get_account_fields', $fields );
+		return $fields;
 
 	}
 
