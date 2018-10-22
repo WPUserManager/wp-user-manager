@@ -8,7 +8,9 @@
 */
 
 // Exit if accessed directly
-if ( ! defined( 'ABSPATH' ) ) exit;
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 
 class WPUM_Form_Password extends WPUM_Form {
 
@@ -58,7 +60,7 @@ class WPUM_Form_Password extends WPUM_Form {
 	 */
 	public function __construct() {
 
-		if( ! is_user_logged_in() ) {
+		if ( ! is_user_logged_in() ) {
 			return;
 		}
 
@@ -67,14 +69,16 @@ class WPUM_Form_Password extends WPUM_Form {
 		add_action( 'wp', array( $this, 'process' ) );
 		add_filter( 'submit_wpum_form_validate_fields', [ $this, 'validate_password' ], 10, 4 );
 
-		$this->steps  = (array) apply_filters( 'password_change_steps', array(
-			'submit' => array(
-				'name'     => esc_html__( 'Change password', 'wp-user-manager' ),
-				'view'     => array( $this, 'submit' ),
-				'handler'  => array( $this, 'submit_handler' ),
-				'priority' => 10
+		$this->steps = (array) apply_filters(
+			'password_change_steps', array(
+				'submit' => array(
+					'name'     => esc_html__( 'Change password', 'wp-user-manager' ),
+					'view'     => array( $this, 'submit' ),
+					'handler'  => array( $this, 'submit_handler' ),
+					'priority' => 10,
+				),
 			)
-		) );
+		);
 
 		uasort( $this->steps, array( $this, 'sort_by_priority' ) );
 
@@ -94,24 +98,26 @@ class WPUM_Form_Password extends WPUM_Form {
 			return;
 		}
 
-		$this->fields = apply_filters( 'password_change_form_fields', array(
-			'password' => array(
+		$this->fields = apply_filters(
+			'password_change_form_fields', array(
 				'password' => array(
-					'label'       => esc_html__( 'Password', 'wp-user-manager' ),
-					'type'        => 'password',
-					'required'    => true,
-					'placeholder' => '',
-					'priority'    => 0
-				),
-				'password_repeat' => array(
-					'label'       => esc_html__( 'Repeat password', 'wp-user-manager' ),
-					'type'        => 'password',
-					'required'    => true,
-					'placeholder' => '',
-					'priority'    => 1
+					'password'        => array(
+						'label'       => esc_html__( 'Password', 'wp-user-manager' ),
+						'type'        => 'password',
+						'required'    => true,
+						'placeholder' => '',
+						'priority'    => 0,
+					),
+					'password_repeat' => array(
+						'label'       => esc_html__( 'Repeat password', 'wp-user-manager' ),
+						'type'        => 'password',
+						'required'    => true,
+						'placeholder' => '',
+						'priority'    => 1,
+					),
 				),
 			)
-		) );
+		);
 
 	}
 
@@ -129,7 +135,7 @@ class WPUM_Form_Password extends WPUM_Form {
 			'action'    => $this->get_action(),
 			'fields'    => $this->get_fields( 'password' ),
 			'step'      => $this->get_step(),
-			'step_name' => $this->steps[ $this->get_step_key( $this->get_step() ) ]['name']
+			'step_name' => $this->steps[ $this->get_step_key( $this->get_step() ) ]['name'],
 		];
 
 		WPUM()->templates
@@ -149,22 +155,23 @@ class WPUM_Form_Password extends WPUM_Form {
 	 */
 	public function validate_password( $pass, $fields, $values, $form ) {
 
-		if( $form == $this->form_name && isset( $values['password']['password'] ) && ! wpum_get_option( 'disable_strong_passwords' ) ) {
+		if ( $form == $this->form_name && isset( $values['password']['password'] ) ) {
 
-			$password_1      = $values['password']['password'];
-			$password_2      = $values['password']['password_repeat'];
-			$containsLetter  = preg_match('/[A-Z]/', $password_1 );
-			$containsDigit   = preg_match('/\d/', $password_1 );
-			$containsSpecial = preg_match('/[^a-zA-Z\d]/', $password_1 );
+			$password_1 = $values['password']['password'];
+			$password_2 = $values['password']['password_repeat'];
 
-			if( ! $containsLetter || ! $containsDigit || ! $containsSpecial || strlen( $password_1 ) < 8 ) {
-				return new WP_Error( 'password-validation-error', esc_html__( 'Password must be at least 8 characters long and contain at least 1 number, 1 uppercase letter and 1 special character.', 'wp-user-manager' ) );
+			if ( ! wpum_get_option( 'disable_strong_passwords' ) ) {
+				$containsLetter  = preg_match( '/[A-Z]/', $password_1 );
+				$containsDigit   = preg_match( '/\d/', $password_1 );
+				$containsSpecial = preg_match( '/[^a-zA-Z\d]/', $password_1 );
+				if ( ! $containsLetter || ! $containsDigit || ! $containsSpecial || strlen( $password_1 ) < 8 ) {
+					return new WP_Error( 'password-validation-error', esc_html__( 'Password must be at least 8 characters long and contain at least 1 number, 1 uppercase letter and 1 special character.', 'wp-user-manager' ) );
+				}
 			}
 
-			if( $password_1 !== $password_2 ) {
+			if ( $password_1 !== $password_2 ) {
 				return new WP_Error( 'password-validation-nomatch', esc_html__( 'Error: passwords do not match.', 'wp-user-manager' ) );
 			}
-
 		}
 
 		return $pass;
@@ -184,7 +191,7 @@ class WPUM_Form_Password extends WPUM_Form {
 
 			$values = $this->get_posted_fields();
 
-			if( ! wp_verify_nonce( $_POST['password_change_nonce'], 'verify_password_change_form' ) ) {
+			if ( ! wp_verify_nonce( $_POST['password_change_nonce'], 'verify_password_change_form' ) ) {
 				return;
 			}
 
@@ -192,11 +199,11 @@ class WPUM_Form_Password extends WPUM_Form {
 				return;
 			}
 
-			if( ! is_user_logged_in() ) {
+			if ( ! is_user_logged_in() ) {
 				return;
 			}
 
-			if( ! $this->user ) {
+			if ( ! $this->user ) {
 				return;
 			}
 
@@ -204,31 +211,34 @@ class WPUM_Form_Password extends WPUM_Form {
 				throw new Exception( $return->get_error_message() );
 			}
 
-			$updated_user_id = wp_update_user( [
-				'ID'        => $this->user->ID,
-				'user_pass' => $values['password']['password']
-			] );
+			$updated_user_id = wp_update_user(
+				[
+					'ID'        => $this->user->ID,
+					'user_pass' => $values['password']['password'],
+				]
+			);
 
 			if ( is_wp_error( $updated_user_id ) ) {
 				throw new Exception( $updated_user_id->get_error_message() );
 			} else {
 
 				$active_tab = get_query_var( 'tab' );
-				if( empty( $active_tab ) ) {
+				if ( empty( $active_tab ) ) {
 					$active_tab = isset( $_GET['tab'] ) ? $_GET['tab'] : 'password';
 				}
 
 				$redirect = get_permalink();
-				$redirect = add_query_arg( [
-					'password-updated' => 'success',
-					'tab'              => $active_tab
-				], $redirect );
+				$redirect = add_query_arg(
+					[
+						'password-updated' => 'success',
+						'tab'              => $active_tab,
+					], $redirect
+				);
 
 				wp_safe_redirect( $redirect );
 				exit;
 
 			}
-
 		} catch ( Exception $e ) {
 			$this->add_error( $e->getMessage() );
 			return;
