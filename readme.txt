@@ -8,7 +8,7 @@ Tested up to: 4.9
 Requires PHP: 5.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
-Stable tag: 2.0.7
+Stable tag: 2.0.8
 
 The most customizable profiles & community builder WordPress plugin with front-end login, registration, profile customization and content restriction.
 
@@ -114,6 +114,13 @@ Please note that using WPUM and the mentioned add-ons does NOT guarantee complia
 13. Login form.
 
 == Changelog ==
+
+= 2.0.8 ( 22nd October 2018 )
+
+- Fix: when avatars disabled the avatar field would still be visible
+- Fix: when changing password, verification fails to detect if passwords do not match
+- Fix: when changing password, the form would redirect to the main account page instead of showing the success message
+- Tweak: added a toggle to disable the built-in custom menus controller [https://docs.wpusermanager.com/article/430-how-to-disable-the-built-in-custom-menu-controller](https://docs.wpusermanager.com/article/430-how-to-disable-the-built-in-custom-menu-controller)
 
 = 2.0.7 ( 19th September 2018 )
 
