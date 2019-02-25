@@ -181,15 +181,16 @@ class WPUM_Form_Profile extends WPUM_Form {
 				}
 
 				$fields[ $this->get_parsed_id( $field->get_name(), $field->get_primary_id(), $field ) ] = array(
-					'label'       => $field->get_name(),
-					'type'        => $field->get_type(),
-					'required'    => $field->get_meta( 'required' ),
-					'placeholder' => $field->get_meta( 'placeholder' ),
-					'description' => $field->get_description(),
-					'read_only'   => $field->get_meta( 'read_only' ),
-					'options'     => $this->get_field_dropdown_options( $field, $this->user ),
-					'value'       => $this->get_user_field_value( $field ),
-					'priority'    => $priority,
+					'label'         => $field->get_name(),
+					'type'          => $field->get_type(),
+					'required'      => $field->get_meta( 'required' ),
+					'placeholder'   => $field->get_meta( 'placeholder' ),
+					'description'   => $field->get_description(),
+					'read_only'     => $field->get_meta( 'read_only' ),
+					'max_file_size' => $field->get_meta( 'max_file_size' ),
+					'options'       => $this->get_field_dropdown_options( $field, $this->user ),
+					'value'         => $this->get_user_field_value( $field ),
+					'priority'      => $priority,
 				);
 			}
 		}

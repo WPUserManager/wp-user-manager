@@ -443,6 +443,11 @@ abstract class WPUM_Form {
 				if ( defined( 'WPUM_MAX_COVER_SIZE' ) && $field_key == 'user_cover' && $file_to_upload['size'] > WPUM_MAX_COVER_SIZE ) {
 					throw new Exception( $too_big_message );
 				}
+
+				if ( isset( $field['max_file_size'] ) && ! empty( $field['max_file_size'] ) && $file_to_upload['size'] > $field['max_file_size'] ) {
+					throw new Exception( $too_big_message );
+				}
+
 				if ( is_wp_error( $uploaded_file ) ) {
 					throw new Exception( $uploaded_file->get_error_message() );
 				} else {
