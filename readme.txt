@@ -122,6 +122,7 @@ Please note that using WPUM and the mentioned add-ons does NOT guarantee complia
 - Fix: read only setting for fields not working
 - Fix: file max size setting not working
 - Fix: login fails when username is email and login method is set to username
+- Fix: login widget settings not working
 - Tweak: added automatic data installation fixer
 
 = 2.0.8 ( 22nd October 2018 )
