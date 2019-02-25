@@ -154,26 +154,6 @@ function wpum_restrict_wp_profile() {
 add_action( 'load-profile.php', 'wpum_restrict_wp_profile' );
 
 /**
- * Lock access to wp-login.php and redirect users to the WPUM login page.
- *
- * @return void
- */
-function wpum_restrict_wplogin() {
-
-	global $pagenow;
-
-	if ( 'wp-login.php' == $pagenow && ! defined( 'WPUM_UNLOCK_WP_LOGIN' ) ) {
-		$login_page = wpum_get_core_page_id( 'login' );
-		if ( $login_page && wpum_get_option( 'lock_wplogin' ) && ! isset( $_GET['action'] ) ) {
-			wp_safe_redirect( esc_url( get_permalink( $login_page ) ) );
-			exit;
-		}
-	}
-
-}
-add_action( 'init', 'wpum_restrict_wplogin' );
-
-/**
  * Restrict access to the account page only to logged in users.
  * After login, redirect visitors back to the account page.
  *

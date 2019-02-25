@@ -130,7 +130,9 @@ function wpum_login_url( $login_url, $redirect, $force_reauth ) {
 	return $wpum_login_page;
 
 }
-add_filter( 'login_url', 'wpum_login_url', 10, 3 );
+if ( wpum_get_option( 'lock_wplogin' ) ) {
+	add_filter( 'login_url', 'wpum_login_url', 10, 3 );
+}
 
 /**
  * Validate authentication with the selected login method.

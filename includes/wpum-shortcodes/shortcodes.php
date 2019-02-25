@@ -16,7 +16,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Login form shortcode.
  * Vuejs handles the display of the form.
  *
- * @param array $atts
+ * @param array  $atts
  * @param string $content
  * @return void
  */
@@ -27,7 +27,8 @@ function wpum_login_form( $atts, $content = null ) {
 			array(
 				'psw_link'      => '',
 				'register_link' => '',
-			), $atts
+			),
+			$atts
 		)
 	);
 
@@ -54,7 +55,7 @@ add_shortcode( 'wpum_login_form', 'wpum_login_form' );
 /**
  * Password recovery shortcode.
  *
- * @param array $atts
+ * @param array  $atts
  * @param string $content
  * @return void
  */
@@ -65,7 +66,8 @@ function wpum_password_recovery( $atts, $content = null ) {
 			array(
 				'login_link'    => '',
 				'register_link' => '',
-			), $atts
+			),
+			$atts
 		)
 	);
 
@@ -88,7 +90,7 @@ add_shortcode( 'wpum_password_recovery', 'wpum_password_recovery' );
 /**
  * Display a login link.
  *
- * @param array $atts
+ * @param array  $atts
  * @param string $content
  * @return void
  */
@@ -99,14 +101,28 @@ function wpum_login_link( $atts, $content = null ) {
 			array(
 				'redirect' => '',
 				'label'    => esc_html__( 'Login', 'wp-user-manager' ),
-			), $atts
+			),
+			$atts
 		)
 	);
 
 	if ( is_user_logged_in() ) {
 		$output = '';
 	} else {
-		$url    = wp_login_url( $redirect );
+
+		$wpum_login_page = wpum_get_core_page_id( 'login' );
+		$wpum_login_page = get_permalink( $wpum_login_page );
+
+		if ( $redirect ) {
+			$wpum_login_page = add_query_arg( [ 'redirect_to' => $redirect ], $wpum_login_page );
+		}
+
+		if ( $wpum_login_page ) {
+			$url = $wpum_login_page;
+		} else {
+			$url = wp_login_url( $redirect );
+		}
+
 		$output = '<a href="' . esc_url( $url ) . '" class="wpum-login-link">' . esc_html( $label ) . '</a>';
 	}
 
@@ -118,7 +134,7 @@ add_shortcode( 'wpum_login', 'wpum_login_link' );
 /**
  * Display a logout link.
  *
- * @param array $atts
+ * @param array  $atts
  * @param string $content
  * @return void
  */
@@ -129,7 +145,8 @@ function wpum_logout_link( $atts, $content = null ) {
 			array(
 				'redirect' => '',
 				'label'    => esc_html__( 'Logout', 'wp-user-manager' ),
-			), $atts
+			),
+			$atts
 		)
 	);
 
@@ -147,7 +164,7 @@ add_shortcode( 'wpum_logout', 'wpum_logout_link' );
 /**
  * Show the registration form through a shortcode.
  *
- * @param array $atts
+ * @param array  $atts
  * @param string $content
  * @return void
  */
@@ -158,7 +175,8 @@ function wpum_registration_form( $atts, $content = null ) {
 			array(
 				'login_link' => '',
 				'psw_link'   => '',
-			), $atts
+			),
+			$atts
 		)
 	);
 
@@ -212,7 +230,7 @@ add_shortcode( 'wpum_register', 'wpum_registration_form' );
 /**
  * Display the account page of the user.
  *
- * @param array $atts
+ * @param array  $atts
  * @param string $content
  * @return void
  */
@@ -234,7 +252,7 @@ add_shortcode( 'wpum_account', 'wpum_account_page' );
 /**
  * Handles display of the profile shortcode.
  *
- * @param array $atts
+ * @param array  $atts
  * @param string $content
  * @return void
  */
@@ -300,7 +318,7 @@ add_shortcode( 'wpum_profile', 'wpum_profile' );
 /**
  * Shortcode to display content to logged in users only.
  *
- * @param array $atts
+ * @param array  $atts
  * @param string $content
  * @return void
  */
@@ -318,7 +336,8 @@ function wpum_restrict_logged_in( $atts, $content = null ) {
 		$login_page = add_query_arg(
 			[
 				'redirect_to' => get_permalink(),
-			], $login_page
+			],
+			$login_page
 		);
 
 		WPUM()->templates
@@ -340,7 +359,7 @@ add_shortcode( 'wpum_restrict_logged_in', 'wpum_restrict_logged_in' );
 /**
  * Display content to a given list of users by ID.
  *
- * @param array $atts
+ * @param array  $atts
  * @param string $content
  * @return void
  */
@@ -350,7 +369,8 @@ function wpum_restrict_to_users( $atts, $content = null ) {
 		shortcode_atts(
 			array(
 				'ids' => null,
-			), $atts
+			),
+			$atts
 		)
 	);
 
@@ -369,7 +389,8 @@ function wpum_restrict_to_users( $atts, $content = null ) {
 		$login_page = add_query_arg(
 			[
 				'redirect_to' => get_permalink(),
-			], $login_page
+			],
+			$login_page
 		);
 
 		WPUM()->templates
@@ -392,7 +413,7 @@ add_shortcode( 'wpum_restrict_to_users', 'wpum_restrict_to_users' );
 /**
  * Shortcode to display content to a set of user roles.
  *
- * @param array $atts
+ * @param array  $atts
  * @param string $content
  * @return void
  */
@@ -402,7 +423,8 @@ function wpum_restrict_to_user_roles( $atts, $content = null ) {
 		shortcode_atts(
 			array(
 				'roles' => null,
-			), $atts
+			),
+			$atts
 		)
 	);
 
@@ -422,7 +444,8 @@ function wpum_restrict_to_user_roles( $atts, $content = null ) {
 		$login_page = add_query_arg(
 			[
 				'redirect_to' => get_permalink(),
-			], $login_page
+			],
+			$login_page
 		);
 
 		WPUM()->templates
@@ -444,7 +467,7 @@ add_shortcode( 'wpum_restrict_to_user_roles', 'wpum_restrict_to_user_roles' );
 /**
  * Display the recently registered users list.
  *
- * @param array $atts
+ * @param array  $atts
  * @param string $content
  * @return void
  */
@@ -455,7 +478,8 @@ function wpum_recently_registered( $atts, $content = null ) {
 			array(
 				'amount'          => '1',
 				'link_to_profile' => 'yes',
-			), $atts
+			),
+			$atts
 		)
 	);
 
@@ -479,7 +503,7 @@ add_shortcode( 'wpum_recently_registered', 'wpum_recently_registered' );
 /**
  * Display a profile card.
  *
- * @param array $atts
+ * @param array  $atts
  * @param string $content
  * @return void
  */
@@ -492,7 +516,8 @@ function wpum_profile_card( $atts, $content = null ) {
 				'link_to_profile' => 'yes',
 				'display_buttons' => 'yes',
 				'display_cover'   => 'yes',
-			), $atts
+			),
+			$atts
 		)
 	);
 
@@ -533,7 +558,8 @@ function wpum_directory( $atts, $content = null ) {
 		shortcode_atts(
 			array(
 				'id' => '',
-			), $atts
+			),
+			$atts
 		)
 	);
 
