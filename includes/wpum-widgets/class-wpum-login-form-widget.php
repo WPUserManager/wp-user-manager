@@ -9,7 +9,9 @@
  */
 
 // Exit if accessed directly
-if ( ! defined( 'ABSPATH' ) ) exit;
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 
 /**
  * WPUM_Login_Form_Widget Class
@@ -39,43 +41,43 @@ class WPUM_Login_Form_Widget extends WPH_Widget {
 				'type'   => 'text',
 				'class'  => 'widefat',
 				'std'    => __( 'Login', 'wp-user-manager' ),
-				'filter' => 'strip_tags|esc_attr'
+				'filter' => 'strip_tags|esc_attr',
 			),
 			array(
 				'name'   => __( 'Logged In title', 'wp-user-manager' ),
-				'desc'   => __(' This title will be displayed when logged in.', 'wp-user-manager'),
+				'desc'   => __( ' This title will be displayed when logged in.', 'wp-user-manager' ),
 				'id'     => 'logged_in_title',
 				'type'   => 'text',
 				'class'  => 'widefat',
 				'std'    => __( 'My Account', 'wp-user-manager' ),
-				'filter' => 'strip_tags|esc_attr'
+				'filter' => 'strip_tags|esc_attr',
 			),
 			array(
-				'name'     => __( 'Display login link', 'wp-user-manager' ),
-				'id'       => 'login_link',
-				'type'     =>'checkbox',
-				'std'      => 0,
-				'filter'   => 'strip_tags|esc_attr',
+				'name'   => __( 'Display login link', 'wp-user-manager' ),
+				'id'     => 'login_link',
+				'type'   => 'checkbox',
+				'std'    => 0,
+				'filter' => 'strip_tags|esc_attr',
 			),
 			array(
-				'name'     => __( 'Display password recovery link', 'wp-user-manager' ),
-				'id'       => 'psw_link',
-				'type'     =>'checkbox',
-				'std'      => 1,
-				'filter'   => 'strip_tags|esc_attr',
+				'name'   => __( 'Display password recovery link', 'wp-user-manager' ),
+				'id'     => 'psw_link',
+				'type'   => 'checkbox',
+				'std'    => 1,
+				'filter' => 'strip_tags|esc_attr',
 			),
 			array(
-				'name'     => __( 'Display registration link', 'wp-user-manager' ),
-				'id'       => 'register_link',
-				'type'     =>'checkbox',
-				'std'      => 1,
-				'filter'   => 'strip_tags|esc_attr',
+				'name'   => __( 'Display registration link', 'wp-user-manager' ),
+				'id'     => 'register_link',
+				'type'   => 'checkbox',
+				'std'    => 1,
+				'filter' => 'strip_tags|esc_attr',
 			),
 			array(
 				'name'   => __( 'Display profile overview', 'wp-user-manager' ),
-				'desc'   => __('If enabled, once logged in, an overview of the current user profile will appear.', 'wp-user-manager'),
+				'desc'   => __( 'If enabled, once logged in, an overview of the current user profile will appear.', 'wp-user-manager' ),
 				'id'     => 'current_profile',
-				'type'   =>'checkbox',
+				'type'   => 'checkbox',
 				'std'    => 1,
 				'filter' => 'strip_tags|esc_attr',
 			),
@@ -100,7 +102,7 @@ class WPUM_Login_Form_Widget extends WPH_Widget {
 		echo $args['before_widget'];
 		echo $args['before_title'];
 
-		if( is_user_logged_in() ) {
+		if ( is_user_logged_in() ) {
 			echo $instance['logged_in_title'];
 		} else {
 			echo $instance['title'];
@@ -111,13 +113,13 @@ class WPUM_Login_Form_Widget extends WPH_Widget {
 		// Default form settings
 		$settings = array();
 
-		if( is_user_logged_in() && $instance['current_profile'] ) {
+		if ( is_user_logged_in() && $instance['current_profile'] ) {
 
 			WPUM()->templates
 				->get_template_part( 'user-overview' );
 
 		} else {
-			echo do_shortcode( '[wpum_login_form psw_link="'.(($instance['psw_link']) ? 'yes' : 'no').'" register_link="'.(($instance['register_link']) ? 'yes' : 'no').'"]' );			
+			echo do_shortcode( '[wpum_login_form psw_link="' . ( ( $instance['psw_link'] ) ? 'yes' : 'no' ) . '" register_link="' . ( ( $instance['register_link'] ) ? 'yes' : 'no' ) . '"]' );
 		}
 
 		echo $args['after_widget'];
