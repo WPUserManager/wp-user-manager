@@ -28,5 +28,6 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 	maxlength="<?php echo ! empty( $data->maxlength ) ? $data->maxlength : ''; ?>"
 	<?php if ( ! empty( $data->required ) ) echo 'required'; ?>
 	><?php echo isset( $data->value ) ? esc_textarea( html_entity_decode( $data->value ) ) : ''; ?>
+	<?php if ( ! empty( $data->read_only ) ) echo 'readonly'; ?>
 </textarea>
 <?php if ( ! empty( $data->description ) ) : ?><small class="description"><?php echo $data->description; ?></small><?php endif; ?>

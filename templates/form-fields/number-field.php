@@ -27,6 +27,6 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 	placeholder="<?php echo empty( $data->placeholder ) ? '' : esc_attr( $data->placeholder ); ?>"
 	value="<?php echo isset( $data->value ) ? esc_attr( $data->value ) : ''; ?>"
 	<?php if ( ! empty( $data->required ) ) echo 'required'; ?>
-	<?php if ( ! empty( $data->readonly ) ) echo 'readonly'; ?>
+	<?php if ( ! empty( $data->read_only ) ) echo 'readonly'; ?>
 />
 <?php if ( ! empty( $data->description ) ) : ?><small class="description"><?php echo $data->description; ?></small><?php endif; ?>

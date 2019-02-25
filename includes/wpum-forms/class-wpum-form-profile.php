@@ -5,7 +5,7 @@
  * @package     wp-user-manager
  * @copyright   Copyright (c) 2018, Alessandro Tesoro
  * @license     https://opensource.org/licenses/GPL-3.0 GNU Public License
-*/
+ */
 
 // Exit if accessed directly
 if ( ! defined( 'ABSPATH' ) ) {
@@ -71,7 +71,8 @@ class WPUM_Form_Profile extends WPUM_Form {
 		add_action( 'wp', array( $this, 'process' ) );
 
 		$this->steps = (array) apply_filters(
-			'wpum_account_tabs', array(
+			'wpum_account_tabs',
+			array(
 				'account' => array(
 					'name'     => esc_html__( 'Profile settings', 'wp-user-manager' ),
 					'view'     => array( $this, 'show_form' ),
@@ -100,7 +101,8 @@ class WPUM_Form_Profile extends WPUM_Form {
 		}
 
 		$this->fields = apply_filters(
-			'account_page_form_fields', array(
+			'account_page_form_fields',
+			array(
 				'account' => $this->get_account_fields(),
 			)
 		);
@@ -111,9 +113,9 @@ class WPUM_Form_Profile extends WPUM_Form {
 	 * Make sure the nickname and display name options are unique.
 	 *
 	 * @param boolean $pass
-	 * @param array $fields
-	 * @param array $values
-	 * @param string $form
+	 * @param array   $fields
+	 * @param array   $values
+	 * @param string  $form
 	 * @return mixed
 	 */
 	public function validate_nickname( $pass, $fields, $values, $form ) {
@@ -184,6 +186,7 @@ class WPUM_Form_Profile extends WPUM_Form {
 					'required'    => $field->get_meta( 'required' ),
 					'placeholder' => $field->get_meta( 'placeholder' ),
 					'description' => $field->get_description(),
+					'read_only'   => $field->get_meta( 'read_only' ),
 					'options'     => $this->get_field_dropdown_options( $field, $this->user ),
 					'value'       => $this->get_user_field_value( $field ),
 					'priority'    => $priority,
@@ -236,7 +239,7 @@ class WPUM_Form_Profile extends WPUM_Form {
 					$value = $this->get_selected_displayname();
 					break;
 				case 'user_avatar':
-					//$value = get_user_meta( $this->user->ID, 'current_user_avatar', true );
+					// $value = get_user_meta( $this->user->ID, 'current_user_avatar', true );
 					$value = carbon_get_user_meta( $this->user->ID, 'current_user_avatar' );
 					break;
 				case 'user_cover':
@@ -395,7 +398,8 @@ class WPUM_Form_Profile extends WPUM_Form {
 			$redirect = add_query_arg(
 				[
 					'updated' => 'success',
-				], $redirect
+				],
+				$redirect
 			);
 
 			wp_safe_redirect( $redirect );
@@ -411,7 +415,7 @@ class WPUM_Form_Profile extends WPUM_Form {
 	/**
 	 * Prepare the correct value for the display name option.
 	 *
-	 * @param array $values
+	 * @param array  $values
 	 * @param string $value
 	 * @return string
 	 */
