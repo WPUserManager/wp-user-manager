@@ -117,7 +117,7 @@ class WPUM_Login_Form_Widget extends WPH_Widget {
 				->get_template_part( 'user-overview' );
 
 		} else {
-			echo do_shortcode( '[wpum_login_form psw_link="yes" register_link="yes"]' );
+			echo do_shortcode( '[wpum_login_form psw_link="'.(($instance['psw_link']) ? 'yes' : 'no').'" register_link="'.(($instance['register_link']) ? 'yes' : 'no').'"]' );			
 		}
 
 		echo $args['after_widget'];
