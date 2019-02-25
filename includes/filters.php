@@ -8,7 +8,9 @@
  * @since       1.0.0
  */
 
-if ( ! defined( 'ABSPATH' ) ) exit;
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 
 /**
  * Modify the WordPress admin footer within WPUM powered pages.
@@ -18,9 +20,11 @@ if ( ! defined( 'ABSPATH' ) ) exit;
  */
 function wpum_admin_rate_us( $footer_text ) {
 	$screen = get_current_screen();
-	if ( $screen->base !== 'users_page_wpum-settings' )
+	if ( $screen->base !== 'users_page_wpum-settings' ) {
 		return;
-	$rate_text = sprintf( __( 'Please support the future of <a href="%1$s" target="_blank">WP User Manager</a> by <a href="%2$s" target="_blank">rating us</a> on <a href="%2$s" target="_blank">WordPress.org</a>', 'wp-user-manager' ),
+	}
+	$rate_text = sprintf(
+		__( 'Please support the future of <a href="%1$s" target="_blank">WP User Manager</a> by <a href="%2$s" target="_blank">rating us</a> on <a href="%2$s" target="_blank">WordPress.org</a>', 'wp-user-manager' ),
 		'https://wpusermanager.com',
 		'http://wordpress.org/support/view/plugin-reviews/wp-user-manager?filter=5#postform'
 	);
@@ -35,9 +39,9 @@ add_filter( 'admin_footer_text', 'wpum_admin_rate_us' );
  * @return array
  */
 function wpum_add_settings_link( $links ) {
-	$settings_link = '<a href="' . admin_url( 'users.php?page=wpum-settings' ) . '">' . __( 'Settings','wp-user-manager' ) . '</a>';
-	$docs_link     = '<a href="https://docs.wpusermanager.com/" target="_blank">' . __( 'Documentation','wp-user-manager' ) . '</a>';
-	$addons_link   = '<a href="http://wpusermanager.com/addons" target="_blank">' . __( 'Addons','wp-user-manager' ) . '</a>';
+	$settings_link = '<a href="' . admin_url( 'users.php?page=wpum-settings' ) . '">' . __( 'Settings', 'wp-user-manager' ) . '</a>';
+	$docs_link     = '<a href="https://docs.wpusermanager.com/" target="_blank">' . __( 'Documentation', 'wp-user-manager' ) . '</a>';
+	$addons_link   = '<a href="http://wpusermanager.com/addons" target="_blank">' . __( 'Addons', 'wp-user-manager' ) . '</a>';
 	array_unshift( $links, $settings_link );
 	array_unshift( $links, $docs_link );
 	array_unshift( $links, $addons_link );
@@ -97,7 +101,7 @@ function wpum_set_logout_url( $logout_url, $redirect ) {
 
 		$args = [
 			'action'      => 'logout',
-			'redirect_to' => $logout_redirect
+			'redirect_to' => $logout_redirect,
 		];
 
 		$logout_url = add_query_arg( $args, site_url( 'wp-login.php', 'login' ) );
@@ -113,8 +117,8 @@ add_filter( 'logout_url', 'wpum_set_logout_url', 20, 2 );
 /**
  * Filter the wp_login_url function by using the built-in wpum page.
  *
- * @param string $login_url
- * @param string $redirect
+ * @param string  $login_url
+ * @param string  $redirect
  * @param boolean $force_reauth
  * @return void
  */
@@ -123,7 +127,7 @@ function wpum_login_url( $login_url, $redirect, $force_reauth ) {
 	$wpum_login_page = wpum_get_core_page_id( 'login' );
 	$wpum_login_page = get_permalink( $wpum_login_page );
 
-	if( $redirect ) {
+	if ( $redirect ) {
 		$wpum_login_page = add_query_arg( [ 'redirect_to' => $redirect ], $wpum_login_page );
 	}
 
@@ -146,17 +150,17 @@ function wpum_authentication( $user, $username, $password ) {
 
 	$authentication_method = wpum_get_option( 'login_method' );
 
-	if( $authentication_method == 'username' ) {
+	if ( $authentication_method == 'username' ) {
 
-		if( is_email( $username ) ) {
-			return new WP_Error( 'username_only', __( 'Invalid username or incorrect password.', 'wp-user-manager' ) );
+		$user = get_user_by( 'login', $username );
+
+		if ( isset( $user, $user->user_login, $user->user_status ) && 0 == (int) $user->user_status ) {
+			$username = $user->user_login;
+			return wp_authenticate_username_password( null, $username, $password );
 		}
+	} elseif ( $authentication_method == 'email' ) {
 
-		return wp_authenticate_username_password( null, $username, $password );
-
-	} elseif( $authentication_method == 'email' ) {
-
-		if( ! empty( $username ) && is_email( $username ) ) {
+		if ( ! empty( $username ) && is_email( $username ) ) {
 
 			$user = get_user_by( 'email', $username );
 
@@ -164,13 +168,11 @@ function wpum_authentication( $user, $username, $password ) {
 				$username = $user->user_login;
 				return wp_authenticate_username_password( null, $username, $password );
 			}
-
 		} else {
 
 			return new WP_Error( 'email_only', __( 'Invalid email address or incorrect password.', 'wp-user-manager' ) );
 
 		}
-
 	}
 
 	return $user;
@@ -181,13 +183,13 @@ add_filter( 'authenticate', 'wpum_authentication', 20, 3 );
 /**
  * Highlight all pages used by WPUM.
  *
- * @param array $post_states
+ * @param array  $post_states
  * @param object $post
  * @return void
  */
 function wpum_highlight_pages( $post_states, $post ) {
 
-	$mark    = '<img style="width:13px;" src="'. WPUM_PLUGIN_URL .'/assets/images/logo.svg" title="WP User Manager Page">';
+	$mark    = '<img style="width:13px;" src="' . WPUM_PLUGIN_URL . '/assets/images/logo.svg" title="WP User Manager Page">';
 	$post_id = $post->ID;
 
 	switch ( $post_id ) {
@@ -231,7 +233,6 @@ function wpum_upload_dir( $pathdata ) {
 			$pathdata['url']    = str_replace( $pathdata['subdir'], $new_subdir, $pathdata['url'] );
 			$pathdata['subdir'] = str_replace( $pathdata['subdir'], $new_subdir, $pathdata['subdir'] );
 		}
-
 	}
 
 	return $pathdata;
