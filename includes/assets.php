@@ -63,10 +63,10 @@ function wpum_load_scripts() {
 
 	if ( is_page( wpum_get_core_page_id( 'account' ) ) || is_page( wpum_get_core_page_id( 'register' ) ) ) {
 
-		wp_enqueue_style( 'wpum-select2-style', 'https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css', false, WPUM_VERSION );
-		wp_enqueue_script( 'wpum-select2', 'https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js', array( 'jquery' ), WPUM_VERSION, true );
-		wp_enqueue_script( 'wpum-datepicker', 'https://cdn.jsdelivr.net/npm/flatpickr', array( 'jquery' ), WPUM_VERSION, true );
-		wp_enqueue_style( 'wpum-datepicker-style', 'https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css', false, WPUM_VERSION );
+		wp_enqueue_style( 'wpum-select2-style', WPUM_PLUGIN_URL . 'assets/css/select2.min.css', false, WPUM_VERSION );
+		wp_enqueue_script( 'wpum-select2', WPUM_PLUGIN_URL . 'assets/js/select2.min.js', array( 'jquery' ), WPUM_VERSION, true );
+		wp_enqueue_script( 'wpum-datepicker', WPUM_PLUGIN_URL . 'assets/flatpickr/dist/flatpickr.min.js', array( 'jquery' ), WPUM_VERSION, true );
+		wp_enqueue_style( 'wpum-datepicker-style', WPUM_PLUGIN_URL . 'assets/flatpickr/dist/flatpickr.min.css', false, WPUM_VERSION );
 		wp_enqueue_script( 'wpum-frontend-js', WPUM_PLUGIN_URL . 'assets/js/wp-user-manager.min.js', array( 'jquery' ), WPUM_VERSION, true );
 
 		$js_variables = [
