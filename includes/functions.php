@@ -1191,3 +1191,18 @@ function wpum_get_mime_types_for_selection() {
 	return $types;
 
 }
+
+if ( ! function_exists( 'wp_new_user_notification' ) ) {
+	/**
+	 * Sends WPUM email notification by replacing the core emails.
+	 *
+	 * @param string $user_id the user id.
+	 * @param string $plaintext_pass password.
+	 * @return void
+	 */
+	function wp_new_user_notification( $user_id, $plaintext_pass = '' ) {
+		$password = wp_generate_password( 24, true, true );
+		wp_set_password( $password, $user_id );
+		wpum_send_registration_confirmation_email( $user_id, $password );
+	}
+}
