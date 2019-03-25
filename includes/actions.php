@@ -170,7 +170,8 @@ function wpum_restrict_account_page() {
 		$redirect = add_query_arg(
 			[
 				'redirect_to' => get_permalink(),
-			], $redirect
+			],
+			$redirect
 		);
 
 		wp_safe_redirect( $redirect );
@@ -251,7 +252,7 @@ function wpum_check_nick_field( $errors, $update, $user ) {
 /**
  * Add a "view profile" link to the admin user table.
  *
- * @param  array $actions     list of actions
+ * @param  array  $actions     list of actions
  * @param  object $user_object user details
  * @return array              list of actions
  */
