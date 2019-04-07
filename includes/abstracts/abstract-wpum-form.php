@@ -429,12 +429,7 @@ abstract class WPUM_Form {
 			}
 			$file_urls       = array();
 			$files_to_upload = wpum_prepare_uploaded_files( $_FILES[ $field_key ] );
-			foreach ( $files_to_upload as $file_to_upload ) {
-
-				$uploaded_file = wpum_upload_file( $file_to_upload, array(
-					'file_key'           => $field_key,
-					'allowed_mime_types' => $allowed_mime_types,
-				) );
+			foreach ( $files_to_upload as $file_to_upload ) {				
 				// Determine max file size for the avatar field.
 				$too_big_message = esc_html__( 'The uploaded file is too big.', 'wp-user-manager' );
 				if ( defined( 'WPUM_MAX_AVATAR_SIZE' ) && $field_key == 'user_avatar' && $file_to_upload['size'] > WPUM_MAX_AVATAR_SIZE ) {
@@ -447,6 +442,11 @@ abstract class WPUM_Form {
 				if ( isset( $field['max_file_size'] ) && ! empty( $field['max_file_size'] ) && $file_to_upload['size'] > $field['max_file_size'] ) {
 					throw new Exception( $too_big_message );
 				}
+				
+				$uploaded_file = wpum_upload_file( $file_to_upload, array(
+					'file_key'           => $field_key,
+					'allowed_mime_types' => $allowed_mime_types,
+				) );
 
 				if ( is_wp_error( $uploaded_file ) ) {
 					throw new Exception( $uploaded_file->get_error_message() );
