@@ -65,6 +65,6 @@ if ( ! empty( $data->ajax ) && wpum_user_can_upload_file_via_ajax() ) {
 		<?php echo $data->description; ?>
 	<?php endif ?>
 
-	<?php printf( __( 'Maximum file size: %s.', 'wp-user-manager' ), wpum_max_upload_size( '', $file_size ) ); ?>
+	<?php printf( __( 'Maximum file size: %s.', 'wp-user-manager' ), wpum_max_upload_size( isset( $data->key ) ? $data->key : '', $file_size ) ); ?>
 
 </small>
