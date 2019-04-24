@@ -8,7 +8,7 @@ Tested up to: 5.1
 Requires PHP: 5.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
-Stable tag: 2.1.0
+Stable tag: 2.1.1
 
 The most customizable profiles & community builder WordPress plugin with front-end login, registration, profile customization and content restriction.
 
@@ -114,6 +114,15 @@ Please note that using WPUM and the mentioned add-ons does NOT guarantee complia
 13. Login form.
 
 == Changelog ==
+
+= 2.1.1 ( 24th April 2019 )
+
+- Added: private pages can now be selected through the pages settings in the options panel.
+- Fixed: profile page not working when username has special characters.
+- Fixed: verify file before uploading - thanks to @kushsharma.
+- Fixed: max upload size description function not receiving field attributes properly - thanks to @kushsharma.
+- Fixed: edge case preventing options panel to save settings due to capability missing.
+- Fixed: custom password overwritten when creating a new user manually in the admin panel.
 
 = 2.1.0 ( 25th March 2019 )
 
