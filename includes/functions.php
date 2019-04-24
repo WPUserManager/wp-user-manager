@@ -1209,8 +1209,14 @@ if ( ! function_exists( 'wp_new_user_notification' ) ) {
 	 * @return void
 	 */
 	function wp_new_user_notification( $user_id, $plaintext_pass = '' ) {
-		$password = wp_generate_password( 24, true, true );
-		wp_set_password( $password, $user_id );
+
+		if ( is_admin() && current_user_can( 'create_users' ) && isset( $_POST['pass1-text'] ) ) {
+			$password = sanitize_text_field( $_POST['pass1-text'] );
+		} else {
+			$password = wp_generate_password( 24, true, true );
+			wp_set_password( $password, $user_id );
+		}
+
 		wpum_send_registration_confirmation_email( $user_id, $password );
 	}
 }
