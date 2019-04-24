@@ -30,7 +30,11 @@ function wpum_get_pages( $force = false ) {
 	if ( $transient ) {
 		$pages = $transient;
 	} else {
-		$available_pages = get_pages();
+		$available_pages = get_pages(
+			[
+				'post_status' => 'publish,private',
+			]
+		);
 		if ( ! empty( $available_pages ) ) {
 			foreach ( $available_pages as $page ) {
 				$pages[] = array(
@@ -51,7 +55,8 @@ function wpum_get_pages( $force = false ) {
  */
 function wpum_get_login_methods() {
 	return apply_filters(
-		'wpum_get_login_methods', array(
+		'wpum_get_login_methods',
+		array(
 			'username'       => __( 'Username only', 'wp-user-manager' ),
 			'email'          => __( 'Email only', 'wp-user-manager' ),
 			'username_email' => __( 'Username or Email', 'wp-user-manager' ),
@@ -344,7 +349,7 @@ function wpum_log_user_in( $email_or_id ) {
  * Send the registration confirmation email to a given user id.
  * Display the randomly generated password if any is given.
  *
- * @param int $user_id
+ * @param int   $user_id
  * @param mixed $psw
  * @return void
  */
@@ -373,7 +378,7 @@ function wpum_send_registration_confirmation_email( $user_id, $psw = false ) {
 
 		if ( $user instanceof WP_User ) {
 
-			$emails = new WPUM_Emails;
+			$emails = new WPUM_Emails();
 			$emails->__set( 'user_id', $user_id );
 			$emails->__set( 'heading', $registration_confirmation_email['title'] );
 
@@ -430,10 +435,11 @@ function wpum_prepare_uploaded_files( $file_data ) {
  */
 function wpum_upload_file( $file, $args = array() ) {
 	global $wpum_upload, $wpum_uploading_file;
-	include_once( ABSPATH . 'wp-admin/includes/file.php' );
-	include_once( ABSPATH . 'wp-admin/includes/media.php' );
+	include_once ABSPATH . 'wp-admin/includes/file.php';
+	include_once ABSPATH . 'wp-admin/includes/media.php';
 	$args                = wp_parse_args(
-		$args, array(
+		$args,
+		array(
 			'file_key'           => '',
 			'file_label'         => '',
 			'allowed_mime_types' => '',
@@ -794,7 +800,7 @@ function wpum_get_registered_profile_tabs() {
  * Retrieve the url a profile tab for the given user.
  *
  * @param object $user
- * @param array $tab
+ * @param array  $tab
  * @return string
  */
 function wpum_get_profile_tab_url( $user, $tab ) {
@@ -837,7 +843,8 @@ function wpum_get_posts_for_profile( $user_id ) {
 	$paged = ( get_query_var( 'paged' ) ) ? get_query_var( 'paged' ) : 1;
 
 	$args = apply_filters(
-		'wpum_get_posts_for_profile', [
+		'wpum_get_posts_for_profile',
+		[
 			'post_type' => 'post',
 			'author'    => $user_id,
 			'paged'     => $paged,
@@ -863,7 +870,8 @@ function wpum_get_comments_for_profile( $user_id ) {
 	}
 
 	$args = apply_filters(
-		'wpum_get_comments_for_profile', array(
+		'wpum_get_comments_for_profile',
+		array(
 			'user_id' => $user_id,
 			'status'  => 'approve',
 			'number'  => '10',
@@ -897,7 +905,7 @@ function wpum_members_can_view_profiles() {
 /**
  * Gets a list of users orderded by most recent registration date.
  *
- * @param int     $amount amount of users to load.
+ * @param int $amount amount of users to load.
  * @return void
  */
 function wpum_get_recent_users( $amount ) {
