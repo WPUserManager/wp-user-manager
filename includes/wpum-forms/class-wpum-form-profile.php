@@ -311,6 +311,7 @@ class WPUM_Form_Profile extends WPUM_Form {
 			];
 
 			do_action( 'wpum_before_user_update', $this, $values, $this->user->ID );
+			$values = apply_filters( 'wpum_before_user_update_fields' , $this, $values, $this->user->ID );
 
 			// Update first name and last name.
 			if ( isset( $values['account']['user_firstname'] ) ) {
