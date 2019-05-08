@@ -4,7 +4,7 @@ Plugin URI: https://wpusermanager.com
 Contributors: alessandro.tesoro, wpusermanager
 Tags: members, profile, community, user profile, user registration
 Requires at least: 4.9
-Tested up to: 5.1
+Tested up to: 5.2
 Requires PHP: 5.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
