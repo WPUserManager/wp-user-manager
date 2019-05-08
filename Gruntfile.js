@@ -214,47 +214,7 @@ module.exports = function( grunt ) {
 					'!.gitmodules'
 				],
 				dest: 'release/<%= pkg.version %>/'
-			},
-			svn_trunk: {
-               options : {
-                   mode :true
-               },
-               src:  [
-                   '**',
-					'!node_modules/**',
-					'!release/**',
-					'!.git/**',
-					'!.sass-cache/**',
-					'!css/src/**',
-					'!js/src/**',
-					'!img/src/**',
-					'!Gruntfile.js',
-					'!package.json',
-					'!.gitignore',
-					'!.gitmodules'
-               ],
-               dest: 'build/<%= pkg.name %>/trunk/'
-           },
-           svn_tag: {
-               options : {
-                   mode :true
-               },
-               src:  [
-                   '**',
-					'!node_modules/**',
-					'!release/**',
-					'!.git/**',
-					'!.sass-cache/**',
-					'!css/src/**',
-					'!js/src/**',
-					'!img/src/**',
-					'!Gruntfile.js',
-					'!package.json',
-					'!.gitignore',
-					'!.gitmodules'
-               ],
-               dest: 'build/<%= pkg.name %>/tags/<%= pkg.version %>/'
-           }
+			}
 		},
 		svn_checkout: {
            make_local: {
