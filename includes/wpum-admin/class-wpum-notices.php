@@ -55,8 +55,8 @@ class WPUM_Admin_Notices {
 
 			$url = add_query_arg( [ 'wpum_fix_installation_data' => true ], admin_url() );
 
-			$btn           = '<a href="' . esc_url( $url ) . '" class="button-primary">' . esc_html__( 'Fix data installation' ) . '</a>';
-			$error_message = esc_html__( 'It looks like WP User Manager failed to install it\'s default data. To fix the issue please click the button below.' ) . '</br><br/>' . $btn;
+			$btn           = '<a href="' . esc_url( $url ) . '" class="button-primary">' . esc_html__( 'Fix data installation', 'wp-user-manager' ) . '</a>';
+			$error_message = esc_html__( 'It looks like WP User Manager failed to install it\'s default data. To fix the issue please click the button below.', 'wp-user-manager' ) . '</br><br/>' . $btn;
 
 			WPUM()->notices->register_notice( 'wpum_fix_installation', 'error', $error_message );
 
@@ -151,7 +151,7 @@ class WPUM_Admin_Notices {
 
 			update_option( 'wpum_data_installation_fix_check', true );
 
-			$message = sprintf( __( 'WP User Manager has installed default data. You can go back to your <a href="%s">admin panel.</a>' ), admin_url() );
+			$message = sprintf( __( 'WP User Manager has installed default data. You can go back to your <a href="%s">admin panel.</a>', 'wp-user-manager' ), admin_url() );
 
 			wp_die( $message );
 
