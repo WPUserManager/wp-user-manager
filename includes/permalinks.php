@@ -20,16 +20,18 @@ use Brain\Cortex\Route\QueryRoute;
  * The routing will then decide which content to be displayed within that page.
  */
 add_action(
-	'cortex.routes', function( RouteCollectionInterface $routes ) {
+	'cortex.routes',
+	function( RouteCollectionInterface $routes ) {
 
 		$account_page_id = wpum_get_core_page_id( 'account' );
+		$exists          = ( 'publish' == get_post_status( $account_page_id ) ) ? true : false;
 
-		if ( ! $account_page_id ) {
+		if ( ! $account_page_id || ! $exists ) {
 			return;
 		}
 
-		$page_slug       = esc_attr( get_post_field( 'post_name', intval( $account_page_id ) ) );
-		$hierarchy       = wpum_get_full_page_hierarchy( $account_page_id );
+		$page_slug = esc_attr( get_post_field( 'post_name', intval( $account_page_id ) ) );
+		$hierarchy = wpum_get_full_page_hierarchy( $account_page_id );
 
 		if ( ! empty( $hierarchy ) && is_array( $hierarchy ) ) {
 			$page_slug = '';
@@ -57,16 +59,18 @@ add_action(
  * Register rewrite rules for the profile page.
  */
 add_action(
-	'cortex.routes', function( RouteCollectionInterface $routes ) {
+	'cortex.routes',
+	function( RouteCollectionInterface $routes ) {
 
 		$profile_page_id = wpum_get_core_page_id( 'profile' );
+		$exists          = ( 'publish' == get_post_status( $profile_page_id ) ) ? true : false;
 
-		if ( ! $profile_page_id ) {
+		if ( ! $profile_page_id || ! $exists ) {
 			return;
 		}
 
-		$page_slug       = esc_attr( get_post_field( 'post_name', intval( $profile_page_id ) ) );
-		$hierarchy       = wpum_get_full_page_hierarchy( $profile_page_id );
+		$page_slug = esc_attr( get_post_field( 'post_name', intval( $profile_page_id ) ) );
+		$hierarchy = wpum_get_full_page_hierarchy( $profile_page_id );
 
 		if ( ! empty( $hierarchy ) && is_array( $hierarchy ) ) {
 			$page_slug = '';
