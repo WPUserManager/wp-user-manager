@@ -534,7 +534,7 @@ function wpum_sort_array_by_priority( $a, $b ) {
  */
 function wpum_get_account_tab_url( $step_key ) {
 
-	$tab_url = get_permalink();
+	$tab_url = trailingslashit( get_permalink() );
 
 	if ( $step_key == 'logout' ) {
 		$tab_url = wp_logout_url();
