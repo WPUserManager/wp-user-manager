@@ -201,6 +201,10 @@ class WPUM_Form_Profile extends WPUM_Form {
 			unset( $fields['user_avatar'] );
 		}
 
+		if ( wpum_get_option( 'disable_profile_cover' ) && isset( $fields['user_cover'] ) ) {
+			unset( $fields['user_cover'] );
+		}
+
 		return $fields;
 
 	}

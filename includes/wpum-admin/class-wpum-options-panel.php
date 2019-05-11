@@ -351,6 +351,12 @@ class WPUM_Options_Panel {
 					'type' => 'checkbox',
 				),
 				array(
+					'id'   => 'disable_profile_cover',
+					'name' => __( 'Disable profile cover image', 'wp-user-manager' ),
+					'desc' => __( 'Enable this option to prevent users from uploading a custom profile cover image.', 'wp-user-manager' ),
+					'type' => 'checkbox',
+				),
+				array(
 					'id'   => 'disable_strong_passwords',
 					'name' => __( 'Disable strong passwords', 'wp-user-manager' ),
 					'desc' => __( 'Enable this option to disable the built-in strong passwords validation system of WP User Manager.', 'wp-user-manager' ),
