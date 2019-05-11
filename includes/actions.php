@@ -291,3 +291,24 @@ function wpum_complete_setup() {
 
 }
 add_action( 'admin_init', 'wpum_complete_setup' );
+
+/**
+ * Prevent access to wp-login.php
+ *
+ * @return void
+ */
+function wpum_prevent_wp_login() {
+
+	global $pagenow;
+
+	$action = ( isset( $_GET['action'] ) ) ? $_GET['action'] : '';
+
+	if ( $pagenow == 'wp-login.php' && ( ! $action || ( $action && ! in_array( $action, array( 'logout', 'lostpassword', 'rp', 'resetpass' ) ) ) ) ) {
+		$page = home_url();
+		wp_safe_redirect( $page );
+		exit();
+	}
+}
+if ( wpum_get_option( 'lock_wplogin' ) ) {
+	add_action( 'init', 'wpum_prevent_wp_login' );
+}
