@@ -290,7 +290,6 @@ function wpum_complete_setup() {
 	}
 
 }
-add_action( 'admin_init', 'wpum_complete_setup' );
 
 /**
  * Prevent access to wp-login.php

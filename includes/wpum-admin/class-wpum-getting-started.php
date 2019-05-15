@@ -5,10 +5,12 @@
  * @package     wp-user-manager
  * @copyright   Copyright (c) 2018, Alessandro Tesoro
  * @license     https://opensource.org/licenses/GPL-3.0 GNU Public License
-*/
+ */
 
 // Exit if accessed directly
-if ( ! defined( 'ABSPATH' ) ) exit;
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 
 class WPUM_Getting_Started {
 
@@ -21,9 +23,9 @@ class WPUM_Getting_Started {
 	 * Get things started
 	 */
 	public function __construct() {
-		add_action( 'admin_menu', array( $this, 'admin_menus') );
+		add_action( 'admin_menu', array( $this, 'admin_menus' ) );
 		add_action( 'admin_head', array( $this, 'admin_head' ) );
-		add_action( 'admin_init', array( $this, 'welcome'    ) );
+		add_action( 'admin_init', array( $this, 'welcome' ) );
 	}
 
 	/**
@@ -186,13 +188,13 @@ class WPUM_Getting_Started {
 
 			<?php $this->tabs(); ?>
 
-			<p class="about-description"><?php _e('Use the tips below to get started using WP User Manager. You will be up and running in no time!', 'wp-user-manager'); ?></p>
+			<p class="about-description"><?php _e( 'Use the tips below to get started using WP User Manager. You will be up and running in no time!', 'wp-user-manager' ); ?></p>
 
 			<div id="welcome-panel" class="welcome-panel" style="padding-top:0px;">
 				<div class="welcome-panel-content">
 					<div class="welcome-panel-column-container">
 						<div class="welcome-panel-column">
-							<h4><?php _e( 'Configure WP User Manager', 'wp-user-manager' );?></h4>
+							<h4><?php _e( 'Configure WP User Manager', 'wp-user-manager' ); ?></h4>
 							<ul>
 								<li><a href="<?php echo admin_url( 'users.php?page=wpum-settings#/general/login' ); ?>" class="welcome-icon dashicons-admin-network" target="_blank"><?php _e( 'Setup login method', 'wp-user-manager' ); ?></a></li>
 								<li><a href="<?php echo admin_url( 'users.php?page=wpum-settings#/emails' ); ?>" class="welcome-icon dashicons-email-alt" target="_blank"><?php _e( 'Setup notifications', 'wp-user-manager' ); ?></a></li>
@@ -200,16 +202,16 @@ class WPUM_Getting_Started {
 							</ul>
 						</div>
 						<div class="welcome-panel-column">
-							<h4><?php _e( 'Customize Profiles', 'wp-user-manager' );?></h4>
+							<h4><?php _e( 'Customize Profiles', 'wp-user-manager' ); ?></h4>
 							<ul>
-								<li><a href="<?php echo admin_url( 'users.php?page=wpum-settings#/profiles' ); ?>" class="welcome-icon dashicons-admin-users" target="_blank"><?php _e('Customize profiles', 'wp-user-manager'); ?></a></li>
-								<li><a href="<?php echo admin_url( 'users.php?page=wpum-custom-fields#/' ); ?>" class="welcome-icon dashicons-admin-settings" target="_blank"><?php _e('Customize fields', 'wp-user-manager'); ?></a></li>
-								<li><a href="<?php echo admin_url( 'edit.php?post_type=wpum_directory' ); ?>" class="welcome-icon dashicons-groups" target="_blank"><?php _e('Create user directories', 'wp-user-manager'); ?></a></li>
+								<li><a href="<?php echo admin_url( 'users.php?page=wpum-settings#/profiles' ); ?>" class="welcome-icon dashicons-admin-users" target="_blank"><?php _e( 'Customize profiles', 'wp-user-manager' ); ?></a></li>
+								<li><a href="<?php echo admin_url( 'users.php?page=wpum-custom-fields#/' ); ?>" class="welcome-icon dashicons-admin-settings" target="_blank"><?php _e( 'Customize fields', 'wp-user-manager' ); ?></a></li>
+								<li><a href="<?php echo admin_url( 'edit.php?post_type=wpum_directory' ); ?>" class="welcome-icon dashicons-groups" target="_blank"><?php _e( 'Create user directories', 'wp-user-manager' ); ?></a></li>
 							</ul>
 						</div>
 						<div class="welcome-panel-column welcome-panel-last">
-							<h4><?php _e('Documentation', 'wp-user-manager'); ?></h4>
-							<p class="welcome-icon welcome-learn-more"><?php echo sprintf( __( 'Looking for help? <a href="%s" target="_blank">WP User Manager documentation</a> has got you covered.', 'wp-user-manager' ), 'http://docs.wpusermanager.com' ); ?> <br/><br/><a href="http://docs.wpusermanager.com" class="button" target="_blank"><?php _e('Read documentation', 'wp-user-manager') ;?></a></p>
+							<h4><?php _e( 'Documentation', 'wp-user-manager' ); ?></h4>
+							<p class="welcome-icon welcome-learn-more"><?php echo sprintf( __( 'Looking for help? <a href="%s" target="_blank">WP User Manager documentation</a> has got you covered.', 'wp-user-manager' ), 'http://docs.wpusermanager.com' ); ?> <br/><br/><a href="http://docs.wpusermanager.com" class="button" target="_blank"><?php _e( 'Read documentation', 'wp-user-manager' ); ?></a></p>
 						</div>
 					</div>
 				</div>
@@ -220,20 +222,20 @@ class WPUM_Getting_Started {
 				<div class="feature-section  two-col">
 
 					<div class="col">
-						<h3><?php _e('Looking for help ?', 'wp-user-manager'); ?></h3>
-						<p><?php echo sprintf( __('We do all we can to provide every user with the best support possible. If you encounter a problem or have a question, please <a href="%s" target="_blank">contact us.</a> Make sure you <a href="%s">read the documentation</a> first.', 'wp-user-manager'), 'https://wpusermanager.com/contacts', 'https://docs.wpusermanager.com' ); ?></p>
+						<h3><?php _e( 'Looking for help ?', 'wp-user-manager' ); ?></h3>
+						<p><?php echo sprintf( __( 'We do all we can to provide every user with the best support possible. If you encounter a problem or have a question, please <a href="%1$s" target="_blank">contact us.</a> Make sure you <a href="%2$s">read the documentation</a> first.', 'wp-user-manager' ), 'https://wpusermanager.com/contacts', 'https://docs.wpusermanager.com' ); ?></p>
 					</div>
 
 					<div class="last-feature col">
-						<h3><?php _e('Extensions for WP User Manager', 'wp-user-manager'); ?></h3>
-						<p><?php echo __('Browse our growing collection of add-ons built specifically for WPUM to customize the functionality of your community.', 'wp-user-manager'); ?></p>
+						<h3><?php _e( 'Extensions for WP User Manager', 'wp-user-manager' ); ?></h3>
+						<p><?php echo __( 'Browse our growing collection of add-ons built specifically for WPUM to customize the functionality of your community.', 'wp-user-manager' ); ?></p>
 						<a href="<?php echo admin_url(); ?>" class="button"><?php esc_html_e( 'Browse add-ons', 'wp-user-manager' ); ?> &raquo;</a>
 					</div>
 
 					<hr>
 
 					<div class="return-to-dashboard">
-						<a href="<?php echo admin_url( 'users.php?page=wpum-settings' ); ?>"><?php _e('Go To WP User Manager &rarr; Settings', 'wp-user-manager'); ?></a>
+						<a href="<?php echo admin_url( 'users.php?page=wpum-settings' ); ?>"><?php _e( 'Go To WP User Manager &rarr; Settings', 'wp-user-manager' ); ?></a>
 					</div>
 
 				</div>
@@ -270,7 +272,10 @@ class WPUM_Getting_Started {
 		}
 
 		$upgrade = get_option( 'wpum_version_upgraded_from' );
-		if( ! $upgrade ) {
+		if ( ! $upgrade ) {
+
+			wpum_complete_setup();
+
 			wp_safe_redirect( admin_url( 'index.php?page=wpum-getting-started' ) );
 			exit;
 		}
