@@ -8,7 +8,7 @@ Tested up to: 5.2
 Requires PHP: 5.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
-Stable tag: 2.1.2
+Stable tag: 2.1.3
 
 The most customizable profiles & community builder WordPress plugin with front-end login, registration, profile customization and content restriction.
 
@@ -114,6 +114,11 @@ Please note that using WPUM and the mentioned add-ons does NOT guarantee complia
 13. Login form.
 
 == Changelog ==
+
+= 2.1.3 ( 24th May 2019 )
+
+- Tweak: show an alert to automatically fix missing data when default data hasn't installed.
+- Fixed: finish first time data installation after the whole plugin has booted.
 
 = 2.1.2 ( 13th May 2019 )
 
