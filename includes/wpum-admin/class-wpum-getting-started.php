@@ -273,9 +273,6 @@ class WPUM_Getting_Started {
 
 		$upgrade = get_option( 'wpum_version_upgraded_from' );
 		if ( ! $upgrade ) {
-
-			wpum_complete_setup();
-
 			wp_safe_redirect( admin_url( 'index.php?page=wpum-getting-started' ) );
 			exit;
 		}

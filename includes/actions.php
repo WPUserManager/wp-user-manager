@@ -311,3 +311,18 @@ function wpum_prevent_wp_login() {
 if ( wpum_get_option( 'lock_wplogin' ) ) {
 	add_action( 'init', 'wpum_prevent_wp_login' );
 }
+
+/**
+ * Finish data installation after the whole plugin has booted.
+ *
+ * @return void
+ */
+function wpum_finish_db_setup_after_plugin_init() {
+
+	$upgrade = get_option( 'wpum_version_upgraded_from' );
+	if ( ! $upgrade ) {
+		wpum_complete_setup();
+	}
+
+}
+add_action( 'after_wpum_init', 'wpum_finish_db_setup_after_plugin_init' );
