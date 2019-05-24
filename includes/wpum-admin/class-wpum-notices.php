@@ -90,11 +90,8 @@ class WPUM_Admin_Notices {
 
 		$empty = false;
 
-		if ( $this->field_groups_are_empty() ) {
-			$results = $wpdb->get_results( '"SELECT COUNT(*) FROM {$wpdb->prefix}wpum_fields WHERE id IS NOT NULL"' );
-			if ( is_null( $results ) || ! empty( $wpdb->last_error ) ) {
-				return true;
-			}
+		if ( $this->field_groups_are_empty() && empty( WPUM()->fields->get_fields() ) ) {
+			return true;
 		}
 
 		return $empty;
