@@ -49,9 +49,7 @@ class WPUM_Admin_Notices {
 			WPUM()->notices->register_notice( 'wpum_rating', 'success', $rating_message );
 		}
 
-		$option_check = get_option( 'wpum_data_installation_fix_check', false );
-
-		if ( $this->field_groups_are_empty() && $this->fields_are_empty() && $this->registration_forms_are_empty() && ! $option_check ) {
+		if ( $this->field_groups_are_empty() && $this->fields_are_empty() && $this->registration_forms_are_empty() ) {
 
 			$url = add_query_arg( [ 'wpum_fix_installation_data' => true ], admin_url() );
 
@@ -59,10 +57,6 @@ class WPUM_Admin_Notices {
 			$error_message = esc_html__( 'It looks like WP User Manager failed to install it\'s default data. To fix the issue please click the button below.', 'wp-user-manager' ) . '</br><br/>' . $btn;
 
 			WPUM()->notices->register_notice( 'wpum_fix_installation', 'error', $error_message );
-
-		} else {
-
-			update_option( 'wpum_data_installation_fix_check', true );
 
 		}
 
@@ -131,7 +125,7 @@ class WPUM_Admin_Notices {
 	 */
 	public function fix_data_installation() {
 
-		if ( current_user_can( 'manage_options' ) && isset( $_GET['wpum_fix_installation_data'] ) && ! get_option( 'wpum_data_installation_fix_check', false ) ) {
+		if ( current_user_can( 'manage_options' ) && isset( $_GET['wpum_fix_installation_data'] ) ) {
 			delete_option( 'wpum_setup_is_complete' );
 			delete_option( 'wpum_version_upgraded_from' );
 			delete_option( 'wpum_version_upgraded_from' );
