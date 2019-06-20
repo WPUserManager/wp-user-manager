@@ -147,19 +147,11 @@ class WPUM_Form_Profile extends WPUM_Form {
 	 */
 	private function get_account_fields() {
 
-		$fields        = [];
-		$primary_group = WPUM()->fields_groups->get_groups(
-			[
-				'orderby' => 'group_order',
-				'order'   => 'ASC',
-			]
-		);
-
-		$primary_group = $primary_group[0];
+		$fields = [];
 
 		$account_fields = WPUM()->fields->get_fields(
 			[
-				'group_id' => $primary_group->get_ID(),
+				'group_id' => 1,
 				'orderby'  => 'field_order',
 				'order'    => 'ASC',
 			]
