@@ -115,6 +115,13 @@ Please note that using WPUM and the mentioned add-ons does NOT guarantee complia
 
 == Changelog ==
 
+= 2.1.4 ( 20th June 2019 )
+
+- Fix: admin role should be excluded from menu items unless selected
+- Tweak: added utility function for developers to fields groups class.
+- Tweak: reduced queries when loading fields in account form.
+- Tweak: lowered priority of certain menu items in the account form page.
+
 = 2.1.3 ( 24th May 2019 )
 
 - Tweak: show an alert to automatically fix missing data when default data hasn't installed.
