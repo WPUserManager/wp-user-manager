@@ -5,7 +5,7 @@
  * @package     wp-user-manager
  * @copyright   Copyright (c) 2018, Alessandro Tesoro
  * @license     https://opensource.org/licenses/GPL-3.0 GNU Public License
-*/
+ */
 
 // Exit if accessed directly
 if ( ! defined( 'ABSPATH' ) ) {
@@ -69,7 +69,8 @@ class WPUM_Form_Registration extends WPUM_Form {
 		}
 
 		$this->steps = (array) apply_filters(
-			'registration_steps', array(
+			'registration_steps',
+			array(
 				'submit' => array(
 					'name'     => esc_html__( 'Registration Details', 'wp-user-manager' ),
 					'view'     => array( $this, 'submit' ),
@@ -99,9 +100,9 @@ class WPUM_Form_Registration extends WPUM_Form {
 	 * Make sure the password is a strong one.
 	 *
 	 * @param boolean $pass
-	 * @param array $fields
-	 * @param array $values
-	 * @param string $form
+	 * @param array   $fields
+	 * @param array   $values
+	 * @param string  $form
 	 * @return mixed
 	 */
 	public function validate_password( $pass, $fields, $values, $form ) {
@@ -126,9 +127,9 @@ class WPUM_Form_Registration extends WPUM_Form {
 	 * Make sure the chosen username is not part of the excluded list.
 	 *
 	 * @param boolean $pass
-	 * @param array $fields
-	 * @param array $values
-	 * @param string $form
+	 * @param array   $fields
+	 * @param array   $values
+	 * @param string  $form
 	 * @return mixed
 	 */
 	public function validate_username( $pass, $fields, $values, $form ) {
@@ -147,9 +148,9 @@ class WPUM_Form_Registration extends WPUM_Form {
 	 * Validate the honeypot field.
 	 *
 	 * @param boolean $pass
-	 * @param array $fields
-	 * @param array $values
-	 * @param string $form
+	 * @param array   $fields
+	 * @param array   $values
+	 * @param string  $form
 	 * @return mixed
 	 */
 	public function validate_honeypot( $pass, $fields, $values, $form ) {
@@ -168,9 +169,9 @@ class WPUM_Form_Registration extends WPUM_Form {
 	 * Validate role on submission.
 	 *
 	 * @param boolean $pass
-	 * @param array $fields
-	 * @param array $values
-	 * @param string $form
+	 * @param array   $fields
+	 * @param array   $values
+	 * @param string  $form
 	 * @return mixed
 	 */
 	public function validate_role( $pass, $fields, $values, $form ) {
@@ -286,12 +287,11 @@ class WPUM_Form_Registration extends WPUM_Form {
 				$fields['privacy'] = array(
 					'label'       => false,
 					'type'        => 'checkbox',
-					'description' => apply_filters( 'wpum_privacy_text', sprintf( __( 'I have read and accept the <a href="%s" target="_blank">privacy policy</a> and allow "%s" to collect and store the data I submit through this form.', 'wp-user-manager' ), get_permalink( get_option( 'wp_page_for_privacy_policy' ) ), get_bloginfo( 'name' ) ) ),
+					'description' => apply_filters( 'wpum_privacy_text', sprintf( __( 'I have read and accept the <a href="%1$s" target="_blank">privacy policy</a> and allow "%2$s" to collect and store the data I submit through this form.', 'wp-user-manager' ), get_permalink( get_option( 'wp_page_for_privacy_policy' ) ), get_bloginfo( 'name' ) ) ),
 					'required'    => true,
 					'priority'    => 9999,
 				);
 			}
-
 		}
 
 		return apply_filters( 'wpum_get_registration_fields', $fields );
