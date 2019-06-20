@@ -14,3 +14,4 @@ yarn-error.log
 #dist
 deploy.sh
 wp-user-manager
+release
