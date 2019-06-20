@@ -178,6 +178,15 @@ class WPUM_Field_Group {
 	}
 
 	/**
+	 * Get group order.
+	 *
+	 * @return string
+	 */
+	public function get_group_order() {
+		return $this->group_order;
+	}
+
+	/**
 	 * Retrieve the group description.
 	 *
 	 * @return string
