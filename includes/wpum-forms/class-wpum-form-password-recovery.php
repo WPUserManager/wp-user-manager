@@ -405,6 +405,14 @@ class WPUM_Form_Password_Recovery extends WPUM_Form {
 
 			wp_set_password( $password_1, $user_id );
 
+			/**
+			 * Hook: allow developers to hook after the user recovers his password from the account page.
+			 *
+			 * @param string $user_id the user id number.
+			 * @param array $values all values submitted through the form.
+			 */
+			do_action( 'pno_after_user_password_recovery', $user_id, $values );
+
 			// Clear all user sessions.
 			$sessions = WP_Session_Tokens::get_instance( $user_id );
 			$sessions->destroy_all();
