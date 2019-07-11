@@ -218,6 +218,14 @@ class WPUM_Form_Password extends WPUM_Form {
 				]
 			);
 
+			/**
+			 * Hook: allow developers to hook after the user changes his password from the account page.
+			 *
+			 * @param string $user_id the user id number.
+			 * @param array $values all values submitted through the form.
+			 */
+			do_action( 'pno_after_user_password_change', $this->user->ID, $values );
+
 			if ( is_wp_error( $updated_user_id ) ) {
 				throw new Exception( $updated_user_id->get_error_message() );
 			} else {
