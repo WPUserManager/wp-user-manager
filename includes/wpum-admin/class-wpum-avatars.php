@@ -34,12 +34,14 @@ class WPUM_Avatars {
 
 		global $pagenow;
 
-		if ( ! wpum_get_option( 'custom_avatars' ) ) {
-			return;
+		if ( wpum_get_option( 'custom_avatars' ) ) {
+			add_action( 'carbon_fields_register_fields', [ $this, 'avatar_field' ] );
+			add_filter( 'get_avatar_url', [ $this, 'set_avatar_url' ], 10, 3 );
 		}
 
-		add_action( 'carbon_fields_register_fields', [ $this, 'avatar_field' ] );
-		add_filter( 'get_avatar_url', [ $this, 'set_avatar_url' ], 10, 3 );
+		if ( ! wpum_get_option( 'disable_profile_cover' ) ) {
+			add_action( 'carbon_fields_register_fields', [ $this, 'cover_field' ] );
+		}
 
 	}
 
@@ -90,8 +92,22 @@ class WPUM_Avatars {
 			->set_datastore( new WPUM_User_Meta_Custom_Datastore() )
 			->add_fields(
 				array(
-					Field::make( 'image', 'current_user_avatar', esc_html__( 'Custom user avatar', 'wp-user-manager' ) )
+					Field::make( 'image', 'user_cover', esc_html__( 'Custom profile cover image', 'wp-user-manager' ) )
 						->set_value_type( 'url' ),
+				)
+			);
+	}
+
+	/**
+	 * Add the profile cover field in admin panel.
+	 *
+	 * @return void
+	 */
+	public function cover_field() {
+		Container::make( 'user_meta', esc_html__( 'Cover', 'wp-user-manager' ) )
+			->set_datastore( new WPUM_User_Meta_Custom_Datastore() )
+			->add_fields(
+				array(
 					Field::make( 'image', 'user_cover', esc_html__( 'Custom profile cover image', 'wp-user-manager' ) )
 						->set_value_type( 'url' ),
 				)
