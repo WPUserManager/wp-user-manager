@@ -10,44 +10,22 @@
  */
 class WP_Requirements_Check {
 	/**
-	 * Default name of the plugin.
+	 * @since 1.1.0
 	 *
-	 * @since 1.0.0
-	 * @access private
+	 * @var array $args {
+	 *     Requirement arguments.
 	 *
-	 * @var string
+	 *     @type string $title Name of the plugin.
+	 *     @type string $php   Minimum required PHP version.
+	 *     @type string $wp    Minimum required WordPress version.
+	 *     @type string $file  Path to the main plugin file.
+	 *     @type array $i18n   {
+	 *         @type string $php PHP version mismatch error message.
+	 *         @type string $wp  WP version mismatch error message.
+	 *     }
+	 * }
 	 */
-	private $title = '';
-
-	/**
-	 * Default minimum required PHP version.
-	 *
-	 * @since 1.0.0
-	 * @access private
-	 *
-	 * @var string
-	 */
-	private $php = '5.2.4';
-
-	/**
-	 * Default minimum required WordPress version.
-	 *
-	 * @since 1.0.0
-	 * @access private
-	 *
-	 * @var string
-	 */
-	private $wp = '3.8';
-
-	/**
-	 * Path to the main plugin file.
-	 *
-	 * @since 1.0.0
-	 * @access private
-	 *
-	 * @var string
-	 */
-	private $file;
+	private $args;
 
 	/**
 	 * Constructor.
@@ -62,14 +40,33 @@ class WP_Requirements_Check {
 	 *     @type string $php   Minimum required PHP version.
 	 *     @type string $wp    Minimum required WordPress version.
 	 *     @type string $file  Path to the main plugin file.
+	 *     @type array $i18n   {
+	 *         @type string $php PHP version mismatch error message.
+	 *         @type string $wp  WP version mismatch error message.
+	 *     }
 	 * }
 	 */
 	public function __construct( $args ) {
-		foreach ( array( 'title', 'php', 'wp', 'file' ) as $setting ) {
-			if ( isset( $args[ $setting ] ) ) {
-				$this->$setting = $args[ $setting ];
-			}
-		}
+		$args = (array) $args;
+
+		$this->args = wp_parse_args(
+			$args,
+			array(
+				'title' => '',
+				'php'   => '5.2.4',
+				'wp'    => '3.8',
+				'file'  => null,
+				'i18n'  => array()
+			)
+		);
+
+		$this->args['i18n'] = wp_parse_args(
+			$this->args['i18n'],
+			array(
+				'php' => 'The &#8220;%1$s&#8221; plugin cannot run on PHP versions older than %2$s. Please contact your host and ask them to upgrade.',
+				'wp'  => 'The &#8220;%1$s&#8221; plugin cannot run on WordPress versions older than %2$s. Please update your WordPress.',
+			)
+		);
 	}
 
 	/**
@@ -97,8 +94,8 @@ class WP_Requirements_Check {
 	 * @access public
 	 */
 	public function deactivate() {
-		if ( null !== $this->file ) {
-			deactivate_plugins( plugin_basename( $this->file ) );
+		if ( null !== $this->args['file'] ) {
+			deactivate_plugins( plugin_basename( $this->args['file'] ) );
 		}
 	}
 
@@ -111,7 +108,7 @@ class WP_Requirements_Check {
 	 * @return bool True if the PHP version is high enough, false otherwise.
 	 */
 	protected function php_passes() {
-		if ( self::_php_at_least( $this->php ) ) {
+		if ( self::_php_at_least( $this->args['php'] ) ) {
 			return true;
 		}
 
@@ -140,9 +137,19 @@ class WP_Requirements_Check {
 	 * @access public
 	 */
 	public function php_version_notice() {
+		/**
+		 * Filters the notice for outdated PHP versions.
+		 *
+		 * @since 1.1.0
+		 *
+		 * @param string $message The error message.
+		 * @param string $title   The plugin name.
+		 * @param string $php     The WordPress version.
+		 */
+		$message = apply_filters( 'wp_requirements_check_php_notice', $this->args['i18n']['php'], $this->args['title'], $this->args['php'] );
 		?>
 		<div class="error">
-			<p><?php printf( 'The &#8220;%s&#8221; plugin cannot run on PHP versions older than %s. Please contact your host and ask them to upgrade.', esc_html( $this->title ), $this->php ); ?></p>
+			<p><?php printf( $message, esc_html( $this->args['title'] ), $this->args['php'] ); ?></p>
 		</div>
 		<?php
 	}
@@ -156,7 +163,7 @@ class WP_Requirements_Check {
 	 * @return bool True if the WordPress version is high enough, false otherwise.
 	 */
 	protected function wp_passes() {
-		if ( self::_wp_at_least( $this->wp ) ) {
+		if ( self::_wp_at_least( $this->args['wp'] ) ) {
 			return true;
 		}
 
@@ -185,9 +192,19 @@ class WP_Requirements_Check {
 	 * @access public
 	 */
 	public function wp_version_notice() {
+		/**
+		 * Filters the notice for outdated WordPress versions.
+		 *
+		 * @since 1.1.0
+		 *
+		 * @param string $message The error message.
+		 * @param string $title   The plugin name.
+		 * @param string $php     The WordPress version.
+		*/
+		$message = apply_filters( 'wp_requirements_check_wordpress_notice', $this->args['i18n']['wp'], $this->args['title'], $this->args['wp'] );
 		?>
 		<div class="error">
-			<p><?php printf( 'The &#8220;%s&#8221; plugin cannot run on WordPress versions older than %s. Please update WordPress.', esc_html( $this->title ), $this->wp ); ?></p>
+			<p><?php printf( $message, esc_html( $this->args['title'] ), $this->args['wp'] ); ?></p>
 		</div>
 		<?php
 	}

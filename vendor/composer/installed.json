@@ -39,24 +39,24 @@
     },
     {
         "name": "alessandrotesoro/wp-notices",
-        "version": "1.0.2",
-        "version_normalized": "1.0.2.0",
+        "version": "1.0.3",
+        "version_normalized": "1.0.3.0",
         "source": {
             "type": "git",
             "url": "https://github.com/alessandrotesoro/wp-notices.git",
-            "reference": "e465904b48289bafbd01c9cffb2035b92d78bc1f"
+            "reference": "6d3a3d9f695520e8a6b35f13ea7c477500d940ba"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/alessandrotesoro/wp-notices/zipball/e465904b48289bafbd01c9cffb2035b92d78bc1f",
-            "reference": "e465904b48289bafbd01c9cffb2035b92d78bc1f",
+            "url": "https://api.github.com/repos/alessandrotesoro/wp-notices/zipball/6d3a3d9f695520e8a6b35f13ea7c477500d940ba",
+            "reference": "6d3a3d9f695520e8a6b35f13ea7c477500d940ba",
             "shasum": ""
         },
         "require": {
             "composer/installers": "~1.0",
             "php": ">=5.3.2"
         },
-        "time": "2018-04-29T15:46:53+00:00",
+        "time": "2019-05-29T11:24:20+00:00",
         "type": "library",
         "installation-source": "dist",
         "autoload": {
@@ -184,17 +184,17 @@
     },
     {
         "name": "composer/installers",
-        "version": "v1.5.0",
-        "version_normalized": "1.5.0.0",
+        "version": "v1.6.0",
+        "version_normalized": "1.6.0.0",
         "source": {
             "type": "git",
             "url": "https://github.com/composer/installers.git",
-            "reference": "049797d727261bf27f2690430d935067710049c2"
+            "reference": "cfcca6b1b60bc4974324efb5783c13dca6932b5b"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/composer/installers/zipball/049797d727261bf27f2690430d935067710049c2",
-            "reference": "049797d727261bf27f2690430d935067710049c2",
+            "url": "https://api.github.com/repos/composer/installers/zipball/cfcca6b1b60bc4974324efb5783c13dca6932b5b",
+            "reference": "cfcca6b1b60bc4974324efb5783c13dca6932b5b",
             "shasum": ""
         },
         "require": {
@@ -208,7 +208,7 @@
             "composer/composer": "1.0.*@dev",
             "phpunit/phpunit": "^4.8.36"
         },
-        "time": "2017-12-29T09:13:20+00:00",
+        "time": "2018-08-27T06:10:37+00:00",
         "type": "composer-plugin",
         "extra": {
             "class": "Composer\\Installers\\Plugin",
@@ -306,23 +306,34 @@
     },
     {
         "name": "gamajo/template-loader",
-        "version": "1.3.0",
-        "version_normalized": "1.3.0.0",
+        "version": "1.3.1",
+        "version_normalized": "1.3.1.0",
         "source": {
             "type": "git",
             "url": "https://github.com/GaryJones/Gamajo-Template-Loader.git",
-            "reference": "05057216f60baebfc4939e1a2b9aae6e89d25c91"
+            "reference": "fa92a37b780d945463f7fea328dce14933558752"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/GaryJones/Gamajo-Template-Loader/zipball/05057216f60baebfc4939e1a2b9aae6e89d25c91",
-            "reference": "05057216f60baebfc4939e1a2b9aae6e89d25c91",
+            "url": "https://api.github.com/repos/GaryJones/Gamajo-Template-Loader/zipball/fa92a37b780d945463f7fea328dce14933558752",
+            "reference": "fa92a37b780d945463f7fea328dce14933558752",
             "shasum": ""
         },
         "require": {
             "php": ">=5.2.4"
         },
-        "time": "2017-03-24T17:28:34+00:00",
+        "require-dev": {
+            "dealerdirect/phpcodesniffer-composer-installer": "^0.4.4",
+            "php": ">=7.1",
+            "phpcompatibility/phpcompatibility-wp": "^1",
+            "roave/security-advisories": "dev-master",
+            "squizlabs/php_codesniffer": "^3.3",
+            "wp-coding-standards/wpcs": "^1"
+        },
+        "suggest": {
+            "coenjacobs/mozart": "Easily wrap this library with your own prefix, to prevent collisions when multiple plugins use this library"
+        },
+        "time": "2018-09-24T10:23:49+00:00",
         "type": "library",
         "installation-source": "dist",
         "autoload": {
@@ -332,18 +343,17 @@
         },
         "notification-url": "https://packagist.org/downloads/",
         "license": [
-            "GPL-2.0+"
+            "GPL-2.0-or-later"
         ],
         "authors": [
             {
                 "name": "Gary Jones",
-                "email": "gamajo@gamajo.com",
-                "homepage": "http://gamajo.com",
+                "homepage": "https://gamajo.com",
                 "role": "Developer"
             }
         ],
         "description": "A class for your WordPress plugin, to allow loading template parts with fallback through the child theme > parent theme > plugin",
-        "homepage": "http://github.com/GaryJones/Gamajo-Template-Loader",
+        "homepage": "https://github.com/GaryJones/Gamajo-Template-Loader",
         "keywords": [
             "templates",
             "wordpress"
@@ -573,20 +583,20 @@
     },
     {
         "name": "wearerequired/wp-requirements-check",
-        "version": "1.0.1",
-        "version_normalized": "1.0.1.0",
+        "version": "1.1.0",
+        "version_normalized": "1.1.0.0",
         "source": {
             "type": "git",
             "url": "https://github.com/wearerequired/wp-requirements-check.git",
-            "reference": "1ff6197d2427f46778fcdfd7211cf6c500e45b02"
+            "reference": "82b8a6c4b953f59e7e534df2d4287e34af950812"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/wearerequired/wp-requirements-check/zipball/1ff6197d2427f46778fcdfd7211cf6c500e45b02",
-            "reference": "1ff6197d2427f46778fcdfd7211cf6c500e45b02",
+            "url": "https://api.github.com/repos/wearerequired/wp-requirements-check/zipball/82b8a6c4b953f59e7e534df2d4287e34af950812",
+            "reference": "82b8a6c4b953f59e7e534df2d4287e34af950812",
             "shasum": ""
         },
-        "time": "2017-10-23T09:14:03+00:00",
+        "time": "2019-03-11T11:11:33+00:00",
         "type": "library",
         "installation-source": "dist",
         "autoload": {
@@ -629,17 +639,17 @@
         "source": {
             "type": "git",
             "url": "https://github.com/WPBP/Widgets-Helper.git",
-            "reference": "6aa0659e6a2cb73ccef5ba02da0e619b9d876d38"
+            "reference": "5547acaaf60b856b0025cdf44e3831e0f3202929"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/WPBP/Widgets-Helper/zipball/6aa0659e6a2cb73ccef5ba02da0e619b9d876d38",
-            "reference": "6aa0659e6a2cb73ccef5ba02da0e619b9d876d38",
+            "url": "https://api.github.com/repos/WPBP/Widgets-Helper/zipball/5547acaaf60b856b0025cdf44e3831e0f3202929",
+            "reference": "5547acaaf60b856b0025cdf44e3831e0f3202929",
             "shasum": ""
         },
-        "time": "2018-03-06T17:28:54+00:00",
+        "time": "2019-06-26T15:20:33+00:00",
         "type": "library",
-        "installation-source": "dist",
+        "installation-source": "source",
         "autoload": {
             "files": [
                 "wph-widget.php"

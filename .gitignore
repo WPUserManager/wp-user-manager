@@ -7,7 +7,7 @@ node_modules/
 *.sql
 *.tar.gz
 *.zip
-#vendor
+vendor
 yarn.lock
 yarn-error.log
 .sass-cache

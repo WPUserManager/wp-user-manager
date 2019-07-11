@@ -15,7 +15,7 @@
  * GNU General Public License for more details.
  *
  * @author     Alessandro Tesoro
- * @version    1.0.2
+ * @version    1.0.3
  * @copyright  (c) 2018 Alessandro Tesoro
  * @license    http://www.gnu.org/licenses/gpl-3.0.txt GNU LESSER GENERAL PUBLIC LICENSE
  * @package    wp-notices
@@ -43,7 +43,7 @@ final class WP_Notice {
 	 *
 	 * @var string
 	 */
-	public $version = '1.0.2';
+	public $version = '1.0.3';
 
 	/**
 	 * List of registered notices.
@@ -60,7 +60,7 @@ final class WP_Notice {
 	public static function instance() {
 
 		if ( ! isset( self::$instance ) && ! ( self::$instance instanceof WP_Notice ) ) {
-			self::$instance = new WP_Notice;
+			self::$instance = new WP_Notice();
 			self::$instance->init();
 		}
 
@@ -172,7 +172,7 @@ final class WP_Notice {
 	 * @param string $id
 	 * @param string $type
 	 * @param string $content
-	 * @param array $args
+	 * @param array  $args
 	 * @return void
 	 */
 	public function register_notice( $id, $type, $content, $args = array() ) {
@@ -270,9 +270,6 @@ final class WP_Notice {
 	public function restore_notice( $id ) {
 		$id     = self::$instance->get_id( $id );
 		$notice = self::$instance->get_notice( $id );
-		if ( false === $notice ) {
-			return false;
-		}
 		return 'user' === $notice['scope'] ? self::$instance->restore_user( $id ) : self::$instance->restore_global( $id );
 	}
 
@@ -283,14 +280,10 @@ final class WP_Notice {
 	 * @return void
 	 */
 	private function restore_user( $id ) {
-		$id     = self::$instance->get_id( $id );
-		$notice = self::$instance->get_notice( $id );
-
-		if ( false === $notice ) {
-			return false;
-		}
-
+		$id        = self::$instance->get_id( $id );
+		$notice    = self::$instance->get_notice( $id );
 		$dismissed = self::$instance->dismissed_user();
+
 		if ( ! in_array( $id, $dismissed ) ) {
 			return false;
 		}
@@ -309,13 +302,8 @@ final class WP_Notice {
 	 * @return void
 	 */
 	private function restore_global( $id ) {
-		$id     = self::$instance->get_id( $id );
-		$notice = self::$instance->get_notice( $id );
-
-		if ( false === $notice ) {
-			return false;
-		}
-
+		$id        = self::$instance->get_id( $id );
+		$notice    = self::$instance->get_notice( $id );
 		$dismissed = self::$instance->dismissed_global();
 
 		if ( ! in_array( $id, $dismissed ) ) {
