@@ -115,6 +115,15 @@ Please note that using WPUM and the mentioned add-ons does NOT guarantee complia
 
 == Changelog ==
 
+= 2.1.5 ( 11th July 2019 ) =
+
+- Tweak: updated widgets generator dependency.
+- Tweak: updated admin notices generator dependency.
+- Tweak: updated templates loader dependency.
+- Tweak: added hook after the user changes his password from the account page.
+- Tweak: added hook after the user recovers his password from the forgotten password form.
+- Fix: cover field in the admin panel would disappear when custom avatars were disabled.
+
 = 2.1.4 ( 20th June 2019 )
 
 - Fix: admin role should be excluded from menu items unless selected
