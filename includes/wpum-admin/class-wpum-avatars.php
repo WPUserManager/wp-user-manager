@@ -92,7 +92,7 @@ class WPUM_Avatars {
 			->set_datastore( new WPUM_User_Meta_Custom_Datastore() )
 			->add_fields(
 				array(
-					Field::make( 'image', 'user_cover', esc_html__( 'Custom profile cover image', 'wp-user-manager' ) )
+					Field::make( 'image', 'current_user_avatar', esc_html__( 'Custom user avatar', 'wp-user-manager' ) )
 						->set_value_type( 'url' ),
 				)
 			);
