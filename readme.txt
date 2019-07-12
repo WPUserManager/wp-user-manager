@@ -115,6 +115,10 @@ Please note that using WPUM and the mentioned add-ons does NOT guarantee complia
 
 == Changelog ==
 
+= 2.1.6 ( 11th July 2019 ) =
+
+- Fix: issue with custom avatars not loading.
+
 = 2.1.5 ( 11th July 2019 ) =
 
 - Tweak: updated widgets generator dependency.
