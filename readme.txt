@@ -115,6 +115,11 @@ Please note that using WPUM and the mentioned add-ons does NOT guarantee complia
 
 == Changelog ==
 
+= 2.1.7 ( 1st August 2019 ) =
+
+- Tweak: updated language files to use last version of all strings.
+- Tweak: added new filter for developers that allows to modify the subject and content of the registration confirmation email sent to administrators.
+
 = 2.1.6 ( 11th July 2019 ) =
 
 - Fix: issue with custom avatars not loading.
