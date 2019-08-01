@@ -370,10 +370,30 @@ function wpum_send_registration_confirmation_email( $user_id, $psw = false ) {
 		$blogname = wp_specialchars_decode( get_option( 'blogname' ), ENT_QUOTES );
 		// Send notification to admin if not disabled.
 		if ( ! wpum_get_option( 'disable_admin_register_email' ) ) {
+
 			$message  = sprintf( esc_html__( 'New user registration on your site %s:', 'wp-user-manager' ), $blogname ) . "\r\n\r\n";
 			$message .= sprintf( esc_html__( 'Username: %s', 'wp-user-manager' ), $user->user_login ) . "\r\n\r\n";
 			$message .= sprintf( esc_html__( 'E-mail: %s', 'wp-user-manager' ), $user->user_email ) . "\r\n";
-			wp_mail( get_option( 'admin_email' ), sprintf( esc_html__( '[%s] New User Registration', 'wp-user-manager' ), $blogname ), $message );
+
+			/**
+			 * Filter: allow developers to customize the message of the admin registration confirmation email.
+			 *
+			 * @param string $message the message.
+			 * @param WP_User $user user details.
+			 * @return string
+			 */
+			$message = apply_filters( 'wpum_admin_registration_confirmation_email_message', $message, $user );
+
+			/**
+			 * Filter: allow developers to customize the subject of the admin registration confirmation email.
+			 *
+			 * @param string $subject the subject.
+			 * @param WP_User $user user details.
+			 * @return string
+			 */
+			$subject = apply_filters( 'wpum_admin_registration_confirmation_email_subject', sprintf( esc_html__( '[%s] New User Registration', 'wp-user-manager' ), $blogname ), $user );
+
+			wp_mail( get_option( 'admin_email' ), $subject, $message );
 		}
 
 		if ( $user instanceof WP_User ) {
