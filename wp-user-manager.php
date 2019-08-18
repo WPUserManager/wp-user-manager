@@ -34,7 +34,9 @@ Domain Path: /languages
  */
 
 // Exit if accessed directly
-if ( ! defined( 'ABSPATH' ) ) exit;
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 
 if ( ! class_exists( 'WP_User_Manager' ) ) :
 
@@ -242,7 +244,7 @@ if ( ! class_exists( 'WP_User_Manager' ) ) :
 			require_once WPUM_PLUGIN_DIR . 'includes/wpum-directories/wpum-directories-functions.php';
 			require_once WPUM_PLUGIN_DIR . 'includes/widgets.php';
 
-			//require_once WPUM_PLUGIN_DIR . 'includes/wpum-upgrades/class-wpum-updates.php';
+			// require_once WPUM_PLUGIN_DIR . 'includes/wpum-upgrades/class-wpum-updates.php';
 			require_once WPUM_PLUGIN_DIR . 'includes/wpum-upgrades/class-wpum-plugin-updates.php';
 
 			if ( is_admin() || ( defined( 'WP_CLI' ) && WP_CLI ) ) {
@@ -271,7 +273,7 @@ if ( ! class_exists( 'WP_User_Manager' ) ) :
 				require_once WPUM_PLUGIN_DIR . 'includes/wpum-shortcodes/class-wpum-shortcode-directory.php';
 			}
 
-			if( defined( 'DOING_AJAX' ) || ( isset( $_GET['wpum_email_customizer'] ) && 'true' == $_GET['wpum_email_customizer'] ) ) {
+			if ( defined( 'DOING_AJAX' ) || ( isset( $_GET['wpum_email_customizer'] ) && 'true' == $_GET['wpum_email_customizer'] ) ) {
 				require_once WPUM_PLUGIN_DIR . 'includes/wpum-emails/class-wpum-emails-customizer-scripts.php';
 				require_once WPUM_PLUGIN_DIR . 'includes/wpum-emails/class-wpum-emails-customizer.php';
 			}
@@ -302,7 +304,7 @@ if ( ! class_exists( 'WP_User_Manager' ) ) :
 				'fieldsgroups'          => new WPUM_DB_Table_Fields_Groups(),
 				'registrationforms'     => new WPUM_DB_Table_Registration_Forms(),
 				'registrationformsmeta' => new WPUM_DB_Table_Registration_Forms_Meta(),
-				'searchfields'          => new WPUM_DB_Table_Search_Fields()
+				'searchfields'          => new WPUM_DB_Table_Search_Fields(),
 			);
 		}
 
@@ -440,12 +442,14 @@ if ( ! class_exists( 'WP_User_Manager' ) ) :
 
 			require __DIR__ . '/vendor/autoload.php';
 
-			$requirements_check = new WP_Requirements_Check( array(
-				'title' => 'WP User Manager',
-				'php'   => '5.5',
-				'wp'    => '4.7',
-				'file'  => __FILE__,
-			) );
+			$requirements_check = new WP_Requirements_Check(
+				array(
+					'title' => 'WP User Manager',
+					'php'   => '5.5',
+					'wp'    => '4.7',
+					'file'  => __FILE__,
+				)
+			);
 
 			return $requirements_check->passes();
 
