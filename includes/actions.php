@@ -303,7 +303,7 @@ function wpum_prevent_wp_login() {
 	$action = ( isset( $_GET['action'] ) ) ? $_GET['action'] : '';
 
 	if ( $pagenow == 'wp-login.php' && ( ! $action || ( $action && ! in_array( $action, array( 'logout', 'lostpassword', 'rp', 'resetpass' ) ) ) ) ) {
-		$page = home_url();
+		$page = wp_login_url();
 		wp_safe_redirect( $page );
 		exit();
 	}
