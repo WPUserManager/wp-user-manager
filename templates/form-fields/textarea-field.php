@@ -10,10 +10,10 @@
  * happen. When this occurs the version of the template file will be bumped and
  * the readme will list any important changes.
  *
- * @version 1.0.0
+ * @version 1.0.1
  */
 
- // Exit if accessed directly
+// Exit if accessed directly
 if ( ! defined( 'ABSPATH' ) ) exit;
 
 ?>
@@ -25,9 +25,9 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 	name="<?php echo esc_attr( isset( $data->name ) ? $data->name : $data->key ); ?>"
 	id="<?php echo esc_attr( $data->key ); ?>"
 	placeholder="<?php echo empty( $data->placeholder ) ? '' : esc_attr( $data->placeholder ); ?>"
-	maxlength="<?php echo ! empty( $data->maxlength ) ? $data->maxlength : ''; ?>"
+	maxlength="<?php echo ! empty( $data->maxlength ) ? esc_attr( $data->maxlength ) : ''; ?>"
 	<?php if ( ! empty( $data->required ) ) echo 'required'; ?>
-	><?php echo isset( $data->value ) ? esc_textarea( html_entity_decode( $data->value ) ) : ''; ?>
 	<?php if ( ! empty( $data->read_only ) ) echo 'readonly'; ?>
+	><?php echo isset( $data->value ) ? esc_textarea( html_entity_decode( $data->value ) ) : ''; ?>
 </textarea>
-<?php if ( ! empty( $data->description ) ) : ?><small class="description"><?php echo $data->description; ?></small><?php endif; ?>
+<?php if ( ! empty( $data->description ) ) : ?><small class="description"><?php echo wp_kses_post( $data->description ); ?></small><?php endif; ?>
