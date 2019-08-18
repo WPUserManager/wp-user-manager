@@ -43,10 +43,10 @@ add_action(
 
 		$routes->addRoute(
 			new QueryRoute(
-				$page_slug . '{tab:[a-zA-Z0-9_.-]+}',
+				$page_slug . '{tab:[^/]+}',
 				function( array $matches ) use ( $account_page_id ) {
 					return [
-						'tab'     => $matches['tab'],
+						'tab'     => rawurldecode( $matches['tab'] ),
 						'page_id' => $account_page_id,
 					];
 				}
@@ -85,7 +85,7 @@ add_action(
 				$page_slug . '{profile:[^/]+}',
 				function( array $matches ) use ( $profile_page_id ) {
 					return [
-						'profile' => $matches['profile'],
+						'profile' => rawurldecode( $matches['profile'] ),
 						'page_id' => $profile_page_id,
 					];
 				}
@@ -97,8 +97,8 @@ add_action(
 				$page_slug . '{profile:[^/]+}/{tab:[a-zA-Z0-9_.-]+}',
 				function( array $matches ) use ( $profile_page_id ) {
 					return [
-						'profile' => $matches['profile'],
-						'tab'     => $matches['tab'],
+						'profile' => rawurldecode( $matches['profile'] ),
+						'tab'     => rawurldecode( $matches['tab'] ),
 						'page_id' => $profile_page_id,
 					];
 				}
@@ -110,8 +110,8 @@ add_action(
 				$page_slug . '{profile:[^/]+}/{tab:[a-zA-Z0-9_.-]+}/page/{paged:[a-zA-Z0-9_.-]+}',
 				function( array $matches ) use ( $profile_page_id ) {
 					return [
-						'profile' => $matches['profile'],
-						'tab'     => $matches['tab'],
+						'profile' => rawurldecode( $matches['profile'] ),
+						'tab'     => rawurldecode( $matches['tab'] ),
 						'paged'   => $matches['paged'],
 						'page_id' => $profile_page_id,
 					];

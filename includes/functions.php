@@ -561,7 +561,7 @@ function wpum_get_account_tab_url( $step_key ) {
 	} elseif ( $step_key == 'view' ) {
 		$tab_url = get_permalink( wpum_get_core_page_id( 'profile' ) );
 	} else {
-		$tab_url = $tab_url . $step_key;
+		$tab_url = $tab_url . rawurlencode( $step_key );
 	}
 
 	return apply_filters( 'wpum_get_account_tab_url', $tab_url, $step_key );
