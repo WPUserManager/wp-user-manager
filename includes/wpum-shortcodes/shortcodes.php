@@ -264,6 +264,14 @@ function wpum_profile( $atts, $content = null ) {
 	$registration_page = get_permalink( wpum_get_core_page_id( 'register' ) );
 	$warning_message   = sprintf( __( 'This content is available to members only. Please <a href="%1$s">login</a> or <a href="%2$s">register</a> to view this area.', 'wp-user-manager' ), $login_page, $registration_page );
 
+	/**
+	 * Filter: allow developers to modify the profile restriction message.
+	 *
+	 * @param string $warning_message the original message.
+	 * @return string
+	 */
+	$warning_message = apply_filters( 'wpum_profile_restriction_message', $warning_message );
+
 	// Check if not logged in and on profile page - no given user
 	if ( ! is_user_logged_in() && ! wpum_get_queried_user_id() ) {
 
@@ -340,10 +348,20 @@ function wpum_restrict_logged_in( $atts, $content = null ) {
 			$login_page
 		);
 
+		$message = sprintf( __( 'This content is available to members only. Please <a href="%1$s">login</a> or <a href="%2$s">register</a> to view this area.', 'wp-user-manager' ), $login_page, get_permalink( wpum_get_core_page_id( 'register' ) ) );
+
+		/**
+		 * Filter: allow developers to modify the content restriction shortcode message.
+		 *
+		 * @param string $message the original message.
+		 * @return string
+		 */
+		$message = apply_filters( 'wpum_content_restriction_message', $message );
+
 		WPUM()->templates
 			->set_template_data(
 				[
-					'message' => sprintf( __( 'This content is available to members only. Please <a href="%1$s">login</a> or <a href="%2$s">register</a> to view this area.', 'wp-user-manager' ), $login_page, get_permalink( wpum_get_core_page_id( 'register' ) ) ),
+					'message' => $message,
 				]
 			)
 			->get_template_part( 'messages/general', 'warning' );
@@ -393,10 +411,20 @@ function wpum_restrict_to_users( $atts, $content = null ) {
 			$login_page
 		);
 
+		$message = sprintf( __( 'This content is available to members only. Please <a href="%1$s">login</a> or <a href="%2$s">register</a> to view this area.', 'wp-user-manager' ), $login_page, get_permalink( wpum_get_core_page_id( 'register' ) ) );
+
+		/**
+		 * Filter: allow developers to modify the content restriction shortcode message.
+		 *
+		 * @param string $message the original message.
+		 * @return string
+		 */
+		$message = apply_filters( 'wpum_content_restriction_message', $message );
+
 		WPUM()->templates
 			->set_template_data(
 				[
-					'message' => sprintf( __( 'This content is available to members only. Please <a href="%1$s">login</a> or <a href="%2$s">register</a> to view this area.', 'wp-user-manager' ), $login_page, get_permalink( wpum_get_core_page_id( 'register' ) ) ),
+					'message' => $message,
 				]
 			)
 			->get_template_part( 'messages/general', 'warning' );
@@ -448,10 +476,20 @@ function wpum_restrict_to_user_roles( $atts, $content = null ) {
 			$login_page
 		);
 
+		$message = sprintf( __( 'This content is available to members only. Please <a href="%1$s">login</a> or <a href="%2$s">register</a> to view this area.', 'wp-user-manager' ), $login_page, get_permalink( wpum_get_core_page_id( 'register' ) ) );
+
+		/**
+		 * Filter: allow developers to modify the content restriction shortcode message.
+		 *
+		 * @param string $message the original message.
+		 * @return string
+		 */
+		$message = apply_filters( 'wpum_content_restriction_message', $message );
+
 		WPUM()->templates
 			->set_template_data(
 				[
-					'message' => sprintf( __( 'This content is available to members only. Please <a href="%1$s">login</a> or <a href="%2$s">register</a> to view this area.', 'wp-user-manager' ), $login_page, get_permalink( wpum_get_core_page_id( 'register' ) ) ),
+					'message' => $message,
 				]
 			)
 			->get_template_part( 'messages/general', 'warning' );
