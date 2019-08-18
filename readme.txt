@@ -115,6 +115,14 @@ Please note that using WPUM and the mentioned add-ons does NOT guarantee complia
 
 == Changelog ==
 
+= 2.1.8 ( 18th August 2019 ) =
+
+- Tweak: improved data escaping in some areas.
+- Tweak: added filters for developers to modify the profile and content restriction messages.
+- Fix: readonly attribute for textarea hiding placeholder.
+- Fix: redirect to login page when wp-login is locked instead of the homepage.
+- Fix: some characters not accepted into urls for account and profile page.
+
 = 2.1.7 ( 1st August 2019 ) =
 
 - Tweak: updated language files to use last version of all strings.
