@@ -16,82 +16,82 @@ The most customizable profiles & community builder WordPress plugin with front-e
 
 = The most customizable profiles & community builder WordPress plugin =
 
-[WP User Manager](https://wpusermanager.com) lets you create highly customizable user profiles together with custom user registration, login, password recovery and account customization forms to your WordPress website. [WP User Manager](https://wpusermanager.com) is the best solution to manage your community. Powerful and flexible, yet easy to setup and use. With WP User Manager you can create almost any type of website where your visitors can join and become members.
+[WP User Manager](https://wpusermanager.com?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager) lets you create highly customizable user profiles together with custom user registration, login, password recovery and account customization forms to your WordPress website. [WP User Manager](https://wpusermanager.com?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager) is the best solution to manage your community. Powerful and flexible, yet easy to setup and use. With WP User Manager you can create almost any type of website where your visitors can join and become members.
 
-[website](https://wpusermanager.com) | [addons](https://wpusermanager.com/addons) | [documentation](http://docs.wpusermanager.com/) | [support](https://wpusermanager.com/support/)
+[website](https://wpusermanager.com?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager) | [addons](https://wpusermanager.com/addons?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager) | [documentation](http://docs.wpusermanager.com/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager) | [support](https://wpusermanager.com/support/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager)
 
 = Features included =
 
-- [Frontend Forms](https://wpusermanager.com/features/front-end-forms/).
-- [Custom Email Notifications](https://wpusermanager.com/features/custom-email-notifications/).
-- [Custom avatars](https://wpusermanager.com/features/custom-avatars/).
-- [Elegant user profiles](https://wpusermanager.com/features/elegant-user-profiles/).
-- [Shortcodes editor](https://wpusermanager.com/features/shortcodes/).
-- [Beautiful user directories](https://wpusermanager.com/features/user-directories/).
-- [Seo URLs](https://wpusermanager.com/features/seo/).
-- [Content restriction](https://wpusermanager.com/features/content-restriction/).
-- [Passwords management](https://wpusermanager.com/features/passwords-management/).
-- [Custom fields editor](https://wpusermanager.com/features/custom-fields/).
-- [Custom widgets](https://wpusermanager.com/features/custom-widgets/).
-- [Custom redirects](https://wpusermanager.com/features/custom-redirects/).
-- [Powerful tools](https://wpusermanager.com/features/tools/).
-- [Developers friendly](https://wpusermanager.com/features/developers-friendly/).
-- [Extensive documentation](http://docs.wpusermanager.com).
+- [Frontend Forms](https://wpusermanager.com/features/front-end-forms/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager).
+- [Custom Email Notifications](https://wpusermanager.com/features/custom-email-notifications/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager).
+- [Custom avatars](https://wpusermanager.com/features/custom-avatars/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager).
+- [Elegant user profiles](https://wpusermanager.com/features/elegant-user-profiles/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager).
+- [Shortcodes editor](https://wpusermanager.com/features/shortcodes/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager).
+- [Beautiful user directories](https://wpusermanager.com/features/user-directories/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager).
+- [Seo URLs](https://wpusermanager.com/features/seo/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager).
+- [Content restriction](https://wpusermanager.com/features/content-restriction/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager).
+- [Passwords management](https://wpusermanager.com/features/passwords-management/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager).
+- [Custom fields editor](https://wpusermanager.com/features/custom-fields/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager).
+- [Custom widgets](https://wpusermanager.com/features/custom-widgets/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager).
+- [Custom redirects](https://wpusermanager.com/features/custom-redirects/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager).
+- [Powerful tools](https://wpusermanager.com/features/tools/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager).
+- [Developers friendly](https://wpusermanager.com/features/developers-friendly/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager).
+- [Extensive documentation](http://docs.wpusermanager.com?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager).
 - Translation Ready
 
-Read more about our features on [wpusermanager.com](https://wpusermanager.com/features/)
+Read more about our features on [wpusermanager.com](https://wpusermanager.com/features/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager)
 
 = Add-ons =
 
-For more functionality check out [the add-ons page](https://wpusermanager.com/addons/).
+For more functionality check out [the add-ons page](https://wpusermanager.com/addons/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager).
 
 = Free Extensions =
 
-- [Google reCAPTCHA](https://wpusermanager.com/addons/recaptcha): Stop spam registrations on your website for free.
+- [Google reCAPTCHA](https://wpusermanager.com/addons/recaptcha?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager): Stop spam registrations on your website for free.
 - [Username Length](https://wordpress.org/plugins/wpum-username-length): Set minimum and maximum characters length for usernames.
-- [Personal Data](https://wpusermanager.com/addons/personal-data): Allows the user to request an export of personal data and request erasure of personal data from the account page for GDPR compliance.
-- [Delete Account](https://wpusermanager.com/addons/delete-account): Allows the user to delete their own profile from the frontend account page.
+- [Personal Data](https://wpusermanager.com/addons/personal-data?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager): Allows the user to request an export of personal data and request erasure of personal data from the account page for GDPR compliance.
+- [Delete Account](https://wpusermanager.com/addons/delete-account?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager): Allows the user to delete their own profile from the frontend account page.
 
 = Paid Addons =
 
-- [Custom Fields](https://wpusermanager.com/addons/custom-fields/): Add custom fields to members profiles and registration forms.
-- [User Verification](https://wpusermanager.com/addons/user-verification): Send a verification link via email upon registration or manually approve users before they can login.
-- [Social Login & Registration](https://wpusermanager.com/addons/social-login): Allow your users to quickly login and register with their favorite social network account, Facebook, Twitter, Instagram, LinkedIn & Instagram.
-- [MailChimp](https://wpusermanager.com/addons/mailchimp/): Sync users with MailChimp upon registration & more.
+- [Custom Fields](https://wpusermanager.com/addons/custom-fields/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager): Add custom fields to members profiles and registration forms.
+- [User Verification](https://wpusermanager.com/addons/user-verification/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager): Send a verification link via email upon registration or manually approve users before they can login.
+- [Social Login & Registration](https://wpusermanager.com/addons/social-login/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager): Allow your users to quickly login and register with their favorite social network account, Facebook, Twitter, Instagram, LinkedIn & Instagram.
+- [MailChimp](https://wpusermanager.com/addons/mailchimp/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager): Sync users with MailChimp upon registration & more.
 
-[View all extensions](https://wpusermanager.com/addons)
+[View all extensions](https://wpusermanager.com/addons/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager)
 
 = Translations =
 
-Want to add a new language to WP User Manager? Awesome! You can contribute via [translate.wordpress.org](https://translate.wordpress.org/projects/wp-plugins/wp-user-manager). Please read the official [translation tutorial](https://docs.wpusermanager.com/article/67-translate-wp-user-manager) for more information.
+Want to add a new language to WP User Manager? Awesome! You can contribute via [translate.wordpress.org](https://translate.wordpress.org/projects/wp-plugins/wp-user-manager). Please read the official [translation tutorial](https://docs.wpusermanager.com/article/67-translate-wp-user-manager/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager) for more information.
 
 = Support =
 
-Support is provided only through the [support forum](https://wordpress.org/support/plugin/wp-user-manager). Join the [support forum](https://wordpress.org/support/plugin/wp-user-manager) to ask questions and get help regarding WP User Manager. Free support is provided exclusively for bugs and help using the plugin. Please read the support policy [https://wpusermanager.com/support-policy/](https://wpusermanager.com/support-policy/).
+Support is provided only through the [support forum](https://wordpress.org/support/plugin/wp-user-manager). Join the [support forum](https://wordpress.org/support/plugin/wp-user-manager) to ask questions and get help regarding WP User Manager. Free support is provided exclusively for bugs and help using the plugin. Please read the support policy [https://wpusermanager.com/support-policy/](https://wpusermanager.com/support-policy/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager).
 
-Before opening a [support topic](https://wordpress.org/support/plugin/wp-user-manager) please read the [faqs](http://docs.wpusermanager.com/category/66-faq-tutorials) and [documentation](http://docs.wpusermanager.com/).
+Before opening a [support topic](https://wordpress.org/support/plugin/wp-user-manager) please read the [faqs](http://docs.wpusermanager.com/category/66-faq-tutorials/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager) and [documentation](http://docs.wpusermanager.com/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager).
 
-Support for premium addons is provided exclusively [through the premium support platform](https://wpusermanager.com/support/). Support for premium addons cannot be provided through WordPress.org due to the rules put in place by the WordPress.org team.
+Support for premium addons is provided exclusively [through the premium support platform](https://wpusermanager.com/support/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager). Support for premium addons cannot be provided through WordPress.org due to the rules put in place by the WordPress.org team.
 
 == Installation ==
 
-Please read our detailed documentation here [http://docs.wpusermanager.com/category/13-installation](http://docs.wpusermanager.com/category/13-installation)
+Please read our detailed documentation here [https://docs.wpusermanager.com/category/13-installation](https://docs.wpusermanager.com/category/13-installation)
 
 == Frequently Asked Questions ==
 
 = Install instructions =
 
-Please refer to the [official documentation](https://docs.wpusermanager.com/category/13-installation).
+Please refer to the [official documentation](https://docs.wpusermanager.com/category/13-installation/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager).
 
 = Does WPUM work with any theme? =
  WP User Manager has been designed and coded to seamlessly integrate with any properly coded WordPress theme. However, each theme is coded differently and the quality of the code can vary. To avoid potential issues and conflicts, WPUM adds very little css and js to your website. If your theme is properly coded, WPUM should adapt itself to your site layout. Although we cannot guarantee that the plugin works with all themes.
 
 = My emails aren't delivering =
-Please refer to the [official documentation](https://docs.wpusermanager.com/article/73-my-emails-arent-delivering).
+Please refer to the [official documentation](https://docs.wpusermanager.com/article/73-my-emails-arent-delivering/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager).
 
 = Is WP User Manager GDPR compliant? =
 
-Please refer to the [official documentation for gdpr compliance](https://docs.wpusermanager.com/article/427-gdpr-compliance).
+Please refer to the [official documentation for gdpr compliance](https://docs.wpusermanager.com/article/427-gdpr-compliance/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager).
 
 WP User Manager provides add-ons to comply with the right of erasure and the right
 
