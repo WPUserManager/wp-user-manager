@@ -682,19 +682,24 @@ function wpum_directory( $atts, $content = null ) {
 	if ( isset( $_GET['directory-search'] ) && ! empty( $_GET['directory-search'] ) ) {
 		$search_string      = sanitize_text_field( esc_attr( trim( $_GET['directory-search'] ) ) );
 		$args['search']     = '*' . esc_attr( $search_string ) . '*';
-		$args['meta_query'] = array(
-			'relation' => 'OR',
-			array(
-				'key'     => 'first_name',
-				'value'   => esc_attr( $search_string ),
-				'compare' => 'LIKE',
-			),
-			array(
-				'key'     => 'last_name',
-				'value'   => esc_attr( $search_string ),
-				'compare' => 'LIKE',
-			),
-		);
+		$search_meta_keys = apply_filters( 'wpum_directory_search_meta_keys', array( 'first_name', 'last_name' ) );
+
+		if ( ! empty( $search_meta_keys ) ) {
+			$meta_query_keys = array();
+			foreach ( $search_meta_keys as $search_meta_key ) {
+				$meta_query_keys[] = array(
+					'key'     => $search_meta_key,
+					'value'   => esc_attr( $search_string ),
+					'compare' => 'LIKE',
+				);
+			}
+
+			$args['meta_query'] = array(
+				'relation' => 'OR',
+			);
+
+			$args['meta_query'] = array_merge( $args['meta_query'], $meta_query_keys );
+		}
 
 		add_action( 'pre_user_query', function ( $uqi ) {
 			$search = '';
