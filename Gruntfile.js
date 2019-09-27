@@ -208,7 +208,8 @@ module.exports = function( grunt ) {
 					'!Gruntfile.js',
 					'!package.json',
 					'!.gitignore',
-					'!.gitmodules'
+					'!.gitmodules',
+					'!yarn.lock'
 				],
 				dest: 'release/<%= pkg.version %>/'
 			}
