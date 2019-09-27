@@ -45,19 +45,19 @@ Read more about our features on [wpusermanager.com](https://wpusermanager.com/fe
 
 For more functionality check out [the add-ons page](https://wpusermanager.com/addons/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager).
 
-= Free Extensions =
-
-- [Google reCAPTCHA](https://wpusermanager.com/addons/recaptcha?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager): Stop spam registrations on your website for free.
-- [Username Length](https://wordpress.org/plugins/wpum-username-length): Set minimum and maximum characters length for usernames.
-- [Personal Data](https://wpusermanager.com/addons/personal-data?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager): Allows the user to request an export of personal data and request erasure of personal data from the account page for GDPR compliance.
-- [Delete Account](https://wpusermanager.com/addons/delete-account?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager): Allows the user to delete their own profile from the frontend account page.
-
 = Paid Addons =
 
 - [Custom Fields](https://wpusermanager.com/addons/custom-fields/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager): Add custom fields to members profiles and registration forms.
 - [User Verification](https://wpusermanager.com/addons/user-verification/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager): Send a verification link via email upon registration or manually approve users before they can login.
 - [Social Login & Registration](https://wpusermanager.com/addons/social-login/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager): Allow your users to quickly login and register with their favorite social network account, Facebook, Twitter, Instagram, LinkedIn & Instagram.
 - [MailChimp](https://wpusermanager.com/addons/mailchimp/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager): Sync users with MailChimp upon registration & more.
+
+= Free Extensions =
+
+- [Google reCAPTCHA](https://wpusermanager.com/addons/recaptcha?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager): Stop spam registrations on your website for free.
+- [Username Length](https://wordpress.org/plugins/wpum-username-length): Set minimum and maximum characters length for usernames.
+- [Personal Data](https://wpusermanager.com/addons/personal-data?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager): Allows the user to request an export of personal data and request erasure of personal data from the account page for GDPR compliance.
+- [Delete Account](https://wpusermanager.com/addons/delete-account?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager): Allows the user to delete their own profile from the frontend account page.
 
 [View all extensions](https://wpusermanager.com/addons/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager)
 
