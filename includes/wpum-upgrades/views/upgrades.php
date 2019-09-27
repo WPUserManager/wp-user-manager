@@ -26,7 +26,7 @@ $wpum_updates = WPUM_Updates::get_instance();
 			$width            = ! empty( $resume_updates ) ? $resume_updates['percentage'] : 0;
 			?>
 			<div class="wpum-update-panel-content">
-				<p><?php printf( __( 'WP User Manager regularly receives new features, bug fixes, and enhancements. It is important to always stay up-to-date with latest version of WPUM core and its add-ons. Please create a backup of your site before updating. To update add-ons be sure your <a href="%1$s">license keys</a> are activated.', 'wp-user-manager' ), 'https://wpumwp.com/my-account/' ); ?></p>
+				<p><?php printf( __( 'WP User Manager regularly receives new features, bug fixes, and enhancements. It is important to always stay up-to-date with latest version of WPUM core and its addons. Please create a backup of your site before updating. To update add-ons be sure your <a href="%1$s">license keys</a> are activated.', 'wp-user-manager' ), 'https://wpumwp.com/my-account/' ); ?></p>
 			</div>
 
 			<div id="wpum-db-updates" data-resume-update="<?php echo absint( $wpum_updates->is_doing_updates() ); ?>">
@@ -104,7 +104,7 @@ $wpum_updates = WPUM_Updates::get_instance();
 			<div id="wpum-plugin-updates">
 				<div class="postbox-container">
 					<div class="postbox">
-						<h2 class="hndle"><?php _e( 'Add-on Updates', 'wp-user-manager' ); ?></h2>
+						<h2 class="hndle"><?php _e( 'Addon Updates', 'wp-user-manager' ); ?></h2>
 						<div class="inside">
 							<div class="panel-content">
 								<p>

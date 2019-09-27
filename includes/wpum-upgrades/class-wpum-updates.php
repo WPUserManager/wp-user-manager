@@ -158,7 +158,7 @@ class WPUM_Updates {
 	}
 
 	/**
-	 * Register plugin add-on updates.
+	 * Register plugin addon updates.
 	 *
 	 * @access public
 	 */

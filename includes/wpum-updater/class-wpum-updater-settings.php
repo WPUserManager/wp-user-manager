@@ -47,7 +47,7 @@ class WPUM_Updater_Settings {
 		$settings = $this->get_registered_fields();
 
 		if( ! empty( $settings ) ) {
-			Container::make( 'theme_options', esc_html__( 'WP User Manager add-ons licenses', 'wp-user-manager' ) )
+			Container::make( 'theme_options', esc_html__( 'WP User Manager addon licenses', 'wp-user-manager' ) )
 			->set_page_parent( 'options-general.php' )
 			->set_page_menu_title( esc_html__( 'WPUM Licenses', 'wp-user-manager' ) )
 			->set_page_file( 'wpum-licenses' )

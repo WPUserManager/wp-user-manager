@@ -35,7 +35,7 @@ foreach ( $plugins as $plugin_data ) {
 		);
 	}
 	?>
-	<tr <?php echo( true !== $plugin_data['License'] ? 'data-tooltip="' . __( 'Unlicensed add-ons cannot be updated. Please purchase or renew a valid license.', 'wp-user-manager' ) . '"' : '' ); ?>>
+	<tr <?php echo( true !== $plugin_data['License'] ? 'data-tooltip="' . __( 'Unlicensed addons cannot be updated. Please purchase or renew a valid license.', 'wp-user-manager' ) . '"' : '' ); ?>>
 		<td><?php echo wp_kses( $plugin_name, wp_kses_allowed_html( 'post' ) ); ?></td>
 		<td>
 			<?php

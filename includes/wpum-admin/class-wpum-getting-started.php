@@ -228,8 +228,8 @@ class WPUM_Getting_Started {
 
 					<div class="last-feature col">
 						<h3><?php _e( 'Extensions for WP User Manager', 'wp-user-manager' ); ?></h3>
-						<p><?php echo __( 'Browse our growing collection of add-ons built specifically for WPUM to customize the functionality of your community.', 'wp-user-manager' ); ?></p>
-						<a href="<?php echo admin_url(); ?>" class="button"><?php esc_html_e( 'Browse add-ons', 'wp-user-manager' ); ?> &raquo;</a>
+						<p><?php echo __( 'Browse our growing collection of addons built specifically for WPUM to customize the functionality of your community.', 'wp-user-manager' ); ?></p>
+						<a href="<?php echo admin_url(); ?>" class="button"><?php esc_html_e( 'Browse addons', 'wp-user-manager' ); ?> &raquo;</a>
 					</div>
 
 					<hr>

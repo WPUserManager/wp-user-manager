@@ -14,7 +14,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<hr class="wp-header-end">
 
 		<div class="wpum-update-panel-content">
-			<p><?php esc_html_e( 'Congratulations! You are running the latest versions of WP User Manager and its add-ons.', 'wp-user-manager' ); ?></p>
+			<p><?php esc_html_e( 'Congratulations! You are running the latest versions of WP User Manager and its addons.', 'wp-user-manager' ); ?></p>
 		</div>
 
 	</div>

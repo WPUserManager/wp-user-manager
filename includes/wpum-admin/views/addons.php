@@ -1,12 +1,12 @@
 <div class="wrap" id="wpum-addons-page">
 	<h1>
-		<?php esc_html_e( 'WP User Manager Add-ons', 'wp-user-manager' ); ?>
+		<?php esc_html_e( 'WP User Manager Addons', 'wp-user-manager' ); ?>
 		<a href="https://wpusermanager.com/addons/" class="button-primary" target="_blank">
-			<?php esc_html_e( 'View All Add-ons', 'wp-user-manager' ); ?><span class="dashicons dashicons-external"></span>
+			<?php esc_html_e( 'View All Addons', 'wp-user-manager' ); ?><span class="dashicons dashicons-external"></span>
 		</a>
 	</h1>
 
-	<p><?php esc_html_e( 'The following Add-ons extend the functionality of WP User Manager.', 'wp-user-manager' ); ?></p>
+	<p><?php esc_html_e( 'The following Addons extend the functionality of WP User Manager.', 'wp-user-manager' ); ?></p>
 
 	<div id="wpum-addons-list">
 

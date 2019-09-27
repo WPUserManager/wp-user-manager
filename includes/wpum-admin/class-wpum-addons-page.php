@@ -1,6 +1,6 @@
 <?php
 /**
- * Handles registration and display of the add-ons related pages.
+ * Handles registration and display of the addons related pages.
  *
  * @package     wp-user-manager
  * @copyright   Copyright (c) 2018, Alessandro Tesoro
@@ -92,7 +92,7 @@ class WPUM_Addons_Page {
 	 * @return void
 	 */
 	public function add_addons_page() {
-		add_users_page( esc_html__( 'WP User Manager Add-ons', 'wp-user-manager' ), esc_html__( 'Add-ons', 'wp-user-manager' ), 'manage_options', 'wpum-addons', [ $this, 'view_addons' ] );
+		add_users_page( esc_html__( 'WP User Manager Addons', 'wp-user-manager' ), esc_html__( 'Addons', 'wp-user-manager' ), 'manage_options', 'wpum-addons', [ $this, 'view_addons' ] );
 	}
 
 	/**
