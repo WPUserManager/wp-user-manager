@@ -148,7 +148,7 @@ class WPUM_Getting_Started {
 				<a href="https://twitter.com/wpusermanager?ref_src=twsrc%5Etfw" class="twitter-follow-button" data-size="large" data-dnt="true" data-show-count="false">Follow @wpusermanager</a><script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script><div class="fb-like" style="top: -8px; margin-left: 3px;" data-href="https://www.facebook.com/wpusermanager/" data-layout="button" data-action="like" data-size="large" data-show-faces="false" data-share="true"></div>
 				<br/>
 				<?php printf( __( 'Thank you for installing the latest version! WP User Manager %s is ready to provide improved control over your WordPress users.', 'wp-user-manager' ), WPUM_VERSION ); ?>
-				<form action="https://themesdepot.us5.list-manage.com/subscribe/post?u=e68e0bb69f2cdf2dfd083856c&amp;id=054538336e" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank">
+				<form action="https://wpusermanager.us4.list-manage.com/subscribe/post?u=7a902e9d55ec4f3370526c634&amp;id=3b3da3fd3b" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank">
 					<p class="wpum-pre-newsletter-form"><?php esc_html_e( 'Be sure to sign up for the WPUM newsletter below to stay informed of important updates and news.', 'wp-user-manager' ); ?></p>
 					<table class="form-table wpum-newsletter-form">
 						<tbody>
