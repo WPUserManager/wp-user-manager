@@ -1,7 +1,7 @@
 === WP User Manager - User Profile Builder & Membership ===
 Author URI: https://wpusermanager.com
 Plugin URI: https://wpusermanager.com
-Contributors: alessandro.tesoro, wpusermanager
+Contributors: wpusermanager, polevaultweb, alessandro.tesoro
 Tags: members, profile, community, user profile, user registration
 Requires at least: 4.9
 Tested up to: 5.2.3
