@@ -161,10 +161,7 @@ module.exports = function( grunt ) {
 			}
 		},
 		clean: {
-			main: ['release'],
-			post_build: [
-               'build'
-           	]
+			main: ['release']
 		},
 		gittag: {
            addtag: {
@@ -292,7 +289,7 @@ module.exports = function( grunt ) {
 	grunt.registerTask( 'pre_vcs', [ 'version_number' ] );
 	grunt.registerTask( 'do_svn', [ 'svn_checkout', 'copy:svn_trunk', 'copy:svn_tag', 'push_svn' ] );
 	grunt.registerTask( 'do_git', [  'gitcommit', 'gittag', 'gitpush' ] );
-	grunt.registerTask( 'release', [ 'pre_vcs', 'do_svn', 'do_git', 'clean:post_build' ] );
+	grunt.registerTask( 'release', [ 'pre_vcs', 'do_svn', 'do_git'  ] );
 
 	grunt.registerTask( 'build', ['clean', 'copy', 'compress'] );
 
