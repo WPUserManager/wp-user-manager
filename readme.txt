@@ -115,6 +115,14 @@ Please note that using WPUM and the mentioned add-ons does NOT guarantee complia
 
 == Changelog ==
 
+= 2.1.9 ( 27th September 2019 ) =
+
+- WP User Manager has been [acquired by Pole Vault Web](https://wpusermanager.com/acquired/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager)
+- Improvement: Added Homepage option for login, logout, and registration redirects for sites showing blog posts as the homepage
+- Improvement: Filter `wpum_directory_search_meta_keys` for user meta keys involved in directory search
+- Fix: Directory search not finding users when searching by first/last name
+- Fix: Excluded usernames check not performing case insensitive check
+
 = 2.1.8 ( 18th August 2019 ) =
 
 - Tweak: improved data escaping in some areas.
