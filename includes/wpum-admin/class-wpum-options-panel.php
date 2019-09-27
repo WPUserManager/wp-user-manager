@@ -63,7 +63,7 @@ class WPUM_Options_Panel {
 		$this->panel->add_action_button(
 			array(
 				'title' => __( 'View Addons', 'wp-user-manager' ),
-				'url'   => 'http://wpusermanager.com/addons/',
+				'url'   => 'https://wpusermanager.com/addons/',
 			)
 		);
 

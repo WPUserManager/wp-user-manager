@@ -41,7 +41,7 @@ add_filter( 'admin_footer_text', 'wpum_admin_rate_us' );
 function wpum_add_settings_link( $links ) {
 	$settings_link = '<a href="' . admin_url( 'users.php?page=wpum-settings' ) . '">' . __( 'Settings', 'wp-user-manager' ) . '</a>';
 	$docs_link     = '<a href="https://docs.wpusermanager.com/" target="_blank">' . __( 'Documentation', 'wp-user-manager' ) . '</a>';
-	$addons_link   = '<a href="http://wpusermanager.com/addons" target="_blank">' . __( 'Addons', 'wp-user-manager' ) . '</a>';
+	$addons_link   = '<a href="https://wpusermanager.com/addons" target="_blank">' . __( 'Addons', 'wp-user-manager' ) . '</a>';
 	array_unshift( $links, $settings_link );
 	array_unshift( $links, $docs_link );
 	array_unshift( $links, $addons_link );
