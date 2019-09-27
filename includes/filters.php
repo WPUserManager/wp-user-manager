@@ -90,15 +90,12 @@ add_filter( 'lostpassword_url', 'wpum_set_lostpassword_url', 10, 2 );
  *
  * @param string $logout_url
  * @param string $redirect
- * @return void
+ * @return string
  */
 function wpum_set_logout_url( $logout_url, $redirect ) {
+	$logout_redirect = wpum_get_logout_redirect();
 
-	$logout_redirect = wpum_get_option( 'logout_redirect' );
-
-	if ( ! empty( $logout_redirect ) && is_array( $logout_redirect ) && ! $redirect ) {
-		$logout_redirect = get_permalink( $logout_redirect[0] );
-
+	if ( $logout_redirect && ! $redirect ) {
 		$args = [
 			'action'      => 'logout',
 			'redirect_to' => $logout_redirect,
@@ -106,11 +103,9 @@ function wpum_set_logout_url( $logout_url, $redirect ) {
 
 		$logout_url = add_query_arg( $args, site_url( 'wp-login.php', 'login' ) );
 		$logout_url = wp_nonce_url( $logout_url, 'log-out' );
-
 	}
 
 	return $logout_url;
-
 }
 add_filter( 'logout_url', 'wpum_set_logout_url', 20, 2 );
 

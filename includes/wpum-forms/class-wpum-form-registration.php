@@ -470,25 +470,18 @@ class WPUM_Form_Registration extends WPUM_Form {
 	 * @return void
 	 */
 	public function done() {
+		$redirect_page = wpum_get_registration_redirect();
 
-		$redirect_page = wpum_get_option( 'registration_redirect' );
-
-		if ( ! empty( $redirect_page ) && is_array( $redirect_page ) ) {
-
-			$redirect_page = $redirect_page[0];
-			wp_safe_redirect( get_permalink( $redirect_page ) );
+		if ( $redirect_page ) {
+			wp_safe_redirect( $redirect_page );
 			exit;
-
 		} else {
-
 			$registration_page = get_permalink( wpum_get_core_page_id( 'register' ) );
 			$registration_page = add_query_arg( [ 'registration' => 'success' ], $registration_page );
 
 			wp_safe_redirect( $registration_page );
 			exit;
-
 		}
-
 	}
 
 }

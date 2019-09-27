@@ -29,7 +29,7 @@ function wpum_get_settings() {
  *
  * @param string $key
  * @param boolean $default
- * @return void
+ * @return mixed
  */
 function wpum_get_option( $key = '', $default = false ) {
 	global $wpum_options;

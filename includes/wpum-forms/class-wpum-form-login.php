@@ -199,8 +199,9 @@ class WPUM_Form_Login extends WPUM_Form {
 
 			$redirect = get_permalink( wpum_get_core_page_id( 'login' ) );
 
-			if ( ! empty( wpum_get_login_redirect() ) ) {
-				$redirect = wpum_get_login_redirect();
+			$login_redirect = wpum_get_login_redirect();
+			if ( ! empty( $login_redirect ) ) {
+				$redirect = $login_redirect;
 			}
 
 			if( isset( $_GET['redirect_to'] ) && ! empty( $_GET['redirect_to'] ) ) {

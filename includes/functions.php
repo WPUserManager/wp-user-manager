@@ -48,6 +48,21 @@ function wpum_get_pages( $force = false ) {
 	return $pages;
 }
 
+function wpum_get_redirect_pages() {
+	$pages = wpum_get_pages();
+
+	if ( 'posts' == get_option( 'show_on_front' ) ) {
+		$homepage = array( array(
+			'value' => 'hp',
+			'label' => __( 'Homepage', 'wp-user-manager' ),
+		) );
+
+		$pages = array_merge( $homepage, $pages );
+	}
+
+	return $pages;
+}
+
 /**
  * Retrieve the options for the available login methods.
  *
@@ -231,21 +246,49 @@ function wpum_get_login_label() {
 }
 
 /**
+ * Get redirect URL by option name
+ *
+ * @param string $option
+ *
+ * @return string
+ */
+function wpum_get_redirect_option_url( $option ) {
+	$redirect_to = wpum_get_option( $option );
+	$url         = false;
+
+	if ( ! empty( $redirect_to ) && is_array( $redirect_to ) ) {
+		$url = 'hp' == $redirect_to[0] ? home_url() :  get_permalink( $redirect_to[0] );
+	}
+
+	return apply_filters( 'wpum_get_' . $option, esc_url( $url ) );
+}
+
+/**
  * Retrieve the url where to redirect the user after login.
  *
  * @return string
  */
 function wpum_get_login_redirect() {
+	return wpum_get_redirect_option_url( 'login_redirect' );
+}
 
-	$redirect_to = wpum_get_option( 'login_redirect' );
-	$url         = false;
+/**
+ * Retrieve the url where to redirect the user after registration.
+ *
+ * @return string
+ */
+function wpum_get_registration_redirect() {
+	return wpum_get_redirect_option_url( 'registration_redirect' );
+}
 
-	if ( ! empty( $redirect_to ) && is_array( $redirect_to ) ) {
-		$url = get_permalink( $redirect_to[0] );
-	}
 
-	return apply_filters( 'wpum_get_login_redirect', esc_url( $url ) );
-
+/**
+ * Retrieve the url where to redirect the user after logout.
+ *
+ * @return string
+ */
+function wpum_get_logout_redirect() {
+	return wpum_get_redirect_option_url( 'logout_redirect' );
 }
 
 /**
