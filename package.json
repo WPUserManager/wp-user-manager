@@ -2,11 +2,11 @@
   "name": "wp-user-manager",
   "title": "WP User Manager",
   "description": "Plugin",
-  "version": "2.1.8",
-  "homepage": "http://wpusermanager.com",
+  "version": "2.1.9",
+  "homepage": "https://wpusermanager.com",
   "author": {
-    "name": "Alessandro Tesoro",
-    "url": "http://alessandrotesoro.me"
+    "name": "WP User Manager",
+    "url": "https://wpusermanager.com"
   },
   "repository": {
     "type": "git",
