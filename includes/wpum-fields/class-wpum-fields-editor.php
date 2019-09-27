@@ -55,7 +55,7 @@ class WPUM_Fields_Editor {
 	public function setup_menu_page() {
 		add_users_page(
 			esc_html__( 'WP User Manager Fields Editor', 'wp-user-manager' ),
-			esc_html__( 'Custom fields', 'wp-user-manager' ),
+			esc_html__( 'Custom Fields', 'wp-user-manager' ),
 			'manage_options',
 			'wpum-custom-fields',
 			[ $this, 'display_fields_editor' ]

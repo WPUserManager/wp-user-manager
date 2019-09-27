@@ -41,7 +41,7 @@ class WPUM_Registration_Forms_Editor {
 	public function setup_menu_page() {
 		add_users_page(
 			esc_html__( 'WP User Manager Registration Forms Editor', 'wp-user-manager' ),
-			esc_html__( 'Registration forms', 'wp-user-manager' ),
+			esc_html__( 'Registration Forms', 'wp-user-manager' ),
 			'manage_options',
 			'wpum-registration-forms',
 			[ $this, 'display_registration_forms_editor' ]

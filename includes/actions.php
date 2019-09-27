@@ -68,7 +68,7 @@ function wpum_admin_bar_menu( $wp_admin_bar ) {
 	$args = array(
 		'id'     => 'wpum_registration_forms',
 		'href'   => admin_url( 'users.php?page=wpum-registration-forms' ),
-		'title'  => esc_html__( 'Registration forms', 'wp-user-manager' ),
+		'title'  => esc_html__( 'Registration Forms', 'wp-user-manager' ),
 		'parent' => 'wpum_node',
 	);
 	$wp_admin_bar->add_node( $args );
