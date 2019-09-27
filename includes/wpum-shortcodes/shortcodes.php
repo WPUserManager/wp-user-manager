@@ -695,6 +695,17 @@ function wpum_directory( $atts, $content = null ) {
 				'compare' => 'LIKE',
 			),
 		);
+
+		add_action( 'pre_user_query', function ( $uqi ) {
+			$search = '';
+			if ( isset( $uqi->query_vars['search'] ) ) {
+				$search = trim( $uqi->query_vars['search'] );
+			}
+
+			if ( $search ) {
+				$uqi->query_where = str_replace( ') AND (user_login LIKE ', ') OR (user_login LIKE ', $uqi->query_where );
+			}
+		} );
 	}
 
 	$args['offset'] = $offset;
