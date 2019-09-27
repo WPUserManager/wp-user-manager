@@ -1118,7 +1118,7 @@ function wpum_get_plugins() {
 			$plugins[ $plugin_path ]['Status'] = 'inactive';
 		}
 		$dirname = strtolower( dirname( $plugin_path ) );
-		if ( strstr( $dirname, 'wpum-' ) && strstr( $plugin_data['AuthorURI'], 'wpusermanagerr.com' ) ) {
+		if ( strstr( $dirname, 'wpum-' ) && strstr( $plugin_data['AuthorURI'], 'wpusermanager.com' ) ) {
 			$plugins[ $plugin_path ]['Type'] = 'add-on';
 			$license_active                  = __wpum_get_active_license_info( WPUM_License::get_short_name( $plugin_data['Name'] ) );
 			if ( ! empty( $license_active ) && 'valid' === $license_active->license ) {
