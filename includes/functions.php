@@ -313,7 +313,7 @@ function wpum_get_disabled_usernames() {
 		$list = trim( wpum_get_option( 'exclude_usernames' ) );
 		$list = explode( "\n", str_replace( "\r", '', $list ) );
 		foreach ( $list as $username ) {
-			$usernames[] = $username;
+			$usernames[] = strtolower( $username );
 		}
 	}
 	return array_flip( $usernames );

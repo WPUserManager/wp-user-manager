@@ -135,7 +135,7 @@ class WPUM_Form_Registration extends WPUM_Form {
 	public function validate_username( $pass, $fields, $values, $form ) {
 
 		if ( $form == $this->form_name && isset( $values['register']['username'] ) ) {
-			if ( wpum_get_option( 'exclude_usernames' ) && array_key_exists( $values['register']['username'], wpum_get_disabled_usernames() ) ) {
+			if ( wpum_get_option( 'exclude_usernames' ) && array_key_exists( strtolower( $values['register']['username'] ), wpum_get_disabled_usernames() ) ) {
 				return new WP_Error( 'nickname-validation-error', __( 'This username cannot be used.', 'wp-user-manager' ) );
 			}
 		}
