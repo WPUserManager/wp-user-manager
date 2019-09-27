@@ -48,7 +48,7 @@ For more functionality check out [the add-ons page](https://wpusermanager.com/ad
 = Free Extensions =
 
 - [Google reCAPTCHA](https://wpusermanager.com/addons/recaptcha): Stop spam registrations on your website for free.
-- [Username Length](https://wpusermanager.com/addons/username-length): Set minimum and maximum characters length for usernames.
+- [Username Length](https://wordpress.org/plugins/wpum-username-length): Set minimum and maximum characters length for usernames.
 - [Personal Data](https://wpusermanager.com/addons/personal-data): Allows the user to request an export of personal data and request erasure of personal data from the account page for GDPR compliance.
 - [Delete Account](https://wpusermanager.com/addons/delete-account): Allows the user to delete their own profile from the frontend account page.
 
