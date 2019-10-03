@@ -76,10 +76,12 @@ class WPUM_License {
 	/**
 	 * Construction function.
 	 *
-	 * @param string $file    file path.
-	 * @param string $item_name    item name.
-	 * @param string $version version of the addon.
-	 * @param string $author  author of the addon.
+	 * @param string      $file      file path.
+	 * @param string      $item_name item name.
+	 * @param string      $item_id
+	 * @param string      $version   version of the addon.
+	 * @param string      $author    author of the addon.
+	 * @param string|null $_api_url
 	 */
 	public function __construct( $file, $item_name, $item_id, $version, $author, $_api_url = null ) {
 
@@ -88,6 +90,12 @@ class WPUM_License {
 		$this->item_id   = $item_id;
 		$this->version   = $version;
 		$this->author    = $author;
+
+		if ( false !== strpos( $item_id, '.' ) ) {
+			// Fix older versions of addons that had these arguments reversed
+			$this->item_id   = $version;
+			$this->version   = $item_id;
+		}
 
 		if ( ! empty( $_api_url ) ) {
 			$this->api_url = $_api_url;
