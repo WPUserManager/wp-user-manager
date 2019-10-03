@@ -439,6 +439,16 @@ class WPUM_Form_Registration extends WPUM_Form {
 				$user->set_role( $this->role );
 			}
 
+			if ( isset( $values['register']['user_cover']['url'] ) ) {
+				carbon_set_user_meta( $user->ID, 'user_cover', $values['register']['user_cover']['url'] );
+				update_user_meta( $user->ID, '_user_cover_path', $values['register']['user_cover']['path'] );
+			}
+
+			if ( isset( $values['register']['user_avatar']['url'] ) ) {
+				carbon_set_user_meta( $user->ID, 'current_user_avatar', $values['register']['user_avatar']['url'] );
+				update_user_meta( $user->ID, '_current_user_avatar_path', $values['register']['user_avatar']['path'] );
+			}
+
 			// Allow developers to extend signup process.
 			do_action( 'wpum_before_registration_end', $new_user_id, $values );
 

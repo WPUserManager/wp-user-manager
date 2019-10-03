@@ -268,11 +268,17 @@ class WPUM_Registration_Forms_Editor {
 		] );
 
 		$non_allowed_fields = [
-			'user_avatar',
-			'user_cover',
 			'user_nickname',
 			'user_displayname'
 		];
+
+		if ( ! wpum_get_option( 'custom_avatars' ) ) {
+			$non_allowed_fields[] = 'user_avatar';
+		}
+
+		if ( wpum_get_option( 'disable_profile_cover' ) ) {
+			$non_allowed_fields[] = 'user_cover';
+		}
 
 		// Get fields already been used.
 		$form          = new WPUM_Registration_Form( $form_id );
