@@ -381,7 +381,7 @@ class WPUM_Options_Panel {
 				array(
 					'id'      => 'login_redirect',
 					'name'    => __( 'After login', 'wp-user-manager' ),
-					'desc'    => __( 'Select the page where you want to redirect users after they login. Leave blank to redirect users to the previously visited page.', 'wp-user-manager' ),
+					'desc'    => __( 'Select the page where you want to redirect users after they login. If empty it will reload the login page.', 'wp-user-manager' ),
 					'type'    => 'multiselect',
 					'options' => wpum_get_redirect_pages(),
 				),
