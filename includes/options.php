@@ -74,6 +74,7 @@ function wpum_update_option( $key = '', $value = false ) {
 	// If it updated, let's update the global variable.
 	if ( $did_update ) {
 		global $wpum_options;
+		$wpum_options         = is_array( $wpum_options ) ? $wpum_options : array();
 		$wpum_options[ $key ] = $value;
 	}
 
