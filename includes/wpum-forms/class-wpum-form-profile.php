@@ -358,14 +358,14 @@ class WPUM_Form_Profile extends WPUM_Form {
 				if ( $currently_uploaded_file && $existing_avatar_file_path && isset( $values['account']['user_avatar']['url'] ) && $values['account']['user_avatar']['url'] !== $currently_uploaded_file ) {
 					wp_delete_file( $existing_avatar_file_path );
 				}
-				if ( isset( $values['account']['user_avatar']['url'] ) && $currently_uploaded_file !== $values['account']['user_avatar']['url'] ) {
-					carbon_set_user_meta( $updated_user_id, 'current_user_avatar', $values['account']['user_avatar']['url'] );
-					update_user_meta( $updated_user_id, '_current_user_avatar_path', $values['account']['user_avatar']['path'] );
-				}
 				if ( ! $currently_uploaded_file && file_exists( $existing_avatar_file_path ) ) {
 					wp_delete_file( $existing_avatar_file_path );
 					carbon_set_user_meta( $updated_user_id, 'current_user_avatar', false );
 					delete_user_meta( $updated_user_id, '_current_user_avatar_path' );
+				}
+				if ( isset( $values['account']['user_avatar']['url'] ) && $currently_uploaded_file !== $values['account']['user_avatar']['url'] ) {
+					carbon_set_user_meta( $updated_user_id, 'current_user_avatar', $values['account']['user_avatar']['url'] );
+					update_user_meta( $updated_user_id, '_current_user_avatar_path', $values['account']['user_avatar']['path'] );
 				}
 			}
 
