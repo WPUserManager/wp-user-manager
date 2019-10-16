@@ -8,7 +8,7 @@ Tested up to: 5.2.3
 Requires PHP: 5.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
-Stable tag: 2.1.10
+Stable tag: 2.1.11
 
 The most customizable profiles & community builder WordPress plugin with front-end login, registration, profile customization and content restriction.
 
@@ -114,6 +114,13 @@ Please note that using WPUM and the mentioned add-ons does NOT guarantee complia
 13. Login form.
 
 == Changelog ==
+
+= 2.1.11 (16th October 2019) =
+
+- Fix: User avatar not saved if changing an existing image on the edit account page
+- Fix: Select, dropdown and multiselect fields set as readonly can still be changed
+- Fix: Date fields set as readonly still have the date picker and can be changed
+- Fix: PHP Warning: Cannot use a scalar value as an array on first install
 
 = 2.1.10 ( 4th October 2019 ) =
 
