@@ -1,6 +1,6 @@
-/*! WP User Manager - v2.0.0
- * http://wpusermanager.com
- * Copyright (c) 2018; * Licensed GPLv2+ */
+/*! WP User Manager - v2.1.10
+ * https://wpusermanager.com
+ * Copyright (c) 2019; * Licensed GPLv2+ */
 jQuery(document).ready(function ($) {
 	$(document.body).on('click', '.wpum-remove-uploaded-file', function () {
 		$(this).closest('.wpum-uploaded-file').remove();
@@ -9,7 +9,7 @@ jQuery(document).ready(function ($) {
 	$('.wpum-multiselect').select2({
 		theme: 'default'
 	});
-	$('.wpum-datepicker').flatpickr({
+	$('.wpum-datepicker:not([readonly])').flatpickr({
 		dateFormat: wpumFrontend.dateFormat
 	});
 });

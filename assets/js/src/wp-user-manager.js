@@ -6,7 +6,7 @@ jQuery(document).ready(function ($) {
 	$('.wpum-multiselect').select2({
 		theme: 'default'
 	});
-	$('.wpum-datepicker').flatpickr({
+	$('.wpum-datepicker:not([readonly])').flatpickr({
 		dateFormat: wpumFrontend.dateFormat
 	});
 });
