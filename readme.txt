@@ -8,7 +8,7 @@ Tested up to: 5.2.4
 Requires PHP: 5.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
-Stable tag: 2.1.11
+Stable tag: 2.1.12
 
 The most customizable profiles & community builder WordPress plugin with front-end login, registration, profile customization and content restriction.
 
@@ -52,7 +52,6 @@ For more functionality check out [the add-ons page](https://wpusermanager.com/ad
 - [Social Login & Registration](https://wpusermanager.com/addons/social-login/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager): Allow your users to quickly login and register with their favorite social network account, Facebook, Twitter, Instagram, LinkedIn & Instagram.
 - [MailChimp](https://wpusermanager.com/addons/mailchimp/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager): Sync users with MailChimp upon registration & more.
 - [Google reCAPTCHA](https://wpusermanager.com/addons/recaptcha?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager): Stop spam registrations on your website for free.
-
 
 = Free Extensions =
 
@@ -115,6 +114,11 @@ Please note that using WPUM and the mentioned add-ons does NOT guarantee complia
 13. Login form.
 
 == Changelog ==
+
+= 2.1.12 (19th October 2019) =
+
+- New: reCaptcha paid addon with support for the Google reCAPTCHA API v3, and API v2 invisible and checkbox reCAPTCHAs.
+- Update wp-optionskit package
 
 = 2.1.11 (16th October 2019) =
 
