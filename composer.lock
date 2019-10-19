@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "37cee2e07f39e50f931264ea326bcfb1",
+    "content-hash": "310efef2378e21c8988c3108c200ca44",
     "packages": [
         {
             "name": "a5hleyrich/wp-background-processing",
@@ -85,48 +85,6 @@
             "time": "2019-05-29T11:24:20+00:00"
         },
         {
-            "name": "alessandrotesoro/wp-optionskit",
-            "version": "1.0.5",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/alessandrotesoro/wp-optionskit.git",
-                "reference": "73cc202af86ce5b0f0203da89a8a13f76a7ceb85"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/alessandrotesoro/wp-optionskit/zipball/73cc202af86ce5b0f0203da89a8a13f76a7ceb85",
-                "reference": "73cc202af86ce5b0f0203da89a8a13f76a7ceb85",
-                "shasum": ""
-            },
-            "require": {
-                "composer/installers": "~1.0",
-                "php": ">=5.3.2"
-            },
-            "type": "library",
-            "autoload": {
-                "classmap": [
-                    "wp-optionskit.php"
-                ]
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "GPL-3.0-or-later"
-            ],
-            "authors": [
-                {
-                    "name": "Alessandro Tesoro",
-                    "homepage": "http://alessandrotesoro.me"
-                }
-            ],
-            "description": "A toolkit for developers to create administration options panels for WordPress powered by Vuejs",
-            "homepage": "https://github.com/alessandrotesoro/wp-optionskit/",
-            "keywords": [
-                "optionskit",
-                "wordpress"
-            ],
-            "time": "2018-05-05T15:52:37+00:00"
-        },
-        {
             "name": "brain/cortex",
             "version": "1.0.0-alpha.7",
             "source": {
@@ -183,16 +141,16 @@
         },
         {
             "name": "composer/installers",
-            "version": "v1.6.0",
+            "version": "v1.7.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/composer/installers.git",
-                "reference": "cfcca6b1b60bc4974324efb5783c13dca6932b5b"
+                "reference": "141b272484481432cda342727a427dc1e206bfa0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/composer/installers/zipball/cfcca6b1b60bc4974324efb5783c13dca6932b5b",
-                "reference": "cfcca6b1b60bc4974324efb5783c13dca6932b5b",
+                "url": "https://api.github.com/repos/composer/installers/zipball/141b272484481432cda342727a427dc1e206bfa0",
+                "reference": "141b272484481432cda342727a427dc1e206bfa0",
                 "shasum": ""
             },
             "require": {
@@ -248,6 +206,7 @@
                 "RadPHP",
                 "SMF",
                 "Thelia",
+                "Whmcs",
                 "WolfCMS",
                 "agl",
                 "aimeos",
@@ -270,6 +229,7 @@
                 "installer",
                 "itop",
                 "joomla",
+                "known",
                 "kohana",
                 "laravel",
                 "lavalite",
@@ -299,7 +259,7 @@
                 "zend",
                 "zikula"
             ],
-            "time": "2018-08-27T06:10:37+00:00"
+            "time": "2019-08-12T15:00:31+00:00"
         },
         {
             "name": "gamajo/template-loader",
@@ -618,6 +578,48 @@
                 "wordpress"
             ],
             "time": "2019-03-11T11:11:33+00:00"
+        },
+        {
+            "name": "wp-user-manager/wp-optionskit",
+            "version": "1.0.6",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/WPUserManager/wp-optionskit.git",
+                "reference": "66a7fe21b54b39bff1c1fb9c35be8fad7b21818e"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/WPUserManager/wp-optionskit/zipball/66a7fe21b54b39bff1c1fb9c35be8fad7b21818e",
+                "reference": "66a7fe21b54b39bff1c1fb9c35be8fad7b21818e",
+                "shasum": ""
+            },
+            "require": {
+                "composer/installers": "~1.0",
+                "php": ">=5.3.2"
+            },
+            "type": "library",
+            "autoload": {
+                "classmap": [
+                    "wp-optionskit.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-3.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "WP User Manager",
+                    "homepage": "https://wpusermanager.com/"
+                }
+            ],
+            "description": "A toolkit for developers to create administration options panels for WordPress powered by Vuejs",
+            "homepage": "https://github.com/alessandrotesoro/wp-optionskit/",
+            "keywords": [
+                "optionskit",
+                "wordpress"
+            ],
+            "time": "2019-10-19T13:25:34+00:00"
         },
         {
             "name": "wpbp/widgets-helper",
