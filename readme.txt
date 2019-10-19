@@ -4,7 +4,7 @@ Plugin URI: https://wpusermanager.com
 Contributors: wpusermanager, polevaultweb, alessandro.tesoro
 Tags: members, profile, community, user profile, user registration
 Requires at least: 4.9
-Tested up to: 5.2.3
+Tested up to: 5.2.4
 Requires PHP: 5.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -51,10 +51,11 @@ For more functionality check out [the add-ons page](https://wpusermanager.com/ad
 - [User Verification](https://wpusermanager.com/addons/user-verification/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager): Send a verification link via email upon registration or manually approve users before they can login.
 - [Social Login & Registration](https://wpusermanager.com/addons/social-login/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager): Allow your users to quickly login and register with their favorite social network account, Facebook, Twitter, Instagram, LinkedIn & Instagram.
 - [MailChimp](https://wpusermanager.com/addons/mailchimp/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager): Sync users with MailChimp upon registration & more.
+- [Google reCAPTCHA](https://wpusermanager.com/addons/recaptcha?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager): Stop spam registrations on your website for free.
+
 
 = Free Extensions =
 
-- [Google reCAPTCHA](https://wpusermanager.com/addons/recaptcha?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager): Stop spam registrations on your website for free.
 - [Username Length](https://wordpress.org/plugins/wpum-username-length): Set minimum and maximum characters length for usernames.
 - [Personal Data](https://wpusermanager.com/addons/personal-data?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager): Allows the user to request an export of personal data and request erasure of personal data from the account page for GDPR compliance.
 - [Delete Account](https://wpusermanager.com/addons/delete-account?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager): Allows the user to delete their own profile from the frontend account page.
