@@ -93,7 +93,7 @@ class WPUM_Menus {
 	public function cssjs() {
 		?>
 		<style>
-			.carbon-field.carbon-checkbox {padding-left:0px !important;}
+			#menu-management .carbon-field.carbon-checkbox {padding-left:0px !important;}
 			.wpum-link-visibility-roles {display:none};
 		</style>
 		<?php
