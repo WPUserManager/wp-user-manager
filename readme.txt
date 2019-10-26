@@ -22,8 +22,8 @@ The most customizable profiles & community builder WordPress plugin with front-e
 
 = Features included =
 
-- [Frontend Forms](https://wpusermanager.com/features/front-end-forms/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager).
-- [Custom Email Notifications](https://wpusermanager.com/features/custom-email-notifications/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager).
+- [Frontend forms](https://wpusermanager.com/features/front-end-forms/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager).
+- [Custom email notifications](https://wpusermanager.com/features/custom-email-notifications/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager).
 - [Custom avatars](https://wpusermanager.com/features/custom-avatars/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager).
 - [Elegant user profiles](https://wpusermanager.com/features/elegant-user-profiles/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager).
 - [Shortcodes editor](https://wpusermanager.com/features/shortcodes/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager).
