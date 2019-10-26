@@ -141,19 +141,19 @@ class WPUM_Updates {
 		/**
 		 * Setup hooks.
 		 */
-		add_action( 'init', array( $this, '__register_upgrade' ), 9999 );
-		add_action( 'wpum_set_upgrade_completed', array( $this, '__flush_resume_updates' ), 9999 );
-		add_action( 'wp_ajax_wpum_db_updates_info', array( $this, '__wpum_db_updates_info' ) );
-		add_action( 'wp_ajax_wpum_run_db_updates', array( $this, '__wpum_start_updating' ) );
-		add_action( 'admin_init', array( $this, '__redirect_admin' ) );
-		add_action( 'admin_init', array( $this, '__pause_db_update' ), - 1 );
-		add_action( 'admin_init', array( $this, '__restart_db_update' ), - 1 );
-		add_action( 'admin_notices', array( $this, '__show_notice' ) );
-		add_action( 'wpum_restart_db_upgrade', array( $this, '__health_background_update' ) );
+		add_action( 'init', array( $this, 'register_upgrade' ), 9999 );
+		add_action( 'wpum_set_upgrade_completed', array( $this, 'flush_resume_updates' ), 9999 );
+		add_action( 'wp_ajax_wpum_db_updates_info', array( $this, 'wpum_db_updates_info' ) );
+		add_action( 'wp_ajax_wpum_run_db_updates', array( $this, 'wpum_start_updating' ) );
+		add_action( 'admin_init', array( $this, 'redirect_admin' ) );
+		add_action( 'admin_init', array( $this, 'pause_db_update' ), - 1 );
+		add_action( 'admin_init', array( $this, 'restart_db_update' ), - 1 );
+		add_action( 'admin_notices', array( $this, 'show_notice' ) );
+		add_action( 'wpum_restart_db_upgrade', array( $this, 'health_background_update' ) );
 
 		if ( is_admin() ) {
-			add_action( 'admin_init', array( $this, '__change_users_label' ), 9999 );
-			add_action( 'admin_menu', array( $this, '__register_menu' ), 9999 );
+			add_action( 'admin_init', array( $this, 'change_users_label' ), 9999 );
+			add_action( 'admin_menu', array( $this, 'register_menu' ), 9999 );
 		}
 	}
 
@@ -162,7 +162,7 @@ class WPUM_Updates {
 	 *
 	 * @access public
 	 */
-	public function __register_plugin_addon_updates() {
+	public function register_plugin_addon_updates() {
 		$addons         = wpum_get_plugins();
 		$plugin_updates = get_plugin_updates();
 
@@ -181,7 +181,7 @@ class WPUM_Updates {
 	 *
 	 * @access public
 	 */
-	public function __register_upgrade() {
+	public function register_upgrade() {
 		if ( ! is_admin() ) {
 			return;
 		}
@@ -197,7 +197,7 @@ class WPUM_Updates {
 	 *
 	 * @access public
 	 */
-	function __change_users_label() {
+	public function change_users_label() {
 		global $menu;
 
 		// Bailout.
@@ -230,9 +230,9 @@ class WPUM_Updates {
 	 *
 	 * @access public
 	 */
-	public function __register_menu() {
+	public function register_menu() {
 		// Load plugin updates.
-		$this->__register_plugin_addon_updates();
+		$this->register_plugin_addon_updates();
 
 		// Bailout.
 		if ( ! $this->get_total_update_count() ) {
@@ -270,7 +270,7 @@ class WPUM_Updates {
 	 *
 	 * @access public
 	 */
-	public function __redirect_admin() {
+	public function redirect_admin() {
 		// Show db upgrade completed notice.
 		if (
 			! wp_doing_ajax() &&
@@ -293,7 +293,7 @@ class WPUM_Updates {
 	 * @param bool $force
 	 * @return bool
 	 */
-	public function __pause_db_update( $force = false ) {
+	public function pause_db_update( $force = false ) {
 		// Bailout.
 		if (
 			! $force &&
@@ -311,7 +311,7 @@ class WPUM_Updates {
 
 		delete_option( 'wpum_upgrade_error' );
 
-		$this->__health_background_update( $this );
+		$this->health_background_update( $this );
 		$batch = self::$background_updater->get_all_batch();
 
 		// Bailout: if batch is empty
@@ -349,7 +349,7 @@ class WPUM_Updates {
 	 * @access public
 	 * @return bool
 	 */
-	public function __restart_db_update() {
+	public function restart_db_update() {
 		// Bailout.
 		if (
 			wp_doing_ajax() ||
@@ -384,7 +384,7 @@ class WPUM_Updates {
 	 * @access public
 	 * @param WPUM_Updates $wpum_updates
 	 */
-	public function __health_background_update( $wpum_updates ) {
+	public function health_background_update( $wpum_updates ) {
 		if ( ! $this->is_doing_updates() ) {
 			return;
 		}
@@ -466,7 +466,7 @@ class WPUM_Updates {
 			self::$background_updater->delete( $batch->key );
 
 			if ( self::$background_updater->has_queue() ) {
-				$this->__health_background_update( $this );
+				$this->health_background_update( $this );
 			} else {
 				delete_site_transient( self::$background_updater->get_identifier() . '_process_lock' );
 				wp_clear_scheduled_hook( self::$background_updater->get_cron_identifier() );
@@ -543,7 +543,7 @@ class WPUM_Updates {
 	 *
 	 * @access public
 	 */
-	public function __show_notice() {
+	public function show_notice() {
 		$current_screen = get_current_screen();
 
 		// Bailout.
@@ -675,7 +675,7 @@ class WPUM_Updates {
 	 *
 	 * @access public
 	 */
-	public function __flush_resume_updates() {
+	public function flush_resume_updates() {
 		//delete_option( 'wpum_doing_upgrade' );
 		update_option( 'wpum_version', preg_replace( '/[^0-9.].*/', '', WPUM_VERSION ) );
 
@@ -694,7 +694,7 @@ class WPUM_Updates {
 	 * @access public
 	 * @return void
 	 */
-	public function __wpum_start_updating() {
+	public function wpum_start_updating() {
 		// Check permission.
 		if (
 			! current_user_can( 'manage_options' ) ||
@@ -721,7 +721,7 @@ class WPUM_Updates {
 	 * @access public
 	 * @return string
 	 */
-	public function __wpum_db_updates_info() {
+	public function wpum_db_updates_info() {
 		$update_info   = get_option( 'wpum_doing_upgrade' );
 		$response_type = '';
 
