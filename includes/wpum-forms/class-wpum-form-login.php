@@ -210,6 +210,8 @@ class WPUM_Form_Login extends WPUM_Form {
 
 			$user = wp_signon( $creds );
 
+			wp_set_current_user( $user->ID );
+
 			if( is_wp_error( $user ) ) {
 				throw new Exception( $user->get_error_message() );
 			} else {
