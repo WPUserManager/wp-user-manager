@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "310efef2378e21c8988c3108c200ca44",
+    "content-hash": "0737c3f4cb915e842e8ecf264c12cf27",
     "packages": [
         {
             "name": "a5hleyrich/wp-background-processing",
@@ -581,16 +581,16 @@
         },
         {
             "name": "wp-user-manager/wp-optionskit",
-            "version": "1.0.6",
+            "version": "1.0.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/WPUserManager/wp-optionskit.git",
-                "reference": "66a7fe21b54b39bff1c1fb9c35be8fad7b21818e"
+                "reference": "dd8813363f54cdd9536669edc2bf356eb0486a1d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/WPUserManager/wp-optionskit/zipball/66a7fe21b54b39bff1c1fb9c35be8fad7b21818e",
-                "reference": "66a7fe21b54b39bff1c1fb9c35be8fad7b21818e",
+                "url": "https://api.github.com/repos/WPUserManager/wp-optionskit/zipball/dd8813363f54cdd9536669edc2bf356eb0486a1d",
+                "reference": "dd8813363f54cdd9536669edc2bf356eb0486a1d",
                 "shasum": ""
             },
             "require": {
@@ -619,7 +619,7 @@
                 "optionskit",
                 "wordpress"
             ],
-            "time": "2019-10-19T13:25:34+00:00"
+            "time": "2019-11-07T12:23:44+00:00"
         },
         {
             "name": "wpbp/widgets-helper",
