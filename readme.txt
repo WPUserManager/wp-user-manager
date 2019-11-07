@@ -8,7 +8,7 @@ Tested up to: 5.2.4
 Requires PHP: 5.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
-Stable Tag: 2.1.12
+Stable Tag: 2.1.13
 
 The most customizable profiles & community builder WordPress plugin with front-end login, registration, profile customization and content restriction.
 
@@ -115,6 +115,15 @@ Please note that using WPUM and the mentioned add-ons does NOT guarantee complia
 13. Login form.
 
 == Changelog ==
+
+= 2.1.13 (7th November 2019) =
+
+- New: WooCommerce addon. Allow members to update their billing and shipping addresses, display product purchases, reviews and more!
+- Tweak: Added 'wpum_directory_search_query_args' filter for the directory query arguments
+- Fix: Checkbox padding style issue in the edit directory screen
+- Fix: PHP 7 compatibility warnings
+- Fix: Ensure the current user is set on login
+- Fix: Fatal error when viewing the plugin details for an addon that has an update
 
 = 2.1.12 (19th October 2019) =
 
