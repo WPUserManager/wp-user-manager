@@ -137,13 +137,13 @@ Please note that using WPUM and the mentioned add-ons does NOT guarantee complia
 - Fix: Date fields set as readonly still have the date picker and can be changed
 - Fix: PHP Warning: Cannot use a scalar value as an array on first install
 
-= 2.1.10 ( 4th October 2019 ) =
+= 2.1.10 (4th October 2019) =
 
 - Improvement: Allow the avatar and cover image fields to be added to the registration form
 - Fix: Premium Addons not receiving updates
 - Fix: Incorrect wording about login behaviour
 
-= 2.1.9 ( 27th September 2019 ) =
+= 2.1.9 (27th September 2019) =
 
 - WP User Manager has been [acquired by Pole Vault Web](https://wpusermanager.com/acquired/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager)
 - Improvement: Added Homepage option for login, logout, and registration redirects for sites showing blog posts as the homepage
@@ -151,7 +151,7 @@ Please note that using WPUM and the mentioned add-ons does NOT guarantee complia
 - Fix: Directory search not finding users when searching by first/last name
 - Fix: Excluded usernames check not performing case insensitive check
 
-= 2.1.8 ( 18th August 2019 ) =
+= 2.1.8 (18th August 2019) =
 
 - Tweak: improved data escaping in some areas.
 - Tweak: added filters for developers to modify the profile and content restriction messages.
@@ -159,16 +159,16 @@ Please note that using WPUM and the mentioned add-ons does NOT guarantee complia
 - Fix: redirect to login page when wp-login is locked instead of the homepage.
 - Fix: some characters not accepted into urls for account and profile page.
 
-= 2.1.7 ( 1st August 2019 ) =
+= 2.1.7 (1st August 2019) =
 
 - Tweak: updated language files to use last version of all strings.
 - Tweak: added new filter for developers that allows to modify the subject and content of the registration confirmation email sent to administrators.
 
-= 2.1.6 ( 11th July 2019 ) =
+= 2.1.6 (11th July 2019) =
 
 - Fix: issue with custom avatars not loading.
 
-= 2.1.5 ( 11th July 2019 ) =
+= 2.1.5 (11th July 2019) =
 
 - Tweak: updated widgets generator dependency.
 - Tweak: updated admin notices generator dependency.
@@ -177,26 +177,26 @@ Please note that using WPUM and the mentioned add-ons does NOT guarantee complia
 - Tweak: added hook after the user recovers his password from the forgotten password form.
 - Fix: cover field in the admin panel would disappear when custom avatars were disabled.
 
-= 2.1.4 ( 20th June 2019 )
+= 2.1.4 (20th June 2019) =
 
 - Fix: admin role should be excluded from menu items unless selected
 - Tweak: added utility function for developers to fields groups class.
 - Tweak: reduced queries when loading fields in account form.
 - Tweak: lowered priority of certain menu items in the account form page.
 
-= 2.1.3 ( 24th May 2019 )
+= 2.1.3 (24th May 2019) =
 
 - Tweak: show an alert to automatically fix missing data when default data hasn't installed.
 - Fixed: finish first time data installation after the whole plugin has booted.
 
-= 2.1.2 ( 13th May 2019 )
+= 2.1.2 (13th May 2019) =
 
 - Added: option to disable profile cover image field.
 - Fixed: lock access to wp-login.php when enabled.
 - Fixed: make sure url is correctly formatted on account page.
 - Fixed: make sure pages are published before adding rewrite rules.
 
-= 2.1.1 ( 24th April 2019 )
+= 2.1.1 (24th April 2019) =
 
 - Added: private pages can now be selected through the pages settings in the options panel.
 - Fixed: profile page not working when username has special characters.
@@ -205,11 +205,11 @@ Please note that using WPUM and the mentioned add-ons does NOT guarantee complia
 - Fixed: edge case preventing options panel to save settings due to capability missing.
 - Fixed: custom password overwritten when creating a new user manually in the admin panel.
 
-= 2.1.0 ( 25th March 2019 )
+= 2.1.0 (25th March 2019) =
 
 - Added: custom WPUM registration confirmation email is now sent when creating new users from the admin panel.
 
-= 2.0.9 ( 25th February 2019 )
+= 2.0.9 (25th February 2019) =
 
 - Fix: prevent wp-login.php redirect when the setting is disabled
 - Fix: wrongly formatted urls in emails when using third party email providers
@@ -219,24 +219,24 @@ Please note that using WPUM and the mentioned add-ons does NOT guarantee complia
 - Fix: login widget settings not working
 - Tweak: added automatic data installation fixer
 
-= 2.0.8 ( 22nd October 2018 )
+= 2.0.8 (22nd October 2018) =
 
 - Fix: when avatars disabled the avatar field would still be visible
 - Fix: when changing password, verification fails to detect if passwords do not match
 - Fix: when changing password, the form would redirect to the main account page instead of showing the success message
 - Tweak: added a toggle to disable the built-in custom menus controller [https://docs.wpusermanager.com/article/430-how-to-disable-the-built-in-custom-menu-controller](https://docs.wpusermanager.com/article/430-how-to-disable-the-built-in-custom-menu-controller)
 
-= 2.0.7 ( 19th September 2018 )
+= 2.0.7 (19th September 2018) =
 
 - Fix: profile tabs not correctly loading content in some cases.
 
-= 2.0.6 ( 10th September 2018 )
+= 2.0.6 (10th September 2018) =
 
 - Fix: detection of multiple selected roles within menu visibility rules.
 - Fix: encode printing of profile urls.
 - Fix: allow spaces and email addresses as usernames when viewing profiles.
 
-= 2.0.5 ( 31st July 2018 ) =
+= 2.0.5 (31st July 2018) =
 
 - Added: option to disable the built-in strong passwords verification - Users -> settings -> profiles
 - Fixed: password update confirmation notice not visible
@@ -244,7 +244,7 @@ Please note that using WPUM and the mentioned add-ons does NOT guarantee complia
 - Fixed: profile picture sizing within the account page
 - Tweak: updated language files
 
-= 2.0.4 ( 23th July 2018 ) =
+= 2.0.4 (23th July 2018) =
 
 - Tweak: make "username and email" default login method on plugin first install
 - Tweak: no longer show 404 error when accessing the profile page and not logged in
@@ -254,7 +254,7 @@ Please note that using WPUM and the mentioned add-ons does NOT guarantee complia
 - Fix: fatal error on plugin activation when using Yoast SEO
 - Fix: settings page empty or showing error in some cases
 
-= 2.0.3 ( 10th July 2018 ) =
+= 2.0.3 (10th July 2018) =
 - Fix: error when automatic login after registration is enabled which caused an issue with WooCommerce
 - Fix: password recovery broken on older php versions
 - Fix: licensing system looking for temporary url instead of live url
@@ -265,17 +265,17 @@ Please note that using WPUM and the mentioned add-ons does NOT guarantee complia
 - Fix: addon license required message still showing when license successfully activated
 - Fix: search by fist name and last name in user directory
 
-= 2.0.2 ( 2nd July 2018 )
+= 2.0.2 (2nd July 2018) =
 
 - Fix: migration routine not working in some cases.
 - Fix: login redirect not working in some cases.
 - Fix: compatibility of some functionalities with older php versions.
 
-= 2.0.1 ( 29th June 2018 )
+= 2.0.1 (29th June 2018) =
 - Fix: too many parameters sent to the menu editor hook
 - Fix: redirect loop when required pages aren't setup as they're supposed to
 
-= 2.0.0 ( 28th June 2018 ) =
+= 2.0.0 (28th June 2018) =
 - Complete rewrite of the plugin read more here: [https://wpusermanager.com/wpum-2-0-0-release/](https://wpusermanager.com/wpum-2-0-0-release/)
 
 = 1.4.3 =
