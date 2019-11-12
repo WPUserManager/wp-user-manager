@@ -265,7 +265,7 @@ function wpum_v200_upgrade_emails_callback() {
 
 	//$wpum_updates    = WPUM_Updates::get_instance();
 	$existing_emails = get_option( 'wpum_emails' );
-	$new_emails      = '';
+	$new_emails      = array();
 
 	if( ! empty( $existing_emails ) && is_array( $existing_emails ) ) {
 
@@ -300,7 +300,7 @@ function wpum_v200_upgrade_emails_callback() {
 
 	}
 
-	if( is_array( $new_emails ) && ! empty( $new_emails ) ) {
+	if( ! empty( $new_emails ) ) {
 		update_option( 'wpum_email', $new_emails );
 		//$wpum_updates->set_percentage( 100, 100 );
 	}

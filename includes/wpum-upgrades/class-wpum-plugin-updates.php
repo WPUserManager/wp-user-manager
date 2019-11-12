@@ -361,7 +361,7 @@ class WPUM_Plugin_Updates {
 	private function migrate_emails() {
 
 		$existing_emails = get_option( 'wpum_emails' );
-		$new_emails      = '';
+		$new_emails      = array();
 
 		if ( ! empty( $existing_emails ) && is_array( $existing_emails ) ) {
 
@@ -395,7 +395,7 @@ class WPUM_Plugin_Updates {
 			}
 		}
 
-		if ( is_array( $new_emails ) && ! empty( $new_emails ) ) {
+		if ( ! empty( $new_emails ) ) {
 			update_option( 'wpum_email', $new_emails );
 		}
 
