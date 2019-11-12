@@ -437,6 +437,17 @@ class WPUM_Plugin_Updates {
 				]
 			);
 
+			$fields = WPUM()->fields->get_fields();
+			usort( $fields, function ( $a, $b ) {
+				return $a->field_order > $b->field_order;
+			} );
+			$registration_fields = array();
+			foreach ( $fields as $field ) {
+				if ( '1' === $field->show_on_registration ) {
+					$registration_fields[] = $field->id;
+				}
+			}
+
 			$default_form = new WPUM_Registration_Form( $default_form_id );
 			$default_form->add_meta( 'default', true );
 			$default_form->add_meta( 'role', get_option( 'default_role' ) );
