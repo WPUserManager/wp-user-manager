@@ -142,12 +142,13 @@ if ( ! class_exists( 'WP_User_Manager' ) ) :
 		 * Ensures that only one instance of WPUM exists in memory at any one
 		 * time. Also prevents needing to define globals all over the place.
 		 *
-		 * @return WPUM
+		 * @return WP_User_Manager
 		 */
 		public static function instance() {
 			if ( is_null( self::$_instance ) ) {
 				self::$_instance = new self();
 			}
+
 			return self::$_instance;
 		}
 
