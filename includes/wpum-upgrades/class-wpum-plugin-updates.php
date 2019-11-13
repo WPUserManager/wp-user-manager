@@ -451,7 +451,7 @@ class WPUM_Plugin_Updates {
 			$default_form = new WPUM_Registration_Form( $default_form_id );
 			$default_form->add_meta( 'default', true );
 			$default_form->add_meta( 'role', get_option( 'default_role' ) );
-			$default_form->add_meta( 'fields', [] );
+			$default_form->add_meta( 'fields', $registration_fields );
 
 		}
 
