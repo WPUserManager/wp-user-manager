@@ -436,7 +436,16 @@ function wpum_send_registration_confirmation_email( $user_id, $psw = false ) {
 			 */
 			$subject = apply_filters( 'wpum_admin_registration_confirmation_email_subject', sprintf( esc_html__( '[%s] New User Registration', 'wp-user-manager' ), $blogname ), $user );
 
-			wp_mail( get_option( 'admin_email' ), $subject, $message );
+			/**
+			 * Filter: allow developers to customize the email recipient of the admin registration confirmation email.
+			 *
+			 * @param string $to_email the admin email address.
+			 *
+			 * @return string
+			 */
+			$to_email = apply_filters( 'wpum_admin_registration_confirmation_email_recipient', get_option( 'admin_email' ) );
+
+			wp_mail( $to_email, $subject, $message );
 		}
 
 		if ( $user instanceof WP_User ) {
