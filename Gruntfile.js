@@ -209,7 +209,8 @@ module.exports = function( grunt ) {
 					'!package.json',
 					'!.gitignore',
 					'!.gitmodules',
-					'!yarn.lock'
+					'!yarn.lock',
+					'!README.md'
 				],
 				dest: 'release/<%= pkg.version %>/'
 			}
