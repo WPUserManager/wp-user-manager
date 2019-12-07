@@ -15,7 +15,7 @@
 		<v-dialog/>
 		<modals-container/>
 
-		<table class="wp-list-table widefat fixed striped">
+		<table class="wp-list-table widefat fixed striped wpum-registration-forms-table">
 			<thead>
 				<tr>
 					<th scope="col" class="column-primary">{{labels.table_name}}</th>

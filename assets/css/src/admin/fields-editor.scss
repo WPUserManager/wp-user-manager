@@ -59,7 +59,7 @@ body.users_page_wpum-registration-forms {
 		}
 	}
 
-	.wpum-fields-groups-table, .wpum-registration-forms-list {
+	.wpum-fields-groups-table, .wpum-registration-forms-table {
 		tbody {
 			tr {
 				&:hover {
@@ -171,7 +171,7 @@ body.users_page_wpum-registration-forms {
 	.wpum-dialog {
 		.spinner {
 			float: none;
-			margin-top: 20px;
+			margin-top: 20px !important;
 		}
 	}
 
