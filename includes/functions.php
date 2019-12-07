@@ -1132,7 +1132,7 @@ function wpum_get_allowed_user_roles() {
 	}
 
 	$user_roles     = array();
-	$selected_roles = wpum_get_option( 'register_roles' );
+	$selected_roles = wpum_get_option( 'register_roles', array() );
 
 	$allowed_user_roles = is_array( $selected_roles ) ? $selected_roles : array( $selected_roles );
 
