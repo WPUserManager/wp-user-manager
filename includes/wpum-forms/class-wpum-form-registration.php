@@ -317,7 +317,7 @@ class WPUM_Form_Registration extends WPUM_Form {
 
 		if ( is_array( $registered_fields ) && ! empty( $registered_fields ) ) {
 			// Bail if no email field.
-			if ( ! isset( $registered_fields['user_email'] ) ) {
+			if ( ! isset( $registered_fields['user_email'] ) && ! isset( $registered_fields['username'] ) ) {
 				return false;
 			}
 			if ( isset( $registered_fields['username'] ) ) {
