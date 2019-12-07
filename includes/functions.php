@@ -445,7 +445,16 @@ function wpum_send_registration_confirmation_email( $user_id, $psw = false ) {
 			 */
 			$to_email = apply_filters( 'wpum_admin_registration_confirmation_email_recipient', get_option( 'admin_email' ) );
 
-			wp_mail( $to_email, $subject, $message );
+			/**
+			 * Filter: allow developers to customize the email headers of the admin registration confirmation email.
+			 *
+			 * @param string $headers the admin email headers.
+			 *
+			 * @return string|array
+			 */
+			$headers = apply_filters( 'wpum_admin_registration_confirmation_email_headers', '' );
+
+			wp_mail( $to_email, $subject, $message, $headers );
 		}
 
 		if ( $user instanceof WP_User ) {
