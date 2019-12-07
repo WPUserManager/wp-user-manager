@@ -10,7 +10,7 @@ body.users_page_wpum-registration-forms {
 		}
 	}
 
-	#wpum-add-field-group {
+	#wpum-add-field-group, #wpum-add-form {
 		span.dashicons {
 			width: 16px;
 			height: 16px;
@@ -19,6 +19,7 @@ body.users_page_wpum-registration-forms {
 			position: relative;
 			top: 3px;
 			margin-right: 2px;
+			color: #0071a1;
 		}
 	}
 
@@ -52,7 +53,13 @@ body.users_page_wpum-registration-forms {
 		width: 100px;
 	}
 
-	.wpum-fields-groups-table {
+	.wpum-fields-groups-table, .wpum-registration-forms-list {
+		.delete-btn {
+			margin-top: 5px;
+		}
+	}
+
+	.wpum-fields-groups-table, .wpum-registration-forms-list {
 		tbody {
 			tr {
 				&:hover {
@@ -349,8 +356,12 @@ body.users_page_wpum-registration-forms {
 	.spinner {
 		margin: 0 !important;
 	}
-	.dashicons {
+	table .dashicons {
 		color: #00be28;
+	}
+
+	table .button .dashicons {
+		color: #0071a1;
 	}
 }
 

@@ -29,6 +29,7 @@ class WPUM_Registration_Forms_Editor {
 		add_action( 'admin_enqueue_scripts', [ $this, 'load_scripts' ] );
 		add_action( 'wp_ajax_wpum_get_registration_forms', [ $this, 'get_forms' ] );
 		add_action( 'wp_ajax_wpum_get_registration_form', [ $this, 'get_form' ] );
+		add_action( 'wp_ajax_wpum_update_registration_form', [ $this, 'update_form' ] );
 		add_action( 'wp_ajax_wpum_save_registration_form', [ $this, 'save_form' ] );
 		add_action( 'wp_ajax_wpum_save_registration_form_settings', [ $this, 'save_form_settings' ] );
 	}
@@ -40,7 +41,7 @@ class WPUM_Registration_Forms_Editor {
 	 */
 	public function setup_menu_page() {
 		add_users_page(
-			esc_html__( 'WP User Manager Registration Forms Editor', 'wp-user-manager' ),
+			esc_html__( 'Registration Forms', 'wp-user-manager' ),
 			esc_html__( 'Registration Forms', 'wp-user-manager' ),
 			'manage_options',
 			'wpum-registration-forms',
@@ -86,17 +87,20 @@ class WPUM_Registration_Forms_Editor {
 			wp_enqueue_style( 'wpum-registration-forms-editor', WPUM_PLUGIN_URL . 'assets/css/admin/fields-editor.css' , array(), WPUM_VERSION );
 
 			$js_variables = [
+				'is_addon_installed'    => apply_filters( 'wpum_registration_forms_has_registration_forms_addon', false ),
 				'labels'                => $this->get_labels(),
 				'ajax'                  => admin_url( 'admin-ajax.php' ),
 				'pluginURL'             => WPUM_PLUGIN_URL,
+				'addon_url'             => 'https://wpusermanager.com/addons/registration-forms/?ref=wp_admin',
 				'getFormsNonce'         => wp_create_nonce( 'wpum_get_registration_forms' ),
 				'getFormNonce'          => wp_create_nonce( 'wpum_get_registration_form' ),
 				'saveFormNonce'         => wp_create_nonce( 'wpum_save_registration_form' ),
-				'saveFormSettingsNonce' => wp_create_nonce( 'wpum_save_registration_form_settings' )
+				'saveFormSettingsNonce' => wp_create_nonce( 'wpum_save_registration_form_settings' ),
+				'nonce'                 => wp_create_nonce( 'wpum_update_registration_form' ),
+				'delete_form_nonce'     => wp_create_nonce( 'wpum_delete_registration_form' ),
 			];
 
 			wp_localize_script( 'wpum-registration-forms-editor', 'wpumRegistrationFormsEditor', $js_variables );
-
 		}
 
 	}
@@ -104,35 +108,45 @@ class WPUM_Registration_Forms_Editor {
 	/**
 	 * Setup the labels for translation.
 	 *
-	 * @return void
+	 * @return array
 	 */
 	private function get_labels() {
-
 		$labels = [
-			'page_title'             => esc_html__( 'WP User Manager Registration Forms Editor', 'wp-user-manager' ),
-			'table_name'             => esc_html__( 'Form name', 'wp-user-manager' ),
-			'table_fields'           => esc_html__( 'Fields', 'wp-user-manager' ),
-			'table_default'          => esc_html__( 'Default', 'wp-user-manager' ),
-			'table_role'             => esc_html__( 'Registration role', 'wp-user-manager' ),
-			'table_not_found'        => esc_html__( 'No registration forms have been found.', 'wp-user-manager' ),
-			'table_default_tooltip'  => esc_html__( 'The default registration form cannot be deleted.', 'wp-user-manager' ),
-			'table_customize'        => esc_html__( 'Customize fields', 'wp-user-manager' ),
-			'page_back'              => esc_html__( 'Return to the registration forms list', 'wp-user-manager' ),
-			'editor_available_title' => esc_html__( 'Available fields', 'wp-user-manager' ),
-			'editor_available_desc'  => esc_html__( 'To add a field to this form, drag it into the container on the right. To remove a field, place it back here.', 'wp-user-manager' ),
-			'table_field_name'       => esc_html__( 'Field name', 'wp-user-manager' ),
-			'editor_used_fields'     => esc_html__( 'Add fields here to use them in this registration form. Drag fields up and down to change their order within the form.', 'wp-user-manager' ),
-			'editor_drag'            => esc_html__( 'This form does not have any fields yet. Drag and drop fields here.', 'wp-user-manager' ),
-			'success'                => esc_html__( 'Changes successfully saved.', 'wp-user-manager' ),
-			'error'                  => esc_html__( 'Something went wrong no changes saved.', 'wp-user-manager' ),
-			'settings'               => esc_html__( 'Settings', 'wp-user-manager' ),
-			'role_label'             => esc_html__( 'Registration role', 'wp-user-manager' ),
-			'save'                   => esc_html__( 'Save changes', 'wp-user-manager' ),
-			'role_desc'              => esc_html__( 'Select the user role that will be assigned to users upon successfull registration.', 'wp-user-manager' )
+			'confirm_delete'           => esc_html__( 'Confirm Form Deletion?', 'wp-user-manager' ),
+			'modal_form_delete'        => esc_html__( 'You are about to delete the registration form:', 'wp-user-manager' ),
+			'modal_delete'             => esc_html__( 'This action cannot be reversed. Are you sure you want to continue?', 'wp-user-manager' ),
+			'page_title'               => esc_html__( 'Registration Forms', 'wp-user-manager' ),
+			'table_name'               => esc_html__( 'Form name', 'wp-user-manager' ),
+			'table_fields'             => esc_html__( 'Fields', 'wp-user-manager' ),
+			'table_default'            => esc_html__( 'Default', 'wp-user-manager' ),
+			'table_role'               => esc_html__( 'Registration role', 'wp-user-manager' ),
+			'table_actions'            => esc_html__( 'Actions', 'wp-user-manager' ),
+			'table_not_found'          => esc_html__( 'No registration forms have been found.', 'wp-user-manager' ),
+			'table_add_form'           => esc_html__( 'Add New Form', 'wp-user-manager' ),
+			'table_edit_form'          => esc_html__( 'Edit Form Name', 'wp-user-manager' ),
+			'table_default_tooltip'    => esc_html__( 'The default registration form cannot be deleted.', 'wp-user-manager' ),
+			'table_delete_form'        => esc_html__( 'Delete Form', 'wp-user-manager' ),
+			'table_customize'          => esc_html__( 'Customize Form', 'wp-user-manager' ),
+			'page_back'                => esc_html__( 'Return to the registration forms list', 'wp-user-manager' ),
+			'editor_available_title'   => esc_html__( 'Available fields', 'wp-user-manager' ),
+			'editor_available_desc'    => esc_html__( 'To add a field to this form, drag it into the container on the right. To remove a field, place it back here.', 'wp-user-manager' ),
+			'table_field_name'         => esc_html__( 'Field name', 'wp-user-manager' ),
+			'editor_used_fields'       => esc_html__( 'Add fields here to use them in this registration form. Drag fields up and down to change their order within the form.', 'wp-user-manager' ),
+			'editor_drag'              => esc_html__( 'This form does not have any fields yet. Drag and drop fields here.', 'wp-user-manager' ),
+			'success'                  => esc_html__( 'Changes successfully saved.', 'wp-user-manager' ),
+			'error'                    => esc_html__( 'Something went wrong no changes saved.', 'wp-user-manager' ),
+			'settings'                 => esc_html__( 'Settings', 'wp-user-manager' ),
+			'role_label'               => esc_html__( 'Registration role', 'wp-user-manager' ),
+			'save'                     => esc_html__( 'Save changes', 'wp-user-manager' ),
+			'role_desc'                => esc_html__( 'Select the user role that will be assigned to users upon successfull registration.', 'wp-user-manager' ),
+			'tooltip_form_name'        => esc_html__( 'Customize the name of the registration form.', 'wp-user-manager' ),
+			'create_form'              => esc_html__( 'Create Form', 'wp-user-manager' ),
+			'premium_addon'            => sprintf( __( 'Create <a href="%1$s" target="_blank">unlimited registration forms</a>. The <a href="%1$s" target="_blank">Registration Forms</a> addon is required if you wish to add more forms.', 'wp-user-manager' ), 'https://wpusermanager.com/addons/registration-forms/?ref=wp_admin' ),
+			'purchase'                 => esc_html__( 'Purchase', 'wp-user-manager' ),
+			'success_message'          => esc_html__( 'Changes successfully saved.', 'wp-user-manager' ),
 		];
 
 		return $labels;
-
 	}
 
 	/**
@@ -150,11 +164,12 @@ class WPUM_Registration_Forms_Editor {
 			$forms              = [];
 
 			foreach ( $registration_forms as $form ) {
-				$forms[ $form->get_ID() ] = [
+				$forms[] = [
+					'id'      => $form->get_ID(),
 					'name'    => $form->get_name(),
 					'default' => $form->is_default(),
 					'role'    => $form->get_role(),
-					'count'   => $form->get_fields_count()
+					'count'   => $form->get_fields_count(),
 				];
 			}
 
@@ -168,6 +183,37 @@ class WPUM_Registration_Forms_Editor {
 			$this->send_json_error();
 		}
 
+	}
+
+	/**
+	 * Update a form via ajax.
+	 *
+	 * @return void
+	 */
+	public function update_form() {
+		check_ajax_referer( 'wpum_update_registration_form', 'nonce' );
+
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_die( esc_html__( 'Something went wrong: could not update the registration form details.', 'wp-user-manager' ), 403 );
+		}
+
+		$form_id   = isset( $_POST['form_id'] ) && ! empty( $_POST['form_id'] ) ? (int) $_POST['form_id'] : false;
+		$form_name = isset( $_POST['form_name'] ) && ! empty( $_POST['form_name'] ) ? sanitize_text_field( $_POST['form_name'] ) : false;
+
+		if ( $form_id && $form_name ) {
+
+			$updated_form = WPUM()->registration_forms->update( $form_id, [
+					'name' => $form_name,
+				] );
+
+		} else {
+			wp_die( esc_html__( 'Something went wrong: could not update the registration form details.', 'wp-user-manager' ), 403 );
+		}
+
+		wp_send_json_success( [
+				'id'   => $form_id,
+				'name' => $form_name,
+			] );
 	}
 
 	/**
@@ -283,10 +329,11 @@ class WPUM_Registration_Forms_Editor {
 		// Get fields already been used.
 		$form          = new WPUM_Registration_Form( $form_id );
 		$stored_fields = $form->get_meta( 'fields' );
+		$stored_fields = empty( $stored_fields ) ? array() : $stored_fields;
 
 		foreach ( $available_fields as $field ) {
-
-			if( ! empty( $field->get_primary_id() ) && in_array( $field->get_primary_id(), $non_allowed_fields ) ) {
+			$primary_id = $field->get_primary_id();
+			if( ! empty( $primary_id ) && in_array( $primary_id, $non_allowed_fields ) ) {
 				continue;
 			}
 

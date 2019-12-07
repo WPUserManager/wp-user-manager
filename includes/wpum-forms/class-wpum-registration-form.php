@@ -103,7 +103,7 @@ class WPUM_Registration_Form {
 	 * Setup registration form object.
 	 *
 	 * @param mixed $form
-	 * @return void
+	 * @return bool
 	 */
 	private function setup_form( $form = null ) {
 
@@ -128,14 +128,15 @@ class WPUM_Registration_Form {
 		}
 
 		if ( ! empty( $this->id ) ) {
-			$this->is_default = $this->get_meta( 'default' );
+			$default = $this->get_meta( 'default' );
+			$this->is_default = empty( $default ) ? false : $default;
 			$this->role       = $this->get_assigned_role();
-			$this->fields     = $this->get_meta( 'fields' );
+			$fields = $this->get_meta( 'fields' );
+			$this->fields     = empty( $fields ) ? array() : $fields;
 			return true;
 		}
 
 		return false;
-
 	}
 
 	/**
@@ -150,7 +151,7 @@ class WPUM_Registration_Form {
 	/**
 	 * Retrieve the name of the form.
 	 *
-	 * @return void
+	 * @return string
 	 */
 	public function get_name() {
 		return $this->name;
@@ -159,7 +160,7 @@ class WPUM_Registration_Form {
 	/**
 	 * Retrieve the fields assigned to this form.
 	 *
-	 * @return string
+	 * @return array
 	 */
 	public function get_fields() {
 		return $this->fields;
