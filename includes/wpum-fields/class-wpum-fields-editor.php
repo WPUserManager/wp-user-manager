@@ -54,7 +54,7 @@ class WPUM_Fields_Editor {
 	 */
 	public function setup_menu_page() {
 		add_users_page(
-			esc_html__( 'WP User Manager Fields Editor', 'wp-user-manager' ),
+			esc_html__( 'Fields Editor', 'wp-user-manager' ),
 			esc_html__( 'Custom Fields', 'wp-user-manager' ),
 			'manage_options',
 			'wpum-custom-fields',
@@ -92,7 +92,7 @@ class WPUM_Fields_Editor {
 
 			$js_variables = [
 				'is_addon_installed'        => apply_filters( 'wpum_fields_editor_has_custom_fields_addon', false ),
-				'page_title'                => esc_html__( 'WP User Manager Fields Editor', 'wp-user-manager' ),
+				'page_title'                => esc_html__( 'Fields Editor', 'wp-user-manager' ),
 				'success_message'           => esc_html__( 'Changes successfully saved.', 'wp-user-manager' ),
 				'labels'                    => $this->get_labels(),
 				'groups'                    => $this->get_groups(),
@@ -136,7 +136,7 @@ class WPUM_Fields_Editor {
 			'table_default'             => esc_html__( 'Default', 'wp-user-manager' ),
 			'table_fields'              => esc_html__( 'Fields', 'wp-user-manager' ),
 			'table_actions'             => esc_html__( 'Actions', 'wp-user-manager' ),
-			'table_add_group'           => esc_html__( 'Add new field group', 'wp-user-manager' ),
+			'table_add_group'           => esc_html__( 'Add New Field Group', 'wp-user-manager' ),
 			'table_edit_group'          => esc_html__( 'Edit group settings', 'wp-user-manager' ),
 			'table_edit_fields'         => esc_html__( 'Customize fields', 'wp-user-manager' ),
 			'table_delete_group'        => esc_html__( 'Delete group', 'wp-user-manager' ),
@@ -148,8 +148,8 @@ class WPUM_Fields_Editor {
 			'save'                      => esc_html__( 'Save changes', 'wp-user-manager' ),
 			'tooltip_group_name'        => esc_html__( 'Customize the name of group. This may be used in your theme.', 'wp-user-manager' ),
 			'tooltip_group_description' => esc_html__( 'Customize the description of the group. This may be used into your theme.', 'wp-user-manager' ),
-			'purchase'                  => esc_html__( 'Purchase now', 'wp-user-manager' ),
-			'create_group'              => esc_html__( 'Create new fields group', 'wp-user-manager' ),
+			'purchase'                  => esc_html__( 'Purchase', 'wp-user-manager' ),
+			'create_group'              => esc_html__( 'Create Fields Group', 'wp-user-manager' ),
 			'premium_addon'             => sprintf( __( 'Create <a href="%1$s" target="_blank">unlimited custom fields and groups</a> for user profiles and registration forms with a drag & drop interface. The <a href="%1$s" target="_blank">custom fields</a> addon is required if you wish to extend your community.', 'wp-user-manager' ), 'https://wpusermanager.com/addons/custom-fields/?ref=wp_admin' ),
 			'fields_page_title'         => esc_html__( 'Editing:', 'wp-user-manager' ),
 			'fields_go_back'            => esc_html__( 'Back to the groups list', 'wp-user-manager' ),
