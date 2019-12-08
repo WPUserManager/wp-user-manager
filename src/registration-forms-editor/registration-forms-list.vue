@@ -22,6 +22,7 @@
 					<th scope="col">{{labels.table_fields}}</th>
 					<th scope="col" :data-balloon="labels.table_default_tooltip" data-balloon-pos="left">{{labels.table_default}}</th>
 					<th scope="col">{{labels.table_role}}</th>
+					<th scope="col" v-if="isAddonInstalled">{{labels.table_signup_total}}</th>
 					<th scope="col" v-text="sanitized(labels.table_actions)"></th>
 				</tr>
 			</thead>
@@ -50,6 +51,9 @@
 					</td>
 					<td>
 						{{form.role}}
+					</td>
+					<td v-if="isAddonInstalled">
+						{{form.total_signups}}
 					</td>
 					<td class="align-middle">
 						<router-link :to="{ name: 'form', params: { id: form.id }}" tag="button" type="submit" class="button"><span class="dashicons dashicons-admin-settings"></span> <span v-text="sanitized(labels.table_customize)"></span></router-link>
@@ -87,6 +91,7 @@ export default {
 			forms:     '',
 			showMessage: false,
 			messageStatus: 'success',
+			isAddonInstalled: wpumRegistrationFormsEditor.is_addon_installed,
 			messageText: wpumRegistrationFormsEditor.labels.success_message,
 		}
 	},

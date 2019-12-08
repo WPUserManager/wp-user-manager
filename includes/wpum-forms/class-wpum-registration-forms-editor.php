@@ -120,6 +120,7 @@ class WPUM_Registration_Forms_Editor {
 			'table_fields'             => esc_html__( 'Fields', 'wp-user-manager' ),
 			'table_default'            => esc_html__( 'Default', 'wp-user-manager' ),
 			'table_role'               => esc_html__( 'Registration role', 'wp-user-manager' ),
+			'table_signup_total'       => esc_html__( 'Total Signups', 'wp-user-manager' ),
 			'table_actions'            => esc_html__( 'Actions', 'wp-user-manager' ),
 			'table_not_found'          => esc_html__( 'No registration forms have been found.', 'wp-user-manager' ),
 			'table_add_form'           => esc_html__( 'Add New Form', 'wp-user-manager' ),
@@ -164,13 +165,15 @@ class WPUM_Registration_Forms_Editor {
 			$forms              = [];
 
 			foreach ( $registration_forms as $form ) {
-				$forms[] = [
-					'id'      => $form->get_ID(),
-					'name'    => $form->get_name(),
-					'default' => $form->is_default(),
-					'role'    => $form->get_role(),
-					'count'   => $form->get_fields_count(),
+				$form_data = [
+					'id'            => $form->get_ID(),
+					'name'          => $form->get_name(),
+					'default'       => $form->is_default(),
+					'role'          => $form->get_role(),
+					'count'         => $form->get_fields_count(),
 				];
+
+				$forms[] = apply_filters( 'wpum_get_registration_form_data_for_table', $form_data );
 			}
 
 			if( is_array( $forms ) && ! empty( $forms ) ) {
