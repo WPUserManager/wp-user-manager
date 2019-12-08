@@ -69,11 +69,10 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 		<?php endforeach; ?>
 
 		<input type="hidden" name="wpum_form" value="<?php echo $data->form; ?>" />
-		<input type="hidden" name="wpum_form_id" value="<?php echo $data->form_id; ?>" />
 		<input type="hidden" name="step" value="<?php echo esc_attr( $data->step ); ?>" />
 		<?php wp_nonce_field( 'verify_registration_form', 'registration_nonce' ); ?>
 
-		<?php do_action( 'wpum_before_submit_button_registration_form' ); ?>
+		<?php do_action( 'wpum_before_submit_button_registration_form', $data ); ?>
 
 		<input type="submit" name="submit_registration" class="button" value="<?php esc_html_e( 'Register', 'wp-user-manager' ); ?>" />
 

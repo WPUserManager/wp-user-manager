@@ -331,6 +331,15 @@ class WPUM_Form_Registration extends WPUM_Form {
 
 	}
 
+	protected function get_submit_data() {
+		return [
+			'form'    => $this->form_name,
+			'action'  => $this->get_action(),
+			'fields'  => $this->get_fields( 'register' ),
+			'step'    => $this->get_step(),
+		];
+	}
+
 	/**
 	 * Display the first step of the registration form.
 	 *
@@ -342,13 +351,7 @@ class WPUM_Form_Registration extends WPUM_Form {
 		$this->init_fields();
 		$register_with = $this->get_register_by();
 
-		$data = [
-			'form_id' => $this->form_id,
-			'form'    => $this->form_name,
-			'action'  => $this->get_action(),
-			'fields'  => $this->get_fields( 'register' ),
-			'step'    => $this->get_step(),
-		];
+		$data = $this->get_submit_data();
 
 		if ( $register_with ) {
 
