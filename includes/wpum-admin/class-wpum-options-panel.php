@@ -270,6 +270,7 @@ class WPUM_Options_Panel {
 					'multiple' => true,
 					'labels'   => array( 'placeholder' => __( 'Select one or more user roles from the list.', 'wp-user-manager' ) ),
 					'options'  => wpum_get_roles(),
+					'toggle' => array( 'key' => 'allow_role_select', 'value' => true ),
 				),
 			],
 			'terms'               => [
