@@ -70,13 +70,16 @@
 						<form action="post" @submit.prevent="saveSettings()">
 							<div class="widgets-sortables ui-droppable ui-sortable">
 								<div class="sidebar-name">
-									<h2>{{labels.settings}}</h2>
+									<h2>{{labels.settings}}
+										<div class="spinner is-active" v-if="loading"></div></h2>
 								</div>
 								<div class="settings-wrapper">
-									<label for="role">{{labels.role_label}}</label>
-									<select name="role" id="role" :disabled="loading || loadingSettings" v-model="selectedRole">
-										<option v-for="role in allowedRoles" :key="role.value" :value="role.value">{{role.label}}</option>
-									</select>
+
+									<div v-for="field in settings" :key="field.id" v-show="! field.toggle || settingsModel[field.toggle.key] == field.toggle.value">
+											<label :for="field.id">{{field.name}}</label>
+											<component v-bind:is="getFieldComponentName(field.type)" :field="field" :class="classes(field.type)" v-model="settingsModel[field.id]" :disabled="loading || loadingSettings"></component>
+											<p class="description" v-if="field.desc">{{field.desc}}</p>
+									</div>
 								</div>
 							</div>
 
@@ -118,8 +121,8 @@ export default {
 			formName:            '...',
 			availableFields:     [],
 			selectedFields:      [],
-			selectedRole:        '',
-			allowedRoles:        [],
+			settings:            {},
+			settingsModel:      {},
 			showMessage:         false,
 			showMessageSettings: false,
 			messageStatus:       'success',
@@ -133,6 +136,21 @@ export default {
 		this.getForm()
 	},
 	methods: {
+		/**
+		 * Setup classes for the component based on the field type.
+		 */
+		classes (type) {
+			return [
+				'opk-field',
+				type == 'text' ? 'regular-text' : ''
+			];
+		},
+		/**
+		 * Sets the name of the component to retrieve.
+		 */
+		getFieldComponentName ( type ) {
+			return 'formit-'+type
+		},
 		/**
 		 * Retrieve the registration form from the db.
 		 */
@@ -151,8 +169,8 @@ export default {
 				this.formName        = response.data.data.name
 				this.availableFields = response.data.data.available_fields
 				this.selectedFields  = response.data.data.stored_fields
-				this.selectedRole    = response.data.data.selected_role,
-				this.allowedRoles    = response.data.data.allowed_roles
+				this.settings    = response.data.data.settings,
+				this.settingsModel    = response.data.data.settings_model
 			})
 			.catch( error => {
 				this.loading = false
@@ -213,11 +231,11 @@ export default {
 			this.loadingSettings = true
 
 			axios.post( wpumRegistrationFormsEditor.ajax,
-				qs.stringify({
-					nonce:   wpumRegistrationFormsEditor.saveFormSettingsNonce,
+				qs.stringify( {
+					nonce: wpumRegistrationFormsEditor.saveFormSettingsNonce,
 					form_id: this.formID,
-					role:    this.selectedRole
-				}),
+					settings_model: this.settingsModel
+				} ),
 				{
 					params: {
 						action: 'wpum_save_registration_form_settings'

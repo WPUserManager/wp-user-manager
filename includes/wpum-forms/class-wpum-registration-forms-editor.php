@@ -237,15 +237,13 @@ class WPUM_Registration_Forms_Editor {
 				$form = WPUM()->registration_forms->get( $form_id );
 				$form = new WPUM_Registration_Form( $form->id );
 
-				wp_send_json_success(
-					[
-						'name'             => $form->get_name(),
-						'available_fields' => $this->get_available_fields( $form_id ),
-						'stored_fields'    => $this->get_stored_fields( $form_id ),
-						'selected_role'    => $form->get_meta( 'role' ),
-						'allowed_roles'    => wpum_get_roles( true )
-					]
-				 );
+				wp_send_json_success( [
+					'name'             => $form->get_name(),
+					'available_fields' => $this->get_available_fields( $form_id ),
+					'stored_fields'    => $this->get_stored_fields( $form_id ),
+					'settings'         => $form->get_settings_options(),
+					'settings_model'   => $form->get_form_settings_model(),
+				] );
 
 			} else {
 
@@ -402,32 +400,42 @@ class WPUM_Registration_Forms_Editor {
 
 		check_ajax_referer( 'wpum_save_registration_form_settings', 'nonce' );
 
-		if( current_user_can( 'manage_options' ) && is_admin() ) {
-
-			$form_id = isset( $_POST['form_id'] ) ? absint( $_POST['form_id'] ):        false;
-			$role    = isset( $_POST['role'] ) ? sanitize_text_field( $_POST['role'] ): false;
-
-			if( $form_id ) {
-
-				$form = new WPUM_Registration_Form( $form_id );
-
-				if( $form->exists() && get_role( $role ) && $role !== 'administrator' ) {
-
-					$form->update_meta( 'role', $role );
-					wp_send_json_success();
-
-				} else {
-					$this->send_json_error();
-				}
-
-			} else {
-				$this->send_json_error();
-			}
-
-		} else {
+		if( ! current_user_can( 'manage_options' ) || ! is_admin() ) {
 			$this->send_json_error();
 		}
 
+		$form_id = filter_input( INPUT_POST, 'form_id', FILTER_VALIDATE_INT );
+		$settings_model = isset( $_POST['settings_model'] ) ? $_POST['settings_model'] : array();
+
+		if( empty( $form_id ) ) {
+			$this->send_json_error();
+		}
+
+		$form = new WPUM_Registration_Form( $form_id );
+
+		if ( ! $form->exists() ) {
+			$this->send_json_error();
+		}
+
+		$stored_settings_model = $form->get_form_settings_model();
+
+		foreach ( $settings_model as $key => $value ) {
+			$value = sanitize_text_field( $value );
+			if ( isset( $stored_settings_model[ $key ] ) && $value === $stored_settings_model[ $key ] ) {
+				// Setting not changed
+				continue;
+			}
+
+			if ( 'role' === $key && ( $value === 'administrator' || ! get_role( $value ) ) ) {
+				// Illegal role selection;
+				continue;
+			}
+
+			$form->update_meta( $key, $value );
+
+		}
+
+		wp_send_json_success();
 	}
 
 	/**

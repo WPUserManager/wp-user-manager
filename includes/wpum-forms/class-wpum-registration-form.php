@@ -53,6 +53,11 @@ class WPUM_Registration_Form {
 	protected $role = null;
 
 	/**
+	 * @var array
+	 */
+	protected $settings_options;
+
+	/**
 	 * The Database Abstraction
 	 */
 	protected $db;
@@ -196,7 +201,7 @@ class WPUM_Registration_Form {
 	/**
 	 * Check if a form exists.
 	 *
-	 * @return void
+	 * @return bool
 	 */
 	public function exists() {
 		if ( ! $this->id > 0 ) {
@@ -363,6 +368,52 @@ class WPUM_Registration_Form {
 	 */
 	public function delete_meta( $meta_key = '', $meta_value, $prev_value = '' ) {
 		return WPUM()->registration_form_meta->delete_meta( $this->id, $meta_key, $meta_value, $prev_value );
+	}
+
+	/**
+	 * Get the options for the form settings panel
+	 *
+	 * @return array
+	 */
+	public function get_settings_options() {
+		if ( ! empty( $this->settings_options ) ) {
+			return $this->settings_options;
+		}
+
+		$all_roles = wpum_get_roles( true );
+		$roles     = array();
+		foreach ( $all_roles as $role ) {
+			$roles[ $role['value'] ] = $role['label'];
+		}
+
+		$settings = array(
+			array(
+				'id'      => 'role',
+				'name'    => 'Registration Role',
+				'type'    => 'select',
+				'options' => $roles,
+			),
+		);
+
+		$this->settings_options = apply_filters( 'wpum_registration_form_settings_options', $settings );
+
+		return $this->settings_options;
+	}
+
+	/**
+	 * Get all the settings values.
+	 *
+	 * @return array
+	 */
+	public function get_form_settings_model() {
+		$setting_ids = wp_list_pluck( $this->get_settings_options(), 'id' );
+		$model       = array();
+
+		foreach ( $setting_ids as $setting_key ) {
+			$model[ $setting_key ] = $this->get_meta( $setting_key );
+		}
+
+		return $model;
 	}
 
 }
