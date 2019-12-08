@@ -414,7 +414,9 @@ class WPUM_Form_Registration extends WPUM_Form {
 				$password = wp_generate_password( 24, true, true );
 			}
 
-			$new_user_id = wp_create_user( $username, $password, $values['register']['user_email'] );
+			$user_email = isset( $values['register']['user_email'] ) ? $values['register']['user_email'] : '';
+
+			$new_user_id = wp_create_user( $username, $password, $user_email );
 
 			if ( is_wp_error( $new_user_id ) ) {
 				throw new Exception( $new_user_id->get_error_message() );
