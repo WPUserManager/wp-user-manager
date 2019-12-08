@@ -69,6 +69,7 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 		<?php endforeach; ?>
 
 		<input type="hidden" name="wpum_form" value="<?php echo $data->form; ?>" />
+		<input type="hidden" name="wpum_form_id" value="<?php echo $data->form_id; ?>" />
 		<input type="hidden" name="step" value="<?php echo esc_attr( $data->step ); ?>" />
 		<?php wp_nonce_field( 'verify_registration_form', 'registration_nonce' ); ?>
 

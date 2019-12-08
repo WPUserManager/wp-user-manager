@@ -206,7 +206,7 @@ class WPUM_Form_Registration extends WPUM_Form {
 	 *
 	 * @return void
 	 */
-	private function get_registration_form() {
+	protected function get_registration_form() {
 
 		$form = WPUM()->registration_forms->get_forms();
 		$form = $form[0];
@@ -343,10 +343,11 @@ class WPUM_Form_Registration extends WPUM_Form {
 		$register_with = $this->get_register_by();
 
 		$data = [
-			'form'   => $this->form_name,
-			'action' => $this->get_action(),
-			'fields' => $this->get_fields( 'register' ),
-			'step'   => $this->get_step(),
+			'form_id' => $this->form_id,
+			'form'    => $this->form_name,
+			'action'  => $this->get_action(),
+			'fields'  => $this->get_fields( 'register' ),
+			'step'    => $this->get_step(),
 		];
 
 		if ( $register_with ) {
