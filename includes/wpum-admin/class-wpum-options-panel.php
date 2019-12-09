@@ -27,7 +27,7 @@ class WPUM_Options_Panel {
 	/**
 	 * Get things started.
 	 */
-	public function __construct() {
+	public function init() {
 		// Setup labels for the options panel.
 		add_filter( 'wpum_labels', [ $this, 'register_labels' ] );
 
@@ -420,5 +420,3 @@ class WPUM_Options_Panel {
 	}
 
 }
-
-new WPUM_Options_Panel;
