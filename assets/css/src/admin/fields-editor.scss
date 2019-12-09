@@ -411,3 +411,77 @@ body.users_page_wpum-registration-forms {
 		}
 	}
 }
+
+
+body.users_page_wpum-registration-forms {
+	.registration-form-settings {
+		.registration-form-setting {
+			margin-bottom: 10px;
+
+			.formit-checkbox-wrapper {
+				width: 20px;
+				float: left;
+				margin: 5px 10px 0 0;
+			}
+
+			p.description {
+				padding-bottom: 0;
+			}
+
+			.regular-text {
+				width: 100%;
+			}
+
+			.multiselect__tags:hover {
+				border-color: #999;
+			}
+			.multiselect__input {
+				border: none;
+				background: transparent;
+				-webkit-box-shadow: none;
+				box-shadow: none;
+				padding: 0;
+			}
+			.opk-multiselect-field-wrapper {
+				display: block;
+			}
+			.multiselect__content-wrapper {
+				-webkit-box-shadow: 0 3px 5px rgba(0, 0, 0, 0.2);
+				box-shadow: 0 3px 5px rgba(0, 0, 0, 0.2);
+				border: 1px solid #ddd;
+				border-radius: 0;
+				margin-top: 5px;
+			}
+			.multiselect__option--highlight {
+				background: #0073aa;
+				color: #fff;
+			}
+			.multiselect__option--highlight:after {
+				background: #0073aa;
+				color: #fff;
+			}
+			.multiselect__tags-wrap .multiselect__tag {
+				background: #0085ba;
+				border-radius: 3px;
+				margin-bottom: 3px;
+				padding: 5px 30px 5px 10px;
+			}
+			.multiselect__tags-wrap .multiselect__tag i {
+				border-radius: 0;
+			}
+			.multiselect__tags-wrap .multiselect__tag i:hover {
+				background: #dd3e3e;
+			}
+			.multiselect__spinner {
+				background: #f7f7f7;
+			}
+			.multiselect__spinner:before, .multiselect__spinner:after {
+				border-color: #0085ba transparent transparent;
+			}
+			.multiselect__single {
+				background: transparent;
+			}
+
+		}
+	}
+}
