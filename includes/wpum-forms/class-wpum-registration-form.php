@@ -380,17 +380,13 @@ class WPUM_Registration_Form {
 			return $this->settings_options;
 		}
 
-		$all_roles = wpum_get_roles( true );
-		$roles     = array();
-		foreach ( $all_roles as $role ) {
-			$roles[ $role['value'] ] = $role['label'];
-		}
+		$roles = wpum_get_roles( true );
 
 		$settings = array(
 			array(
 				'id'      => 'role',
 				'name'    => 'Registration Role',
-				'type'    => 'select',
+				'type'    => 'multiselect',
 				'options' => $roles,
 			),
 		);

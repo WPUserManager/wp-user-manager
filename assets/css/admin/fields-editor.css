@@ -307,6 +307,24 @@ body.users_page_wpum-registration-forms #wpum-fields-editor-list .vue-wp-notice 
 .widgets-holder-wrap #publishing-action .spinner {
   margin-top: 5px; }
 
+body.users_page_wpum-registration-forms .wpum-registration-form .widget-liquid-right {
+  width: 38%; }
+body.users_page_wpum-registration-forms .wpum-registration-form .widget-liquid-left {
+  width: 58%; }
+body.users_page_wpum-registration-forms .wpum-registration-form .optionskit-form-wrapper {
+  padding: 0; }
+body.users_page_wpum-registration-forms .wpum-registration-form #optionskit-navigation {
+  margin: 0 0 0 -22px;
+  width: calc(100% + 42px); }
+body.users_page_wpum-registration-forms .wpum-registration-form .optionskit-navigation-wrapper {
+  margin: 20px 0; }
+body.users_page_wpum-registration-forms .wpum-registration-form #optionskit-navigation a.router-link-active {
+  color: inherit;
+  border: none; }
+body.users_page_wpum-registration-forms .wpum-registration-form #optionskit-navigation a.router-link-exact-active {
+  box-shadow: none;
+  border-bottom: 4px solid #0085ba;
+  color: #0085ba; }
 body.users_page_wpum-registration-forms .registration-form-settings .registration-form-setting {
   margin-bottom: 10px; }
   body.users_page_wpum-registration-forms .registration-form-settings .registration-form-setting .formit-checkbox-wrapper {
@@ -315,44 +333,5 @@ body.users_page_wpum-registration-forms .registration-form-settings .registratio
     margin: 5px 10px 0 0; }
   body.users_page_wpum-registration-forms .registration-form-settings .registration-form-setting p.description {
     padding-bottom: 0; }
-  body.users_page_wpum-registration-forms .registration-form-settings .registration-form-setting .regular-text {
-    width: 100%; }
-  body.users_page_wpum-registration-forms .registration-form-settings .registration-form-setting .multiselect__tags:hover {
-    border-color: #999; }
-  body.users_page_wpum-registration-forms .registration-form-settings .registration-form-setting .multiselect__input {
-    border: none;
-    background: transparent;
-    -webkit-box-shadow: none;
-    box-shadow: none;
-    padding: 0; }
-  body.users_page_wpum-registration-forms .registration-form-settings .registration-form-setting .opk-multiselect-field-wrapper {
-    display: block; }
-  body.users_page_wpum-registration-forms .registration-form-settings .registration-form-setting .multiselect__content-wrapper {
-    -webkit-box-shadow: 0 3px 5px rgba(0, 0, 0, 0.2);
-    box-shadow: 0 3px 5px rgba(0, 0, 0, 0.2);
-    border: 1px solid #ddd;
-    border-radius: 0;
-    margin-top: 5px; }
-  body.users_page_wpum-registration-forms .registration-form-settings .registration-form-setting .multiselect__option--highlight {
-    background: #0073aa;
-    color: #fff; }
-  body.users_page_wpum-registration-forms .registration-form-settings .registration-form-setting .multiselect__option--highlight:after {
-    background: #0073aa;
-    color: #fff; }
-  body.users_page_wpum-registration-forms .registration-form-settings .registration-form-setting .multiselect__tags-wrap .multiselect__tag {
-    background: #0085ba;
-    border-radius: 3px;
-    margin-bottom: 3px;
-    padding: 5px 30px 5px 10px; }
-  body.users_page_wpum-registration-forms .registration-form-settings .registration-form-setting .multiselect__tags-wrap .multiselect__tag i {
-    border-radius: 0; }
-  body.users_page_wpum-registration-forms .registration-form-settings .registration-form-setting .multiselect__tags-wrap .multiselect__tag i:hover {
-    background: #dd3e3e; }
-  body.users_page_wpum-registration-forms .registration-form-settings .registration-form-setting .multiselect__spinner {
-    background: #f7f7f7; }
-  body.users_page_wpum-registration-forms .registration-form-settings .registration-form-setting .multiselect__spinner:before, body.users_page_wpum-registration-forms .registration-form-settings .registration-form-setting .multiselect__spinner:after {
-    border-color: #0085ba transparent transparent; }
-  body.users_page_wpum-registration-forms .registration-form-settings .registration-form-setting .multiselect__single {
-    background: transparent; }
 
 /*# sourceMappingURL=fields-editor.css.map */
