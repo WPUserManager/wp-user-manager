@@ -118,9 +118,6 @@ class WPUM_Options_Panel {
 				'login' => __( 'Login Settings', 'wp-user-manager' ),
 				'misc'  => __( 'Misc Settings', 'wp-user-manager' ),
 			],
-			'registration' => [
-				'terms' => __( 'Terms & Conditions', 'wp-user-manager' ),
-			],
 			'emails'       => [
 				'admin_notifications' => __( 'Administration Notifications', 'wp-user-manager' ),
 			],
@@ -262,8 +259,6 @@ class WPUM_Options_Panel {
 					'options'  => wpum_get_roles(),
 					'toggle' => array( 'key' => 'allow_role_select', 'value' => true ),
 				),
-			],
-			'terms'               => [
 				array(
 					'id'   => 'enable_terms',
 					'name' => __( 'Enable Terms & Conditions', 'wp-user-manager' ),
@@ -276,6 +271,7 @@ class WPUM_Options_Panel {
 					'desc'    => __( 'Select the page that contains your terms.', 'wp-user-manager' ),
 					'type'    => 'multiselect',
 					'options' => wpum_get_pages(),
+					'toggle'  => array( 'key' => 'enable_terms', 'value' => true ),
 				),
 			],
 			'emails'              => [
