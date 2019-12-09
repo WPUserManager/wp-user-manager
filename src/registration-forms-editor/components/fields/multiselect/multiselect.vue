@@ -146,7 +146,7 @@ export default {
 			if( this.field.labels ) {
 				return this.field.labels[which]
 			} else {
-				return this.$optionsKitSettings.labels.multiselect[which]
+				return this.field.all_labels.multiselect[which]
 			}
 		},
         /**

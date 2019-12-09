@@ -247,10 +247,12 @@ class WPUM_Registration_Forms_Editor {
 				$form = WPUM()->registration_forms->get( $form_id );
 				$form = new WPUM_Registration_Form( $form->id );
 
+				$all_labels     = ( new WPUM_Options_Panel() )->register_labels( array() );
 				$settings       = $form->get_settings_options();
 				$settings_model = $form->get_settings_model();
 				foreach ( $settings as $key => $setting ) {
-					$settings[ $key ]['current'] = isset( $settings_model[ $setting['id'] ] ) ? $settings_model[ $setting['id'] ] : '';
+					$settings[ $key ]['current']    = isset( $settings_model[ $setting['id'] ] ) ? $settings_model[ $setting['id'] ] : '';
+					$settings[ $key ]['all_labels'] = $all_labels;
 				}
 
 				wp_send_json_success( [
