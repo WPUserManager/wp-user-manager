@@ -107,7 +107,7 @@ export default {
         /**
          * Preselect any stored value for this field.
          */
-        const retrievedValue = this.$optionsKitSettings.options[ this.field.id ]
+        const retrievedValue = this.field.current
         const fieldOptions   = this.field.options
 		const currentValue   = []
 

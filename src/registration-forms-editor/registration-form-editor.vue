@@ -65,7 +65,7 @@
 				</div>
 
 				<div class="sidebars-column-2">
-					<div class="widgets-holder-wrap">
+					<div class="widgets-holder-wrap registration-form-settings">
 						<wp-notice :type="messageStatus" alternative v-if="showMessageSettings">{{messageContent}}</wp-notice>
 						<form action="post" @submit.prevent="saveSettings()">
 							<div class="widgets-sortables ui-droppable ui-sortable">
@@ -74,8 +74,7 @@
 										<div class="spinner is-active" v-if="loading"></div></h2>
 								</div>
 								<div class="settings-wrapper">
-
-									<div v-for="field in settings" :key="field.id" v-show="! field.toggle || settingsModel[field.toggle.key] == field.toggle.value">
+									<div class="registration-form-setting" v-for="field in settings" :key="field.id" v-show="! field.toggle || settingsModel[field.toggle.key] == field.toggle.value">
 											<label :for="field.id">{{field.name}}</label>
 											<component v-bind:is="getFieldComponentName(field.type)" :field="field" :class="classes(field.type)" v-model="settingsModel[field.id]" :disabled="loading || loadingSettings"></component>
 											<p class="description" v-if="field.desc">{{field.desc}}</p>

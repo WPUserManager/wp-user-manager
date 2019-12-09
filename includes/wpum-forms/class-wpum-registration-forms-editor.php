@@ -32,6 +32,16 @@ class WPUM_Registration_Forms_Editor {
 		add_action( 'wp_ajax_wpum_update_registration_form', [ $this, 'update_form' ] );
 		add_action( 'wp_ajax_wpum_save_registration_form', [ $this, 'save_form' ] );
 		add_action( 'wp_ajax_wpum_save_registration_form_settings', [ $this, 'save_form_settings' ] );
+
+		add_filter( 'wpum_form_settings_sanitize_text', array( $this, 'sanitize_text_field' ) );
+		add_filter( 'wpum_form_settings_sanitize_textarea', array( $this, 'sanitize_textarea_field' ) );
+		add_filter( 'wpum_form_settings_sanitize_radio', array( $this, 'sanitize_text_field' ) );
+		add_filter( 'wpum_form_settings_sanitize_select', array( $this, 'sanitize_text_field' ) );
+		add_filter( 'wpum_form_settings_sanitize_checkbox', array( $this, 'sanitize_checkbox_field' ) );
+		add_filter( 'wpum_form_settings_sanitize_multiselect', array( $this, 'sanitize_multiple_field' ) );
+		add_filter( 'wpum_form_settings_sanitize_multicheckbox', array( $this, 'sanitize_multiple_field' )  );
+		add_filter( 'wpum_form_settings_sanitize_file', array( $this, 'sanitize_file_field' ) );
+
 	}
 
 	/**
@@ -237,12 +247,18 @@ class WPUM_Registration_Forms_Editor {
 				$form = WPUM()->registration_forms->get( $form_id );
 				$form = new WPUM_Registration_Form( $form->id );
 
+				$settings       = $form->get_settings_options();
+				$settings_model = $form->get_settings_model();
+				foreach ( $settings as $key => $setting ) {
+					$settings[ $key ]['current'] = isset( $settings_model[ $setting['id'] ] ) ? $settings_model[ $setting['id'] ] : '';
+				}
+
 				wp_send_json_success( [
 					'name'             => $form->get_name(),
 					'available_fields' => $this->get_available_fields( $form_id ),
 					'stored_fields'    => $this->get_stored_fields( $form_id ),
-					'settings'         => $form->get_settings_options(),
-					'settings_model'   => $form->get_form_settings_model(),
+					'settings'         => $settings,
+					'settings_model'   => $settings_model,
 				] );
 
 			} else {
@@ -417,10 +433,22 @@ class WPUM_Registration_Forms_Editor {
 			$this->send_json_error();
 		}
 
-		$stored_settings_model = $form->get_form_settings_model();
+		$registered_settings = $form->get_settings_options();
+		$settings = array();
+		foreach( $registered_settings as $registered_setting ) {
+			$settings[ $registered_setting['id']] = $registered_setting;
+		}
+		$stored_settings_model = $form->get_settings_model();
 
 		foreach ( $settings_model as $key => $value ) {
-			$value = sanitize_text_field( $value );
+			if ( ! isset( $settings[ $key ] ) ) {
+				continue;
+			}
+
+			$setting = $settings[ $key ];
+
+			$value = apply_filters( 'wpum_form_settings_sanitize_' . $setting['type'], $value );
+
 			if ( isset( $stored_settings_model[ $key ] ) && $value === $stored_settings_model[ $key ] ) {
 				// Setting not changed
 				continue;
@@ -436,6 +464,83 @@ class WPUM_Registration_Forms_Editor {
 		}
 
 		wp_send_json_success();
+	}
+
+
+	/**
+	 * Sanitize the text field.
+	 *
+	 * @param string $input
+	 *
+	 * @return string
+	 */
+	public function sanitize_text_field( $input ) {
+		return trim( wp_strip_all_tags( $input, true ) );
+	}
+
+	/**
+	 * Sanitize textarea field.
+	 *
+	 * @param string $input
+	 *
+	 * @return string
+	 */
+	public function sanitize_textarea_field( $input ) {
+		return stripslashes( wp_kses_post( $input ) );
+	}
+
+	/**
+	 * Sanitize multiselect and multicheck field.
+	 *
+	 * @param mixed $input
+	 *
+	 * @return array
+	 */
+	public function sanitize_multiple_field( $input ) {
+		$new_input = array();
+
+		if ( is_array( $input ) && ! empty( $input ) ) {
+			foreach ( $input as $key => $value ) {
+				$new_input[ sanitize_key( $key ) ] = sanitize_text_field( $value );
+			}
+		}
+
+		if ( ! empty( $input ) && ! is_array( $input ) ) {
+			$input = explode( ',', $input );
+			foreach ( $input as $key => $value ) {
+				$new_input[ sanitize_key( $key ) ] = sanitize_text_field( $value );
+			}
+		}
+
+		return $new_input;
+	}
+
+	/**
+	 * Sanitize urls for the file field.
+	 *
+	 * @param string $input
+	 *
+	 * @return string
+	 */
+	public function sanitize_file_field( $input  ) {
+		return esc_url( $input );
+	}
+
+	/**
+	 * Sanitize the checkbox field.
+	 *
+	 * @param string $input
+	 *
+	 * @return bool
+	 */
+	public function sanitize_checkbox_field( $input ) {
+		$pass = false;
+
+		if ( $input == 'true' ) {
+			$pass = true;
+		}
+
+		return $pass;
 	}
 
 	/**

@@ -405,7 +405,7 @@ class WPUM_Registration_Form {
 	 *
 	 * @return array
 	 */
-	public function get_form_settings_model() {
+	public function get_settings_model() {
 		$setting_ids = wp_list_pluck( $this->get_settings_options(), 'id' );
 		$model       = array();
 

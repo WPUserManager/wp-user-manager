@@ -82,17 +82,13 @@ function wpum_get_login_methods() {
 /**
  * Retrieve a list of all user roles and cache them into a transient.
  *
- * @param boolean $force set to true if loading outside the wpum settings
+ * @param boolean $force set to true to get the latest
  * @param boolean $admin set to true to load the admin role too
+ *
  * @return array
  */
 function wpum_get_roles( $force = false, $admin = false ) {
-
 	$roles = [];
-
-	if ( ( ! isset( $_GET['page'] ) || 'wpum-settings' != $_GET['page'] ) && ! $force ) {
-		return $roles;
-	}
 
 	$transient = get_transient( 'wpum_get_roles' );
 
@@ -117,7 +113,6 @@ function wpum_get_roles( $force = false, $admin = false ) {
 	}
 
 	return $roles;
-
 }
 
 /**
