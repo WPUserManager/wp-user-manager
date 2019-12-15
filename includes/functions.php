@@ -1297,5 +1297,5 @@ function wpum_get_registration_form( $form_id = null ) {
 		return $form[0];
 	}
 
-	return new \WPUM_Registration_Form( $this->form_id );
+	return new \WPUM_Registration_Form( $form_id );
 }
