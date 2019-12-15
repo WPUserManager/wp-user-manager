@@ -439,7 +439,7 @@ function wpum_send_registration_confirmation_email( $user_id, $psw = false ) {
 			wp_mail( $to_email, $subject, $message );
 		}
 
-		if ( $user instanceof WP_User ) {
+		if ( $user instanceof WP_User && $user->data->user_email ) {
 
 			$emails = new WPUM_Emails();
 			$emails->__set( 'user_id', $user_id );
