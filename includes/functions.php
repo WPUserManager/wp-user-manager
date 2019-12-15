@@ -1282,3 +1282,20 @@ if ( ! function_exists( 'wp_new_user_notification' ) ) {
 		wpum_send_registration_confirmation_email( $user_id, $password );
 	}
 }
+
+/**
+ * Get a specific registration form or the default
+ *
+ * @param null|int $form_id
+ *
+ * @return WPUM_Registration_Form
+ */
+function wpum_get_registration_form( $form_id = null ) {
+	if ( empty( $form_id ) ) {
+		$form = WPUM()->registration_forms->get_forms();
+
+		return $form[0];
+	}
+
+	return new \WPUM_Registration_Form( $this->form_id );
+}
