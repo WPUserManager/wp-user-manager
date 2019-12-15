@@ -411,7 +411,7 @@ if ( ! class_exists( 'WP_User_Manager' ) ) :
 
 			// Plugin version.
 			if ( ! defined( 'WPUM_VERSION' ) ) {
-				define( 'WPUM_VERSION', '2.1.14' );
+				define( 'WPUM_VERSION', '2.2' );
 			}
 
 			// Plugin Folder Path.
