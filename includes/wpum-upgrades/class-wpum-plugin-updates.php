@@ -34,6 +34,81 @@ class WPUM_Plugin_Updates {
 
 		add_action( 'admin_init', [ $this, 'v2_upgrade_notice' ] );
 		add_action( 'admin_init', [ $this, 'upgrade' ] );
+		add_action( 'admin_init', [ $this, 'maybe_perform_minor_upgrades' ] );
+	}
+
+	/**
+	 * Perform minor database upgrades without prompting the user.
+	 */
+	public function maybe_perform_minor_upgrades() {
+		if ( defined( 'DOING_AJAX' ) && DOING_AJAX ) {
+			return;
+		}
+
+		$installed_version = get_option( 'wpum_version' );
+
+		if ( false === $installed_version ) {
+			// Fresh install
+			return;
+		}
+
+		$latest_version = WPUM_VERSION;
+
+		if ( 0 === version_compare( $installed_version, $latest_version ) ) {
+			// Latest version already installed
+			return;
+		}
+
+		if ( version_compare( $installed_version, '2.2', '<' ) ) {
+			$this->upgrade_v2_2();
+		}
+
+		update_option( 'wpum_version', $latest_version );
+	}
+
+	/**
+	 * Update default registration meta
+	 */
+	protected function upgrade_v2_2() {
+		// Get default registration form
+		$registration_forms = WPUM()->registration_forms->get_forms();
+		$form               = false;
+		foreach ( $registration_forms as $registration_form ) {
+			if ( $registration_form->is_default() ) {
+				$form = $registration_form;
+				break;
+			}
+		}
+
+		if ( ! $form ) {
+			return;
+		}
+
+		// Get all registration form subsections
+		$subsections = apply_filters( 'wpum_registered_settings_sections', array() );
+		$subsections = isset( $subsections['registration'] ) ? $subsections['registration'] : array();
+		$sections    = array_merge( array( 'registration' ), array_keys( $subsections ) );
+		$settings    = apply_filters( 'wpum_registered_settings', array() );
+
+		// Get all registration form options
+		foreach ( $settings as $key => $options ) {
+			if ( ! in_array( $key, $sections ) ) {
+				continue;
+			}
+
+			foreach ( $options as $option ) {
+				$value = wpum_get_option( $option['id'] );
+
+				if ( false === $value ) {
+					continue;
+				}
+
+				// Update form meta with option
+				$form->update_meta( $option['id'], $value );
+				// Remove option from general settings
+				wpum_delete_option( $option['id'] );
+			}
+		}
 	}
 
 	/**
