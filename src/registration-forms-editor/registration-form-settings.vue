@@ -33,6 +33,9 @@
 						</td>
 					</tr>
 				</table>
+				<div class="spinner is-active" v-if="loading"></div>
+				<input type="submit" class="button button-primary button-large" v-model="labels.save" :disabled="loading || loadingSettings">
+				<div class="spinner is-active" v-show="loadingSettings"></div>
 			</div>
 		</form>
 	</div>

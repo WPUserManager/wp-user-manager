@@ -96,7 +96,6 @@ class WPUM_Options_Panel {
 	public function register_settings_tabs( $tabs ) {
 		$tabs = array(
 			'general'      => __( 'General', 'wp-user-manager' ),
-			'registration' => __( 'Registration', 'wp-user-manager' ),
 			'emails'       => __( 'Emails', 'wp-user-manager' ),
 			'profiles'     => __( 'Profiles', 'wp-user-manager' ),
 			'redirects'    => __( 'Redirects', 'wp-user-manager' ),
@@ -117,6 +116,9 @@ class WPUM_Options_Panel {
 			'general'      => [
 				'login' => __( 'Login Settings', 'wp-user-manager' ),
 				'misc'  => __( 'Misc Settings', 'wp-user-manager' ),
+			],
+			'registration' => [
+				'terms' => __( 'Terms & Conditions', 'wp-user-manager' ),
 			],
 			'emails'       => [
 				'admin_notifications' => __( 'Administration Notifications', 'wp-user-manager' ),
@@ -236,13 +238,7 @@ class WPUM_Options_Panel {
 					'type' => 'textarea',
 				),
 			],
-			'registration'        => [
-				array(
-					'id'   => 'login_after_registration',
-					'name' => __( 'Login After Registration', 'wp-user-manager' ),
-					'desc' => __( 'Enable this option to automatically authenticate users after registration.', 'wp-user-manager' ),
-					'type' => 'checkbox',
-				),
+			'registration' => [
 				array(
 					'id'   => 'allow_role_select',
 					'name' => __( 'Allow Role Section', 'wp-user-manager' ),
@@ -257,8 +253,16 @@ class WPUM_Options_Panel {
 					'multiple' => true,
 					'labels'   => array( 'placeholder' => __( 'Select one or more user roles from the list.', 'wp-user-manager' ) ),
 					'options'  => wpum_get_roles(),
-					'toggle' => array( 'key' => 'allow_role_select', 'value' => true ),
+					'toggle'   => array( 'key' => 'allow_role_select', 'value' => true ),
 				),
+				array(
+					'id'   => 'login_after_registration',
+					'name' => __( 'Login After Registration', 'wp-user-manager' ),
+					'desc' => __( 'Enable this option to automatically authenticate users after registration.', 'wp-user-manager' ),
+					'type' => 'checkbox',
+				),
+			],
+			'terms'        => [
 				array(
 					'id'   => 'enable_terms',
 					'name' => __( 'Enable Terms & Conditions', 'wp-user-manager' ),

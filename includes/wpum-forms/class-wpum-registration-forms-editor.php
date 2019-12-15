@@ -150,7 +150,7 @@ class WPUM_Registration_Forms_Editor {
 			'error'                    => esc_html__( 'Something went wrong no changes saved.', 'wp-user-manager' ),
 			'settings'                 => esc_html__( 'Settings', 'wp-user-manager' ),
 			'role_label'               => esc_html__( 'Registration role', 'wp-user-manager' ),
-			'save'                     => esc_html__( 'Save changes', 'wp-user-manager' ),
+			'save'                     => esc_html__( 'Save Changes', 'wp-user-manager' ),
 			'role_desc'                => esc_html__( 'Select the user role that will be assigned to users upon successfull registration.', 'wp-user-manager' ),
 			'tooltip_form_name'        => esc_html__( 'Customize the name of the registration form.', 'wp-user-manager' ),
 			'create_form'              => esc_html__( 'Create Form', 'wp-user-manager' ),

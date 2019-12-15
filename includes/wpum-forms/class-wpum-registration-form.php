@@ -382,16 +382,34 @@ class WPUM_Registration_Form {
 
 		$roles = wpum_get_roles( true );
 
-		$settings = array(
+		$default_settings = array(
 			array(
 				'id'      => 'role',
 				'name'    => 'Registration Role',
 				'type'    => 'multiselect',
 				'options' => $roles,
+				'toggle'  => array( 'key' => 'allow_role_select', 'value' => false ),
 			),
 		);
 
-		$this->settings_options = apply_filters( 'wpum_registration_form_settings_options', $settings );
+		// Get all registration form subsections
+		$subsections  = apply_filters( 'wpum_registered_settings_sections', array() );
+		$subsections  = isset( $subsections['registration'] ) ? $subsections['registration'] : array();
+		$sections     = array_merge( array( 'registration' ), array_keys( $subsections ) );
+		$all_settings = apply_filters( 'wpum_registered_settings', array() );
+
+		$settings_options = array();
+
+		// Get all registration form options
+		foreach ( $all_settings as $key => $options ) {
+			if ( ! in_array( $key, $sections ) ) {
+				continue;
+			}
+
+			$settings_options = array_merge( $settings_options, $options );
+		}
+
+		$this->settings_options = apply_filters( 'wpum_registration_form_settings_options', array_merge( $default_settings, $settings_options ) );
 
 		return $this->settings_options;
 	}
