@@ -20,7 +20,7 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 
 <div class="wpum-template wpum-form wpum-registration-form">
 
-	<?php do_action( 'wpum_before_registration_form' ); ?>
+	<?php do_action( 'wpum_before_registration_form', $data ); ?>
 
 	<form action="<?php echo esc_url( $data->action ); ?>" method="post" id="wpum-submit-registration-form" enctype="multipart/form-data">
 
