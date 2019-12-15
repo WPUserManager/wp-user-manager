@@ -458,7 +458,7 @@ class WPUM_Registration_Forms_Editor {
 				continue;
 			}
 
-			if ( 'role' === $key && ( $value === 'administrator' || ! get_role( $value ) ) ) {
+			if ( 'role' === $key && is_array( $value ) && ! empty( $value ) && ( $value[0] === 'administrator' || ! get_role( $value[0] ) ) ) {
 				// Illegal role selection;
 				continue;
 			}
