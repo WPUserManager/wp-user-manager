@@ -508,7 +508,7 @@ abstract class WPUM_Form {
 				}
 			}
 		}
-		return apply_filters( 'submit_wpum_form_validate_fields', true, $this->fields, $values, $this->form_name );
+		return apply_filters( 'submit_wpum_form_validate_fields', true, $this->fields, $values, $this->form_name, $this );
 	}
 
 	/**

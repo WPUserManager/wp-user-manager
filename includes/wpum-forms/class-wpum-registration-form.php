@@ -65,7 +65,7 @@ class WPUM_Registration_Form {
 	/**
 	 * Constructor.
 	 *
-	 * @param mixed|boolean $_id
+	 * @param mixed|boolean $_id_or_form
 	 */
 	public function __construct( $_id_or_form = false ) {
 
@@ -309,6 +309,24 @@ class WPUM_Registration_Form {
 
 		return $data;
 
+	}
+
+	/**
+	 * Get the form setting, using the form meta first and the main options as a backup
+	 *
+	 * @param string $key
+	 * @param bool   $default
+	 *
+	 * @return mixed
+	 */
+	public function get_setting( $key, $default = false ) {
+		$form_setting = $this->get_meta( $key );
+
+		if ( false !== $form_setting ) {
+			return $form_setting;
+		}
+
+		return $default;
 	}
 
 	/**
