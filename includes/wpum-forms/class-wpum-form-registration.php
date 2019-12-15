@@ -478,7 +478,10 @@ class WPUM_Form_Registration extends WPUM_Form {
 			do_action( 'wpum_after_registration', $new_user_id, $values );
 
 			// Automatically log a user in if enabled.
-			if ( $form->get_setting( 'login_after_registration' ) ) {
+			$login_after_reg = $form->get_setting( 'login_after_registration' );
+			$login_after_reg = empty( $login_after_reg ) ? false : $login_after_reg;
+			$auto_login_user = apply_filters( 'wpum_auto_login_user_after_registration', $login_after_reg );
+			if ( $auto_login_user ) {
 				wpum_log_user_in( $new_user_id );
 			}
 
