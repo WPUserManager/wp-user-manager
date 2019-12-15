@@ -78,6 +78,6 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 
 	</form>
 
-	<?php do_action( 'wpum_after_registration_form' ); ?>
+	<?php do_action( 'wpum_after_registration_form', $data ); ?>
 
 </div>
