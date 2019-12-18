@@ -211,14 +211,19 @@ class WPUM_Registration_Form {
 		return true;
 	}
 
+	public function get_role_key() {
+		$role = $this->get_meta( 'role' );
+
+		return is_array( $role ) ? $role[0] : $role;
+	}
+
 	/**
 	 * Retrieve the human friendly name.
 	 *
 	 * @return void
 	 */
 	private function get_assigned_role() {
-
-		$role            = $this->get_meta( 'role' );
+		$role            = $this->get_role_key();
 		$available_roles = wpum_get_roles( true );
 
 		$criteria   = array( 'value' => $role );
@@ -232,7 +237,6 @@ class WPUM_Registration_Form {
 		}
 
 		return $role;
-
 	}
 
 	/**
