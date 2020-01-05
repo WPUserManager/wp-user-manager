@@ -4,15 +4,17 @@ body.users_page_wpum-registration-forms .wp-heading-inline img {
   float: left;
   padding-right: 15px;
   margin-top: -6px; }
-body.users_page_wpum-custom-fields #wpum-add-field-group span.dashicons,
-body.users_page_wpum-registration-forms #wpum-add-field-group span.dashicons {
+body.users_page_wpum-custom-fields #wpum-add-field-group span.dashicons, body.users_page_wpum-custom-fields #wpum-add-form span.dashicons,
+body.users_page_wpum-registration-forms #wpum-add-field-group span.dashicons,
+body.users_page_wpum-registration-forms #wpum-add-form span.dashicons {
   width: 16px;
   height: 16px;
   font-size: 16px;
   vertical-align: inherit;
   position: relative;
   top: 3px;
-  margin-right: 2px; }
+  margin-right: 2px;
+  color: #0071a1; }
 body.users_page_wpum-custom-fields .wpum-icon-button.circular,
 body.users_page_wpum-registration-forms .wpum-icon-button.circular {
   padding: 4px !important;
@@ -37,35 +39,48 @@ body.users_page_wpum-registration-forms .order-anchor {
 body.users_page_wpum-custom-fields .small-column,
 body.users_page_wpum-registration-forms .small-column {
   width: 100px; }
-body.users_page_wpum-custom-fields .wpum-fields-groups-table tbody tr:hover,
-body.users_page_wpum-registration-forms .wpum-fields-groups-table tbody tr:hover {
+body.users_page_wpum-custom-fields .wpum-fields-groups-table .delete-btn, body.users_page_wpum-custom-fields .wpum-registration-forms-list .delete-btn,
+body.users_page_wpum-registration-forms .wpum-fields-groups-table .delete-btn,
+body.users_page_wpum-registration-forms .wpum-registration-forms-list .delete-btn {
+  margin-top: 5px; }
+body.users_page_wpum-custom-fields .wpum-fields-groups-table tbody tr:hover, body.users_page_wpum-custom-fields .wpum-registration-forms-table tbody tr:hover,
+body.users_page_wpum-registration-forms .wpum-fields-groups-table tbody tr:hover,
+body.users_page_wpum-registration-forms .wpum-registration-forms-table tbody tr:hover {
   background: #f5f5f5; }
-body.users_page_wpum-custom-fields .wpum-fields-groups-table .button,
-body.users_page_wpum-registration-forms .wpum-fields-groups-table .button {
+body.users_page_wpum-custom-fields .wpum-fields-groups-table .button, body.users_page_wpum-custom-fields .wpum-registration-forms-table .button,
+body.users_page_wpum-registration-forms .wpum-fields-groups-table .button,
+body.users_page_wpum-registration-forms .wpum-registration-forms-table .button {
   margin-right: 5px; }
-  body.users_page_wpum-custom-fields .wpum-fields-groups-table .button:last-child,
-  body.users_page_wpum-registration-forms .wpum-fields-groups-table .button:last-child {
+  body.users_page_wpum-custom-fields .wpum-fields-groups-table .button:last-child, body.users_page_wpum-custom-fields .wpum-registration-forms-table .button:last-child,
+  body.users_page_wpum-registration-forms .wpum-fields-groups-table .button:last-child,
+  body.users_page_wpum-registration-forms .wpum-registration-forms-table .button:last-child {
     margin-right: 0; }
-  body.users_page_wpum-custom-fields .wpum-fields-groups-table .button span.dashicons,
-  body.users_page_wpum-registration-forms .wpum-fields-groups-table .button span.dashicons {
+  body.users_page_wpum-custom-fields .wpum-fields-groups-table .button span.dashicons, body.users_page_wpum-custom-fields .wpum-registration-forms-table .button span.dashicons,
+  body.users_page_wpum-registration-forms .wpum-fields-groups-table .button span.dashicons,
+  body.users_page_wpum-registration-forms .wpum-registration-forms-table .button span.dashicons {
     position: relative;
     top: 3px;
     margin-right: 3px; }
-  body.users_page_wpum-custom-fields .wpum-fields-groups-table .button.delete-btn:hover span.dashicons,
-  body.users_page_wpum-registration-forms .wpum-fields-groups-table .button.delete-btn:hover span.dashicons {
+  body.users_page_wpum-custom-fields .wpum-fields-groups-table .button.delete-btn:hover span.dashicons, body.users_page_wpum-custom-fields .wpum-registration-forms-table .button.delete-btn:hover span.dashicons,
+  body.users_page_wpum-registration-forms .wpum-fields-groups-table .button.delete-btn:hover span.dashicons,
+  body.users_page_wpum-registration-forms .wpum-registration-forms-table .button.delete-btn:hover span.dashicons {
     color: red; }
-body.users_page_wpum-custom-fields .wpum-fields-groups-table .dashicons-yes,
-body.users_page_wpum-registration-forms .wpum-fields-groups-table .dashicons-yes {
+body.users_page_wpum-custom-fields .wpum-fields-groups-table .dashicons-yes, body.users_page_wpum-custom-fields .wpum-registration-forms-table .dashicons-yes,
+body.users_page_wpum-registration-forms .wpum-fields-groups-table .dashicons-yes,
+body.users_page_wpum-registration-forms .wpum-registration-forms-table .dashicons-yes {
   color: green; }
-body.users_page_wpum-custom-fields .wpum-fields-groups-table .align-middle,
-body.users_page_wpum-registration-forms .wpum-fields-groups-table .align-middle {
+body.users_page_wpum-custom-fields .wpum-fields-groups-table .align-middle, body.users_page_wpum-custom-fields .wpum-registration-forms-table .align-middle,
+body.users_page_wpum-registration-forms .wpum-fields-groups-table .align-middle,
+body.users_page_wpum-registration-forms .wpum-registration-forms-table .align-middle {
   vertical-align: middle; }
-body.users_page_wpum-custom-fields .wpum-fields-groups-table td,
-body.users_page_wpum-registration-forms .wpum-fields-groups-table td {
+body.users_page_wpum-custom-fields .wpum-fields-groups-table td, body.users_page_wpum-custom-fields .wpum-registration-forms-table td,
+body.users_page_wpum-registration-forms .wpum-fields-groups-table td,
+body.users_page_wpum-registration-forms .wpum-registration-forms-table td {
   vertical-align: middle;
   padding: 12px 10px; }
-body.users_page_wpum-custom-fields .wpum-fields-groups-table .spinner,
-body.users_page_wpum-registration-forms .wpum-fields-groups-table .spinner {
+body.users_page_wpum-custom-fields .wpum-fields-groups-table .spinner, body.users_page_wpum-custom-fields .wpum-registration-forms-table .spinner,
+body.users_page_wpum-registration-forms .wpum-fields-groups-table .spinner,
+body.users_page_wpum-registration-forms .wpum-registration-forms-table .spinner {
   margin: 0;
   float: none !important; }
 body.users_page_wpum-custom-fields #wpum-fields-editor-wrapper .vue-wp-notice,
@@ -123,7 +138,7 @@ body.users_page_wpum-registration-forms .media-frame-content {
 body.users_page_wpum-custom-fields .wpum-dialog .spinner,
 body.users_page_wpum-registration-forms .wpum-dialog .spinner {
   float: none;
-  margin-top: 20px; }
+  margin-top: 20px !important; }
 body.users_page_wpum-custom-fields .dialog-form,
 body.users_page_wpum-registration-forms .dialog-form {
   padding-top: 10px; }
@@ -255,8 +270,10 @@ body.users_page_wpum-registration-forms #wpum-fields-editor-list .vue-wp-notice 
 
 .wpum-registration-forms-list .spinner {
   margin: 0 !important; }
-.wpum-registration-forms-list .dashicons {
+.wpum-registration-forms-list table .dashicons {
   color: #00be28; }
+.wpum-registration-forms-list table .button .dashicons {
+  color: #0071a1; }
 
 .dragArea {
   min-height: 50px; }
@@ -289,5 +306,32 @@ body.users_page_wpum-registration-forms #wpum-fields-editor-list .vue-wp-notice 
     width: 100%; }
 .widgets-holder-wrap #publishing-action .spinner {
   margin-top: 5px; }
+
+body.users_page_wpum-registration-forms .wpum-registration-form .widget-liquid-right {
+  width: 38%; }
+body.users_page_wpum-registration-forms .wpum-registration-form .widget-liquid-left {
+  width: 58%; }
+body.users_page_wpum-registration-forms .wpum-registration-form .optionskit-form-wrapper {
+  padding: 0; }
+body.users_page_wpum-registration-forms .wpum-registration-form #optionskit-navigation {
+  margin: 0 0 0 -22px;
+  width: calc(100% + 42px); }
+body.users_page_wpum-registration-forms .wpum-registration-form .optionskit-navigation-wrapper {
+  margin: 20px 0; }
+body.users_page_wpum-registration-forms .wpum-registration-form #optionskit-navigation a.router-link-active {
+  color: inherit;
+  border: none; }
+body.users_page_wpum-registration-forms .wpum-registration-form #optionskit-navigation a.router-link-exact-active {
+  box-shadow: none;
+  border-bottom: 4px solid #0085ba;
+  color: #0085ba; }
+body.users_page_wpum-registration-forms .registration-form-settings .registration-form-setting {
+  margin-bottom: 10px; }
+  body.users_page_wpum-registration-forms .registration-form-settings .registration-form-setting .formit-checkbox-wrapper {
+    width: 20px;
+    float: left;
+    margin: 5px 10px 0 0; }
+  body.users_page_wpum-registration-forms .registration-form-settings .registration-form-setting p.description {
+    padding-bottom: 0; }
 
 /*# sourceMappingURL=fields-editor.css.map */

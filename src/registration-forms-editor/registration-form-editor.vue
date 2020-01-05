@@ -1,14 +1,24 @@
 <template>
-	<div>
-		<h1 class="wp-heading-inline">
-			<img :src="pluginURL + 'assets/images/logo.svg'" alt="WP User Manager">
-			{{formName}}
-		</h1>
-		<router-link to="/" class="page-title-action wpum-icon-button circular" :data-balloon="labels.page_back" data-balloon-pos="down"><span class="dashicons dashicons-arrow-left-alt"></span></router-link>
+	<div class="wpum-registration-form">
+			<h1 class="wp-heading-inline">
+				<img :src="pluginURL + 'assets/images/logo.svg'" alt="WP User Manager">
+				{{formName}}
+			</h1>
+			<router-link to="/" class="page-title-action wpum-icon-button circular" :data-balloon="labels.page_back" data-balloon-pos="down"><span class="dashicons dashicons-arrow-left-alt"></span></router-link>
+		<div class="optionskit-navigation-wrapper">
+			<div class="wp-filter" id="optionskit-navigation">
+				<ul class="filter-links">
+					<li>
+						<router-link :to="{ name: 'form', params: { id: this.formID }}">{{labels.table_fields}}</router-link>
+					</li>
+					<li>
+						<router-link :to="{ name: 'form-settings', params: { id: this.formID }}">{{labels.settings}}</router-link>
+					</li>
+				</ul>
+			</div>
+		</div>
 
-		<br/><br/>
-
-	  	<div class="widget-liquid-left">
+		<div class="widget-liquid-right">
 			<div id="widgets-left">
 				<div id="available-widgets-d" class="widgets-holder-wrap ui-droppable">
 					<div class="sidebar-name">
@@ -32,19 +42,17 @@
 			</div>
 		</div>
 
-		<div class="widget-liquid-right">
+		<div class="widget-liquid-left">
 			<div id="widgets-right" class="wp-clearfix">
 
-				<div class="sidebars-column-1">
+				<div class="sidebars-column-3">
 					<div class="widgets-holder-wrap">
 
 						<wp-notice :type="messageStatus" alternative v-if="showMessage">{{messageContent}}</wp-notice>
 
 						<div class="widgets-sortables ui-droppable ui-sortable">
 							<div class="sidebar-name">
-								<h2>{{formName}}
-									<div class="spinner is-active" v-if="loading"></div>
-								</h2>
+								<h2>{{labels.editor_current_title}}</h2>
 							</div>
 							<div class="sidebar-description">
 								<p class="description">{{labels.editor_used_fields}}</p>
@@ -61,33 +69,6 @@
 							</draggable>
 							<!-- end fields list -->
 						</div>
-					</div>
-				</div>
-
-				<div class="sidebars-column-2">
-					<div class="widgets-holder-wrap">
-						<wp-notice :type="messageStatus" alternative v-if="showMessageSettings">{{messageContent}}</wp-notice>
-						<form action="post" @submit.prevent="saveSettings()">
-							<div class="widgets-sortables ui-droppable ui-sortable">
-								<div class="sidebar-name">
-									<h2>{{labels.settings}}</h2>
-								</div>
-								<div class="settings-wrapper">
-									<label for="role">{{labels.role_label}}</label>
-									<select name="role" id="role" :disabled="loading || loadingSettings" v-model="selectedRole">
-										<option v-for="role in allowedRoles" :key="role.value" :value="role.value">{{role.label}}</option>
-									</select>
-								</div>
-							</div>
-
-							<div id="major-publishing-actions">
-								<div id="publishing-action">
-									<div class="spinner is-active" v-if="loadingSettings"></div>
-									<input type="submit" :value="labels.save" :disabled="loading || loadingSettings" class="button button-primary button-large">
-								</div>
-								<div class="clear"></div>
-							</div>
-						</form>
 					</div>
 				</div>
 
@@ -118,8 +99,8 @@ export default {
 			formName:            '...',
 			availableFields:     [],
 			selectedFields:      [],
-			selectedRole:        '',
-			allowedRoles:        [],
+			settings:            {},
+			settingsModel:      {},
 			showMessage:         false,
 			showMessageSettings: false,
 			messageStatus:       'success',
@@ -133,6 +114,21 @@ export default {
 		this.getForm()
 	},
 	methods: {
+		/**
+		 * Setup classes for the component based on the field type.
+		 */
+		classes (type) {
+			return [
+				'opk-field',
+				type == 'text' ? 'regular-text' : ''
+			];
+		},
+		/**
+		 * Sets the name of the component to retrieve.
+		 */
+		getFieldComponentName ( type ) {
+			return 'formit-'+type
+		},
 		/**
 		 * Retrieve the registration form from the db.
 		 */
@@ -151,8 +147,6 @@ export default {
 				this.formName        = response.data.data.name
 				this.availableFields = response.data.data.available_fields
 				this.selectedFields  = response.data.data.stored_fields
-				this.selectedRole    = response.data.data.selected_role,
-				this.allowedRoles    = response.data.data.allowed_roles
 			})
 			.catch( error => {
 				this.loading = false
@@ -200,42 +194,6 @@ export default {
 				this.showMessage    = true
 				this.messageStatus  = 'error'
 				this.messageContent =  wpumRegistrationFormsEditor.labels.error
-				this.resetNotice()
-				console.log(error)
-			})
-
-		},
-		/**
-		 * Save settings to the form.
-		 */
-		saveSettings() {
-
-			this.loadingSettings = true
-
-			axios.post( wpumRegistrationFormsEditor.ajax,
-				qs.stringify({
-					nonce:   wpumRegistrationFormsEditor.saveFormSettingsNonce,
-					form_id: this.formID,
-					role:    this.selectedRole
-				}),
-				{
-					params: {
-						action: 'wpum_save_registration_form_settings'
-					},
-				}
-			)
-			.then( response => {
-				this.loadingSettings     = false
-				this.showMessageSettings = true
-				this.messageStatus       = 'success'
-				this.messageContent      = wpumRegistrationFormsEditor.labels.success
-				this.resetNotice()
-			})
-			.catch( error => {
-				this.loadingSettings     = false
-				this.showMessageSettings = true
-				this.messageStatus       = 'error'
-				this.messageContent      = wpumRegistrationFormsEditor.labels.error
 				this.resetNotice()
 				console.log(error)
 			})

@@ -167,7 +167,7 @@ class WPUM_DB_Registration_Forms extends WPUM_DB {
 			'offset'  => 0,
 			'search'  => '',
 			'orderby' => 'id',
-			'order'   => 'DESC',
+			'order'   => 'ASC',
 		);
 
 		$args = wp_parse_args( $args, $defaults );

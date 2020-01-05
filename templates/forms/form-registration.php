@@ -20,7 +20,7 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 
 <div class="wpum-template wpum-form wpum-registration-form">
 
-	<?php do_action( 'wpum_before_registration_form' ); ?>
+	<?php do_action( 'wpum_before_registration_form', $data ); ?>
 
 	<form action="<?php echo esc_url( $data->action ); ?>" method="post" id="wpum-submit-registration-form" enctype="multipart/form-data">
 
@@ -72,12 +72,12 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 		<input type="hidden" name="step" value="<?php echo esc_attr( $data->step ); ?>" />
 		<?php wp_nonce_field( 'verify_registration_form', 'registration_nonce' ); ?>
 
-		<?php do_action( 'wpum_before_submit_button_registration_form' ); ?>
+		<?php do_action( 'wpum_before_submit_button_registration_form', $data ); ?>
 
 		<input type="submit" name="submit_registration" class="button" value="<?php esc_html_e( 'Register', 'wp-user-manager' ); ?>" />
 
 	</form>
 
-	<?php do_action( 'wpum_after_registration_form' ); ?>
+	<?php do_action( 'wpum_after_registration_form', $data ); ?>
 
 </div>
