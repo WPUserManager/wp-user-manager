@@ -120,6 +120,7 @@ Please note that using WPUM and the mentioned add-ons does NOT guarantee complia
 = 2.2 (6th January 2020) =
 
 - New: Registration Forms addon. Create unlimited registration forms and have full control over form settings.
+- Improvement: Registration form settings moved from main settings page to the form itself
 - Fix: PHP 7.1 compatibility issues in wp-optionskit dependency
 - Improvement: Filter 'wpum_admin_registration_confirmation_email_recipient' to allow developers to customize the email recipient of the admin registration confirmation email
 - Improvement: Filter 'wpum_admin_registration_confirmation_email_headers' to  allow developers to customize the email headers of the admin registration confirmation email
