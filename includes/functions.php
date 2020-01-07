@@ -1280,9 +1280,16 @@ if ( ! function_exists( 'wp_new_user_notification' ) ) {
 	 * @return void
 	 */
 	function wp_new_user_notification( $user_id, $plaintext_pass = '' ) {
+		$password_set_by_admin = false;
+		if ( isset( $_POST['pass1-text'] ) ) {
+			$password_set_by_admin = $_POST['pass1-text'];
+		}
+		if ( empty( $password_set_by_admin ) && isset( $_POST['pass1'] ) ) {
+			$password_set_by_admin = $_POST['pass1'];
+		}
 
-		if ( is_admin() && current_user_can( 'create_users' ) && isset( $_POST['pass1-text'] ) ) {
-			$password = sanitize_text_field( $_POST['pass1-text'] );
+		if ( is_admin() && current_user_can( 'create_users' ) && $password_set_by_admin ) {
+			$password = sanitize_text_field( $password_set_by_admin );
 		} else {
 			$password = wp_generate_password( 24, true, true );
 			wp_set_password( $password, $user_id );
