@@ -150,8 +150,8 @@ abstract class WPUM_Shortcode_Generator {
 	 * @return void
 	 */
 	protected function get_fields() {
-
-		$defined_fields   = $this->define_fields();
+		$class            = strtolower( get_called_class() );
+		$defined_fields   = apply_filters( $class . '_defined_fields', $this->define_fields() );
 		$generated_fields = $this->generate_fields( $defined_fields );
 
 		$errors = array();

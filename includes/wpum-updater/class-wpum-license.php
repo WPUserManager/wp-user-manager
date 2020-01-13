@@ -114,7 +114,7 @@ class WPUM_License {
 	 */
 	private function includes() {
 
-		if ( ! class_exists( 'EDD_SL_Plugin_Updater' ) ) {
+		if ( ! class_exists( 'WPUM_EDD_SL_Plugin_Updater' ) ) {
 			require_once WPUM_PLUGIN_DIR . 'includes/wpum-updater/EDD_SL_Plugin_Updater.php';
 		}
 
@@ -299,7 +299,7 @@ class WPUM_License {
 			return;
 		}
 
-		$edd_updater = new EDD_SL_Plugin_Updater(
+		$edd_updater = new WPUM_EDD_SL_Plugin_Updater(
 			$this->api_url, $this->file, array(
 				'version'   => $this->version,
 				'license'   => $this->license,

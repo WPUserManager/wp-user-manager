@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "0737c3f4cb915e842e8ecf264c12cf27",
+    "content-hash": "e1d52fb2bdc352876d3ad38927ed1e4e",
     "packages": [
         {
             "name": "a5hleyrich/wp-background-processing",
@@ -581,21 +581,25 @@
         },
         {
             "name": "wp-user-manager/wp-optionskit",
-            "version": "1.0.7",
+            "version": "1.0.12",
             "source": {
                 "type": "git",
                 "url": "https://github.com/WPUserManager/wp-optionskit.git",
-                "reference": "dd8813363f54cdd9536669edc2bf356eb0486a1d"
+                "reference": "8a702e2dafac256edf6640225f6903135424c929"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/WPUserManager/wp-optionskit/zipball/dd8813363f54cdd9536669edc2bf356eb0486a1d",
-                "reference": "dd8813363f54cdd9536669edc2bf356eb0486a1d",
+                "url": "https://api.github.com/repos/WPUserManager/wp-optionskit/zipball/8a702e2dafac256edf6640225f6903135424c929",
+                "reference": "8a702e2dafac256edf6640225f6903135424c929",
                 "shasum": ""
             },
             "require": {
                 "composer/installers": "~1.0",
                 "php": ">=5.3.2"
+            },
+            "require-dev": {
+                "dealerdirect/phpcodesniffer-composer-installer": "^0.5.0",
+                "phpcompatibility/php-compatibility": "^9.3"
             },
             "type": "library",
             "autoload": {
@@ -619,7 +623,7 @@
                 "optionskit",
                 "wordpress"
             ],
-            "time": "2019-11-07T12:23:44+00:00"
+            "time": "2020-01-03T21:08:39+00:00"
         },
         {
             "name": "wpbp/widgets-helper",

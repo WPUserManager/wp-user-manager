@@ -53,6 +53,11 @@ class WPUM_Registration_Form {
 	protected $role = null;
 
 	/**
+	 * @var array
+	 */
+	protected $settings_options;
+
+	/**
 	 * The Database Abstraction
 	 */
 	protected $db;
@@ -60,7 +65,7 @@ class WPUM_Registration_Form {
 	/**
 	 * Constructor.
 	 *
-	 * @param mixed|boolean $_id
+	 * @param mixed|boolean $_id_or_form
 	 */
 	public function __construct( $_id_or_form = false ) {
 
@@ -103,7 +108,7 @@ class WPUM_Registration_Form {
 	 * Setup registration form object.
 	 *
 	 * @param mixed $form
-	 * @return void
+	 * @return bool
 	 */
 	private function setup_form( $form = null ) {
 
@@ -128,14 +133,15 @@ class WPUM_Registration_Form {
 		}
 
 		if ( ! empty( $this->id ) ) {
-			$this->is_default = $this->get_meta( 'default' );
+			$default = $this->get_meta( 'default' );
+			$this->is_default = empty( $default ) ? false : $default;
 			$this->role       = $this->get_assigned_role();
-			$this->fields     = $this->get_meta( 'fields' );
+			$fields = $this->get_meta( 'fields' );
+			$this->fields     = empty( $fields ) ? array() : $fields;
 			return true;
 		}
 
 		return false;
-
 	}
 
 	/**
@@ -150,7 +156,7 @@ class WPUM_Registration_Form {
 	/**
 	 * Retrieve the name of the form.
 	 *
-	 * @return void
+	 * @return string
 	 */
 	public function get_name() {
 		return $this->name;
@@ -159,7 +165,7 @@ class WPUM_Registration_Form {
 	/**
 	 * Retrieve the fields assigned to this form.
 	 *
-	 * @return string
+	 * @return array
 	 */
 	public function get_fields() {
 		return $this->fields;
@@ -195,7 +201,7 @@ class WPUM_Registration_Form {
 	/**
 	 * Check if a form exists.
 	 *
-	 * @return void
+	 * @return bool
 	 */
 	public function exists() {
 		if ( ! $this->id > 0 ) {
@@ -205,14 +211,19 @@ class WPUM_Registration_Form {
 		return true;
 	}
 
+	public function get_role_key() {
+		$role = $this->get_meta( 'role' );
+
+		return is_array( $role ) ? $role[0] : $role;
+	}
+
 	/**
 	 * Retrieve the human friendly name.
 	 *
 	 * @return void
 	 */
 	private function get_assigned_role() {
-
-		$role            = $this->get_meta( 'role' );
+		$role            = $this->get_role_key();
 		$available_roles = wpum_get_roles( true );
 
 		$criteria   = array( 'value' => $role );
@@ -226,7 +237,6 @@ class WPUM_Registration_Form {
 		}
 
 		return $role;
-
 	}
 
 	/**
@@ -306,6 +316,24 @@ class WPUM_Registration_Form {
 	}
 
 	/**
+	 * Get the form setting, using the form meta first and the main options as a backup
+	 *
+	 * @param string $key
+	 * @param bool   $default
+	 *
+	 * @return mixed
+	 */
+	public function get_setting( $key, $default = false ) {
+		$form_setting = $this->get_meta( $key );
+
+		if ( false !== $form_setting ) {
+			return $form_setting;
+		}
+
+		return $default;
+	}
+
+	/**
 	 * Retrieve metadata for this registration form.
 	 *
 	 * @param   string $meta_key      The meta key to retrieve.
@@ -362,6 +390,66 @@ class WPUM_Registration_Form {
 	 */
 	public function delete_meta( $meta_key = '', $meta_value, $prev_value = '' ) {
 		return WPUM()->registration_form_meta->delete_meta( $this->id, $meta_key, $meta_value, $prev_value );
+	}
+
+	/**
+	 * Get the options for the form settings panel
+	 *
+	 * @return array
+	 */
+	public function get_settings_options() {
+		if ( ! empty( $this->settings_options ) ) {
+			return $this->settings_options;
+		}
+
+		$roles = wpum_get_roles( true );
+
+		$default_settings = array(
+			array(
+				'id'      => 'role',
+				'name'    => 'Registration Role',
+				'type'    => 'multiselect',
+				'options' => $roles,
+				'toggle'  => array( 'key' => 'allow_role_select', 'value' => false ),
+			),
+		);
+
+		// Get all registration form subsections
+		$subsections  = apply_filters( 'wpum_registered_settings_sections', array() );
+		$subsections  = isset( $subsections['registration'] ) ? $subsections['registration'] : array();
+		$sections     = array_merge( array( 'registration' ), array_keys( $subsections ) );
+		$all_settings = apply_filters( 'wpum_registered_settings', array() );
+
+		$settings_options = array();
+
+		// Get all registration form options
+		foreach ( $all_settings as $key => $options ) {
+			if ( ! in_array( $key, $sections ) ) {
+				continue;
+			}
+
+			$settings_options = array_merge( $settings_options, $options );
+		}
+
+		$this->settings_options = apply_filters( 'wpum_registration_form_settings_options', array_merge( $default_settings, $settings_options ) );
+
+		return $this->settings_options;
+	}
+
+	/**
+	 * Get all the settings values.
+	 *
+	 * @return array
+	 */
+	public function get_settings_model() {
+		$setting_ids = wp_list_pluck( $this->get_settings_options(), 'id' );
+		$model       = array();
+
+		foreach ( $setting_ids as $setting_key ) {
+			$model[ $setting_key ] = $this->get_meta( $setting_key );
+		}
+
+		return $model;
 	}
 
 }

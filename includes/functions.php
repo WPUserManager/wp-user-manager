@@ -15,26 +15,21 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Retrieve pages from the database and cache them as transient.
  *
+ * @param bool $force
+ *
  * @return array
  */
 function wpum_get_pages( $force = false ) {
-
 	$pages = [];
-
-	if ( ( ! isset( $_GET['page'] ) || 'wpum-settings' != $_GET['page'] ) && ! $force ) {
-		return $pages;
-	}
 
 	$transient = get_transient( 'wpum_get_pages' );
 
-	if ( $transient ) {
+	if ( $transient && ! $force ) {
 		$pages = $transient;
 	} else {
-		$available_pages = get_pages(
-			[
+		$available_pages = get_pages( [
 				'post_status' => 'publish,private',
-			]
-		);
+			] );
 		if ( ! empty( $available_pages ) ) {
 			foreach ( $available_pages as $page ) {
 				$pages[] = array(
@@ -45,6 +40,7 @@ function wpum_get_pages( $force = false ) {
 			set_transient( 'wpum_get_pages', $pages, DAY_IN_SECONDS );
 		}
 	}
+
 	return $pages;
 }
 
@@ -82,17 +78,13 @@ function wpum_get_login_methods() {
 /**
  * Retrieve a list of all user roles and cache them into a transient.
  *
- * @param boolean $force set to true if loading outside the wpum settings
+ * @param boolean $force set to true to get the latest
  * @param boolean $admin set to true to load the admin role too
+ *
  * @return array
  */
 function wpum_get_roles( $force = false, $admin = false ) {
-
 	$roles = [];
-
-	if ( ( ! isset( $_GET['page'] ) || 'wpum-settings' != $_GET['page'] ) && ! $force ) {
-		return $roles;
-	}
 
 	$transient = get_transient( 'wpum_get_roles' );
 
@@ -117,7 +109,6 @@ function wpum_get_roles( $force = false, $admin = false ) {
 	}
 
 	return $roles;
-
 }
 
 /**
@@ -445,10 +436,19 @@ function wpum_send_registration_confirmation_email( $user_id, $psw = false ) {
 			 */
 			$to_email = apply_filters( 'wpum_admin_registration_confirmation_email_recipient', get_option( 'admin_email' ) );
 
-			wp_mail( $to_email, $subject, $message );
+			/**
+			 * Filter: allow developers to customize the email headers of the admin registration confirmation email.
+			 *
+			 * @param string $headers the admin email headers.
+			 *
+			 * @return string|array
+			 */
+			$headers = apply_filters( 'wpum_admin_registration_confirmation_email_headers', '' );
+
+			wp_mail( $to_email, $subject, $message, $headers );
 		}
 
-		if ( $user instanceof WP_User ) {
+		if ( $user instanceof WP_User && $user->data->user_email ) {
 
 			$emails = new WPUM_Emails();
 			$emails->__set( 'user_id', $user_id );
@@ -1121,19 +1121,19 @@ function wpum_setup_default_custom_search_fields() {
  * Retrieve a list of allowed users role on the registration page
  *
  * @since 1.0.0
+ *
+ * @param array $selected_roles
+ *
  * @return array $roles An array of the roles
  */
-function wpum_get_allowed_user_roles() {
-
+function wpum_get_allowed_user_roles( $selected_roles = array() ) {
 	global $wp_roles;
 
 	if ( ! isset( $wp_roles ) ) {
 		$wp_roles = new WP_Roles();
 	}
 
-	$user_roles     = array();
-	$selected_roles = wpum_get_option( 'register_roles' );
-
+	$user_roles         = array();
 	$allowed_user_roles = is_array( $selected_roles ) ? $selected_roles : array( $selected_roles );
 
 	foreach ( $allowed_user_roles as $role ) {
@@ -1141,7 +1141,6 @@ function wpum_get_allowed_user_roles() {
 	}
 
 	return $user_roles;
-
 }
 
 /**
@@ -1281,9 +1280,16 @@ if ( ! function_exists( 'wp_new_user_notification' ) ) {
 	 * @return void
 	 */
 	function wp_new_user_notification( $user_id, $plaintext_pass = '' ) {
+		$password_set_by_admin = false;
+		if ( isset( $_POST['pass1-text'] ) ) {
+			$password_set_by_admin = $_POST['pass1-text'];
+		}
+		if ( empty( $password_set_by_admin ) && isset( $_POST['pass1'] ) ) {
+			$password_set_by_admin = $_POST['pass1'];
+		}
 
-		if ( is_admin() && current_user_can( 'create_users' ) && isset( $_POST['pass1-text'] ) ) {
-			$password = sanitize_text_field( $_POST['pass1-text'] );
+		if ( is_admin() && current_user_can( 'create_users' ) && $password_set_by_admin ) {
+			$password = sanitize_text_field( $password_set_by_admin );
 		} else {
 			$password = wp_generate_password( 24, true, true );
 			wp_set_password( $password, $user_id );
@@ -1291,4 +1297,21 @@ if ( ! function_exists( 'wp_new_user_notification' ) ) {
 
 		wpum_send_registration_confirmation_email( $user_id, $password );
 	}
+}
+
+/**
+ * Get a specific registration form or the default
+ *
+ * @param null|int $form_id
+ *
+ * @return WPUM_Registration_Form
+ */
+function wpum_get_registration_form( $form_id = null ) {
+	if ( empty( $form_id ) ) {
+		$form = WPUM()->registration_forms->get_forms();
+
+		return $form[0];
+	}
+
+	return new \WPUM_Registration_Form( $form_id );
 }

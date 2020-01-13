@@ -44,6 +44,11 @@ class WPUM_Form_Registration extends WPUM_Form {
 	protected $role = null;
 
 	/**
+	 * @var WPUM_Registration_Form
+	 */
+	protected $registration_form;
+
+	/**
 	 * Returns static instance of class.
 	 *
 	 * @return self
@@ -64,9 +69,7 @@ class WPUM_Form_Registration extends WPUM_Form {
 		add_filter( 'submit_wpum_form_validate_fields', [ $this, 'validate_password' ], 10, 4 );
 		add_filter( 'submit_wpum_form_validate_fields', [ $this, 'validate_username' ], 10, 4 );
 		add_filter( 'submit_wpum_form_validate_fields', [ $this, 'validate_honeypot' ], 10, 4 );
-		if ( wpum_get_option( 'allow_role_select' ) ) {
-			add_filter( 'submit_wpum_form_validate_fields', [ $this, 'validate_role' ], 10, 4 );
-		}
+		add_filter( 'submit_wpum_form_validate_fields', [ $this, 'validate_role' ], 10, 4 );
 
 		$this->steps = (array) apply_filters(
 			'registration_steps',
@@ -175,18 +178,22 @@ class WPUM_Form_Registration extends WPUM_Form {
 	 * @return mixed
 	 */
 	public function validate_role( $pass, $fields, $values, $form ) {
+		$registration_form = $this->get_registration_form();
+
+		$allow_role_select = $registration_form->get_setting( 'allow_role_select' );
+		if ( empty( $allow_role_select ) ) {
+			return $pass;
+		}
 
 		if ( $form == $this->form_name && isset( $values['register']['role'] ) ) {
-
 			$role_field     = $values['register']['role'];
-			$selected_roles = array_flip( wpum_get_option( 'register_roles' ) );
+			$selected_roles = array_flip( $registration_form->get_setting( 'register_roles' ) );
 			if ( ! array_key_exists( $role_field, $selected_roles ) ) {
 				return new WP_Error( 'role-validation-error', __( 'Select a valid role from the list.', 'wp-user-manager' ) );
 			}
 		}
 
 		return $pass;
-
 	}
 
 	/**
@@ -204,15 +211,17 @@ class WPUM_Form_Registration extends WPUM_Form {
 	/**
 	 * Retrieve the registration form from the database.
 	 *
-	 * @return void
+	 * @return WPUM_Registration_Form
 	 */
-	private function get_registration_form() {
+	public function get_registration_form() {
+		if ( $this->registration_form ) {
+			return $this->registration_form;
+		}
 
 		$form = WPUM()->registration_forms->get_forms();
-		$form = $form[0];
+		$this->registration_form = $form[0];
 
-		return $form;
-
+		return $this->registration_form;
 	}
 
 	/**
@@ -227,7 +236,7 @@ class WPUM_Form_Registration extends WPUM_Form {
 
 		if ( $registration_form->exists() ) {
 
-			$this->role    = $registration_form->get_meta( 'role' );
+			$this->role    = $registration_form->get_role_key();
 			$stored_fields = $registration_form->get_meta( 'fields' );
 
 			if ( is_array( $stored_fields ) && ! empty( $stored_fields ) ) {
@@ -258,12 +267,14 @@ class WPUM_Form_Registration extends WPUM_Form {
 				'priority' => 0,
 			];
 
-			if ( wpum_get_option( 'allow_role_select' ) ) {
+			if ( $registration_form->get_setting( 'allow_role_select' ) ) {
+				$selected_roles = $registration_form->get_setting( 'register_roles', array() );
+
 				$fields['role'] = array(
 					'label'       => __( 'Select Role', 'wp-user-manager' ),
 					'type'        => 'select',
 					'required'    => true,
-					'options'     => wpum_get_allowed_user_roles(),
+					'options'     => wpum_get_allowed_user_roles( $selected_roles ),
 					'description' => __( 'Select your user role', 'wp-user-manager' ),
 					'priority'    => 9998,
 					'value'       => get_option( 'default_role' ),
@@ -271,8 +282,8 @@ class WPUM_Form_Registration extends WPUM_Form {
 			}
 
 			// Add a terms field is enabled.
-			if ( wpum_get_option( 'enable_terms' ) ) {
-				$terms_page      = wpum_get_option( 'terms_page' );
+			if ( $registration_form->get_setting( 'enable_terms' ) ) {
+				$terms_page      = $registration_form->get_setting( 'terms_page' );
 				$fields['terms'] = array(
 					'label'       => false,
 					'type'        => 'checkbox',
@@ -317,7 +328,7 @@ class WPUM_Form_Registration extends WPUM_Form {
 
 		if ( is_array( $registered_fields ) && ! empty( $registered_fields ) ) {
 			// Bail if no email field.
-			if ( ! isset( $registered_fields['user_email'] ) ) {
+			if ( ! isset( $registered_fields['user_email'] ) && ! isset( $registered_fields['username'] ) ) {
 				return false;
 			}
 			if ( isset( $registered_fields['username'] ) ) {
@@ -331,6 +342,15 @@ class WPUM_Form_Registration extends WPUM_Form {
 
 	}
 
+	protected function get_submit_data() {
+		return [
+			'form'    => $this->form_name,
+			'action'  => $this->get_action(),
+			'fields'  => $this->get_fields( 'register' ),
+			'step'    => $this->get_step(),
+		];
+	}
+
 	/**
 	 * Display the first step of the registration form.
 	 *
@@ -342,12 +362,7 @@ class WPUM_Form_Registration extends WPUM_Form {
 		$this->init_fields();
 		$register_with = $this->get_register_by();
 
-		$data = [
-			'form'   => $this->form_name,
-			'action' => $this->get_action(),
-			'fields' => $this->get_fields( 'register' ),
-			'step'   => $this->get_step(),
-		];
+		$data = $this->get_submit_data();
 
 		if ( $register_with ) {
 
@@ -414,7 +429,9 @@ class WPUM_Form_Registration extends WPUM_Form {
 				$password = wp_generate_password( 24, true, true );
 			}
 
-			$new_user_id = wp_create_user( $username, $password, $values['register']['user_email'] );
+			$user_email = isset( $values['register']['user_email'] ) ? $values['register']['user_email'] : '';
+
+			$new_user_id = wp_create_user( $username, $password, $user_email );
 
 			if ( is_wp_error( $new_user_id ) ) {
 				throw new Exception( $new_user_id->get_error_message() );
@@ -430,8 +447,10 @@ class WPUM_Form_Registration extends WPUM_Form {
 				]
 			);
 
+			$form = $this->get_registration_form();
+
 			// Assign the role set into the registration form.
-			if ( wpum_get_option( 'allow_role_select' ) && isset( $values['register']['role'] ) ) {
+			if ( $form->get_setting( 'allow_role_select' ) && isset( $values['register']['role'] ) ) {
 				$user = new WP_User( $new_user_id );
 				$user->set_role( $values['register']['role'] );
 			} else {
@@ -459,7 +478,10 @@ class WPUM_Form_Registration extends WPUM_Form {
 			do_action( 'wpum_after_registration', $new_user_id, $values );
 
 			// Automatically log a user in if enabled.
-			if ( wpum_get_option( 'login_after_registration' ) ) {
+			$login_after_reg = $form->get_setting( 'login_after_registration' );
+			$login_after_reg = empty( $login_after_reg ) ? false : $login_after_reg;
+			$auto_login_user = apply_filters( 'wpum_auto_login_user_after_registration', $login_after_reg );
+			if ( $auto_login_user ) {
 				wpum_log_user_in( $new_user_id );
 			}
 

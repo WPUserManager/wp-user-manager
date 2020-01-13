@@ -8,7 +8,7 @@ Tested up to: 5.3
 Requires PHP: 5.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
-Stable Tag: 2.1.14
+Stable Tag: 2.2.1
 
 The most customizable profiles & community builder WordPress plugin with front-end login, registration, profile customization and content restriction.
 
@@ -50,6 +50,7 @@ For more functionality check out [the add-ons page](https://wpusermanager.com/ad
 - [Custom Fields](https://wpusermanager.com/addons/custom-fields/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager): Add custom fields to members profiles and registration forms.
 - [WooCommerce](https://wpusermanager.com/addons/woocommerce/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager): Integration with WooCommerce. Allow members to update their billing and shipping addresses, display product purchases, reviews and more!
 - [User Verification](https://wpusermanager.com/addons/user-verification/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager): Send a verification link via email upon registration or manually approve users before they can login.
+- [Registration Forms](https://wpusermanager.com/addons/registration-forms/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager): Create unlimited registration forms and have full control over form settings.
 - [Social Login & Registration](https://wpusermanager.com/addons/social-login/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager): Allow your users to quickly login and register with their favorite social network account, Facebook, Twitter, Instagram, LinkedIn & Instagram.
 - [MailChimp](https://wpusermanager.com/addons/mailchimp/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager): Sync users with MailChimp upon registration & more.
 - [Google reCAPTCHA](https://wpusermanager.com/addons/recaptcha?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager): Stop spam registrations on your website for free.
@@ -115,6 +116,19 @@ Please note that using WPUM and the mentioned add-ons does NOT guarantee complia
 13. Login form.
 
 == Changelog ==
+
+= 2.2.1 (7th January 2020) =
+
+- Fix: Password not set correctly when creating users via wp-admin
+- Fix: Viewing addon plugin details not showing changelog when updates available
+
+= 2.2 (6th January 2020) =
+
+- New: Registration Forms addon. Create unlimited registration forms and have full control over form settings.
+- Improvement: Registration form settings moved from main settings page to the form itself
+- Fix: PHP 7.1 compatibility issues in wp-optionskit dependency
+- Improvement: Filter 'wpum_admin_registration_confirmation_email_recipient' to allow developers to customize the email recipient of the admin registration confirmation email
+- Improvement: Filter 'wpum_admin_registration_confirmation_email_headers' to  allow developers to customize the email headers of the admin registration confirmation email
 
 = 2.1.14 (12th November 2019) =
 
