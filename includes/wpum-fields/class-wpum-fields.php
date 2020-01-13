@@ -60,14 +60,16 @@ class WPUM_Fields {
 			'datepicker',
 		] );
 
+		$paths = apply_filters( 'wpum_load_fields_file_paths', array( WPUM_PLUGIN_DIR . 'includes/wpum-fields/types/' ) );
+
 		foreach ( $fields as $field ) {
-			if ( file_exists( WPUM_PLUGIN_DIR . 'includes/wpum-fields/types/class-wpum-field-' . $field . '.php' ) ) {
-				require_once WPUM_PLUGIN_DIR . 'includes/wpum-fields/types/class-wpum-field-' . $field . '.php';
+			foreach ( $paths as $path ) {
+				if ( file_exists( $path . 'class-wpum-field-' . $field . '.php' ) ) {
+					require_once $path . '/class-wpum-field-' . $field . '.php';
+					break;
+				}
 			}
 		}
-
 	}
 
 }
-
-new WPUM_Fields;

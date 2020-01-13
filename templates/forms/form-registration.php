@@ -46,13 +46,16 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 					</label>
 
 				<?php else : ?>
-
-					<label for="<?php echo esc_attr( $key ); ?>">
-						<?php echo esc_html( $field['label'] ); ?>
-						<?php if( isset( $field['required'] ) && $field['required'] ) : ?>
-							<span class="wpum-required">*</span>
-						<?php endif; ?>
-					</label>
+					<?php
+					$show_label = apply_filters( 'wpum_form_show_field_label', true, $field );
+					if ( $show_label ) : ?>
+						<label for="<?php echo esc_attr( $key ); ?>">
+							<?php echo esc_html( $field['label'] ); ?>
+							<?php if ( isset( $field['required'] ) && $field['required'] ) : ?>
+								<span class="wpum-required">*</span>
+							<?php endif; ?>
+						</label>
+					<?php endif; ?>
 					<div class="field <?php echo $field['required'] ? 'required-field' : ''; ?>">
 						<?php
 							// Add the key to field.

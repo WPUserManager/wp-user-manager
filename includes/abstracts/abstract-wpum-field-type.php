@@ -127,7 +127,7 @@ abstract class WPUM_Field_Type {
 	 *
 	 * @return array
 	 */
-	private function get_default_editor_settings() {
+	protected function get_default_editor_settings() {
 
 		$settings = [
 			'general' => [
@@ -229,10 +229,10 @@ abstract class WPUM_Field_Type {
 	 * Register fields into an array that can be easily retrieved.
 	 *
 	 * @param array $fields
-	 * @return void
+	 *
+	 * @return array
 	 */
 	public function register_field_type( $fields ) {
-
 		$settings =  array_merge_recursive( $this->get_default_editor_settings(), $this->get_editor_settings() );
 
 		$fields[ $this->group ]['fields'][] = array(
@@ -244,7 +244,6 @@ abstract class WPUM_Field_Type {
 		);
 
 		return $fields;
-
 	}
 
 }

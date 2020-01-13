@@ -356,6 +356,7 @@ if ( ! class_exists( 'WP_User_Manager' ) ) :
 			$sidebar_manager = \Carbon_Fields\Carbon_Fields::resolve( 'sidebar_manager' );
 			remove_action( 'admin_enqueue_scripts', array( $sidebar_manager, 'enqueue_scripts' ) );
 
+			new WPUM_Fields();
 			$this->notices                = TDP\WP_Notice::instance();
 			$this->forms                  = WPUM_Forms::instance();
 			$this->templates              = new WPUM_Template_Loader();

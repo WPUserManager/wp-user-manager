@@ -73,6 +73,8 @@ class WPUM_Fields_Editor {
 
 		if ( $screen->base == 'users_page_wpum-custom-fields' ) {
 
+			do_action( 'wpum_before_fields_editor_load_scripts' );
+
 			$is_vue_dev = defined( 'WPUM_VUE_DEV' ) && WPUM_VUE_DEV ? true : false;
 
 			if ( $is_vue_dev ) {
@@ -495,30 +497,22 @@ class WPUM_Fields_Editor {
 	 * @return mixed
 	 */
 	private function field_type_exists( $type = null ) {
+		if ( empty( $type ) ) {
+			return false;
+		}
 
-		$exists = false;
-
-		if ( $type ) {
-
-			// Grab all registered field types.
-			$registered_fields = wpum_get_registered_field_types();
-			$criteria          = array( 'type' => $type );
-			$default_fields    = wp_list_filter( $registered_fields['default']['fields'], $criteria );
-			$standard_fields   = wp_list_filter( $registered_fields['standard']['fields'], $criteria );
-			$advanced_fields   = wp_list_filter( $registered_fields['advanced']['fields'], $criteria );
-
-			// If it's found in either the default, standard or advanced fields groups then it's a success!
-			if ( is_array( $default_fields ) && ! empty( $default_fields ) ) {
-				$exists = $default_fields;
-			} elseif ( is_array( $standard_fields ) && ! empty( $standard_fields ) ) {
-				$exists = $standard_fields;
-			} elseif ( is_array( $advanced_fields ) && ! empty( $advanced_fields ) ) {
-				$exists = $advanced_fields;
+		// Grab all registered field types.
+		$registered_fields = wpum_get_registered_field_types();
+		$criteria          = array( 'type' => $type );
+		$field_groups      = array_keys( $registered_fields );
+		foreach ( $field_groups as $field_group ) {
+			$fields = wp_list_filter( $registered_fields[ $field_group ]['fields'], $criteria );
+			if ( is_array( $fields ) && ! empty( $fields ) ) {
+				return $fields;
 			}
 		}
 
-		return $exists;
-
+		return false;
 	}
 
 	/**
@@ -644,7 +638,11 @@ class WPUM_Fields_Editor {
 							case 'checkbox':
 								$setting_data = $setting_data === 'true' ? true : false;
 							default:
-								$setting_data = sanitize_text_field( $setting_data );
+								if ( has_filter( 'wpum_fields_editor_update_field_' . $setting_type ) ) {
+									$setting_data = apply_filters( 'wpum_fields_editor_update_field_' . $setting_type, $setting_data );
+								} else {
+									$setting_data = sanitize_text_field( $setting_data );
+								}
 								break;
 						}
 
