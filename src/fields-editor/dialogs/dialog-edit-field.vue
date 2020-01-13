@@ -84,12 +84,16 @@
 <script>
 import axios from 'axios'
 import qs from 'qs'
+import Vue from "vue";
 import VueFormGenerator from 'vue-form-generator'
+import fieldWpEditor from '../fields/fieldWpEditor'
 import draggable from 'vuedraggable'
 import lodashRemove from 'lodash.remove'
 import lodashIncludes from 'lodash.includes'
 import optionsInput from '../settings/options'
 import '../../../assets/css/src/_columns.scss'
+
+Vue.component("fieldWpEditor", fieldWpEditor);
 
 export default {
 	name: 'dialog-edit-field',
