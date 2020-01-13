@@ -145,9 +145,7 @@ export default {
 		this.getSettings()
 
 		// Remove sidebar sections that aren't needed.
-		if( this.primary_id !== undefined || this.primary_id !== null || this.primary_id !== '' ) {
-			this.maybeRemoveSidebarTabs()
-		}
+		this.maybeRemoveSidebarTabs()
 
 		// Translate the error messages part of the Vue Form Generator.
 		let res                        = VueFormGenerator.validators.resources;
@@ -228,6 +226,10 @@ export default {
 				this.disabledTabs = [ 'validation' ]
 			} else if( this.primary_id == 'user_avatar' || this.primary_id == 'user_cover' ) {
 				this.disabledTabs = [ 'privacy', 'permissions' ]
+			}
+
+			if (this.field_type == 'html') {
+				this.disabledTabs = [ 'validation', 'privacy', 'permissions' ]
 			}
 		},
 		/**
