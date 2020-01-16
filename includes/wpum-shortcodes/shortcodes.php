@@ -694,11 +694,13 @@ function wpum_directory( $atts, $content = null ) {
 				);
 			}
 
-			$args['meta_query'] = array(
-				'relation' => 'OR',
-			);
+			$meta_query_keys['relation'] = 'OR';
 
-			$args['meta_query'] = array_merge( $args['meta_query'], $meta_query_keys );
+			if ( ! isset( $args['meta_query' ] ) ) {
+				$args['meta_query'] = array();
+			}
+
+			$args['meta_query'] = array_merge( $args['meta_query'], array( $meta_query_keys ) );
 		}
 
 		add_action( 'pre_user_query', function ( $uqi ) {
