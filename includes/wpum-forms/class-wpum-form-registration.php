@@ -32,7 +32,7 @@ class WPUM_Form_Registration extends WPUM_Form {
 	 * Stores static instance of class.
 	 *
 	 * @access protected
-	 * @var WPUM_Form_Register The single instance of the class
+	 * @var WPUM_Form_Registration The single instance of the class
 	 */
 	protected static $_instance = null;
 
