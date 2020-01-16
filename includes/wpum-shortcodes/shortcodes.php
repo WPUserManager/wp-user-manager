@@ -716,7 +716,7 @@ function wpum_directory( $atts, $content = null ) {
 	}
 
 	$args['offset'] = $offset;
-	$args           = apply_filters( 'wpum_directory_search_query_args', $args );
+	$args           = apply_filters( 'wpum_directory_search_query_args', $args, $directory_id );
 	$user_query     = new WP_User_Query( $args );
 	$total_users    = $user_query->get_total();
 	$total_pages    = ceil( $total_users / $profiles_per_page );
