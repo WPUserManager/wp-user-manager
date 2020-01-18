@@ -102,7 +102,7 @@ class WPUM_Registration_Forms_Editor {
 				'labels'                => $this->get_labels(),
 				'ajax'                  => admin_url( 'admin-ajax.php' ),
 				'pluginURL'             => WPUM_PLUGIN_URL,
-				'addon_url'             => 'https://wpusermanager.com/addons/registration-forms/?ref=wp_admin',
+				'addon_url'             => 'https://wpusermanager.com/addons/registration-forms?utm_source=WP%20User%20Manager&utm_medium=insideplugin&utm_campaign=WP%20User%20Manager&utm_content=registration-forms-editor',
 				'getFormsNonce'         => wp_create_nonce( 'wpum_get_registration_forms' ),
 				'getFormNonce'          => wp_create_nonce( 'wpum_get_registration_form' ),
 				'saveFormNonce'         => wp_create_nonce( 'wpum_save_registration_form' ),
@@ -154,7 +154,7 @@ class WPUM_Registration_Forms_Editor {
 			'role_desc'                => esc_html__( 'Select the user role that will be assigned to users upon successfull registration.', 'wp-user-manager' ),
 			'tooltip_form_name'        => esc_html__( 'Customize the name of the registration form.', 'wp-user-manager' ),
 			'create_form'              => esc_html__( 'Create Form', 'wp-user-manager' ),
-			'premium_addon'            => sprintf( __( 'Create <a href="%1$s" target="_blank">unlimited registration forms</a>. The <a href="%1$s" target="_blank">Registration Forms</a> addon is required if you wish to add more forms.', 'wp-user-manager' ), 'https://wpusermanager.com/addons/registration-forms/?ref=wp_admin' ),
+			'premium_addon'            => sprintf( __( 'Create <a href="%1$s" target="_blank">unlimited registration forms</a>. The <a href="%1$s" target="_blank">Registration Forms</a> addon is required if you wish to add more forms.', 'wp-user-manager' ), 'https://wpusermanager.com/addons/registration-forms?utm_source=WP%20User%20Manager&utm_medium=insideplugin&utm_campaign=WP%20User%20Manager&utm_content=registration-forms-editor' ),
 			'purchase'                 => esc_html__( 'Purchase', 'wp-user-manager' ),
 			'success_message'          => esc_html__( 'Changes successfully saved.', 'wp-user-manager' ),
 		];

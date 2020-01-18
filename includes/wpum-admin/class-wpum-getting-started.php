@@ -211,7 +211,7 @@ class WPUM_Getting_Started {
 						</div>
 						<div class="welcome-panel-column welcome-panel-last">
 							<h4><?php _e( 'Documentation', 'wp-user-manager' ); ?></h4>
-							<p class="welcome-icon welcome-learn-more"><?php echo sprintf( __( 'Looking for help? <a href="%s" target="_blank">WP User Manager documentation</a> has got you covered.', 'wp-user-manager' ), 'http://docs.wpusermanager.com' ); ?> <br/><br/><a href="http://docs.wpusermanager.com" class="button" target="_blank"><?php _e( 'Read documentation', 'wp-user-manager' ); ?></a></p>
+							<p class="welcome-icon welcome-learn-more"><?php echo sprintf( __( 'Looking for help? <a href="%s" target="_blank">WP User Manager documentation</a> has got you covered.', 'wp-user-manager' ), 'https://docs.wpusermanager.com/?utm_source=WP%20User%20Manager&utm_medium=insideplugin&utm_campaign=WP%20User%20Manager&utm_content=welcome-panel' ); ?> <br/><br/><a href="https://docs.wpusermanager.com/?utm_source=WP%20User%20Manager&utm_medium=insideplugin&utm_campaign=WP%20User%20Manager&utm_content=welcome-panel" class="button" target="_blank"><?php _e( 'Read documentation', 'wp-user-manager' ); ?></a></p>
 						</div>
 					</div>
 				</div>
@@ -223,13 +223,13 @@ class WPUM_Getting_Started {
 
 					<div class="col">
 						<h3><?php _e( 'Looking for help ?', 'wp-user-manager' ); ?></h3>
-						<p><?php echo sprintf( __( 'We do all we can to provide every user with the best support possible. If you encounter a problem or have a question, please <a href="%1$s" target="_blank">contact us.</a> Make sure you <a href="%2$s">read the documentation</a> first.', 'wp-user-manager' ), 'https://wpusermanager.com/contacts', 'https://docs.wpusermanager.com' ); ?></p>
+						<p><?php echo sprintf( __( 'We do all we can to provide every user with the best support possible. If you encounter a problem or have a question, please <a href="%1$s" target="_blank">contact us.</a> Make sure you <a href="%2$s">read the documentation</a> first.', 'wp-user-manager' ), 'https://wpusermanager.com/contacts?utm_source=WP%20User%20Manager&utm_medium=insideplugin&utm_campaign=WP%20User%20Manager&utm_content=welcome-panel', 'https://docs.wpusermanager.com/?utm_source=WP%20User%20Manager&utm_medium=insideplugin&utm_campaign=WP%20User%20Manager&utm_content=welcome-panel' ); ?></p>
 					</div>
 
 					<div class="last-feature col">
 						<h3><?php _e( 'Extensions for WP User Manager', 'wp-user-manager' ); ?></h3>
 						<p><?php echo __( 'Browse our growing collection of addons built specifically for WPUM to customize the functionality of your community.', 'wp-user-manager' ); ?></p>
-						<a href="<?php echo admin_url(); ?>" class="button"><?php esc_html_e( 'Browse addons', 'wp-user-manager' ); ?> &raquo;</a>
+						<a href="<?php echo admin_url( 'users.php?page=wpum-addons' ); ?>" class="button"><?php esc_html_e( 'Browse addons', 'wp-user-manager' ); ?> &raquo;</a>
 					</div>
 
 					<hr>

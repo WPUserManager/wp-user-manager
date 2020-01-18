@@ -103,7 +103,7 @@ class WPUM_Fields_Editor {
 				'get_fields_nonce'          => wp_create_nonce( 'wpum_get_fields' ),
 				'create_field_nonce'        => wp_create_nonce( 'wpum_create_field' ),
 				'delete_field_nonce'        => wp_create_nonce( 'wpum_delete_field' ),
-				'cf_addon_url'              => 'https://wpusermanager.com/addons/custom-fields/?ref=wp_admin',
+				'cf_addon_url'              => 'https://wpusermanager.com/addons/custom-fields?utm_source=WP%20User%20Manager&utm_medium=insideplugin&utm_campaign=WP%20User%20Manager&utm_content=custom-fields-editor',
 				'fields_types'              => wpum_get_registered_field_types(),
 				'edit_dialog_tabs'          => wpum_get_edit_field_dialog_tabs(),
 			];
@@ -150,7 +150,7 @@ class WPUM_Fields_Editor {
 			'tooltip_group_description' => esc_html__( 'Customize the description of the group. This may be used into your theme.', 'wp-user-manager' ),
 			'purchase'                  => esc_html__( 'Purchase', 'wp-user-manager' ),
 			'create_group'              => esc_html__( 'Create Fields Group', 'wp-user-manager' ),
-			'premium_addon'             => sprintf( __( 'Create <a href="%1$s" target="_blank">unlimited custom fields and groups</a> for user profiles and registration forms with a drag & drop interface. The <a href="%1$s" target="_blank">custom fields</a> addon is required if you wish to extend your community.', 'wp-user-manager' ), 'https://wpusermanager.com/addons/custom-fields/?ref=wp_admin' ),
+			'premium_addon'             => sprintf( __( 'Create <a href="%1$s" target="_blank">unlimited custom fields and groups</a> for user profiles and registration forms with a drag & drop interface. The <a href="%1$s" target="_blank">custom fields</a> addon is required if you wish to extend your community.', 'wp-user-manager' ), 'https://wpusermanager.com/addons/custom-fields?utm_source=WP%20User%20Manager&utm_medium=insideplugin&utm_campaign=WP%20User%20Manager&utm_content=custom-fields-editor' ),
 			'fields_page_title'         => esc_html__( 'Editing:', 'wp-user-manager' ),
 			'fields_go_back'            => esc_html__( 'Back to the groups list', 'wp-user-manager' ),
 			'fields_add_new'            => esc_html__( 'Add new custom field', 'wp-user-manager' ),

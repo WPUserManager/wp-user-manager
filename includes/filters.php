@@ -25,7 +25,7 @@ function wpum_admin_rate_us( $footer_text ) {
 	}
 	$rate_text = sprintf(
 		__( 'Please support the future of <a href="%1$s" target="_blank">WP User Manager</a> by <a href="%2$s" target="_blank">rating us</a> on <a href="%2$s" target="_blank">WordPress.org</a>', 'wp-user-manager' ),
-		'https://wpusermanager.com',
+		'https://wpusermanager.com/?utm_source=WP%20User%20Manager&utm_medium=insideplugin&utm_campaign=WP%20User%20Manager&utm_content=settings-footer',
 		'http://wordpress.org/support/view/plugin-reviews/wp-user-manager?filter=5#postform'
 	);
 	return str_replace( '</span>', '', $footer_text ) . ' | ' . $rate_text . ' <span class="dashicons dashicons-star-filled footer-star"></span><span class="dashicons dashicons-star-filled footer-star"></span><span class="dashicons dashicons-star-filled footer-star"></span><span class="dashicons dashicons-star-filled footer-star"></span><span class="dashicons dashicons-star-filled footer-star"></span></span>';
@@ -40,8 +40,8 @@ add_filter( 'admin_footer_text', 'wpum_admin_rate_us' );
  */
 function wpum_add_settings_link( $links ) {
 	$settings_link = '<a href="' . admin_url( 'users.php?page=wpum-settings' ) . '">' . __( 'Settings', 'wp-user-manager' ) . '</a>';
-	$docs_link     = '<a href="https://docs.wpusermanager.com/" target="_blank">' . __( 'Documentation', 'wp-user-manager' ) . '</a>';
-	$addons_link   = '<a href="https://wpusermanager.com/addons" target="_blank">' . __( 'Addons', 'wp-user-manager' ) . '</a>';
+	$docs_link     = '<a href="https://docs.wpusermanager.com/?utm_source=WP%20User%20Manager&utm_medium=insideplugin&utm_campaign=WP%20User%20Manager&utm_content=plugins-table" target="_blank">' . __( 'Documentation', 'wp-user-manager' ) . '</a>';
+	$addons_link   = '<a href="https://wpusermanager.com/addons?utm_source=WP%20User%20Manager&utm_medium=insideplugin&utm_campaign=WP%20User%20Manager&utm_content=plugins-table" target="_blank">' . __( 'Addons', 'wp-user-manager' ) . '</a>';
 	array_unshift( $links, $settings_link );
 	array_unshift( $links, $docs_link );
 	array_unshift( $links, $addons_link );

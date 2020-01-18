@@ -1,7 +1,7 @@
 <div class="wrap" id="wpum-addons-page">
 	<h1>
 		<?php esc_html_e( 'WP User Manager Addons', 'wp-user-manager' ); ?>
-		<a href="https://wpusermanager.com/addons/" class="button-primary" target="_blank">
+		<a href="https://wpusermanager.com/addons/?utm_source=WP%20User%20Manager&utm_medium=insideplugin&utm_campaign=WP%20User%20Manager&utm_content=addons-page" class="button-primary" target="_blank">
 			<?php esc_html_e( 'View All Addons', 'wp-user-manager' ); ?><span class="dashicons dashicons-external"></span>
 		</a>
 	</h1>
@@ -10,7 +10,9 @@
 
 	<div id="wpum-addons-list">
 
-		<?php foreach( $this->get_addons() as $addon ) : ?>
+		<?php foreach( $this->get_addons() as $addon ) :
+			$addon->link = $addon->link . '?utm_source=WP%20User%20Manager&utm_medium=insideplugin&utm_campaign=WP%20User%20Manager&utm_content=addons-page';
+			?>
 
 			<div class="download type-download">
 				<div class="featured-img">
