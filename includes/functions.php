@@ -871,17 +871,15 @@ function wpum_get_registered_profile_tabs() {
 /**
  * Retrieve the url a profile tab for the given user.
  *
- * @param object $user
- * @param array  $tab
+ * @param \WP_User $user
+ * @param string  $tab
  * @return string
  */
 function wpum_get_profile_tab_url( $user, $tab ) {
-
 	$url  = wpum_get_profile_url( $user );
 	$url .= '/' . $tab;
 
-	return $url;
-
+	return apply_filters( 'wpum_get_profile_tab_url', $url, $tab, $user );
 }
 
 /**
