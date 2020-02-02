@@ -471,7 +471,7 @@ endif; // End if class_exists check.
  * Start WP User Manager.
  * The main function responsible for returning the one true WP User Manager instance to functions everywhere.
  *
- * @return object
+ * @return WP_User_Manager
  */
 function WPUM() {
 	return WP_User_Manager::instance();
