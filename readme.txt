@@ -8,7 +8,7 @@ Tested up to: 5.3
 Requires PHP: 5.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
-Stable Tag: 2.2.2
+Stable Tag: 2.2.3
 
 The most customizable profiles & community builder WordPress plugin with front-end login, registration, profile customization and content restriction.
 
@@ -116,6 +116,11 @@ Please note that using WPUM and the mentioned add-ons does NOT guarantee complia
 13. Login form.
 
 == Changelog ==
+
+= 2.2.3 (3rd February 2020) =
+
+- Fix: Directory dropdowns for 'Sort By' and 'Results per page' not working unless Search button clicked
+- Improvement: Filter 'wpum_get_profile_tab_url' to allow developers to customize the URL of a profile tab link
 
 = 2.2.2 (18th January 2020) =
 
