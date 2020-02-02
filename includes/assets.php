@@ -60,6 +60,7 @@ function wpum_load_scripts() {
 
 	// Load frontend js.
 	wp_enqueue_script( 'jquery' );
+	wp_register_script( 'wpum-directories', WPUM_PLUGIN_URL . 'assets/js/wpum-directories.min.js', array( 'jquery' ), WPUM_VERSION, true );
 
 	if ( is_page( wpum_get_core_page_id( 'account' ) ) || is_page( wpum_get_core_page_id( 'register' ) ) ) {
 

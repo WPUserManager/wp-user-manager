@@ -55,7 +55,8 @@ module.exports = function( grunt ) {
 					'assets/js/admin/admin-email-customizer.min.js': ['assets/js/src/admin/admin-email-customizer.js'],
 					'assets/js/admin/admin-menus.min.js': ['assets/js/src/admin/admin-menus.js'],
 					'assets/js/admin/admin-upgrades.min.js': ['assets/js/src/admin/admin-upgrades.js'],
-					'assets/js/wp-user-manager.min.js': ['assets/js/src/wp-user-manager.js']
+					'assets/js/wp-user-manager.min.js': ['assets/js/src/wp-user-manager.js'],
+					'assets/js/wpum-directories.min.js': ['assets/js/src/wpum-directories.js']
 				},
 				options: {
 					banner: '/*! <%= pkg.title %> - v<%= pkg.version %>\n' +

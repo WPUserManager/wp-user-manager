@@ -746,6 +746,8 @@ function wpum_directory( $atts, $content = null ) {
 
 	$output = ob_get_clean();
 
+	wp_enqueue_script( 'wpum-directories' );
+
 	return $output;
 
 }
