@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "e1d52fb2bdc352876d3ad38927ed1e4e",
+    "content-hash": "0cef48c4b87e3af865c77360d65b7a17",
     "packages": [
         {
             "name": "a5hleyrich/wp-background-processing",
@@ -626,6 +626,52 @@
             "time": "2020-01-03T21:08:39+00:00"
         },
         {
+            "name": "wp-user-manager/wpum-blocks",
+            "version": "dev-master",
+            "dist": {
+                "type": "path",
+                "url": "/Applications/MAMP/htdocs/wpum.test/packages/wpum-blocks",
+                "reference": "1eeb1f424f93c748484a175ae7b1d6b6537d6b6d",
+                "shasum": null
+            },
+            "require": {
+                "composer/installers": "~1.0",
+                "php": ">=5.6"
+            },
+            "require-dev": {
+                "dealerdirect/phpcodesniffer-composer-installer": "0.4.4",
+                "pressmodo/phpcs-config": "dev-master"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "WPUserManagerBlocks\\": "includes/classes/"
+                },
+                "files": [
+                    "blocks-loader.php"
+                ]
+            },
+            "scripts": {
+                "lint": [
+                    "phpcs ."
+                ],
+                "lint-fix": [
+                    "phpcbf ."
+                ]
+            },
+            "authors": [
+                {
+                    "name": "WP User Manager",
+                    "email": "hello@wpusermanager.com"
+                }
+            ],
+            "description": "WP User Manager component that registers custom Gutenberg blocks.",
+            "homepage": "https://wpusermanager.com",
+            "keywords": [
+                "wordpress"
+            ]
+        },
+        {
             "name": "wpbp/widgets-helper",
             "version": "dev-master",
             "source": {
@@ -670,6 +716,7 @@
     "aliases": [],
     "minimum-stability": "dev",
     "stability-flags": {
+        "wp-user-manager/wpum-blocks": 20,
         "wpbp/widgets-helper": 20
     },
     "prefer-stable": false,

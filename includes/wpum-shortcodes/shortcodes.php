@@ -34,7 +34,7 @@ function wpum_login_form( $atts, $content = null ) {
 
 	ob_start();
 
-	if ( is_user_logged_in() ) {
+	if ( is_user_logged_in() && ! ( isset( $_GET['context'] ) && 'edit' === $_GET['context'] ) ) {
 		WPUM()->templates
 			->get_template_part( 'already-logged-in' );
 	} else {
@@ -73,7 +73,7 @@ function wpum_password_recovery( $atts, $content = null ) {
 
 	ob_start();
 
-	if ( is_user_logged_in() ) {
+	if ( is_user_logged_in() && ! ( isset( $_GET['context'] ) && 'edit' === $_GET['context'] ) ) {
 		WPUM()->templates
 			->get_template_part( 'already-logged-in' );
 	} else {
@@ -106,7 +106,7 @@ function wpum_login_link( $atts, $content = null ) {
 		)
 	);
 
-	if ( is_user_logged_in() ) {
+	if ( is_user_logged_in() && ! ( isset( $_GET['context'] ) && 'edit' === $_GET['context'] ) ) {
 		$output = '';
 	} else {
 
@@ -152,7 +152,7 @@ function wpum_logout_link( $atts, $content = null ) {
 
 	$output = '';
 
-	if ( is_user_logged_in() ) {
+	if ( is_user_logged_in() || ! ( isset( $_GET['context'] ) && 'edit' === $_GET['context'] )  ) {
 		$output = '<a href="' . esc_url( wp_logout_url( $redirect ) ) . '">' . esc_html( $label ) . '</a>';
 	}
 
@@ -186,7 +186,7 @@ function wpum_registration_form( $atts, $content = null ) {
 
 	if ( wpum_is_registration_enabled() ) {
 
-		if ( is_user_logged_in() && ! $is_success ) {
+		if ( is_user_logged_in() && ! $is_success && ! ( isset( $_GET['context'] ) && 'edit' === $_GET['context'] ) ) {
 
 			WPUM()->templates
 				->get_template_part( 'already-logged-in' );

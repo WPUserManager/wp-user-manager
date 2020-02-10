@@ -1,4 +1,10 @@
 {
+  "repositories": [
+    {
+      "type": "path",
+      "url": "/Applications/MAMP/htdocs/wpum.test/packages/wpum-blocks"
+    }
+  ],
   "require": {
     "a5hleyrich/wp-background-processing": "^1.0",
     "alessandrotesoro/wp-notices": "^1.0",
@@ -7,6 +13,7 @@
     "htmlburger/carbon-fields": "^2.1",
     "wearerequired/wp-requirements-check": "^1.0",
     "wp-user-manager/wp-optionskit": "^1.0",
+    "wp-user-manager/wpum-blocks": "dev-master",
     "wpbp/widgets-helper": "dev-master"
   },
   "minimum-stability": "dev",
