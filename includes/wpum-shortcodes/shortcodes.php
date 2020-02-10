@@ -262,7 +262,14 @@ function wpum_profile( $atts, $content = null ) {
 
 	$login_page        = get_permalink( wpum_get_core_page_id( 'login' ) );
 	$registration_page = get_permalink( wpum_get_core_page_id( 'register' ) );
-	$warning_message   = sprintf( __( 'This content is available to members only. Please <a href="%1$s">login</a> or <a href="%2$s">register</a> to view this area.', 'wp-user-manager' ), $login_page, $registration_page );
+
+	if ( ! is_user_logged_in() && wpum_get_queried_user_id() ) {
+		$user       = get_user_by( 'id', wpum_get_queried_user_id() );
+		$redirect   = wpum_get_profile_url( $user );
+		$login_page = add_query_arg( [ 'redirect_to' => $redirect ], $login_page );
+	}
+
+	$warning_message  = sprintf( __( 'This content is available to members only. Please <a href="%1$s">login</a> or <a href="%2$s">register</a> to view this area.', 'wp-user-manager' ), $login_page, $registration_page );
 
 	/**
 	 * Filter: allow developers to modify the profile restriction message.
