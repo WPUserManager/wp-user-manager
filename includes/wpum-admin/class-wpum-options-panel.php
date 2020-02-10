@@ -354,7 +354,7 @@ class WPUM_Options_Panel {
 					'type' => 'checkbox',
 				),
 			],
-			'profiles_content'    => [
+			'profiles_content' => [
 				array(
 					'id'   => 'profile_posts',
 					'name' => __( 'Display Posts', 'wp-user-manager' ),
@@ -365,6 +365,14 @@ class WPUM_Options_Panel {
 					'id'   => 'profile_comments',
 					'name' => __( 'Display Comments', 'wp-user-manager' ),
 					'desc' => __( 'Enable this option to display users submitted comments on their profile page.', 'wp-user-manager' ),
+					'type' => 'checkbox',
+				),
+			],
+			'account'          => [
+				array(
+					'id'   => 'current_password',
+					'name' => __( 'Require Current Password', 'wp-user-manager' ),
+					'desc' => __( 'Ask user for current password when resetting password on the account page', 'wp-user-manager' ),
 					'type' => 'checkbox',
 				),
 			],

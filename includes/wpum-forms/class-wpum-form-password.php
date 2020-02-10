@@ -98,27 +98,36 @@ class WPUM_Form_Password extends WPUM_Form {
 			return;
 		}
 
-		$this->fields = apply_filters(
-			'password_change_form_fields', array(
-				'password' => array(
-					'password'        => array(
-						'label'       => esc_html__( 'Password', 'wp-user-manager' ),
-						'type'        => 'password',
-						'required'    => true,
-						'placeholder' => '',
-						'priority'    => 0,
-					),
-					'password_repeat' => array(
-						'label'       => esc_html__( 'Repeat password', 'wp-user-manager' ),
-						'type'        => 'password',
-						'required'    => true,
-						'placeholder' => '',
-						'priority'    => 1,
-					),
+		$password_fields = array(
+			'password' => array(
+				'password'        => array(
+					'label'       => esc_html__( 'Password', 'wp-user-manager' ),
+					'type'        => 'password',
+					'required'    => true,
+					'placeholder' => '',
+					'priority'    => 0,
 				),
-			)
+				'password_repeat' => array(
+					'label'       => esc_html__( 'Repeat password', 'wp-user-manager' ),
+					'type'        => 'password',
+					'required'    => true,
+					'placeholder' => '',
+					'priority'    => 1,
+				),
+			),
 		);
 
+		if ( wpum_get_option( 'current_password' ) ) {
+			$password_fields['password']['current_password'] = array(
+				'label'       => __( 'Current Password', 'wpum-delete-account' ),
+				'type'        => 'password',
+				'required'    => true,
+				'placeholder' => '',
+				'priority'    => - 1,
+			);
+		}
+
+		$this->fields = apply_filters( 'password_change_form_fields', $password_fields );
 	}
 
 	/**
@@ -157,8 +166,16 @@ class WPUM_Form_Password extends WPUM_Form {
 
 		if ( $form == $this->form_name && isset( $values['password']['password'] ) ) {
 
-			$password_1 = $values['password']['password'];
-			$password_2 = $values['password']['password_repeat'];
+			$password_current = $values['password']['current_password'];
+			$password_1       = $values['password']['password'];
+			$password_2       = $values['password']['password_repeat'];
+
+			if ( wpum_get_option( 'current_password' ) ) {
+				$user = wp_get_current_user();
+				if ( $user && ! wp_check_password( $password_current, $user->data->user_pass, $user->ID ) ) {
+					return new WP_Error( 'password-validation-wrongcurrent', esc_html__( 'Error: incorrect current password.', 'wp-user-manager' ) );
+				}
+			}
 
 			if ( ! wpum_get_option( 'disable_strong_passwords' ) ) {
 				$containsLetter  = preg_match( '/[A-Z]/', $password_1 );
