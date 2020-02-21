@@ -98,6 +98,7 @@ class WPUM_Directories_Editor {
 			'exclude_from_search' => true,
 			'publicly_queryable'  => true,
 			'capability_type'     => 'page',
+			'show_in_rest' => true
 		);
 		register_post_type( 'wpum_directory', $args );
 
