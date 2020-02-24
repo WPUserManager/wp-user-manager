@@ -44,7 +44,7 @@ class WPUM_Directories_Editor {
 			add_filter( 'bulk_post_updated_messages', array( $this, 'bulk_post_updated_messages' ) );
 		}
 
-		add_filter( 'register_post_type_args', array( $this, 'show_rest_to_users' ), 10, 2 );
+		add_filter( 'register_post_type_args', array( $this, 'show_rest_to_user_directories' ), 10, 2 );
 	}
 
 	/**
@@ -114,7 +114,7 @@ class WPUM_Directories_Editor {
 	 *
 	 * @return mixed
 	 */
-	public function show_rest_to_users( $args, $post_type ) {
+	public function show_rest_to_user_directories( $args, $post_type ) {
 		if ( is_user_logged_in() ) {
 			if ( 'wpum_directory' === $post_type ) {
 				$args['show_in_rest'] = true;
