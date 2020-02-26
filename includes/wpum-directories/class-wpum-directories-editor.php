@@ -44,6 +44,7 @@ class WPUM_Directories_Editor {
 			add_filter( 'bulk_post_updated_messages', array( $this, 'bulk_post_updated_messages' ) );
 		}
 
+		add_filter( 'register_post_type_args', array( $this, 'show_rest_to_user_directories' ), 10, 2 );
 	}
 
 	/**
@@ -98,9 +99,29 @@ class WPUM_Directories_Editor {
 			'exclude_from_search' => true,
 			'publicly_queryable'  => true,
 			'capability_type'     => 'page',
+			'show_in_rest' => true
 		);
 		register_post_type( 'wpum_directory', $args );
 
+	}
+
+	/**
+	 * Add REST API support to an Directory post type.
+	 * User needs to be logged in
+	 *
+	 * @param array $args
+	 * @param string $post_type
+	 *
+	 * @return mixed
+	 */
+	public function show_rest_to_user_directories( $args, $post_type ) {
+		if ( is_user_logged_in() ) {
+			if ( 'wpum_directory' === $post_type ) {
+				$args['show_in_rest'] = true;
+			}
+		}
+
+		return $args;
 	}
 
 	/**

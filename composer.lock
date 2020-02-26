@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "e1d52fb2bdc352876d3ad38927ed1e4e",
+    "content-hash": "7c6dd0dabdfcdf1bc07017d7710d2b3b",
     "packages": [
         {
             "name": "a5hleyrich/wp-background-processing",
@@ -141,16 +141,16 @@
         },
         {
             "name": "composer/installers",
-            "version": "v1.7.0",
+            "version": "v1.8.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/composer/installers.git",
-                "reference": "141b272484481432cda342727a427dc1e206bfa0"
+                "reference": "7d610d50aae61ae7ed6675e58efeabdf279bb5e3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/composer/installers/zipball/141b272484481432cda342727a427dc1e206bfa0",
-                "reference": "141b272484481432cda342727a427dc1e206bfa0",
+                "url": "https://api.github.com/repos/composer/installers/zipball/7d610d50aae61ae7ed6675e58efeabdf279bb5e3",
+                "reference": "7d610d50aae61ae7ed6675e58efeabdf279bb5e3",
                 "shasum": ""
             },
             "require": {
@@ -198,6 +198,7 @@
                 "Kanboard",
                 "Lan Management System",
                 "MODX Evo",
+                "MantisBT",
                 "Mautic",
                 "Maya",
                 "OXID",
@@ -252,6 +253,7 @@
                 "shopware",
                 "silverstripe",
                 "sydes",
+                "sylius",
                 "symfony",
                 "typo3",
                 "wordpress",
@@ -259,7 +261,7 @@
                 "zend",
                 "zikula"
             ],
-            "time": "2019-08-12T15:00:31+00:00"
+            "time": "2020-02-07T10:39:20+00:00"
         },
         {
             "name": "gamajo/template-loader",
@@ -624,6 +626,47 @@
                 "wordpress"
             ],
             "time": "2020-01-03T21:08:39+00:00"
+        },
+        {
+            "name": "wp-user-manager/wpum-blocks",
+            "version": "1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/WPUserManager/wpum-blocks.git",
+                "reference": "00321690255be4e231f7bdb851c64043aa0d562d"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/WPUserManager/wpum-blocks/zipball/00321690255be4e231f7bdb851c64043aa0d562d",
+                "reference": "00321690255be4e231f7bdb851c64043aa0d562d",
+                "shasum": ""
+            },
+            "require": {
+                "composer/installers": "~1.0",
+                "php": ">=5.6"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "WPUserManagerBlocks\\": "includes/classes/"
+                },
+                "files": [
+                    "blocks-loader.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "authors": [
+                {
+                    "name": "WP User Manager",
+                    "email": "hello@wpusermanager.com"
+                }
+            ],
+            "description": "WP User Manager component that registers custom blocks.",
+            "homepage": "https://wpusermanager.com",
+            "keywords": [
+                "wordpress"
+            ],
+            "time": "2020-02-26T10:54:59+00:00"
         },
         {
             "name": "wpbp/widgets-helper",

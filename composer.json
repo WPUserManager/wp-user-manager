@@ -7,6 +7,7 @@
     "htmlburger/carbon-fields": "^2.1",
     "wearerequired/wp-requirements-check": "^1.0",
     "wp-user-manager/wp-optionskit": "^1.0",
+    "wp-user-manager/wpum-blocks": "^1.0",
     "wpbp/widgets-helper": "dev-master"
   },
   "minimum-stability": "dev",
