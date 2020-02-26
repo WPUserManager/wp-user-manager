@@ -123,8 +123,9 @@ class WPUM_Options_Panel {
 			'emails'       => [
 				'admin_notifications' => __( 'Administration Notifications', 'wp-user-manager' ),
 			],
-			'profiles'     => [
+			'profiles' => [
 				'profiles_content' => __( 'Profiles Content', 'wp-user-manager' ),
+				'account'          => __( 'Account', 'wp-user-manager' ),
 			],
 			'redirects'    => [
 				'backend_redirects' => __( 'Backend Redirects', 'wp-user-manager' ),
