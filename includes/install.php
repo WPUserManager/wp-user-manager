@@ -41,12 +41,15 @@ function wp_user_manager_install( $network_wide = false ) {
  * @return void
  */
 function wpum_generate_pages() {
+	$is_block_editor = use_block_editor_for_post_type( 'page' );
 	// Generate login page
 	if ( ! wpum_get_option( 'login_page' ) ) {
+		$login_content = $is_block_editor ? '<!-- wp:wpum/login-form /-->' : '[wpum_login_form psw_link="yes" register_link="yes"]';
+
 		$login = wp_insert_post(
 			array(
 				'post_title'     => __( 'Login', 'wp-user-manager' ),
-				'post_content'   => '[wpum_login_form psw_link="yes" register_link="yes"]',
+				'post_content'   => $login_content,
 				'post_status'    => 'publish',
 				'post_author'    => 1,
 				'post_type'      => 'page',
@@ -57,10 +60,12 @@ function wpum_generate_pages() {
 	}
 	// Generate password recovery page
 	if ( ! wpum_get_option( 'password_recovery_page' ) ) {
+		$psw_content = $is_block_editor ? '<!-- wp:wpum/password-recovery-form /-->' : '[wpum_password_recovery login_link="yes" register_link="yes"]';
+
 		$psw = wp_insert_post(
 			array(
 				'post_title'     => __( 'Password Reset', 'wp-user-manager' ),
-				'post_content'   => '[wpum_password_recovery login_link="yes" register_link="yes"]',
+				'post_content'   => $psw_content,
 				'post_status'    => 'publish',
 				'post_author'    => 1,
 				'post_type'      => 'page',
@@ -71,10 +76,12 @@ function wpum_generate_pages() {
 	}
 	// Generate password recovery page
 	if ( ! wpum_get_option( 'registration_page' ) ) {
+		$reg_content = $is_block_editor ? '<!-- wp:wpum/registration-form /-->' : '[wpum_register login_link="yes" psw_link="yes"]';
+
 		$register = wp_insert_post(
 			array(
 				'post_title'     => __( 'Register', 'wp-user-manager' ),
-				'post_content'   => '[wpum_register login_link="yes" psw_link="yes"]',
+				'post_content'   => $reg_content,
 				'post_status'    => 'publish',
 				'post_author'    => 1,
 				'post_type'      => 'page',
@@ -85,10 +92,12 @@ function wpum_generate_pages() {
 	}
 	// Generate account page
 	if ( ! wpum_get_option( 'account_page' ) ) {
+		$account_content = $is_block_editor ? '<!-- wp:wpum/account-page /-->' : '[wpum_account]';
+
 		$account = wp_insert_post(
 			array(
 				'post_title'     => __( 'Account', 'wp-user-manager' ),
-				'post_content'   => '[wpum_account]',
+				'post_content'   => $account_content,
 				'post_status'    => 'publish',
 				'post_author'    => 1,
 				'post_type'      => 'page',
@@ -99,10 +108,12 @@ function wpum_generate_pages() {
 	}
 	// Generate password recovery page
 	if ( ! wpum_get_option( 'profile_page' ) ) {
+		$profile_content = $is_block_editor ? '<!-- wp:wpum/profile-page /-->' : '[wpum_profile]';
+
 		$profile = wp_insert_post(
 			array(
 				'post_title'     => __( 'Profile', 'wp-user-manager' ),
-				'post_content'   => '[wpum_profile]',
+				'post_content'   => $profile_content,
 				'post_status'    => 'publish',
 				'post_author'    => 1,
 				'post_type'      => 'page',
