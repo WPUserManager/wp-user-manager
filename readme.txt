@@ -8,7 +8,7 @@ Tested up to: 5.3
 Requires PHP: 5.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
-Stable Tag: 2.2.3
+Stable Tag: 2.3
 
 The most customizable profiles & community builder WordPress plugin with front-end login, registration, profile customization and content restriction.
 
@@ -116,6 +116,12 @@ Please note that using WPUM and the mentioned add-ons does NOT guarantee complia
 13. Login form.
 
 == Changelog ==
+
+= 2.3 (26th February 2020) =
+
+- New: Block Editor support! New WPUM blocks for login form, registration form, user directories, and more
+- Improvement: Add current password field as confirmation when changing the password on the Account page (enabled with the 'Require Current Password' account setting)
+- Fix: User not redirected to profile page after logging in, when logged out and clicking on the the link in the restricted content message
 
 = 2.2.3 (3rd February 2020) =
 
