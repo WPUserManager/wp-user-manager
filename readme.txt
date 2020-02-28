@@ -8,7 +8,7 @@ Tested up to: 5.3
 Requires PHP: 5.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
-Stable Tag: 2.3
+Stable Tag: 2.3.1
 
 The most customizable profiles & community builder WordPress plugin with front-end login, registration, profile customization and content restriction.
 
@@ -116,6 +116,10 @@ Please note that using WPUM and the mentioned add-ons does NOT guarantee complia
 13. Login form.
 
 == Changelog ==
+
+= 2.3.1 (28th February 2020) =
+
+- Fix: PHP Fatal error: Uncaught Error: Call to undefined function is_user_logged_in() on some installs, especially ClassicPress sites
 
 = 2.3 (26th February 2020) =
 
