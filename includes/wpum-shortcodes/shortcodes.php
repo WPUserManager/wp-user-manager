@@ -759,3 +759,38 @@ function wpum_directory( $atts, $content = null ) {
 
 }
 add_shortcode( 'wpum_user_directory', 'wpum_directory' );
+
+/**
+ * Make sure search meta keys for custom fields don't have a leading underscore
+ *
+ * @param array $args
+ *
+ * @return array
+ */
+function wpum_maybe_fix_carbon_fields_search_keys( $args ) {
+	if ( ! isset( $args['meta_query'][0] ) ) {
+		return $args;
+	}
+
+	$wpum_meta = false;
+
+	foreach ( $args['meta_query'][0] as $meta ) {
+		if ( isset( $meta['key'] ) && substr( $meta['key'], 0, 5 ) === 'wpum_' ) {
+			$wpum_meta = true;
+			break;
+		}
+	}
+
+	if ( ! $wpum_meta ) {
+		return $args;
+	}
+
+	remove_action( 'pre_get_users', array(
+		Carbon_Fields\Carbon_Fields::service( 'meta_query' ),
+		'hook_pre_get_users',
+	) );
+
+	return $args;
+}
+
+add_filter( 'wpum_directory_search_query_args', 'wpum_maybe_fix_carbon_fields_search_keys', 100 );
