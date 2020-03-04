@@ -213,7 +213,7 @@ function wpum_get_email_field( $email_id = false, $field_id = false ) {
 	}
 
 	$output       = false;
-	$stored_email = get_option( 'wpum_email', false );
+	$stored_email = wpum_get_emails();
 
 	if ( ! empty( $stored_email ) && is_array( $stored_email ) && array_key_exists( $email_id, $stored_email ) ) {
 		$found_email = $stored_email[ $email_id ];
@@ -241,13 +241,26 @@ function wpum_get_email( $email_id = false ) {
 		return false;
 	}
 
-	$emails = get_option( 'wpum_email', array() );
+	$emails = wpum_get_emails();
 
 	if ( array_key_exists( $email_id, $emails ) && is_array( $emails[ $email_id ] ) ) {
 		$email = $emails[ $email_id ];
 	}
 
 	return $email;
+}
+
+/**
+ * @return array
+ */
+function wpum_get_emails() {
+	$emails = get_option( 'wpum_email', array() );
+
+	if ( empty( $emails ) ) {
+		$emails = wpum_install_emails();
+	}
+
+	return $emails;
 }
 
 /**

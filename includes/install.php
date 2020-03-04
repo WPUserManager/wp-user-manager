@@ -147,10 +147,9 @@ function wpum_install_registration_form() {
 /**
  * Install emails into the database.
  *
- * @return void
+ * @return array
  */
 function wpum_install_emails() {
-
 	$emails = [
 		'registration_confirmation' => [
 			'title'   => 'Welcome to {sitename}',
@@ -176,6 +175,7 @@ function wpum_install_emails() {
 
 	update_option( 'wpum_email', $emails );
 
+	return $emails;
 }
 
 /**
