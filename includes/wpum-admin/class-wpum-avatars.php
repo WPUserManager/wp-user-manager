@@ -120,10 +120,10 @@ class WPUM_Avatars {
 	 * @param string $url
 	 * @param mixed $id_or_email
 	 * @param array $args
-	 * @return void
+	 *
+	 * @return string
 	 */
 	public function set_avatar_url( $url, $id_or_email, $args ) {
-
 		// Bail if forcing default.
 		if ( ! empty( $args['force_default'] ) ) {
 			return $url;
@@ -134,6 +134,10 @@ class WPUM_Avatars {
 			return $url;
 		}
 
+		if ( ! $this->carbon_fields_loaded() ) {
+			return $url;
+		}
+
 		$custom_avatar = carbon_get_user_meta( $this->get_user_id( $id_or_email ), 'current_user_avatar' );
 
 		if ( $custom_avatar && $custom_avatar !== 'false' ) {
@@ -141,7 +145,21 @@ class WPUM_Avatars {
 		}
 
 		return apply_filters( 'wpum_get_avatar_url', $url, $id_or_email );
+	}
 
+	/**
+	 * Check Carbon Fields has been properly loaded before we use a function.
+	 *
+	 * @return bool
+	 */
+	protected function carbon_fields_loaded() {
+		$register_action = 'carbon_fields_register_fields';
+		$registered_action = 'carbon_fields_fields_registered';
+		if ( ! doing_action( $register_action ) && ! doing_action( $registered_action ) && did_action( $registered_action ) === 0 ) {
+			return false;
+		}
+
+		return true;
 	}
 
 }
