@@ -496,13 +496,22 @@ class WPUM_Form_Registration extends WPUM_Form {
 	}
 
 	/**
+	 * Get the redirect page URL
+	 *
+	 * @return string
+	 */
+	protected function get_redirect_page() {
+		return wpum_get_registration_redirect();
+	}
+
+	/**
 	 * Last step of the registration form.
 	 * Redirect user to the selected page in the admin panel or a show a success message.
 	 *
 	 * @return void
 	 */
 	public function done() {
-		$redirect_page = wpum_get_registration_redirect();
+		$redirect_page = $this->get_redirect_page();
 
 		if ( $redirect_page ) {
 			wp_safe_redirect( $redirect_page );
