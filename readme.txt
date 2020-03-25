@@ -4,11 +4,11 @@ Plugin URI: https://wpusermanager.com
 Contributors: wpusermanager, polevaultweb, alessandro.tesoro
 Tags: members, membership, community, user profile, user registration
 Requires at least: 4.9
-Tested up to: 5.3
+Tested up to: 5.4
 Requires PHP: 5.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
-Stable Tag: 2.3.1
+Stable Tag: 2.3.2
 
 The most customizable profiles & community builder WordPress plugin with front-end login, registration, profile customization and content restriction.
 
@@ -116,6 +116,14 @@ Please note that using WPUM and the mentioned add-ons does NOT guarantee complia
 13. Login form.
 
 == Changelog ==
+
+= 2.3.2 (26th March 2020) =
+
+- New: Compatibility with Registration Forms v1.0.4
+- Fix: Fatal error with when using the Avada theme and Fusion Builder
+- Fix: Directory search doesn't work when custom fields added to search keys
+- Fix: Emails not sending if wpum_email option doesn't exist
+- Fix: Delete registration form button appearing for default form
 
 = 2.3.1 (28th February 2020) =
 
