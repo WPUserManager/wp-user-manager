@@ -47,7 +47,7 @@
 						{{form.count}}
 					</td>
 					<td>
-						<span v-if="form.default === true" class="dashicons dashicons-yes"></span>
+						<span v-if="isDefault(form)" class="dashicons dashicons-yes"></span>
 					</td>
 					<td>
 						{{form.role}}
@@ -56,8 +56,8 @@
 						{{form.total_signups}}
 					</td>
 					<td class="align-middle">
-						<router-link :to="{ name: 'form', params: { id: form.id }}" tag="button" type="submit" class="button"><span class="dashicons dashicons-admin-settings"></span> <span v-text="sanitized(labels.table_customize)"></span></router-link>
-						<button type="submit" class="button delete-btn" v-if="! isDefault(form.id)" @click="showDeleteDialog( form.name, form.id )"><span class="dashicons dashicons-trash"></span> <span v-text="sanitized(labels.table_delete_form)"></span></button>
+						<router-link :to="{ name: 'form', params: { id: form.id }}" tag="button" type="submit" class="button" v-if="isDefault(form) || isAddonInstalled"><span class="dashicons dashicons-admin-settings"></span> <span v-text="sanitized(labels.table_customize)"></span></router-link>
+						<button type="submit" class="button delete-btn" v-if="! isDefault(form)" @click="showDeleteDialog( form.name, form.id )"><span class="dashicons dashicons-trash"></span> <span v-text="sanitized(labels.table_delete_form)"></span></button>
 					</td>
 				</tr>
 			</tbody>
@@ -112,8 +112,8 @@ export default {
 		 * Determine if the form is the default one or not.
 		 * Needed to check wether we can delete it or not.
 		 */
-		isDefault( form_id ) {
-			return form_id === '1' ? true : false
+		isDefault( form ) {
+			return form.default === true
 		},
 		/**
 		 * Show the success status for the editor.
