@@ -8,7 +8,7 @@ Tested up to: 5.4
 Requires PHP: 5.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
-Stable Tag: 2.3.2
+Stable Tag: 2.3.3
 
 The most customizable profiles & community builder WordPress plugin with front-end login, registration, profile customization and content restriction.
 
@@ -116,6 +116,10 @@ Please note that using WPUM and the mentioned add-ons does NOT guarantee complia
 13. Login form.
 
 == Changelog ==
+
+= 2.3.3 (27th April 2020) =
+
+- Fix: Settings page doesn't load when using the Site Kit by Google plugin
 
 = 2.3.2 (26th March 2020) =
 
