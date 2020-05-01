@@ -126,9 +126,10 @@ abstract class WPUM_Form {
 	 * Adds an error.
 	 *
 	 * @param string $error The error message.
+	 * @param string $error_code
 	 */
-	public function add_error( $error ) {
-		$this->errors[] = $error;
+	public function add_error( $error, $error_code = '' ) {
+		$this->errors[] = apply_filters( 'wpum_form_error_message', $error, $error_code );
 	}
 
 	/**

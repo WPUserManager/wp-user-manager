@@ -403,7 +403,7 @@ class WPUM_Form_Profile extends WPUM_Form {
 			exit;
 
 		} catch ( Exception $e ) {
-			$this->add_error( $e->getMessage() );
+			$this->add_error( $e->getMessage(), 'account_handler' );
 			return;
 		}
 

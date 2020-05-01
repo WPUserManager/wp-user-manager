@@ -489,7 +489,7 @@ class WPUM_Form_Registration extends WPUM_Form {
 			$this->step ++;
 
 		} catch ( Exception $e ) {
-			$this->add_error( $e->getMessage() );
+			$this->add_error( $e->getMessage(), 'registration_submit' );
 			return;
 		}
 

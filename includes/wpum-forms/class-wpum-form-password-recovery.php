@@ -250,7 +250,7 @@ class WPUM_Form_Password_Recovery extends WPUM_Form {
 			$this->step ++;
 
 		} catch ( Exception $e ) {
-			$this->add_error( $e->getMessage() );
+			$this->add_error( $e->getMessage(), 'password_recovery_submit' );
 			return;
 		}
 	}
@@ -421,7 +421,7 @@ class WPUM_Form_Password_Recovery extends WPUM_Form {
 			$this->step ++;
 
 		} catch ( Exception $e ) {
-			$this->add_error( $e->getMessage() );
+			$this->add_error( $e->getMessage(), 'password_recovery_reset' );
 			return;
 		}
 

@@ -265,7 +265,7 @@ class WPUM_Form_Password extends WPUM_Form {
 
 			}
 		} catch ( Exception $e ) {
-			$this->add_error( $e->getMessage() );
+			$this->add_error( $e->getMessage(), 'password_change_submit' );
 			return;
 		}
 

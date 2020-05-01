@@ -173,7 +173,7 @@ class WPUM_Form_Login extends WPUM_Form {
 			$this->step ++;
 
 		} catch ( Exception $e ) {
-			$this->add_error( $e->getMessage() );
+			$this->add_error( $e->getMessage(), 'login_submit' );
 			return;
 		}
 	}
@@ -221,7 +221,7 @@ class WPUM_Form_Login extends WPUM_Form {
 				exit;
 			}
 		} catch ( Exception $e ) {
-			$this->add_error( $e->getMessage() );
+			$this->add_error( $e->getMessage(), 'login_done' );
 			return;
 		}
 
