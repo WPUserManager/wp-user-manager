@@ -212,6 +212,8 @@ class WPUM_Form_Login extends WPUM_Form {
 
 			wp_set_current_user( $user->ID );
 
+			$redirect = apply_filters( 'wpum_redirect_after_login', $redirect, $user );
+
 			if( is_wp_error( $user ) ) {
 				throw new Exception( $user->get_error_message() );
 			} else {
