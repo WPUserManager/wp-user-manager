@@ -173,6 +173,8 @@ function wpum_install_emails() {
 		]
 	];
 
+	$emails = array_merge( $emails, get_option( 'wpum_email', array() ) );
+
 	update_option( 'wpum_email', $emails );
 
 	return $emails;
