@@ -8,7 +8,7 @@ Tested up to: 5.4
 Requires PHP: 5.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
-Stable Tag: 2.3.3
+Stable Tag: 2.3.4
 
 The most customizable profiles & community builder WordPress plugin with front-end login, registration, profile customization and content restriction.
 
@@ -116,6 +116,14 @@ Please note that using WPUM and the mentioned add-ons does NOT guarantee complia
 13. Login form.
 
 == Changelog ==
+
+= 2.3.4 (7th May 2020) =
+
+- Improvement: Filters 'wpum_profile_display_cover_image' and 'wpum_profile_display_avatar' to control displaying the profile cover and avatar images
+- Improvement: Filter 'wpum_redirect_after_login' to customize the redirect URL after login for users
+- Improvement: Filter 'wpum_form_error_message' to allow filtering error messages, useful for translations
+- Fix: Custom fields and registration forms pages don't load when using the Site Kit by Google plugin
+- Fix: Addon emails being overwritten if plugin is deactivated and activated again
 
 = 2.3.3 (27th April 2020) =
 
