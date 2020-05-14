@@ -102,28 +102,24 @@ class WPUM_Form_Registration extends WPUM_Form {
 	/**
 	 * Make sure the password is a strong one.
 	 *
-	 * @param boolean $pass
-	 * @param array   $fields
-	 * @param array   $values
-	 * @param string  $form
-	 * @return mixed
+	 * @param bool $pass
+	 * @param array $fields
+	 * @param array $values
+	 * @param string $form
+	 *
+	 * @return bool|WP_Error
 	 */
 	public function validate_password( $pass, $fields, $values, $form ) {
 
-		if ( $form == $this->form_name && isset( $values['register']['user_password'] ) && ! wpum_get_option( 'disable_strong_passwords' ) ) {
+		if ( $form == $this->form_name && isset( $values['register']['user_password'] ) ) {
 
-			$password_1      = $values['register']['user_password'];
-			$containsLetter  = preg_match( '/[A-Z]/', $password_1 );
-			$containsDigit   = preg_match( '/\d/', $password_1 );
-			$containsSpecial = preg_match( '/[^a-zA-Z\d]/', $password_1 );
-
-			if ( ! $containsLetter || ! $containsDigit || ! $containsSpecial || strlen( $password_1 ) < 8 ) {
-				return new WP_Error( 'password-validation-error', esc_html__( 'Password must be at least 8 characters long and contain at least 1 number, 1 uppercase letter and 1 special character.', 'wp-user-manager' ) );
+			$strong_password_check = $this->validate_strong_password( $values['register']['user_password'] );
+			if ( is_wp_error( $strong_password_check ) ) {
+				return $strong_password_check;
 			}
 		}
 
 		return $pass;
-
 	}
 
 	/**

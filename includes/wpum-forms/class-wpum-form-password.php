@@ -177,13 +177,9 @@ class WPUM_Form_Password extends WPUM_Form {
 				}
 			}
 
-			if ( ! wpum_get_option( 'disable_strong_passwords' ) ) {
-				$containsLetter  = preg_match( '/[A-Z]/', $password_1 );
-				$containsDigit   = preg_match( '/\d/', $password_1 );
-				$containsSpecial = preg_match( '/[^a-zA-Z\d]/', $password_1 );
-				if ( ! $containsLetter || ! $containsDigit || ! $containsSpecial || strlen( $password_1 ) < 8 ) {
-					return new WP_Error( 'password-validation-error', esc_html__( 'Password must be at least 8 characters long and contain at least 1 number, 1 uppercase letter and 1 special character.', 'wp-user-manager' ) );
-				}
+			$strong_password_check = $this->validate_strong_password( $password_1 );
+			if ( is_wp_error( $strong_password_check ) ) {
+				return $strong_password_check;
 			}
 
 			if ( $password_1 !== $password_2 ) {

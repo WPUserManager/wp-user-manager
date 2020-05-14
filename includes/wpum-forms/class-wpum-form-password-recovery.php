@@ -344,14 +344,15 @@ class WPUM_Form_Password_Recovery extends WPUM_Form {
 	 * Validate the 2 passwords are the same and make sure they're safe enough.
 	 *
 	 * @param boolean $pass
-	 * @param array $fields
-	 * @param array $values
-	 * @param string $form
-	 * @return void
+	 * @param array   $fields
+	 * @param array   $values
+	 * @param string  $form
+	 *
+	 * @return bool|WP_Error
 	 */
 	public function validate_passwords( $pass, $fields, $values, $form ) {
 
-		if( $form == 'password-recovery' && isset( $values['password']['password'] ) && isset( $values['password']['password_2'] ) && ! wpum_get_option( 'disable_strong_passwords' ) ) {
+		if( $form == 'password-recovery' && isset( $values['password']['password'] ) && isset( $values['password']['password_2'] ) ) {
 
 			$password_1 = $values['password']['password'];
 			$password_2 = $values['password']['password_2'];
@@ -360,18 +361,14 @@ class WPUM_Form_Password_Recovery extends WPUM_Form {
 				return new WP_Error( 'password-validation-nomatch', esc_html__( 'Error: passwords do not match.', 'wp-user-manager' ) );
 			}
 
-			$containsLetter  = preg_match('/[A-Z]/', $password_1 );
-			$containsDigit   = preg_match('/\d/', $password_1 );
-			$containsSpecial = preg_match('/[^a-zA-Z\d]/', $password_1 );
-
-			if( ! $containsLetter || ! $containsDigit || ! $containsSpecial || strlen( $password_1 ) < 8 ) {
-				return new WP_Error( 'password-validation-error', esc_html__( 'Password must be at least 8 characters long and contain at least 1 number and 1 uppercase letter and 1 special character.', 'wp-user-manager' ) );
+			$strong_password_check = $this->validate_strong_password( $password_1 );
+			if ( is_wp_error( $strong_password_check ) ) {
+				return $strong_password_check;
 			}
 
 		}
 
 		return $pass;
-
 	}
 
 	/**

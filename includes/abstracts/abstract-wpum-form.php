@@ -513,6 +513,27 @@ abstract class WPUM_Form {
 	}
 
 	/**
+	 * @param string $password
+	 *
+	 * @return bool|WP_Error
+	 */
+	protected function validate_strong_password( $password ) {
+		if ( wpum_get_option( 'disable_strong_passwords' ) ) {
+			return true;
+		}
+
+		$containsLetter  = preg_match( '/[A-Z]/', $password );
+		$containsDigit   = preg_match( '/\d/', $password );
+		$containsSpecial = preg_match( '/[^a-zA-Z\d]/', $password );
+
+		if ( ! $containsLetter || ! $containsDigit || ! $containsSpecial || strlen( $password ) < 8 ) {
+			return new WP_Error( 'password-validation-error', esc_html__( 'Password must be at least 8 characters long and contain at least 1 number and 1 uppercase letter and 1 special character.', 'wp-user-manager' ) );
+		}
+
+		return true;
+	}
+
+	/**
 	 * Retrieve a name value for the form by replacing whitespaces with underscores
 	 * and make everything lower case.
 	 *
