@@ -18,7 +18,7 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 
 ?>
 
-<div id="profile-content-about">
+<div id="profile-content-about" class="profile-content-settings">
 
 	<?php if ( wpum_has_profile_fields() ) : ?>
 
