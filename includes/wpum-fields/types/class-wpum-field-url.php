@@ -13,23 +13,13 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 /**
  * Register a text field type.
  */
-class WPUM_Field_URL extends WPUM_Field_Type {
+class WPUM_Field_Url extends WPUM_Field_Type {
 
-	/**
-	 * Hook into the main class and register a new field.
-	 *
-	 * @return void
-	 */
-	public function init() {
-
-		// Define field type information.
+	public function __construct() {
 		$this->name  = esc_html__( 'URL', 'wp-user-manager' );
 		$this->type  = 'url';
 		$this->icon  = 'dashicons-admin-links';
 		$this->order = 3;
-
 	}
 
 }
-
-new WPUM_Field_URL();

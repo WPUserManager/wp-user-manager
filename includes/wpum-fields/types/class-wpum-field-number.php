@@ -15,14 +15,7 @@ if ( ! defined( 'ABSPATH' ) ) exit;
  */
 class WPUM_Field_Number extends WPUM_Field_Type {
 
-	/**
-	 * Hook into the main class and register a new field.
-	 *
-	 * @return void
-	 */
-	public function init() {
-
-		// Define field type information.
+	public function __construct() {
 		$this->name  = esc_html__( 'Number', 'wp-user-manager' );
 		$this->type  = 'number';
 		$this->icon  = 'dashicons-leftright';
@@ -32,4 +25,3 @@ class WPUM_Field_Number extends WPUM_Field_Type {
 
 }
 
-new WPUM_Field_Number();

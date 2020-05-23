@@ -13,23 +13,12 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 /**
  * Register a multicheckbox field type.
  */
-class WPUM_Field_MultiCheckbox extends WPUM_Field_Type {
+class WPUM_Field_Multicheckbox extends WPUM_Field_Type {
 
-	/**
-	 * Hook into the main class and register a new field.
-	 *
-	 * @return void
-	 */
-	public function init() {
-
-		// Define field type information.
+	public function __construct() {
 		$this->name  = esc_html__( 'Checkboxes', 'wp-user-manager' );
 		$this->type  = 'multicheckbox';
 		$this->icon  = 'dashicons-editor-ol';
 		$this->order = 3;
-
 	}
-
 }
-
-new WPUM_Field_MultiCheckbox();

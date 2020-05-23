@@ -15,21 +15,12 @@ if ( ! defined( 'ABSPATH' ) ) exit;
  */
 class WPUM_Field_Checkbox extends WPUM_Field_Type {
 
-	/**
-	 * Hook into the main class and register a new field.
-	 *
-	 * @return void
-	 */
-	public function init() {
-
-		// Define field type information.
+	public function __construct() {
 		$this->name  = esc_html__( 'Single checkbox', 'wp-user-manager' );
 		$this->type  = 'checkbox';
 		$this->icon  = 'dashicons-yes';
 		$this->order = 3;
-
 	}
 
 }
 
-new WPUM_Field_Checkbox();

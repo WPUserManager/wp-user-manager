@@ -15,21 +15,11 @@ if ( ! defined( 'ABSPATH' ) ) exit;
  */
 class WPUM_Field_Dropdown extends WPUM_Field_Type {
 
-	/**
-	 * Hook into the main class and register a new field.
-	 *
-	 * @return void
-	 */
-	public function init() {
-
-		// Define field type information.
+	public function __construct() {
 		$this->name  = esc_html__( 'Dropdown', 'wp-user-manager' );
 		$this->type  = 'dropdown';
 		$this->icon  = 'dashicons-editor-ul';
 		$this->order = 3;
-
 	}
 
 }
-
-new WPUM_Field_Dropdown();

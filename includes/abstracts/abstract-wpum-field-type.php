@@ -87,31 +87,17 @@ abstract class WPUM_Field_Type {
 	public $settings;
 
 	/**
-	 * Primary class constructor.
+	 * Register the field
 	 *
 	 * @since 2.0.0
-	 *
-	 * @param bool $init
 	 */
-	public function __construct() {
-
+	public function register() {
 		// The form ID is to be accessed in the builder.
 		$this->form_id = isset( $_GET['form_id'] ) ? absint( $_GET['form_id'] ) : false;
 
-		// Bootstrap.
-		$this->init();
-
 		// Add fields tab.
 		add_filter( 'wpum_registered_field_types', array( $this, 'register_field_type' ), 15 );
-
 	}
-
-	/**
-	 * All systems go. Used by subclasses.
-	 *
-	 * @since 2.0.0
-	 */
-	public function init() {}
 
 	/**
 	 * Setup the editor settings for this field type.

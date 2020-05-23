@@ -17,22 +17,11 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 class WPUM_Field_Datepicker extends WPUM_Field_Type {
 
-	/**
-	 * Hook into the main class and register a new field.
-	 *
-	 * @return void
-	 */
-	public function init() {
-
-		// Define field type information.
+	public function __construct() {
 		$this->group = 'advanced';
 		$this->name  = esc_html__( 'Datepicker', 'wp-user-manager' );
 		$this->type  = 'datepicker';
 		$this->icon  = 'dashicons-calendar-alt';
 		$this->order = 3;
-
 	}
-
 }
-
-new WPUM_Field_Datepicker();
