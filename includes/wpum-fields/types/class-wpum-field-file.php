@@ -28,7 +28,23 @@ class WPUM_Field_File extends WPUM_Field_Type {
 		$this->type  = 'file';
 		$this->icon  = 'dashicons-paperclip';
 		$this->order = 3;
+	}
 
+	/**
+	 * @return array
+	 */
+	public function get_editor_settings() {
+		return [
+			'general' => [
+				'max_file_size' => array(
+					'type'      => 'input',
+					'inputType' => 'text',
+					'label'     => esc_html__( 'Maximum file size', 'wp-user-manager' ),
+					'model'     => 'max_file_size',
+					'hint'      => esc_html__( 'Enter the maximum file size users can upload through this field. The amount must be in bytes.', 'wp-user-manager' ),
+				),
+			],
+		];
 	}
 
 }

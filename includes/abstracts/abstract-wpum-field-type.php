@@ -211,16 +211,6 @@ abstract class WPUM_Field_Type {
 			]
 		];
 
-		if ( $this->type == 'file' ) {
-			$settings['general']['max_file_size'] = array(
-				'type'      => 'input',
-				'inputType' => 'text',
-				'label'     => esc_html__( 'Maximum file size', 'wp-user-manager' ),
-				'model'     => 'max_file_size',
-				'hint'      => esc_html__( 'Enter the maximum file size users can upload through this field. The amount must be in bytes.', 'wp-user-manager' ),
-			);
-		}
-
 		return apply_filters( 'wpum_register_field_type_settings', $settings, $this->type, $this->type );
 
 	}
