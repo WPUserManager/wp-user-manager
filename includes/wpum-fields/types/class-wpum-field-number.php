@@ -20,8 +20,38 @@ class WPUM_Field_Number extends WPUM_Field_Type {
 		$this->type  = 'number';
 		$this->icon  = 'dashicons-leftright';
 		$this->order = 3;
+	}
 
+	public function get_data_keys() {
+		return array_keys( $this->get_editor_settings()['validation'] );
+	}
+
+	/**
+	 * @return array
+	 */
+	public function get_editor_settings() {
+		return [
+			'validation' => [
+				'min_value' => array(
+					'type'      => 'input',
+					'inputType' => 'number',
+					'label'     => esc_html__( 'Minimum Value', 'wp-user-manager' ),
+					'model'     => 'min_value',
+				),
+				'max_value' => array(
+					'type'      => 'input',
+					'inputType' => 'number',
+					'label'     => esc_html__( 'Maximum Value', 'wp-user-manager' ),
+					'model'     => 'max_value',
+				),
+				'step_size' => array(
+					'type'      => 'input',
+					'inputType' => 'number',
+					'label'     => esc_html__( 'Step Size', 'wp-user-manager' ),
+					'model'     => 'step_size',
+				),
+			],
+		];
 	}
 
 }
-
