@@ -241,7 +241,7 @@ class WPUM_Form_Registration extends WPUM_Form {
 					$field = new WPUM_Field( $field );
 
 					if ( $field->exists() ) {
-						$fields[ $this->get_parsed_id( $field->get_name(), $field->get_primary_id(), $field ) ] = array(
+						$data = array(
 							'label'       => $field->get_name(),
 							'type'        => $field->get_type(),
 							'required'    => $field->get_meta( 'required' ),
@@ -251,6 +251,10 @@ class WPUM_Form_Registration extends WPUM_Form {
 							'primary_id'  => $field->get_primary_id(),
 							'options'     => $this->get_custom_field_dropdown_options( $field ),
 						);
+
+						$data = array_merge( $data, $field->get_field_data() );
+
+						$fields[ $this->get_parsed_id( $field->get_name(), $field->get_primary_id(), $field ) ] = $data;
 					}
 				}
 			}

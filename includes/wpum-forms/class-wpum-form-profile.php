@@ -172,7 +172,7 @@ class WPUM_Form_Profile extends WPUM_Form {
 					continue;
 				}
 
-				$fields[ $this->get_parsed_id( $field->get_name(), $field->get_primary_id(), $field ) ] = array(
+				$data = array(
 					'label'         => $field->get_name(),
 					'type'          => $field->get_type(),
 					'required'      => $field->get_meta( 'required' ),
@@ -184,6 +184,10 @@ class WPUM_Form_Profile extends WPUM_Form {
 					'value'         => $this->get_user_field_value( $field ),
 					'priority'      => $priority,
 				);
+
+				$data = array_merge( $data, $field->get_field_data() );
+
+				$fields[ $this->get_parsed_id( $field->get_name(), $field->get_primary_id(), $field ) ] = $data;
 			}
 		}
 

@@ -108,6 +108,10 @@ abstract class WPUM_Field_Type {
 		return [];
 	}
 
+	public function get_data_keys() {
+		return [];
+	}
+
 	/**
 	 * Setup the default settings for all field types.
 	 *

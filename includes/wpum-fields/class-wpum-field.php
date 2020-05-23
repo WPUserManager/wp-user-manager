@@ -117,6 +117,11 @@ class WPUM_Field {
 	protected $db;
 
 	/**
+	 * @var WPUM_Field_Type
+	 */
+	public $field_type;
+
+	/**
 	 * Constructor.
 	 *
 	 * @param mixed|boolean $_id
@@ -193,6 +198,9 @@ class WPUM_Field {
 			$this->required      = $this->get_meta( 'required' );
 			$this->visibility    = $this->get_meta( 'visibility' );
 			$this->editable      = $this->get_meta( 'editing' );
+
+			$class = 'WPUM_Field_' . ucfirst( $this->get_type() );
+			$this->field_type = new $class;
 
 			return true;
 		}
@@ -686,6 +694,16 @@ class WPUM_Field {
 	 */
 	public function delete_meta( $meta_key = '', $meta_value = '', $prev_value = '' ) {
 		return WPUM()->field_meta->delete_meta( $this->id, $meta_key, $meta_value, $prev_value );
+	}
+
+	public function get_field_data() {
+		$data = [];
+
+		foreach ( $this->field_type->get_data_keys() as $key ) {
+			$data[ $key ] = $this->get_meta( $key );
+		}
+
+		return $data;
 	}
 
 }
