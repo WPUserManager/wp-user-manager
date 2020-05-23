@@ -648,7 +648,7 @@ function wpum_format_field_url_output( $field, $value ) {
  * @return string
  */
 function wpum_format_field_textarea_output( $field, $value ) {
-	return wp_kses_post( $value );
+	return wpautop( wp_kses_post( $value ) );
 }
 
 /**
