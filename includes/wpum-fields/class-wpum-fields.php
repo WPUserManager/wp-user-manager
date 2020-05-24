@@ -61,6 +61,7 @@ class WPUM_Fields {
 			'telephone',
 			'video',
 			'audio',
+			'wysiwyg',
 		] );
 
 		foreach ( $fields as $field ) {
