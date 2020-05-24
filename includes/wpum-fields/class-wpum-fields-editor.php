@@ -570,13 +570,19 @@ class WPUM_Fields_Editor {
 				if ( $type == 'checkbox' ) {
 					$value = (bool) $field->get_meta( $setting_id );
 				} else {
+					$default_method = 'default_' . $setting_id;
+					if ( method_exists( $field->field_type, $default_method ) ) {
+						if ( ! $field->meta_exists( $setting_id ) ) {
+							return $field->field_type->{$default_method}();
+						}
+					}
+
 					$value = $field->get_meta( $setting_id );
 				}
 			}
 		}
 
 		return $value;
-
 	}
 
 	/**

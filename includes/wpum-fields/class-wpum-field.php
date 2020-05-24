@@ -652,6 +652,15 @@ class WPUM_Field {
 	}
 
 	/**
+	 * @param string $meta_key
+	 *
+	 * @return bool
+	 */
+	public function meta_exists( $meta_key ) {
+		return WPUM()->field_meta->meta_exists( $this->id, $meta_key );
+	}
+
+	/**
 	 * Add meta data field to a field.
 	 *
 	 * @param   string $meta_key      Metadata name.

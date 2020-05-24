@@ -102,7 +102,7 @@ if ( ! class_exists( 'WP_User_Manager' ) ) :
 		/**
 		 * Store update and delete fields metas.
 		 *
-		 * @var object
+		 * @var WPUM_DB_Field_Meta
 		 */
 		public $field_meta;
 

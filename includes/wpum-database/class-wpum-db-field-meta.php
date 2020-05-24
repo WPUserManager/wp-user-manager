@@ -62,6 +62,18 @@ class WPUM_DB_Field_Meta extends WPUM_DB {
 	}
 
 	/**
+	 * @param int    $field_id
+	 * @param string $meta_key
+	 *
+	 * @return bool
+	 */
+	public function meta_exists( $field_id = 0, $meta_key = '' ) {
+		$field_id = $this->sanitize_field_id( $field_id );
+
+		return metadata_exists( 'wpum_field', $field_id, $meta_key );
+	}
+
+	/**
 	 * Add meta data field to a field.
 	 *
 	 * @param integer $field_id
