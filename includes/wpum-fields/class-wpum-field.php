@@ -374,6 +374,10 @@ class WPUM_Field {
 		return $this->type_nicename;
 	}
 
+	public function get_parent_type() {
+		return $this->field_type->template();
+	}
+
 	/**
 	 * Set a field as primary field when the type within a list of specific fields.
 	 *
@@ -709,7 +713,15 @@ class WPUM_Field {
 		$data = [];
 
 		foreach ( $this->field_type->get_data_keys() as $key ) {
-			$data[ $key ] = $this->get_meta( $key );
+			$default_method = 'default_' . $key;
+			$value = $this->get_meta( $key );
+			if ( method_exists( $this->field_type, $default_method ) ) {
+				if ( ! $this->meta_exists( $key ) ) {
+					$value = $this->field_type->{$default_method}();
+				}
+			}
+
+			$data[ $key ] = $value;
 		}
 
 		return $data;
