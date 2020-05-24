@@ -58,6 +58,7 @@ class WPUM_Fields {
 			'radio',
 			'number',
 			'datepicker',
+			'telephone',
 		] );
 
 		foreach ( $fields as $field ) {
