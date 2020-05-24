@@ -22,5 +22,17 @@ class WPUM_Field_Checkbox extends WPUM_Field_Type {
 		$this->order = 3;
 	}
 
+
+	/**
+	 * Format the output onto the profiles for the checkbox field.
+	 *
+	 * @param object $field
+	 * @param mixed $value
+	 * @return string
+	 */
+	function get_formatted_output( $field, $value ) {
+		return esc_html__( 'Yes', 'wp-user-manager' );
+	}
+
 }
 

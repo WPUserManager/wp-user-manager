@@ -22,4 +22,14 @@ class WPUM_Field_Email extends WPUM_Field_Type {
 		$this->order = 3;
 	}
 
+	/**
+	 * Format the output onto the profiles for the email field.
+	 *
+	 * @param object $field
+	 * @param mixed $value
+	 * @return string
+	 */
+	function get_formatted_output( $field, $value ) {
+		return esc_html( antispambot( $value ) );
+	}
 }

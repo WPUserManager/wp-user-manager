@@ -22,4 +22,26 @@ class WPUM_Field_Textarea extends WPUM_Field_Type {
 		$this->order = 3;
 	}
 
+	/**
+	 * Gets the value of a posted textarea field.
+	 *
+	 * @param  string $key
+	 * @param  array  $field
+	 * @return string
+	 */
+	public function get_posted_field( $key, $field ) {
+		return isset( $_POST[ $key ] ) ? wp_kses_post( trim( stripslashes( $_POST[ $key ] ) ) ) : '';
+	}
+
+	/**
+	 * Format the output of the textarea field onto profile pages.
+	 *
+	 * @param object $field
+	 * @param mixed $value
+	 * @return string
+	 */
+	function get_formatted_output( $field, $value ) {
+		return wpautop( wp_kses_post( $value ) );
+	}
+
 }

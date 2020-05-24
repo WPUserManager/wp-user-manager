@@ -34,9 +34,10 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 							<?php
 								// Add the key to field.
 								$field[ 'key' ] = $key;
+								$template = isset( $field['template'] ) ? $field['template'] : $field['type'];
 								WPUM()->templates
 									->set_template_data( $field )
-									->get_template_part( 'form-fields/' . $field['type'], 'field' );
+									->get_template_part( 'form-fields/' . $template, 'field' );
 							?>
 						</span>
 						<?php echo esc_html( $field['label'] ); ?>
@@ -57,9 +58,10 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 						<?php
 							// Add the key to field.
 							$field[ 'key' ] = $key;
+							$template = isset( $field['template'] ) ? $field['template'] : $field['type'];
 							WPUM()->templates
 								->set_template_data( $field )
-								->get_template_part( 'form-fields/' . $field['type'], 'field' );
+								->get_template_part( 'form-fields/' . $template, 'field' );
 						?>
 					</div>
 

@@ -32,6 +32,13 @@ abstract class WPUM_Field_Type {
 	public $type;
 
 	/**
+	 * Used to if the child type is different to parent, but uses same template
+	 *
+	 * @var string
+	 */
+	public $template;
+
+	/**
 	 * Icon for the editor button. This is a class name from the Dashicons set.
 	 *
 	 * @since 2.0.0
@@ -224,6 +231,78 @@ abstract class WPUM_Field_Type {
 		);
 
 		return $fields;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function template() {
+		if ( ! empty( $this->template ) ) {
+			return $this->template;
+		}
+
+		return $this->type;
+	}
+
+	/**
+	 * Navigates through an array and sanitizes the field.
+	 *
+	 * @param array|string    $value      The array or string to be sanitized.
+	 * @param string|callable $sanitizer  The sanitization method to use. Built in: `url`, `email`, `url_or_email`, or
+	 *                                      default (text). Custom single argument callable allowed.
+	 * @return array|string   $value      The sanitized array (or string from the callback).
+	 */
+	protected function sanitize_posted_field( $value, $sanitizer = null ) {
+		// Sanitize value
+		if ( is_array( $value ) ) {
+			foreach ( $value as $key => $val ) {
+				$value[ $key ] = $this->sanitize_posted_field( $val, $sanitizer );
+			}
+			return $value;
+		}
+		$value = trim( $value );
+		if ( 'url' === $sanitizer ) {
+			return esc_url_raw( $value );
+		} elseif ( 'email' === $sanitizer ) {
+			return sanitize_email( $value );
+		} elseif ( 'url_or_email' === $sanitizer ) {
+			if ( null !== parse_url( $value, PHP_URL_HOST ) ) {
+				// Sanitize as URL
+				return esc_url_raw( $value );
+			}
+			// Sanitize as email
+			return sanitize_email( $value );
+		} elseif ( is_callable( $sanitizer ) ) {
+			return call_user_func( $sanitizer, $value );
+		}
+		// Use standard text sanitizer
+		return sanitize_text_field( stripslashes( $value ) );
+	}
+
+	/**
+	 * Gets the value of a posted field.
+	 *
+	 * @param  string $key
+	 * @param  array  $field
+	 * @return string|array
+	 */
+	public function get_posted_field( $key, $field ) {
+		// Allow custom sanitizers with standard text fields.
+		if ( ! isset( $field['sanitizer'] ) ) {
+			$field['sanitizer'] = null;
+		}
+		return isset( $_POST[ $key ] ) ? $this->sanitize_posted_field( $_POST[ $key ], $field['sanitizer'] ) : '';
+	}
+
+	/**
+	 * Format the output onto the profiles for the text field.
+	 *
+	 * @param object $field
+	 * @param mixed $value
+	 * @return string
+	 */
+	function get_formatted_output( $field, $value ) {
+		return esc_html( $value );
 	}
 
 }

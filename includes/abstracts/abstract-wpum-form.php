@@ -262,218 +262,20 @@ abstract class WPUM_Form {
 			foreach ( $group_fields as $key => $field ) {
 				// Get the value
 				$field_type = str_replace( '-', '_', $field['type'] );
+
+				$class = 'WPUM_Field_' . ucfirst( $field_type );
+				$field_object = new $class;
+
 				if ( $handler = apply_filters( "wpum_get_posted_{$field_type}_field", false ) ) {
 					$values[ $group_key ][ $key ] = call_user_func( $handler, $key, $field );
-				} elseif ( method_exists( $this, "get_posted_{$field_type}_field" ) ) {
-					$values[ $group_key ][ $key ] = call_user_func( array( $this, "get_posted_{$field_type}_field" ), $key, $field );
 				} else {
-					$values[ $group_key ][ $key ] = $this->get_posted_field( $key, $field );
+					$values[ $group_key ][ $key ] = $field_object->get_posted_field( $key, $field );
 				}
 				// Set fields value
 				$this->fields[ $group_key ][ $key ]['value'] = $values[ $group_key ][ $key ];
 			}
 		}
 		return $values;
-	}
-
-	/**
-	 * Navigates through an array and sanitizes the field.
-	 *
-	 * @param array|string    $value      The array or string to be sanitized.
-	 * @param string|callable $sanitizer  The sanitization method to use. Built in: `url`, `email`, `url_or_email`, or
-	 *                                      default (text). Custom single argument callable allowed.
-	 * @return array|string   $value      The sanitized array (or string from the callback).
-	 */
-	protected function sanitize_posted_field( $value, $sanitizer = null ) {
-		// Sanitize value
-		if ( is_array( $value ) ) {
-			foreach ( $value as $key => $val ) {
-				$value[ $key ] = $this->sanitize_posted_field( $val, $sanitizer );
-			}
-			return $value;
-		}
-		$value = trim( $value );
-		if ( 'url' === $sanitizer ) {
-			return esc_url_raw( $value );
-		} elseif ( 'email' === $sanitizer ) {
-			return sanitize_email( $value );
-		} elseif ( 'url_or_email' === $sanitizer ) {
-			if ( null !== parse_url( $value, PHP_URL_HOST ) ) {
-				// Sanitize as URL
-				return esc_url_raw( $value );
-			}
-			// Sanitize as email
-			return sanitize_email( $value );
-		} elseif ( is_callable( $sanitizer ) ) {
-			return call_user_func( $sanitizer, $value );
-		}
-		// Use standard text sanitizer
-		return sanitize_text_field( stripslashes( $value ) );
-	}
-
-	/**
-	 * Gets the value of a posted field.
-	 *
-	 * @param  string $key
-	 * @param  array  $field
-	 * @return string|array
-	 */
-	protected function get_posted_field( $key, $field ) {
-		// Allow custom sanitizers with standard text fields.
-		if ( ! isset( $field['sanitizer'] ) ) {
-			$field['sanitizer'] = null;
-		}
-		return isset( $_POST[ $key ] ) ? $this->sanitize_posted_field( $_POST[ $key ], $field['sanitizer'] ) : '';
-	}
-
-	/**
-	 * Gets the value of a posted multiselect field.
-	 *
-	 * @param  string $key
-	 * @param  array  $field
-	 * @return array
-	 */
-	protected function get_posted_multiselect_field( $key, $field ) {
-		return isset( $_POST[ $key ] ) ? array_map( 'sanitize_text_field', $_POST[ $key ] ) : array();
-	}
-
-	/**
-	 * Gets the value of a posted file field.
-	 *
-	 * @param  string $key
-	 * @param  array  $field
-	 * @return string|array
-	 */
-	protected function get_posted_file_field( $key, $field ) {
-		$file = $this->upload_file( $key, $field );
-		if ( ! $file ) {
-			$file = $this->get_posted_field( 'current_' . $key, $field );
-		} elseif ( is_array( $file ) ) {
-			$file = array_filter( array_merge( $file, (array) $this->get_posted_field( 'current_' . $key, $field ) ) );
-		}
-		return $file;
-	}
-
-	/**
-	 * Gets the value of a posted textarea field.
-	 *
-	 * @param  string $key
-	 * @param  array  $field
-	 * @return string
-	 */
-	protected function get_posted_textarea_field( $key, $field ) {
-		return isset( $_POST[ $key ] ) ? wp_kses_post( trim( stripslashes( $_POST[ $key ] ) ) ) : '';
-	}
-
-	/**
-	 * Gets the value of a posted textarea field.
-	 *
-	 * @param  string $key
-	 * @param  array  $field
-	 * @return string
-	 */
-	protected function get_posted_wp_editor_field( $key, $field ) {
-		return $this->get_posted_textarea_field( $key, $field );
-	}
-
-	/**
-	 * Gets posted terms for the taxonomy.
-	 *
-	 * @param  string $key
-	 * @param  array  $field
-	 * @return array
-	 */
-	protected function get_posted_term_checklist_field( $key, $field ) {
-		if ( isset( $_POST[ 'tax_input' ] ) && isset( $_POST[ 'tax_input' ][ $field['taxonomy'] ] ) ) {
-			return array_map( 'absint', $_POST[ 'tax_input' ][ $field['taxonomy'] ] );
-		} else {
-			return array();
-		}
-	}
-
-	/**
-	 * Gets posted terms for the taxonomy.
-	 *
-	 * @param  string $key
-	 * @param  array  $field
-	 * @return int
-	 */
-	protected function get_posted_term_multiselect_field( $key, $field ) {
-		return isset( $_POST[ $key ] ) ? array_map( 'absint', $_POST[ $key ] ) : array();
-	}
-
-	/**
-	 * Gets posted terms for the taxonomy.
-	 *
-	 * @param  string $key
-	 * @param  array  $field
-	 * @return int
-	 */
-	protected function get_posted_term_select_field( $key, $field ) {
-		return ! empty( $_POST[ $key ] ) && $_POST[ $key ] > 0 ? absint( $_POST[ $key ] ) : '';
-	}
-
-	/**
-	 * Handles the uploading of files.
-	 *
-	 * @param string $field_key
-	 * @param array  $field
-	 * @throws Exception When file upload failed
-	 * @return  string|array
-	 */
-	protected function upload_file( $field_key, $field ) {
-		if ( isset( $_FILES[ $field_key ] ) && ! empty( $_FILES[ $field_key ] ) && ! empty( $_FILES[ $field_key ]['name'] ) ) {
-			$allowed_mime_types = wpum_get_allowed_mime_types();
-			if ( ! empty( $field['allowed_mime_types'] ) ) {
-				$extensions         = explode( ',', $field['allowed_mime_types'] );
-				$allowed_mime_types = [];
-				foreach ( $extensions as $extension ) {
-					$extension = strtolower( trim( str_replace( '.', '', $extension ) ) );
-					foreach ( get_allowed_mime_types() as $allowed_ext => $allowed_mime_type ) {
-						if ( in_array( $extension, explode( '|', $allowed_ext ) ) ) {
-							$allowed_mime_types[ $allowed_ext ] = $allowed_mime_type;
-							break;
-						}
-					}
-				}
-			}
-			$file_urls       = array();
-			$files_to_upload = wpum_prepare_uploaded_files( $_FILES[ $field_key ] );
-			foreach ( $files_to_upload as $file_to_upload ) {
-				// Determine max file size for the avatar field.
-				$too_big_message = sprintf( esc_html__( 'The uploaded %s file is too big.', 'wp-user-manager' ), $field['label'] );
-				if ( defined( 'WPUM_MAX_AVATAR_SIZE' ) && $field_key == 'user_avatar' && $file_to_upload['size'] > WPUM_MAX_AVATAR_SIZE ) {
-					throw new Exception( $too_big_message );
-				}
-				if ( defined( 'WPUM_MAX_COVER_SIZE' ) && $field_key == 'user_cover' && $file_to_upload['size'] > WPUM_MAX_COVER_SIZE ) {
-					throw new Exception( $too_big_message );
-				}
-
-				if ( isset( $field['max_file_size'] ) && ! empty( $field['max_file_size'] ) && $file_to_upload['size'] > $field['max_file_size'] ) {
-					throw new Exception( $too_big_message );
-				}
-
-				$uploaded_file = wpum_upload_file( $file_to_upload, array(
-					'file_key'           => $field_key,
-					'allowed_mime_types' => $allowed_mime_types,
-					'file_label'         => $field['label'],
-				) );
-
-				if ( is_wp_error( $uploaded_file ) ) {
-					throw new Exception( $uploaded_file->get_error_message() );
-				} else {
-					$file_urls[] = [
-						'url'  => $uploaded_file->url,
-						'path' => $uploaded_file->file
-					];
-				}
-			}
-			if ( ! empty( $field['multiple'] ) ) {
-				return $file_urls;
-			} else {
-				return current( $file_urls );
-			}
-		}
 	}
 
 	/**
@@ -501,7 +303,7 @@ abstract class WPUM_Form {
 						}
 					}
 				}
-				if ( 'file' === $field['type'] && ! empty( $field['allowed_mime_types'] ) ) {
+				if ( 'file' === $field['template'] && ! empty( $field['allowed_mime_types'] ) ) {
 					if ( is_array( $values[ $group_key ][ $key ] ) ) {
 						$check_value = array_filter( $values[ $group_key ][ $key ] );
 					} else {
@@ -511,7 +313,7 @@ abstract class WPUM_Form {
 						foreach ( $check_value as $file_url ) {
 							$file_url  = current( explode( '?', $file_url ) );
 							$file_info = wp_check_filetype( $file_url );
-							if ( ! is_numeric( $file_url ) && $file_info && ! in_array( $file_info['type'], $field['allowed_mime_types'] ) ) {
+							if ( ! is_numeric( $file_url ) && $file_info && ! in_array( $file_info['ext'], explode( ',', $field['allowed_mime_types'] ) ) ) {
 								throw new Exception( sprintf( __( '"%s" (filetype %s) needs to be one of the following file types: %s', 'wp-user-manager' ), $field['label'], $file_info['ext'], implode( ', ', array_keys( $field['allowed_mime_types'] ) ) ) );
 							}
 						}

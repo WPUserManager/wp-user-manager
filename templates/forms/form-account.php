@@ -54,7 +54,7 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 									$field[ 'key' ] = $key;
 									WPUM()->templates
 										->set_template_data( $field )
-										->get_template_part( 'form-fields/' . $field['type'], 'field' );
+										->get_template_part( 'form-fields/' . $field['template'], 'field' );
 								?>
 							</span>
 							<?php echo esc_html( $field['label'] ); ?>
@@ -77,7 +77,7 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 								$field[ 'key' ] = $key;
 								WPUM()->templates
 									->set_template_data( $field )
-									->get_template_part( 'form-fields/' . $field['type'], 'field' );
+									->get_template_part( 'form-fields/' . $field['template'], 'field' );
 							?>
 						</div>
 

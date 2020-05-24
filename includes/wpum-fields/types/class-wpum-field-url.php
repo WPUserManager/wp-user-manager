@@ -22,4 +22,14 @@ class WPUM_Field_Url extends WPUM_Field_Type {
 		$this->order = 3;
 	}
 
+	/**
+	 * Format the output onto the profiles for the url field.
+	 *
+	 * @param object $field
+	 * @param mixed $value
+	 * @return string
+	 */
+	function get_formatted_output( $field, $value ) {
+		return '<a href="'. esc_url( $value ) .'" target="_blank" rel="noopener noreferrer">'. esc_html( $value ) .'</a>';
+	}
 }

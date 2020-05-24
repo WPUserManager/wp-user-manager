@@ -626,19 +626,17 @@ class WPUM_Field {
 	 * @return mixed
 	 */
 	private function format_value( $value ) {
-
 		if( ! $value ) {
 			return;
 		}
 
-		$func_name = apply_filters( 'wpum_field_ouput_callback_function', "wpum_format_field_{$this->type}_output", $this, $value );
+		$func_name = apply_filters( 'wpum_field_ouput_callback_function', false, $this, $value );
 
-		if( ! function_exists( $func_name ) ) {
-			return call_user_func( "wpum_format_field_text_output", $this, $value );
+		if ( $func_name && function_exists( $func_name ) ) {
+			return call_user_func( $func_name, $this, $value );
 		}
 
-		return call_user_func( $func_name, $this, $value );
-
+		return $this->field_type->get_formatted_output( $this, $value );
 	}
 
 	/**

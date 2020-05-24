@@ -250,6 +250,7 @@ class WPUM_Form_Registration extends WPUM_Form {
 							'priority'    => $key,
 							'primary_id'  => $field->get_primary_id(),
 							'options'     => $this->get_custom_field_dropdown_options( $field ),
+							'template'    => $field->get_parent_type(),
 						);
 
 						$data = array_merge( $data, $field->get_field_data() );
