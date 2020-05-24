@@ -423,10 +423,19 @@ abstract class WPUM_Form {
 	 */
 	protected function upload_file( $field_key, $field ) {
 		if ( isset( $_FILES[ $field_key ] ) && ! empty( $_FILES[ $field_key ] ) && ! empty( $_FILES[ $field_key ]['name'] ) ) {
+			$allowed_mime_types = wpum_get_allowed_mime_types();
 			if ( ! empty( $field['allowed_mime_types'] ) ) {
-				$allowed_mime_types = $field['allowed_mime_types'];
-			} else {
-				$allowed_mime_types = wpum_get_allowed_mime_types();
+				$extensions         = explode( ',', $field['allowed_mime_types'] );
+				$allowed_mime_types = [];
+				foreach ( $extensions as $extension ) {
+					$extension = strtolower( trim( str_replace( '.', '', $extension ) ) );
+					foreach ( get_allowed_mime_types() as $allowed_ext => $allowed_mime_type ) {
+						if ( in_array( $extension, explode( '|', $allowed_ext ) ) ) {
+							$allowed_mime_types[ $allowed_ext ] = $allowed_mime_type;
+							break;
+						}
+					}
+				}
 			}
 			$file_urls       = array();
 			$files_to_upload = wpum_prepare_uploaded_files( $_FILES[ $field_key ] );
@@ -447,6 +456,7 @@ abstract class WPUM_Form {
 				$uploaded_file = wpum_upload_file( $file_to_upload, array(
 					'file_key'           => $field_key,
 					'allowed_mime_types' => $allowed_mime_types,
+					'file_label'         => $field['label'],
 				) );
 
 				if ( is_wp_error( $uploaded_file ) ) {

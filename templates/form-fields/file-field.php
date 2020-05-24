@@ -17,7 +17,7 @@
 if ( ! defined( 'ABSPATH' ) ) exit;
 
 $classes            = array( 'input-text' );
-$allowed_mime_types = array_values( ! empty( $data->allowed_mime_types ) ? $data->allowed_mime_types : get_allowed_mime_types() );
+$allowed_mime_types = ! empty( $data->allowed_mime_types ) ? explode( ',', $data->allowed_mime_types ) : array_values( get_allowed_mime_types() );
 $field_name         = isset( $data->name ) ? $data->name : $data->key;
 $field_name         .= ! empty( $data->multiple ) ? '[]' : '';
 $file_size = isset( $data->max_file_size ) ? $data->max_file_size : false;

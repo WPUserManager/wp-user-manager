@@ -40,6 +40,13 @@ class WPUM_Field_File extends WPUM_Field_Type {
 					'model'     => 'max_file_size',
 					'hint'      => esc_html__( 'Enter the maximum file size users can upload through this field. The amount must be in bytes.', 'wp-user-manager' ),
 				),
+				'allowed_mime_types' => array(
+					'type'      => 'input',
+					'inputType' => 'text',
+					'label'     => esc_html__( 'Allowed File Types', 'wp-user-manager' ),
+					'model'     => 'allowed_mime_types',
+					'hint'      => esc_html__( 'Comma Separated List of allowed file types, (i.e. jpg, gif, png, pdf)', 'wp-user-manager' ),
+				),
 			],
 		];
 	}
