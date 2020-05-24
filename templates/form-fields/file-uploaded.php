@@ -31,6 +31,8 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 		<span class="wpum-uploaded-file-preview"><img src="<?php echo esc_url( $image_src ); ?>" /> <a class="wpum-remove-uploaded-file" href="#">[<?php esc_html_e( 'remove', 'wp-user-manager' ); ?>]</a></span>
 	<?php elseif ( 'video' === wp_ext2type( $extension ) ) : ?>
 		<span class="wpum-uploaded-file-preview"><?php echo wp_video_shortcode( array( 'src' => $image_src ) ); ?> <a class="wpum-remove-uploaded-file" href="#">[<?php esc_html_e( 'remove', 'wp-user-manager' ); ?>]</a></span>
+	<?php elseif ( 'audio' === wp_ext2type( $extension ) ) : ?>
+		<span class="wpum-uploaded-file-preview"><?php echo wp_audio_shortcode( array( 'src' => $image_src ) ); ?> <a class="wpum-remove-uploaded-file" href="#">[<?php esc_html_e( 'remove', 'wp-user-manager' ); ?>]</a></span>
 	<?php else : ?>
 		<span class="wpum-uploaded-file-name"><code><?php echo esc_html( basename( $image_src ) ); ?></code> <a class="wpum-remove-uploaded-file" href="#">[<?php esc_html_e( 'remove', 'wp-user-manager' ); ?>]</a></span>
 	<?php endif; ?>

@@ -158,6 +158,8 @@ class WPUM_Field_File extends WPUM_Field_Type {
 			$value = '<span class="wpum-uploaded-file-name"><img src="' . $image_src . '"></span>';
 		} else if ( 'video' === $file_type ) {
 			$value = '<span class="wpum-uploaded-file-name">' . wp_video_shortcode( array( 'src' => $image_src ) ) . '</span>';
+		} else if ( 'audio' === $file_type ) {
+			$value = '<span class="wpum-uploaded-file-name">' . wp_audio_shortcode( array( 'src' => $image_src ) ) . '</span>';
 		} else {
 			$value = '<span class="wpum-uploaded-file-name"><code>' . $image_src . '</code></span>';
 		}
