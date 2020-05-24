@@ -23,12 +23,16 @@ class WPUM_Field_File extends WPUM_Field_Type {
 		$this->order = 3;
 	}
 
+	public function get_data_keys() {
+		return array_keys( $this->get_editor_settings()['validation'] );
+	}
+
 	/**
 	 * @return array
 	 */
 	public function get_editor_settings() {
 		return [
-			'general' => [
+			'validation' => [
 				'max_file_size' => array(
 					'type'      => 'input',
 					'inputType' => 'text',
