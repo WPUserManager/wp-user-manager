@@ -689,7 +689,10 @@ function wpum_directory( $atts, $content = null ) {
 	if ( isset( $_GET['directory-search'] ) && ! empty( $_GET['directory-search'] ) ) {
 		$search_string      = sanitize_text_field( esc_attr( trim( $_GET['directory-search'] ) ) );
 		$args['search']     = '*' . esc_attr( $search_string ) . '*';
-		$search_meta_keys = apply_filters( 'wpum_directory_search_meta_keys', array( 'first_name', 'last_name' ) );
+
+		$search_field_keys = carbon_get_post_meta( $directory_id, 'directory_search_fields' );
+		$search_meta_keys  = apply_filters( 'wpum_directory_search_meta_keys', $search_field_keys );
+		$search_meta_keys  = array_unique( $search_meta_keys );
 
 		if ( ! empty( $search_meta_keys ) ) {
 			$meta_query_keys = array();

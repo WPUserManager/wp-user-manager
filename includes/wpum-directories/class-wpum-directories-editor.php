@@ -115,9 +115,6 @@ class WPUM_Directories_Editor {
 			Field::make( 'multiselect', 'directory_assigned_roles', esc_html__( 'User roles', 'wp-user-manager' ) )
 			     ->set_help_text( esc_html__( 'Leave blank to display all user roles.', 'wp-user-manager' ) )
 			     ->add_options( $this->get_roles() ),
-			Field::make( 'checkbox', 'directory_search_form', esc_html__( 'Display search form', 'wp-user-manager' ) )
-			     ->set_option_value( 'yes' )
-			     ->set_help_text( esc_html__( 'Enable this option to display the user search form', 'wp-user-manager' ) ),
 			Field::make( 'text', 'directory_excluded_users', esc_html__( 'Exclude users', 'wp-user-manager' ) )
 			     ->set_attribute( 'placeholder', esc_html__( 'Example: 1, 6, 32', 'wp-user-manager' ) )
 			     ->set_help_text( esc_html__( 'Comma separated list of users id you wish to exclude.', 'wp-user-manager' ) ),
@@ -130,6 +127,22 @@ class WPUM_Directories_Editor {
 		Container::make( 'post_meta', esc_html__( 'General settings', 'wp-user-manager' ) )
 		         ->where( 'post_type', '=', 'wpum_directory' )
 		         ->add_fields( apply_filters( 'wpum_directory_general_settings', $general_settings_fields ) );
+
+
+		$search_fields = array (
+			Field::make( 'checkbox', 'directory_search_form', esc_html__( 'Display search form', 'wp-user-manager' ) )
+			     ->set_option_value( 'yes' )
+			     ->set_help_text( esc_html__( 'Enable this option to display the user search form', 'wp-user-manager' ) ),
+			Field::make( 'multiselect', 'directory_search_fields', esc_html__( 'Search fields', 'wp-user-manager' ) )
+			     ->set_help_text( sprintf( __( 'Select the fields to search in. Search custom fields using the <a href="%s" target="_blank">Custom Fields</a> addon.', 'wp-user-manager' ), 'https://wpusermanager.com/addons/custom-fields?utm_source=WP%20User%20Manager&utm_medium=insideplugin&utm_campaign=WP%20User%20Manager&utm_content=edit-directory' ) )
+			     ->add_options( $this->get_search_fields() )
+			     ->set_default_value( array( 'first_name', 'last_name' ) ),
+		);
+
+		Container::make( 'post_meta', esc_html__( 'Search', 'wp-user-manager' ) )
+		         ->where( 'post_type', '=', 'wpum_directory' )
+		         ->add_fields( apply_filters( 'wpum_directory_search_settings', $search_fields ) );
+
 
 		$sorting_fields = array(
 			Field::make( 'checkbox', 'directory_display_sorter', esc_html__( 'Display sorter', 'wp-user-manager' ) )
@@ -185,6 +198,19 @@ class WPUM_Directories_Editor {
 
 		return $roles;
 
+	}
+
+	/**
+	 * @return array
+	 */
+	protected function get_search_fields() {
+		$fields = array(
+			'first_name'  => __( 'First Name', 'wp-user-manager' ),
+			'last_name'   => __( 'Last Name', 'wp-user-manager' ),
+			'description' => __( 'Description', 'wp-user-manager' ),
+		);
+
+		return apply_filters( 'wpum_directory_search_fields', $fields );
 	}
 
 	/**
