@@ -129,12 +129,15 @@ class WPUM_Directories_Editor {
 		         ->add_fields( apply_filters( 'wpum_directory_general_settings', $general_settings_fields ) );
 
 
-		$search_fields = array (
+		$search_field_text = sprintf( __( 'Select the fields to search in. Search custom fields using the <a href="%s" target="_blank">Custom Fields</a> addon.', 'wp-user-manager' ), 'https://wpusermanager.com/addons/custom-fields?utm_source=WP%20User%20Manager&utm_medium=insideplugin&utm_campaign=WP%20User%20Manager&utm_content=edit-directory' );
+		$search_field_text = apply_filters( 'wpum_directory_search_fields_help_text', $search_field_text );
+
+		$search_fields = array(
 			Field::make( 'checkbox', 'directory_search_form', esc_html__( 'Display search form', 'wp-user-manager' ) )
 			     ->set_option_value( 'yes' )
 			     ->set_help_text( esc_html__( 'Enable this option to display the user search form', 'wp-user-manager' ) ),
 			Field::make( 'multiselect', 'directory_search_fields', esc_html__( 'Search fields', 'wp-user-manager' ) )
-			     ->set_help_text( sprintf( __( 'Select the fields to search in. Search custom fields using the <a href="%s" target="_blank">Custom Fields</a> addon.', 'wp-user-manager' ), 'https://wpusermanager.com/addons/custom-fields?utm_source=WP%20User%20Manager&utm_medium=insideplugin&utm_campaign=WP%20User%20Manager&utm_content=edit-directory' ) )
+			     ->set_help_text( $search_field_text )
 			     ->add_options( $this->get_search_fields() )
 			     ->set_default_value( array( 'first_name', 'last_name' ) ),
 		);
