@@ -708,16 +708,41 @@ function wpum_directory( $atts, $content = null ) {
 			}
 
 			$args['meta_query'] = array_merge( $args['meta_query'], array( $meta_query_keys ) );
+
+			add_filter( 'user_search_columns', function ( $columns, $search, $wp_user_query ) {
+				global $wpum_directory_columns_search;
+
+				$wpum_directory_columns_search = $wp_user_query->get_search_sql( $search, $columns, 'both' );
+
+				return array();
+			}, 10, 3 );
 		}
 
-		add_action( 'pre_user_query', function ( $uqi ) {
+		add_action( 'pre_user_query', function ( $uqi ) use ( $search_meta_keys ) {
 			$search = '';
 			if ( isset( $uqi->query_vars['search'] ) ) {
 				$search = trim( $uqi->query_vars['search'] );
 			}
 
 			if ( $search ) {
-				$uqi->query_where = str_replace( ') AND (user_login LIKE ', ') OR (user_login LIKE ', $uqi->query_where );
+				global $wpum_directory_columns_search;
+				if ( ! empty( $wpum_directory_columns_search ) && ! empty( $search_meta_keys ) ) {
+					$first_key = $search_meta_keys[0];
+
+					$found_alias = false;
+					foreach ( $uqi->meta_query->get_clauses() as $alias => $clause ) {
+						if ( $clause['key'] === $first_key && $clause['compare'] == 'LIKE' ) {
+							$found_alias = $alias;
+							break;
+						}
+					}
+					if ( $found_alias ) {
+						$wpum_directory_columns_search = ltrim( $wpum_directory_columns_search, ' AND ' );
+						$uqi->query_where = str_replace( ' ( ' . $found_alias . '.meta_key = \'' . $first_key, $wpum_directory_columns_search . ' OR ( ' . $found_alias . '.meta_key = \''  . $first_key, $uqi->query_where );
+					}
+				}
+
+				$uqi->query_where = str_replace( ') AND ()', ') ', $uqi->query_where );
 			}
 		} );
 	}
