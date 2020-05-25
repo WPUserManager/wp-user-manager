@@ -39,6 +39,7 @@ if ( ! empty( $data->ajax ) && wpum_user_can_upload_file_via_ajax() ) {
 							'key' => $data->key,
 							'name' => 'current_' . $field_name,
 							'value' => $value,
+							'type'  => $data->type,
 							'field' => []
 						] )
 						->get_template_part( 'form-fields/file', 'uploaded' );
@@ -48,10 +49,11 @@ if ( ! empty( $data->ajax ) && wpum_user_can_upload_file_via_ajax() ) {
 			<?php
 				WPUM()->templates
 					->set_template_data( [
-						'key' => $data->key,
-						'name' => 'current_' . $field_name,
+						'key'   => $data->key,
+						'name'  => 'current_' . $field_name,
 						'value' => $value,
-						'field' => []
+						'type'  => $data->type,
+						'field' => [],
 					] )
 					->get_template_part( 'form-fields/file', 'uploaded' );
 			?>
