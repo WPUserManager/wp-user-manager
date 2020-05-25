@@ -88,14 +88,14 @@ if ( ! class_exists( 'WP_User_Manager' ) ) :
 		/**
 		 * The fields groups handler.
 		 *
-		 * @var object
+		 * @var WPUM_DB_Fields_Groups
 		 */
 		public $fields_groups;
 
 		/**
 		 * The fields handler.
 		 *
-		 * @var object
+		 * @var WPUM_DB_Fields
 		 */
 		public $fields;
 
