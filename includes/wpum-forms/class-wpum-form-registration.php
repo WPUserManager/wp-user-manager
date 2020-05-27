@@ -306,8 +306,7 @@ class WPUM_Form_Registration extends WPUM_Form {
 			}
 		}
 
-		return apply_filters( 'wpum_get_registration_fields', $fields );
-
+		return apply_filters( 'wpum_get_registration_fields', $fields, $registration_form );
 	}
 
 	/**
