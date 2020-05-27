@@ -109,14 +109,14 @@ if ( ! class_exists( 'WP_User_Manager' ) ) :
 		/**
 		 * Registration forms db handler.
 		 *
-		 * @var object
+		 * @var WPUM_DB_Registration_Forms
 		 */
 		public $registration_forms;
 
 		/**
 		 * Registration form meta handler.
 		 *
-		 * @var object
+		 * @var WPUM_DB_Registration_Form_Meta
 		 */
 		public $registration_form_meta;
 
