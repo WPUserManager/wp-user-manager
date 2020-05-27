@@ -303,7 +303,8 @@ abstract class WPUM_Form {
 						}
 					}
 				}
-				if ( 'file' === $field['template'] && ! empty( $field['allowed_mime_types'] ) ) {
+				$template = isset( $field['template'] ) ? $field['template'] : $field['type'];
+				if ( 'file' === $template && ! empty( $field['allowed_mime_types'] ) ) {
 					if ( is_array( $values[ $group_key ][ $key ] ) ) {
 						$check_value = array_filter( $values[ $group_key ][ $key ] );
 					} else {
