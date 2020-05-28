@@ -31,7 +31,7 @@ class WPUM_Addon_ACF {
 
 		$mark = '<img style="width:13px; margin-right: 10px;" src="' . WPUM_PLUGIN_URL . '/assets/images/logo.svg" title="WP User Manager">';
 
-		add_meta_box('wpum-acf-group-settings', $mark . __('WP User Manager' ), 'wpumacf_setting_metabox', 'acf-field-group', 'side');
+		add_meta_box('wpum-acf-group-settings', $mark . __('WP User Manager' ), array( $this, 'setting_metabox' ), 'acf-field-group', 'side');
 	}
 
 	public function setting_metabox() {
@@ -55,11 +55,17 @@ class WPUM_Addon_ACF {
 			<tr valign="top">
 
 				<td colspan="2">
-					<strong>User Profile</strong><p>
+					<strong>User Profile</strong>
+					<p>
 						<label>
 							<input disabled="disabled" type="checkbox" name="" value="1">&nbsp;Show fields on user profiles
 						</label>
-					</p></td>
+					</p><p>
+						<label>
+							<input disabled="disabled" type="checkbox" name="" value="1">&nbsp;Show on profile tab
+						</label>
+					</p>
+				</td>
 
 			</tr>
 			<tr valign="top">
