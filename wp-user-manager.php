@@ -3,7 +3,7 @@
 Plugin Name: WP User Manager
 Plugin URI:  https://wpusermanager.com
 Description: Beautifully simple user profile directories with frontend login, registration and account customization. WP User Manager is the best solution to manage your community and your users for WordPress.
-Version:     2.3.4
+Version:     2.3.5
 Author:      WP User Manager
 Author URI:  https://wpusermanager.com
 License:     GPLv3+
@@ -14,7 +14,7 @@ Domain Path: /languages
 /**
  * WP User Manager.
  *
- * Copyright (c) 2018 Alessandro Tesoro
+ * Copyright (c) 2020 WP User Manager
  *
  * WP User Manager. is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -26,9 +26,9 @@ Domain Path: /languages
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
  *
- * @author     Alessandro Tesoro
- * @version    2.0.2
- * @copyright  (c) 2018 Alessandro Tesoro
+ * @author     WP User Manager
+ * @version    2.3.5
+ * @copyright  (c) 2020 WP User Manager
  * @license    http://www.gnu.org/licenses/gpl-3.0.txt GNU LESSER GENERAL PUBLIC LICENSE
  * @package    wp-user-manager
  */
@@ -48,7 +48,7 @@ if ( ! class_exists( 'WP_User_Manager' ) ) :
 		/**
 		 * @var string
 		 */
-		protected $version = '2.3.4';
+		protected $version = '2.3.5';
 
 		/**
 		 * WPUM Instance.

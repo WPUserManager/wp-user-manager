@@ -8,7 +8,7 @@ Tested up to: 5.4
 Requires PHP: 5.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
-Stable Tag: 2.3.4
+Stable Tag: 2.3.5
 
 The most customizable profiles & community builder WordPress plugin with front-end login, registration, profile customization and content restriction.
 
@@ -53,6 +53,7 @@ For more advanced functionality check out [pricing page](https://wpusermanager.c
 - [WooCommerce](https://wpusermanager.com/addons/woocommerce/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager): Integration with WooCommerce. Allow members to update their billing and shipping addresses, display product purchases, reviews and more!
 - [User Verification](https://wpusermanager.com/addons/user-verification/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager): Send a verification link via email upon registration or manually approve users before they can login.
 - [Registration Forms](https://wpusermanager.com/addons/registration-forms/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager): Create unlimited registration forms and have full control over form settings.
+- [Advanced Custom Fields](https://wpusermanager.com/addons/acf/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager): Collect [ACF](https://wordpress.org/plugins/advanced-custom-fields/) user data at registration and allow users to see and edit the data on their profile.
 - [Social Login & Registration](https://wpusermanager.com/addons/social-login/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager): Allow your users to quickly login and register with their favorite social network account, Facebook, Twitter, Instagram, LinkedIn & Instagram.
 - [Mailhimp](https://wpusermanager.com/addons/mailchimp/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager): Sync users with Mailchimp upon registration & more.
 - [Google reCAPTCHA](https://wpusermanager.com/addons/recaptcha?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager): Stop spam registrations on your website for free.
@@ -116,6 +117,16 @@ Please note that using WPUM and the mentioned add-ons does NOT guarantee complia
 13. Login form.
 
 == Changelog ==
+
+= 2.3.5 (1st June 2020) =
+
+- New: Directory search - dropdown to select which fields to search in (compatible with Custom Fields addon)
+- New: Advanced Custom Fields addon. Collect ACF user data at registration and allow users to see and edit the data on their profile
+- New: Compatibility with Custom Fields v2.1.0 - new field types (Video, Audio, WYSIWYG, Telephone), directory search integration
+- Fix: Directory search returning incorrect results when directory limited by role
+- Fix: File upload size not validating on the registration form
+- Fix: File upload max size not displaying on the registration form
+- Fix: Password reset form not validating that both passwords are the same when the setting to not enforce strong passwords is enabled
 
 = 2.3.4 (7th May 2020) =
 
