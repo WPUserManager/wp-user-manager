@@ -43,14 +43,13 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 
 	<div id="profile-tab-content">
 		<?php
-			$active_tab = wpum_get_active_profile_tab();
-			WPUM()->templates
-				->set_template_data( [
-					'user'            => $data->user,
-					'current_user_id' => $data->current_user_id,
-				] )
-				->get_template_part( "profiles/{$active_tab}" );
-		?>
+		$active_tab = wpum_get_active_profile_tab();
+		WPUM()->templates->set_template_data( [
+				'user'            => $data->user,
+				'current_user_id' => $data->current_user_id,
+			] )->get_template_part( "profiles/{$active_tab}" );
+
+		do_action( 'wpum_profile_page_content_' . $active_tab ); ?>
 	</div>
 
 	<div class="wpum_clearfix"></div>
