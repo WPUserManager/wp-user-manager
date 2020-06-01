@@ -121,8 +121,8 @@ Please note that using WPUM and the mentioned add-ons does NOT guarantee complia
 = 2.3.5 (1st June 2020) =
 
 - New: Directory search - dropdown to select which fields to search in (compatible with Custom Fields addon)
-- New: Advanced Custom Fields addon. Collect ACF user data at registration and allow users to see and edit the data on their profile
-- New: Compatibility with Custom Fields v2.1.0 - new field types (Video, Audio, WYSIWYG, Telephone), directory search integration
+- New: [Advanced Custom Fields](https://wpusermanager.com/addons/acf/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager) addon. Collect ACF user data at registration and allow users to see and edit the data on their profile
+- New: Compatibility with [Custom Fields](https://wpusermanager.com/addons/custom-fields/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager) addon v2.1.0 - new field types (Video, Audio, WYSIWYG, Telephone), directory search integration
 - Fix: Directory search returning incorrect results when directory limited by role
 - Fix: File upload size not validating on the registration form
 - Fix: File upload max size not displaying on the registration form
