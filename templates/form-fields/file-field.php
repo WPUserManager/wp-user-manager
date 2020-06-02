@@ -32,19 +32,20 @@ if ( ! empty( $data->ajax ) && wpum_user_can_upload_file_via_ajax() ) {
 <div class="wpum-uploaded-files">
 	<?php if ( ! empty( $data->value ) ) : ?>
 		<?php if ( is_array( $data->value ) ) : ?>
-			<?php foreach ( $data->value as $value ) : ?>
+			<?php 	if (isset($data->value['url']) || array_key_exists('url', $data->value)) {
+ 				?>
 				<?php
 					WPUM()->templates
 						->set_template_data( [
 							'key' => $data->key,
 							'name' => 'current_' . $field_name,
-							'value' => $value,
+							'value' => $data->value['url'],
 							'type'  => $data->type,
 							'field' => []
 						] )
 						->get_template_part( 'form-fields/file', 'uploaded' );
 				?>
-			<?php endforeach; ?>
+			<?php } ?>
 		<?php elseif ( $value = $data->value ) : ?>
 			<?php
 				WPUM()->templates
