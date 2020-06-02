@@ -62,6 +62,7 @@ For more advanced functionality check out [pricing page](https://wpusermanager.c
 
 = Free Extensions =
 
+- [Newsletter](https://wordpress.org/plugins/wpum-newsletter): Subscribe your members to your Newsletter plugin lists easily during registration
 - [Username Length](https://wordpress.org/plugins/wpum-username-length): Set minimum and maximum characters length for usernames.
 
 = Translations =
