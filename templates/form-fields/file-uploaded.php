@@ -27,7 +27,7 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 		$image_src = $data->value;
 	}
 	$extension = ! empty( $data->extension ) ? $data->extension : substr( strrchr( $image_src, '.' ), 1 );
-	if ( 'image' === wp_ext2type( $extension ) ) : ?>
+				if ( 'image' === wp_ext2type( $extension ) ) : ?>
 		<span class="wpum-uploaded-file-preview"><img src="<?php echo esc_url( $image_src ); ?>" /> <a class="wpum-remove-uploaded-file" href="#">[<?php esc_html_e( 'remove', 'wp-user-manager' ); ?>]</a></span>
 	<?php elseif ( 'video' === wp_ext2type( $extension ) && $data->type === 'video' ) : ?>
 		<span class="wpum-uploaded-file-preview"><?php echo wp_video_shortcode( array( 'src' => $image_src ) ); ?> <a class="wpum-remove-uploaded-file" href="#">[<?php esc_html_e( 'remove', 'wp-user-manager' ); ?>]</a></span>
