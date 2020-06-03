@@ -26,47 +26,39 @@ if ( ! empty( $data->ajax ) && wpum_user_can_upload_file_via_ajax() ) {
 	wp_enqueue_script( 'wpum-ajax-file-upload' );
 	$classes[] = 'wpum-file-upload';
 }
-
 ?>
 
 <div class="wpum-uploaded-files">
-	<?php if ( ! empty( $data->value ) ) : ?>
-		<?php if ( is_array( $data->value ) ) : ?>
-			<?php foreach ( $data->value as $value ) : ?>
-				<?php
+  <?php if ( ! empty( $data->value ) ) : 
+		 if ( is_array( $data->value ) ) : 
+			if (isset($data->value['url']) || array_key_exists('url', $data->value)) :
 					WPUM()->templates
 						->set_template_data( [
 							'key' => $data->key,
 							'name' => 'current_' . $field_name,
-							'value' => $value,
+							'value' => $data->value['url'],
 							'type'  => $data->type,
 							'field' => []
 						] )
 						->get_template_part( 'form-fields/file', 'uploaded' );
-				?>
-			<?php endforeach; ?>
-		<?php elseif ( $value = $data->value ) : ?>
-			<?php
-				WPUM()->templates
-					->set_template_data( [
-						'key'   => $data->key,
-						'name'  => 'current_' . $field_name,
-						'value' => $value,
-						'type'  => $data->type,
-						'field' => [],
-					] )
-					->get_template_part( 'form-fields/file', 'uploaded' );
-			?>
-		<?php endif; ?>
-	<?php endif; ?>
+				 endif;		
+			  elseif ( $value = $data->value ) : 
+					WPUM()->templates
+						->set_template_data( [
+							'key'   => $data->key,
+							'name'  => 'current_' . $field_name,
+							'value' => $value,
+							'type'  => $data->type,
+							'field' => [],
+						] )
+						->get_template_part( 'form-fields/file', 'uploaded' );
+			 endif; 
+		 endif; ?>
 </div>
-
 <input type="file" class="<?php echo esc_attr( implode( ' ', $classes ) ); ?>" data-file_types="<?php echo esc_attr( implode( '|', $allowed_mime_types ) ); ?>" <?php if ( ! empty( $data->multiple ) ) echo 'multiple'; ?> name="<?php echo esc_attr( isset( $data->name ) ? $data->name : $data->key ); ?><?php if ( ! empty( $data->multiple ) ) echo '[]'; ?>" id="<?php echo esc_attr( $data->key ); ?>" placeholder="<?php echo empty( $data->placeholder ) ? '' : esc_attr( $data->placeholder ); ?>" />
 <small class="description">
-	<?php if ( ! empty( $data->description ) ) : ?>
-		<?php echo $data->description; ?>
-	<?php endif ?>
-
-	<?php printf( __( 'Maximum file size: %s.', 'wp-user-manager' ), wpum_max_upload_size( isset( $data->key ) ? $data->key : '', $file_size ) ); ?>
-
+<?php if ( ! empty( $data->description ) ) : 
+		 echo $data->description; 
+	 	endif; 
+	  printf( __( 'Maximum file size: %s.', 'wp-user-manager' ), wpum_max_upload_size( isset( $data->key ) ? $data->key : '', $file_size ) ); ?>
 </small>
