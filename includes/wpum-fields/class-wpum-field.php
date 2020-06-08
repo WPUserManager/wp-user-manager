@@ -122,6 +122,13 @@ class WPUM_Field {
 	public $field_type;
 
 	/**
+	 * Check if the field is virtual
+	 * 
+	 * @var boolean
+	 */
+	protected $is_virtual = false;
+
+	/**
 	 * Constructor.
 	 *
 	 * @param mixed|boolean $_id

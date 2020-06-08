@@ -68,6 +68,11 @@
 								</div>
 							</draggable>
 							<!-- end fields list -->
+							<div class="droppable-fields-after">
+								<template v-for="field in droppableFieldAfter">
+									<component :is="field" :key="field.name"></component>
+								</template>
+							</div>
 						</div>
 					</div>
 				</div>
@@ -79,10 +84,12 @@
 </template>
 
 <script>
+import Vue from 'vue'
 import axios from 'axios'
 import qs from 'qs'
 import balloon from 'balloon-css'
 import draggable from 'vuedraggable'
+import hooks from './hooks' 
 
 export default {
 	name: 'registration-form-editor',
@@ -105,6 +112,11 @@ export default {
 			showMessageSettings: false,
 			messageStatus:       'success',
 			messageContent:      ''
+		}
+	},
+	computed: {
+		droppableFieldAfter(){
+			return hooks.applyFilters('droppableFieldAfter', []);
 		}
 	},
 	created() {

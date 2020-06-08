@@ -18,6 +18,7 @@
     "build": "node build/build.js"
   },
   "dependencies": {
+    "@wordpress/hooks": "^2.8.0",
     "axios": "^0.18.0",
     "balloon-css": "^0.5.0",
     "lodash.findindex": "^4.6.0",
