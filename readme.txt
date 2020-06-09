@@ -8,7 +8,7 @@ Tested up to: 5.4
 Requires PHP: 5.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
-Stable Tag: 2.3.5
+Stable Tag: 2.3.6
 
 The most customizable profiles & community builder WordPress plugin with front-end login, registration, profile customization and content restriction.
 
@@ -118,6 +118,13 @@ Please note that using WPUM and the mentioned add-ons does NOT guarantee complia
 13. Login form.
 
 == Changelog ==
+
+= 2.3.6 (9th June 2020) =
+
+- New: Newsletter addon which integrates with the [Newsletter plugin](https://wordpress.org/plugins/newsletter/)
+- Improvement: Simplified avatar image styling on the profile page
+- Fix: Fatal error at registration if user can select their role
+- Fix: Duplicated image file field if registration is prevented due to a validation error
 
 = 2.3.5 (1st June 2020) =
 
