@@ -347,6 +347,8 @@ class WPUM_Registration_Forms_Editor {
 			$non_allowed_fields[] = 'user_cover';
 		}
 
+		$non_allowed_fields = apply_filters( 'wpum_non_allowed_fields', $non_allowed_fields );
+
 		// Get fields already been used.
 		$form          = new WPUM_Registration_Form( $form_id );
 		$stored_fields = $form->get_meta( 'fields' );

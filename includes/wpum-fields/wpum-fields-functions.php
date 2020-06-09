@@ -191,7 +191,7 @@ function wpum_install_cover_image_field() {
 	);
 
 	$save_field = new WPUM_Field();
-	$save_field->add( $field );
+	$save_field->add( $field );	
 	$save_field->add_meta( 'user_meta_key', 'user_cover' );
 	$save_field->add_meta( 'editing', 'public' );
 	$save_field->add_meta( 'visibility', 'public' );
@@ -631,4 +631,10 @@ function wpum_max_upload_size( $field_name = '', $custom_size = false ) {
 	}
 
 	return $output;
+}
+
+
+function wpum_get_field_class_name( $field ) {
+
+	return apply_filters( 'wpum_field_class', 'WPUM_Field_' . ucfirst( $field ), $field );
 }

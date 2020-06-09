@@ -67,9 +67,11 @@ class WPUM_Fields {
 		foreach ( $fields as $field ) {
 			if ( file_exists( WPUM_PLUGIN_DIR . 'includes/wpum-fields/types/class-wpum-field-' . $field . '.php' ) ) {
 				require_once WPUM_PLUGIN_DIR . 'includes/wpum-fields/types/class-wpum-field-' . $field . '.php';
-				$class = 'WPUM_Field_' . ucfirst( $field );
-				( new $class )->register();
 			}
+
+			$class = wpum_get_field_class_name($field);
+			if( class_exists($class) )
+				( new $class )->register();
 		}
 
 	}
