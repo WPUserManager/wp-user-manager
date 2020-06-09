@@ -273,7 +273,7 @@ class WPUM_Form_Registration extends WPUM_Form {
 
 				$fields['role'] = array(
 					'label'       => __( 'Select Role', 'wp-user-manager' ),
-					'type'        => 'select',
+					'type'        => 'dropdown',
 					'required'    => true,
 					'options'     => wpum_get_allowed_user_roles( $selected_roles ),
 					'description' => __( 'Select your user role', 'wp-user-manager' ),
