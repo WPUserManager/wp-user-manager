@@ -59,7 +59,7 @@
 							</div>
 							<!-- start fields list -->
 							<draggable v-model="selectedFields" class="droppable-fields" :options="{group:'formFields', animation:150}" @sort="saveFields">
-								<div class="widget" v-for="element in selectedFields" :key="element.name">
+								<div class="widget" v-for="(element, i) in selectedFields" :key="i">
 									<div class="widget-top">
 										<div class="widget-title ui-sortable-handle">
 											<h3>{{element.name}}</h3>
