@@ -226,7 +226,7 @@ class WPUM_Form_Registration extends WPUM_Form {
 	 *
 	 * @return array
 	 */
-	private function get_registration_fields() {
+	protected function get_registration_fields() {
 
 		$fields            = [];
 		$registration_form = $this->get_registration_form();
