@@ -122,13 +122,6 @@ class WPUM_Field {
 	public $field_type;
 
 	/**
-	 * Check if the field is virtual
-	 * 
-	 * @var boolean
-	 */
-	protected $is_virtual = false;
-
-	/**
 	 * Constructor.
 	 *
 	 * @param mixed|boolean $_id
@@ -150,7 +143,6 @@ class WPUM_Field {
 
 		if ( $field ) {
 			$this->setup_field( $field );
-			do_action('wpum_field_'.$this->id.'_init', $this);
 		} else {
 			return false;
 		}
@@ -207,7 +199,7 @@ class WPUM_Field {
 			$this->visibility    = $this->get_meta( 'visibility' );
 			$this->editable      = $this->get_meta( 'editing' );
 
-			$class = wpum_get_field_class_name($this->get_type());
+			$class = 'WPUM_Field_' . ucfirst( $this->get_type() );
 			$this->field_type = new $class;
 
 			return true;

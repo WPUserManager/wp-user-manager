@@ -69,7 +69,7 @@ class WPUM_Fields {
 				require_once WPUM_PLUGIN_DIR . 'includes/wpum-fields/types/class-wpum-field-' . $field . '.php';
 			}
 
-			$class = wpum_get_field_class_name($field);
+			$class = 'WPUM_Field_' . ucfirst( $field );
 			if( class_exists($class) )
 				( new $class )->register();
 		}
