@@ -22,7 +22,7 @@
 			<div id="widgets-left">
 				<div id="available-widgets-d" class="widgets-holder-wrap ui-droppable">
 					<div class="sidebar-name">
-						<h2>{{labels.editor_available_title}} <div class="spinner is-active" v-if="loading"></div></h2>
+						<h2>{{labels.editor_available_title}}</h2>
 					</div>
 					<div class="sidebar-description">
 						<p class="description">{{labels.editor_available_desc}}</p>
@@ -52,7 +52,7 @@
 
 						<div class="widgets-sortables ui-droppable ui-sortable">
 							<div class="sidebar-name">
-								<h2>{{labels.editor_current_title}}</h2>
+								<h2>{{labels.editor_current_title}} <div class="spinner is-active" v-if="loading"></div></h2>
 							</div>
 							<div class="sidebar-description">
 								<p class="description">{{labels.editor_used_fields}}</p>
@@ -89,7 +89,7 @@ import axios from 'axios'
 import qs from 'qs'
 import balloon from 'balloon-css'
 import draggable from 'vuedraggable'
-import hooks from './hooks' 
+import hooks from './hooks'
 
 export default {
 	name: 'registration-form-editor',
