@@ -532,7 +532,7 @@ class WPUM_Form_Registration extends WPUM_Form {
 	 */
 	public function render_registration_form_fields($field, $key){
 		$registered_groups = array_column(wpum_get_registered_field_types(), 'fields');
-		$registered_fields = $registered_groups ? array_merge(...$registered_groups) : [];
+		$registered_fields = $registered_groups ? call_user_func_array('array_merge', $registered_groups) : [];
 		$registered_types  = $registered_fields ? array_column($registered_fields, 'type') : [];
 
 		if( in_array( $field['type'], $registered_types ) ){
