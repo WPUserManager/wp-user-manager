@@ -88,7 +88,6 @@ import VueFormGenerator from 'vue-form-generator'
 import draggable from 'vuedraggable'
 import lodashRemove from 'lodash.remove'
 import lodashIncludes from 'lodash.includes'
-import optionsInput from '../settings/options'
 import '../../../assets/css/src/_columns.scss'
 
 export default {
