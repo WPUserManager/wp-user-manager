@@ -264,6 +264,9 @@ abstract class WPUM_Form {
 				$field_type = str_replace( '-', '_', $field['type'] );
 
 				$class = 'WPUM_Field_' . ucfirst( $field_type );
+
+				if( !class_exists( $class ) ) continue;
+
 				$field_object = new $class;
 
 				if ( $handler = apply_filters( "wpum_get_posted_{$field_type}_field", false ) ) {

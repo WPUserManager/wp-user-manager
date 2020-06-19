@@ -234,7 +234,7 @@ class WPUM_Form_Registration extends WPUM_Form {
 		if ( $registration_form->exists() ) {
 
 			$this->role    = $registration_form->get_role_key();
-			$stored_fields = $registration_form->get_meta( 'fields' );
+			$stored_fields = $registration_form->get_fields();
 
 			if ( is_array( $stored_fields ) && ! empty( $stored_fields ) ) {
 				foreach ( $stored_fields as $key => $field ) {

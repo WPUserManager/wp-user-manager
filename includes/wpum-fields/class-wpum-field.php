@@ -200,9 +200,10 @@ class WPUM_Field {
 			$this->editable      = $this->get_meta( 'editing' );
 
 			$class = 'WPUM_Field_' . ucfirst( $this->get_type() );
-			$this->field_type = new $class;
-
-			return true;
+			if( class_exists( $class ) ){
+				$this->field_type = new $class;
+				return true;
+			}
 		}
 
 		return false;

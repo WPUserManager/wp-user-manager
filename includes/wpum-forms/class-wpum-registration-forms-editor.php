@@ -297,7 +297,7 @@ class WPUM_Registration_Forms_Editor {
 
 		if( $form->exists() ) {
 
-			$stored_fields = $form->get_meta( 'fields' );
+			$stored_fields = $form->get_fields();
 
 			if( is_array( $stored_fields ) && ! empty( $stored_fields ) ) {
 				foreach ( $stored_fields as $field ) {
@@ -351,7 +351,7 @@ class WPUM_Registration_Forms_Editor {
 
 		// Get fields already been used.
 		$form          = new WPUM_Registration_Form( $form_id );
-		$stored_fields = $form->get_meta( 'fields' );
+		$stored_fields = $form->get_fields();
 		$stored_fields = empty( $stored_fields ) ? array() : $stored_fields;
 
 		foreach ( $available_fields as $field ) {

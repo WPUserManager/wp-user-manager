@@ -168,7 +168,7 @@ class WPUM_Registration_Form {
 	 * @return array
 	 */
 	public function get_fields() {
-		return $this->fields;
+		return apply_filters( 'wpum_registration_form_fields', $this->fields, $this );
 	}
 
 	/**
