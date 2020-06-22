@@ -237,23 +237,23 @@ add_filter( 'upload_dir', 'wpum_upload_dir' );
 /**
  * Filters only valid registration form fields
  *
- * @param  array $fields
- * @param  WPUM_Registration_Form $form_instance
+ * @param array $fields
+ *
  * @return array
  */
-function wpum_registration_form_valid_fields( $fields, $form_instance ){
+function wpum_registration_form_valid_fields( $fields ) {
 
-	foreach( $fields as $index => $field_id ){
-
+	foreach ( $fields as $index => $field_id ) {
 		$field          = new WPUM_Field( $field_id );
 		$is_valid_field = $field->exists() && class_exists( 'WPUM_Field_' . ucfirst( $field->get_type() ) );
 
-		if( !$is_valid_field ){
-			unset( $fields[$index] );
+		if ( ! $is_valid_field ) {
+			unset( $fields[ $index ] );
 			continue;
 		}
 	}
 
 	return $fields;
 }
-add_filter( 'wpum_registration_form_fields', 'wpum_registration_form_valid_fields', 10, 2 );
+
+add_filter( 'wpum_registration_form_fields', 'wpum_registration_form_valid_fields' );

@@ -265,7 +265,9 @@ abstract class WPUM_Form {
 
 				$class = 'WPUM_Field_' . ucfirst( $field_type );
 
-				if( !class_exists( $class ) ) continue;
+				if ( ! class_exists( $class ) ) {
+					continue;
+				}
 
 				$field_object = new $class;
 
