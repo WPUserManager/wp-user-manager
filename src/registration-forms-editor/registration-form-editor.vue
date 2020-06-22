@@ -22,7 +22,7 @@
 			<div id="widgets-left">
 				<div id="available-widgets-d" class="widgets-holder-wrap ui-droppable">
 					<div class="sidebar-name">
-						<h2>{{labels.editor_available_title}} <div class="spinner is-active" v-if="loading"></div></h2>
+						<h2>{{labels.editor_available_title}}</h2>
 					</div>
 					<div class="sidebar-description">
 						<p class="description">{{labels.editor_available_desc}}</p>
@@ -52,14 +52,14 @@
 
 						<div class="widgets-sortables ui-droppable ui-sortable">
 							<div class="sidebar-name">
-								<h2>{{labels.editor_current_title}}</h2>
+								<h2>{{labels.editor_current_title}} <div class="spinner is-active" v-if="loading"></div></h2>
 							</div>
 							<div class="sidebar-description">
 								<p class="description">{{labels.editor_used_fields}}</p>
 							</div>
 							<!-- start fields list -->
 							<draggable v-model="selectedFields" class="droppable-fields" :options="{group:'formFields', animation:150}" @sort="saveFields">
-								<div class="widget" v-for="element in selectedFields" :key="element.name">
+								<div class="widget" v-for="(element, i) in selectedFields" :key="i">
 									<div class="widget-top">
 										<div class="widget-title ui-sortable-handle">
 											<h3>{{element.name}}</h3>
@@ -68,6 +68,11 @@
 								</div>
 							</draggable>
 							<!-- end fields list -->
+							<div class="droppable-fields-after">
+								<template v-for="field in droppableFieldAfter">
+									<component :is="field" :key="field.name"></component>
+								</template>
+							</div>
 						</div>
 					</div>
 				</div>
@@ -79,10 +84,12 @@
 </template>
 
 <script>
+import Vue from 'vue'
 import axios from 'axios'
 import qs from 'qs'
 import balloon from 'balloon-css'
 import draggable from 'vuedraggable'
+import hooks from './hooks'
 
 export default {
 	name: 'registration-form-editor',
@@ -105,6 +112,11 @@ export default {
 			showMessageSettings: false,
 			messageStatus:       'success',
 			messageContent:      ''
+		}
+	},
+	computed: {
+		droppableFieldAfter(){
+			return hooks.applyFilters('droppableFieldAfter', []);
 		}
 	},
 	created() {

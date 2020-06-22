@@ -25,49 +25,17 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 	<form action="<?php echo esc_url( $data->action ); ?>" method="post" id="wpum-submit-registration-form" enctype="multipart/form-data">
 
 		<?php foreach ( $data->fields as $key => $field ) : ?>
-			<fieldset class="fieldset-<?php echo esc_attr( $key ); ?>">
 
-				<?php if( $field['type'] == 'checkbox' ) : ?>
+			<?php
+			/**
+			 * Hook to render form field. Always use conditional check to
+			 * make sure the field type. Otherwise field would render multiple times.
+			 *
+			 * @var $field
+			 */
+			do_action( 'wpum_registration_form_field', $field, $key );
+			?>
 
-					<label for="<?php echo esc_attr( $key ); ?>">
-						<span class="field <?php echo $field['required'] ? 'required-field' : ''; ?>">
-							<?php
-								// Add the key to field.
-								$field[ 'key' ] = $key;
-								$template = isset( $field['template'] ) ? $field['template'] : $field['type'];
-								WPUM()->templates
-									->set_template_data( $field )
-									->get_template_part( 'form-fields/' . $template, 'field' );
-							?>
-						</span>
-						<?php echo esc_html( $field['label'] ); ?>
-						<?php if( isset( $field['required'] ) && $field['required'] ) : ?>
-							<span class="wpum-required">*</span>
-						<?php endif; ?>
-					</label>
-
-				<?php else : ?>
-
-					<label for="<?php echo esc_attr( $key ); ?>">
-						<?php echo esc_html( $field['label'] ); ?>
-						<?php if( isset( $field['required'] ) && $field['required'] ) : ?>
-							<span class="wpum-required">*</span>
-						<?php endif; ?>
-					</label>
-					<div class="field <?php echo $field['required'] ? 'required-field' : ''; ?>">
-						<?php
-							// Add the key to field.
-							$field[ 'key' ] = $key;
-							$template = isset( $field['template'] ) ? $field['template'] : $field['type'];
-							WPUM()->templates
-								->set_template_data( $field )
-								->get_template_part( 'form-fields/' . $template, 'field' );
-						?>
-					</div>
-
-				<?php endif; ?>
-
-			</fieldset>
 		<?php endforeach; ?>
 
 		<input type="hidden" name="wpum_form" value="<?php echo $data->form; ?>" />

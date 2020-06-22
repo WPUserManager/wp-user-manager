@@ -70,6 +70,7 @@ class WPUM_Form_Registration extends WPUM_Form {
 		add_filter( 'submit_wpum_form_validate_fields', [ $this, 'validate_username' ], 10, 4 );
 		add_filter( 'submit_wpum_form_validate_fields', [ $this, 'validate_honeypot' ], 10, 4 );
 		add_filter( 'submit_wpum_form_validate_fields', [ $this, 'validate_role' ], 10, 4 );
+		add_action( 'wpum_registration_form_field', [ $this, 'render_registration_form_fields' ], 10, 2 );
 
 		$this->steps = (array) apply_filters(
 			'registration_steps',
@@ -225,7 +226,7 @@ class WPUM_Form_Registration extends WPUM_Form {
 	 *
 	 * @return array
 	 */
-	private function get_registration_fields() {
+	protected function get_registration_fields() {
 
 		$fields            = [];
 		$registration_form = $this->get_registration_form();
@@ -233,7 +234,7 @@ class WPUM_Form_Registration extends WPUM_Form {
 		if ( $registration_form->exists() ) {
 
 			$this->role    = $registration_form->get_role_key();
-			$stored_fields = $registration_form->get_meta( 'fields' );
+			$stored_fields = $registration_form->get_fields();
 
 			if ( is_array( $stored_fields ) && ! empty( $stored_fields ) ) {
 				foreach ( $stored_fields as $key => $field ) {
@@ -522,6 +523,23 @@ class WPUM_Form_Registration extends WPUM_Form {
 
 			wp_safe_redirect( $registration_page );
 			exit;
+		}
+	}
+
+	/**
+	 * Rendering built in form fields
+	 *
+	 */
+	public function render_registration_form_fields($field, $key){
+		$registered_groups = array_column(wpum_get_registered_field_types(), 'fields');
+		$registered_fields = $registered_groups ? call_user_func_array('array_merge', $registered_groups) : [];
+		$registered_types  = $registered_fields ? array_column($registered_fields, 'type') : [];
+
+		if( in_array( $field['type'], $registered_types ) ){
+
+			WPUM()->templates
+				->set_template_data( [ 'field' => $field, 'key' => $key ] )
+				->get_template_part( 'forms/form-registration-fields', 'field' );
 		}
 	}
 
