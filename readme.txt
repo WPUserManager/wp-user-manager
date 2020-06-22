@@ -119,7 +119,7 @@ Please note that using WPUM and the mentioned add-ons does NOT guarantee complia
 
 == Changelog ==
 
-= 2.3.7 (24th June 2020) =
+= 2.3.7 (23th June 2020) =
 
 - New: Compatibility with [Registration Forms](https://wpusermanager.com/addons/registration-forms/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager) addon v1.1.0 - add custom HTML to your registration forms
 - Fix: Personal Data and Delete Account addons not receiving updates
