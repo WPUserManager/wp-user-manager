@@ -266,7 +266,6 @@ if ( ! class_exists( 'WP_User_Manager' ) ) :
 				require_once WPUM_PLUGIN_DIR . 'includes/wpum-forms/class-wpum-registration-forms-editor.php';
 				require_once WPUM_PLUGIN_DIR . 'includes/wpum-emails/class-wpum-emails-list.php';
 				require_once WPUM_PLUGIN_DIR . 'includes/wpum-updater/class-wpum-updater-settings.php';
-				require_once WPUM_PLUGIN_DIR . 'includes/wpum-updater/free-plugins.php';
 				require_once WPUM_PLUGIN_DIR . 'includes/wpum-shortcodes/class-wpum-shortcode-button.php';
 				require_once WPUM_PLUGIN_DIR . 'includes/wpum-shortcodes/class-wpum-shortcode-login.php';
 				require_once WPUM_PLUGIN_DIR . 'includes/wpum-shortcodes/class-wpum-shortcode-login-link.php';
@@ -289,6 +288,7 @@ if ( ! class_exists( 'WP_User_Manager' ) ) :
 			}
 
 			require_once WPUM_PLUGIN_DIR . 'includes/wpum-updater/class-wpum-license.php';
+			require_once WPUM_PLUGIN_DIR . 'includes/wpum-updater/free-plugins.php';
 
 			require_once WPUM_PLUGIN_DIR . 'includes/install.php';
 

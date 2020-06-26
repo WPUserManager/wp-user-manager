@@ -13,6 +13,10 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 add_action( 'admin_init', 'wpum_free_plugins_auto_updater', 0 );
 
 function wpum_free_plugins_auto_updater() {
+	if ( ! class_exists( 'WPUM_EDD_SL_Plugin_Updater' ) ) {
+		require_once WPUM_PLUGIN_DIR . 'includes/wpum-updater/EDD_SL_Plugin_Updater.php';
+	}
+
 	$api_url = 'https://wpusermanager.com';
 
 	$delete_account = WP_PLUGIN_DIR . '/wpum-delete-account/wpum-delete-account.php';
