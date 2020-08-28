@@ -329,11 +329,9 @@ function wpum_mask_email_address( $email_address ) {
  * @return boolean
  */
 function wpum_is_registration_enabled() {
-
 	$enabled = get_option( 'users_can_register' );
 
-	return $enabled;
-
+	return apply_filters( 'wpum_registration_enabled', $enabled );
 }
 
 /**
