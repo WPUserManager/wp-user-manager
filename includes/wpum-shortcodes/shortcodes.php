@@ -164,9 +164,10 @@ add_shortcode( 'wpum_logout', 'wpum_logout_link' );
 /**
  * Show the registration form through a shortcode.
  *
- * @param array  $atts
- * @param string $content
- * @return void
+ * @param array       $atts
+ * @param string|null $content
+ *
+ * @return string
  */
 function wpum_registration_form( $atts, $content = null ) {
 
@@ -213,7 +214,7 @@ function wpum_registration_form( $atts, $content = null ) {
 		WPUM()->templates
 			->set_template_data(
 				[
-					'message' => esc_html__( 'Registrations are currently disabled.', 'wp-user-manager' ),
+					'message' => apply_filters( 'wpum_registration_disabled_message', esc_html__( 'Registrations are currently disabled.', 'wp-user-manager' ) ),
 				]
 			)
 			->get_template_part( 'messages/general', 'error' );
