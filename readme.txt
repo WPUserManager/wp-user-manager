@@ -125,7 +125,7 @@ Please note that using WPUM and the mentioned add-ons does NOT guarantee complia
 - Improvement: Add filter 'wpum_admin_registration_confirmation_email_attachments' for attachments for the new registration admin email
 - Improvement: Add filter 'wpum_registration_enabled' to override the users_can_register setting
 - Fix: Registration form checkbox settings not persisting after save
-- Fix: Registration form showing register link instead of login link
+- Fix: Registration form block showing register link instead of login link
 
 = 2.3.8 (26th June 2020) =
 
