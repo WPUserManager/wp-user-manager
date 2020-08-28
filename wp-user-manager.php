@@ -60,28 +60,28 @@ if ( ! class_exists( 'WP_User_Manager' ) ) :
 		/**
 		 * Holds the admin notice creation helper class.
 		 *
-		 * @var object
+		 * @var TDP\WP_Notice
 		 */
 		public $notices;
 
 		/**
 		 * Store the template loader object.
 		 *
-		 * @var object
+		 * @var WPUM_Template_Loader
 		 */
 		public $templates;
 
 		/**
 		 * Store all forms.
 		 *
-		 * @var object
+		 * @var WPUM_Forms
 		 */
 		public $forms;
 
 		/**
 		 * The email templates handler.
 		 *
-		 * @var object
+		 * @var WPUM_Emails
 		 */
 		public $emails;
 

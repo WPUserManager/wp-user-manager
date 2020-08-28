@@ -18,7 +18,7 @@ class WPUM_Forms {
 	/**
 	 * The single instance of the class.
 	 *
-	 * @var self
+	 * @var WPUM_Forms
 	 */
 	private static $_instance = null;
 
@@ -26,7 +26,7 @@ class WPUM_Forms {
 	 * Allows for accessing single instance of class. Class should only be constructed once per call.
 	 *
 	 * @static
-	 * @return self Main instance.
+	 * @return WPUM_Forms Main instance.
 	 */
 	public static function instance() {
 		if ( is_null( self::$_instance ) ) {
