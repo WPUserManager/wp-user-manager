@@ -543,7 +543,11 @@ class WPUM_Registration_Forms_Editor {
 		$pass = false;
 
 		if ( $input == 'true' ) {
-			$pass = true;
+			return true;
+		}
+
+		if ( 1 == $input ) {
+			return true;
 		}
 
 		return $pass;
