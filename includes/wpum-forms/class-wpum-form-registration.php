@@ -66,6 +66,7 @@ class WPUM_Form_Registration extends WPUM_Form {
 	public function __construct() {
 		add_action( 'wp', array( $this, 'process' ) );
 
+		add_filter( 'submit_wpum_form_validate_fields', [ $this, 'validate_emails' ], 10, 4 );
 		add_filter( 'submit_wpum_form_validate_fields', [ $this, 'validate_password' ], 10, 4 );
 		add_filter( 'submit_wpum_form_validate_fields', [ $this, 'validate_username' ], 10, 4 );
 		add_filter( 'submit_wpum_form_validate_fields', [ $this, 'validate_honeypot' ], 10, 4 );
@@ -98,6 +99,34 @@ class WPUM_Form_Registration extends WPUM_Form {
 			$this->step = is_numeric( $_GET['step'] ) ? max( absint( $_GET['step'] ), 0 ) : array_search( $_GET['step'], array_keys( $this->steps ) );
 		}
 
+	}
+
+	/**
+	 * Make sure any emails are valid.
+	 *
+	 * @param bool $pass
+	 * @param array $fields
+	 * @param array $values
+	 * @param string $form
+	 *
+	 * @return bool|WP_Error
+	 */
+	public function validate_emails( $pass, $fields, $values, $form ) {
+		if ( $form !== $this->form_name ) {
+			return $pass;
+		}
+
+		foreach ( $fields['register'] as $key => $field ) {
+			if ( 'email' !== $field['type'] ) {
+				continue;
+			}
+
+			if ( ! is_email( $values['register'][ $key ] ) ) {
+				return new WP_Error( 'email-validation-error', esc_html( sprintf( __( '%s is not a valid email address.', 'wp-user-manager' ), $values['register'][ $key ] ) ) );
+			}
+		}
+
+		return $pass;
 	}
 
 	/**
