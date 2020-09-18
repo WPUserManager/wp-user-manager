@@ -20,7 +20,7 @@
 			<div class="download type-download">
 				<div class="featured-img">
 					<a href="<?php echo esc_url( $addon->link ); ?>" title="<?php echo esc_html( $addon->title ); ?>" target="_blank">
-						<img src="<?php echo esc_url( $addon->thumbnail ); ?>" alt="<?php echo esc_html( $addon->title ); ?>" width="280" height="164">
+						<img src="<?php echo esc_url( $addon->thumbnail ); ?>" alt="<?php echo esc_html( $addon->title ); ?>" width="100" height="100">
 					</a>
 				</div>
 				<div class="addon-content">
