@@ -8,7 +8,7 @@ Tested up to: 5.5
 Requires PHP: 5.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
-Stable Tag: 2.3.9
+Stable Tag: 2.3.10
 
 The most customizable profiles & community builder WordPress plugin with front-end login, registration, profile customization and content restriction.
 
@@ -118,6 +118,16 @@ Please note that using WPUM and the mentioned add-ons does NOT guarantee complia
 13. Login form.
 
 == Changelog ==
+
+= 2.3.10 (18th September 2020) =
+
+- Improvement: Added field type icons to the fields in the edit registration form screen
+- Improvement: Validate email addresses on registration form submission in case HTML validation disabled
+- Fix: Settings not saved on installs that force a trailing slash to the URL
+- Fix: Fatal error if same page chosen for the profile and account pages
+- Fix: Change page title to 'Log In' instead of 'Login'
+- Fix: Images stretched on the addons page
+- Fix: Translation issue in terms text
 
 = 2.3.9 (28th August 2020) =
 

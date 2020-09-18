@@ -48,13 +48,15 @@
 	border: 1px solid #d1d1d1
 }
 
-.type-download>.featured-img img {
-	border-bottom: 1px solid #ddd
+
+.type-download>.featured-img {
+	padding: 15px;
 }
 
 .type-download .addon-content {
 	*zoom: 1;
-	padding: 15px 20px
+	padding: 15px 20px;
+	min-height: 110px;
 }
 
 .type-download .addon-content:after,

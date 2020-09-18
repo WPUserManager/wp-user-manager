@@ -132,6 +132,7 @@ class WPUM_Registration_Forms_Editor {
 			'table_default'            => esc_html__( 'Default', 'wp-user-manager' ),
 			'table_role'               => esc_html__( 'Registration Role', 'wp-user-manager' ),
 			'table_signup_total'       => esc_html__( 'Total Signups', 'wp-user-manager' ),
+			'table_shortcode'          => esc_html__( 'Shortcode', 'wp-user-manager' ),
 			'table_actions'            => esc_html__( 'Actions', 'wp-user-manager' ),
 			'table_not_found'          => esc_html__( 'No registration forms have been found.', 'wp-user-manager' ),
 			'table_add_form'           => esc_html__( 'Add New Form', 'wp-user-manager' ),
@@ -305,9 +306,12 @@ class WPUM_Registration_Forms_Editor {
 					$stored_field = new WPUM_Field( $field );
 
 					if( $stored_field->exists() ) {
+						$icon = isset( $stored_field->field_type->icon ) ? $stored_field->field_type->icon : 'dashicons-editor-justify';
+						
 						$fields[] = [
 							'id'   => $stored_field->get_ID(),
-							'name' => $stored_field->get_name()
+							'name' => $stored_field->get_name(),
+							'icon' => $icon,
 						];
 					}
 
@@ -364,9 +368,12 @@ class WPUM_Registration_Forms_Editor {
 				continue;
 			}
 
+			$icon = isset( $field->field_type->icon ) ? $field->field_type->icon : 'dashicons-editor-justify';
+
 			$fields[] = [
 				'id'   => $field->get_ID(),
 				'name' => $field->get_name(),
+				'icon' => $icon,
 			];
 		}
 

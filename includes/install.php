@@ -48,7 +48,7 @@ function wpum_generate_pages() {
 
 		$login = wp_insert_post(
 			array(
-				'post_title'     => __( 'Login', 'wp-user-manager' ),
+				'post_title'     => __( 'Log In', 'wp-user-manager' ),
 				'post_content'   => $login_content,
 				'post_status'    => 'publish',
 				'post_author'    => 1,

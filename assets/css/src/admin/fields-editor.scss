@@ -365,6 +365,17 @@ body.users_page_wpum-registration-forms {
 	}
 }
 
+.wpum-registration-form {
+	h3 .dashicons {
+		width: 15px;
+		height: 15px;
+		margin-right: 10px;
+		display: inline-block;
+		font-size: 18px;
+		vertical-align: bottom;
+	}
+}
+
 .dragArea {
 	min-height: 50px;
 }

@@ -32,7 +32,7 @@
 						<div class="widget ui-draggable" v-for="element in availableFields" :key="element.name">
 							<div class="widget-top">
 								<div class="widget-title ui-draggable-handle">
-									<h3>{{element.name}}</h3>
+									<h3><span :class="'dashicons ' + element.icon"></span> {{element.name}}</h3>
 								</div>
 							</div>
 						</div>
@@ -62,7 +62,7 @@
 								<div class="widget" v-for="(element, i) in selectedFields" :key="i">
 									<div class="widget-top">
 										<div class="widget-title ui-sortable-handle">
-											<h3>{{element.name}}</h3>
+											<h3><span :class="'dashicons ' + element.icon"></span> {{element.name}}</h3>
 										</div>
 									</div>
 								</div>
