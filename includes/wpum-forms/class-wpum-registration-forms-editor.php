@@ -306,10 +306,12 @@ class WPUM_Registration_Forms_Editor {
 					$stored_field = new WPUM_Field( $field );
 
 					if( $stored_field->exists() ) {
+						$icon = isset( $stored_field->field_type->icon ) ? $stored_field->field_type->icon : 'dashicons-editor-justify';
+						
 						$fields[] = [
 							'id'   => $stored_field->get_ID(),
 							'name' => $stored_field->get_name(),
-							'icon' => $stored_field->field_type->icon,
+							'icon' => $icon,
 						];
 					}
 
@@ -366,10 +368,12 @@ class WPUM_Registration_Forms_Editor {
 				continue;
 			}
 
+			$icon = isset( $field->field_type->icon ) ? $field->field_type->icon : 'dashicons-editor-justify';
+
 			$fields[] = [
 				'id'   => $field->get_ID(),
 				'name' => $field->get_name(),
-				'icon' =>  $field->field_type->icon,
+				'icon' => $icon,
 			];
 		}
 
