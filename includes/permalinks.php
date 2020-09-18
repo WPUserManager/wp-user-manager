@@ -63,9 +63,20 @@ add_action(
 	function( RouteCollectionInterface $routes ) {
 
 		$profile_page_id = wpum_get_core_page_id( 'profile' );
-		$exists          = ( 'publish' == get_post_status( $profile_page_id ) ) ? true : false;
 
-		if ( ! $profile_page_id || ! $exists ) {
+		if ( ! $profile_page_id ) {
+			return;
+		}
+
+		$account_page_id = wpum_get_core_page_id( 'account' );
+
+		if( $account_page_id == $profile_page_id ) {
+			return;
+		}
+
+		$exists = ( 'publish' == get_post_status( $profile_page_id ) ) ? true : false;
+
+		if ( ! $exists ) {
 			return;
 		}
 
