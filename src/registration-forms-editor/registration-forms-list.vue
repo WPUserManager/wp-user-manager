@@ -22,6 +22,7 @@
 					<th scope="col">{{labels.table_fields}}</th>
 					<th scope="col" :data-balloon="labels.table_default_tooltip" data-balloon-pos="left">{{labels.table_default}}</th>
 					<th scope="col">{{labels.table_role}}</th>
+					<th scope="col" v-if="isAddonInstalled">{{labels.table_shortcode}}</th>
 					<th scope="col" v-if="isAddonInstalled">{{labels.table_signup_total}}</th>
 					<th scope="col" v-text="sanitized(labels.table_actions)"></th>
 				</tr>
@@ -51,6 +52,9 @@
 					</td>
 					<td>
 						{{form.role}}
+					</td>
+					<td v-if="isAddonInstalled">
+						[wpum_register form_id="{{form.id}}"]
 					</td>
 					<td v-if="isAddonInstalled">
 						{{form.total_signups}}
