@@ -307,7 +307,8 @@ class WPUM_Registration_Forms_Editor {
 					if( $stored_field->exists() ) {
 						$fields[] = [
 							'id'   => $stored_field->get_ID(),
-							'name' => $stored_field->get_name()
+							'name' => $stored_field->get_name(),
+							'icon' => $stored_field->field_type->icon,
 						];
 					}
 
@@ -367,6 +368,7 @@ class WPUM_Registration_Forms_Editor {
 			$fields[] = [
 				'id'   => $field->get_ID(),
 				'name' => $field->get_name(),
+				'icon' =>  $field->field_type->icon,
 			];
 		}
 
