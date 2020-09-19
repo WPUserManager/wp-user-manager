@@ -49,7 +49,7 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 				'current_user_id' => $data->current_user_id,
 			] )->get_template_part( "profiles/{$active_tab}" );
 
-		do_action( 'wpum_profile_page_content_' . $active_tab ); ?>
+		do_action( 'wpum_profile_page_content_' . $active_tab, $data ); ?>
 	</div>
 
 	<div class="wpum_clearfix"></div>
