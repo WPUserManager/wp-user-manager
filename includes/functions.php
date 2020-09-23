@@ -908,30 +908,28 @@ function wpum_get_active_profile_tab() {
 /**
  * Grab posts submitted by a user within a profile
  *
- * @param int $user_id
- * @return void
+ * @param int    $user_id
+ * @param string $post_type
+ *
+ * @return false|WP_Query
  */
-function wpum_get_posts_for_profile( $user_id ) {
-
+function wpum_get_posts_for_profile( $user_id, $post_type = 'post' ) {
 	if ( ! $user_id ) {
 		return false;
 	}
 
 	$paged = ( get_query_var( 'paged' ) ) ? get_query_var( 'paged' ) : 1;
 
-	$args = apply_filters(
-		'wpum_get_posts_for_profile',
-		[
-			'post_type' => 'post',
-			'author'    => $user_id,
-			'paged'     => $paged,
-		]
-	);
+	$args = apply_filters( 'wpum_get_posts_for_profile', [
+		'post_type'   => $post_type,
+		'author'      => $user_id,
+		'paged'       => $paged,
+		'post_status' => 'publish',
+	] );
 
 	$query = new WP_Query( $args );
 
 	return $query;
-
 }
 
 /**
