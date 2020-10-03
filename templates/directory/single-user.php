@@ -21,12 +21,12 @@ $user = $data->data;
 ?>
 <div class="wpum-directory-single-user">
 	<div class="wpum-row wpum-middle-xs">
-		<div class="wpum-col-xs-1" id="directory-avatar">
+		<div class="wpum-col-xs-2" id="directory-avatar">
 			<a href="<?php echo esc_url( wpum_get_profile_url( $user ) ); ?>">
 				<?php echo get_avatar( $user->ID, 100 ); ?>
 			</a>
 		</div>
-		<div class="wpum-col-xs-8">
+		<div class="wpum-col-xs-6">
 			<p class="wpum-name">
 				<a href="<?php echo esc_url( wpum_get_profile_url( $user ) ); ?>"><?php echo esc_html( $user->display_name ); ?></a>
 			</p>
@@ -34,7 +34,7 @@ $user = $data->data;
 				<?php echo wp_trim_words( wp_kses_post( get_user_meta( $user->ID, 'description', true ) ), $num_words = 20, '...' ); ?>
 			</p>
 		</div>
-		<div class="wpum-col-xs-3 wpum-meta">
+		<div class="wpum-col-xs-4 wpum-meta">
 			<a href="<?php echo esc_url( wpum_get_profile_url( $user ) ); ?>" class="button"><?php esc_html_e( 'View profile', 'wp-user-manager' ); ?></a>
 		</div>
 	</div>
