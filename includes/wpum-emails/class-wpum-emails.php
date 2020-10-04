@@ -424,7 +424,7 @@ class WPUM_Emails {
 		if ( ! $this->email_tag_exists( $tag ) ) {
 			return $m[0];
 		}
-		return call_user_func( $this->tags[ $tag ]['function'], $this->user_id, $this->password_reset_key, $this->plain_text_password, $tag );
+		return call_user_func( $this->tags[ $tag ]['function'], $this->user_id, $this->password_reset_key, $this->plain_text_password, $tag, $this );
 	}
 
 	/**
