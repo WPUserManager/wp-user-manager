@@ -8,7 +8,7 @@ Tested up to: 5.5
 Requires PHP: 5.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
-Stable Tag: 2.3.11
+Stable Tag: 2.3.12
 
 The most customizable profiles & community builder WordPress plugin with front-end login, registration, profile customization and content restriction.
 
@@ -121,6 +121,16 @@ Please note that using WPUM and the mentioned add-ons does NOT guarantee complia
 13. Login form.
 
 == Changelog ==
+
+= 2.3.12 (12th October 2020) =
+
+- New: [Groups](https://wpusermanager.com/addons/groups/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager) addon. Give your users the ability to create and join groups
+- New: [Private Content](https://wpusermanager.com/addons/private-content/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager) addon. Provide private content for all your users, as well as user specific content so you can tailor for each member
+- New: [Content Restriction Plus](https://wpusermanager.com/addons/content-restriction/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager) addon. One-click restriction to posts, pages and custom post types
+- Improvement: Add 'wpum_send_registration_admin_email' filter to allow disabling the admin emails on user register
+- Fix: Password protected posts redirecting to login after entering password, when wp-login.php is restricted in settings
+- Fix: Avatar overlapping name in user directory on some themes
+- Fix: User directory not full width on some themes
 
 = 2.3.11 (23rd September 2020) =
 
