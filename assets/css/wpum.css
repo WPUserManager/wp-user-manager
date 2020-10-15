@@ -1169,7 +1169,7 @@
 
 #profile-content-about h3.group-title, .profile-content-settings h3.group-title {
   border: 3px solid #eee;
-  margin-bottom: 0;
+  margin: 1.5rem 0 0;
   padding: 15px 20px;
   border-top-right-radius: 3px;
   border-top-left-radius: 3px;

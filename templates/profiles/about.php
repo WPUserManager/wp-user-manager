@@ -25,13 +25,13 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 		<?php while ( wpum_profile_field_groups() ) : wpum_the_profile_field_group(); ?>
 
 			<?php if ( wpum_field_group_has_fields() ) : ?>
-
+				<div class="profile-fields-group profile-fields-group-<?php echo wpum_get_field_group_id(); ?>">
 				<?php if( wpum_get_field_group_name() ) : ?>
 					<h3 class="group-title"><?php echo esc_html( wpum_get_field_group_name() ); ?></h3>
 				<?php endif; ?>
 
 				<?php if( ! empty( wpum_get_field_group_description() ) ) : ?>
-					<p><?php wpum_the_field_group_description(); ?></h3>
+					<p><?php wpum_the_field_group_description(); ?></p>
 				<?php endif; ?>
 
 				<table class="profile-fields-table">
@@ -46,7 +46,7 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 						<?php endwhile; ?>
 					</tbody>
 				</table>
-
+				</div>
 			<?php endif; ?>
 
 		<?php endwhile; ?>
