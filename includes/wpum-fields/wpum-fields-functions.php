@@ -232,6 +232,10 @@ function wpum_get_edit_field_dialog_tabs() {
 
 	$tabs = [
 		array(
+				'id'   => 'fields',
+				'name' => esc_html__( 'Fields', 'wp-user-manager' )
+		),
+		array(
 			'id'   => 'general',
 			'name' => esc_html__( 'General', 'wp-user-manager' )
 		),

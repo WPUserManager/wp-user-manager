@@ -62,6 +62,7 @@ class WPUM_Fields {
 			'video',
 			'audio',
 			'wysiwyg',
+			'repeater'
 		] );
 
 		foreach ( $fields as $field ) {
