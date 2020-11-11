@@ -17,10 +17,24 @@ class WPUM_Field_Repeater extends WPUM_Field_Type {
 
 	public function __construct() {
 		$this->group = 'advanced';
-		$this->name  = esc_html__( 'Repeater 1', 'wp-user-manager' );
+		$this->name  = esc_html__( 'Repeater', 'wp-user-manager' );
 		$this->type  = 'repeater';
 		$this->template = 'complex';
 		$this->icon  = 'dashicons-menu-alt';
-		$this->order = 0;
+		$this->order = 1;
+	}
+
+	/**
+	 * @return array
+	 */
+	public function get_editor_settings() {
+		return [
+			'fields' => [
+				'table' => array(
+					'type'      => 'table',
+					'model'     => 'table',
+				)
+			],
+		];
 	}
 }
