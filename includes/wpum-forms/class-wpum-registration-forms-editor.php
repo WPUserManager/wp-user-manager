@@ -218,9 +218,11 @@ class WPUM_Registration_Forms_Editor {
 
 		if ( $form_id && $form_name ) {
 
-			$updated_form = WPUM()->registration_forms->update( $form_id, [
-					'name' => $form_name,
-				] );
+			$data = apply_filters( 'wpum_registration_form_update', [
+				'name' => $form_name,
+			], $form_id );
+
+			$updated_form = WPUM()->registration_forms->update( $form_id, $data );
 
 		} else {
 			wp_die( esc_html__( 'Something went wrong: could not update the registration form details.', 'wp-user-manager' ), 403 );
@@ -307,7 +309,7 @@ class WPUM_Registration_Forms_Editor {
 
 					if( $stored_field->exists() ) {
 						$icon = isset( $stored_field->field_type->icon ) ? $stored_field->field_type->icon : 'dashicons-editor-justify';
-						
+
 						$fields[] = [
 							'id'   => $stored_field->get_ID(),
 							'name' => $stored_field->get_name(),

@@ -366,7 +366,7 @@ function wpum_the_field_group_id() {
  */
 function wpum_get_field_group_name() {
 	global $wpum_fields_group;
-	return apply_filters( 'wpum_get_field_group_name', $wpum_fields_group->get_name() );
+	return apply_filters( 'wpum_get_field_group_name', $wpum_fields_group->get_name(), $wpum_fields_group->get_id() );
 }
 
 /**
@@ -406,7 +406,7 @@ function wpum_the_field_group_slug() {
  */
 function wpum_get_field_group_description() {
 	global $wpum_fields_group;
-	return apply_filters( 'wpum_get_field_group_description', $wpum_fields_group->get_description() );
+	return apply_filters( 'wpum_get_field_group_description', $wpum_fields_group->get_description(), $wpum_fields_group->get_id() );
 }
 
 /**

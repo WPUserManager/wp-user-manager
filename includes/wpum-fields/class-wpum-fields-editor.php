@@ -270,10 +270,10 @@ class WPUM_Fields_Editor {
 		if ( $group_id && $group_name ) {
 
 			$updated_group = WPUM()->fields_groups->update(
-				$group_id, [
+				$group_id, apply_filters('wpum_field_group_update', [
 					'name'        => $group_name,
 					'description' => $group_description,
-				]
+				], $group_id )
 			);
 
 		} else {
