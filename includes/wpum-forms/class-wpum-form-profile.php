@@ -368,10 +368,14 @@ class WPUM_Form_Profile extends WPUM_Form {
 					wp_delete_file( $existing_avatar_file_path );
 					carbon_set_user_meta( $updated_user_id, 'current_user_avatar', false );
 					delete_user_meta( $updated_user_id, '_current_user_avatar_path' );
+
+					do_action( 'wpum_user_update_remove_avatar', $this->user->ID );
 				}
 				if ( isset( $values['account']['user_avatar']['url'] ) && $currently_uploaded_file !== $values['account']['user_avatar']['url'] ) {
 					carbon_set_user_meta( $updated_user_id, 'current_user_avatar', $values['account']['user_avatar']['url'] );
 					update_user_meta( $updated_user_id, '_current_user_avatar_path', $values['account']['user_avatar']['path'] );
+
+					do_action( 'wpum_user_update_change_avatar', $this->user->ID, $values['account']['user_avatar']['url'] );
 				}
 			}
 
@@ -385,6 +389,8 @@ class WPUM_Form_Profile extends WPUM_Form {
 				if ( $currently_uploaded_cover !== $values['account']['user_cover']['url'] ) {
 					carbon_set_user_meta( $updated_user_id, 'user_cover', $values['account']['user_cover']['url'] );
 					update_user_meta( $updated_user_id, '_user_cover_path', $values['account']['user_cover']['path'] );
+
+					do_action( 'wpum_user_update_change_cover', $this->user->ID, $values['account']['user_cover']['url'] );
 				}
 			}
 
@@ -392,6 +398,8 @@ class WPUM_Form_Profile extends WPUM_Form {
 				wp_delete_file( $existing_cover_file_path );
 				carbon_set_user_meta( $updated_user_id, 'user_cover', false );
 				delete_user_meta( $updated_user_id, '_user_cover_path' );
+
+				do_action( 'wpum_user_update_remove_cover', $this->user->ID );
 			}
 
 			do_action( 'wpum_after_user_update', $this, $values, $updated_user_id );
