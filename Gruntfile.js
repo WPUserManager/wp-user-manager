@@ -147,7 +147,7 @@ module.exports = function( grunt ) {
 
 			sass: {
 				files: ['assets/css/src/**/*.scss'],
-				tasks: ['sass', 'cssmin'],
+				tasks: ['css'],
 				options: {
 					debounceDelay: 500
 				}
@@ -155,7 +155,7 @@ module.exports = function( grunt ) {
 
 			scripts: {
 				files: ['assets/js/src/**/*.js', 'assets/js/vendor/**/*.js'],
-				tasks: ['concat', 'uglify'],
+				tasks: ['js'],
 				options: {
 					debounceDelay: 500
 				}
@@ -283,7 +283,9 @@ module.exports = function( grunt ) {
 	grunt.loadNpmTasks('git-changelog');
 
 	// Default task.
-	grunt.registerTask( 'default', ['concat', 'uglify', 'sass', 'cssmin'] );
+	grunt.registerTask( 'css', [ 'sass', 'cssmin'] );
+	grunt.registerTask( 'js', ['concat', 'uglify'] );
+	grunt.registerTask( 'default', ['js', 'css'] );
 	grunt.registerTask( 'textdomain', ['addtextdomain'] );
 	grunt.registerTask( 'do_pot', ['makepot'] );
 	grunt.registerTask( 'do_changelog', ['git_changelog'] );
