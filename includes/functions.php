@@ -577,7 +577,8 @@ function wpum_upload_file( $file, $args = array() ) {
  * Returns mime types specifically for WPUm.
  *
  * @param string $field
- * @return void
+ *
+ * @return array
  */
 function wpum_get_allowed_mime_types( $field = '' ) {
 	if ( 'current_user_avatar' === $field ) {
@@ -605,12 +606,22 @@ function wpum_get_allowed_mime_types( $field = '' ) {
  *
  * @param array $a
  * @param array $b
- * @return void
+ *
+ * @return int
  */
 function wpum_sort_array_by_priority( $a, $b ) {
 	if ( $a['priority'] == $b['priority'] ) {
 		return 0;
 	}
+
+	if ( ! isset( $a['priority'] ) ) {
+		return 1;
+	}
+
+	if ( ! isset( $b['priority'] ) ) {
+		return -1;
+	}
+
 	return ( $a['priority'] < $b['priority'] ) ? -1 : 1;
 }
 
