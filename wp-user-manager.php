@@ -335,7 +335,7 @@ if ( ! class_exists( 'WP_User_Manager' ) ) :
 		 * @return void
 		 */
 		public function load_textdomain() {
-			load_plugin_textdomain( 'wpum', false, basename( dirname( __FILE__ ) ) . '/languages' );
+			load_plugin_textdomain( 'wp-user-manager', false, basename( dirname( __FILE__ ) ) . '/languages' );
 		}
 
 		/**

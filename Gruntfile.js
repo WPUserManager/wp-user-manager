@@ -116,7 +116,7 @@ module.exports = function( grunt ) {
 	                ],
                     domainPath: '/languages',
                     mainFile: 'wp-user-manager.php',
-                    potFilename: 'wpum.pot',
+                    potFilename: 'wp-user-manager.pot',
                     potHeaders: {
                         poedit: true,                 // Includes common Poedit headers.
                         'x-poedit-keywordslist': true // Include a list of all possible gettext functions.
