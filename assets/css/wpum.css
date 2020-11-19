@@ -1167,12 +1167,16 @@
   border-bottom-left-radius: 3px;
 }
 
-#profile-content-about h3.group-title, .profile-content-settings h3.group-title {
+#profile-content-about h3.group-title, #profile-content-about p.group-description, .profile-content-settings h3.group-title, .profile-content-settings p.group-description {
   border: 1px solid #eee;
   margin: 1.5rem 0 0;
   padding: 15px 20px;
   border-top-right-radius: 3px;
   border-top-left-radius: 3px;
+}
+#profile-content-about p.group-description, .profile-content-settings p.group-description {
+  margin-top: 0;
+  border-top: none;
 }
 #profile-content-about .profile-fields-table, .profile-content-settings .profile-fields-table {
   width: 100%;

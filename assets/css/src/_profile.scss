@@ -85,12 +85,16 @@
 }
 
 #profile-content-about, .profile-content-settings {
-	h3.group-title {
+	h3.group-title, p.group-description {
 		border: 1px solid #eee;
 		margin: 1.5rem 0 0;
 		padding: 15px 20px;
 		border-top-right-radius: 3px;
 		border-top-left-radius: 3px;
+	}
+	p.group-description {
+		margin-top: 0;
+		border-top: none;
 	}
 
 	.profile-fields-table {

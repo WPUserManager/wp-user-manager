@@ -31,7 +31,7 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 				<?php endif; ?>
 
 				<?php if( ! empty( wpum_get_field_group_description() ) ) : ?>
-					<p><?php wpum_the_field_group_description(); ?></p>
+					<p class="group-description"><?php wpum_the_field_group_description(); ?></p>
 				<?php endif; ?>
 
 				<table class="profile-fields-table">
