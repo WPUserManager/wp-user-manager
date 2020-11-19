@@ -43,7 +43,7 @@
 }
 
 #header-profile-details {
-	border: 3px solid #eee;
+	border: 1px solid #eee;
 	margin: 0;
 	border-bottom-right-radius: 3px;
 	border-bottom-left-radius: 3px;
@@ -65,7 +65,7 @@
 	display: flex;
 	flex-wrap: wrap;
 	background: #fafafa;
-	border-top: 3px solid #eee;
+	border-top: 1px solid #eee;
 	>a,
 	>button {
 		background: none;
@@ -86,7 +86,7 @@
 
 #profile-content-about, .profile-content-settings {
 	h3.group-title {
-		border: 3px solid #eee;
+		border: 1px solid #eee;
 		margin: 1.5rem 0 0;
 		padding: 15px 20px;
 		border-top-right-radius: 3px;
@@ -96,14 +96,14 @@
 	.profile-fields-table {
 		width: 100%;
 		margin-top: 0;
-		border: 3px solid #eee;
+		border: 1px solid #eee;
 		border-top:0;
 		border-bottom-right-radius: 3px;
 		border-bottom-left-radius: 3px;
 		td.label {
 			width: 30%;
 			font-weight: 600;
-			padding: 0 20px;
+			padding: 5px 20px;
 		}
 
 		tr {
