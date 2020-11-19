@@ -206,7 +206,7 @@ class WPUM_Emails {
 	 * Prepare the email to be sent.
 	 *
 	 * @param string $message
-	 * @return void
+	 * @return string
 	 */
 	public function build_email( $message ) {
 

@@ -226,7 +226,7 @@ class WPUM_Form_Password_Recovery extends WPUM_Form {
 				// Now send an email to the user.
 				if( $password_reset_key ) {
 
-					$password_reset_email = wpum_get_email( 'password_recovery_request' );
+					$password_reset_email = wpum_get_email( 'password_recovery_request', $user->data->ID );
 
 					$emails = new WPUM_Emails;
 					$emails->__set( 'user_id', $user->data->ID );

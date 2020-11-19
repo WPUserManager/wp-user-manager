@@ -387,7 +387,7 @@ function wpum_log_user_in( $email_or_id ) {
  */
 function wpum_send_registration_confirmation_email( $user_id, $psw = false ) {
 
-	$registration_confirmation_email = wpum_get_email( 'registration_confirmation' );
+	$registration_confirmation_email = wpum_get_email( 'registration_confirmation', $user_id );
 
 	if ( ! $user_id ) {
 		return;
