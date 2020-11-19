@@ -46,8 +46,7 @@ body.users_page_wpum-custom-fields .small-column,
 body.users_page_wpum-registration-forms .small-column {
   width: 100px;
 }
-body.users_page_wpum-custom-fields .wpum-fields-groups-table .delete-btn, body.users_page_wpum-custom-fields .wpum-registration-forms-list .delete-btn,
-body.users_page_wpum-registration-forms .wpum-fields-groups-table .delete-btn,
+body.users_page_wpum-custom-fields .wpum-registration-forms-list .delete-btn,
 body.users_page_wpum-registration-forms .wpum-registration-forms-list .delete-btn {
   margin-top: 5px;
 }
