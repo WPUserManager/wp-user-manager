@@ -30,11 +30,24 @@ class WPUM_Field_Repeater extends WPUM_Field_Type {
 	 * @return array
 	 */
 	public function get_editor_settings() {
+
+		// $fields = WPUM()->fields->get_fields(
+		// 	[
+		// 		'orderby'  => 'field_order',
+		// 		'order'    => 'ASC',
+		// 		'parent'   => 0
+		// 	]
+		// );
+
+		// error_log(json_encode($fields));
+
+
 		return [
 			'fields' => [
 				'repeater' => array(
 					'type'      => 'repeater',
 					'model'     => 'repeater',
+					'fields' 	=> array()
 				)
 			],
 		];
@@ -46,7 +59,7 @@ class WPUM_Field_Repeater extends WPUM_Field_Type {
 	public function parent_field_model_data( $model, $primary_field_id ){
 
 		if( isset( $model['repeater'] ) ){
-			$model['parent'] = $_POST['field_id'];
+			$model['parent'] = intval( $_POST['field_id'] );
 		}
 		return $model;
 	}

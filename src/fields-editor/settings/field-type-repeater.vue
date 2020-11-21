@@ -1,7 +1,7 @@
 <template>
 	<div class="repeater-wrapper">
 		<div v-if="state === 'add'">
-			<dialog-create-field :group_id="$route.params.id.toString()" :addNewField="() => console.log('hello')" />
+			<dialog-create-field :group_id="$route.params.id.toString()" :addNewField="() => console.log('hello')" :parent="this.model.parent" />
 		</div>
 		<div v-if="state === 'list'">
 			<a class="page-title-action wpum-icon-button" @click="state = 'add'">
@@ -68,5 +68,8 @@ export default {
 	}
 	.repeater-wrapper >>> #create-field-dialog .media-modal-close {
 		display: none;
+	}
+	.repeater-wrapper >>> .wpum-fields-groups-table{
+		margin-top: 10px;
 	}
 </style>

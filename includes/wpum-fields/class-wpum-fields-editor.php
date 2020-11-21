@@ -306,6 +306,7 @@ class WPUM_Fields_Editor {
 		$fields = [];
 
 		$group_id = isset( $_GET['group_id'] ) && ! empty( $_GET['group_id'] ) ? (int) $_GET['group_id'] : false;
+		$parent   = isset( $_GET['parent_id'] ) ? intval( $_GET['parent_id'] ) : 0;
 
 		if ( $group_id ) {
 
@@ -314,6 +315,7 @@ class WPUM_Fields_Editor {
 					'group_id' => $group_id,
 					'orderby'  => 'field_order',
 					'order'    => 'ASC',
+					'parent'   => $parent
 				]
 			);
 
@@ -332,6 +334,7 @@ class WPUM_Fields_Editor {
 					'default'       => $field->is_primary(),
 					'default_id'    => $field->get_primary_id(),
 					'required'      => $field->is_required(),
+					'parent_id'		=> $field->get_parent_ID()
 				];
 
 			}
