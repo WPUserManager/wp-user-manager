@@ -1446,6 +1446,29 @@
   text-align: right;
 }
 
+@media only screen and (max-width: 500px) {
+  #directory-avatar a {
+    width: inherit;
+    height: inherit;
+  }
+
+  #directory-avatar img {
+    height: 100%;
+  }
+
+  #wpum-directory-search-form .wpum-col-xs-10 {
+    margin-bottom: 10px;
+  }
+  #wpum-directory-search-form .wpum-col-xs-2, #wpum-directory-search-form .wpum-col-xs-10 {
+    flex-basis: 100%;
+    max-width: 100%;
+  }
+
+  .wpum-directory-single-user .wpum-meta {
+    flex-basis: 100%;
+    max-width: 100%;
+  }
+}
 @media only screen and (max-width: 767px) {
   .wpum_one_half,
 .wpum_one_third,
