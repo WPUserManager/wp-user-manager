@@ -29,7 +29,7 @@
 					</div>
 
 					<draggable v-model="availableFields" class="dragArea available-fields-holder" :options="{group:'formFields', sort:false, animation:150}">
-						<div class="widget ui-draggable" v-for="element in availableFields" :key="element.name">
+						<div class="widget ui-draggable" v-for="element in availableFields" :key="element.id">
 							<div class="widget-top">
 								<div class="widget-title ui-draggable-handle">
 									<h3><span :class="'dashicons ' + element.icon"></span> {{element.name}}</h3>
@@ -60,7 +60,8 @@
 							<!-- start fields list -->
 							<draggable v-model="selectedFields" class="droppable-fields" :options="{group:'formFields', animation:150}" @sort="saveFields">
 								<div class="widget" v-for="(element, i) in selectedFields" :key="i">
-									<div class="widget-top">
+									<component v-if="isComponentAvailable(element.type)" :is="`wpum-field-${element.type}`" :field="element"></component>
+									<div class="widget-top" v-else>
 										<div class="widget-title ui-sortable-handle">
 											<h3><span :class="'dashicons ' + element.icon"></span> {{element.name}}</h3>
 										</div>
@@ -111,7 +112,8 @@ export default {
 			showMessage:         false,
 			showMessageSettings: false,
 			messageStatus:       'success',
-			messageContent:      ''
+			messageContent:      '',
+			fields:				 {}
 		}
 	},
 	computed: {
@@ -124,6 +126,11 @@ export default {
 		this.formID = this.$route.params.id
 		// Retrieve the selected form.
 		this.getForm()
+
+		// save wpum-fields to use later
+		Object.keys( Vue.options.components )
+			.filter( (name) => name.startsWith('wpum-field-') )
+			.forEach( ( name ) => this.fields[name] = Vue.options.components[name]  )
 	},
 	methods: {
 		/**
@@ -210,6 +217,9 @@ export default {
 				console.log(error)
 			})
 
+		},
+		isComponentAvailable( type ){
+			return !!this.fields['wpum-field-' + type];
 		}
 	}
 }

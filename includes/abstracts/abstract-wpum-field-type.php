@@ -208,7 +208,7 @@ abstract class WPUM_Field_Type {
 			]
 		];
 
-		return apply_filters( 'wpum_register_field_type_settings', $settings, $this->type, $this->type );
+		return apply_filters( 'wpum_register_field_type_settings', $settings, $this->type );
 
 	}
 

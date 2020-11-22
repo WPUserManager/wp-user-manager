@@ -6,6 +6,7 @@ import router from './router'
 import WPNotice from 'vue-wp-notice'
 import VModal from 'vue-js-modal'
 import VueFormitFields from 'vue-formit-fields'
+import WPUMFields from './components/field-types'
 import MultiselectField from './components/fields/multiselect'
 import {Bootstrap} from './bootstrap'
 
@@ -14,6 +15,9 @@ Vue.use(WPNotice)
 Vue.use(VModal, { dialog: true, dynamic: true })
 
 Vue.component('formit-multiselect', MultiselectField)
+
+// register wpum fields
+WPUMFields.forEach( ( Field ) => { Vue.component( Field.name, Field ) } )
 
 Vue.config.productionTip = false
 
