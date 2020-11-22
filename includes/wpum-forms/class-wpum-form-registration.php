@@ -272,6 +272,7 @@ class WPUM_Form_Registration extends WPUM_Form {
 
 					if ( $field->exists() ) {
 						$data = array(
+							'id'		  => $field->get_ID(),
 							'label'       => $field->get_name(),
 							'type'        => $field->get_type(),
 							'required'    => $field->get_meta( 'required' ),
