@@ -23,13 +23,28 @@ if( !$parent ){
 	return;
 }
 
-$fields = WPUM()->fields->get_fields([
+$button_label = $parent->get_meta( 'button_label' );
+echo sprintf( '<button type="button" class="add-repeater-row">%s</button>', !empty( $button_label ) ? $button_label : esc_html__( 'Add row', 'wp-user-manager' ) );
+
+$fields 	= WPUM()->fields->get_fields([
 	'group_id' => $parent->get_group_id(),
 	'parent'   => $parent->get_ID()
 ]);
-
+$parent_key = !empty( $parent->get_primary_id() ) ? str_replace( ' ', '_', strtolower( $parent->get_primary_id() ) ) : $parent->get_meta( 'user_meta_key' );
 
 foreach( $fields as $field ){
+
+	$options 		= array();
+	$options_needed = ! $field->is_primary() && in_array( $field->get_type(), [ 'dropdown', 'multiselect', 'radio', 'multicheckbox' ] );
+	if ( $options_needed ) {
+
+		$stored_options = $field->get_meta( 'dropdown_options' );
+		if ( ! empty( $stored_options ) && is_array( $stored_options ) ) {
+			foreach ( $stored_options as $option ) {
+				$options[ $option['value'] ] = $option['label'];
+			}
+		}
+	}
 
 	$key   = !empty( $field->get_primary_id() ) ? str_replace( ' ', '_', strtolower( $field->get_primary_id() ) ) : $field->get_meta( 'user_meta_key' );
 	$field = array(
@@ -41,8 +56,9 @@ foreach( $fields as $field ){
 		'description' => $field->get_description(),
 		'priority'    => $key,
 		'primary_id'  => $field->get_primary_id(),
-		'options'     => array(),
+		'options'     => $options,
 		'template'    => $field->get_parent_type(),
+		'name'		  => $parent_key . '[0]' .$key
 	);
 
 	WPUM()->templates

@@ -1004,6 +1004,7 @@
   padding: 0 0 1em 0;
   line-height: 2em;
   border: 0;
+  position: relative;
 }
 .wpum-form fieldset label {
   display: block;

@@ -3,7 +3,7 @@
 		<div v-if="state === 'add'">
 			<dialog-create-field :group_id="$route.params.id.toString()" :addNewField="addedNewField" :parent="this.model.parent" />
 		</div>
-		<div v-if="state === 'list'">
+		<div v-else>
 			<a class="page-title-action wpum-icon-button" @click="state = 'add'">
 				<span class="dashicons dashicons-plus-alt"></span> {{labels.fields_add_new}}
 			</a>
@@ -16,6 +16,7 @@
 						<th scope="col" class="small-column" :data-balloon="labels.fields_required_tooltip" data-balloon-pos="up">{{labels.fields_required}}</th>
 						<th scope="col" class="small-column" :data-balloon="labels.fields_visibility_tooltip" data-balloon-pos="up">{{labels.fields_visibility}}</th>
 						<th scope="col" class="small-column" :data-balloon="labels.fields_editable_tooltip" data-balloon-pos="up">{{labels.fields_editable}}</th>
+						<th scope="col">{{labels.table_actions}}</th>
 					</tr>
 				</thead>
 				<tbody>
@@ -26,6 +27,10 @@
 						<td><span class="dashicons dashicons-yes" v-if="field.required === true"></span></td>
 						<td><span class="dashicons dashicons-yes" v-if="field.visibility === 'public'"></span></td>
 						<td><span class="dashicons dashicons-yes" v-if="field.editable === 'public'"></span></td>
+						<td class="align-middle">
+							<button class="button" @click="openEditFieldDialog( field.id, field.name, field.type, field.default_id )"><span class="dashicons dashicons-edit"></span> {{labels.fields_edit}}</button>
+							<button class="button delete-btn" @click="openDeleteFieldDialog( field.id, field.name )"><span class="dashicons dashicons-trash"></span> {{labels.fields_delete}}</button>
+						</td>
 					</tr>
 				</tbody>
 			</table>
@@ -37,18 +42,21 @@
 import VueFormGenerator from 'vue-form-generator'
 import CreateField from './../dialogs/dialog-create-field'
 import axios from 'axios'
+import EditFieldDialog from './../dialogs/dialog-edit-field'
+import DeleteFieldDialog from './../dialogs/dialog-delete-field'
 
 export default {
 	mixins: [ VueFormGenerator.abstractField ],
 	components: {
-		'dialog-create-field': CreateField
+		'dialog-create-field': CreateField,
 	},
 	data(){
 		return {
 			labels:         wpumFieldsEditor.labels,
 			fields: 		[],
 			state:			'list',
-			repeater:		null
+			repeater:		null,
+			editField:		{}
 		}
 	},
 	methods: {
@@ -77,7 +85,28 @@ export default {
 		addedNewField(){
 			this.getFields();
 			this.state = 'list';
-		}
+		},
+		openEditFieldDialog( id, name, type, primary_id ) {
+
+			this.$modal.show( EditFieldDialog, {
+				field_id: id,
+				field_name: name,
+				field_type: type,
+				primary_id: primary_id,
+				updateStatus:(status) => {
+					this.getFields();
+				}
+			},{ height: '80%', width: type === 'repeater' ? '80%' : '60%', clickToClose: false })
+		},
+		openDeleteFieldDialog( id, name ) {
+			this.$modal.show( DeleteFieldDialog, {
+				field_id: id,
+				field_name: name,
+				updateStatus:(status, id_or_message) => {
+					this.getFields();
+				}
+			},{ height: '230px' })
+		},
 	},
 	mounted(){
 
