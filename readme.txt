@@ -8,7 +8,7 @@ Tested up to: 5.5
 Requires PHP: 5.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
-Stable Tag: 2.3.12
+Stable Tag: 2.3.13
 
 The most customizable profiles & community builder WordPress plugin with front-end login, registration, profile customization and content restriction.
 
@@ -60,6 +60,7 @@ For more advanced functionality check out the [pricing page](https://wpusermanag
 - [Mailchimp](https://wpusermanager.com/addons/mailchimp/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager): Sync users with Mailchimp upon registration & more
 - [Google reCAPTCHA](https://wpusermanager.com/addons/recaptcha?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager): Stop spam registrations on your website for free
 - [Content Restriction Plus](https://wpusermanager.com/addons/content-restriction/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager): One-click restriction to posts, pages and custom post types
+- [WPML](https://wpusermanager.com/addons/wpml/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager): Translate your custom fields, field groups, registrations forms, and emails using [WPML](https://wpml.org/)
 - [Personal Data](https://wpusermanager.com/addons/personal-data?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager): Allows the user to request an export of personal data and request erasure of personal data from the account page for GDPR compliance
 - [Delete Account](https://wpusermanager.com/addons/delete-account?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager): Allows the user to delete their own profile from the frontend account page
 
@@ -121,6 +122,21 @@ Please note that using WPUM and the mentioned add-ons does NOT guarantee complia
 13. Login form.
 
 == Changelog ==
+
+= 2.3.13 (23rd November 2020) =
+
+- New: [WPML](https://wpusermanager.com/addons/wpml/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager) addon. Give your users to translate custom fields, field Groups, registrations forms, and emails using [WPML](https://wpml.org/)
+- Improvement: Add 'wpum_directory_users' and 'wpum_directory_users_total' filters to allow changing of users displayed in a directory
+- Improvement: Added hooks and filters for developers to use around login, and profile updates
+- Improvement: Profile page styling
+- Improvement: Directory responsive styling
+- Improvement: File URLs now linked on profile
+- Fix: Incorrect text domain and outdated .pot file
+- Fix: PHP Notice: Undefined index: priority
+- Fix: Warning: implode(): Invalid arguments passed on file upload
+- Fix: Incorrect terms page link in registration form if terms link is enabled but page not selected
+- Fix: Field group description styling
+- Fix: Delete field button styling issue
 
 = 2.3.12 (12th October 2020) =
 
