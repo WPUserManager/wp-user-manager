@@ -18,7 +18,7 @@ The most customizable profiles & community builder WordPress plugin with front-e
 
 [WP User Manager](https://wpusermanager.com?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager) lets you create highly customizable user profiles together with custom user registration, login, password recovery and account customization forms to your WordPress website.
 
-[WP User Manager](https://wpusermanager.com?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager) is the best solution to manage your community. Powerful and flexible, yet easy to setup and use. With WP User Manager you can create almost any type of wordpress membership website where your visitors can join and become members.
+[WP User Manager](https://wpusermanager.com?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager) is the best solution to manage your community. Powerful and flexible, yet easy to setup and use. With WP User Manager you can create almost any type of WordPress membership website where your visitors can join and become members.
 
 Create a custom login page, have full control over the registration form, give your site a member area, let the users manage their user data.
 
