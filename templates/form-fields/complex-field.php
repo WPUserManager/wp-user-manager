@@ -58,7 +58,7 @@ foreach( $fields as $field ){
 		'primary_id'  => $field->get_primary_id(),
 		'options'     => $options,
 		'template'    => $field->get_parent_type(),
-		'name'		  => $parent_key . '[0]' .$key
+		'name'		  => "{$parent_key}[0][{$key}]"
 	);
 
 	WPUM()->templates

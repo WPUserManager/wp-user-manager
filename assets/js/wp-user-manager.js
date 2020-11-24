@@ -1,6 +1,6 @@
-/*! WP User Manager - v2.1.10
+/*! WP User Manager - v2.3.11
  * https://wpusermanager.com
- * Copyright (c) 2019; * Licensed GPLv2+ */
+ * Copyright (c) 2020; * Licensed GPLv2+ */
 jQuery(document).ready(function ($) {
 	$(document.body).on('click', '.wpum-remove-uploaded-file', function () {
 		$(this).closest('.wpum-uploaded-file').remove();
@@ -12,4 +12,90 @@ jQuery(document).ready(function ($) {
 	$('.wpum-datepicker:not([readonly])').flatpickr({
 		dateFormat: wpumFrontend.dateFormat
 	});
+
+	var repeater = {
+
+		form:		$('#wpum-submit-registration-form'),
+		repeaters:  {},
+
+		init: function(){
+			var self = this;
+
+			$('.add-repeater-row').each( function(){
+				var repeater = $(this).parents('fieldset');
+				if( repeater.length ){
+					self.increaseInstance( repeater.get(0).classList[0] );
+				}
+			});
+
+			self.form.on( 'click', '.add-repeater-row', function(){
+				var repeater =  $(this).parents('fieldset');
+				if( repeater.length ){
+					self.addNewInstance( repeater.get(0).classList[0] );
+				}
+			});
+		},
+
+		increaseInstance: function( name ){
+			if( !this.repeaters[ name ] ){
+				this.resetInstance( name );
+			}
+
+			this.repeaters[name]++;
+		},
+
+		addNewInstance: function( name ){
+			this.addNewRepeaterRow( name );
+			this.setupInstances( name );
+		},
+
+		resetInstance: function( name ){
+			this.repeaters[name] = 0;
+		},
+
+		addNewRepeaterRow: function( name ){
+			var repeater = $( '.' + name ).last();
+			if( !repeater.length ){
+				return;
+			}
+
+			repeater.clone().insertAfter( repeater );
+		},
+
+		setupInstances: function( name ){
+			var repeaterRow = $( '.' + name );
+			var self		= this;
+
+			if( !repeaterRow.length ){
+				return;
+			}
+
+			self.resetInstance( name );
+
+			repeaterRow.each( function( i ){
+
+				$(this).find( ':input' ).each( function(){
+
+					$(this).attr(
+						'name',
+						$(this).prop( 'name' ).replace(
+							new RegExp(/\[(.*?)\]/),
+							function(){
+								return '[' + i + ']';
+							}
+						)
+					);
+
+					if( i > 0 ){
+						var id = $(this).prop( 'id' ) + '_' + i;
+						$(this).attr( 'id', id );
+						$(this).closest( 'fieldset' ).find( 'label' ).attr( 'for', id );
+					}
+				});
+				self.increaseInstance( name );
+			});
+		}
+	}
+
+	repeater.init();
 });

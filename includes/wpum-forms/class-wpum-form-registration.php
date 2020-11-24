@@ -71,6 +71,7 @@ class WPUM_Form_Registration extends WPUM_Form {
 		add_filter( 'submit_wpum_form_validate_fields', [ $this, 'validate_username' ], 10, 4 );
 		add_filter( 'submit_wpum_form_validate_fields', [ $this, 'validate_honeypot' ], 10, 4 );
 		add_filter( 'submit_wpum_form_validate_fields', [ $this, 'validate_role' ], 10, 4 );
+		add_filter( 'submit_wpum_form_validate_fields', [ $this, 'validate_repeater' ], 10, 4 );
 		add_action( 'wpum_registration_form_field', [ $this, 'render_registration_form_fields' ], 10, 2 );
 
 		$this->steps = (array) apply_filters(
@@ -221,6 +222,34 @@ class WPUM_Form_Registration extends WPUM_Form {
 
 		return $pass;
 	}
+
+
+	/**
+	 * Validate repeater on submission.
+	 *
+	 * @param boolean $pass
+	 * @param array   $fields
+	 * @param array   $values
+	 * @param string  $form
+	 * @return mixed
+	 */
+	public function validate_repeater( $pass, $fields, $values, $form ) {
+
+		if ( $form !== $this->form_name ) {
+			return $pass;
+		}
+
+		foreach ( $fields['register'] as $key => $field ) {
+			if ( 'repeater' !== $field['type'] ) {
+				continue;
+			}
+
+			return new WP_Error( 'email-validation-error', esc_html( sprintf( __( '%s is not a valid repeater field.', 'wp-user-manager' ), 'XXX' ) ) );
+		}
+
+		return $pass;
+	}
+
 
 	/**
 	 * Initializes the fields used in the form.
