@@ -19,9 +19,9 @@
 						<th scope="col">{{labels.table_actions}}</th>
 					</tr>
 				</thead>
-				<tbody>
+				<draggable v-model="fields" :element="'tbody'" :options="{handle:'.order-anchor', animation:150}" @end="onSortingEnd">
 					<tr v-for="field in fields" :key="field.id">
-						<td v-if="fields.length > 1"><span class="dashicons dashicons-menu"></span></td>
+						<td v-if="fields.length > 1" class="order-anchor align-middle"><span class="dashicons dashicons-menu"></span></td>
 						<td>{{field.name}}</td>
 						<td>{{field.type_nicename}}</td>
 						<td><span class="dashicons dashicons-yes" v-if="field.required === true"></span></td>
@@ -32,7 +32,7 @@
 							<button class="button delete-btn" @click="openDeleteFieldDialog( field.id, field.name )"><span class="dashicons dashicons-trash"></span> {{labels.fields_delete}}</button>
 						</td>
 					</tr>
-				</tbody>
+				</draggable>
 			</table>
 		</div>
 	</div>
@@ -41,7 +41,9 @@
 
 import VueFormGenerator from 'vue-form-generator'
 import CreateField from './../dialogs/dialog-create-field'
+import draggable from 'vuedraggable'
 import axios from 'axios'
+import qs from 'qs'
 import EditFieldDialog from './../dialogs/dialog-edit-field'
 import DeleteFieldDialog from './../dialogs/dialog-delete-field'
 
@@ -49,6 +51,7 @@ export default {
 	mixins: [ VueFormGenerator.abstractField ],
 	components: {
 		'dialog-create-field': CreateField,
+		'draggable': draggable
 	},
 	data(){
 		return {
@@ -82,9 +85,13 @@ export default {
 				console.error(error);
 			})
 		},
-		addedNewField(){
-			this.getFields();
+		addedNewField( status, data ){
+
 			this.state = 'list';
+
+			if( status !== 'error' ){
+				this.openEditFieldDialog( data.field_id, data.field_name, data.field_type, data.default_id )
+			}
 		},
 		openEditFieldDialog( id, name, type, primary_id ) {
 
@@ -107,6 +114,28 @@ export default {
 				}
 			},{ height: '230px' })
 		},
+		onSortingEnd(){
+
+			this.$parent.$parent.$parent.loading = true
+
+			axios.post( wpumFieldsEditor.ajax,
+				qs.stringify({
+					nonce: wpumFieldsEditor.nonce,
+					fields: this.fields
+				}),
+				{
+					params: {
+						action: 'wpum_update_fields_order'
+					},
+				}
+			)
+			.then( response => {
+				this.$parent.$parent.$parent.loading = false
+			})
+			.catch( error => {
+				this.$parent.$parent.$parent.loading = false
+			})
+		}
 	},
 	mounted(){
 
