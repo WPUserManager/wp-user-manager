@@ -24,4 +24,8 @@ class WPUM_Field_Datepicker extends WPUM_Field_Type {
 		$this->icon  = 'dashicons-calendar-alt';
 		$this->order = 3;
 	}
+
+	public function get_formatted_output( $field, $value ) {
+		return date_i18n( get_option( 'date_format' ), strtotime( $value ) );
+	}
 }
