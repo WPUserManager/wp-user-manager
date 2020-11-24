@@ -60,7 +60,7 @@ For more advanced functionality check out the [pricing page](https://wpusermanag
 - [Mailchimp](https://wpusermanager.com/addons/mailchimp/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager): Sync users with Mailchimp upon registration & more
 - [Google reCAPTCHA](https://wpusermanager.com/addons/recaptcha?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager): Stop spam registrations on your website for free
 - [Content Restriction Plus](https://wpusermanager.com/addons/content-restriction/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager): One-click restriction to posts, pages and custom post types
-- [WPML](https://wpusermanager.com/addons/wpml/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager): Translate your custom fields, field groups, registrations forms, and emails using [WPML](https://wpml.org/)
+- [WPML](https://wpusermanager.com/addons/wpml/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager): Translate your custom fields, field groups, registration forms, and emails using [WPML](https://wpml.org/)
 - [Personal Data](https://wpusermanager.com/addons/personal-data?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager): Allows the user to request an export of personal data and request erasure of personal data from the account page for GDPR compliance
 - [Delete Account](https://wpusermanager.com/addons/delete-account?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager): Allows the user to delete their own profile from the frontend account page
 
