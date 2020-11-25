@@ -610,16 +610,16 @@ function wpum_get_allowed_mime_types( $field = '' ) {
  * @return int
  */
 function wpum_sort_array_by_priority( $a, $b ) {
-	if ( $a['priority'] == $b['priority'] ) {
-		return 0;
-	}
-
 	if ( ! isset( $a['priority'] ) ) {
 		return 1;
 	}
 
 	if ( ! isset( $b['priority'] ) ) {
 		return -1;
+	}
+
+	if ( $a['priority'] == $b['priority'] ) {
+		return 0;
 	}
 
 	return ( $a['priority'] < $b['priority'] ) ? -1 : 1;
