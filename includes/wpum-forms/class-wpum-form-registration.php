@@ -244,7 +244,26 @@ class WPUM_Form_Registration extends WPUM_Form {
 				continue;
 			}
 
-			return new WP_Error( 'email-validation-error', esc_html( sprintf( __( '%s is not a valid repeater field.', 'wp-user-manager' ), 'XXX' ) ) );
+			$wpum_field = new WPUM_Field( $field['id'] );
+			$min_rows 	= $wpum_field->get_meta( 'min_rows' ) ? $wpum_field->get_meta( 'min_rows' ) : 0;
+			$max_rows 	= $wpum_field->get_meta('max_rows') ?  $wpum_field->get_meta('max_rows') : 0;
+			$values 	= isset( $field['value'] ) && is_array( $field['value'] ) ?  $field['value'] : [];
+
+			if( count( $values ) < $min_rows ){
+				return new WP_Error( 'repeater-validation-error', esc_html( sprintf( __( '%s requires at least %d rows', 'wp-user-manager' ), $field['label'], intval( $min_rows ) ) ) );
+			}
+
+			if( $max_rows > 0 && count( $values ) > $max_rows ){
+				return new WP_Error( 'repeater-validation-error', esc_html( sprintf( __( '%s accepts maximum %d rows', 'wp-user-manager' ), $field['label'], intval( $max_rows ) ) ) );
+			}
+
+			if( $field['required'] ){
+				$first_row = isset( $values[0] ) && is_array( $values[0] ) ? $values[0] : [];
+
+				if( !count( $first_row ) || count( array_filter( $first_row ) ) !== count( $first_row ) ){
+					return new WP_Error( 'repeater-validation-error', esc_html( sprintf( __( 'Please fill out %s details', 'wp-user-manager' ), $field['label'] ) ) );
+				}
+			}
 		}
 
 		return $pass;
@@ -595,6 +614,18 @@ class WPUM_Form_Registration extends WPUM_Form {
 		$registered_types  = $registered_fields ? array_column($registered_fields, 'type') : [];
 
 		if( in_array( $field['type'], $registered_types ) ){
+
+			// Parent field should handle the child field rendering
+			if( in_array( $field['type'], wpum_get_registered_parent_field_types() ) ){
+
+				$field[ 'key' ] = $key;
+				$template 		= isset( $field['template'] ) ? $field['template'] : $field['type'];
+
+				WPUM()->templates
+					->set_template_data( $field )
+					->get_template_part( 'form-fields/' . $template, 'field' );
+				return;
+			}
 
 			WPUM()->templates
 				->set_template_data( [ 'field' => $field, 'key' => $key ] )

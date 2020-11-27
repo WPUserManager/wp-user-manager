@@ -636,3 +636,13 @@ function wpum_max_upload_size( $field_name = '', $custom_size = false ) {
 
 	return $output;
 }
+
+/**
+ * Retrieve a list of registered parent field types.
+ *
+ * @return array
+ */
+function wpum_get_registered_parent_field_types(){
+
+	return apply_filters( 'wpum_registered_parent_field_types', [] );
+}

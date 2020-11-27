@@ -25,6 +25,7 @@ class WPUM_Field_Repeater extends WPUM_Field_Type {
 
 		add_filter( 'wpum_fields_editor_deregister_model', array( $this, 'parent_field_model_data' ), 10, 2 );
 		add_filter( 'wpum_register_field_type_settings', array( $this, 'settings_fields' ), 10, 2 );
+		add_filter( 'wpum_registered_parent_field_types', array( $this, 'register_parent_field' ) );
 	}
 
 	/**
@@ -96,5 +97,17 @@ class WPUM_Field_Repeater extends WPUM_Field_Type {
 			$model['parent'] = intval( $_POST['field_id'] );
 		}
 		return $model;
+	}
+
+
+	/**
+	 * Register as parent field
+	 *
+	 * @return array
+	 */
+	public function register_parent_field( $fields ){
+		$fields[] = $this->type;
+
+		return $fields;
 	}
 }

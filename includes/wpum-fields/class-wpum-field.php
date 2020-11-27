@@ -744,4 +744,21 @@ class WPUM_Field {
 		return $data;
 	}
 
+
+	/**
+	 * Get parsed field key
+	 *
+	 * @return String
+	 */
+	public function get_key() {
+
+		if ( ! empty( $this->get_primary_id() ) ) {
+			return str_replace( ' ', '_', strtolower( $this->get_primary_id() ) );
+		} elseif ( empty( $this->get_primary_id() ) && $this->get_meta( 'user_meta_key' ) ) {
+			return $this->get_meta( 'user_meta_key' );
+		}
+
+		return str_replace( ' ', '_', strtolower( $this->get_name() ) );
+	}
+
 }

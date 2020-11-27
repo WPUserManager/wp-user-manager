@@ -59,7 +59,10 @@ jQuery(document).ready(function ($) {
 				return;
 			}
 
-			repeater.clone().insertAfter( repeater );
+			var newRepeater = repeater.clone();
+			newRepeater.find( ':input' ).not(':button, :submit, :reset').val('').prop('checked', false).prop('selected', false).trigger('change');
+
+			newRepeater.insertAfter( repeater );
 		},
 
 		setupInstances: function( name ){
