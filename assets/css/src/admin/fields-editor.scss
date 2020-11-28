@@ -1,5 +1,6 @@
 body.users_page_wpum-custom-fields,
-body.users_page_wpum-registration-forms {
+body.users_page_wpum-registration-forms,
+body.users_page_wpum-roles {
 
 	.wp-heading-inline {
 		img {
@@ -10,7 +11,7 @@ body.users_page_wpum-registration-forms {
 		}
 	}
 
-	#wpum-add-field-group, #wpum-add-form {
+	#wpum-add-field-group, #wpum-add-form, #wpum-add-role {
 		span.dashicons {
 			width: 16px;
 			height: 16px;
@@ -53,7 +54,7 @@ body.users_page_wpum-registration-forms {
 		width: 100px;
 	}
 
-	.wpum-registration-forms-list {
+	.wpum-registration-forms-list, .wpum-roles-list {
 		.delete-btn {
 			margin-top: 5px;
 		}

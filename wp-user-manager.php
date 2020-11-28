@@ -264,6 +264,12 @@ if ( ! class_exists( 'WP_User_Manager' ) ) :
 				require_once WPUM_PLUGIN_DIR . 'includes/wpum-admin/class-wpum-permalinks-settings.php';
 				require_once WPUM_PLUGIN_DIR . 'includes/wpum-fields/class-wpum-fields-editor.php';
 				require_once WPUM_PLUGIN_DIR . 'includes/wpum-forms/class-wpum-registration-forms-editor.php';
+				require_once WPUM_PLUGIN_DIR . 'includes/wpum-roles/class-wpum-role.php';
+				require_once WPUM_PLUGIN_DIR . 'includes/wpum-roles/class-wpum-capability.php';
+				require_once WPUM_PLUGIN_DIR . 'includes/wpum-roles/class-wpum-collection.php';
+				require_once WPUM_PLUGIN_DIR . 'includes/wpum-roles/class-wpum-roles.php';
+				require_once WPUM_PLUGIN_DIR . 'includes/wpum-roles/functions.php';
+				require_once WPUM_PLUGIN_DIR . 'includes/wpum-roles/class-wpum-roles-editor.php';
 				require_once WPUM_PLUGIN_DIR . 'includes/wpum-emails/class-wpum-emails-list.php';
 				require_once WPUM_PLUGIN_DIR . 'includes/wpum-updater/class-wpum-updater-settings.php';
 				require_once WPUM_PLUGIN_DIR . 'includes/wpum-shortcodes/class-wpum-shortcode-button.php';

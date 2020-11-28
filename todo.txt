@@ -1,0 +1,8 @@
+Roles
+
+
+Duplicate role link
+Users link and link up users count
+Create role modal (name)
+dont allow delete of user role
+granted denied counts wrong
