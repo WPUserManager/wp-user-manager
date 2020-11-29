@@ -56,7 +56,7 @@ class WPUM_Field_Repeater extends WPUM_Field_Type {
 					'type'      => 'input',
 					'inputType' => 'number',
 					'label'     => esc_html__( 'Maximum Rows', 'wp-user-manager' ),
-					'model'     => 'min_rows',
+					'model'     => 'max_rows',
 					'hint'      => esc_html__( 'Enter the maximum rows for the field.', 'wp-user-manager' ),
 				)
 			],

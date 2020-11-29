@@ -15,7 +15,7 @@ jQuery(document).ready(function ($) {
 
 	var repeater = {
 
-		form:		$('#wpum-submit-registration-form'),
+		form:		$('form'),
 		repeaters:  {},
 
 		init: function(){
@@ -24,7 +24,9 @@ jQuery(document).ready(function ($) {
 			$('.add-repeater-row').each( function(){
 				var repeater = $(this).parents('fieldset');
 				if( repeater.length ){
-					self.increaseInstance( repeater.get(0).classList[0] );
+					var name = repeater.get(0).classList[0];
+					self.increaseInstance( name );
+					self.validateMaxRows( name );
 				}
 			});
 
@@ -56,6 +58,10 @@ jQuery(document).ready(function ($) {
 		addNewRepeaterRow: function( name ){
 			var repeater = $( '.' + name ).last();
 			if( !repeater.length ){
+				return;
+			}
+
+			if( !this.validateMaxRows( name ) ){
 				return;
 			}
 
@@ -97,6 +103,22 @@ jQuery(document).ready(function ($) {
 				});
 				self.increaseInstance( name );
 			});
+		},
+
+		validateMaxRows( name ){
+			var repeater = $( '.' + name );
+			var maxRows = repeater.find('.add-repeater-row').data('max-row');
+			if( !maxRows || parseInt( maxRows ) < 1 ){
+				return true;
+			}
+
+			if( repeater.length < parseInt( maxRows ) ){
+				return true;
+			}
+
+			repeater.find('.add-repeater-row').attr('disabled', true);
+
+			return repeater.length < parseInt( maxRows );
 		}
 	}
 

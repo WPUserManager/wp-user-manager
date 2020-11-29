@@ -36,6 +36,17 @@ if( isset( $data->value ) && is_array( $data->value ) ){
 		return $field->get_key();
 	}, $fields );
 
+	array_walk( $data->value, function( &$value ){
+
+		if( !is_array( $value ) ){
+			return;
+		}
+
+		$value = array_filter( $value, function( $key ){
+			return $key !== '_type';
+		}, ARRAY_FILTER_USE_KEY);
+	});
+
 	if( count( array_diff( array_keys( $data->value ), $field_keys ) ) > 0 ){
 
 		foreach( $data->value as $index => $value ){
@@ -61,7 +72,13 @@ if( !isset( $data->value ) ){
 
 $index 		  = isset( $data->index ) ? $data->index : 0;
 $button_label = $parent->get_meta( 'button_label' );
-echo sprintf( '<button type="button" class="add-repeater-row">%s</button>', !empty( $button_label ) ? $button_label : esc_html__( 'Add row', 'wp-user-manager' ) );
+$max_rows 	  = $parent->get_meta( 'max_rows' );
+
+echo sprintf(
+	'<button type="button" class="add-repeater-row" data-max-row="%d">%s</button>',
+	!empty( $max_rows ) ? intval( $max_rows ) : 0,
+	!empty( $button_label ) ? $button_label : esc_html__( 'Add row', 'wp-user-manager' )
+);
 
 foreach( $fields as $field ){
 
