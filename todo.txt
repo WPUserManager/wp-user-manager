@@ -6,3 +6,11 @@ Users link and link up users count
 Create role modal (name)
 dont allow delete of user role
 granted denied counts wrong
+set as default action link
+
+list button styling
+
+add role
+duplicate role
+
+setting to turn off role editor

@@ -118,7 +118,7 @@ class WPUM_Roles_Editor {
 			'table_granted'         => esc_html__( 'Granted', 'wp-user-manager' ),
 			'table_denied'          => esc_html__( 'Denied', 'wp-user-manager' ),
 			'table_default'         => esc_html__( 'Default', 'wp-user-manager' ),
-			'table_role'            => esc_html__( 'Registration Role', 'wp-user-manager' ),
+			'table_edit'       => esc_html__( 'Edit', 'wp-user-manager' ),
 			'table_signup_total'    => esc_html__( 'Total Signups', 'wp-user-manager' ),
 			'table_shortcode'       => esc_html__( 'Shortcode', 'wp-user-manager' ),
 			'table_actions'         => esc_html__( 'Actions', 'wp-user-manager' ),
@@ -212,153 +212,33 @@ class WPUM_Roles_Editor {
 	}
 
 	/**
-	 * Retrieve a single registration form given an ID.
+	 * Retrieve a single role
 	 *
 	 * @return void
 	 */
-	public function get_form() {
-
-		check_ajax_referer( 'wpum_get_registration_form', 'nonce' );
+	public function get_role() {
+		check_ajax_referer( 'wpum_get_role', 'nonce' );
 
 		if ( current_user_can( 'manage_options' ) && is_admin() ) {
+			$all_roles = wpum_get_all_roles();
+			$role_id   = isset( $_GET['role_id'] ) ? $_GET['role_id'] : false;
 
-			$form_id = isset( $_GET['form_id'] ) ? absint( $_GET['form_id'] ) : false;
+			if ( $role_id && isset( $all_roles[ $role_id ] ) ) {
 
-			if ( $form_id ) {
-
-				$form = WPUM()->registration_forms->get( $form_id );
-				$form = new WPUM_Registration_Form( $form->id );
-
-				$all_labels     = ( new WPUM_Options_Panel() )->register_labels( array() );
-				$settings       = $form->get_settings_options();
-				$settings_model = $form->get_settings_model();
-				foreach ( $settings as $key => $setting ) {
-					$settings[ $key ]['current']    = isset( $settings_model[ $setting['id'] ] ) ? $settings_model[ $setting['id'] ] : '';
-					$settings[ $key ]['all_labels'] = $all_labels;
-				}
+				$role = wpum_get_role( $role_id );
 
 				wp_send_json_success( [
-					'name'             => $form->get_name(),
-					'available_fields' => $this->get_available_fields( $form_id ),
-					'stored_fields'    => $this->get_stored_fields( $form_id ),
-					'settings'         => $settings,
-					'settings_model'   => $settings_model,
+					'name'             => $role->label,
+					'slug'             => $role->name
 				] );
 
 			} else {
-
 				$this->send_json_error();
-
 			}
 
 		} else {
-
 			$this->send_json_error();
-
 		}
-
-	}
-
-	/**
-	 * Get all the fields used within a form.
-	 *
-	 * @param string $form_id
-	 *
-	 * @return array
-	 */
-	private function get_stored_fields( $form_id ) {
-
-		if ( ! $form_id ) {
-			return;
-		}
-
-		$fields = [];
-
-		$form = new WPUM_Registration_Form( $form_id );
-
-		if ( $form->exists() ) {
-
-			$stored_fields = $form->get_fields();
-
-			if ( is_array( $stored_fields ) && ! empty( $stored_fields ) ) {
-				foreach ( $stored_fields as $field ) {
-
-					$stored_field = new WPUM_Field( $field );
-
-					if ( $stored_field->exists() ) {
-						$icon = isset( $stored_field->field_type->icon ) ? $stored_field->field_type->icon : 'dashicons-editor-justify';
-
-						$fields[] = [
-							'id'   => $stored_field->get_ID(),
-							'name' => $stored_field->get_name(),
-							'icon' => $icon,
-						];
-					}
-
-				}
-			}
-
-		}
-
-		return $fields;
-
-	}
-
-	/**
-	 * Get fields available to be used within a registration form.
-	 *
-	 * @return array
-	 */
-	private function get_available_fields( $form_id ) {
-
-		$fields = [];
-
-		$available_fields = WPUM()->fields->get_fields( [
-			'orderby' => 'fields_order',
-			'order'   => 'ASC',
-		] );
-
-		$non_allowed_fields = [
-			'user_nickname',
-			'user_displayname',
-		];
-
-		if ( ! wpum_get_option( 'custom_avatars' ) ) {
-			$non_allowed_fields[] = 'user_avatar';
-		}
-
-		if ( wpum_get_option( 'disable_profile_cover' ) ) {
-			$non_allowed_fields[] = 'user_cover';
-		}
-
-		$non_allowed_fields = apply_filters( 'wpum_non_allowed_fields', $non_allowed_fields );
-
-		// Get fields already been used.
-		$form          = new WPUM_Registration_Form( $form_id );
-		$stored_fields = $form->get_fields();
-		$stored_fields = empty( $stored_fields ) ? array() : $stored_fields;
-
-		foreach ( $available_fields as $field ) {
-			$primary_id = $field->get_primary_id();
-			if ( ! empty( $primary_id ) && in_array( $primary_id, $non_allowed_fields ) ) {
-				continue;
-			}
-
-			if ( in_array( $field->get_ID(), $stored_fields ) ) {
-				continue;
-			}
-
-			$icon = isset( $field->field_type->icon ) ? $field->field_type->icon : 'dashicons-editor-justify';
-
-			$fields[] = [
-				'id'   => $field->get_ID(),
-				'name' => $field->get_name(),
-				'icon' => $icon,
-			];
-		}
-
-		return $fields;
-
 	}
 
 	/**
@@ -366,24 +246,23 @@ class WPUM_Roles_Editor {
 	 *
 	 * @return void
 	 */
-	public function save_form() {
+	public function save_role() {
 
-		check_ajax_referer( 'wpum_save_registration_form', 'nonce' );
+		check_ajax_referer( 'wpum_save_role', 'nonce' );
 
 		if ( current_user_can( 'manage_options' ) && is_admin() ) {
 
-			$form_id = isset( $_POST['form_id'] ) ? absint( $_POST['form_id'] ) : false;
-			$fields  = isset( $_POST['fields'] ) && is_array( $_POST['fields'] ) && ! empty( $_POST['fields'] ) ? $_POST['fields'] : false;
+			$role_id = isset( $_POST['role_id'] ) ? absint( $_POST['role_id'] ) : false;
 
-			if ( $form_id ) {
-				$registration_form = new WPUM_Registration_Form( $form_id );
-				$fields_to_save    = [];
-
-				if ( $registration_form->exists() ) {
-					foreach ( $fields as $field ) {
-						$fields_to_save[] = absint( $field['id'] );
-					}
-				}
+			if ( $role_id ) {
+//				$registration_form = new WPUM_Registration_Form( $role_id );
+//				$fields_to_save    = [];
+//
+//				if ( $registration_form->exists() ) {
+//					foreach ( $fields as $field ) {
+//						$fields_to_save[] = absint( $field['id'] );
+//					}
+//				}
 
 				if ( ! empty( $fields_to_save ) ) {
 					$registration_form->update_meta( 'fields', $fields_to_save );
@@ -399,66 +278,6 @@ class WPUM_Roles_Editor {
 		}
 
 	}
-
-	/**
-	 * Save settings of the form.
-	 *
-	 * @return void
-	 */
-	public function save_form_settings() {
-
-		check_ajax_referer( 'wpum_save_registration_form_settings', 'nonce' );
-
-		if ( ! current_user_can( 'manage_options' ) || ! is_admin() ) {
-			$this->send_json_error();
-		}
-
-		$form_id        = filter_input( INPUT_POST, 'form_id', FILTER_VALIDATE_INT );
-		$settings_model = isset( $_POST['settings_model'] ) ? $_POST['settings_model'] : array();
-
-		if ( empty( $form_id ) ) {
-			$this->send_json_error();
-		}
-
-		$form = new WPUM_Registration_Form( $form_id );
-
-		if ( ! $form->exists() ) {
-			$this->send_json_error();
-		}
-
-		$registered_settings = $form->get_settings_options();
-		$settings            = array();
-		foreach ( $registered_settings as $registered_setting ) {
-			$settings[ $registered_setting['id'] ] = $registered_setting;
-		}
-		$stored_settings_model = $form->get_settings_model();
-
-		foreach ( $settings_model as $key => $value ) {
-			if ( ! isset( $settings[ $key ] ) ) {
-				continue;
-			}
-
-			$setting = $settings[ $key ];
-
-			$value = apply_filters( 'wpum_form_settings_sanitize_' . $setting['type'], $value );
-
-			if ( isset( $stored_settings_model[ $key ] ) && $value === $stored_settings_model[ $key ] ) {
-				// Setting not changed
-				continue;
-			}
-
-			if ( 'role' === $key && is_array( $value ) && ! empty( $value ) && ( $value[0] === 'administrator' || ! get_role( $value[0] ) ) ) {
-				// Illegal role selection;
-				continue;
-			}
-
-			$form->update_meta( $key, $value );
-
-		}
-
-		wp_send_json_success();
-	}
-
 
 	/**
 	 * Sanitize the text field.

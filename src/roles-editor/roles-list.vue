@@ -29,7 +29,7 @@
 			</thead>
 			<tbody>
 				<tr class="no-items" v-if="loading">
-					<td class="colspanchange" colspan="4">
+					<td class="colspanchange" colspan="7">
 						<div class="spinner is-active"></div>
 					</td>
 				</tr>
@@ -40,7 +40,7 @@
 							<router-link :to="{ name: 'role', params: { id: role.id }}">{{role.name}}</router-link></strong><br>
 						<div class="row-actions">
 							<span>
-								<a href="#" @click="showEditFormDialog( form )" v-text="sanitized(labels.table_edit_form)"></a>
+<!--								<a href="#" @click="showEditFormDialog( role )" v-text="sanitized(labels.table_edit)"></a>-->
 							</span>
 						</div>
 					</td>
