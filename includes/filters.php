@@ -259,7 +259,7 @@ function wpum_registration_form_valid_fields( $fields ) {
 add_filter( 'wpum_registration_form_fields', 'wpum_registration_form_valid_fields' );
 
 function wpum_set_displayname_on_registration( $user_data ) {
-	$display_name_format = wpum_get_option( 'default_display_name', 'display_username' );
+	$display_name_format = wpum_get_option( 'default_display_name', array( 'display_username' ) );
 	$display_name_format = $display_name_format[0];
 
 	if ( 'display_username' === $display_name_format ) {
