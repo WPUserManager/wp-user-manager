@@ -56,7 +56,7 @@ class WPUM_Role {
 
 			// Validate cap values as booleans in case they are stored as strings.
 			$this->caps = array_map( function ( $val ) {
-				filter_var( $val, FILTER_VALIDATE_BOOLEAN );
+				return filter_var( $val, FILTER_VALIDATE_BOOLEAN );
 			}, $this->caps );
 
 			// Get granted and denied caps.

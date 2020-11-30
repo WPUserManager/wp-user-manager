@@ -5,12 +5,12 @@ Duplicate role link
 Users link and link up users count
 Create role modal (name)
 dont allow delete of user role
-granted denied counts wrong
 set as default action link
 
 list button styling
 
 add role
 duplicate role
+edit role name dialog
 
 setting to turn off role editor

@@ -1,58 +1,20 @@
 <template>
-	<div class="wpum-registration-form">
-			<h1 class="wp-heading-inline">
-				<img :src="pluginURL + 'assets/images/logo.svg'" alt="WP User Manager">
-				{{roleName}}
-			</h1>
-			<router-link to="/" class="page-title-action wpum-icon-button circular" :data-balloon="labels.page_back" data-balloon-pos="down"><span class="dashicons dashicons-arrow-left-alt"></span></router-link>
-		<div class="optionskit-navigation-wrapper">
-			<div class="wp-filter" id="optionskit-navigation">
-				<ul class="filter-links">
-					<li>
-						<router-link :to="{ name: 'role', params: { id: this.roleID }}">{{labels.table_fields}}</router-link>
-					</li>
-				</ul>
+	<div class="wpum-role">
+		<h1 class="wp-heading-inline">
+			<img :src="pluginURL + 'assets/images/logo.svg'" alt="WP User Manager">
+			{{ roleName }}
+		</h1>
+		<router-link to="/" class="page-title-action wpum-icon-button circular" :data-balloon="labels.page_back"
+					 data-balloon-pos="down"><span class="dashicons dashicons-arrow-left-alt"></span></router-link>
+		<a class="page-title-action wpum-icon-button" @click="openCreateNewCapDialog()"><span class="dashicons dashicons-plus-alt"></span> {{labels.add_new_cap}}</a>
+		<div class="wpum-role-wrapper">
+			<div class="wpum-role-caps">
+dsds
+			</div>
+			<div class="wpum-role-stats">
+sdsdsdsd
 			</div>
 		</div>
-
-<!--		<div class="widget-liquid-left">-->
-<!--			<div id="widgets-right" class="wp-clearfix">-->
-
-<!--				<div class="sidebars-column-3">-->
-<!--					<div class="widgets-holder-wrap">-->
-
-<!--						<wp-notice :type="messageStatus" alternative v-if="showMessage">{{messageContent}}</wp-notice>-->
-
-<!--						<div class="widgets-sortables ui-droppable ui-sortable">-->
-<!--							<div class="sidebar-name">-->
-<!--								<h2>{{labels.editor_current_title}} <div class="spinner is-active" v-if="loading"></div></h2>-->
-<!--							</div>-->
-<!--							<div class="sidebar-description">-->
-<!--								<p class="description">{{labels.editor_used_fields}}</p>-->
-<!--							</div>-->
-<!--							&lt;!&ndash; start fields list &ndash;&gt;-->
-<!--							<draggable v-model="selectedFields" class="droppable-fields" :options="{group:'formFields', animation:150}" @sort="saveFields">-->
-<!--								<div class="widget" v-for="(element, i) in selectedFields" :key="i">-->
-<!--									<div class="widget-top">-->
-<!--										<div class="widget-title ui-sortable-handle">-->
-<!--											<h3><span :class="'dashicons ' + element.icon"></span> {{element.name}}</h3>-->
-<!--										</div>-->
-<!--									</div>-->
-<!--								</div>-->
-<!--							</draggable>-->
-<!--							&lt;!&ndash; end fields list &ndash;&gt;-->
-<!--							<div class="droppable-fields-after">-->
-<!--								<template v-for="field in droppableFieldAfter">-->
-<!--									<component :is="field" :key="field.name"></component>-->
-<!--								</template>-->
-<!--							</div>-->
-<!--						</div>-->
-<!--					</div>-->
-<!--				</div>-->
-
-<!--			</div>-->
-<!--		</div>-->
-
 	</div>
 </template>
 
@@ -61,6 +23,8 @@ import Vue from 'vue'
 import axios from 'axios'
 import qs from 'qs'
 import balloon from 'balloon-css'
+import CreateFieldDialog from "../fields-editor/dialogs/dialog-create-field";
+import PremiumDialog from "../fields-editor/dialogs/dialog-premium";
 
 export default {
 	name: 'role-editor',
@@ -113,6 +77,26 @@ export default {
 				this.loading = false
 				console.log(error)
 			})
+		},
+		/**
+		 * Open the create new field dialog. Only works when the premium addon is installed.
+		 */
+		openCreateNewCapDialog() {
+			this.$modal.show( CreateCapDialog, {
+				addNewCap: ( status, data_or_message ) => {
+					if ( status == 'error' ) {
+						this.showError( data_or_message )
+					} else {
+						this.showSuccess()
+						this.getFields()
+
+						const field_id = data_or_message.field_id
+						const field_name = data_or_message.field_name
+						const field_type = data_or_message.field_type
+						const default_id = data_or_message.default_id
+					}
+				}
+			}, { height: '80%', width: '70%' } )
 		},
 		/**
 		 * Automatically hide a notice after it's displayed.
