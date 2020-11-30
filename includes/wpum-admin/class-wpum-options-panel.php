@@ -233,6 +233,15 @@ class WPUM_Options_Panel {
 					'options'  => wpum_get_roles(),
 				),
 				array(
+					'id'       => 'wp_admin_roles',
+					'name'     => __( 'Restrict Dashboard Access', 'wp-user-manager' ),
+					'desc'     => __( 'Restrict access to the WordPress dashboard for specific user roles. Administrators will always have access.', 'wp-user-manager' ),
+					'type'     => 'multiselect',
+					'multiple' => true,
+					'labels'   => array( 'placeholder' => __( 'Select one or more user roles from the list.', 'wp-user-manager' ) ),
+					'options'  => wpum_get_roles(),
+				),
+				array(
 					'id'   => 'exclude_usernames',
 					'name' => __( 'Excluded Usernames', 'wp-user-manager' ),
 					'desc' => __( 'Enter the usernames that you wish to disable. Separate each username on a new line.', 'wp-user-manager' ),
