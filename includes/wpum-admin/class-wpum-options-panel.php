@@ -363,6 +363,14 @@ class WPUM_Options_Panel {
 					'desc' => __( 'Enable this option to disable the built-in strong passwords validation system of WP User Manager.', 'wp-user-manager' ),
 					'type' => 'checkbox',
 				),
+				array(
+					'id'      => 'default_display_name',
+					'name'    => __( 'Default Display Name', 'wp-user-manager' ),
+					'desc'    => __( 'Select the default format for the user display name at registration. The user can change their display name later in their account.', 'wp-user-manager' ),
+					'type'    => 'multiselect',
+					'options' => wpum_get_display_name_options(),
+					'std'     => 'display_username',
+				),
 			],
 			'profiles_content' => [
 				array(

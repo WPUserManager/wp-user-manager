@@ -1338,3 +1338,28 @@ function wpum_get_registration_form( $form_id = null ) {
 
 	return new \WPUM_Registration_Form( $form_id );
 }
+
+function wpum_get_display_name_options() {
+	return array(
+		array(
+			'value' => 'display_username',
+			'label' => 'Username',
+		),
+		array(
+			'value' => 'display_firstname',
+			'label' => 'First name',
+		),
+		array(
+			'value' => 'display_lastname',
+			'label' => 'Last name',
+		),
+		array(
+			'value' => 'display_firstlast',
+			'label' => 'First and last name',
+		),
+		array(
+			'value' => 'display_lastfirst',
+			'label' => 'Last and first name',
+		),
+	);
+}
