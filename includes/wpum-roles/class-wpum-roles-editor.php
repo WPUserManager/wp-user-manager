@@ -14,11 +14,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 class WPUM_Roles_Editor {
 
+	protected $capability;
+
 	/**
 	 * Get things started.
 	 */
 	public function __construct() {
 		$this->init_hooks();
+		$this->capability = apply_filters( 'wpum_admin_pages_capability', 'manage_options' );
 	}
 
 	/**
@@ -40,7 +43,7 @@ class WPUM_Roles_Editor {
 	 * @return void
 	 */
 	public function setup_menu_page() {
-		add_users_page( esc_html__( 'Roles', 'wp-user-manager' ), esc_html__( 'Roles', 'wp-user-manager' ), 'manage_options', 'wpum-roles', [
+		add_users_page( esc_html__( 'Roles', 'wp-user-manager' ), esc_html__( 'Roles', 'wp-user-manager' ), $this->capability, 'wpum-roles', [
 				$this,
 				'display_roles_editor',
 			] );
@@ -148,7 +151,7 @@ class WPUM_Roles_Editor {
 	public function get_roles() {
 		check_ajax_referer( 'wpum_get_roles', 'nonce' );
 
-		if ( current_user_can( 'manage_options' ) && is_admin() ) {
+		if ( current_user_can( $this->capability ) && is_admin() ) {
 
 			$default_role = get_option( 'default_role' );
 			$all_roles = wpum_get_all_roles();
@@ -187,7 +190,7 @@ class WPUM_Roles_Editor {
 	public function update_form() {
 		check_ajax_referer( 'wpum_update_registration_form', 'nonce' );
 
-		if ( ! current_user_can( 'manage_options' ) ) {
+		if ( ! current_user_can( $this->capability ) ) {
 			wp_die( esc_html__( 'Something went wrong: could not update the registration form details.', 'wp-user-manager' ), 403 );
 		}
 
@@ -220,7 +223,7 @@ class WPUM_Roles_Editor {
 	public function get_role() {
 		check_ajax_referer( 'wpum_get_role', 'nonce' );
 
-		if ( current_user_can( 'manage_options' ) && is_admin() ) {
+		if ( current_user_can( $this->capability ) && is_admin() ) {
 			$all_roles = wpum_get_all_roles();
 			$role_id   = isset( $_GET['role_id'] ) ? $_GET['role_id'] : false;
 
@@ -251,7 +254,7 @@ class WPUM_Roles_Editor {
 
 		check_ajax_referer( 'wpum_save_role', 'nonce' );
 
-		if ( current_user_can( 'manage_options' ) && is_admin() ) {
+		if ( current_user_can( $this->capability ) && is_admin() ) {
 
 			$role_id = isset( $_POST['role_id'] ) ? absint( $_POST['role_id'] ) : false;
 
@@ -266,7 +269,7 @@ class WPUM_Roles_Editor {
 //				}
 
 				if ( ! empty( $fields_to_save ) ) {
-					$registration_form->update_meta( 'fields', $fields_to_save );
+					//$registration_form->update_meta( 'fields', $fields_to_save );
 					wp_send_json_success();
 				}
 
