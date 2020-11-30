@@ -38,7 +38,7 @@ add_action( 'save_post_page', 'wpum_delete_pages_transient' );
  */
 function wpum_admin_bar_menu( $wp_admin_bar ) {
 
-	if ( ! current_user_can( 'manage_options' ) ) {
+	if ( ! current_user_can( apply_filters( 'wpum_admin_pages_capability', 'manage_options' ) ) ) {
 		return;
 	}
 

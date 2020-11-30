@@ -82,7 +82,7 @@ class WPUM_Options_Panel {
 			'parent'     => 'users.php',
 			'page_title' => __( 'WP User Manager Settings', 'wp-user-manager' ),
 			'menu_title' => __( 'Settings', 'wp-user-manager' ),
-			'capability' => 'manage_options',
+			'capability' => apply_filters( 'wpum_admin_pages_capability', 'manage_options' ),
 		);
 	}
 

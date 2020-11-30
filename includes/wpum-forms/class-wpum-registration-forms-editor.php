@@ -12,10 +12,13 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 
 class WPUM_Registration_Forms_Editor {
 
+	protected $capability;
+
 	/**
 	 * Get things started.
 	 */
 	public function __construct() {
+		$this->capability = apply_filters( 'wpum_admin_pages_capability', 'manage_options' );
 		$this->init_hooks();
 	}
 
@@ -53,7 +56,7 @@ class WPUM_Registration_Forms_Editor {
 		add_users_page(
 			esc_html__( 'Registration Forms', 'wp-user-manager' ),
 			esc_html__( 'Registration Forms', 'wp-user-manager' ),
-			'manage_options',
+			$this->capability,
 			'wpum-registration-forms',
 			[ $this, 'display_registration_forms_editor' ]
 		);
@@ -172,7 +175,7 @@ class WPUM_Registration_Forms_Editor {
 
 		check_ajax_referer( 'wpum_get_registration_forms', 'nonce' );
 
-		if( current_user_can( 'manage_options' ) && is_admin() ) {
+		if( current_user_can( $this->capability ) && is_admin() ) {
 
 			$registration_forms = WPUM()->registration_forms->get_forms();
 			$forms              = [];
@@ -209,7 +212,7 @@ class WPUM_Registration_Forms_Editor {
 	public function update_form() {
 		check_ajax_referer( 'wpum_update_registration_form', 'nonce' );
 
-		if ( ! current_user_can( 'manage_options' ) ) {
+		if ( ! current_user_can( $this->capability ) ) {
 			wp_die( esc_html__( 'Something went wrong: could not update the registration form details.', 'wp-user-manager' ), 403 );
 		}
 
@@ -243,7 +246,7 @@ class WPUM_Registration_Forms_Editor {
 
 		check_ajax_referer( 'wpum_get_registration_form', 'nonce' );
 
-		if( current_user_can( 'manage_options' ) && is_admin() ) {
+		if( current_user_can( $this->capability ) && is_admin() ) {
 
 			$form_id = isset( $_GET['form_id'] ) ? absint( $_GET['form_id'] ) : false;
 
@@ -392,7 +395,7 @@ class WPUM_Registration_Forms_Editor {
 
 		check_ajax_referer( 'wpum_save_registration_form', 'nonce' );
 
-		if( current_user_can( 'manage_options' ) && is_admin() ) {
+		if( current_user_can( $this->capability ) && is_admin() ) {
 
 			$form_id = isset( $_POST['form_id'] ) ? absint( $_POST['form_id'] ) : false;
 			$fields  = isset( $_POST['fields'] ) && is_array( $_POST['fields'] ) && ! empty( $_POST['fields'] ) ? $_POST['fields'] : false;
@@ -431,7 +434,7 @@ class WPUM_Registration_Forms_Editor {
 
 		check_ajax_referer( 'wpum_save_registration_form_settings', 'nonce' );
 
-		if( ! current_user_can( 'manage_options' ) || ! is_admin() ) {
+		if( ! current_user_can( $this->capability ) || ! is_admin() ) {
 			$this->send_json_error();
 		}
 
