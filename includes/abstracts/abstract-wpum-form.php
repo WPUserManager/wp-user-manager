@@ -341,6 +341,7 @@ abstract class WPUM_Form {
 		}
 
 		$checkUppercase = apply_filters( 'wpum_strong_password_check_uppercase', true );
+		$checkLetter     = apply_filters( 'wpum_strong_password_check_letter', false );
 		$checkDigit     = apply_filters( 'wpum_strong_password_check_digit', true );
 		$checkSpecial   = apply_filters( 'wpum_strong_password_check_special', true );
 
@@ -350,6 +351,10 @@ abstract class WPUM_Form {
 		$error_message = array();
 		if ( $checkUppercase ) {
 			$error_message[] = __( '1 uppercase letter', 'wp-user-manager' );
+		}
+
+		if ( $checkLetter ) {
+			$error_message[] = __( '1 letter', 'wp-user-manager' );
 		}
 
 		if ( $checkDigit ) {
@@ -369,6 +374,10 @@ abstract class WPUM_Form {
 		$validates = true;
 
 		if ( $validates && $checkUppercase && ! preg_match( '/[A-Z]/', $password ) ) {
+			$validates = false;
+		}
+
+		if ( $validates && $checkLetter && ! preg_match( '/[a-zA-Z]/', $password ) ) {
 			$validates = false;
 		}
 
