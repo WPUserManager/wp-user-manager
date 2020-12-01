@@ -266,6 +266,7 @@ if ( ! class_exists( 'WP_User_Manager' ) ) :
 				require_once WPUM_PLUGIN_DIR . 'includes/wpum-forms/class-wpum-registration-forms-editor.php';
 				require_once WPUM_PLUGIN_DIR . 'includes/wpum-roles/class-wpum-role.php';
 				require_once WPUM_PLUGIN_DIR . 'includes/wpum-roles/class-wpum-capability.php';
+				require_once WPUM_PLUGIN_DIR . 'includes/wpum-roles/class-wpum-capability-group.php';
 				require_once WPUM_PLUGIN_DIR . 'includes/wpum-roles/class-wpum-collection.php';
 				require_once WPUM_PLUGIN_DIR . 'includes/wpum-roles/class-wpum-roles.php';
 				require_once WPUM_PLUGIN_DIR . 'includes/wpum-roles/functions.php';
