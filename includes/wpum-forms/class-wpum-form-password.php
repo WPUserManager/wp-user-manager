@@ -119,7 +119,7 @@ class WPUM_Form_Password extends WPUM_Form {
 
 		if ( wpum_get_option( 'current_password' ) ) {
 			$password_fields['password']['current_password'] = array(
-				'label'       => __( 'Current Password', 'wpum-delete-account' ),
+				'label'       => __( 'Current Password', 'wp-user-manager' ),
 				'type'        => 'password',
 				'required'    => true,
 				'placeholder' => '',

@@ -92,7 +92,7 @@ class WPUM_Addons_Page {
 	 * @return void
 	 */
 	public function add_addons_page() {
-		add_users_page( esc_html__( 'WP User Manager Addons', 'wp-user-manager' ), esc_html__( 'Addons', 'wp-user-manager' ), 'manage_options', 'wpum-addons', [ $this, 'view_addons' ] );
+		add_users_page( esc_html__( 'WP User Manager Addons', 'wp-user-manager' ), esc_html__( 'Addons', 'wp-user-manager' ), apply_filters( 'wpum_admin_pages_capability', 'manage_options' ), 'wpum-addons', [ $this, 'view_addons' ] );
 	}
 
 	/**

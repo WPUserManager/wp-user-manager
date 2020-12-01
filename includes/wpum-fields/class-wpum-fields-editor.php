@@ -24,10 +24,13 @@ class WPUM_Fields_Editor {
 	 */
 	public $deregistered_settings = [];
 
+	protected $capability;
+
 	/**
 	 * Get things started.
 	 */
 	public function __construct() {
+		$this->capability = apply_filters( 'wpum_admin_pages_capability', 'manage_options' );
 		$this->init_hooks();
 	}
 
@@ -56,7 +59,7 @@ class WPUM_Fields_Editor {
 		add_users_page(
 			esc_html__( 'Fields Editor', 'wp-user-manager' ),
 			esc_html__( 'Custom Fields', 'wp-user-manager' ),
-			'manage_options',
+			$this->capability,
 			'wpum-custom-fields',
 			[ $this, 'display_fields_editor' ]
 		);
@@ -230,7 +233,7 @@ class WPUM_Fields_Editor {
 
 		check_ajax_referer( 'wpum_update_fields_groups', 'nonce' );
 
-		if ( ! current_user_can( 'manage_options' ) ) {
+		if ( ! current_user_can( $this->capability ) ) {
 			wp_die( esc_html__( 'Something went wrong: could not update the groups order.', 'wp-user-manager' ), 403 );
 		}
 
@@ -260,7 +263,7 @@ class WPUM_Fields_Editor {
 
 		check_ajax_referer( 'wpum_update_fields_groups', 'nonce' );
 
-		if ( ! current_user_can( 'manage_options' ) ) {
+		if ( ! current_user_can( $this->capability ) ) {
 			wp_die( esc_html__( 'Something went wrong: could not update the group details.', 'wp-user-manager' ), 403 );
 		}
 
@@ -300,7 +303,7 @@ class WPUM_Fields_Editor {
 
 		check_ajax_referer( 'wpum_get_fields', 'nonce' );
 
-		if ( ! current_user_can( 'manage_options' ) ) {
+		if ( ! current_user_can( $this->capability ) ) {
 			wp_die( esc_html__( 'Something went wrong while retrieving the list of fields.', 'wp-user-manager' ), 403 );
 		}
 
@@ -358,7 +361,7 @@ class WPUM_Fields_Editor {
 
 		check_ajax_referer( 'wpum_update_fields_groups', 'nonce' );
 
-		if ( ! current_user_can( 'manage_options' ) ) {
+		if ( ! current_user_can( $this->capability ) ) {
 			wp_die( esc_html__( 'Something went wrong: could not update the fields order.', 'wp-user-manager' ), 403 );
 		}
 
@@ -392,7 +395,7 @@ class WPUM_Fields_Editor {
 
 		check_ajax_referer( 'wpum_get_fields', 'nonce' );
 
-		if ( ! current_user_can( 'manage_options' ) ) {
+		if ( ! current_user_can( $this->capability ) ) {
 			wp_send_json_error( null, 403 );
 		}
 
@@ -596,7 +599,7 @@ class WPUM_Fields_Editor {
 
 		check_ajax_referer( 'wpum_get_fields', 'nonce' );
 
-		if ( ! current_user_can( 'manage_options' ) ) {
+		if ( ! current_user_can( $this->capability ) ) {
 			wp_send_json_error( null, 403 );
 		}
 

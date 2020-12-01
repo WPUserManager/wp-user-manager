@@ -42,7 +42,7 @@ class WPUM_Emails_List {
 		add_users_page(
 			esc_html__( 'WP User Manager Emails', 'wp-user-manager' ),
 			esc_html__( 'Emails', 'wp-user-manager' ),
-			'manage_options',
+			apply_filters( 'wpum_admin_pages_capability', 'manage_options' ),
 			'wpum-emails',
 			[ $this, 'display_emails_list' ]
 		);
@@ -124,7 +124,7 @@ class WPUM_Emails_List {
 
 		$email = isset( $_POST['email'] ) ? sanitize_email( $_POST['email'] ) : false;
 
-		if( $email && is_email( $email ) && current_user_can( 'manage_options' ) && is_admin() ) {
+		if( $email && is_email( $email ) && current_user_can( apply_filters( 'wpum_admin_pages_capability', 'manage_options' ) ) && is_admin() ) {
 
 			$emails       = new WPUM_Emails;
 			$emails->__set( 'heading', esc_html__( 'Test email', 'wp-user-manager' ) );

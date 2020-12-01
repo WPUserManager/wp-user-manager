@@ -146,13 +146,13 @@ class WPUM_Emails_Customizer {
 						'<br/><br/>',
 						$registered_email['description'] . '<br/><br/>'
 					),
-					'capability'  => 'manage_options',
+					'capability'  => apply_filters( 'wpum_admin_pages_capability', 'manage_options' ),
 				] );
 
 				$wp_customize->add_section( $email_id . '_settings' , [
 					'title'       => esc_html__( 'Email content settings', 'wp-user-manager' ),
 					'description' => '<a href="#" class="button" id="wpum-display-tags-btn"><span class="dashicons dashicons-editor-code"></span>' . esc_html__( 'View available email merge tags', 'wp-user-manager' ) . '</a><div class="wpum-email-tags-list"><strong>' . esc_html__( 'Available email merge tags:', 'wp-user-manager' ) . '</strong><br/>' . wpum_get_emails_tags_list() . '<hr/></div>',
-					'capability'  => 'manage_options',
+					'capability'  => apply_filters( 'wpum_admin_pages_capability', 'manage_options' ),
 					'panel'       => $email_id,
 				] );
 
@@ -179,7 +179,7 @@ class WPUM_Emails_Customizer {
 		}
 
 		$wp_customize->add_setting( 'wpum_email[' . $email_id . '][subject]', array(
-			'capability'        => 'manage_options',
+			'capability'        => apply_filters( 'wpum_admin_pages_capability', 'manage_options' ),
 			'sanitize_callback' => 'sanitize_text_field',
 			'transport'         => 'postMessage',
 			'default'           => $this->get_default( $email_id, 'subject' ),
@@ -194,7 +194,7 @@ class WPUM_Emails_Customizer {
 		) );
 
 		$wp_customize->add_setting( 'wpum_email[' . $email_id . '][title]', array(
-			'capability'        => 'manage_options',
+			'capability'        => apply_filters( 'wpum_admin_pages_capability', 'manage_options' ),
 			'sanitize_callback' => 'sanitize_text_field',
 			'transport'         => 'postMessage',
 			'default'           => $this->get_default( $email_id, 'title' ),
@@ -209,7 +209,7 @@ class WPUM_Emails_Customizer {
 		) );
 
 		$wp_customize->add_setting( 'wpum_email[' . $email_id . '][content]', array(
-			'capability'        => 'manage_options',
+			'capability'        => apply_filters( 'wpum_admin_pages_capability', 'manage_options' ),
 			'sanitize_callback' => 'wp_kses_post',
 			'transport'         => 'postMessage',
 			'default'           => $this->get_default( $email_id, 'content' ),

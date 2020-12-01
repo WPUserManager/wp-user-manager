@@ -214,6 +214,10 @@ class WPUM_Registration_Form {
 	public function get_role_key() {
 		$role = $this->get_meta( 'role' );
 
+		if ( empty( $role ) ) {
+			return apply_filters( 'wpum_registration_from_default_role', get_option( 'default_role' ), $this );
+		}
+
 		return is_array( $role ) ? $role[0] : $role;
 	}
 
