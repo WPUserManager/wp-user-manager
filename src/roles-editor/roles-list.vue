@@ -20,10 +20,10 @@
 				<tr>
 					<th scope="col" class="column-primary">{{labels.table_name}}</th>
 					<th scope="col">{{labels.table_slug}}</th>
-					<th scope="col" :data-balloon="labels.table_default_tooltip" data-balloon-pos="left">{{labels.table_default}}</th>
-					<th scope="col">{{labels.table_users}}</th>
-					<th scope="col">{{labels.table_granted}}</th>
-					<th scope="col">{{labels.table_denied}}</th>
+					<th class="col-default" scope="col" :data-balloon="labels.table_default_tooltip" data-balloon-pos="left">{{labels.table_default}}</th>
+					<th class="col-stat" scope="col">{{labels.table_users}}</th>
+					<th class="col-stat" scope="col">{{labels.table_granted}}</th>
+					<th class="col-stat" scope="col">{{labels.table_denied}}</th>
 					<th scope="col" v-text="sanitized(labels.table_actions)"></th>
 				</tr>
 			</thead>
@@ -40,7 +40,7 @@
 							<router-link :to="{ name: 'role', params: { id: role.id }}">{{role.name}}</router-link></strong><br>
 						<div class="row-actions">
 							<span>
-<!--								<a href="#" @click="showEditFormDialog( role )" v-text="sanitized(labels.table_edit)"></a>-->
+							<a href="#" @click="showEditFormDialog( role )" v-text="sanitized(labels.table_edit)"></a>
 							</span>
 						</div>
 					</td>
@@ -51,7 +51,7 @@
 						<span v-if="isDefault(role)" class="dashicons dashicons-yes"></span>
 					</td>
 					<td>
-						{{role.count}}
+						<a :href="usersURL + '?role=' + role.id">{{role.count}}</a>
 					</td>
 					<td>
 						{{role.granted_count}}
@@ -61,7 +61,7 @@
 					</td>
 					<td class="align-middle">
 						<router-link :to="{ name: 'role', params: { id: role.id }}" tag="button" type="submit" class="button"><span class="dashicons dashicons-admin-settings"></span> <span v-text="sanitized(labels.table_customize)"></span></router-link>
-						<button type="submit" class="button delete-btn" v-if="! isDefault(role)" @click="showDeleteDialog( role.name, role.id )"><span class="dashicons dashicons-trash"></span> <span v-text="sanitized(labels.table_delete_role)"></span></button>
+<!--						<button type="submit" class="button delete-btn" v-if="! isDefault(role)" @click="showDeleteDialog( role.name, role.id )"><span class="dashicons dashicons-trash"></span> <span v-text="sanitized(labels.table_delete_role)"></span></button>-->
 					</td>
 				</tr>
 			</tbody>
@@ -87,6 +87,7 @@ export default {
 		return {
 			labels:    wpumRolesEditor.labels,
 			pluginURL: wpumRolesEditor.pluginURL,
+			usersURL: wpumRolesEditor.usersURL,
 			loading:   false,
 			roles:     '',
 			showMessage: false,

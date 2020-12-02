@@ -2,17 +2,12 @@ Roles
 
 
 Duplicate role link
-Users link and link up users count
-Create role modal (name)
+
 dont allow delete of user role
 set as default action link
 
-list button styling
 
-add role
-duplicate role
+Create role modal (name)
 edit role name dialog
 
-setting to turn off role editor
-
-button styles 
+// TODO delete this file

@@ -979,7 +979,7 @@ function wpum_cap_group_exists( $name ) {
  * @return array
  */
 function wpum_get_cap_groups() {
-	return wpum_cap_group_collection()->get_collection();
+	return wpum_cap_group_collection()->get_items();
 }
 
 /**

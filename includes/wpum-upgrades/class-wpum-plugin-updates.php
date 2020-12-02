@@ -63,6 +63,10 @@ class WPUM_Plugin_Updates {
 			$this->upgrade_v2_2();
 		}
 
+		if ( version_compare( $installed_version, '2.4', '<' ) ) {
+			$this->upgrade_v2_4();
+		}
+
 		update_option( 'wpum_version', $latest_version );
 	}
 
@@ -109,6 +113,13 @@ class WPUM_Plugin_Updates {
 				wpum_delete_option( $option['id'] );
 			}
 		}
+	}
+
+	/**
+	 * Update default registration meta
+	 */
+	protected function upgrade_v2_4() {
+		wpum_update_option( 'roles_editor', true );
 	}
 
 	/**
