@@ -34,7 +34,7 @@
 						</li>
 					</ul>
 
-					<div class="wpum-caps" :style="{'max-height': `calc(100% - ${navHeight}px)`}">
+					<div class="wpum-caps">
 						<form action="post" @submit.prevent="saveRole()" class="opk-form">
 
 							<div v-for="group in groups" :id="'group-' + group.name" class="cap-group"
