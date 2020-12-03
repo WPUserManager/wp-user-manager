@@ -85,7 +85,8 @@ class WPUM_Registration_Forms_Editor {
 			$is_vue_dev = defined( 'WPUM_VUE_DEV' ) && WPUM_VUE_DEV ? true : false;
 
 			if( $is_vue_dev ) {
-				wp_register_script( 'wpum-registration-forms-editor', 'http://localhost:8080/registration-forms-editor.js', array(), WPUM_VERSION, true );
+				$vue_dev_port = defined( 'WPUM_VUE_DEV_PORT' ) ? WPUM_VUE_DEV_PORT : '8080';
+				wp_register_script( 'wpum-registration-forms-editor', 'http://localhost:' . $vue_dev_port . '/registration-forms-editor.js', array(), WPUM_VERSION, true );
 			} else {
 				wp_register_script( 'wpum-registration-forms-editor',  WPUM_PLUGIN_URL . 'dist/static/js/registration-forms-editor.js' , array(), WPUM_VERSION, true );
 			}

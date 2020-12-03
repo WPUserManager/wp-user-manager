@@ -31,8 +31,9 @@ Create a custom login page, have full control over the registration form, give y
 - [Custom avatars](https://wpusermanager.com/features/custom-avatars/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager)
 - [Elegant user profiles](https://wpusermanager.com/features/elegant-user-profiles/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager)
 - [Shortcodes editor](https://wpusermanager.com/features/shortcodes/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager)
+- [Roles editor](https://wpusermanager.com/features/roles/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager): Edit roles and their capabilities. Create new roles and duplicate existing ones.
 - [Beautiful user directories](https://wpusermanager.com/features/user-directories/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager)
-- [Seo URLs](https://wpusermanager.com/features/seo/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager)
+- [SEO URLs](https://wpusermanager.com/features/seo/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager)
 - [Content restriction](https://wpusermanager.com/features/content-restriction/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager)
 - [Passwords management](https://wpusermanager.com/features/passwords-management/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager)
 - [Custom fields editor](https://wpusermanager.com/features/custom-fields/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager)

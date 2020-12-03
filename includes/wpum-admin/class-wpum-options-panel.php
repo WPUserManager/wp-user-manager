@@ -247,6 +247,12 @@ class WPUM_Options_Panel {
 					'desc' => __( 'Enter the usernames that you wish to disable. Separate each username on a new line.', 'wp-user-manager' ),
 					'type' => 'textarea',
 				),
+				array(
+					'id'   => 'roles_editor',
+					'name' => __( 'Roles Editor', 'wp-user-manager' ),
+					'desc' => __( 'Enable the roles editor in the Users menu.', 'wp-user-manager' ),
+					'type' => 'checkbox'
+				),
 			],
 			'registration' => [
 				array(
