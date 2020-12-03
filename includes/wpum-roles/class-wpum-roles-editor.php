@@ -38,6 +38,9 @@ class WPUM_Roles_Editor {
 		add_action( 'wp_ajax_wpum_get_roles', [ $this, 'get_roles' ] );
 		add_action( 'wp_ajax_wpum_get_role', [ $this, 'get_role' ] );
 		add_action( 'wp_ajax_wpum_save_role', [ $this, 'save_role' ] );
+		add_action( 'wp_ajax_wpum_update_role', [ $this, 'update_role' ] );
+		add_action( 'wp_ajax_wpum_delete_role', [ $this, 'delete_role' ] );
+		add_action( 'wp_ajax_wpum_create_role', [ $this, 'create_role' ] );
 	}
 
 	/**
@@ -98,9 +101,11 @@ class WPUM_Roles_Editor {
 				'getRolesNonce'     => wp_create_nonce( 'wpum_get_roles' ),
 				'getRoleNonce'      => wp_create_nonce( 'wpum_get_role' ),
 				'saveRoleNonce'     => wp_create_nonce( 'wpum_save_role' ),
+				'createRoleNonce'   => wp_create_nonce( 'wpum_create_role' ),
 				'nonce'             => wp_create_nonce( 'wpum_update_role' ),
 				'delete_role_nonce' => wp_create_nonce( 'wpum_delete_role' ),
 				'usersURL'          => admin_url( 'users.php' ),
+				'changeDefaultURL'  => admin_url( 'options-general.php#default_role' ),
 			];
 
 			wp_localize_script( 'wpum-roles-editor', 'wpumRolesEditor', $js_variables );
@@ -127,6 +132,7 @@ class WPUM_Roles_Editor {
 			'table_denied'          => esc_html__( 'Denied', 'wp-user-manager' ),
 			'table_default'         => esc_html__( 'Default', 'wp-user-manager' ),
 			'table_edit'            => esc_html__( 'Edit', 'wp-user-manager' ),
+			'table_edit_role'       => esc_html__( 'Edit Role', 'wp-user-manager' ),
 			'table_signup_total'    => esc_html__( 'Total Signups', 'wp-user-manager' ),
 			'table_shortcode'       => esc_html__( 'Shortcode', 'wp-user-manager' ),
 			'table_actions'         => esc_html__( 'Actions', 'wp-user-manager' ),
@@ -134,7 +140,8 @@ class WPUM_Roles_Editor {
 			'table_add_role'        => esc_html__( 'Add New Role', 'wp-user-manager' ),
 			'table_add_cap'         => esc_html__( 'Add New Capability', 'wp-user-manager' ),
 			'table_default_tooltip' => esc_html__( 'The default role cannot be deleted.', 'wp-user-manager' ),
-			'table_delete_role'     => esc_html__( 'Delete Role', 'wp-user-manager' ),
+			'table_duplicate_role'  => esc_html__( 'Duplicate', 'wp-user-manager' ),
+			'table_delete_role'     => esc_html__( 'Delete', 'wp-user-manager' ),
 			'table_customize'       => esc_html__( 'Edit Capabilities', 'wp-user-manager' ),
 			'add_new_cap'           => esc_html__( 'Add Custom Capability', 'wp-user-manager' ),
 			'page_back'             => esc_html__( 'Return to the roles list', 'wp-user-manager' ),
@@ -142,7 +149,7 @@ class WPUM_Roles_Editor {
 			'cap_success'           => esc_html__( 'Capabilities successfully saved.', 'wp-user-manager' ),
 			'error'                 => esc_html__( 'Something went wrong no changes saved.', 'wp-user-manager' ),
 			'save'                  => esc_html__( 'Save Changes', 'wp-user-manager' ),
-			'tooltip_form_name'     => esc_html__( 'Customize the name of the role.', 'wp-user-manager' ),
+			'tooltip_role_name'     => esc_html__( 'Customize the name of the role.', 'wp-user-manager' ),
 			'tooltip_cap_name'      => esc_html__( 'Customize the name of the capability.', 'wp-user-manager' ),
 			'create_role'           => esc_html__( 'Create Role', 'wp-user-manager' ),
 			'create_cap'            => esc_html__( 'Create Capability', 'wp-user-manager' ),
@@ -168,13 +175,14 @@ class WPUM_Roles_Editor {
 
 			foreach ( $all_roles as $role ) {
 				$data = [
-					'id'            => $role->name,
-					'slug'          => $role->name,
-					'name'          => $role->label,
-					'default'       => $default_role && $default_role == $role->name,
-					'count'         => wpum_get_role_user_count( $role->name ),
-					'granted_count' => wpum_get_role_granted_cap_count( $role->name ),
-					'denied_count'  => wpum_get_role_denied_cap_count( $role->name ),
+					'id'                    => $role->name,
+					'slug'                  => $role->name,
+					'name'                  => $role->label,
+					'default'               => $default_role && $default_role == $role->name,
+					'count'                 => wpum_get_role_user_count( $role->name ),
+					'granted_count'         => wpum_get_role_granted_cap_count( $role->name ),
+					'denied_count'          => wpum_get_role_denied_cap_count( $role->name ),
+					'current_user_has_role' => current_user_can( $role->name ),
 				];
 
 				$roles[] = apply_filters( 'wpum_get_role_data_for_table', $data );
@@ -300,17 +308,17 @@ class WPUM_Roles_Editor {
 					$all_group    = wpum_get_cap_group( 'all' );
 					$custom_group = wpum_get_cap_group( 'custom' );
 
-					foreach( $custom_caps as $custom_cap ) {
+					foreach ( $custom_caps as $custom_cap ) {
 
-							if ( $all_group ) {
-								$all_group->caps[] = $custom_cap;
-								sort( $all_group->caps );
-							}
+						if ( $all_group ) {
+							$all_group->caps[] = $custom_cap;
+							sort( $all_group->caps );
+						}
 
-							if ( $custom_group ) {
-								$custom_group->caps[] = $custom_cap;
-								sort( $custom_group->caps );
-							}
+						if ( $custom_group ) {
+							$custom_group->caps[] = $custom_cap;
+							sort( $custom_group->caps );
+						}
 					}
 				}
 
@@ -320,6 +328,144 @@ class WPUM_Roles_Editor {
 		} else {
 			$this->send_json_error();
 		}
+	}
+
+	/**
+	 * Update a form via ajax.
+	 *
+	 * @return void
+	 */
+	public function update_role() {
+		check_ajax_referer( 'wpum_update_role', 'nonce' );
+
+		if ( ! current_user_can( $this->capability ) ) {
+			wp_die( esc_html__( 'Something went wrong: could not update the role details.', 'wp-user-manager' ), 403 );
+		}
+
+		$role_id   = isset( $_POST['role_id'] ) && ! empty( $_POST['role_id'] ) ? sanitize_text_field( $_POST['role_id'] ) : false;
+		$role_name = isset( $_POST['role_name'] ) && ! empty( $_POST['role_name'] ) ? sanitize_text_field( $_POST['role_name'] ) : false;
+
+		if ( $role_id && $role_name ) {
+
+			$data = apply_filters( 'wpum_role_update', [
+				'name' => $role_name,
+			], $role_id );
+
+			// TODO
+
+		} else {
+			wp_die( esc_html__( 'Something went wrong: could not update the registration form details.', 'wp-user-manager' ), 403 );
+		}
+
+		wp_send_json_success( [
+			'id'   => $role_id,
+			'name' => $role_name,
+		] );
+	}
+
+	function delete_role() {
+		check_ajax_referer( 'wpum_delete_role', 'nonce' );
+
+		$role_id = isset( $_POST['role_id'] ) && ! empty( $_POST['role_id'] ) ? sanitize_text_field( $_POST['role_id'] ) : false;
+
+		if ( ! current_user_can( 'manage_options' ) || ! current_user_can( 'delete_roles' ) || empty( $role_id ) ) {
+			wp_die( esc_html__( 'Something went wrong: could not delete the role.', 'wp-user-manager' ), 403 );
+		}
+
+		// Get the default role.
+		$default_role = get_option( 'default_role' );
+
+		// Don't delete the default role. Site admins should change the default before attempting to delete the role.
+		if ( $role_id == $default_role ) {
+			wp_die( esc_html__( 'Something went wrong: cannot delete the default role.', 'wp-user-manager' ), 403 );
+		}
+
+		// Get all users with the role to be deleted.
+		$users = get_users( array( 'role' => $role_id ) );
+
+		foreach ( $users as $user ) {
+			if ( $user->has_cap( $role_id ) && 1 >= count( $user->roles ) ) {
+				$user->set_role( $default_role );
+			} else if ( $user->has_cap( $role_id ) ) {
+				$user->remove_role( $role_id );
+			}
+		}
+
+		remove_role( $role_id );
+		wpum_unregister_role( $role_id );
+
+		do_action( 'wpum_role_delete', $role_id );
+
+		wp_send_json_success( (string) $role_id );
+
+	}
+
+	/**
+	 * Store new forms into the database.
+	 *
+	 * @return void
+	 */
+	function create_role() {
+		check_ajax_referer( 'wpum_create_role', 'nonce' );
+
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_die( esc_html__( 'Something went wrong: could not create new role.', 'wp-user-manager' ), 403 );
+		}
+
+		$role_name = isset( $_POST['role_name'] ) && ! empty( $_POST['role_name'] ) ? sanitize_text_field( $_POST['role_name'] ) : false;
+
+		if ( $role_name ) {
+			$role_id = strtolower( sanitize_file_name( $role_name ) );
+
+			$new_role = add_role( $role_id, $role_name );
+			$args     = array(
+				'label' => $role_name,
+			);
+
+			$orig_role_id = isset( $_POST['orig_role_id'] ) && ! empty( $_POST['orig_role_id'] ) ? sanitize_text_field( $_POST['orig_role_id'] ) : false;
+			if ( $orig_role_id ) {
+				$orig_role = wpum_get_role( $orig_role_id );
+
+				foreach ( $orig_role->caps as $orig_cap => $value ) {
+					$args['caps'][ $orig_cap ] = $value;
+				}
+
+				foreach ( $orig_role->granted_caps as $cap ) {
+					$args['granted_caps'][] = $cap;
+					$new_role->add_cap( $cap );
+				}
+
+				foreach ( $orig_role->denied_caps as $cap ) {
+					$args['denied_caps'][] = $cap;
+					$new_role->add_cap( $cap, false );
+				}
+			}
+
+			wpum_register_role( $role_id, $args );
+
+			do_action( 'wpum_role_add', $role_id );
+
+			$default_role = get_option( 'default_role' );
+
+			$role = wpum_get_role( $role_id );
+
+			$data = [
+				'id'                    => $role->name,
+				'slug'                  => $role->name,
+				'name'                  => $role->label,
+				'default'               => $default_role && $default_role == $role->name,
+				'count'                 => wpum_get_role_user_count( $role->name ),
+				'granted_count'         => wpum_get_role_granted_cap_count( $role->name ),
+				'denied_count'          => wpum_get_role_denied_cap_count( $role->name ),
+				'current_user_has_role' => current_user_can( $role->name ),
+			];
+
+			wp_send_json_success( $data );
+
+		} else {
+			wp_die( esc_html__( 'Something went wrong: could not create new role.', 'wp-user-manager' ), 403 );
+		}
+
 	}
 
 	/**

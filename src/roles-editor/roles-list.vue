@@ -5,7 +5,7 @@
 			<img :src="pluginURL + 'assets/images/logo.svg'" alt="WP User Manager">
 			{{labels.page_title}}
 		</h1>
-		<a href="#" class="page-title-action" id="wpum-add-role" @click="showAddRoleDialog()"><span class="dashicons dashicons-plus-alt"></span> <span v-text="sanitized(labels.table_add_role)"></span></a>
+		<a href="#" class="page-title-action" id="wpum-add-role" @click="showAddRoleDialog( 0 )"><span class="dashicons dashicons-plus-alt"></span> <span v-text="sanitized(labels.table_add_role)"></span></a>
 		<br/><br/>
 
 		<wp-notice :type="messageStatus" v-if="showMessage">
@@ -39,16 +39,25 @@
 						<strong>
 							<router-link :to="{ name: 'role', params: { id: role.id }}">{{role.name}}</router-link></strong><br>
 						<div class="row-actions">
+							<router-link :to="{ name: 'role', params: { id: role.id }}"><span v-text="sanitized(labels.table_edit)"></span></router-link>
+							|
 							<span>
-							<a href="#" @click="showEditFormDialog( role )" v-text="sanitized(labels.table_edit)"></a>
-							</span>
+								<a href="#" @click="showAddRoleDialog( role.id )"><span
+									v-text="sanitized(labels.table_duplicate_role)"></span></a> |
+								</span>
+							<span class="delete" v-if="! role.current_user_has_role">
+								<a href="#" v-if="! isDefault(role)" @click="showDeleteDialog( role.name, role.id )"><span
+								v-text="sanitized(labels.table_delete_role)"></span></a>
+								</span>
 						</div>
 					</td>
 					<td>
 						{{role.slug}}
 					</td>
 					<td>
-						<span v-if="isDefault(role)" class="dashicons dashicons-yes"></span>
+						<a v-if="isDefault(role)" :href="changeDefaultURL">
+							<span v-if="isDefault(role)" class="dashicons dashicons-yes"></span>
+						</a>
 					</td>
 					<td>
 						<a :href="usersURL + '?role=' + role.id">{{role.count}}</a>
@@ -61,7 +70,6 @@
 					</td>
 					<td class="align-middle">
 						<router-link :to="{ name: 'role', params: { id: role.id }}" tag="button" type="submit" class="button"><span class="dashicons dashicons-admin-settings"></span> <span v-text="sanitized(labels.table_customize)"></span></router-link>
-<!--						<button type="submit" class="button delete-btn" v-if="! isDefault(role)" @click="showDeleteDialog( role.name, role.id )"><span class="dashicons dashicons-trash"></span> <span v-text="sanitized(labels.table_delete_role)"></span></button>-->
 					</td>
 				</tr>
 			</tbody>
@@ -74,20 +82,25 @@
 import axios from 'axios'
 import Sanitize from 'sanitize-html'
 import balloon from 'balloon-css'
+import DeleteDialog from './dialogs/dialog-delete-role'
+import EditRoleDialog from './dialogs/dialog-edit-role'
+import CreateRoleDialog from './dialogs/dialog-create-role'
 import removeRoleByID from 'lodash.remove'
 import findFormIndex from 'lodash.findindex'
 
 export default {
 	name: 'roles-list',
 	components: {
-		// DeleteDialog,
-		// EditFormDialog
+		DeleteDialog,
+		EditRoleDialog,
+		CreateRoleDialog
 	},
 	data() {
 		return {
 			labels:    wpumRolesEditor.labels,
 			pluginURL: wpumRolesEditor.pluginURL,
 			usersURL: wpumRolesEditor.usersURL,
+			changeDefaultURL: wpumRolesEditor.changeDefaultURL,
 			loading:   false,
 			roles:     '',
 			showMessage: false,
@@ -186,7 +199,7 @@ export default {
 					if( status == 'error' ) {
 						this.showError(id_or_message)
 					} else {
-						removeRoleByID(this.role, {
+						removeRoleByID(this.roles, {
 							id: id_or_message.data.data
 						})
 						this.showSuccess()
@@ -197,10 +210,10 @@ export default {
 			})
 		},
 		/**
-		 * Show the edit form dialog.
+		 * Show the edit role dialog.
 		 */
 		showEditFormDialog( role ) {
-			this.$modal.show( EditRolemDialog , {
+			this.$modal.show( EditRoleDialog , {
 				role_id: role.id,
 				role_name: role.name,
 				/**
@@ -212,9 +225,9 @@ export default {
 						this.showError(data_or_message)
 					} else {
 						// Find object index of the updated group.
-						const formIndex = findFormIndex( this.forms , function(o) { return o.id == data_or_message.id })
+						const roleIndex = findFormIndex( this.forms , function(o) { return o.id == data_or_message.id })
 						// Now update the interface content.
-						this.forms[formIndex].name = data_or_message.name
+						this.roles[roleIndex].name = data_or_message.name
 						// Show success message.
 						this.showSuccess()
 					}
@@ -223,6 +236,19 @@ export default {
 				height: '250px',
 			})
 		},
+		showAddRoleDialog( role_id ) {
+			this.$modal.show( CreateRoleDialog, {
+				orig_role_id: role_id,
+				addNewRole: ( status, data_or_message ) => {
+					if ( status == 'error' ) {
+						this.showError( data_or_message )
+					} else {
+						this.showSuccess()
+						this.roles.push( data_or_message )
+					}
+				}
+			}, { height: '250px' } )
+		}
 	}
 }
 </script>
