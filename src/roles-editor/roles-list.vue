@@ -245,6 +245,7 @@ export default {
 					} else {
 						this.showSuccess()
 						this.roles.push( data_or_message )
+						this.$router.push({ name: 'role', params: { id: data_or_message.id }})
 					}
 				}
 			}, { height: '250px' } )
