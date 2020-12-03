@@ -40,10 +40,10 @@ final class WPUM_Capability_Group {
 
 		$this->name = sanitize_key( $name );
 
-		$registered_caps = array_keys( wp_list_filter( members_get_caps(), array( 'group' => $this->name ) ) );
+		$registered_caps = array_keys( wp_list_filter( wpum_get_caps(), array( 'group' => $this->name ) ) );
 
 		$this->caps = array_unique( array_merge( $this->caps, $registered_caps ) );
 
-		$this->caps = members_remove_hidden_caps( $this->caps );
+		$this->caps = wpum_remove_hidden_caps( $this->caps );
 	}
 }
