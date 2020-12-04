@@ -70,14 +70,11 @@ function wpum_load_scripts() {
 add_action( 'wp_enqueue_scripts', 'wpum_load_scripts' );
 
 function wpum_enqueue_scripts() {
-
-	$prefix = defined( 'WPUM_VUE_DEV' ) && WPUM_VUE_DEV ? '' : '.min';
-
 	wp_enqueue_style( 'wpum-select2-style', 'https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css', false, WPUM_VERSION );
 	wp_enqueue_script( 'wpum-select2', 'https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js', array( 'jquery' ), WPUM_VERSION, true );
 	wp_enqueue_script( 'wpum-datepicker', 'https://cdn.jsdelivr.net/npm/flatpickr', array( 'jquery' ), WPUM_VERSION, true );
 	wp_enqueue_style( 'wpum-datepicker-style', 'https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css', false, WPUM_VERSION );
-	wp_enqueue_script( 'wpum-frontend-js', WPUM_PLUGIN_URL . 'assets/js/wp-user-manager'.$prefix.'.js', array( 'jquery' ), WPUM_VERSION, true );
+	wp_enqueue_script( 'wpum-frontend-js', WPUM_PLUGIN_URL . 'assets/js/wp-user-manager.min.js', array( 'jquery' ), WPUM_VERSION, true );
 
 	$js_variables = [
 		'dateFormat' => get_option( 'date_format' ),

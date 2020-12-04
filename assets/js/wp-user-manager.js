@@ -105,7 +105,7 @@ jQuery(document).ready(function ($) {
 			});
 		},
 
-		validateMaxRows( name ){
+		validateMaxRows: function( name ){
 			var repeater = $( '.' + name );
 			var maxRows = repeater.find('.add-repeater-row').data('max-row');
 			if( !maxRows || parseInt( maxRows ) < 1 ){
