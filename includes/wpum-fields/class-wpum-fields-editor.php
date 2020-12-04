@@ -185,6 +185,8 @@ class WPUM_Fields_Editor {
 			'field_add_option'          => esc_html__( 'Add option', 'wp-user-manager' ),
 			'field_option_label'        => esc_html__( 'Option label', 'wp-user-manager' ),
 			'field_option_value'        => esc_html__( 'Option value', 'wp-user-manager' ),
+			'repeater_fields_add_new'	=> esc_html__( 'Add new sub field', 'wp-user-manager' ),
+			'repeater_fields_create'	=> esc_html__( 'Add sub field', 'wp-user-manager' ),
 		];
 
 	}

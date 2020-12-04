@@ -56,6 +56,7 @@ export default {
 	data(){
 		return {
 			labels:         wpumFieldsEditor.labels,
+			clonedLabels:   Object.assign( {}, wpumFieldsEditor.labels ),
 			fields: 		[],
 			state:			'list',
 			repeater:		null,
@@ -90,6 +91,7 @@ export default {
 			this.state = 'list';
 
 			if( status !== 'error' ){
+				this.getFields();
 				this.openEditFieldDialog( data.field_id, data.field_name, data.field_type, data.default_id )
 			}
 		},
@@ -138,7 +140,8 @@ export default {
 		}
 	},
 	mounted(){
-
+		this.labels.fields_add_new = this.labels.repeater_fields_add_new;
+		this.labels.fields_create = this.labels.repeater_fields_create;
 	},
 	created(){
 		this.repeater = wpumFieldsEditor.fields_types.advanced.fields.find((field) => field.type === 'repeater')
@@ -152,6 +155,8 @@ export default {
 		if(this.repeater){
 			wpumFieldsEditor.fields_types.advanced.fields.push(this.repeater)
 		}
+		this.labels.fields_add_new = this.clonedLabels.fields_add_new;
+		this.labels.fields_create  = this.clonedLabels.fields_create;
 	}
 }
 </script>
