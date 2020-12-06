@@ -2,6 +2,12 @@ includes:
     - vendor/szepeviktor/phpstan-wordpress/extension.neon
 parameters:
     level: 5
+    bootstrapFiles:
+        - tests/phpstan/bootstrap.php
+    scanDirectories:
+            - vendor/htmlburger/carbon-fields
     paths:
         - wp-user-manager.php
         - includes
+    ignoreErrors:
+        - '#^Function apply_filters(_ref_array)? invoked with [34567] parameters, 2 required\.$#'
