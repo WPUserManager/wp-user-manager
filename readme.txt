@@ -4,11 +4,11 @@ Plugin URI: https://wpusermanager.com
 Contributors: wpusermanager, polevaultweb, alessandro.tesoro
 Tags: members, membership, community, user profile, user registration
 Requires at least: 4.9
-Tested up to: 5.5
+Tested up to: 5.6
 Requires PHP: 5.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
-Stable Tag: 2.3.13
+Stable Tag: 2.4
 
 The most customizable profiles & community builder WordPress plugin with front-end login, registration, profile customization and content restriction.
 
@@ -31,7 +31,7 @@ Create a custom login page, have full control over the registration form, give y
 - [Custom avatars](https://wpusermanager.com/features/custom-avatars/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager)
 - [Elegant user profiles](https://wpusermanager.com/features/elegant-user-profiles/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager)
 - [Shortcodes editor](https://wpusermanager.com/features/shortcodes/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager)
-- [Roles editor](https://wpusermanager.com/features/roles/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager): Edit roles and their capabilities. Create new roles and duplicate existing ones.
+- [Roles editor](https://wpusermanager.com/features/roles-and-permissions-editor/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager): Edit roles and their capabilities. Create new roles and duplicate existing ones.
 - [Beautiful user directories](https://wpusermanager.com/features/user-directories/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager)
 - [SEO URLs](https://wpusermanager.com/features/seo/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager)
 - [Content restriction](https://wpusermanager.com/features/content-restriction/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager)
@@ -123,6 +123,20 @@ Please note that using WPUM and the mentioned add-ons does NOT guarantee complia
 13. Login form.
 
 == Changelog ==
+
+= 2.4 (8th December 2020) =
+
+- New: Roles editor to add, edit and delete user roles, and customize role capabilities
+- New: Repeater field with the [Custom Fields addon](https://wpusermanager.com/addons/custom-fields/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager)
+- New: Setting to control the default display name for registered users
+- New: Setting to restrict the wp-admin dashboard for specific roles
+- New: Compatibility with WordPress 5.6 and PHP 8
+- Improvement: Added 'wpum_admin_pages_capability' filter for the capability to show plugin admin pages
+- Improvement: Added filters to control the strong password requirements
+- Improvement: Datepicker field value now returned in the localized format
+- Fix: PHP Notice: Undefined offset: 0 in registration form when no role selected
+- Fix: PHP Notice: Undefined index: priority (again)
+- Fix: Wrong text domain for 'current password' (props [apermo](https://profiles.wordpress.org/apermo/))
 
 = 2.3.13 (23rd November 2020) =
 
