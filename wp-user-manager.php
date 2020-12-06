@@ -298,7 +298,7 @@ if ( ! class_exists( 'WP_User_Manager' ) ) :
 			require_once WPUM_PLUGIN_DIR . 'includes/wpum-updater/free-plugins.php';
 
 			require_once WPUM_PLUGIN_DIR . 'includes/install.php';
-
+			WPUM_Blocks::get_instance();
 		}
 
 		/**
