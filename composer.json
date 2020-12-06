@@ -13,5 +13,8 @@
   "minimum-stability": "dev",
   "config": {
     "sort-packages": true
+  },
+  "require-dev": {
+    "szepeviktor/phpstan-wordpress": "dev-master"
   }
 }
