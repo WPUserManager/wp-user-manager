@@ -19,7 +19,12 @@
 						<th scope="col">{{labels.table_actions}}</th>
 					</tr>
 				</thead>
-				<draggable v-model="fields" :element="'tbody'" :options="{handle:'.order-anchor', animation:150}" @end="onSortingEnd">
+				<tbody v-if="loading">
+					<tr>
+						<td :colspan="fields.length > 1 ? 7 : 6"><div class="spinner is-active"></div></td>
+					</tr>
+				</tbody>
+				<draggable v-else v-model="fields" :element="'tbody'" :options="{handle:'.order-anchor', animation:150}" @end="onSortingEnd">
 					<tr v-for="field in fields" :key="field.id">
 						<td v-if="fields.length > 1" class="order-anchor align-middle"><span class="dashicons dashicons-menu"></span></td>
 						<td>{{field.name}}</td>
@@ -60,7 +65,8 @@ export default {
 			fields: 		[],
 			state:			'list',
 			repeater:		null,
-			editField:		{}
+			editField:		{},
+			loading:		true
 		}
 	},
 	methods: {
@@ -80,10 +86,12 @@ export default {
 				if ( typeof response.data.data.fields !== 'undefined' && response.data.data.fields.length > 0 ) {
 					this.fields = response.data.data.fields
 				}
+				this.loading = false;
 			})
 			.catch( error => {
 				this.$parent.loading = false
 				console.error(error);
+				this.loading = false;
 			})
 		},
 		addedNewField( status, data ){
