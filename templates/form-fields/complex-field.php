@@ -47,16 +47,27 @@ if( count( $fields ) ){
 			return $field->get_key();
 	}, $fields );
 
-	$values 	= array_map( function( $value ){
-		if( isset( $value['_type'] ) ) unset( $value['_type'] );
-		return $value;
-	}, (array) $data->value );
+	$value = isset( $data->value ) ? $data->value : array();
 
-	$index 		= 0;
+	$values = array_map( function ( $value ) {
+		if ( isset( $value['_type'] ) ) {
+			unset( $value['_type'] );
+		}
+
+		return $value;
+	}, (array) $value );
+
+	$index = 0;
+	if ( empty( $values ) ) {
+		$values[] = true;
+	}
+	$values[] = true;
+
+	$clone_row_index = count( $values ) - 1;
 
 	do {
-
-		echo '<div class="fieldset-wpum_field_group">';
+		$clone_row = $index == $clone_row_index;
+		echo '<div class="fieldset-wpum_field_group' . ( $clone_row ? ' fieldset-wpum_field_group-clone' : '' ) . '">';
 
 		foreach( $fields as $field ){
 
@@ -72,8 +83,18 @@ if( count( $fields ) ){
 				}
 			}
 
+
 			$key   = $field->get_key();
-			$value = isset( $values[$index][ $key ] ) ? $values[$index][ $key ] : '';
+			$value = isset( $values[ $index ][ $key ] ) ? $values[ $index ][ $key ] : '';
+
+			if ( $index > 0 ) {
+				$key .= '_' . $index;
+
+				if ( isset( $values[ $index ][ $key ] ) ) {
+					$value = $values[ $index ][ $key ];
+				}
+			}
+
 			$field = array(
 				'id'		  => $field->get_ID(),
 				'label'       => $field->get_name(),
