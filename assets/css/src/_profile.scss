@@ -64,7 +64,6 @@
 .profile-navbar {
 	display: flex;
 	flex-wrap: wrap;
-	background: #fafafa;
 	border-top: 1px solid #eee;
 	>a,
 	>button {
@@ -104,6 +103,9 @@
 		border-top:0;
 		border-bottom-right-radius: 3px;
 		border-bottom-left-radius: 3px;
+		td {
+			border: none;
+		}
 		td.label {
 			width: 30%;
 			font-weight: 600;
@@ -111,7 +113,6 @@
 		}
 
 		tr {
-			background: #fafafa;
 			&:last-child {
 				border-bottom: none;
 			}
