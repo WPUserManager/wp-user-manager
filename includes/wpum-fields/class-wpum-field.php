@@ -674,7 +674,7 @@ class WPUM_Field {
 	 * @access  public
 	 * @since   2.0
 	 */
-	public function add_meta( $meta_key = '', $meta_value, $unique = false ) {
+	public function add_meta( $meta_key, $meta_value, $unique = false ) {
 		return WPUM()->field_meta->add_meta( $this->id, $meta_key, $meta_value, $unique );
 	}
 
@@ -689,7 +689,7 @@ class WPUM_Field {
 	 * @access  public
 	 * @since   2.0
 	 */
-	public function update_meta( $meta_key = '', $meta_value, $prev_value = '' ) {
+	public function update_meta( $meta_key, $meta_value, $prev_value = '' ) {
 		return WPUM()->field_meta->update_meta( $this->id, $meta_key, $meta_value, $prev_value );
 	}
 
