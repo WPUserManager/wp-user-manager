@@ -51,7 +51,8 @@ class WPUM_DB_Field_Meta extends WPUM_DB {
 	 * @param string $meta_key
 	 * @param boolean $single If true, return only the first value of the specified meta_key.
 	 *                        This parameter has no effect if meta_key is not specified.
-	 * @return void
+	 *
+	 * @return mixed
 	 */
 	public function get_meta( $field_id = 0, $meta_key = '', $single = false ) {
 		$field_id = $this->sanitize_field_id( $field_id );
@@ -80,9 +81,9 @@ class WPUM_DB_Field_Meta extends WPUM_DB {
 	 * @param string $meta_key
 	 * @param mixed $meta_value
 	 * @param boolean $unique
-	 * @return void
+	 * @return int|false
 	 */
-	public function add_meta( $field_id = 0, $meta_key = '', $meta_value, $unique = false ) {
+	public function add_meta( $field_id, $meta_key, $meta_value, $unique = false ) {
 		$field_id = $this->sanitize_field_id( $field_id );
 		if ( false === $field_id ) {
 			return false;
@@ -94,12 +95,13 @@ class WPUM_DB_Field_Meta extends WPUM_DB {
 	 * Update meta data for a field.
 	 *
 	 * @param integer $field_id
-	 * @param string $meta_key
-	 * @param mixed $meta_value
-	 * @param string $prev_value
-	 * @return void
+	 * @param string  $meta_key
+	 * @param mixed   $meta_value
+	 * @param string  $prev_value
+	 *
+	 * @return bool|int
 	 */
-	public function update_meta( $field_id = 0, $meta_key = '', $meta_value, $prev_value = '' ) {
+	public function update_meta( $field_id, $meta_key, $meta_value, $prev_value = '' ) {
 		$field_id = $this->sanitize_field_id( $field_id );
 		if ( false === $field_id ) {
 			return false;
@@ -111,9 +113,10 @@ class WPUM_DB_Field_Meta extends WPUM_DB {
 	 * Delete meta data for a field.
 	 *
 	 * @param integer $field_id
-	 * @param string $meta_key
-	 * @param string $meta_value
-	 * @return void
+	 * @param string  $meta_key
+	 * @param string  $meta_value
+	 *
+	 * @return bool
 	 */
 	public function delete_meta( $field_id = 0, $meta_key = '', $meta_value = '' ) {
 		return delete_metadata( 'wpum_field', $field_id, $meta_key, $meta_value );
@@ -123,7 +126,8 @@ class WPUM_DB_Field_Meta extends WPUM_DB {
 	 * Given a field ID, make sure it's a positive number, greater than zero before inserting or adding.
 	 *
 	 * @param mixed $field_id
-	 * @return void
+	 *
+	 * @return false|int
 	 */
 	private function sanitize_field_id( $field_id ) {
 		if ( ! is_numeric( $field_id ) ) {

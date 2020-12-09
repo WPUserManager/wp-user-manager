@@ -51,13 +51,14 @@ class WPUM_DB_Registration_Form_Meta extends WPUM_DB {
 	 * @param string $meta_key
 	 * @param boolean $single If true, return only the first value of the specified meta_key.
 	 *                        This parameter has no effect if meta_key is not specified.
-	 * @return void
+	 * @return mixed
 	 */
 	public function get_meta( $form_id = 0, $meta_key = '', $single = false ) {
 		$form_id = $this->sanitize_form_id( $form_id );
 		if ( false === $form_id ) {
 			return false;
 		}
+
 		return get_metadata( 'wpum_registration_form', $form_id, $meta_key, $single );
 	}
 
@@ -65,16 +66,18 @@ class WPUM_DB_Registration_Form_Meta extends WPUM_DB {
 	 * Add meta data field to a registration form.
 	 *
 	 * @param integer $form_id
-	 * @param string $meta_key
-	 * @param mixed $meta_value
+	 * @param string  $meta_key
+	 * @param mixed   $meta_value
 	 * @param boolean $unique
-	 * @return void
+	 *
+	 * @return false|int
 	 */
-	public function add_meta( $form_id = 0, $meta_key = '', $meta_value, $unique = false ) {
+	public function add_meta( $form_id, $meta_key, $meta_value, $unique = false ) {
 		$form_id = $this->sanitize_form_id( $form_id );
 		if ( false === $form_id ) {
 			return false;
 		}
+
 		return add_metadata( 'wpum_registration_form', $form_id, $meta_key, $meta_value, $unique );
 	}
 
@@ -82,16 +85,18 @@ class WPUM_DB_Registration_Form_Meta extends WPUM_DB {
 	 * Update meta data for a registration form.
 	 *
 	 * @param integer $form_id
-	 * @param string $meta_key
-	 * @param mixed $meta_value
-	 * @param string $prev_value
-	 * @return void
+	 * @param string  $meta_key
+	 * @param mixed   $meta_value
+	 * @param string  $prev_value
+	 *
+	 * @return int|bool
 	 */
-	public function update_meta( $form_id = 0, $meta_key = '', $meta_value, $prev_value = '' ) {
+	public function update_meta( $form_id, $meta_key, $meta_value, $prev_value = '' ) {
 		$form_id = $this->sanitize_form_id( $form_id );
 		if ( false === $form_id ) {
 			return false;
 		}
+
 		return update_metadata( 'wpum_registration_form', $form_id, $meta_key, $meta_value, $prev_value );
 	}
 
@@ -99,9 +104,10 @@ class WPUM_DB_Registration_Form_Meta extends WPUM_DB {
 	 * Delete meta data for a registration form.
 	 *
 	 * @param integer $form_id
-	 * @param string $meta_key
-	 * @param string $meta_value
-	 * @return void
+	 * @param string  $meta_key
+	 * @param string  $meta_value
+	 *
+	 * @return bool
 	 */
 	public function delete_meta( $form_id = 0, $meta_key = '', $meta_value = '' ) {
 		return delete_metadata( 'wpum_registration_form', $form_id, $meta_key, $meta_value );
@@ -111,7 +117,8 @@ class WPUM_DB_Registration_Form_Meta extends WPUM_DB {
 	 * Given a field ID, make sure it's a positive number, greater than zero before inserting or adding.
 	 *
 	 * @param mixed $form_id
-	 * @return void
+	 *
+	 * @return false|int
 	 */
 	private function sanitize_form_id( $form_id ) {
 		if ( ! is_numeric( $form_id ) ) {
@@ -125,6 +132,7 @@ class WPUM_DB_Registration_Form_Meta extends WPUM_DB {
 		if ( empty( $form_id ) ) {
 			return false;
 		}
+
 		return absint( $form_id );
 	}
 
