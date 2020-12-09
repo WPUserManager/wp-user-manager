@@ -72,7 +72,9 @@ class WPUM_DB_Fields extends WPUM_DB {
 	 * Insert a new field.
 	 *
 	 * @access public
-	 * @param array $data
+	 *
+	 * @param array  $data
+	 * @param string $type
 	 *
 	 * @return int ID of the inserted field.
 	 */
@@ -248,10 +250,10 @@ class WPUM_DB_Fields extends WPUM_DB {
 	 * Parse the `WHERE` clause for the SQL query.
 	 *
 	 * @param array $args
-	 * @return void
+	 *
+	 * @return string
 	 */
 	private function parse_where( $args ) {
-
 		$where = '';
 
 		// Specific fields group.
@@ -269,7 +271,6 @@ class WPUM_DB_Fields extends WPUM_DB {
 		}
 
 		return $where;
-
 	}
 
 }

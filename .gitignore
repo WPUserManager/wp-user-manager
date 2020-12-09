@@ -13,4 +13,6 @@ yarn-error.log
 #dist
 deploy.sh
 wp-user-manager
+languages/*
+!languages/wp-user-manager.pot
 release

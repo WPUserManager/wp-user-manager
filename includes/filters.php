@@ -257,3 +257,31 @@ function wpum_registration_form_valid_fields( $fields ) {
 }
 
 add_filter( 'wpum_registration_form_fields', 'wpum_registration_form_valid_fields' );
+
+function wpum_set_displayname_on_registration( $user_data ) {
+	$display_name_format = wpum_get_option( 'default_display_name', array( 'display_username' ) );
+	$display_name_format = $display_name_format[0];
+
+	if ( 'display_username' === $display_name_format ) {
+		return $user_data;
+	}
+
+	$first = ! empty( $user_data['first_name'] ) ? $user_data['first_name'] : '';
+	$last  = ! empty( $user_data['last_name'] ) ? $user_data['last_name'] : '';
+
+	if ( 'display_firstname' === $display_name_format ) {
+		$user_data['display_name'] = $first;
+	} else if ( 'display_lastname' === $display_name_format ) {
+		$user_data['display_name'] = $last;
+	} else if ( 'display_firstlast' === $display_name_format ) {
+		$display                   = $first . ' ' . $last;
+		$user_data['display_name'] = trim( $display );
+	} else if ( 'display_lastfirst' === $display_name_format ) {
+		$display                   = $last . ' ' . $first;
+		$user_data['display_name'] = trim( $display );
+	}
+
+	return $user_data;
+}
+
+add_filter( 'wpum_registration_user_data', 'wpum_set_displayname_on_registration', 10 );

@@ -82,7 +82,7 @@ class WPUM_Options_Panel {
 			'parent'     => 'users.php',
 			'page_title' => __( 'WP User Manager Settings', 'wp-user-manager' ),
 			'menu_title' => __( 'Settings', 'wp-user-manager' ),
-			'capability' => 'manage_options',
+			'capability' => apply_filters( 'wpum_admin_pages_capability', 'manage_options' ),
 		);
 	}
 
@@ -233,10 +233,25 @@ class WPUM_Options_Panel {
 					'options'  => wpum_get_roles(),
 				),
 				array(
+					'id'       => 'wp_admin_roles',
+					'name'     => __( 'Restrict Dashboard Access', 'wp-user-manager' ),
+					'desc'     => __( 'Restrict access to the WordPress dashboard for specific user roles. Administrators will always have access.', 'wp-user-manager' ),
+					'type'     => 'multiselect',
+					'multiple' => true,
+					'labels'   => array( 'placeholder' => __( 'Select one or more user roles from the list.', 'wp-user-manager' ) ),
+					'options'  => wpum_get_roles(),
+				),
+				array(
 					'id'   => 'exclude_usernames',
 					'name' => __( 'Excluded Usernames', 'wp-user-manager' ),
 					'desc' => __( 'Enter the usernames that you wish to disable. Separate each username on a new line.', 'wp-user-manager' ),
 					'type' => 'textarea',
+				),
+				array(
+					'id'   => 'roles_editor',
+					'name' => __( 'Roles Editor', 'wp-user-manager' ),
+					'desc' => __( 'Enable the roles editor in the Users menu.', 'wp-user-manager' ),
+					'type' => 'checkbox'
 				),
 			],
 			'registration' => [
@@ -353,6 +368,14 @@ class WPUM_Options_Panel {
 					'name' => __( 'Disable Strong Passwords', 'wp-user-manager' ),
 					'desc' => __( 'Enable this option to disable the built-in strong passwords validation system of WP User Manager.', 'wp-user-manager' ),
 					'type' => 'checkbox',
+				),
+				array(
+					'id'      => 'default_display_name',
+					'name'    => __( 'Default Display Name', 'wp-user-manager' ),
+					'desc'    => __( 'Select the default format for the user display name at registration. The user can change their display name later in their account.', 'wp-user-manager' ),
+					'type'    => 'multiselect',
+					'options' => wpum_get_display_name_options(),
+					'std'     => 'display_username',
 				),
 			],
 			'profiles_content' => [

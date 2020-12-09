@@ -387,7 +387,7 @@ function wpum_log_user_in( $email_or_id ) {
  */
 function wpum_send_registration_confirmation_email( $user_id, $psw = false ) {
 
-	$registration_confirmation_email = wpum_get_email( 'registration_confirmation' );
+	$registration_confirmation_email = wpum_get_email( 'registration_confirmation', $user_id );
 
 	if ( ! $user_id ) {
 		return;
@@ -399,60 +399,11 @@ function wpum_send_registration_confirmation_email( $user_id, $psw = false ) {
 
 		// The blogname option is escaped with esc_html on the way into the database in sanitize_option
 		// we want to reverse this for the plain text arena of emails.
-		$blogname = wp_specialchars_decode( get_option( 'blogname' ), ENT_QUOTES );
+
 		// Send notification to admin if not disabled.
-		if ( ! wpum_get_option( 'disable_admin_register_email' ) ) {
-
-			$message  = sprintf( esc_html__( 'New user registration on your site %s:', 'wp-user-manager' ), $blogname ) . "\r\n\r\n";
-			$message .= sprintf( esc_html__( 'Username: %s', 'wp-user-manager' ), $user->user_login ) . "\r\n\r\n";
-			$message .= sprintf( esc_html__( 'E-mail: %s', 'wp-user-manager' ), $user->user_email ) . "\r\n";
-
-			/**
-			 * Filter: allow developers to customize the message of the admin registration confirmation email.
-			 *
-			 * @param string $message the message.
-			 * @param WP_User $user user details.
-			 * @return string
-			 */
-			$message = apply_filters( 'wpum_admin_registration_confirmation_email_message', $message, $user );
-
-			/**
-			 * Filter: allow developers to customize the subject of the admin registration confirmation email.
-			 *
-			 * @param string $subject the subject.
-			 * @param WP_User $user user details.
-			 * @return string
-			 */
-			$subject = apply_filters( 'wpum_admin_registration_confirmation_email_subject', sprintf( esc_html__( '[%s] New User Registration', 'wp-user-manager' ), $blogname ), $user );
-
-			/**
-			 * Filter: allow developers to customize the email recipient of the admin registration confirmation email.
-			 *
-			 * @param string $to_email the admin email address.
-			 *
-			 * @return string
-			 */
-			$to_email = apply_filters( 'wpum_admin_registration_confirmation_email_recipient', get_option( 'admin_email' ) );
-
-			/**
-			 * Filter: allow developers to customize the email headers of the admin registration confirmation email.
-			 *
-			 * @param string $headers the admin email headers.
-			 *
-			 * @return string|array
-			 */
-			$headers = apply_filters( 'wpum_admin_registration_confirmation_email_headers', '' );
-
-			/**
-			 * Filter: allow developers to customize the email attachments of the admin registration confirmation email.
-			 *
-			 * @param array
-			 *
-			 * @return array
-			 */
-			$attachments = apply_filters( 'wpum_admin_registration_confirmation_email_attachments', array(), $user );
-
-			wp_mail( $to_email, $subject, $message, $headers, $attachments );
+		$disable_admin_email = wpum_get_option( 'disable_admin_register_email' );
+		if ( ! $disable_admin_email && apply_filters( 'wpum_send_registration_admin_email', true ) ) {
+			wpum_send_registration_admin_email( $user );
 		}
 
 		if ( $user instanceof WP_User && $user->data->user_email ) {
@@ -474,6 +425,64 @@ function wpum_send_registration_confirmation_email( $user_id, $psw = false ) {
 		}
 	}
 
+}
+
+/**
+ * @param WP_User $user
+ */
+function wpum_send_registration_admin_email( $user ) {
+	$blogname = wp_specialchars_decode( get_option( 'blogname' ), ENT_QUOTES );
+
+	$message  = sprintf( esc_html__( 'New user registration on your site %s:', 'wp-user-manager' ), $blogname ) . "\r\n\r\n";
+	$message .= sprintf( esc_html__( 'Username: %s', 'wp-user-manager' ), $user->user_login ) . "\r\n\r\n";
+	$message .= sprintf( esc_html__( 'E-mail: %s', 'wp-user-manager' ), $user->user_email ) . "\r\n";
+
+	/**
+	 * Filter: allow developers to customize the message of the admin registration confirmation email.
+	 *
+	 * @param string $message the message.
+	 * @param WP_User $user user details.
+	 * @return string
+	 */
+	$message = apply_filters( 'wpum_admin_registration_confirmation_email_message', $message, $user );
+
+	/**
+	 * Filter: allow developers to customize the subject of the admin registration confirmation email.
+	 *
+	 * @param string $subject the subject.
+	 * @param WP_User $user user details.
+	 * @return string
+	 */
+	$subject = apply_filters( 'wpum_admin_registration_confirmation_email_subject', sprintf( esc_html__( '[%s] New User Registration', 'wp-user-manager' ), $blogname ), $user );
+
+	/**
+	 * Filter: allow developers to customize the email recipient of the admin registration confirmation email.
+	 *
+	 * @param string $to_email the admin email address.
+	 *
+	 * @return string
+	 */
+	$to_email = apply_filters( 'wpum_admin_registration_confirmation_email_recipient', get_option( 'admin_email' ) );
+
+	/**
+	 * Filter: allow developers to customize the email headers of the admin registration confirmation email.
+	 *
+	 * @param string $headers the admin email headers.
+	 *
+	 * @return string|array
+	 */
+	$headers = apply_filters( 'wpum_admin_registration_confirmation_email_headers', '' );
+
+	/**
+	 * Filter: allow developers to customize the email attachments of the admin registration confirmation email.
+	 *
+	 * @param array
+	 *
+	 * @return array
+	 */
+	$attachments = apply_filters( 'wpum_admin_registration_confirmation_email_attachments', array(), $user );
+
+	wp_mail( $to_email, $subject, $message, $headers, $attachments );
 }
 
 /**
@@ -568,7 +577,8 @@ function wpum_upload_file( $file, $args = array() ) {
  * Returns mime types specifically for WPUm.
  *
  * @param string $field
- * @return void
+ *
+ * @return array
  */
 function wpum_get_allowed_mime_types( $field = '' ) {
 	if ( 'current_user_avatar' === $field ) {
@@ -596,12 +606,22 @@ function wpum_get_allowed_mime_types( $field = '' ) {
  *
  * @param array $a
  * @param array $b
- * @return void
+ *
+ * @return int
  */
 function wpum_sort_array_by_priority( $a, $b ) {
+	if ( ! isset( $a['priority'] ) ) {
+		return 1;
+	}
+
+	if ( ! isset( $b['priority'] ) ) {
+		return -1;
+	}
+
 	if ( $a['priority'] == $b['priority'] ) {
 		return 0;
 	}
+
 	return ( $a['priority'] < $b['priority'] ) ? -1 : 1;
 }
 
@@ -1317,4 +1337,29 @@ function wpum_get_registration_form( $form_id = null ) {
 	}
 
 	return new \WPUM_Registration_Form( $form_id );
+}
+
+function wpum_get_display_name_options() {
+	return array(
+		array(
+			'value' => 'display_username',
+			'label' => 'Username',
+		),
+		array(
+			'value' => 'display_firstname',
+			'label' => 'First name',
+		),
+		array(
+			'value' => 'display_lastname',
+			'label' => 'Last name',
+		),
+		array(
+			'value' => 'display_firstlast',
+			'label' => 'First and last name',
+		),
+		array(
+			'value' => 'display_lastfirst',
+			'label' => 'Last and first name',
+		),
+	);
 }

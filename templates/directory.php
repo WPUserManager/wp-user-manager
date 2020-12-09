@@ -20,7 +20,7 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 
 <div id="wpum-user-directory">
 
-	<?php do_action( 'wpum_before_user_directory' ); ?>
+	<?php do_action( 'wpum_before_user_directory', $data ); ?>
 
 	<form action="<?php the_permalink(); ?>" method="GET" name="wpum-directory-search-form">
 		<?php
@@ -65,6 +65,6 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 
 	</div>
 	<!-- end directory -->
-	<?php do_action( 'wpum_after_user_directory' ); ?>
+	<?php do_action( 'wpum_after_user_directory', $data ); ?>
 
 </div>

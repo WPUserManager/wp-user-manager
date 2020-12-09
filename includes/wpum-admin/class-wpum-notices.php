@@ -60,6 +60,17 @@ class WPUM_Admin_Notices {
 
 		}
 
+		if ( empty( get_option( 'permalink_structure' ) ) ) {
+			$page       = 'options-permalink.php';
+			$update_url = admin_url() . $page;
+			$message    = __( '<strong>WP User Manager</strong> requires your site to have a \'pretty\' permalink structure enabled instead of the default \'Plain\'.', 'wp-user-manager' );
+			global $pagenow;
+			if ( isset( $pagenow ) && $page !== $pagenow ) {
+				$message .= ' <a href="' . $update_url . '">' . esc_html__( 'Change permalinks', 'wp-user-manager' ) . '</a>';
+			}
+			WPUM()->notices->register_notice( 'wpum_permalinks', 'warning', $message, [ 'dismissible' => false ] );
+		}
+
 	}
 
 	/**
@@ -128,10 +139,10 @@ class WPUM_Admin_Notices {
 			delete_option( 'wpum_version_upgraded_from' );
 
 			wpum_install_default_field_group();
-			wpum_install_fields();
+			$fields = wpum_install_fields();
 			wpum_install_cover_image_field();
 			wpum_setup_default_custom_search_fields();
-			wpum_install_registration_form();
+			wpum_install_registration_form( $fields );
 
 			update_option( 'wpum_setup_is_complete', true );
 

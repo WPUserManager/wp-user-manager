@@ -38,7 +38,7 @@ add_action( 'save_post_page', 'wpum_delete_pages_transient' );
  */
 function wpum_admin_bar_menu( $wp_admin_bar ) {
 
-	if ( ! current_user_can( 'manage_options' ) ) {
+	if ( ! current_user_can( apply_filters( 'wpum_admin_pages_capability', 'manage_options' ) ) ) {
 		return;
 	}
 
@@ -100,6 +100,41 @@ function wpum_remove_admin_bar() {
 	}
 }
 add_action( 'after_setup_theme', 'wpum_remove_admin_bar' );
+
+function wpum_restrict_wp_admin_dashboard_access() {
+	if ( ! is_admin() ) {
+		return;
+	}
+
+	if ( defined( 'DOING_AJAX' ) && DOING_AJAX ) {
+		return;
+	}
+
+	if ( ! is_user_logged_in() ) {
+		return;
+	}
+
+	if ( current_user_can( 'administrator' ) ) {
+		return;
+	}
+
+	$excluded_roles = wpum_get_option( 'wp_admin_roles' );
+	if ( empty( $excluded_roles ) ) {
+		return;
+	}
+
+	$user = wp_get_current_user();
+	if ( ! in_array( $user->roles[0], $excluded_roles ) ) {
+		return;
+	}
+
+	$redirect = apply_filters( 'wpum_restrict_wp_admin_dashboard_access_redirect', home_url() );
+
+	wp_redirect( $redirect );
+	exit;
+}
+
+add_action( 'init', 'wpum_restrict_wp_admin_dashboard_access' );
 
 /**
  * Restrict access to the wp-login.php registration page
@@ -270,25 +305,21 @@ add_filter( 'user_row_actions', 'wpum_admin_user_action_link', 10, 2 );
  * @return void
  */
 function wpum_complete_setup() {
-
-	$is_setup_complete = get_option( 'wpum_setup_is_complete', false );
-
 	if ( ! get_option( 'wpum_setup_is_complete' ) && ! get_option( 'wpum_version_upgraded_from' ) ) {
 
 		wpum_install_default_field_group();
 
-		wpum_install_fields();
+		$fields = wpum_install_fields();
 
 		wpum_install_cover_image_field();
 
 		wpum_setup_default_custom_search_fields();
 
-		wpum_install_registration_form();
+		wpum_install_registration_form( $fields );
 
 		update_option( 'wpum_setup_is_complete', true );
 
 	}
-
 }
 
 /**

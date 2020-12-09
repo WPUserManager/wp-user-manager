@@ -42,7 +42,7 @@ class WPUM_Emails_List {
 		add_users_page(
 			esc_html__( 'WP User Manager Emails', 'wp-user-manager' ),
 			esc_html__( 'Emails', 'wp-user-manager' ),
-			'manage_options',
+			apply_filters( 'wpum_admin_pages_capability', 'manage_options' ),
 			'wpum-emails',
 			[ $this, 'display_emails_list' ]
 		);
@@ -61,7 +61,8 @@ class WPUM_Emails_List {
 
 			// Detect if vue deb mode or not and register the appropriate script url.
 			if( $is_vue_dev ) {
-				wp_register_script( 'wpum-emails-editor', 'http://localhost:8080/emails.js', array(), WPUM_VERSION, true );
+				$vue_dev_port = defined( 'WPUM_VUE_DEV_PORT' ) ? WPUM_VUE_DEV_PORT : '8080';
+				wp_register_script( 'wpum-emails-editor', 'http://localhost:' . $vue_dev_port . '/emails.js', array(), WPUM_VERSION, true );
 			} else {
 				wp_register_script( 'wpum-emails-editor',  WPUM_PLUGIN_URL . 'dist/static/js/emails.js' , array(), WPUM_VERSION, true );
 			}
@@ -123,7 +124,7 @@ class WPUM_Emails_List {
 
 		$email = isset( $_POST['email'] ) ? sanitize_email( $_POST['email'] ) : false;
 
-		if( $email && is_email( $email ) && current_user_can( 'manage_options' ) && is_admin() ) {
+		if( $email && is_email( $email ) && current_user_can( apply_filters( 'wpum_admin_pages_capability', 'manage_options' ) ) && is_admin() ) {
 
 			$emails       = new WPUM_Emails;
 			$emails->__set( 'heading', esc_html__( 'Test email', 'wp-user-manager' ) );

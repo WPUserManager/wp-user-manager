@@ -39,7 +39,7 @@ class WPUM_Registration_Form {
 	protected $fields = [];
 
 	/**
-	 * Wether or not this form is the default form.
+	 * Whether or not this form is the default form.
 	 *
 	 * @var boolean
 	 */
@@ -94,7 +94,8 @@ class WPUM_Registration_Form {
 	 * Magic __get function to dispatch a call to retrieve a private property.
 	 *
 	 * @param string $key
-	 * @return void
+	 *
+	 * @return mixed|WP_Error
 	 */
 	public function __get( $key ) {
 		if( method_exists( $this, 'get_' . $key ) ) {
@@ -147,7 +148,7 @@ class WPUM_Registration_Form {
 	/**
 	 * Retrieve the form id.
 	 *
-	 * @return void
+	 * @return string
 	 */
 	public function get_ID() {
 		return $this->id;
@@ -181,7 +182,7 @@ class WPUM_Registration_Form {
 	}
 
 	/**
-	 * Check wether or not this is the default registration form.
+	 * Check whether or not this is the default registration form.
 	 *
 	 * @return boolean
 	 */
@@ -192,7 +193,7 @@ class WPUM_Registration_Form {
 	/**
 	 * Retrieve the assigned role for this form.
 	 *
-	 * @return void
+	 * @return string
 	 */
 	public function get_role() {
 		return $this->role;
@@ -214,13 +215,17 @@ class WPUM_Registration_Form {
 	public function get_role_key() {
 		$role = $this->get_meta( 'role' );
 
+		if ( empty( $role ) ) {
+			return apply_filters( 'wpum_registration_from_default_role', get_option( 'default_role' ), $this );
+		}
+
 		return is_array( $role ) ? $role[0] : $role;
 	}
 
 	/**
 	 * Retrieve the human friendly name.
 	 *
-	 * @return void
+	 * @return string
 	 */
 	private function get_assigned_role() {
 		$role            = $this->get_role_key();
@@ -243,7 +248,8 @@ class WPUM_Registration_Form {
 	 * Update an existing registration form.
 	 *
 	 * @param array $args
-	 * @return void
+	 *
+	 * @return bool
 	 */
 	public function update( $args ) {
 
@@ -268,14 +274,14 @@ class WPUM_Registration_Form {
 		do_action( 'wpum_post_update_registration_form', $args, $this->id );
 
 		return $ret;
-
 	}
 
 	/**
 	 * Sanitize columns before adding a group to the database.
 	 *
 	 * @param array $data
-	 * @return void
+	 *
+	 * @return array
 	 */
 	private function sanitize_columns( $data ) {
 
@@ -312,7 +318,6 @@ class WPUM_Registration_Form {
 		}
 
 		return $data;
-
 	}
 
 	/**
@@ -358,7 +363,7 @@ class WPUM_Registration_Form {
 	 * @access  public
 	 * @since   2.0
 	 */
-	public function add_meta( $meta_key = '', $meta_value, $unique = false ) {
+	public function add_meta( $meta_key, $meta_value, $unique = false ) {
 		return WPUM()->registration_form_meta->add_meta( $this->id, $meta_key, $meta_value, $unique );
 	}
 
@@ -373,7 +378,7 @@ class WPUM_Registration_Form {
 	 * @access  public
 	 * @since   2.0
 	 */
-	public function update_meta( $meta_key = '', $meta_value, $prev_value = '' ) {
+	public function update_meta( $meta_key, $meta_value, $prev_value = '' ) {
 		return WPUM()->registration_form_meta->update_meta( $this->id, $meta_key, $meta_value, $prev_value );
 	}
 
@@ -388,8 +393,8 @@ class WPUM_Registration_Form {
 	 * @access  public
 	 * @since   2.0
 	 */
-	public function delete_meta( $meta_key = '', $meta_value, $prev_value = '' ) {
-		return WPUM()->registration_form_meta->delete_meta( $this->id, $meta_key, $meta_value, $prev_value );
+	public function delete_meta( $meta_key, $meta_value, $prev_value = '' ) {
+		return WPUM()->registration_form_meta->delete_meta( $this->id, $meta_key, $meta_value );
 	}
 
 	/**

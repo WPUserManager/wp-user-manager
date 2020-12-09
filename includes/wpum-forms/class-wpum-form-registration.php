@@ -363,14 +363,16 @@ class WPUM_Form_Registration extends WPUM_Form {
 
 			// Add a terms field is enabled.
 			if ( $registration_form->get_setting( 'enable_terms' ) ) {
-				$terms_page      = $registration_form->get_setting( 'terms_page' );
-				$fields['terms'] = array(
-					'label'       => false,
-					'type'        => 'checkbox',
-					'description' => apply_filters( 'wpum_terms_text', sprintf( __( 'By registering to this website you agree to the <a href="%s" target="_blank">terms & conditions</a>.', 'wp-user-manager' ), get_permalink( $terms_page[0] ) ) ),
-					'required'    => true,
-					'priority'    => 9999,
-				);
+				$terms_page      = $registration_form->get_setting( 'terms_page', array() );
+				if ( isset( $terms_page[0] ) ) {
+					$fields['terms'] = array(
+						'label'       => false,
+						'type'        => 'checkbox',
+						'description' => apply_filters( 'wpum_terms_text', sprintf( __( 'By registering to this website you agree to the <a href="%s" target="_blank">terms & conditions</a>.', 'wp-user-manager' ), get_permalink( $terms_page[0] ) ) ),
+						'required'    => true,
+						'priority'    => 9999,
+					);
+				}
 			}
 
 			// Add privacy policy checkbox if enabled in WP.
@@ -516,17 +518,17 @@ class WPUM_Form_Registration extends WPUM_Form {
 				throw new Exception( $new_user_id->get_error_message() );
 			}
 
-			$new_user_id = wp_update_user(
-				[
-					'ID'          => $new_user_id,
-					'user_url'    => isset( $values['register']['user_website'] ) ? $values['register']['user_website'] : false,
-					'first_name'  => isset( $values['register']['user_firstname'] ) ? $values['register']['user_firstname'] : false,
-					'last_name'   => isset( $values['register']['user_lastname'] ) ? $values['register']['user_lastname'] : false,
-					'description' => isset( $values['register']['user_description'] ) ? $values['register']['user_description'] : false,
-				]
-			);
-
 			$form = $this->get_registration_form();
+
+			$new_user_data = [
+				'ID'          => $new_user_id,
+				'user_url'    => isset( $values['register']['user_website'] ) ? $values['register']['user_website'] : false,
+				'first_name'  => isset( $values['register']['user_firstname'] ) ? $values['register']['user_firstname'] : false,
+				'last_name'   => isset( $values['register']['user_lastname'] ) ? $values['register']['user_lastname'] : false,
+				'description' => isset( $values['register']['user_description'] ) ? $values['register']['user_description'] : false,
+			];
+
+			$new_user_id = wp_update_user( apply_filters( 'wpum_registration_user_data', $new_user_data, $new_user_id, $form ) );
 
 			// Assign the role set into the registration form.
 			if ( $form->get_setting( 'allow_role_select' ) && isset( $values['register']['role'] ) ) {

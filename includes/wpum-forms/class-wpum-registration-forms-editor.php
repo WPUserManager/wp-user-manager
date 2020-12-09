@@ -12,10 +12,13 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 
 class WPUM_Registration_Forms_Editor {
 
+	protected $capability;
+
 	/**
 	 * Get things started.
 	 */
 	public function __construct() {
+		$this->capability = apply_filters( 'wpum_admin_pages_capability', 'manage_options' );
 		$this->init_hooks();
 	}
 
@@ -54,7 +57,7 @@ class WPUM_Registration_Forms_Editor {
 		add_users_page(
 			esc_html__( 'Registration Forms', 'wp-user-manager' ),
 			esc_html__( 'Registration Forms', 'wp-user-manager' ),
-			'manage_options',
+			$this->capability,
 			'wpum-registration-forms',
 			[ $this, 'display_registration_forms_editor' ]
 		);
@@ -83,7 +86,8 @@ class WPUM_Registration_Forms_Editor {
 			$is_vue_dev = defined( 'WPUM_VUE_DEV' ) && WPUM_VUE_DEV ? true : false;
 
 			if( $is_vue_dev ) {
-				wp_register_script( 'wpum-registration-forms-editor', 'http://localhost:8080/registration-forms-editor.js', array(), WPUM_VERSION, true );
+				$vue_dev_port = defined( 'WPUM_VUE_DEV_PORT' ) ? WPUM_VUE_DEV_PORT : '8080';
+				wp_register_script( 'wpum-registration-forms-editor', 'http://localhost:' . $vue_dev_port . '/registration-forms-editor.js', array(), WPUM_VERSION, true );
 			} else {
 				wp_register_script( 'wpum-registration-forms-editor',  WPUM_PLUGIN_URL . 'dist/static/js/registration-forms-editor.js' , array(), WPUM_VERSION, true );
 			}
@@ -173,7 +177,7 @@ class WPUM_Registration_Forms_Editor {
 
 		check_ajax_referer( 'wpum_get_registration_forms', 'nonce' );
 
-		if( current_user_can( 'manage_options' ) && is_admin() ) {
+		if( current_user_can( $this->capability ) && is_admin() ) {
 
 			$registration_forms = WPUM()->registration_forms->get_forms();
 			$forms              = [];
@@ -210,7 +214,7 @@ class WPUM_Registration_Forms_Editor {
 	public function update_form() {
 		check_ajax_referer( 'wpum_update_registration_form', 'nonce' );
 
-		if ( ! current_user_can( 'manage_options' ) ) {
+		if ( ! current_user_can( $this->capability ) ) {
 			wp_die( esc_html__( 'Something went wrong: could not update the registration form details.', 'wp-user-manager' ), 403 );
 		}
 
@@ -219,9 +223,11 @@ class WPUM_Registration_Forms_Editor {
 
 		if ( $form_id && $form_name ) {
 
-			$updated_form = WPUM()->registration_forms->update( $form_id, [
-					'name' => $form_name,
-				] );
+			$data = apply_filters( 'wpum_registration_form_update', [
+				'name' => $form_name,
+			], $form_id );
+
+			$updated_form = WPUM()->registration_forms->update( $form_id, $data );
 
 		} else {
 			wp_die( esc_html__( 'Something went wrong: could not update the registration form details.', 'wp-user-manager' ), 403 );
@@ -242,7 +248,7 @@ class WPUM_Registration_Forms_Editor {
 
 		check_ajax_referer( 'wpum_get_registration_form', 'nonce' );
 
-		if( current_user_can( 'manage_options' ) && is_admin() ) {
+		if( current_user_can( $this->capability ) && is_admin() ) {
 
 			$form_id = isset( $_GET['form_id'] ) ? absint( $_GET['form_id'] ) : false;
 
@@ -393,7 +399,7 @@ class WPUM_Registration_Forms_Editor {
 
 		check_ajax_referer( 'wpum_save_registration_form', 'nonce' );
 
-		if( current_user_can( 'manage_options' ) && is_admin() ) {
+		if( current_user_can( $this->capability ) && is_admin() ) {
 
 			$form_id = isset( $_POST['form_id'] ) ? absint( $_POST['form_id'] ) : false;
 			$fields  = isset( $_POST['fields'] ) && is_array( $_POST['fields'] ) && ! empty( $_POST['fields'] ) ? $_POST['fields'] : false;
@@ -432,7 +438,7 @@ class WPUM_Registration_Forms_Editor {
 
 		check_ajax_referer( 'wpum_save_registration_form_settings', 'nonce' );
 
-		if( ! current_user_can( 'manage_options' ) || ! is_admin() ) {
+		if( ! current_user_can( $this->capability ) || ! is_admin() ) {
 			$this->send_json_error();
 		}
 

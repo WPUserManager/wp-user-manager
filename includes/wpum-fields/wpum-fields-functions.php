@@ -16,26 +16,23 @@ if ( ! defined( 'ABSPATH' ) ) exit;
  * @return void
  */
 function wpum_install_default_field_group() {
-
-	if( ! get_option( 'wpum_version_upgraded_from' ) ) {
+	if ( ! get_option( 'wpum_version_upgraded_from' ) ) {
 		$default_group = new WPUM_Field_Group();
-		$default_group->add(
-			[
-				'id'   => 1,
-				'name' => esc_html__( 'Primary fields', 'wp-user-manager' )
-			]
-		);
+		$default_group->add( [
+			'id'         => 1,
+			'name'       => esc_html__( 'Primary fields', 'wp-user-manager' ),
+			'is_primary' => 1,
+		] );
 	}
-
 }
 
 /**
  * Install the default primary fields within the default group.
  *
- * @return void
+ * @return array
  */
 function wpum_install_fields() {
-
+	$saved_fields = [];
 	if( ! get_option( 'wpum_version_upgraded_from' ) ) {
 
 		$group_id = 1;
@@ -169,10 +166,11 @@ function wpum_install_fields() {
 				$save_field->add_meta( $meta_key, $meta_value );
 			}
 
+			$saved_fields[] = $save_field;
 		}
-
 	}
 
+	return $saved_fields;
 }
 
 /**
@@ -370,7 +368,7 @@ function wpum_the_field_group_id() {
  */
 function wpum_get_field_group_name() {
 	global $wpum_fields_group;
-	return apply_filters( 'wpum_get_field_group_name', $wpum_fields_group->get_name() );
+	return apply_filters( 'wpum_get_field_group_name', $wpum_fields_group->get_name(), $wpum_fields_group->get_id() );
 }
 
 /**
@@ -410,7 +408,7 @@ function wpum_the_field_group_slug() {
  */
 function wpum_get_field_group_description() {
 	global $wpum_fields_group;
-	return apply_filters( 'wpum_get_field_group_description', $wpum_fields_group->get_description() );
+	return apply_filters( 'wpum_get_field_group_description', $wpum_fields_group->get_description(), $wpum_fields_group->get_id() );
 }
 
 /**

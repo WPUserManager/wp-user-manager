@@ -123,7 +123,8 @@ function wpum_email_tag_lastname( $user_id ) {
  * Parse the {login_page_url} tag into the email to display the site login page url.
  *
  * @param string $user_id
- * @return void
+ *
+ * @return string
  */
 function wpum_email_tag_login_page_url( $user_id = false ) {
 
@@ -139,7 +140,14 @@ function wpum_email_tag_login_page_url( $user_id = false ) {
 	return $url;
 }
 
-function wpum_email_tag_password( $user_id = false, $password_reset_key = false, $plain_text_password ) {
+/**
+ * @param false  $user_id
+ * @param false  $password_reset_key
+ * @param string $plain_text_password
+ *
+ * @return string
+ */
+function wpum_email_tag_password( $user_id = false, $password_reset_key = false, $plain_text_password = '' ) {
 	return sanitize_text_field( $plain_text_password );
 }
 
@@ -229,12 +237,12 @@ function wpum_get_email_field( $email_id = false, $field_id = false ) {
 /**
  * Retrieve details about emails stored into the database.
  *
- * @param bool $email_id
+ * @param bool     $email_id
+ * @param null|int $user_id
  *
  * @return bool|string
  */
-function wpum_get_email( $email_id = false ) {
-
+function wpum_get_email( $email_id = false, $user_id = null ) {
 	$email = false;
 
 	if ( ! $email_id ) {
@@ -247,7 +255,7 @@ function wpum_get_email( $email_id = false ) {
 		$email = $emails[ $email_id ];
 	}
 
-	return $email;
+	return apply_filters( 'wpum_get_email', $email, $email_id, $user_id );
 }
 
 /**

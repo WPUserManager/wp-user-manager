@@ -3,7 +3,7 @@
 Plugin Name: WP User Manager
 Plugin URI:  https://wpusermanager.com
 Description: Beautifully simple user profile directories with frontend login, registration and account customization. WP User Manager is the best solution to manage your community and your users for WordPress.
-Version:     2.3.11
+Version:     2.3.13
 Author:      WP User Manager
 Author URI:  https://wpusermanager.com
 License:     GPLv3+
@@ -48,7 +48,7 @@ if ( ! class_exists( 'WP_User_Manager' ) ) :
 		/**
 		 * @var string
 		 */
-		protected $version = '2.3.11';
+		protected $version = '2.3.13';
 
 		/**
 		 * WPUM Instance.
@@ -264,6 +264,13 @@ if ( ! class_exists( 'WP_User_Manager' ) ) :
 				require_once WPUM_PLUGIN_DIR . 'includes/wpum-admin/class-wpum-permalinks-settings.php';
 				require_once WPUM_PLUGIN_DIR . 'includes/wpum-fields/class-wpum-fields-editor.php';
 				require_once WPUM_PLUGIN_DIR . 'includes/wpum-forms/class-wpum-registration-forms-editor.php';
+				require_once WPUM_PLUGIN_DIR . 'includes/wpum-roles/class-wpum-role.php';
+				require_once WPUM_PLUGIN_DIR . 'includes/wpum-roles/class-wpum-capability.php';
+				require_once WPUM_PLUGIN_DIR . 'includes/wpum-roles/class-wpum-capability-group.php';
+				require_once WPUM_PLUGIN_DIR . 'includes/wpum-roles/class-wpum-collection.php';
+				require_once WPUM_PLUGIN_DIR . 'includes/wpum-roles/class-wpum-roles.php';
+				require_once WPUM_PLUGIN_DIR . 'includes/wpum-roles/functions.php';
+				require_once WPUM_PLUGIN_DIR . 'includes/wpum-roles/class-wpum-roles-editor.php';
 				require_once WPUM_PLUGIN_DIR . 'includes/wpum-emails/class-wpum-emails-list.php';
 				require_once WPUM_PLUGIN_DIR . 'includes/wpum-updater/class-wpum-updater-settings.php';
 				require_once WPUM_PLUGIN_DIR . 'includes/wpum-shortcodes/class-wpum-shortcode-button.php';
@@ -291,7 +298,7 @@ if ( ! class_exists( 'WP_User_Manager' ) ) :
 			require_once WPUM_PLUGIN_DIR . 'includes/wpum-updater/free-plugins.php';
 
 			require_once WPUM_PLUGIN_DIR . 'includes/install.php';
-
+			WPUM_Blocks::get_instance();
 		}
 
 		/**
@@ -335,7 +342,7 @@ if ( ! class_exists( 'WP_User_Manager' ) ) :
 		 * @return void
 		 */
 		public function load_textdomain() {
-			load_plugin_textdomain( 'wpum', false, basename( dirname( __FILE__ ) ) . '/languages' );
+			load_plugin_textdomain( 'wp-user-manager', false, basename( dirname( __FILE__ ) ) . '/languages' );
 		}
 
 		/**

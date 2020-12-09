@@ -24,10 +24,13 @@ class WPUM_Fields_Editor {
 	 */
 	public $deregistered_settings = [];
 
+	protected $capability;
+
 	/**
 	 * Get things started.
 	 */
 	public function __construct() {
+		$this->capability = apply_filters( 'wpum_admin_pages_capability', 'manage_options' );
 		$this->init_hooks();
 	}
 
@@ -56,7 +59,7 @@ class WPUM_Fields_Editor {
 		add_users_page(
 			esc_html__( 'Fields Editor', 'wp-user-manager' ),
 			esc_html__( 'Custom Fields', 'wp-user-manager' ),
-			'manage_options',
+			$this->capability,
 			'wpum-custom-fields',
 			[ $this, 'display_fields_editor' ]
 		);
@@ -76,7 +79,8 @@ class WPUM_Fields_Editor {
 			$is_vue_dev = defined( 'WPUM_VUE_DEV' ) && WPUM_VUE_DEV ? true : false;
 
 			if ( $is_vue_dev ) {
-				wp_register_script( 'wpum-fields-editor', 'http://localhost:8080/fields-editor.js', array(), WPUM_VERSION, true );
+				$vue_dev_port = defined( 'WPUM_VUE_DEV_PORT' ) ? WPUM_VUE_DEV_PORT : '8080';
+				wp_register_script( 'wpum-fields-editor', 'http://localhost:'. $vue_dev_port . '/fields-editor.js', array(), WPUM_VERSION, true );
 			} else {
 				wp_register_script( 'wpum-fields-editor', WPUM_PLUGIN_URL . 'dist/static/js/fields-editor.js', array(), WPUM_VERSION, true );
 			}
@@ -231,7 +235,7 @@ class WPUM_Fields_Editor {
 
 		check_ajax_referer( 'wpum_update_fields_groups', 'nonce' );
 
-		if ( ! current_user_can( 'manage_options' ) ) {
+		if ( ! current_user_can( $this->capability ) ) {
 			wp_die( esc_html__( 'Something went wrong: could not update the groups order.', 'wp-user-manager' ), 403 );
 		}
 
@@ -261,7 +265,7 @@ class WPUM_Fields_Editor {
 
 		check_ajax_referer( 'wpum_update_fields_groups', 'nonce' );
 
-		if ( ! current_user_can( 'manage_options' ) ) {
+		if ( ! current_user_can( $this->capability ) ) {
 			wp_die( esc_html__( 'Something went wrong: could not update the group details.', 'wp-user-manager' ), 403 );
 		}
 
@@ -272,10 +276,10 @@ class WPUM_Fields_Editor {
 		if ( $group_id && $group_name ) {
 
 			$updated_group = WPUM()->fields_groups->update(
-				$group_id, [
+				$group_id, apply_filters('wpum_field_group_update', [
 					'name'        => $group_name,
 					'description' => $group_description,
-				]
+				], $group_id )
 			);
 
 		} else {
@@ -301,7 +305,7 @@ class WPUM_Fields_Editor {
 
 		check_ajax_referer( 'wpum_get_fields', 'nonce' );
 
-		if ( ! current_user_can( 'manage_options' ) ) {
+		if ( ! current_user_can( $this->capability ) ) {
 			wp_die( esc_html__( 'Something went wrong while retrieving the list of fields.', 'wp-user-manager' ), 403 );
 		}
 
@@ -362,7 +366,7 @@ class WPUM_Fields_Editor {
 
 		check_ajax_referer( 'wpum_update_fields_groups', 'nonce' );
 
-		if ( ! current_user_can( 'manage_options' ) ) {
+		if ( ! current_user_can( $this->capability ) ) {
 			wp_die( esc_html__( 'Something went wrong: could not update the fields order.', 'wp-user-manager' ), 403 );
 		}
 
@@ -396,7 +400,7 @@ class WPUM_Fields_Editor {
 
 		check_ajax_referer( 'wpum_get_fields', 'nonce' );
 
-		if ( ! current_user_can( 'manage_options' ) ) {
+		if ( ! current_user_can( $this->capability ) ) {
 			wp_send_json_error( null, 403 );
 		}
 
@@ -600,7 +604,7 @@ class WPUM_Fields_Editor {
 
 		check_ajax_referer( 'wpum_get_fields', 'nonce' );
 
-		if ( ! current_user_can( 'manage_options' ) ) {
+		if ( ! current_user_can( $this->capability ) ) {
 			wp_send_json_error( null, 403 );
 		}
 

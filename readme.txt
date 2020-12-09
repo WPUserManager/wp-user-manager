@@ -8,7 +8,7 @@ Tested up to: 5.5
 Requires PHP: 5.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
-Stable Tag: 2.3.11
+Stable Tag: 2.3.13
 
 The most customizable profiles & community builder WordPress plugin with front-end login, registration, profile customization and content restriction.
 
@@ -18,7 +18,7 @@ The most customizable profiles & community builder WordPress plugin with front-e
 
 [WP User Manager](https://wpusermanager.com?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager) lets you create highly customizable user profiles together with custom user registration, login, password recovery and account customization forms to your WordPress website.
 
-[WP User Manager](https://wpusermanager.com?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager) is the best solution to manage your community. Powerful and flexible, yet easy to setup and use. With WP User Manager you can create almost any type of wordpress membership website where your visitors can join and become members.
+[WP User Manager](https://wpusermanager.com?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager) is the best solution to manage your community. Powerful and flexible, yet easy to setup and use. With WP User Manager you can create almost any type of WordPress membership website where your visitors can join and become members.
 
 Create a custom login page, have full control over the registration form, give your site a member area, let the users manage their user data.
 
@@ -31,8 +31,9 @@ Create a custom login page, have full control over the registration form, give y
 - [Custom avatars](https://wpusermanager.com/features/custom-avatars/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager)
 - [Elegant user profiles](https://wpusermanager.com/features/elegant-user-profiles/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager)
 - [Shortcodes editor](https://wpusermanager.com/features/shortcodes/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager)
+- [Roles editor](https://wpusermanager.com/features/roles/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager): Edit roles and their capabilities. Create new roles and duplicate existing ones.
 - [Beautiful user directories](https://wpusermanager.com/features/user-directories/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager)
-- [Seo URLs](https://wpusermanager.com/features/seo/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager)
+- [SEO URLs](https://wpusermanager.com/features/seo/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager)
 - [Content restriction](https://wpusermanager.com/features/content-restriction/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager)
 - [Passwords management](https://wpusermanager.com/features/passwords-management/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager)
 - [Custom fields editor](https://wpusermanager.com/features/custom-fields/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager)
@@ -52,11 +53,15 @@ For more advanced functionality check out the [pricing page](https://wpusermanag
 - [Custom Fields](https://wpusermanager.com/addons/custom-fields/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager): Add custom fields to members profiles and registration forms
 - [WooCommerce](https://wpusermanager.com/addons/woocommerce/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager): Integration with WooCommerce. Allow members to update their billing and shipping addresses, display product purchases, reviews and more!
 - [User Verification](https://wpusermanager.com/addons/user-verification/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager): Send a verification link via email upon registration or manually approve users before they can login
+- [Groups](https://wpusermanager.com/addons/groups/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager): Give your users the ability to create and join groups
 - [Registration Forms](https://wpusermanager.com/addons/registration-forms/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager): Create unlimited registration forms, customize forms with HTML, and have full control over form settings
 - [Advanced Custom Fields](https://wpusermanager.com/addons/acf/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager): Collect [ACF](https://wordpress.org/plugins/advanced-custom-fields/) user data at registration and allow users to see and edit the data on their profile
 - [Social Login & Registration](https://wpusermanager.com/addons/social-login/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager): Allow your users to quickly login and register with their favorite social network account, Facebook, Twitter, Instagram, LinkedIn & Instagram
+- [Private Content](https://wpusermanager.com/addons/private-content/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager): Provide private content for all your users, as well as user specific content so you can tailor for each member
 - [Mailchimp](https://wpusermanager.com/addons/mailchimp/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager): Sync users with Mailchimp upon registration & more
 - [Google reCAPTCHA](https://wpusermanager.com/addons/recaptcha?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager): Stop spam registrations on your website for free
+- [Content Restriction Plus](https://wpusermanager.com/addons/content-restriction/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager): One-click restriction to posts, pages and custom post types
+- [WPML](https://wpusermanager.com/addons/wpml/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager): Translate your custom fields, field groups, registration forms, and emails using [WPML](https://wpml.org/)
 - [Personal Data](https://wpusermanager.com/addons/personal-data?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager): Allows the user to request an export of personal data and request erasure of personal data from the account page for GDPR compliance
 - [Delete Account](https://wpusermanager.com/addons/delete-account?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager): Allows the user to delete their own profile from the frontend account page
 
@@ -119,6 +124,31 @@ Please note that using WPUM and the mentioned add-ons does NOT guarantee complia
 
 == Changelog ==
 
+= 2.3.13 (23rd November 2020) =
+
+- New: [WPML](https://wpusermanager.com/addons/wpml/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager) addon. Give your users to translate custom fields, field Groups, registrations forms, and emails using [WPML](https://wpml.org/)
+- Improvement: Add 'wpum_directory_users' and 'wpum_directory_users_total' filters to allow changing of users displayed in a directory
+- Improvement: Added hooks and filters for developers to use around login, and profile updates
+- Improvement: Profile page styling
+- Improvement: Directory responsive styling
+- Improvement: File URLs now linked on profile
+- Fix: Incorrect text domain and outdated .pot file
+- Fix: PHP Notice: Undefined index: priority
+- Fix: Warning: implode(): Invalid arguments passed on file upload
+- Fix: Incorrect terms page link in registration form if terms link is enabled but page not selected
+- Fix: Field group description styling
+- Fix: Delete field button styling issue
+
+= 2.3.12 (12th October 2020) =
+
+- New: [Groups](https://wpusermanager.com/addons/groups/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager) addon. Give your users the ability to create and join groups
+- New: [Private Content](https://wpusermanager.com/addons/private-content/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager) addon. Provide private content for all your users, as well as user specific content so you can tailor for each member
+- New: [Content Restriction Plus](https://wpusermanager.com/addons/content-restriction/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager) addon. One-click restriction to posts, pages and custom post types
+- Improvement: Add 'wpum_send_registration_admin_email' filter to allow disabling the admin emails on user register
+- Fix: Password protected posts redirecting to login after entering password, when wp-login.php is restricted in settings
+- Fix: Avatar overlapping name in user directory on some themes
+- Fix: User directory not full width on some themes
+
 = 2.3.11 (23rd September 2020) =
 
 - Addon compatibility fixes
@@ -139,7 +169,7 @@ Please note that using WPUM and the mentioned add-ons does NOT guarantee complia
 - Improvement: Add filter 'wpum_admin_registration_confirmation_email_attachments' for attachments for the new registration admin email
 - Improvement: Add filter 'wpum_registration_enabled' to override the users_can_register setting
 - Fix: Registration form checkbox settings not persisting after save
-- Fix: Registration form showing register link instead of login link
+- Fix: Registration form block showing register link instead of login link
 
 = 2.3.8 (26th June 2020) =
 

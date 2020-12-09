@@ -208,9 +208,13 @@ class WPUM_Form_Login extends WPUM_Form {
 				$redirect = $_GET['redirect_to'];
 			}
 
+			do_action( 'wpum_before_login', $username );
+
 			$user = wp_signon( $creds );
 
 			wp_set_current_user( $user->ID );
+
+			do_action( 'wpum_after_login', $user->ID, $user );
 
 			$redirect = apply_filters( 'wpum_redirect_after_login', $redirect, $user );
 

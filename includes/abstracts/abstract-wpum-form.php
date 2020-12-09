@@ -320,7 +320,7 @@ abstract class WPUM_Form {
 							$file_url  = current( explode( '?', $file_url ) );
 							$file_info = wp_check_filetype( $file_url );
 							if ( ! is_numeric( $file_url ) && $file_info && ! in_array( $file_info['ext'], explode( ',', $field['allowed_mime_types'] ) ) ) {
-								throw new Exception( sprintf( __( '"%s" (filetype %s) needs to be one of the following file types: %s', 'wp-user-manager' ), $field['label'], $file_info['ext'], implode( ', ', array_keys( $field['allowed_mime_types'] ) ) ) );
+								throw new Exception( sprintf( __( '"%s" (filetype %s) needs to be one of the following file types: %s', 'wp-user-manager' ), $field['label'], $file_info['ext'], $field['allowed_mime_types'] ) );
 							}
 						}
 					}
@@ -340,12 +340,63 @@ abstract class WPUM_Form {
 			return true;
 		}
 
-		$containsLetter  = preg_match( '/[A-Z]/', $password );
-		$containsDigit   = preg_match( '/\d/', $password );
-		$containsSpecial = preg_match( '/[^a-zA-Z\d]/', $password );
+		$checkUppercase = apply_filters( 'wpum_strong_password_check_uppercase', true );
+		$checkLetter     = apply_filters( 'wpum_strong_password_check_letter', false );
+		$checkDigit     = apply_filters( 'wpum_strong_password_check_digit', true );
+		$checkSpecial   = apply_filters( 'wpum_strong_password_check_special', true );
 
-		if ( ! $containsLetter || ! $containsDigit || ! $containsSpecial || strlen( $password ) < 8 ) {
-			return new WP_Error( 'password-validation-error', esc_html__( 'Password must be at least 8 characters long and contain at least 1 number and 1 uppercase letter and 1 special character.', 'wp-user-manager' ) );
+		$minLength   = apply_filters( 'wpum_strong_password_min_length', 8 );
+		$checkLength = apply_filters( 'wpum_strong_password_check_length', $minLength > 0 );
+
+		$error_message = array();
+		if ( $checkUppercase ) {
+			$error_message[] = __( '1 uppercase letter', 'wp-user-manager' );
+		}
+
+		if ( $checkLetter ) {
+			$error_message[] = __( '1 letter', 'wp-user-manager' );
+		}
+
+		if ( $checkDigit ) {
+			$error_message[] = __( '1 number', 'wp-user-manager' );
+		}
+
+		if ( $checkSpecial ) {
+			$error_message[] = __( '1 special character', 'wp-user-manager' );
+		}
+
+		if ( ! empty( $error_message ) ) {
+			$error_message = ' ' . __( 'and contain at least', 'wp-user-manager' ) . ' ' . implode( ' and ', $error_message ) . '.';
+		}
+
+		$invalidMessage = apply_filters( 'wpum_strong_password_invalid_message', sprintf( __( 'Password must be at least %s characters long', 'wp-user-manager' ), $minLength ) . $error_message );
+
+		$validates = true;
+
+		if ( $validates && $checkUppercase && ! preg_match( '/[A-Z]/', $password ) ) {
+			$validates = false;
+		}
+
+		if ( $validates && $checkLetter && ! preg_match( '/[a-zA-Z]/', $password ) ) {
+			$validates = false;
+		}
+
+		if ( $validates && $checkDigit && ! preg_match( '/\d/', $password ) ) {
+			$validates = false;
+		}
+
+		if ( $validates && $checkSpecial && ! preg_match( '/[^a-zA-Z\d]/', $password ) ) {
+			$validates = false;
+		}
+
+		if ( $validates && $checkLength && strlen( $password ) < $minLength ) {
+			$validates = false;
+		}
+
+		$validates = apply_filters( 'wpum_strong_password_is_valid', $validates, $password );
+
+		if ( ! $validates ) {
+			return new WP_Error( 'password-validation-error', esc_html( $invalidMessage ) );
 		}
 
 		return true;

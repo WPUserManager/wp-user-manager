@@ -1126,7 +1126,7 @@
 }
 
 #header-profile-details {
-  border: 3px solid #eee;
+  border: 1px solid #eee;
   margin: 0;
   border-bottom-right-radius: 3px;
   border-bottom-left-radius: 3px;
@@ -1145,8 +1145,7 @@
 .profile-navbar {
   display: flex;
   flex-wrap: wrap;
-  background: #fafafa;
-  border-top: 3px solid #eee;
+  border-top: 1px solid #eee;
 }
 .profile-navbar > a,
 .profile-navbar > button {
@@ -1168,28 +1167,32 @@
   border-bottom-left-radius: 3px;
 }
 
-#profile-content-about h3.group-title, .profile-content-settings h3.group-title {
-  border: 3px solid #eee;
-  margin-bottom: 0;
+#profile-content-about h3.group-title, #profile-content-about p.group-description, .profile-content-settings h3.group-title, .profile-content-settings p.group-description {
+  border: 1px solid #eee;
+  margin: 1.5rem 0 0;
   padding: 15px 20px;
   border-top-right-radius: 3px;
   border-top-left-radius: 3px;
 }
+#profile-content-about p.group-description, .profile-content-settings p.group-description {
+  margin-top: 0;
+  border-top: none;
+}
 #profile-content-about .profile-fields-table, .profile-content-settings .profile-fields-table {
   width: 100%;
   margin-top: 0;
-  border: 3px solid #eee;
+  border: 1px solid #eee;
   border-top: 0;
   border-bottom-right-radius: 3px;
   border-bottom-left-radius: 3px;
 }
+#profile-content-about .profile-fields-table td, .profile-content-settings .profile-fields-table td {
+  border: none;
+}
 #profile-content-about .profile-fields-table td.label, .profile-content-settings .profile-fields-table td.label {
   width: 30%;
   font-weight: 600;
-  padding: 0 20px;
-}
-#profile-content-about .profile-fields-table tr, .profile-content-settings .profile-fields-table tr {
-  background: #fafafa;
+  padding: 5px 20px;
 }
 #profile-content-about .profile-fields-table tr:last-child, .profile-content-settings .profile-fields-table tr:last-child {
   border-bottom: none;
@@ -1443,6 +1446,29 @@
   text-align: right;
 }
 
+@media only screen and (max-width: 500px) {
+  #directory-avatar a {
+    width: inherit;
+    height: inherit;
+  }
+
+  #directory-avatar img {
+    height: 100%;
+  }
+
+  #wpum-directory-search-form .wpum-col-xs-10 {
+    margin-bottom: 10px;
+  }
+  #wpum-directory-search-form .wpum-col-xs-2, #wpum-directory-search-form .wpum-col-xs-10 {
+    flex-basis: 100%;
+    max-width: 100%;
+  }
+
+  .wpum-directory-single-user .wpum-meta {
+    flex-basis: 100%;
+    max-width: 100%;
+  }
+}
 @media only screen and (max-width: 767px) {
   .wpum_one_half,
 .wpum_one_third,
