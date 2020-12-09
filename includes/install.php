@@ -146,7 +146,7 @@ function wpum_install_registration_form( $fields = array() ) {
 	$default_fields = [];
 
 	foreach ( $fields as $field ) {
-		if ( in_array( $field->get_primary_id(), array( 'user_email', 'user_password' ) ) ) {
+		if ( in_array( $field->get_type(), array( 'user_email', 'user_password' ) ) ) {
 			$default_fields[] = $field->get_ID();
 		}
 	}
