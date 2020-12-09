@@ -139,10 +139,10 @@ class WPUM_Admin_Notices {
 			delete_option( 'wpum_version_upgraded_from' );
 
 			wpum_install_default_field_group();
-			wpum_install_fields();
+			$fields = wpum_install_fields();
 			wpum_install_cover_image_field();
 			wpum_setup_default_custom_search_fields();
-			wpum_install_registration_form();
+			wpum_install_registration_form( $fields );
 
 			update_option( 'wpum_setup_is_complete', true );
 

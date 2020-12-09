@@ -127,9 +127,11 @@ function wpum_generate_pages() {
 /**
  * Install the registration form into the database.
  *
+ * @param array $fields
+ *
  * @return void
  */
-function wpum_install_registration_form() {
+function wpum_install_registration_form( $fields = array() ) {
 
 	$default_form_id = WPUM()->registration_forms->insert(
 		[
@@ -140,7 +142,16 @@ function wpum_install_registration_form() {
 	$default_form = new WPUM_Registration_Form( $default_form_id );
 	$default_form->add_meta( 'default', true );
 	$default_form->add_meta( 'role', get_option( 'default_role' ) );
-	$default_form->add_meta( 'fields', [] );
+
+	$default_fields = [];
+
+	foreach ( $fields as $field ) {
+		if ( in_array( $field->get_primary_id(), array( 'user_email', 'user_password' ) ) ) {
+			$default_fields[] = $field->get_ID();
+		}
+	}
+
+	$default_form->add_meta( 'fields', $default_fields );
 
 }
 

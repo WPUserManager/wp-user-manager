@@ -305,25 +305,21 @@ add_filter( 'user_row_actions', 'wpum_admin_user_action_link', 10, 2 );
  * @return void
  */
 function wpum_complete_setup() {
-
-	$is_setup_complete = get_option( 'wpum_setup_is_complete', false );
-
 	if ( ! get_option( 'wpum_setup_is_complete' ) && ! get_option( 'wpum_version_upgraded_from' ) ) {
 
 		wpum_install_default_field_group();
 
-		wpum_install_fields();
+		$fields = wpum_install_fields();
 
 		wpum_install_cover_image_field();
 
 		wpum_setup_default_custom_search_fields();
 
-		wpum_install_registration_form();
+		wpum_install_registration_form( $fields );
 
 		update_option( 'wpum_setup_is_complete', true );
 
 	}
-
 }
 
 /**

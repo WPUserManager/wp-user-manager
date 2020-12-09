@@ -29,10 +29,10 @@ function wpum_install_default_field_group() {
 /**
  * Install the default primary fields within the default group.
  *
- * @return void
+ * @return array
  */
 function wpum_install_fields() {
-
+	$saved_fields = [];
 	if( ! get_option( 'wpum_version_upgraded_from' ) ) {
 
 		$group_id = 1;
@@ -166,10 +166,11 @@ function wpum_install_fields() {
 				$save_field->add_meta( $meta_key, $meta_value );
 			}
 
+			$saved_fields[] = $save_field;
 		}
-
 	}
 
+	return $saved_fields;
 }
 
 /**
