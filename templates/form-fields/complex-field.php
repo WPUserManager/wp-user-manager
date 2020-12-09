@@ -25,54 +25,81 @@ if( !$parent ){
 
 $fields 	= WPUM()->fields->get_fields([
 	'group_id' => $parent->get_group_id(),
-	'parent'   => $parent->get_ID()
+	'parent'   => $parent->get_ID(),
+	'order'	   => 'ASC'
 ]);
 
 $parent_key = $parent->get_key();
 
-if( isset( $data->value ) && is_array( $data->value ) ){
+echo sprintf(
+	'<fieldset class="fieldset-%s"><legend>%s %s</legend>',
+	esc_attr( $parent_key ),
+	esc_html( $data->label ),
+	( isset( $data->required ) && $data->required ? '<span class="wpum-required">*</span>' : '' )
+);
 
-	$field_keys = array_map( function( $field ){
-		return $field->get_key();
-	}, $fields );
-
-	array_walk( $data->value, function( &$value ){
-
-		if( !is_array( $value ) ){
-			return;
-		}
-
-		$value = array_filter( $value, function( $key ){
-			return $key !== '_type';
-		}, ARRAY_FILTER_USE_KEY);
-	});
-
-	if( count( array_diff( array_keys( $data->value ), $field_keys ) ) > 0 ){
-
-		foreach( $data->value as $index => $value ){
-
-			$field		  = $data;
-			$field->value = $value;
-			$field->index = $index;
-
-			WPUM()->templates
-				->set_template_data( [ 'field' => (array) $field, 'key' => $field->key ] )
-				->get_template_part( 'forms/form-registration-fields', 'field' );
-
-		}
-		return;
-	}
-
-}
-
-
-if( !isset( $data->value ) ){
-	echo sprintf( '<fieldset class="fieldset-%s"><label>%s %s</label>', esc_attr( $parent_key ), esc_html( $data->label ), ( isset( $data->required ) && $data->required ? '<span class="wpum-required">*</span>' : '' ) );
-}
-
-$index 		  = isset( $data->index ) ? $data->index : 0;
 $button_label = $parent->get_meta( 'button_label' );
 $max_rows 	  = $parent->get_meta( 'max_rows' );
+
+if( count( $fields ) ){
+
+	$field_keys = array_map( function( $field ){
+			return $field->get_key();
+	}, $fields );
+
+	$values 	= array_map( function( $value ){
+		if( isset( $value['_type'] ) ) unset( $value['_type'] );
+		return $value;
+	}, (array) $data->value );
+
+	$index 		= 0;
+
+	do {
+
+		echo '<div class="fieldset-wpum_field_group">';
+
+		foreach( $fields as $field ){
+
+			$options 		= [];
+			$options_needed = ! $field->is_primary() && in_array( $field->get_type(), [ 'dropdown', 'multiselect', 'radio', 'multicheckbox' ] );
+			if ( $options_needed ) {
+
+				$stored_options = $field->get_meta( 'dropdown_options' );
+				if ( ! empty( $stored_options ) && is_array( $stored_options ) ) {
+					foreach ( $stored_options as $option ) {
+						$options[ $option['value'] ] = $option['label'];
+					}
+				}
+			}
+
+			$key   = $field->get_key();
+			$value = isset( $values[$index][ $key ] ) ? $values[$index][ $key ] : '';
+			$field = array(
+				'id'		  => $field->get_ID(),
+				'label'       => $field->get_name(),
+				'type'        => $field->get_type(),
+				'required'    => $field->get_meta( 'required' ),
+				'placeholder' => $field->get_meta( 'placeholder' ),
+				'description' => $field->get_description(),
+				'priority'    => $field->get_key(),
+				'primary_id'  => $field->get_primary_id(),
+				'options'     => $options,
+				'template'    => $field->get_parent_type(),
+				'name'		  => "{$parent_key}[{$index}][{$key}]",
+				'value'		  => $value
+			);
+
+			WPUM()->templates
+				->set_template_data( [ 'field' => $field, 'key' => $key ] )
+				->get_template_part( 'forms/form-registration-fields', 'field' );
+		}
+
+		echo '</div>';
+
+		$index++;
+
+	} while ( isset( $values[$index] ) );
+}
 
 echo sprintf(
 	'<button type="button" class="add-repeater-row" data-max-row="%d">%s</button>',
@@ -80,44 +107,6 @@ echo sprintf(
 	!empty( $button_label ) ? $button_label : esc_html__( 'Add row', 'wp-user-manager' )
 );
 
-foreach( $fields as $field ){
-
-	$options 		= [];
-	$options_needed = ! $field->is_primary() && in_array( $field->get_type(), [ 'dropdown', 'multiselect', 'radio', 'multicheckbox' ] );
-	if ( $options_needed ) {
-
-		$stored_options = $field->get_meta( 'dropdown_options' );
-		if ( ! empty( $stored_options ) && is_array( $stored_options ) ) {
-			foreach ( $stored_options as $option ) {
-				$options[ $option['value'] ] = $option['label'];
-			}
-		}
-	}
-
-	$key   = $field->get_key();
-	$value = isset( $data->value[ $key ] ) ? $data->value[ $key ] : '';
-	$field = array(
-		'id'		  => $field->get_ID(),
-		'label'       => $field->get_name(),
-		'type'        => $field->get_type(),
-		'required'    => $field->get_meta( 'required' ),
-		'placeholder' => $field->get_meta( 'placeholder' ),
-		'description' => $field->get_description(),
-		'priority'    => $field->get_key(),
-		'primary_id'  => $field->get_primary_id(),
-		'options'     => $options,
-		'template'    => $field->get_parent_type(),
-		'name'		  => "{$parent_key}[{$index}][{$key}]",
-		'value'		  => $value
-	);
-
-	WPUM()->templates
-		->set_template_data( [ 'field' => $field, 'key' => $key ] )
-		->get_template_part( 'forms/form-registration-fields', 'field' );
-}
-
-if( !isset( $data->value ) ){
-	echo '</fieldset>';
-}
+echo '</fieldset>';
 
 ?>

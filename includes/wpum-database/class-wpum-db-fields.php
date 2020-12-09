@@ -222,6 +222,7 @@ class WPUM_DB_Fields extends WPUM_DB {
 				", absint( $args['offset'] ), absint( $args['number'] ) ), 0 );
 
 			if ( ! empty( $fields ) ) {
+				$new_fields = array();
 				foreach ( $fields as $key => $field ) {
 
 					$field          = new WPUM_Field( $field );
@@ -231,9 +232,9 @@ class WPUM_DB_Fields extends WPUM_DB {
 						unset( $fields[$key] );
 						continue;
 					}
-
-					$fields[ $key ] = $field;
+					$new_fields[] = $field;
 				}
+				$fields = $new_fields;
 
 				wp_cache_set( $cache_key, $fields, $this->cache_group, 3600 );
 			}

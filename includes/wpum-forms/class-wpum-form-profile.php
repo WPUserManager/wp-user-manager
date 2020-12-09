@@ -173,6 +173,7 @@ class WPUM_Form_Profile extends WPUM_Form {
 				}
 
 				$data = array(
+					'id'			=> $field->get_ID(),
 					'label'         => $field->get_name(),
 					'type'          => $field->get_type(),
 					'required'      => $field->get_meta( 'required' ),

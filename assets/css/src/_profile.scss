@@ -100,10 +100,19 @@
 		border-top:0;
 		border-bottom-right-radius: 3px;
 		border-bottom-left-radius: 3px;
-		td.label {
-			width: 30%;
-			font-weight: 600;
-			padding: 0 20px;
+		td {
+			&.label {
+				width: 30%;
+				font-weight: 600;
+				padding: 0 20px;
+			}
+			.field_repeater_child {
+				margin: 0 0 .5em;
+
+				&:last-child {
+					margin-bottom: 0;
+				}
+			}
 		}
 
 		tr {

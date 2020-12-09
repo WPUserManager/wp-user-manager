@@ -110,4 +110,28 @@ class WPUM_Field_Repeater extends WPUM_Field_Type {
 
 		return $fields;
 	}
+
+	function get_formatted_output( $field, $values ) {
+
+		$html = '';
+
+		$children = WPUM()->fields->get_fields([
+			'group_id' => $field->get_group_id(),
+			'parent'   => $field->get_ID(),
+			'order'	   => 'ASC'
+		]);
+
+		foreach( $values as $value ){
+			$html .= '<ul class="field_repeater_child">';
+			foreach( $children as $child ){
+				if( isset( $value[ $child->get_key() ] ) ){
+					$formatted = $child->field_type->get_formatted_output( $child, $value[ $child->get_key() ] );
+					$html 	  .= sprintf( '<li><strong>%s</strong>: %s</li>', $child->get_name(), $formatted );
+				}
+			}
+			$html .= '</ul>';
+		}
+
+		return $html;
+	}
 }

@@ -22,19 +22,19 @@ jQuery(document).ready(function ($) {
 			var self = this;
 
 			$('.add-repeater-row').each( function(){
-				var repeater = $(this).parents('fieldset');
+				var parent 	 = $(this).parents('fieldset');
+				var repeater = parent.find('.fieldset-wpum_field_group');
+
 				if( repeater.length ){
-					var name = repeater.get(0).classList[0];
+					var name = parent.get(0).classList[0];
 					self.increaseInstance( name );
 					self.validateMaxRows( name );
 				}
 			});
 
 			self.form.on( 'click', '.add-repeater-row', function(){
-				var repeater =  $(this).parents('fieldset');
-				if( repeater.length ){
-					self.addNewInstance( repeater.get(0).classList[0] );
-				}
+				var parent =  $(this).parents('fieldset');
+				self.addNewInstance( parent.get(0).classList[0] );
 			});
 		},
 
@@ -56,7 +56,7 @@ jQuery(document).ready(function ($) {
 		},
 
 		addNewRepeaterRow: function( name ){
-			var repeater = $( '.' + name ).last();
+			var repeater = $( '.' + name ).find('.fieldset-wpum_field_group').last();
 			if( !repeater.length ){
 				return;
 			}
@@ -72,7 +72,7 @@ jQuery(document).ready(function ($) {
 		},
 
 		setupInstances: function( name ){
-			var repeaterRow = $( '.' + name );
+			var repeaterRow = $( '.' + name ).find('.fieldset-wpum_field_group');
 			var self		= this;
 
 			if( !repeaterRow.length ){
@@ -106,8 +106,10 @@ jQuery(document).ready(function ($) {
 		},
 
 		validateMaxRows: function( name ){
-			var repeater = $( '.' + name );
-			var maxRows = repeater.find('.add-repeater-row').data('max-row');
+			var parent   = $( '.' + name );
+			var repeater = parent.find('.fieldset-wpum_field_group');
+			var addBtn	 = parent.find('.add-repeater-row');
+			var maxRows  = addBtn.data('max-row');
 			if( !maxRows || parseInt( maxRows ) < 1 ){
 				return true;
 			}
@@ -116,7 +118,7 @@ jQuery(document).ready(function ($) {
 				return true;
 			}
 
-			repeater.find('.add-repeater-row').attr('disabled', true);
+			addBtn.attr('disabled', true);
 
 			return repeater.length < parseInt( maxRows );
 		}
