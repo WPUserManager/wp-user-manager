@@ -100,7 +100,7 @@ export default {
 		updateStatus: '',
 	},
 	components:{
-    	"vue-form-generator": VueFormGenerator.component,
+		"vue-form-generator": VueFormGenerator.component,
 		draggable
   	},
 	data() {
@@ -136,6 +136,10 @@ export default {
 		}
 	},
 	created() {
+
+		//setup tabs
+		this.setupTabs();
+
 		// Retrieve the settings for this field type via ajax.
 		this.getSettings()
 
@@ -301,6 +305,17 @@ export default {
 		 */
 		deleteOption( index ) {
 			this.dropdownOptions.splice( index, 1 );
+		},
+		/**
+		* Setup tabs on init
+		*/
+		setupTabs(){
+
+			if(this.field_type !== 'repeater'){
+				this.tabs = this.tabs.filter( tab => tab.id !== 'fields' )
+			}
+
+			this.activeTab = this.tabs && this.tabs[0].id
 		}
 	}
 }

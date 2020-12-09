@@ -43,6 +43,22 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 		<form action="<?php echo esc_url( $data->action ); ?>" method="post" id="wpum-submit-account-form" enctype="multipart/form-data">
 
 			<?php foreach ( $data->fields as $key => $field ) : ?>
+
+				<?php
+				// Parent field should handle the child field rendering
+				if( in_array( $field['type'], wpum_get_registered_parent_field_types() ) ){
+
+					$field[ 'key' ] = $key;
+					$template 		= isset( $field['template'] ) ? $field['template'] : $field['type'];
+
+					WPUM()->templates
+						->set_template_data( $field )
+						->get_template_part( 'form-fields/' . $template, 'field' );
+
+					continue;
+				}
+				?>
+
 				<fieldset class="fieldset-<?php echo esc_attr( $key ); ?>">
 
 					<?php if( $field['type'] == 'checkbox' ) : ?>

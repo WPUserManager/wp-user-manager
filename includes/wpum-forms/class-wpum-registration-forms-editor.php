@@ -35,6 +35,7 @@ class WPUM_Registration_Forms_Editor {
 		add_action( 'wp_ajax_wpum_update_registration_form', [ $this, 'update_form' ] );
 		add_action( 'wp_ajax_wpum_save_registration_form', [ $this, 'save_form' ] );
 		add_action( 'wp_ajax_wpum_save_registration_form_settings', [ $this, 'save_form_settings' ] );
+		add_action( 'wp_ajax_wpum_get_registration_form_field', [ $this, 'get_form_field_data' ] );
 
 		add_filter( 'wpum_form_settings_sanitize_text', array( $this, 'sanitize_text_field' ) );
 		add_filter( 'wpum_form_settings_sanitize_textarea', array( $this, 'sanitize_textarea_field' ) );
@@ -318,6 +319,7 @@ class WPUM_Registration_Forms_Editor {
 							'id'   => $stored_field->get_ID(),
 							'name' => $stored_field->get_name(),
 							'icon' => $icon,
+							'type' => $stored_field->get_type()
 						];
 					}
 
@@ -380,6 +382,7 @@ class WPUM_Registration_Forms_Editor {
 				'id'   => $field->get_ID(),
 				'name' => $field->get_name(),
 				'icon' => $icon,
+				'type' => $field->get_type()
 			];
 		}
 
@@ -483,6 +486,46 @@ class WPUM_Registration_Forms_Editor {
 		}
 
 		wp_send_json_success();
+	}
+
+
+	public function get_form_field_data(){
+
+		check_ajax_referer( 'wpum_get_registration_form', 'nonce' );
+
+		$parent_id = !empty( $_GET['parent_id'] ) ? intval( $_GET['parent_id'] ) : 0;
+
+		if( !$parent_id ){
+			$this->send_json_error();
+		}
+
+		$field = new WPUM_Field( $parent_id );
+
+		if( !$field ){
+			$this->send_json_error();
+		}
+
+		$fields = WPUM()->fields->get_fields(
+			[
+				'orderby'  => 'field_order',
+				'order'    => 'ASC',
+				'parent'   => $field->get_ID(),
+				'group_id' => $field->get_group_id()
+			]
+		);
+
+		$response = [];
+
+		foreach( $fields as $field ){
+			$response[] = [
+				'id'   => $field->get_ID(),
+				'name' => $field->get_name(),
+				'type' => $field->get_type(),
+				'icon' => $field->field_type->icon ? $field->field_type->icon : 'dashicons-editor-justify'
+			];
+		}
+
+		wp_send_json_success( array( 'fields' => $response ) );
 	}
 
 

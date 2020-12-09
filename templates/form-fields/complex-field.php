@@ -1,0 +1,112 @@
+<?php
+/**
+ * The template for displaying the repeater field.
+ *
+ * This template can be overridden by copying it to yourtheme/wpum/form-fields/complex-field.php
+ *
+ * HOWEVER, on occasion WPUM will need to update template files and you
+ * (the theme developer) will need to copy the new files to your theme to
+ * maintain compatibility. We try to do this as little as possible, but it does
+ * happen. When this occurs the version of the template file will be bumped and
+ * the readme will list any important changes.
+ *
+ * @version 1.0.0
+ */
+
+ // Exit if accessed directly
+if ( ! defined( 'ABSPATH' ) ) exit;
+
+
+$parent = new WPUM_Field( $data->id );
+
+if( !$parent ){
+	return;
+}
+
+$fields 	= WPUM()->fields->get_fields([
+	'group_id' => $parent->get_group_id(),
+	'parent'   => $parent->get_ID(),
+	'order'	   => 'ASC'
+]);
+
+$parent_key = $parent->get_key();
+
+echo sprintf(
+	'<fieldset class="fieldset-%s"><legend>%s %s</legend>',
+	esc_attr( $parent_key ),
+	esc_html( $data->label ),
+	( isset( $data->required ) && $data->required ? '<span class="wpum-required">*</span>' : '' )
+);
+
+$button_label = $parent->get_meta( 'button_label' );
+$max_rows 	  = $parent->get_meta( 'max_rows' );
+
+if( count( $fields ) ){
+
+	$field_keys = array_map( function( $field ){
+			return $field->get_key();
+	}, $fields );
+
+	$values 	= array_map( function( $value ){
+		if( isset( $value['_type'] ) ) unset( $value['_type'] );
+		return $value;
+	}, (array) $data->value );
+
+	$index 		= 0;
+
+	do {
+
+		echo '<div class="fieldset-wpum_field_group">';
+
+		foreach( $fields as $field ){
+
+			$options 		= [];
+			$options_needed = ! $field->is_primary() && in_array( $field->get_type(), [ 'dropdown', 'multiselect', 'radio', 'multicheckbox' ] );
+			if ( $options_needed ) {
+
+				$stored_options = $field->get_meta( 'dropdown_options' );
+				if ( ! empty( $stored_options ) && is_array( $stored_options ) ) {
+					foreach ( $stored_options as $option ) {
+						$options[ $option['value'] ] = $option['label'];
+					}
+				}
+			}
+
+			$key   = $field->get_key();
+			$value = isset( $values[$index][ $key ] ) ? $values[$index][ $key ] : '';
+			$field = array(
+				'id'		  => $field->get_ID(),
+				'label'       => $field->get_name(),
+				'type'        => $field->get_type(),
+				'required'    => $field->get_meta( 'required' ),
+				'placeholder' => $field->get_meta( 'placeholder' ),
+				'description' => $field->get_description(),
+				'priority'    => $field->get_key(),
+				'primary_id'  => $field->get_primary_id(),
+				'options'     => $options,
+				'template'    => $field->get_parent_type(),
+				'name'		  => "{$parent_key}[{$index}][{$key}]",
+				'value'		  => $value
+			);
+
+			WPUM()->templates
+				->set_template_data( [ 'field' => $field, 'key' => $key ] )
+				->get_template_part( 'forms/form-registration-fields', 'field' );
+		}
+
+		echo '</div>';
+
+		$index++;
+
+	} while ( isset( $values[$index] ) );
+}
+
+echo sprintf(
+	'<button type="button" class="add-repeater-row" data-max-row="%d">%s</button>',
+	!empty( $max_rows ) ? intval( $max_rows ) : 0,
+	!empty( $button_label ) ? $button_label : esc_html__( 'Add row', 'wp-user-manager' )
+);
+
+echo '</fieldset>';
+
+?>

@@ -295,7 +295,7 @@ export default {
 						this.getFields()
 					}
 				}
-			},{ height: '80%', width: '60%' })
+			},{ height: '80%', width: type === 'repeater' ? '80%' : '60%' })
 		}
 	}
 }

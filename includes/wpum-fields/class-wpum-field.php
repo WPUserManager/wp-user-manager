@@ -24,6 +24,14 @@ class WPUM_Field {
 	protected $id = 0;
 
 	/**
+	 * Parent ID.
+	 *
+	 * @access protected
+	 * @var int
+	 */
+	protected $parent_id = 0;
+
+	/**
 	 * Group ID.
 	 *
 	 * @access protected
@@ -198,6 +206,7 @@ class WPUM_Field {
 			$this->required      = $this->get_meta( 'required' );
 			$this->visibility    = $this->get_meta( 'visibility' );
 			$this->editable      = $this->get_meta( 'editing' );
+			$this->parent_id 	 = max( 0, (int)$this->get_meta( 'parent_id' ) );
 
 			$class = 'WPUM_Field_' . ucfirst( $this->get_type() );
 			if( class_exists( $class ) ){
@@ -217,6 +226,15 @@ class WPUM_Field {
 	 */
 	public function get_ID() {
 		return $this->id;
+	}
+
+	/**
+	 * Retrieve the field parent id.
+	 *
+	 * @return void
+	 */
+	public function get_parent_ID() {
+		return $this->parent_id;
 	}
 
 	/**
@@ -724,6 +742,23 @@ class WPUM_Field {
 		}
 
 		return $data;
+	}
+
+
+	/**
+	 * Get parsed field key
+	 *
+	 * @return String
+	 */
+	public function get_key() {
+
+		if ( ! empty( $this->get_primary_id() ) ) {
+			return str_replace( ' ', '_', strtolower( $this->get_primary_id() ) );
+		} elseif ( empty( $this->get_primary_id() ) && $this->get_meta( 'user_meta_key' ) ) {
+			return $this->get_meta( 'user_meta_key' );
+		}
+
+		return str_replace( ' ', '_', strtolower( $this->get_name() ) );
 	}
 
 }

@@ -1063,6 +1063,14 @@
 .wpum-form fieldset.fieldset-robo {
   display: none;
 }
+.wpum-form fieldset .fieldset-wpum_field_group {
+  border: 1px solid #dcdcdc;
+  padding: 1em;
+  margin-top: 1em;
+}
+.wpum-form fieldset .add-repeater-row {
+  margin-top: 1em;
+}
 .wpum-form .select2-container {
   width: 100%;
 }
@@ -1192,6 +1200,12 @@
   width: 30%;
   font-weight: 600;
   padding: 5px 20px;
+}
+#profile-content-about .profile-fields-table td .field_repeater_child, .profile-content-settings .profile-fields-table td .field_repeater_child {
+  margin: 0 0 0.5em;
+}
+#profile-content-about .profile-fields-table td .field_repeater_child:last-child, .profile-content-settings .profile-fields-table td .field_repeater_child:last-child {
+  margin-bottom: 0;
 }
 #profile-content-about .profile-fields-table tr:last-child, .profile-content-settings .profile-fields-table tr:last-child {
   border-bottom: none;

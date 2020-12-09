@@ -70,6 +70,10 @@ export default {
 	props: {
 		group_id:    '',
 		addNewField: '',
+		parent: {
+			type: Number,
+			default: 0
+		}
 	},
 	data() {
 		return {
@@ -140,7 +144,8 @@ export default {
 					nonce: wpumFieldsEditor.create_field_nonce,
 					field_name: this.newFieldName,
 					field_type: this.newFieldType,
-					group_id: this.group_id
+					group_id: this.group_id,
+					parent: this.parent
 				}),
 				{
 					params: {

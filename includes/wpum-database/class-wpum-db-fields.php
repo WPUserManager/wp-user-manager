@@ -202,22 +202,41 @@ class WPUM_DB_Fields extends WPUM_DB {
 		$args['orderby'] = esc_sql( $args['orderby'] );
 		$args['order']   = esc_sql( $args['order'] );
 
+		$join_query = "";
+
+		if( !empty( $args['parent'] )  ){
+			$meta_table = $wpdb->prefix.'wpum_fieldmeta';
+			$join_query = $wpdb->prepare("JOIN $meta_table meta ON meta.wpum_field_id = id AND meta.meta_key = %s", "parent_id");
+			$join_query = apply_filters( 'wpum_fields_join_query', $join_query, $this );
+
+			$where 		= str_replace( '`group_id`', sprintf( 'meta.meta_value = %d AND `group_id`', intval( $args['parent'] ) ), $where );
+		}
+
 		if ( false === $fields ) {
 			$fields = $wpdb->get_col( $wpdb->prepare(
 				"
 					SELECT id
 					FROM $this->table_name
+					$join_query
 					$where
 					ORDER BY {$args['orderby']} {$args['order']}
 					LIMIT %d,%d;
 				", absint( $args['offset'] ), absint( $args['number'] ) ), 0 );
 
 			if ( ! empty( $fields ) ) {
+				$new_fields = array();
 				foreach ( $fields as $key => $field ) {
+
 					$field          = new WPUM_Field( $field );
 					$field->set_user_meta( $args['user_id'] );
-					$fields[ $key ] = $field;
+
+					if( empty( $args['parent'] ) && $field->get_parent_ID() > 0 ){
+						unset( $fields[$key] );
+						continue;
+					}
+					$new_fields[] = $field;
 				}
+				$fields = $new_fields;
 
 				wp_cache_set( $cache_key, $fields, $this->cache_group, 3600 );
 			}

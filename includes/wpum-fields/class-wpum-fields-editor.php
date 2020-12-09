@@ -189,6 +189,8 @@ class WPUM_Fields_Editor {
 			'field_add_option'          => esc_html__( 'Add option', 'wp-user-manager' ),
 			'field_option_label'        => esc_html__( 'Option label', 'wp-user-manager' ),
 			'field_option_value'        => esc_html__( 'Option value', 'wp-user-manager' ),
+			'repeater_fields_add_new'	=> esc_html__( 'Add new sub field', 'wp-user-manager' ),
+			'repeater_fields_create'	=> esc_html__( 'Add sub field', 'wp-user-manager' ),
 		];
 
 	}
@@ -310,6 +312,7 @@ class WPUM_Fields_Editor {
 		$fields = [];
 
 		$group_id = isset( $_GET['group_id'] ) && ! empty( $_GET['group_id'] ) ? (int) $_GET['group_id'] : false;
+		$parent   = isset( $_GET['parent_id'] ) ? intval( $_GET['parent_id'] ) : 0;
 
 		if ( $group_id ) {
 
@@ -318,6 +321,7 @@ class WPUM_Fields_Editor {
 					'group_id' => $group_id,
 					'orderby'  => 'field_order',
 					'order'    => 'ASC',
+					'parent'   => $parent
 				]
 			);
 
@@ -336,6 +340,7 @@ class WPUM_Fields_Editor {
 					'default'       => $field->is_primary(),
 					'default_id'    => $field->get_primary_id(),
 					'required'      => $field->is_required(),
+					'parent_id'		=> $field->get_parent_ID()
 				];
 
 			}
