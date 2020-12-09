@@ -131,9 +131,12 @@ Please note that using WPUM and the mentioned add-ons does NOT guarantee complia
 - New: Setting to control the default display name for registered users
 - New: Setting to restrict the wp-admin dashboard for specific roles
 - New: Compatibility with WordPress 5.6 and PHP 8
+- New: Compatibility with WordPress Twenty Twenty-One theme
+- Improvement: Warning notice when the site permalinks are set as the plain default, which breaks profile and account pages
 - Improvement: Added 'wpum_admin_pages_capability' filter for the capability to show plugin admin pages
 - Improvement: Added filters to control the strong password requirements
 - Improvement: Datepicker field value now returned in the localized format
+- Improvement: Email and password fields added to the registration form by default on plugin install
 - Fix: PHP Notice: Undefined offset: 0 in registration form when no role selected
 - Fix: PHP Notice: Undefined index: priority (again)
 - Fix: Wrong text domain for 'current password' (props [apermo](https://profiles.wordpress.org/apermo/))
