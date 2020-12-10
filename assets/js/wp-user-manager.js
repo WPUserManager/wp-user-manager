@@ -37,6 +37,7 @@ jQuery( function( $ ) {
 				$( this ).attr( 'data-name', $( this ).attr( 'name' ) );
 				$( this ).attr( 'id', '' )
 				$( this ).attr( 'name', '' )
+				$( this ).removeAttr( 'required' )
 			} );
 
 			self.form.on( 'click', '.add-repeater-row', function() {
@@ -116,8 +117,6 @@ jQuery( function( $ ) {
 						} else {
 							clone_id = $(this).prop( 'id' );
 						}
-
-						console.log( clone_id);
 
 						var id = clone_id + '_' + i;
 						$( this ).attr( 'id', id );

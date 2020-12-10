@@ -642,7 +642,7 @@ class WPUM_Fields_Editor {
 					// Find the first key of the array within the setting config array.
 					reset( $setting_config );
 					$first_key      = key( $setting_config );
-					$setting_config = $setting_config[ $first_key ];
+					$setting_config = isset( $setting_config[ $first_key ] ) ? $setting_config[ $first_key ] : false;
 
 					if ( is_array( $setting_config ) && array_key_exists( 'type', $setting_config ) ) {
 
@@ -658,6 +658,7 @@ class WPUM_Fields_Editor {
 								break;
 							case 'checkbox':
 								$setting_data = $setting_data === 'true' ? true : false;
+								break;
 							default:
 								$setting_data = sanitize_text_field( $setting_data );
 								break;

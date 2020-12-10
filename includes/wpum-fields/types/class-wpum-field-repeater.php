@@ -175,10 +175,13 @@ class WPUM_Field_Repeater extends WPUM_Field_Type {
 
 		foreach( $values as $value ){
 			$html .= '<ul class="field_repeater_child">';
-			foreach( $children as $child ){
-				if( isset( $value[ $child->get_key() ] ) ){
+			foreach ( $children as $child ) {
+				if ( $child->get_visibility() !== 'public' ) {
+					continue;
+				}
+				if ( isset( $value[ $child->get_key() ] ) ) {
 					$formatted = $child->field_type->get_formatted_output( $child, $value[ $child->get_key() ] );
-					$html 	  .= sprintf( '<li><strong>%s</strong>: %s</li>', $child->get_name(), $formatted );
+					$html      .= sprintf( '<li><strong>%s</strong>: %s</li>', $child->get_name(), $formatted );
 				}
 			}
 			$html .= '</ul>';
