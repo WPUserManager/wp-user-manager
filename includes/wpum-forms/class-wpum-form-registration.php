@@ -234,7 +234,6 @@ class WPUM_Form_Registration extends WPUM_Form {
 	 * @return mixed
 	 */
 	public function validate_repeater( $pass, $fields, $values, $form ) {
-
 		if ( $form !== $this->form_name ) {
 			return $pass;
 		}
@@ -245,23 +244,23 @@ class WPUM_Form_Registration extends WPUM_Form {
 			}
 
 			$wpum_field = new WPUM_Field( $field['id'] );
-			$min_rows 	= $wpum_field->get_meta( 'min_rows' ) ? $wpum_field->get_meta( 'min_rows' ) : 0;
-			$max_rows 	= $wpum_field->get_meta('max_rows') ?  $wpum_field->get_meta('max_rows') : 0;
-			$values 	= isset( $field['value'] ) && is_array( $field['value'] ) ?  $field['value'] : [];
+			$min_rows   = $wpum_field->get_meta( 'min_rows' ) ? $wpum_field->get_meta( 'min_rows' ) : 0;
+			$max_rows   = $wpum_field->get_meta( 'max_rows' ) ? $wpum_field->get_meta( 'max_rows' ) : 0;
+			$values     = isset( $field['value'] ) && is_array( $field['value'] ) ? $field['value'] : [];
 
-			if( count( $values ) < $min_rows ){
-				return new WP_Error( 'repeater-validation-error', esc_html( sprintf( __( '%s requires at least %d rows', 'wp-user-manager' ), $field['label'], intval( $min_rows ) ) ) );
+			if ( count( $values ) < $min_rows ) {
+				return new WP_Error( 'repeater-validation-error', esc_html( apply_filters( 'wpum_repeater_validation_min_rows_error_message', sprintf( __( '%s requires at least %d rows', 'wp-user-manager' ), $field['label'], intval( $min_rows ) ), $field, $min_rows ) ) );
 			}
 
-			if( $max_rows > 0 && count( $values ) > $max_rows ){
-				return new WP_Error( 'repeater-validation-error', esc_html( sprintf( __( '%s accepts maximum %d rows', 'wp-user-manager' ), $field['label'], intval( $max_rows ) ) ) );
+			if ( $max_rows > 0 && count( $values ) > $max_rows ) {
+				return new WP_Error( 'repeater-validation-error', esc_html( apply_filters( 'wpum_repeater_validation_max_rows_error_message', sprintf( __( '%s accepts maximum %d rows', 'wp-user-manager' ), $field['label'], intval( $max_rows ) ), $field, $max_rows ) ) );
 			}
 
-			if( $field['required'] ){
+			if ( $field['required'] ) {
 				$first_row = isset( $values[0] ) && is_array( $values[0] ) ? $values[0] : [];
 
-				if( !count( $first_row ) || count( array_filter( $first_row ) ) !== count( $first_row ) ){
-					return new WP_Error( 'repeater-validation-error', esc_html( sprintf( __( 'Please fill out %s details', 'wp-user-manager' ), $field['label'] ) ) );
+				if ( ! count( $first_row ) || count( array_filter( $first_row ) ) !== count( $first_row ) ) {
+					return new WP_Error( 'repeater-validation-error', esc_html( apply_filters( 'wpum_repeater_validation_required_error_message', sprintf( __( 'Please fill out %s data', 'wp-user-manager' ), $field['label'] ), $field ) ) );
 				}
 			}
 		}

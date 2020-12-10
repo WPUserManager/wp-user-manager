@@ -126,7 +126,7 @@ jQuery( function( $ ) {
 
 		validateMaxRows: function( name ) {
 			var parent = $( '.' + name );
-			var repeater = parent.find( '.fieldset-wpum_field_group' );
+			var repeater = parent.find( '.fieldset-wpum_field_group' ).not( '.fieldset-wpum_field_group-clone' );
 			var addBtn = parent.find( '.add-repeater-row' );
 			var maxRows = addBtn.data( 'max-row' );
 			if ( !maxRows || parseInt( maxRows ) < 1 ) {

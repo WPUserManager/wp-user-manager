@@ -3,6 +3,9 @@
 	> h2 {
 		margin-top: 0;
 	}
+	.wpum-required {
+		color: red;
+	}
 	fieldset {
 		margin: 0;
 		padding: 0 0 1em 0;
@@ -15,9 +18,6 @@
 			small {
 				opacity: .75;
 				font-size: 0.83em;
-			}
-			.wpum-required {
-				color: red;
 			}
 		}
 		div.field {

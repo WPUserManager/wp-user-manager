@@ -999,6 +999,9 @@
 .wpum-form > h2 {
   margin-top: 0;
 }
+.wpum-form .wpum-required {
+  color: red;
+}
 .wpum-form fieldset {
   margin: 0;
   padding: 0 0 1em 0;
@@ -1013,9 +1016,6 @@
 .wpum-form fieldset label small {
   opacity: 0.75;
   font-size: 0.83em;
-}
-.wpum-form fieldset label .wpum-required {
-  color: red;
 }
 .wpum-form fieldset div.field {
   vertical-align: middle;
