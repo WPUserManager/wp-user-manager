@@ -26,23 +26,23 @@ Create a custom login page, have full control over the registration form, give y
 
 = Features included =
 
-- [Frontend forms](https://wpusermanager.com/features/front-end-forms/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager)
-- [Custom email notifications](https://wpusermanager.com/features/custom-email-notifications/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager)
-- [Custom avatars](https://wpusermanager.com/features/custom-avatars/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager)
-- [Elegant user profiles](https://wpusermanager.com/features/elegant-user-profiles/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager)
-- [Shortcodes editor](https://wpusermanager.com/features/shortcodes/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager)
-- [Roles editor](https://wpusermanager.com/features/roles-and-permissions-editor/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager): Edit roles and their capabilities. Create new roles and duplicate existing ones.
-- [Beautiful user directories](https://wpusermanager.com/features/user-directories/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager)
-- [SEO URLs](https://wpusermanager.com/features/seo/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager)
-- [Content restriction](https://wpusermanager.com/features/content-restriction/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager)
-- [Passwords management](https://wpusermanager.com/features/passwords-management/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager)
-- [Custom fields editor](https://wpusermanager.com/features/custom-fields/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager)
-- [Custom widgets](https://wpusermanager.com/features/custom-widgets/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager)
-- [Custom redirects](https://wpusermanager.com/features/custom-redirects/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager)
-- [Powerful tools](https://wpusermanager.com/features/tools/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager)
-- [Developers friendly](https://wpusermanager.com/features/developers-friendly/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager)
-- [Extensive documentation](http://docs.wpusermanager.com?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager)
-- Translation Ready
+- [Frontend forms](https://wpusermanager.com/features/front-end-forms/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager): Allow users to register and login from the front of the site. Customized the registration form
+- [Custom email notifications](https://wpusermanager.com/features/custom-email-notifications/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager): Customize the emails sent to users when the register, reset their password and more
+- [Custom avatars](https://wpusermanager.com/features/custom-avatars/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager): Users can edit their site avatar by uploading an image from the account page
+- [Elegant user profiles](https://wpusermanager.com/features/elegant-user-profiles/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager): All users have a public profile page to display their data
+- [Shortcodes editor](https://wpusermanager.com/features/shortcodes/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager): Easily add the plugin shortcodes to pages or posts with the shortcode generator and editor
+- [Roles editor](https://wpusermanager.com/features/roles-and-permissions-editor/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager): Edit roles and their capabilities. Create new roles and duplicate existing ones
+- [Beautiful user directories](https://wpusermanager.com/features/user-directories/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager): Display users in a directories that can be displayed anywhere on the site
+- [SEO URLs](https://wpusermanager.com/features/seo/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager): All the URLs are SEO friendly
+- [Content restriction](https://wpusermanager.com/features/content-restriction/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager): Restrict content for certain users, by logged in status, or by role
+- [Passwords management](https://wpusermanager.com/features/passwords-management/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager): Allow users to update their password from their account page
+- [Custom fields editor](https://wpusermanager.com/features/custom-fields/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager): Create custom user fields that can be used to collect data on registration
+- [Custom widgets](https://wpusermanager.com/features/custom-widgets/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager): Display user data and forms in sidebars using widgets
+- [Custom redirects](https://wpusermanager.com/features/custom-redirects/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager): Control where the users are redirected to on login, registration and more
+- [Powerful tools](https://wpusermanager.com/features/tools/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager): Tools to be in control of your site and who registers
+- [Developers friendly](https://wpusermanager.com/features/developers-friendly/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager): Customize and integrate with other plugins with a large number of hooks and filters
+- [Extensive documentation](http://docs.wpusermanager.com?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager): Full documentation and expert support
+- Translation Ready - The plugin and addons are fully localized ready for translation
 
 Read more about our features on [wpusermanager.com](https://wpusermanager.com/features/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager)
 
