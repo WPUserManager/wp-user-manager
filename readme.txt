@@ -124,7 +124,7 @@ Please note that using WPUM and the mentioned add-ons does NOT guarantee complia
 
 == Changelog ==
 
-= 2.4 (8th December 2020) =
+= 2.4 (11th December 2020) =
 
 - New: Roles editor to add, edit and delete user roles, and customize role capabilities
 - New: Repeater field with the [Custom Fields addon](https://wpusermanager.com/addons/custom-fields/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager)
