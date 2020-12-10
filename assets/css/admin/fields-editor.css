@@ -79,7 +79,7 @@ body.users_page_wpum-registration-forms .wpum-roles-table .button,
 body.users_page_wpum-roles .wpum-fields-groups-table .button,
 body.users_page_wpum-roles .wpum-registration-forms-table .button,
 body.users_page_wpum-roles .wpum-roles-table .button {
-  margin-right: 5px;
+  margin: 3px 5px 3px 0;
 }
 body.users_page_wpum-custom-fields .wpum-fields-groups-table .button:last-child, body.users_page_wpum-custom-fields .wpum-registration-forms-table .button:last-child, body.users_page_wpum-custom-fields .wpum-roles-table .button:last-child,
 body.users_page_wpum-registration-forms .wpum-fields-groups-table .button:last-child,
