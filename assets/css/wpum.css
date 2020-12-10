@@ -1067,12 +1067,19 @@
   border: 1px solid #dcdcdc;
   padding: 1em;
   margin-top: 1em;
+  position: relative;
 }
 .wpum-form fieldset .fieldset-wpum_field_group-clone {
   display: none;
 }
 .wpum-form fieldset .add-repeater-row {
   margin-top: 1em;
+}
+.wpum-form fieldset .remove-repeater-row {
+  position: absolute;
+  right: 10px;
+  text-decoration: none;
+  top: 0;
 }
 .wpum-form .select2-container {
   width: 100%;

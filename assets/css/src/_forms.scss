@@ -76,12 +76,20 @@
 			border: 1px solid #dcdcdc;
 			padding: 1em;
 			margin-top: 1em;
+			position: relative;
 		}
 		.fieldset-wpum_field_group-clone {
 			display: none;
 		}
 		.add-repeater-row {
 			margin-top: 1em;
+		}
+
+		.remove-repeater-row {
+			position: absolute;
+			right: 10px;
+			text-decoration: none;
+			top: 0;
 		}
 	}
 	.select2-container {

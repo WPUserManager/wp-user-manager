@@ -41,6 +41,14 @@ jQuery( function( $ ) {
 				var parent = $( this ).parents( 'fieldset' );
 				self.addNewInstance( parent.get( 0 ).classList[ 0 ] );
 			} );
+
+			self.form.on( 'click', '.remove-repeater-row', function(e) {
+				e.preventDefault();
+				var parent = $( this ).parents( 'fieldset' );
+				var $row = $( this ).parents( '.fieldset-wpum_field_group' );
+				$row.remove();
+				self.setupInstances( parent.get( 0 ).classList[ 0 ] );
+			} );
 		},
 
 		increaseInstance: function( name ) {
