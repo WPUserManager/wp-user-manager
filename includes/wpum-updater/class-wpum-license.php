@@ -137,7 +137,7 @@ class WPUM_License {
 		add_action( 'admin_init', array( $this, 'deactivate_license' ) );
 
 		// Updater.
-		add_action( 'admin_init', array( $this, 'auto_updater' ), 0 );
+		add_action( 'init', array( $this, 'auto_updater' ), 0 );
 
 		$plugin_name = explode( 'plugins/', $this->file );
 		$plugin_name = plugin_basename( $this->file );
@@ -294,6 +294,11 @@ class WPUM_License {
 	 * @return void
 	 */
 	public function auto_updater() {
+		// To support auto-updates, this needs to run during the wp_version_check cron job for privileged users.
+		$doing_cron = defined( 'DOING_CRON' ) && DOING_CRON;
+		if ( ! current_user_can( 'manage_options' ) && ! $doing_cron ) {
+			return;
+		}
 
 		if ( 'valid' !== get_option( $this->item_shortname . '_license_active' ) ) {
 			return;
@@ -350,12 +355,12 @@ class WPUM_License {
 				break;
 		}
 
-		if ( $status == 'valid' ) {
-			$status_class == 'notice-success';
+		if ( empty( $message ) && $status !== 'valid' ) {
+			return '';
 		}
 
-		if ( empty( $message ) && $status !== 'valid' ) {
-			return false;
+		if ( $status == 'valid' ) {
+			$status_class == 'notice-success';
 		}
 
 		if ( ! empty( $message ) ) {
@@ -389,24 +394,30 @@ class WPUM_License {
 	 * Add a notice when the license has not been activated yet.
 	 *
 	 * @param string $plugin_file
-	 * @param array $plugin_data
+	 * @param array  $plugin_data
 	 * @param string $status
-	 * @return void
 	 */
 	public function plugin_page_notices( $plugin_file, $plugin_data, $status ) {
-
-		// Bailout.
 		if ( get_option( 'wpum_' . $this->item_shortname . '_license_active' ) && get_option( 'wpum_' . $this->item_shortname . '_license_active' ) == 'valid' ) {
-			return false;
+			return;
 		}
 
-		$update_notice_wrap = '<tr class="wpum-addon-notice-tr active"><td colspan="3" class="colspanchange"><div class="notice inline notice-error notice-alt wpum-invalid-license"><p><span class="dashicons dashicons-info" style="color:red;"></span> %s</p></div></td></tr>';
+		$colspan = wp_is_auto_update_enabled_for_type( 'plugin' ) ? 4 : 3;
+
+		$update_notice_wrap = '<tr class="plugin-update-tr wpum-addon-notice-tr active"><td colspan="' . $colspan . '" class="colspanchange plugin-update"><div class="notice inline notice-error notice-alt wpum-invalid-license"><p><span class="dashicons dashicons-info" style="color:red;"></span> %s</p></div></td></tr>';
 		$message            = $this->license_state_message();
 
 		if ( ! empty( $message['message'] ) ) {
 			echo sprintf( $update_notice_wrap, $message['message'] );
+			?>
+			<script type="application/javascript">
+				(function ($) {
+					$( document ).ready( function() {
+						$( 'tr[data-plugin="<?php echo $plugin_file; ?>"]').addClass('update');
+					} );
+				})( jQuery );
+			</script> <?php
 		}
-
 	}
 
 	/**

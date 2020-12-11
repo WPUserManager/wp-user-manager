@@ -119,7 +119,7 @@ class WPUM_Updater_Settings {
 
 		?>
 		<script>
-			var wpum_location = $( location );
+			var wpum_location = jQuery( location );
 
 			window.wpum_removeArguments = function() {
 				function removeParam(key, sourceURL) {
@@ -130,7 +130,7 @@ class WPUM_Updater_Settings {
 						params_arr = queryString.split("&");
 						for (var i = params_arr.length - 1; i >= 0; i -= 1) {
 								param = params_arr[i].split("=")[0];
-								if ($.inArray(param, key) > -1) {
+								if (jQuery.inArray(param, key) > -1) {
 										params_arr.splice(i, 1);
 								}
 						}

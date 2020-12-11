@@ -8,7 +8,7 @@ Tested up to: 5.6
 Requires PHP: 5.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
-Stable Tag: 2.4
+Stable Tag: 2.4.1
 
 The most customizable profiles & community builder WordPress plugin with front-end login, registration, profile customization and content restriction.
 
@@ -123,6 +123,14 @@ Please note that using WPUM and the mentioned add-ons does NOT guarantee complia
 13. Login form.
 
 == Changelog ==
+
+= 2.4.1 (11th December 2020) =
+
+- New: Enable plugin auto-updates for WP User Manager addons
+- Fix: PHP Warning: array_map(): Expected parameter 2 to be an array when a viewing an empty repeater field
+- Fix: Undefined $ JavaScript notice on the WPUM Licenses page
+- Fix: Carbon Fields JavaScript notice on the WPUM Licenses page
+- Fix: Plugin table addon update notice rows styled differently to others
 
 = 2.4 (10th December 2020) =
 
