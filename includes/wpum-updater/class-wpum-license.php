@@ -137,7 +137,7 @@ class WPUM_License {
 		add_action( 'admin_init', array( $this, 'deactivate_license' ) );
 
 		// Updater.
-		add_action( 'admin_init', array( $this, 'auto_updater' ), 0 );
+		add_action( 'init', array( $this, 'auto_updater' ), 0 );
 
 		$plugin_name = explode( 'plugins/', $this->file );
 		$plugin_name = plugin_basename( $this->file );
@@ -294,6 +294,11 @@ class WPUM_License {
 	 * @return void
 	 */
 	public function auto_updater() {
+		// To support auto-updates, this needs to run during the wp_version_check cron job for privileged users.
+		$doing_cron = defined( 'DOING_CRON' ) && DOING_CRON;
+		if ( ! current_user_can( 'manage_options' ) && ! $doing_cron ) {
+			return;
+		}
 
 		if ( 'valid' !== get_option( $this->item_shortname . '_license_active' ) ) {
 			return;
