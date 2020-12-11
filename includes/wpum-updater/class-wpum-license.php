@@ -350,12 +350,12 @@ class WPUM_License {
 				break;
 		}
 
-		if ( $status == 'valid' ) {
-			$status_class == 'notice-success';
+		if ( empty( $message ) && $status !== 'valid' ) {
+			return '';
 		}
 
-		if ( empty( $message ) && $status !== 'valid' ) {
-			return false;
+		if ( $status == 'valid' ) {
+			$status_class == 'notice-success';
 		}
 
 		if ( ! empty( $message ) ) {
