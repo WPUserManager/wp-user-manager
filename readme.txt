@@ -127,7 +127,7 @@ Please note that using WPUM and the mentioned add-ons does NOT guarantee complia
 = 2.4.1 (11th December 2020) =
 
 - New: Enable plugin auto-updates for WP User Manager addons
-- Fix: PHP Warning: array_map(): Expected parameter 2 to be an array when a viewing an empty repeater field
+- Fix: PHP Warning: array_map(): Expected parameter 2 to be an array when viewing an empty repeater field
 - Fix: Undefined $ JavaScript notice on the WPUM Licenses page
 - Fix: Carbon Fields JavaScript notice on the WPUM Licenses page
 - Fix: Plugin table addon update notice rows styled differently to others
