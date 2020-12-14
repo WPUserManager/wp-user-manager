@@ -138,7 +138,11 @@ class WPUM_Field_Repeater extends WPUM_Field_Type {
 	 */
 	public function parent_field_model_data( $model, $primary_field_id ) {
 		if ( isset( $model['repeater'] ) ) {
-			$model['parent'] = intval( $_POST['field_id'] );
+			$field_id = intval( $_POST['field_id'] );
+			$field    = new WPUM_Field( $field_id );
+
+			$model['parent'] = $field->get_ID();
+			$model['group']  = $field->get_group_id();
 		}
 
 		return $model;

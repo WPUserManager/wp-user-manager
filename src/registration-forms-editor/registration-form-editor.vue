@@ -126,11 +126,6 @@ export default {
 		this.formID = this.$route.params.id
 		// Retrieve the selected form.
 		this.getForm()
-
-		// save wpum-fields to use later
-		Object.keys( Vue.options.components )
-			.filter( (name) => name.startsWith('wpum-field-') )
-			.forEach( ( name ) => this.fields[name] = Vue.options.components[name]  )
 	},
 	methods: {
 		/**
@@ -219,7 +214,7 @@ export default {
 
 		},
 		isComponentAvailable( type ){
-			return !!this.fields['wpum-field-' + type];
+			return !!this.$root.$options.components['wpum-field-' + type];
 		}
 	}
 }
