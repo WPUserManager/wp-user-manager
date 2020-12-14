@@ -32,6 +32,7 @@ class WPUM_Field_Repeater extends WPUM_Field_Type {
 	 * @return array
 	 */
 	public function get_editor_settings() {
+
 		return [
 			'general' => [
 				'button_label' => array(
@@ -68,6 +69,7 @@ class WPUM_Field_Repeater extends WPUM_Field_Type {
 		];
 	}
 
+
 	/**
 	 * Setup settings fields
 	 *
@@ -76,10 +78,11 @@ class WPUM_Field_Repeater extends WPUM_Field_Type {
 	 *
 	 * @return array
 	 */
-	public function settings_fields( $fields, $type ) {
-		if ( $type === $this->type ) {
+	public function settings_fields( $fields, $type ){
 
-			if ( isset( $fields['general']['placeholder'] ) ) {
+		if( $type === $this->type ){
+
+			if( isset( $fields['general']['placeholder'] ) ){
 				unset( $fields['general']['placeholder'] );
 			}
 		}
@@ -87,60 +90,19 @@ class WPUM_Field_Repeater extends WPUM_Field_Type {
 		return $fields;
 	}
 
-	/**
-	 * Navigates through an array and sanitizes the field.
-	 *
-	 * @param array|string    $value      The array or string to be sanitized.
-	 * @param string|callable $sanitizer  The sanitization method to use. Built in: `url`, `email`, `url_or_email`, or
-	 *                                      default (text). Custom single argument callable allowed.
-	 * @return array|string   $value      The sanitized array (or string from the callback).
-	 */
-	protected function sanitize_posted_field( $value, $sanitizer = null ) {
-		// Sanitize value
-		if ( is_array( $value ) ) {
-			foreach ( $value as $key => $val ) {
-				if ( false !== strpos( $key, 'wpum_field' ) ) {
-					$parts = explode( '_', $key );
-					if ( count( $parts ) > 3 ) {
-						array_pop( $parts );
-						$key = implode( '_', $parts );
-					}
-				}
-
-				$value[ $key ] = $this->sanitize_posted_field( $val, $sanitizer );
-			}
-			return $value;
-		}
-		$value = trim( $value );
-		if ( 'url' === $sanitizer ) {
-			return esc_url_raw( $value );
-		} elseif ( 'email' === $sanitizer ) {
-			return sanitize_email( $value );
-		} elseif ( 'url_or_email' === $sanitizer ) {
-			if ( null !== parse_url( $value, PHP_URL_HOST ) ) {
-				// Sanitize as URL
-				return esc_url_raw( $value );
-			}
-			// Sanitize as email
-			return sanitize_email( $value );
-		} elseif ( is_callable( $sanitizer ) ) {
-			return call_user_func( $sanitizer, $value );
-		}
-		// Use standard text sanitizer
-		return sanitize_text_field( stripslashes( $value ) );
-	}
 
 	/**
-	 * @param array $model
-	 * @param int $primary_field_id
-	 *
 	 * @return array
 	 */
-	public function parent_field_model_data( $model, $primary_field_id ) {
-		if ( isset( $model['repeater'] ) ) {
-			$model['parent'] = intval( $_POST['field_id'] );
-		}
+	public function parent_field_model_data( $model, $primary_field_id ){
 
+		if( isset( $model['repeater'] ) ){
+			$field_id 		 = intval( $_POST['field_id'] );
+			$field 			 = new WPUM_Field( $field_id );
+
+			$model['parent'] = $field->get_ID();
+			$model['group']  = $field->get_group_id();
+		}
 		return $model;
 	}
 
@@ -165,6 +127,7 @@ class WPUM_Field_Repeater extends WPUM_Field_Type {
 	 * @return string
 	 */
 	function get_formatted_output( $field, $values ) {
+
 		$html = '';
 
 		$children = WPUM()->fields->get_fields([
@@ -175,13 +138,10 @@ class WPUM_Field_Repeater extends WPUM_Field_Type {
 
 		foreach( $values as $value ){
 			$html .= '<ul class="field_repeater_child">';
-			foreach ( $children as $child ) {
-				if ( $child->get_visibility() !== 'public' ) {
-					continue;
-				}
-				if ( isset( $value[ $child->get_key() ] ) ) {
+			foreach( $children as $child ){
+				if( isset( $value[ $child->get_key() ] ) ){
 					$formatted = $child->field_type->get_formatted_output( $child, $value[ $child->get_key() ] );
-					$html      .= sprintf( '<li><strong>%s</strong>: %s</li>', $child->get_name(), $formatted );
+					$html 	  .= sprintf( '<li><strong>%s</strong>: %s</li>', $child->get_name(), $formatted );
 				}
 			}
 			$html .= '</ul>';

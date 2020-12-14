@@ -30,14 +30,8 @@
 						<td>{{field.name}}</td>
 						<td>{{field.type_nicename}}</td>
 						<td><span class="dashicons dashicons-yes" v-if="field.required === true"></span></td>
-						<td>
-							<span class="dashicons dashicons-yes" v-if="field.visibility == 'public'"></span>
-							<span class="dashicons dashicons-hidden" v-else></span>
-						</td>
-						<td>
-							<span class="dashicons dashicons-yes" v-if="field.editable == 'public'"></span>
-							<span class="dashicons dashicons-lock" v-else></span>
-						</td>
+						<td><span class="dashicons dashicons-yes" v-if="field.visibility === 'public'"></span></td>
+						<td><span class="dashicons dashicons-yes" v-if="field.editable === 'public'"></span></td>
 						<td class="align-middle">
 							<button class="button" @click="openEditFieldDialog( field.id, field.name, field.type, field.default_id )"><span class="dashicons dashicons-edit"></span> {{labels.fields_edit}}</button>
 							<button class="button delete-btn" @click="openDeleteFieldDialog( field.id, field.name )"><span class="dashicons dashicons-trash"></span> {{labels.fields_delete}}</button>
@@ -81,7 +75,7 @@ export default {
 
 			axios.get( wpumFieldsEditor.ajax, {
 				params: {
-					group_id: this.$route.params.id,
+					group_id: this.model.group,
 					nonce: wpumFieldsEditor.get_fields_nonce,
 					action: 'wpum_get_fields_from_group',
 					parent_id: this.model.parent
