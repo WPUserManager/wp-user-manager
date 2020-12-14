@@ -90,8 +90,54 @@ class WPUM_Field_Repeater extends WPUM_Field_Type {
 		return $fields;
 	}
 
+	/**
+	 * Navigates through an array and sanitizes the field.
+	 *
+	 * @param array|string    $value      The array or string to be sanitized.
+	 * @param string|callable $sanitizer  The sanitization method to use. Built in: `url`, `email`, `url_or_email`, or
+	 *                                      default (text). Custom single argument callable allowed.
+	 * @return array|string   $value      The sanitized array (or string from the callback).
+	 */
+	protected function sanitize_posted_field( $value, $sanitizer = null ) {
+		// Sanitize value
+		if ( is_array( $value ) ) {
+			foreach ( $value as $key => $val ) {
+				if ( false !== strpos( $key, 'wpum_field' ) ) {
+					$parts = explode( '_', $key );
+					if ( count( $parts ) > 3 ) {
+						array_pop( $parts );
+						$key = implode( '_', $parts );
+					}
+				}
+
+				$value[ $key ] = $this->sanitize_posted_field( $val, $sanitizer );
+			}
+			return $value;
+		}
+		$value = trim( $value );
+		if ( 'url' === $sanitizer ) {
+			return esc_url_raw( $value );
+		} elseif ( 'email' === $sanitizer ) {
+			return sanitize_email( $value );
+		} elseif ( 'url_or_email' === $sanitizer ) {
+			if ( null !== parse_url( $value, PHP_URL_HOST ) ) {
+				// Sanitize as URL
+				return esc_url_raw( $value );
+			}
+			// Sanitize as email
+			return sanitize_email( $value );
+		} elseif ( is_callable( $sanitizer ) ) {
+			return call_user_func( $sanitizer, $value );
+		}
+		// Use standard text sanitizer
+		return sanitize_text_field( stripslashes( $value ) );
+	}
+
 
 	/**
+	 * @param array $model
+	 * @param int $primary_field_id
+	 *
 	 * @return array
 	 */
 	public function parent_field_model_data( $model, $primary_field_id ){
