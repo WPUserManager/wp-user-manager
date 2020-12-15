@@ -281,6 +281,10 @@ function wpum_set_displayname_on_registration( $user_data ) {
 		$user_data['display_name'] = trim( $display );
 	}
 
+	if ( empty( $user_data['display_name'] ) ) {
+		unset( $user_data['display_name'] );
+	}
+
 	return $user_data;
 }
 
