@@ -139,7 +139,6 @@ class WPUM_License {
 		// Updater.
 		add_action( 'init', array( $this, 'auto_updater' ), 0 );
 
-		$plugin_name = explode( 'plugins/', $this->file );
 		$plugin_name = plugin_basename( $this->file );
 		add_action( "after_plugin_row_{$plugin_name}", array( $this, 'plugin_page_notices' ), 10, 3 );
 
@@ -149,18 +148,14 @@ class WPUM_License {
 	 * Register settings for the new addon.
 	 *
 	 * @param  $settings
-	 * @return void
+	 *
+	 * @return array
 	 */
 	public function settings( $settings ) {
-
-		$new_settings[] = Field::make(
-			'text',
-			$this->item_shortname . '_license_key',
-			sprintf( __( '%1$s License Key', 'wp-user-manager' ), $this->item_name )
-		)->set_help_text( $this->get_status_message() );
+		$new_settings[] = Field::make( 'text', $this->item_shortname . '_license_key', sprintf( __( '%1$s License Key', 'wp-user-manager' ), $this->item_name ) )
+							   ->set_help_text( $this->get_status_message() );
 
 		return array_merge( $settings, $new_settings );
-
 	}
 
 	/**
@@ -177,7 +172,7 @@ class WPUM_License {
 				return;
 			}
 
-			if ( 'valid' === get_option( $this->item_shortname . '_license_active' ) ) {
+			if ( $this->is_valid() ) {
 				return;
 			}
 
@@ -323,9 +318,8 @@ class WPUM_License {
 	 * @return string
 	 */
 	public function get_status_message() {
-
 		$message = '';
-		$status  = get_option( $this->item_shortname . '_license_active' );
+		$status  = $this->get_license_status();
 
 		$status_class = 'notice-error';
 
@@ -391,6 +385,29 @@ class WPUM_License {
 	}
 
 	/**
+	 * @return false|mixed|void
+	 */
+	protected function get_license_status() {
+		return get_option( $this->item_shortname . '_license_active' );
+	}
+
+	/**
+	 * @return bool
+	 */
+	protected function is_valid() {
+		$license_status = $this->get_license_status();
+		if ( empty( $license_status ) ) {
+			return false;
+		}
+
+		if ( 'valid' !== $license_status ) {
+			return false;
+		}
+
+		return true;
+	}
+
+	/**
 	 * Add a notice when the license has not been activated yet.
 	 *
 	 * @param string $plugin_file
@@ -398,10 +415,6 @@ class WPUM_License {
 	 * @param string $status
 	 */
 	public function plugin_page_notices( $plugin_file, $plugin_data, $status ) {
-		if ( get_option( 'wpum_' . $this->item_shortname . '_license_active' ) && get_option( 'wpum_' . $this->item_shortname . '_license_active' ) == 'valid' ) {
-			return;
-		}
-
 		$colspan = wp_is_auto_update_enabled_for_type( 'plugin' ) ? 4 : 3;
 
 		$update_notice_wrap = '<tr class="plugin-update-tr wpum-addon-notice-tr active"><td colspan="' . $colspan . '" class="colspanchange plugin-update"><div class="notice inline notice-error notice-alt wpum-invalid-license"><p><span class="dashicons dashicons-info" style="color:red;"></span> %s</p></div></td></tr>';
@@ -428,13 +441,10 @@ class WPUM_License {
 	 */
 	public function license_state_message() {
 		$message_data = array();
-		if ( ! get_option( $this->item_shortname . '_license_active' ) || get_option( $this->item_shortname . '_license_active' ) !== 'valid' ) {
-			$message_data['message'] = sprintf(
-				__( 'Please <a href="%1$s">activate your license</a> to receive updates and support for the %2$s addon.', 'wp-user-manager' ),
-				esc_url( admin_url( 'options-general.php?page=wpum-licenses' ) ),
-				'<strong>' . $this->item_name . '</strong>'
-			);
+		if ( ! $this->is_valid() ) {
+			$message_data['message'] = sprintf( __( 'Please <a href="%1$s">activate your license</a> to receive updates and support for the %2$s addon.', 'wp-user-manager' ), esc_url( admin_url( 'options-general.php?page=wpum-licenses' ) ), '<strong>' . $this->item_name . '</strong>' );
 		}
+
 		return $message_data;
 	}
 
