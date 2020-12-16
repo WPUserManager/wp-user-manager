@@ -479,4 +479,4 @@ function WPUM() {
 	return WP_User_Manager::instance();
 }
 
-WPUM();
+add_action( 'plugins_loaded', 'WPUM' );
