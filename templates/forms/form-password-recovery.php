@@ -36,11 +36,11 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 					<label for="<?php echo esc_attr( $key ); ?>">
 						<span class="field <?php echo $field['required'] ? 'required-field' : ''; ?>">
 							<?php
-								// Add the key to field.
-								$field[ 'key' ] = $key;
-								WPUM()->templates
-									->set_template_data( $field )
-									->get_template_part( 'form-fields/' . $field['type'], 'field' );
+							// Add the key to field.
+							$field[ 'key' ] = $key;
+							WPUM()->templates
+								->set_template_data( $field )
+								->get_template_part( 'form-fields/' . $field['type'], 'field' );
 							?>
 						</span>
 						<?php echo esc_html( $field['label'] ); ?>
@@ -59,11 +59,11 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 					</label>
 					<div class="field <?php echo $field['required'] ? 'required-field' : ''; ?>">
 						<?php
-							// Add the key to field.
-							$field[ 'key' ] = $key;
-							WPUM()->templates
-								->set_template_data( $field )
-								->get_template_part( 'form-fields/' . $field['type'], 'field' );
+						// Add the key to field.
+						$field[ 'key' ] = $key;
+						WPUM()->templates
+							->set_template_data( $field )
+							->get_template_part( 'form-fields/' . $field['type'], 'field' );
 						?>
 					</div>
 
@@ -75,6 +75,9 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 		<input type="hidden" name="wpum_form" value="<?php echo $data->form; ?>" />
 		<input type="hidden" name="step" value="<?php echo esc_attr( $data->step ); ?>" />
 		<?php wp_nonce_field( 'verify_password_recovery_form', 'password_recovery_nonce' ); ?>
+
+		<?php do_action( 'wpum_before_submit_button_password_recovery_form' ); ?>
+
 		<input type="submit" name="submit_password_recovery" class="button" value="<?php esc_html_e( 'Reset password', 'wp-user-manager' ); ?>" />
 
 	</form>
