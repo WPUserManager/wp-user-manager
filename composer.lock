@@ -587,16 +587,16 @@
         },
         {
             "name": "wp-user-manager/wp-optionskit",
-            "version": "1.0.14",
+            "version": "1.0.15",
             "source": {
                 "type": "git",
                 "url": "https://github.com/WPUserManager/wp-optionskit.git",
-                "reference": "f97d9d5a75f576264559ce67359c61d465d7c58d"
+                "reference": "d549a0e8a59e2d13ec78b958ce49250fb90bbd1e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/WPUserManager/wp-optionskit/zipball/f97d9d5a75f576264559ce67359c61d465d7c58d",
-                "reference": "f97d9d5a75f576264559ce67359c61d465d7c58d",
+                "url": "https://api.github.com/repos/WPUserManager/wp-optionskit/zipball/d549a0e8a59e2d13ec78b958ce49250fb90bbd1e",
+                "reference": "d549a0e8a59e2d13ec78b958ce49250fb90bbd1e",
                 "shasum": ""
             },
             "require": {
@@ -629,7 +629,7 @@
                 "optionskit",
                 "wordpress"
             ],
-            "time": "2020-09-18T15:07:33+00:00"
+            "time": "2020-12-17T00:17:35+00:00"
         },
         {
             "name": "wp-user-manager/wpum-blocks",
