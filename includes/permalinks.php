@@ -30,28 +30,42 @@ add_action(
 			return;
 		}
 
-		$page_slug = esc_attr( get_post_field( 'post_name', intval( $account_page_id ) ) );
-		$hierarchy = wpum_get_full_page_hierarchy( $account_page_id );
+		$account_page_ids = array_unique( array_filter( apply_filters( 'wpum_account_page_ids', array( $account_page_id ), $account_page_id ) ) );
 
-		if ( ! empty( $hierarchy ) && is_array( $hierarchy ) ) {
-			$page_slug = '';
-			foreach ( array_reverse( $hierarchy )  as $page ) {
-				$parent_page_slug = esc_attr( get_post_field( 'post_name', intval( $page['id'] ) ) );
-				$page_slug       .= $parent_page_slug . '/';
-			}
-		}
+		$account_page_slugs = array();
 
-		$routes->addRoute(
-			new QueryRoute(
-				$page_slug . '{tab:[^/]+}',
-				function( array $matches ) use ( $account_page_id ) {
-					return [
-						'tab'     => rawurldecode( $matches['tab'] ),
-						'page_id' => $account_page_id,
-					];
+		foreach( $account_page_ids as $account_page_id ) {
+			$page_slug = esc_attr( get_post_field( 'post_name', intval( $account_page_id ) ) );
+			$hierarchy = wpum_get_full_page_hierarchy( $account_page_id );
+
+			if ( ! empty( $hierarchy ) && is_array( $hierarchy ) ) {
+				$page_slug = '';
+				foreach ( array_reverse( $hierarchy )  as $page ) {
+					$parent_page_slug = esc_attr( get_post_field( 'post_name', intval( $page['id'] ) ) );
+					$page_slug       .= $parent_page_slug . '/';
 				}
-			)
-		);
+			}
+
+			$page_slug = apply_filters( 'wpum_account_page_slug', $page_slug, $account_page_id );
+
+			if ( in_array( $page_slug, $account_page_slugs ) ) {
+				continue;
+			}
+
+			$account_page_slugs[] = $page_slug;
+
+			$routes->addRoute(
+				new QueryRoute(
+					$page_slug . '{tab:[^/]+}',
+					function( array $matches ) use ( $account_page_id ) {
+						return [
+							'tab'     => rawurldecode( $matches['tab'] ),
+							'page_id' => $account_page_id,
+						];
+					}
+				)
+			);
+		}
 	}
 );
 
@@ -80,55 +94,52 @@ add_action(
 			return;
 		}
 
-		$page_slug = esc_attr( get_post_field( 'post_name', intval( $profile_page_id ) ) );
-		$hierarchy = wpum_get_full_page_hierarchy( $profile_page_id );
+		$profile_page_ids = array_unique( array_filter( apply_filters( 'wpum_profile_page_ids', array( $profile_page_id ), $profile_page_id ) ) );
 
-		if ( ! empty( $hierarchy ) && is_array( $hierarchy ) ) {
-			$page_slug = '';
-			foreach ( array_reverse( $hierarchy ) as $page ) {
-				$parent_page_slug = esc_attr( get_post_field( 'post_name', intval( $page['id'] ) ) );
-				$page_slug       .= $parent_page_slug . '/';
+		$profile_page_slugs = array();
+		foreach( $profile_page_ids as $profile_page_id ) {
+
+			$page_slug = esc_attr( get_post_field( 'post_name', intval( $profile_page_id ) ) );
+			$hierarchy = wpum_get_full_page_hierarchy( $profile_page_id );
+
+			if ( ! empty( $hierarchy ) && is_array( $hierarchy ) ) {
+				$page_slug = '';
+				foreach ( array_reverse( $hierarchy ) as $page ) {
+					$parent_page_slug = esc_attr( get_post_field( 'post_name', intval( $page['id'] ) ) );
+					$page_slug        .= $parent_page_slug . '/';
+				}
 			}
-		}
 
-		$routes->addRoute(
-			new QueryRoute(
-				$page_slug . '{profile:[^/]+}',
-				function( array $matches ) use ( $profile_page_id ) {
+			if ( in_array( $page_slug, $profile_page_slugs ) ) {
+				continue;
+			}
+
+			$profile_page_slugs[] = $page_slug;
+
+			$routes->addRoute( new QueryRoute( $page_slug . '{profile:[^/]+}', function ( array $matches ) use ( $profile_page_id ) {
 					return [
 						'profile' => rawurldecode( $matches['profile'] ),
 						'page_id' => $profile_page_id,
 					];
-				}
-			)
-		);
+				} ) );
 
-		$routes->addRoute(
-			new QueryRoute(
-				$page_slug . '{profile:[^/]+}/{tab:[a-zA-Z0-9_.-]+}',
-				function( array $matches ) use ( $profile_page_id ) {
+			$routes->addRoute( new QueryRoute( $page_slug . '{profile:[^/]+}/{tab:[a-zA-Z0-9_.-]+}', function ( array $matches ) use ( $profile_page_id ) {
 					return [
 						'profile' => rawurldecode( $matches['profile'] ),
 						'tab'     => rawurldecode( $matches['tab'] ),
 						'page_id' => $profile_page_id,
 					];
-				}
-			)
-		);
+				} ) );
 
-		$routes->addRoute(
-			new QueryRoute(
-				$page_slug . '{profile:[^/]+}/{tab:[a-zA-Z0-9_.-]+}/page/{paged:[a-zA-Z0-9_.-]+}',
-				function( array $matches ) use ( $profile_page_id ) {
+			$routes->addRoute( new QueryRoute( $page_slug . '{profile:[^/]+}/{tab:[a-zA-Z0-9_.-]+}/page/{paged:[a-zA-Z0-9_.-]+}', function ( array $matches ) use ( $profile_page_id ) {
 					return [
 						'profile' => rawurldecode( $matches['profile'] ),
 						'tab'     => rawurldecode( $matches['tab'] ),
 						'paged'   => $matches['paged'],
 						'page_id' => $profile_page_id,
 					];
-				}
-			)
-		);
+				} ) );
 
+		}
 	}
 );
