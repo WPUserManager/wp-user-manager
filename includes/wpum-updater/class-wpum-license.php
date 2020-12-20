@@ -407,7 +407,7 @@ class WPUM_License {
 	 * @param string $status
 	 */
 	public function plugin_page_notices( $plugin_file, $plugin_data, $status ) {
-		$has_update = -1 == version_compare( $plugin_data['Version'], $plugin_data['new_version'] );
+		$has_update = isset( $plugin_data['new_version'] ) && -1 == version_compare( $plugin_data['Version'], $plugin_data['new_version'] );
 
 		$license_data   = $this->get_license_data();
 		$licence_status = isset( $license_data['status'] ) ? $license_data['status'] : 'empty';
@@ -436,7 +436,8 @@ class WPUM_License {
 			$notice_class   = 'notice-warning';
 		}
 
-		$update_notice_wrap = '<tr id="wpum-addon-notice-' . $plugin_data['slug'] . '" class="plugin-update-tr wpum-addon-notice-tr active"><td colspan="' . $colspan . '" class="colspanchange plugin-update"><div class="notice inline update-message '. $notice_class . ' notice-alt wpum-invalid-license"><p>%s</p></div></td></tr>';
+		$slug = isset( $plugin_data['slug'] ) ? $plugin_data['slug'] : strtolower( str_replace( ' ', '-', $plugin_data['Name']));
+		$update_notice_wrap = '<tr id="wpum-addon-notice-' . $slug . '" class="plugin-update-tr wpum-addon-notice-tr active"><td colspan="' . $colspan . '" class="colspanchange plugin-update"><div class="notice inline update-message '. $notice_class . ' notice-alt wpum-invalid-license"><p>%s</p></div></td></tr>';
 
 		if ( ( empty( $this->license) || $has_update ) && $message ) {
 			echo sprintf( $update_notice_wrap, $message );
@@ -446,13 +447,12 @@ class WPUM_License {
 					$( document ).ready( function() {
 						$( 'tr[data-plugin="<?php echo $plugin_file; ?>"]' ).addClass( 'update' );
 
-
-						if ( $( '#<?php echo $plugin_data['slug']; ?>-update' ).length ) {
+						if ( $( '#<?php echo $slug; ?>-update' ).length ) {
 							<?php if ( ! $has_update ) : ?>
-							$( '#wpum-addon-notice-<?php echo $plugin_data['slug']; ?>' ).remove();
-							$( '#<?php echo $plugin_data['slug']; ?>-update em' ).remove();
+							$( '#wpum-addon-notice-<?php echo $slug; ?>' ).remove();
+							$( '#<?php echo $slug; ?>-update em' ).remove();
 							<?php else: ?>
-							$( '#<?php echo $plugin_data['slug']; ?>-update' ).remove();
+							$( '#<?php echo $slug; ?>-update' ).remove();
 							<?php endif; ?>
 						}
 
