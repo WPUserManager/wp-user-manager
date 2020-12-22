@@ -1,6 +1,6 @@
 <?php
 /**
- * Handles the display of logged in content shortcode generator.
+ * Handles the display of logged out content shortcode generator.
  *
  * @package     wp-user-manager
  * @copyright   Copyright (c) 2018, Alessandro Tesoro
@@ -13,15 +13,15 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 /**
  * Add registration form shortcode window to the editor.
  */
-class WPUM_Shortcode_Content_Loggedin extends WPUM_Shortcode_Generator {
+class WPUM_Shortcode_Content_Loggedout extends WPUM_Shortcode_Generator {
 
 	/**
 	 * Inject the editor for this shortcode.
 	 */
 	public function __construct() {
-		$this->shortcode['title'] = esc_html__( 'Members only content', 'wp-user-manager' );
-		$this->shortcode['label'] = esc_html__( 'Members only content', 'wp-user-manager' );
-		parent::__construct( 'wpum_restrict_logged_in' );
+		$this->shortcode['title'] = esc_html__( 'Logged out only user content', 'wp-user-manager' );
+		$this->shortcode['label'] = esc_html__( 'Logged out only user content', 'wp-user-manager' );
+		parent::__construct( 'wpum_restrict_logged_out' );
 	}
 
 	/**
@@ -42,4 +42,4 @@ class WPUM_Shortcode_Content_Loggedin extends WPUM_Shortcode_Generator {
 
 }
 
-new WPUM_Shortcode_Content_Loggedin;
+new WPUM_Shortcode_Content_Loggedout;

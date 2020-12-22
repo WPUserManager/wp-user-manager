@@ -339,6 +339,14 @@ add_shortcode( 'wpum_profile', 'wpum_profile' );
  * @return void
  */
 function wpum_restrict_logged_in( $atts, $content = null ) {
+	extract(
+		shortcode_atts(
+			array(
+				'show_message' => 'yes',
+			),
+			$atts
+		)
+	);
 
 	ob_start();
 
@@ -347,6 +355,10 @@ function wpum_restrict_logged_in( $atts, $content = null ) {
 		echo do_shortcode( $content );
 
 	} else {
+
+		if ( ! $show_message || 'no' === $show_message ) {
+			return '';
+		}
 
 		$login_page = get_permalink( wpum_get_core_page_id( 'login' ) );
 		$login_page = add_query_arg(
@@ -364,7 +376,7 @@ function wpum_restrict_logged_in( $atts, $content = null ) {
 		 * @param string $message the original message.
 		 * @return string
 		 */
-		$message = apply_filters( 'wpum_content_restriction_message', $message );
+		$message = apply_filters( 'wpum_content_restriction_message', $message, 'wpum_restrict_logged_in' );
 
 		WPUM()->templates
 			->set_template_data(
@@ -383,18 +395,18 @@ function wpum_restrict_logged_in( $atts, $content = null ) {
 add_shortcode( 'wpum_restrict_logged_in', 'wpum_restrict_logged_in' );
 
 /**
- * Display content to a given list of users by ID.
+ * Shortcode to display content to logged out users only.
  *
  * @param array  $atts
  * @param string $content
- * @return void
+ *
+ * @return string
  */
-function wpum_restrict_to_users( $atts, $content = null ) {
-
+function wpum_restrict_logged_out( $atts, $content = null ) {
 	extract(
 		shortcode_atts(
 			array(
-				'ids' => null,
+				'show_message' => 'no',
 			),
 			$atts
 		)
@@ -402,14 +414,15 @@ function wpum_restrict_to_users( $atts, $content = null ) {
 
 	ob_start();
 
-	$allowed_users = explode( ',', $ids );
-	$current_user  = get_current_user_id();
-
-	if ( is_user_logged_in() && ! is_null( $content ) && ! is_feed() && in_array( $current_user, $allowed_users ) ) {
+	if ( ! is_user_logged_in() && ! is_null( $content ) && ! is_feed() ) {
 
 		echo do_shortcode( $content );
 
 	} else {
+
+		if ( ! $show_message || 'no' === $show_message ) {
+			return '';
+		}
 
 		$login_page = get_permalink( wpum_get_core_page_id( 'login' ) );
 		$login_page = add_query_arg(
@@ -427,7 +440,74 @@ function wpum_restrict_to_users( $atts, $content = null ) {
 		 * @param string $message the original message.
 		 * @return string
 		 */
-		$message = apply_filters( 'wpum_content_restriction_message', $message );
+		$message = apply_filters( 'wpum_content_restriction_message', $message, 'wpum_restrict_logged_out' );
+
+		WPUM()->templates
+			->set_template_data(
+				[
+					'message' => $message,
+				]
+			)
+			->get_template_part( 'messages/general', 'warning' );
+
+	}
+
+	$output = ob_get_clean();
+
+	return $output;
+}
+add_shortcode( 'wpum_restrict_logged_out', 'wpum_restrict_logged_out' );
+
+/**
+ * Display content to a given list of users by ID.
+ *
+ * @param array  $atts
+ * @param string $content
+ * @return void
+ */
+function wpum_restrict_to_users( $atts, $content = null ) {
+
+	extract(
+		shortcode_atts(
+			array(
+				'ids' => null,
+				'show_message' => 'yes',
+			),
+			$atts
+		)
+	);
+
+	ob_start();
+
+	$allowed_users = explode( ',', $ids );
+	$current_user  = get_current_user_id();
+
+	if ( is_user_logged_in() && ! is_null( $content ) && ! is_feed() && in_array( $current_user, $allowed_users ) ) {
+
+		echo do_shortcode( $content );
+
+	} else {
+		if ( ! $show_message || 'no' === $show_message ) {
+			return '';
+		}
+
+		$login_page = get_permalink( wpum_get_core_page_id( 'login' ) );
+		$login_page = add_query_arg(
+			[
+				'redirect_to' => get_permalink(),
+			],
+			$login_page
+		);
+
+		$message = sprintf( __( 'This content is available to members only. Please <a href="%1$s">login</a> or <a href="%2$s">register</a> to view this area.', 'wp-user-manager' ), $login_page, get_permalink( wpum_get_core_page_id( 'register' ) ) );
+
+		/**
+		 * Filter: allow developers to modify the content restriction shortcode message.
+		 *
+		 * @param string $message the original message.
+		 * @return string
+		 */
+		$message = apply_filters( 'wpum_content_restriction_message', $message, 'wpum_restrict_to_users' );
 
 		WPUM()->templates
 			->set_template_data(
@@ -459,6 +539,7 @@ function wpum_restrict_to_user_roles( $atts, $content = null ) {
 		shortcode_atts(
 			array(
 				'roles' => null,
+				'show_message' => 'yes',
 			),
 			$atts
 		)
@@ -475,6 +556,9 @@ function wpum_restrict_to_user_roles( $atts, $content = null ) {
 		echo do_shortcode( $content );
 
 	} else {
+		if ( ! $show_message || 'no' === $show_message ) {
+			return '';
+		}
 
 		$login_page = get_permalink( wpum_get_core_page_id( 'login' ) );
 		$login_page = add_query_arg(
@@ -492,7 +576,7 @@ function wpum_restrict_to_user_roles( $atts, $content = null ) {
 		 * @param string $message the original message.
 		 * @return string
 		 */
-		$message = apply_filters( 'wpum_content_restriction_message', $message );
+		$message = apply_filters( 'wpum_content_restriction_message', $message, 'wpum_restrict_to_user_roles' );
 
 		WPUM()->templates
 			->set_template_data(
