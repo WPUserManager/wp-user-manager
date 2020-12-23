@@ -33,7 +33,13 @@ class WPUM_Shortcode_Content_Users extends WPUM_Shortcode_Generator {
 				'name'    => 'ids',
 				'label'   => esc_html__( 'Comma separated user id(s)', 'wp-user-manager' ),
 				'tooltip' => esc_html__( 'List of user ids for which the content will be available.', 'wp-user-manager' )
-			)
+			),
+			array(
+				'type'    => 'listbox',
+				'name'    => 'show_message',
+				'label'   => esc_html__( 'Show message', 'wp-user-manager' ),
+				'options' => $this->get_yes_no(),
+			),
 		];
 	}
 

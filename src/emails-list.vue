@@ -230,6 +230,7 @@ export default {
 		}
 		.search-form {
 			float: none;
+			margin: 10px 0 15px;
 		}
 	}
 	.spinner {

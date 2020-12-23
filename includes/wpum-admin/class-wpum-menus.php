@@ -36,6 +36,8 @@ class WPUM_Menus {
 		if ( ! is_admin() ) {
 			add_filter( 'wp_get_nav_menu_items', [ $this, 'exclude_menu_items' ], 10, 3 );
 		}
+
+		add_action( 'wp_nav_menu_item_custom_fields', array( $this, 'nav_walker_overide_fix' ), 10, 4 );
 	}
 
 	/**
@@ -137,7 +139,8 @@ class WPUM_Menus {
 	 * @param array $items
 	 * @param array $menu
 	 * @param array $args
-	 * @return void
+	 *
+	 * @return array
 	 */
 	public function exclude_menu_items( $items, $menu, $args ) {
 
@@ -177,6 +180,30 @@ class WPUM_Menus {
 
 		return $items;
 
+	}
+
+	/**
+	 * When other themes or plugins extend the Walker_Nav_Menu_Edit class, ours won't get called
+	 * Use the WP 5.4+ hook to inject what Carbon Fields needs for the menu item settings.
+	 *
+	 * @param $id
+	 * @param $item
+	 * @param $depth
+	 * @param $args
+	 */
+	public function nav_walker_overide_fix( $id, $item, $depth, $args ) {
+		if ( is_a( $args->walker, 'Carbon_Fields\\Walker\\Nav_Menu_Item_Edit_Walker' ) ) {
+			return;
+		}
+
+		$flag = '<!--CarbonFields-->';
+
+		ob_start();
+		do_action( 'carbon_fields_print_nav_menu_item_container_fields', $item, '', $depth, $args, $id );
+		echo $flag;
+		$output = ob_get_clean();
+
+		echo $output;
 	}
 
 }

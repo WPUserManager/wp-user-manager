@@ -81,7 +81,7 @@ export default {
 
 			axios.get( wpumFieldsEditor.ajax, {
 				params: {
-					group_id: this.$route.params.id,
+					group_id: this.model.group,
 					nonce: wpumFieldsEditor.get_fields_nonce,
 					action: 'wpum_get_fields_from_group',
 					parent_id: this.model.parent

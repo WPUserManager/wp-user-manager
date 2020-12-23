@@ -587,16 +587,16 @@
         },
         {
             "name": "wp-user-manager/wp-optionskit",
-            "version": "1.0.14",
+            "version": "1.0.15",
             "source": {
                 "type": "git",
                 "url": "https://github.com/WPUserManager/wp-optionskit.git",
-                "reference": "f97d9d5a75f576264559ce67359c61d465d7c58d"
+                "reference": "d549a0e8a59e2d13ec78b958ce49250fb90bbd1e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/WPUserManager/wp-optionskit/zipball/f97d9d5a75f576264559ce67359c61d465d7c58d",
-                "reference": "f97d9d5a75f576264559ce67359c61d465d7c58d",
+                "url": "https://api.github.com/repos/WPUserManager/wp-optionskit/zipball/d549a0e8a59e2d13ec78b958ce49250fb90bbd1e",
+                "reference": "d549a0e8a59e2d13ec78b958ce49250fb90bbd1e",
                 "shasum": ""
             },
             "require": {
@@ -629,20 +629,20 @@
                 "optionskit",
                 "wordpress"
             ],
-            "time": "2020-09-18T15:07:33+00:00"
+            "time": "2020-12-17T00:17:35+00:00"
         },
         {
             "name": "wp-user-manager/wpum-blocks",
-            "version": "1.2",
+            "version": "1.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/WPUserManager/wpum-blocks.git",
-                "reference": "39fc926ea8e560c58949c7b83caedc59d09af0e8"
+                "reference": "c47ec595510f5386102dce13f00f4753c48bcd83"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/WPUserManager/wpum-blocks/zipball/39fc926ea8e560c58949c7b83caedc59d09af0e8",
-                "reference": "39fc926ea8e560c58949c7b83caedc59d09af0e8",
+                "url": "https://api.github.com/repos/WPUserManager/wpum-blocks/zipball/c47ec595510f5386102dce13f00f4753c48bcd83",
+                "reference": "c47ec595510f5386102dce13f00f4753c48bcd83",
                 "shasum": ""
             },
             "require": {
@@ -670,7 +670,7 @@
             "keywords": [
                 "wordpress"
             ],
-            "time": "2020-12-06T21:00:07+00:00"
+            "time": "2020-12-22T22:44:35+00:00"
         },
         {
             "name": "wpbp/widgets-helper",
