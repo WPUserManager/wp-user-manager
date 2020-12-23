@@ -8,7 +8,7 @@ Tested up to: 5.6
 Requires PHP: 5.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
-Stable Tag: 2.4.1
+Stable Tag: 2.4.2
 
 The most customizable profiles & community builder WordPress plugin with front-end login, registration, profile customization and content restriction.
 
@@ -123,6 +123,16 @@ Please note that using WPUM and the mentioned add-ons does NOT guarantee complia
 13. Login form.
 
 == Changelog ==
+
+= 2.4.2 (23rd December 2020) =
+
+- New: Shortcode for restricting content to logged out users only
+- New: Restrict blocks content to logged out users only
+- New: Add block & shortcode argument to show or hide restricted message
+- Improvement: WPML addon compatibility improvements
+- Improvement: Other addon compatibility tweaks
+- Fix: PHP warning if no users/roles selected for block restriction
+- Fix: Menu item settings not showing if another plugin extends Walker_Nav_Menu_Edit
 
 = 2.4.1 (11th December 2020) =
 
