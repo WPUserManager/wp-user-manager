@@ -131,6 +131,7 @@ Please note that using WPUM and the mentioned add-ons does NOT guarantee complia
 - New: Add block & shortcode argument to show or hide restricted message
 - Improvement: WPML addon compatibility improvements
 - Improvement: Other addon compatibility tweaks
+- Improvement: License checking for addons
 - Fix: PHP warning if no users/roles selected for block restriction
 - Fix: Menu item settings not showing if another plugin extends Walker_Nav_Menu_Edit
 
