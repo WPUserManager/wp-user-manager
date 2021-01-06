@@ -14,7 +14,6 @@ jQuery( function( $ ) {
 
 	var repeater = {
 
-		form: $( 'form' ),
 		repeaters: {},
 
 		init: function() {
@@ -40,12 +39,12 @@ jQuery( function( $ ) {
 				$( this ).removeAttr( 'required' )
 			} );
 
-			self.form.on( 'click', '.add-repeater-row', function() {
+			$('body').on( 'click', '.add-repeater-row', function() {
 				var parent = $( this ).parents( 'fieldset' );
 				self.addNewInstance( parent.get( 0 ).classList[ 0 ] );
 			} );
 
-			self.form.on( 'click', '.remove-repeater-row', function(e) {
+			$('body').on( 'click', '.remove-repeater-row', function(e) {
 				e.preventDefault();
 				var parent = $( this ).parents( 'fieldset' );
 				var $row = $( this ).parents( '.fieldset-wpum_field_group' );
