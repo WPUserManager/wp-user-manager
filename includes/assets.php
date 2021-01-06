@@ -83,4 +83,6 @@ function wpum_enqueue_scripts() {
 	];
 
 	wp_localize_script( 'wpum-frontend-js', 'wpumFrontend', $js_variables );
+
+	do_action( 'wpum_enqueue_frontend_scripts', $suffix );
 }
