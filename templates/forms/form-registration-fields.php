@@ -20,6 +20,14 @@ $field = $data->field;
 $key   = $data->key;
 if ( ! empty( $field['default_value'] ) ) {
 	$field['value'] = $field['default_value'];
+
+	// Query Strings as defaults
+	preg_match_all( "/\{query_var key=\"(.+?)\"\}/", $field['default_value'], $query_vars );
+	if ( ! empty( $query_vars[1] ) ) {
+		foreach ( $query_vars[1] as $key => $query_var ) {
+			$field['value'] = ! empty( $_GET[ $query_var ] ) ? wp_unslash( sanitize_text_field( $_GET[ $query_var ] ) ) : '';
+		}
+	}
 }
 ?>
 
