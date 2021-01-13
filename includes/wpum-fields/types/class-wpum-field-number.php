@@ -50,6 +50,13 @@ class WPUM_Field_Number extends WPUM_Field_Type {
 					'label'     => esc_html__( 'Step Size', 'wp-user-manager' ),
 					'model'     => 'step_size',
 				),
+				'pattern' => array(
+					'type'      => 'input',
+					'inputType' => 'text',
+					'label'     => esc_html__( 'Pattern', 'wp-user-manager' ),
+					'model'     => 'pattern',
+					'hint'      => esc_html__( 'A regular expression to validate number formats.', 'wp-user-manager' ) . ' <a target="_blank" href="http://html5pattern.com/">' . esc_html__( 'Example patterns' ) . '</a>'
+				),
 			],
 		];
 	}

@@ -29,5 +29,6 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 	maxlength="<?php echo ! empty( $data->maxlength ) ? $data->maxlength : ''; ?>"
 	<?php if ( ! empty( $data->required ) ) echo 'required'; ?>
 	<?php if ( ! empty( $data->read_only ) ) echo 'readonly'; ?>
+	<?php if ( ! empty( $data->pattern ) ) echo ' pattern="' . $data->pattern . '"' ; ?>
 />
 <?php if ( ! empty( $data->description ) ) : ?><small class="description"><?php echo $data->description; ?></small><?php endif; ?>
