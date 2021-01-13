@@ -43,12 +43,14 @@ $key   = $data->key;
 
 	<?php else : ?>
 
-		<label for="<?php echo esc_attr( $key ); ?>">
-			<?php echo esc_html( $field['label'] ); ?>
-			<?php if( isset( $field['required'] ) && $field['required'] ) : ?>
-				<span class="wpum-required">*</span>
-			<?php endif; ?>
-		</label>
+		<?php if ( $field['type'] !== 'hidden' ) : ?>
+			<label for="<?php echo esc_attr( $key ); ?>">
+				<?php echo esc_html( $field['label'] ); ?>
+				<?php if ( isset( $field['required'] ) && $field['required'] ) : ?>
+					<span class="wpum-required">*</span>
+				<?php endif; ?>
+			</label>
+		<?php endif; ?>
 		<div class="field <?php echo $field['required'] ? 'required-field' : ''; ?>">
 			<?php
 				// Add the key to field.
