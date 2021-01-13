@@ -18,6 +18,9 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 
 $field = $data->field;
 $key   = $data->key;
+if ( ! empty( $field['default_value'] ) ) {
+	$field['value'] = $field['default_value'];
+}
 ?>
 
 <fieldset class="fieldset-<?php echo esc_attr( $key ); ?>">

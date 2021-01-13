@@ -20,10 +20,13 @@ class WPUM_Field_Number extends WPUM_Field_Type {
 		$this->type  = 'number';
 		$this->icon  = 'dashicons-leftright';
 		$this->order = 3;
+		$this->allow_default = true;
 	}
 
 	public function get_data_keys() {
-		return array_keys( $this->get_editor_settings()['validation'] );
+		$keys = parent::get_data_keys();
+
+		return array_merge( $keys, array_keys( $this->get_editor_settings()['validation'] ) );
 	}
 
 	/**

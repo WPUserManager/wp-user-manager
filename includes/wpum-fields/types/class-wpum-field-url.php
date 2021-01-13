@@ -20,6 +20,7 @@ class WPUM_Field_Url extends WPUM_Field_Type {
 		$this->type  = 'url';
 		$this->icon  = 'dashicons-admin-links';
 		$this->order = 3;
+		$this->allow_default = true;
 	}
 
 	/**

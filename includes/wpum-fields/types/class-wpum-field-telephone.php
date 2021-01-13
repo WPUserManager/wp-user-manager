@@ -23,7 +23,9 @@ class WPUM_Field_Telephone extends WPUM_Field_Type {
 	}
 
 	public function get_data_keys() {
-		return array_keys( $this->get_editor_settings()['validation'] );
+		$keys = parent::get_data_keys();
+
+		return array_merge( $keys, array_keys( $this->get_editor_settings()['validation'] ) );
 	}
 
 	/**
