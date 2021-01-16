@@ -53,7 +53,7 @@ class WPUM_User_Meta_Custom_Datastore extends Datastore {
 			$value = array();
 		}
 		if ( empty( $value ) ) {
-			return '';
+			$value = '';
 		}
 
 		return $value;
