@@ -43,7 +43,8 @@ class WPUM_User_Meta_Custom_Datastore extends Datastore {
 	 * Load the field value(s)
 	 *
 	 * @param Field $field The field to load value(s) in.
-	 * @return array
+	 *
+	 * @return mixed
 	 */
 	public function load( Field $field ) {
 		$key   = $this->get_key_for_field( $field );
@@ -51,6 +52,10 @@ class WPUM_User_Meta_Custom_Datastore extends Datastore {
 		if ( empty( $value ) && is_a( $field, '\\Carbon_Fields\\Field\\Complex_Field' ) ) {
 			$value = array();
 		}
+		if ( empty( $value ) ) {
+			return '';
+		}
+
 		return $value;
 	}
 
