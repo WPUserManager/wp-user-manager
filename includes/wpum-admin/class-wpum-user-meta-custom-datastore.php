@@ -49,11 +49,11 @@ class WPUM_User_Meta_Custom_Datastore extends Datastore {
 	public function load( Field $field ) {
 		$key   = $this->get_key_for_field( $field );
 		$value = get_user_meta( $this->object_id, $key, true );
-		if ( empty( $value ) && is_a( $field, '\\Carbon_Fields\\Field\\Complex_Field' ) ) {
-			$value = array();
-		}
 		if ( empty( $value ) ) {
 			$value = '';
+		}
+		if ( empty( $value ) && is_a( $field, '\\Carbon_Fields\\Field\\Complex_Field' ) ) {
+			$value = array();
 		}
 
 		return $value;
