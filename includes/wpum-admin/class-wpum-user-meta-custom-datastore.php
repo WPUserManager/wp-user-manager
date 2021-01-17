@@ -36,6 +36,8 @@ class WPUM_User_Meta_Custom_Datastore extends Datastore {
 	 * @param bool $autoload
 	 */
 	protected function save_key_value_pair_with_autoload( $key, $value, $autoload ) {
+		$value = apply_filters( 'wpum_custom_field_admin_meta_update', $value, $key, $this->object_id, $value );
+
 		update_user_meta( $this->object_id, $key, $value );
 	}
 

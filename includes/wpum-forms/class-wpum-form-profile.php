@@ -210,8 +210,9 @@ class WPUM_Form_Profile extends WPUM_Form {
 	/**
 	 * Retrieve the value of a given field for the currently logged in user.
 	 *
-	 * @param object $field
-	 * @return void
+	 * @param WPUM_Field $field
+	 *
+	 * @return mixed
 	 */
 	private function get_user_field_value( $field ) {
 
@@ -259,8 +260,7 @@ class WPUM_Form_Profile extends WPUM_Form {
 
 		}
 
-		return $value;
-
+		return apply_filters( 'wpum_custom_field_value', $value, $field, $this->user->ID );
 	}
 
 	/**

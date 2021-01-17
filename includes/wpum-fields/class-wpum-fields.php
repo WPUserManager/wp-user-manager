@@ -63,7 +63,8 @@ class WPUM_Fields {
 			'audio',
 			'wysiwyg',
 			'repeater',
-			'hidden'
+			'hidden',
+			'taxonomy',
 		] );
 
 		foreach ( $fields as $field ) {

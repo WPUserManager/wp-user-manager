@@ -487,20 +487,19 @@ abstract class WPUM_Form {
 			}
 		}
 
-		return $options;
-
+		return apply_filters( 'wpum_form_custom_field_dropdown_options', $options, $field );
 	}
 
 	/**
 	 * Retrieve stored dropdown options from the db.
 	 *
 	 * @param object $field
-	 * @return void
+	 *
+	 * @return array
 	 */
 	protected function get_custom_field_dropdown_options( $field ) {
-
 		if ( $field->is_primary() ) {
-			return;
+			return [];
 		}
 
 		$options = [];
@@ -516,8 +515,7 @@ abstract class WPUM_Form {
 			}
 		}
 
-		return $options;
-
+		return apply_filters( 'wpum_form_custom_field_dropdown_options', $options, $field );
 	}
 
 }

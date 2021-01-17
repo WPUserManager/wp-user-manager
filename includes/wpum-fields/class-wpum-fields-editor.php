@@ -415,7 +415,7 @@ class WPUM_Fields_Editor {
 			$first_key = key( $field_type );
 
 			$settings = $field_type[ $first_key ]['settings'];
-			$settings = $settings[ $fields_type_group ];
+			$settings = apply_filters( 'wpum_fields_editor_field_settings', $settings[ $fields_type_group ], $field_type[ $first_key ], $fields_type_group );
 			$model    = [];
 
 			// Generate the model array for vuejs.
@@ -449,7 +449,8 @@ class WPUM_Fields_Editor {
 	 *
 	 * @param array $settings
 	 * @param string $primary_field_id
-	 * @return void
+	 *
+	 * @return array
 	 */
 	private function deregister_settings( $settings, $primary_field_id ) {
 
@@ -483,7 +484,8 @@ class WPUM_Fields_Editor {
 	 * Deregister models for fields that are no longer required.
 	 *
 	 * @param array $model
-	 * @return void
+	 *
+	 * @return array
 	 */
 	private function deregister_model( $model, $primary_field_id ) {
 
