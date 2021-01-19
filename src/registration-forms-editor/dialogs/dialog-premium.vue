@@ -6,7 +6,7 @@
 				<h1><span class="dashicons dashicons-warning"></span> Premium addon required</h1>
 			</div>
 			<div class="media-frame-content">
-				<p v-html="labels.premium_addon"></p>
+				<p v-html="labels['premium_addon' + type]"></p>
 			</div>
 			<div class="media-frame-toolbar">
 				<div class="media-toolbar">
@@ -22,6 +22,12 @@
 <script>
 export default {
 	name: 'premium-dialog',
+	props: {
+		type: {
+			type: String,
+			default: ''
+		},
+	},
 	data() {
 		return {
 			labels: wpumRegistrationFormsEditor.labels,

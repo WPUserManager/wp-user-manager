@@ -73,6 +73,13 @@
 								<template v-for="field in droppableFieldAfter">
 									<component :is="field" :key="field.name"></component>
 								</template>
+
+								<p v-if="! isAddonInstalled" style="text-align:right">
+									<button class="button" @click="showRegistrationAddonDialog('step')">Add Step</button>
+									<button class="button" @click="showRegistrationAddonDialog('html')">Add HTML</button>
+
+									<modals-container/>
+								</p>
 							</div>
 						</div>
 					</div>
@@ -91,6 +98,7 @@ import qs from 'qs'
 import balloon from 'balloon-css'
 import draggable from 'vuedraggable'
 import hooks from './hooks'
+import PremiumFormsDialog from "./dialogs/dialog-premium";
 
 export default {
 	name: 'registration-form-editor',
@@ -101,6 +109,7 @@ export default {
 		return {
 			labels:              wpumRegistrationFormsEditor.labels,
 			pluginURL:           wpumRegistrationFormsEditor.pluginURL,
+			isAddonInstalled: 	 wpumRegistrationFormsEditor.is_addon_installed,
 			loading:             false,
 			loadingSettings:     false,
 			formID:              '',
@@ -215,6 +224,12 @@ export default {
 		},
 		isComponentAvailable( type ){
 			return !!this.$root.$options.components['wpum-field-' + type];
+		},
+		/**
+		 * Show the add new form modal or show the premium dialog if the addon isn't installed.
+		 */
+		showRegistrationAddonDialog(type) {
+				this.$modal.show( PremiumFormsDialog, {type: type},{ height: '220px' })
 		}
 	}
 }
