@@ -16,14 +16,6 @@
  // Exit if accessed directly
 if ( ! defined( 'ABSPATH' ) ) exit;
 
-?>
+$field_type = empty( $data->field_type ) ? 'select' : $data->field_type;
 
-<select name="<?php echo esc_attr( isset( $data->name ) ? $data->name : $data->key ); ?>" id="<?php echo esc_attr( $data->key ); ?>" <?php if ( ! empty( $data->required ) ) echo 'required'; ?> <?php if ( ! empty( $data->read_only ) ) echo 'disabled'; ?>>
-	<?php foreach ( $data->options as $key => $value ) : ?>
-		<option value="<?php echo esc_attr( $key ); ?>" <?php if ( isset( $data->value ) || isset( $data->default ) ) selected( isset( $data->value ) ? $data->value : $data->default, $key ); ?>><?php echo esc_html( $value ); ?></option>
-	<?php endforeach; ?>
-</select>
-<?php if ( ! empty( $data->read_only ) ) : ?>
-	<input type="hidden" name="<?php echo esc_attr( isset( $data->name ) ? $data->name : $data->key ); ?>" id="<?php echo esc_attr( $data->key ); ?>" value="<?php echo isset( $data->value ) ? esc_attr( $data->value ) : ''; ?>" />
-<?php endif; ?>
-<?php if ( ! empty( $data->description ) ) : ?><small class="description"><?php echo $data->description; ?></small><?php endif; ?>
+WPUM()->templates->set_template_data( $data )->get_template_part( 'form-fields/' . $field_type, 'field' );

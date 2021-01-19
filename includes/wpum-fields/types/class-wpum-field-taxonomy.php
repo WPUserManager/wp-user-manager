@@ -35,12 +35,37 @@ class WPUM_Field_Taxonomy extends WPUM_Field_Type {
 	public function get_editor_settings() {
 		return [
 			'general' => [
-				'taxonomy' => array(
-					'type'      => 'select',
-					'label'     => esc_html__( 'Taxonomy', 'wp-user-manager' ),
-					'model'     => 'taxonomy',
-					'values' => [
-					],
+				'taxonomy'   => array(
+					'type'   => 'select',
+					'label'  => esc_html__( 'Taxonomy', 'wp-user-manager' ),
+					'model'  => 'taxonomy',
+					'required'  => true,
+					'values' => [],
+				),
+				'field_type' => array(
+					'type'   => 'select',
+					'label'  => esc_html__( 'Field Type', 'wp-user-manager' ),
+					'model'  => 'field_type',
+					'default' => 'select',
+					'required'  => true,
+					'values' => array(
+						array(
+							'id'   => '',
+							'name' => 'Select Field Type',
+						),
+						array(
+							'id'   => 'select',
+							'name' => 'Dropdown',
+						),
+						array(
+							'id'   => 'multiselect',
+							'name' => 'Multiselect',
+						),
+						array(
+							'id'   => 'multicheckbox',
+							'name' => 'Checkboxes',
+						),
+					),
 				),
 			],
 		];

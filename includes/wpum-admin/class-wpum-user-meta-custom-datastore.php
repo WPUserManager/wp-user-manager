@@ -58,7 +58,10 @@ class WPUM_User_Meta_Custom_Datastore extends Datastore {
 			$value = array();
 		}
 
-		return $value;
+		$id = str_replace( 'wpum_field_', '', $field->get_base_name() );
+		$wpum_field = new WPUM_Field( $id );
+
+		return apply_filters( 'wpum_custom_field_value', $value, $wpum_field, $this->object_id );
 	}
 
 	/**
