@@ -79,18 +79,17 @@ class WPUM_Field_Taxonomy extends WPUM_Field_Type {
 	 * @return string
 	 */
 	function get_formatted_output( $field, $value ) {
-		if ( ! $field->is_primary() ) {
-			$options = $field->get_meta( 'dropdown_options' );
-			if ( is_array( $options ) ) {
-				foreach ( $options as $key => $option ) {
-					if( $option['value'] == $value ) {
-						$value = $option['label'];
-					}
-				}
-			}
+		$user_id = wpum_get_queried_user_id();
+
+		$terms = wp_get_object_terms( $user_id, $field->get_meta( 'taxonomy' ) );
+
+		$values = [];
+
+		foreach ( $terms as $term ) {
+			$values[] = $term->name;
 		}
 
-		return $value;
+		return implode( ', ', $values );
 	}
 
 }
