@@ -280,8 +280,10 @@ function wpum_profile( $atts, $content = null ) {
 	 */
 	$warning_message = apply_filters( 'wpum_profile_restriction_message', $warning_message );
 
+	$queried_user_id = wpum_get_queried_user_id();
+
 	// Check if not logged in and on profile page - no given user
-	if ( ! is_user_logged_in() && ! wpum_get_queried_user_id() ) {
+	if ( ! is_user_logged_in() && ! $queried_user_id ) {
 
 		WPUM()->templates
 			->set_template_data(
@@ -291,7 +293,7 @@ function wpum_profile( $atts, $content = null ) {
 			)
 			->get_template_part( 'messages/general', 'warning' );
 
-	} elseif ( ! is_user_logged_in() && wpum_get_queried_user_id() && ! wpum_guests_can_view_profiles() ) {
+	} elseif ( ! is_user_logged_in() && $queried_user_id && ! wpum_guests_can_view_profiles( $queried_user_id ) ) {
 
 		WPUM()->templates
 			->set_template_data(
@@ -301,7 +303,7 @@ function wpum_profile( $atts, $content = null ) {
 			)
 			->get_template_part( 'messages/general', 'warning' );
 
-	} elseif ( is_user_logged_in() && wpum_get_queried_user_id() && ! wpum_members_can_view_profiles() && ! wpum_is_own_profile() ) {
+	} elseif ( is_user_logged_in() && $queried_user_id && ! wpum_members_can_view_profiles( $queried_user_id ) && ! wpum_is_own_profile() ) {
 
 		WPUM()->templates
 			->set_template_data(
@@ -769,6 +771,26 @@ function wpum_directory( $atts, $content = null ) {
 			$args['order']    = 'ASC';
 			break;
 	}
+
+	$privacy_meta_query_key    = is_user_logged_in() ? '_hide_profile_members' : '_hide_profile_guests';
+	$args['meta_query'] = array();
+	$args['meta_query'][] = array(
+		'relation' => 'OR',
+		array(
+			'key'     => $privacy_meta_query_key,
+			'value'   => '',
+			'compare' => 'NOT EXISTS',
+		),
+		array(
+			'key'     => $privacy_meta_query_key,
+			'value'   => '',
+		),
+	);
+
+	remove_action( 'pre_get_users', array(
+		Carbon_Fields\Carbon_Fields::service( 'meta_query' ),
+		'hook_pre_get_users',
+	) );
 
 	// Setup search if anything specified.
 	if ( isset( $_GET['directory-search'] ) && ! empty( $_GET['directory-search'] ) ) {

@@ -8,6 +8,9 @@
  * @since       1.0.0
  */
 
+use Carbon_Fields\Container;
+use Carbon_Fields\Field;
+
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
@@ -231,7 +234,7 @@ function wpum_display_account_page_content() {
 		$active_tab = key( $tabs );
 	}
 
-	if ( $active_tab == 'settings' || $active_tab == 'password' ) {
+	if ( in_array( $active_tab, array( 'settings', 'password', 'privacy' ) ) ) {
 		if ( $active_tab == 'settings' ) {
 			$active_tab = 'profile';
 		}
@@ -357,3 +360,14 @@ function wpum_finish_db_setup_after_plugin_init() {
 
 }
 add_action( 'after_wpum_init', 'wpum_finish_db_setup_after_plugin_init' );
+
+function wpum_register_profile_privacy_fields() {
+	Container::make( 'user_meta', esc_html__( 'Profile Privacy', 'wp-user-manager' ) )
+	         ->add_fields( array(
+		         Field::make( 'checkbox', 'hide_profile_guests', esc_html__( 'Hide profile from guests', 'wp-user-manager' ) )
+		              ->set_help_text( esc_html__( 'Hide this profile from guests. Overrides the global profile options.', 'wp-user-manager' ) ),
+		         Field::make( 'checkbox', 'hide_profile_members', esc_html__( 'Hide profile from members', 'wp-user-manager' ) )
+		              ->set_help_text( esc_html__( 'Hide this profile from members. Overrides the global profile options.', 'wp-user-manager' ) )
+	         ) );
+}
+add_action( 'carbon_fields_register_fields', 'wpum_register_profile_privacy_fields' );

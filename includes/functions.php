@@ -696,6 +696,13 @@ function wpum_get_account_page_tabs() {
 		unset( $tabs['view'] );
 	}
 
+	if ( wpum_get_option( 'members_can_set_privacy' ) ) {
+		$tabs['privacy'] = [
+			'name'     => esc_html__( 'Profile Privacy', 'wp-user-manager' ),
+			'priority' => 700,
+		];
+	}
+
 	$tabs = apply_filters( 'wpum_get_account_page_tabs', $tabs );
 
 	uasort( $tabs, 'wpum_sort_array_by_priority' );
@@ -982,18 +989,29 @@ function wpum_get_comments_for_profile( $user_id ) {
 /**
  * Checks if guests can view profiles.
  *
+ * @param int $user_id
+ *
  * @return bool
  */
-function wpum_guests_can_view_profiles() {
+function wpum_guests_can_view_profiles( $user_id ) {
+	if ( carbon_get_user_meta( $user_id, 'hide_profile_guests' ) ) {
+		return false;
+	}
+
 	return wpum_get_option( 'guests_can_view_profiles' );
 }
 
 /**
  * Checks if members can view profiles.
  *
+ * @param int $user_id
+ *
  * @return bool
  */
-function wpum_members_can_view_profiles() {
+function wpum_members_can_view_profiles( $user_id ) {
+	if ( carbon_get_user_meta( $user_id, 'hide_profile_members' ) ) {
+		return false;
+	}
 	return wpum_get_option( 'members_can_view_profiles' );
 }
 
