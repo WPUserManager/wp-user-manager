@@ -210,7 +210,7 @@ module.exports = function( grunt ) {
 					'!package.json',
 					'!.gitignore',
 					'!.gitmodules',
-					'!.distributewp.json',
+					'!distributewp.json',
 					'!yarn.lock'
 				],
 				dest: 'release/<%= pkg.version %>/'
