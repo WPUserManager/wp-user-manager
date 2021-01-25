@@ -62,7 +62,7 @@ class WPUM_Forms {
 			include( WPUM_PLUGIN_DIR . 'includes/abstracts/abstract-wpum-form.php' );
 		}
 		// Now try to load the form_name
-		$form_class = 'WPUM_Form_' . str_replace( '-', '_', $form_name );
+		$form_class = apply_filters( 'wpum_load_form_class', 'WPUM_Form_' . str_replace( '-', '_', $form_name ), $form_name );
 		$form_file  = WPUM_PLUGIN_DIR . 'includes/wpum-forms/class-wpum-form-' . $form_name . '.php';
 		$form_file  = apply_filters( 'wpum_load_form_path', $form_file, $form_name );
 

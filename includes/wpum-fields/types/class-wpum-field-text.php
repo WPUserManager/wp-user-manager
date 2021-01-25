@@ -20,6 +20,30 @@ class WPUM_Field_Text extends WPUM_Field_Type {
 		$this->type  = 'text';
 		$this->icon  = 'dashicons-editor-textcolor';
 		$this->order = 3;
+		$this->allow_default = true;
+	}
+
+	public function get_data_keys() {
+		$keys = parent::get_data_keys();
+
+		return array_merge( $keys, array_keys( $this->get_editor_settings()['validation'] ) );
+	}
+
+	/**
+	 * @return array
+	 */
+	public function get_editor_settings() {
+		return [
+			'validation' => [
+				'pattern' => array(
+					'type'      => 'input',
+					'inputType' => 'text',
+					'label'     => esc_html__( 'Pattern', 'wp-user-manager' ),
+					'model'     => 'pattern',
+					'hint'      => esc_html__( 'A regular expression to validate number formats.', 'wp-user-manager' ) . ' <a target="_blank" href="http://html5pattern.com/">' . esc_html__( 'Example patterns' ) . '</a>'
+				),
+			],
+		];
 	}
 
 }

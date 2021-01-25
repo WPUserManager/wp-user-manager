@@ -20,6 +20,8 @@ class WPUM_Field_Textarea extends WPUM_Field_Type {
 		$this->type  = 'textarea';
 		$this->icon  = 'dashicons-editor-paragraph';
 		$this->order = 3;
+		$this->allow_default = true;
+		$this->default_type = 'textArea';
 	}
 
 	/**

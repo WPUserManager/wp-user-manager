@@ -376,10 +376,13 @@ class WPUM_Form_Registration extends WPUM_Form {
 
 			// Add privacy policy checkbox if enabled in WP.
 			if ( get_option( 'wp_page_for_privacy_policy' ) ) {
+				$privacy_url = get_permalink( get_option( 'wp_page_for_privacy_policy' ) );
+				$blogname    = get_bloginfo( 'name' );
+
 				$fields['privacy'] = array(
 					'label'       => false,
 					'type'        => 'checkbox',
-					'description' => apply_filters( 'wpum_privacy_text', sprintf( __( 'I have read and accept the <a href="%1$s" target="_blank">privacy policy</a> and allow "%2$s" to collect and store the data I submit through this form.', 'wp-user-manager' ), get_permalink( get_option( 'wp_page_for_privacy_policy' ) ), get_bloginfo( 'name' ) ) ),
+					'description' => apply_filters( 'wpum_privacy_text', sprintf( __( 'I have read and accept the <a href="%1$s" target="_blank">privacy policy</a> and allow "%2$s" to collect and store the data I submit through this form.', 'wp-user-manager' ), $privacy_url, $blogname ), $privacy_url, $blogname ),
 					'required'    => true,
 					'priority'    => 9999,
 				);

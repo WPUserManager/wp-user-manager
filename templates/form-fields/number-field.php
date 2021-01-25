@@ -31,5 +31,6 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 	<?php if ( ! empty( $data->min_value ) ) echo ' min="' . $data->min_value . '"' ; ?>
 	<?php if ( ! empty( $data->max_value ) ) echo ' max="' . $data->max_value . '"' ; ?>
 	<?php if ( ! empty( $data->step_size ) ) echo ' step="' . $data->step_size . '"' ; ?>
+	<?php if ( ! empty( $data->pattern ) ) echo ' pattern="' . $data->pattern . '"' ; ?>
 />
 <?php if ( ! empty( $data->description ) ) : ?><small class="description"><?php echo $data->description; ?></small><?php endif; ?>

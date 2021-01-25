@@ -8,7 +8,7 @@ Tested up to: 5.6
 Requires PHP: 5.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
-Stable Tag: 2.4.2
+Stable Tag: 2.5
 
 The most customizable profiles & community builder WordPress plugin with front-end login, registration, profile customization and content restriction.
 
@@ -54,7 +54,8 @@ For more advanced functionality check out the [pricing page](https://wpusermanag
 - [WooCommerce](https://wpusermanager.com/addons/woocommerce/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager): Integration with WooCommerce. Allow members to update their billing and shipping addresses, display product purchases, reviews and more!
 - [User Verification](https://wpusermanager.com/addons/user-verification/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager): Send a verification link via email upon registration or manually approve users before they can login
 - [Groups](https://wpusermanager.com/addons/groups/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager): Give your users the ability to create and join groups
-- [Registration Forms](https://wpusermanager.com/addons/registration-forms/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager): Create unlimited registration forms, customize forms with HTML, and have full control over form settings
+- [Security](https://wpusermanager.com/addons/security/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager): Add password security features and user login management features
+- [Registration Forms](https://wpusermanager.com/addons/registration-forms/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager): Create unlimited registration forms, create multi-step forms, customize forms with HTML, and have full control over form settings
 - [Advanced Custom Fields](https://wpusermanager.com/addons/acf/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager): Collect [ACF](https://wordpress.org/plugins/advanced-custom-fields/) user data at registration and allow users to see and edit the data on their profile
 - [Social Login & Registration](https://wpusermanager.com/addons/social-login/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager): Allow your users to quickly login and register with their favorite social network account, Facebook, Twitter, Instagram, LinkedIn & Instagram
 - [Private Content](https://wpusermanager.com/addons/private-content/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager): Provide private content for all your users, as well as user specific content so you can tailor for each member
@@ -123,6 +124,22 @@ Please note that using WPUM and the mentioned add-ons does NOT guarantee complia
 13. Login form.
 
 == Changelog ==
+
+= 2.5 (25th January 2021) =
+
+- New: [Security](https://wpusermanager.com/addons/security/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager) addon: Add password security features and user login management features
+- New: Multi-step registration forms with the [Registration Forms addon](https://wpusermanager.com/addons/registration-forms/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager)
+- New: Allow users to set the privacy for their profile to hide from guests and/or other users
+- New: Taxonomy field with the [Custom Fields addon](https://wpusermanager.com/addons/custom-fields/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager)
+- New: Hidden field type
+- New: Default value for text, hidden, number, radio, dropdown, and textarea fields on registration forms
+- New: Support for setting default field values from a query string
+- Improvement: Add pattern validation to number and text fields
+- Improvement: Add privacy policy URL and blog name arguments to 'wpum_privacy_text' filter
+- Fix: Blocks restricted by user logged in before 2.4.2 not working
+- Fix: User meta field values set as false when creating a user from the wp-admin
+- Fix: Incorrect prefixes in filters for password recovery and change forms
+- Fix: Repeater add button not working if multiple forms on one page
 
 = 2.4.2 (23rd December 2020) =
 

@@ -633,16 +633,16 @@
         },
         {
             "name": "wp-user-manager/wpum-blocks",
-            "version": "1.5",
+            "version": "1.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/WPUserManager/wpum-blocks.git",
-                "reference": "c47ec595510f5386102dce13f00f4753c48bcd83"
+                "reference": "76238173ad4f291fa7bef73c84e86c5d8a80a848"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/WPUserManager/wpum-blocks/zipball/c47ec595510f5386102dce13f00f4753c48bcd83",
-                "reference": "c47ec595510f5386102dce13f00f4753c48bcd83",
+                "url": "https://api.github.com/repos/WPUserManager/wpum-blocks/zipball/76238173ad4f291fa7bef73c84e86c5d8a80a848",
+                "reference": "76238173ad4f291fa7bef73c84e86c5d8a80a848",
                 "shasum": ""
             },
             "require": {
@@ -670,7 +670,7 @@
             "keywords": [
                 "wordpress"
             ],
-            "time": "2020-12-22T22:44:35+00:00"
+            "time": "2021-01-06T13:24:37+00:00"
         },
         {
             "name": "wpbp/widgets-helper",

@@ -352,6 +352,12 @@ class WPUM_Options_Panel {
 					'type' => 'checkbox',
 				),
 				array(
+					'id'   => 'members_can_set_privacy',
+					'name' => __( 'Allow Members to set their profile privacy', 'wp-user-manager' ),
+					'desc' => __( 'Adds a Privacy account tab where members can override the global settings above.', 'wp-user-manager' ),
+					'type' => 'checkbox',
+				),
+				array(
 					'id'   => 'custom_avatars',
 					'name' => __( 'Custom Avatars', 'wp-user-manager' ),
 					'desc' => __( 'Enable this option to allow users to upload custom avatars for their profiles.', 'wp-user-manager' ),

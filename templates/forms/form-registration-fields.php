@@ -18,6 +18,17 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 
 $field = $data->field;
 $key   = $data->key;
+if ( ! empty( $field['default_value'] ) ) {
+	$field['value'] = $field['default_value'];
+
+	// Query Strings as defaults
+	preg_match_all( "/\{query_var key=\"(.+?)\"\}/", $field['default_value'], $query_vars );
+	if ( ! empty( $query_vars[1] ) ) {
+		foreach ( $query_vars[1] as $key => $query_var ) {
+			$field['value'] = ! empty( $_GET[ $query_var ] ) ? wp_unslash( sanitize_text_field( $_GET[ $query_var ] ) ) : '';
+		}
+	}
+}
 ?>
 
 <fieldset class="fieldset-<?php echo esc_attr( $key ); ?>">
@@ -43,12 +54,14 @@ $key   = $data->key;
 
 	<?php else : ?>
 
-		<label for="<?php echo esc_attr( $key ); ?>">
-			<?php echo esc_html( $field['label'] ); ?>
-			<?php if( isset( $field['required'] ) && $field['required'] ) : ?>
-				<span class="wpum-required">*</span>
-			<?php endif; ?>
-		</label>
+		<?php if ( $field['type'] !== 'hidden' ) : ?>
+			<label for="<?php echo esc_attr( $key ); ?>">
+				<?php echo esc_html( $field['label'] ); ?>
+				<?php if ( isset( $field['required'] ) && $field['required'] ) : ?>
+					<span class="wpum-required">*</span>
+				<?php endif; ?>
+			</label>
+		<?php endif; ?>
 		<div class="field <?php echo $field['required'] ? 'required-field' : ''; ?>">
 			<?php
 				// Add the key to field.

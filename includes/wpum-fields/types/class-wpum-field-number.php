@@ -20,10 +20,13 @@ class WPUM_Field_Number extends WPUM_Field_Type {
 		$this->type  = 'number';
 		$this->icon  = 'dashicons-leftright';
 		$this->order = 3;
+		$this->allow_default = true;
 	}
 
 	public function get_data_keys() {
-		return array_keys( $this->get_editor_settings()['validation'] );
+		$keys = parent::get_data_keys();
+
+		return array_merge( $keys, array_keys( $this->get_editor_settings()['validation'] ) );
 	}
 
 	/**
@@ -49,6 +52,13 @@ class WPUM_Field_Number extends WPUM_Field_Type {
 					'inputType' => 'number',
 					'label'     => esc_html__( 'Step Size', 'wp-user-manager' ),
 					'model'     => 'step_size',
+				),
+				'pattern' => array(
+					'type'      => 'input',
+					'inputType' => 'text',
+					'label'     => esc_html__( 'Pattern', 'wp-user-manager' ),
+					'model'     => 'pattern',
+					'hint'      => esc_html__( 'A regular expression to validate number formats.', 'wp-user-manager' ) . ' <a target="_blank" href="http://html5pattern.com/">' . esc_html__( 'Example patterns' ) . '</a>'
 				),
 			],
 		];

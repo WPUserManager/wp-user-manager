@@ -36,6 +36,8 @@ class WPUM_User_Meta_Custom_Datastore extends Datastore {
 	 * @param bool $autoload
 	 */
 	protected function save_key_value_pair_with_autoload( $key, $value, $autoload ) {
+		$value = apply_filters( 'wpum_custom_field_admin_meta_update', $value, $key, $this->object_id, $value );
+
 		update_user_meta( $this->object_id, $key, $value );
 	}
 
@@ -43,15 +45,23 @@ class WPUM_User_Meta_Custom_Datastore extends Datastore {
 	 * Load the field value(s)
 	 *
 	 * @param Field $field The field to load value(s) in.
-	 * @return array
+	 *
+	 * @return mixed
 	 */
 	public function load( Field $field ) {
 		$key   = $this->get_key_for_field( $field );
 		$value = get_user_meta( $this->object_id, $key, true );
+		if ( empty( $value ) ) {
+			$value = '';
+		}
 		if ( empty( $value ) && is_a( $field, '\\Carbon_Fields\\Field\\Complex_Field' ) ) {
 			$value = array();
 		}
-		return $value;
+
+		$id = str_replace( 'wpum_field_', '', $field->get_base_name() );
+		$wpum_field = new WPUM_Field( $id );
+
+		return apply_filters( 'wpum_custom_field_value', $value, $wpum_field, $this->object_id );
 	}
 
 	/**

@@ -20,6 +20,7 @@ class WPUM_Field_Dropdown extends WPUM_Field_Type {
 		$this->type  = 'dropdown';
 		$this->icon  = 'dashicons-editor-ul';
 		$this->order = 3;
+		$this->allow_default = true;
 	}
 
 

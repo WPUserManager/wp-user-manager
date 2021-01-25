@@ -20,6 +20,7 @@ class WPUM_Field_Radio extends WPUM_Field_Type {
 		$this->type  = 'radio';
 		$this->icon  = 'dashicons-list-view';
 		$this->order = 3;
+		$this->allow_default = true;
 	}
 
 	/**

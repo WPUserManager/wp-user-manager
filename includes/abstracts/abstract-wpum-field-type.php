@@ -94,6 +94,16 @@ abstract class WPUM_Field_Type {
 	public $settings;
 
 	/**
+	 * @var bool
+	 */
+	protected $allow_default = false;
+
+	/**
+	 * @var string
+	 */
+	protected $default_type = 'input';
+
+	/**
 	 * Register the field
 	 *
 	 * @since 2.0.0
@@ -116,6 +126,10 @@ abstract class WPUM_Field_Type {
 	}
 
 	public function get_data_keys() {
+		if ( $this->allow_default ) {
+			return [ 'default_value' ];
+		}
+
 		return [];
 	}
 
@@ -124,7 +138,7 @@ abstract class WPUM_Field_Type {
 	 *
 	 * @return array
 	 */
-	private function get_default_editor_settings() {
+	protected function get_default_editor_settings() {
 
 		$settings = [
 			'general' => [
@@ -207,6 +221,15 @@ abstract class WPUM_Field_Type {
 				)
 			]
 		];
+
+		if ( $this->allow_default ) {
+			$settings['general']['default_value'] = array(
+				'type'      => $this->default_type,
+				'inputType' => 'text',
+				'label'     => esc_html__( 'Default Value', 'wp-user-manager' ),
+				'model'     => 'default_value',
+			);
+		}
 
 		return apply_filters( 'wpum_register_field_type_settings', $settings, $this->type );
 
