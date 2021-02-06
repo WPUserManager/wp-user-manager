@@ -65,6 +65,7 @@ class WPUM_Fields {
 			'repeater',
 			'hidden',
 			'taxonomy',
+			'user',
 		] );
 
 		foreach ( $fields as $field ) {
