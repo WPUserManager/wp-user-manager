@@ -107,7 +107,7 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 			<?php wp_nonce_field( 'verify_account_form', 'account_update_nonce' ); ?>
 			<input type="submit" name="submit_account" class="button" value="<?php esc_html_e( 'Update profile', 'wp-user-manager' ); ?>" />
 
-		<?php do_action( 'wpum_after_account_form' ); ?>
+		<?php do_action( 'wpum_after_account_form', $data ); ?>
 
 	</form>
 

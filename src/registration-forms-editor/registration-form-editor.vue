@@ -97,7 +97,7 @@ import axios from 'axios'
 import qs from 'qs'
 import balloon from 'balloon-css'
 import draggable from 'vuedraggable'
-import hooks from './hooks'
+import hooks from './../hooks'
 import PremiumFormsDialog from "./dialogs/dialog-premium";
 
 export default {
