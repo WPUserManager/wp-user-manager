@@ -366,7 +366,7 @@ abstract class WPUM_Form {
 		}
 
 		if ( ! empty( $error_message ) ) {
-			$error_message = ' ' . __( 'and contain at least', 'wp-user-manager' ) . ' ' . implode( ' and ', $error_message ) . '.';
+			$error_message = ' ' . __( 'and contain at least', 'wp-user-manager' ) . ' ' . implode( __( ' and ', 'wp-user-manager' ) , $error_message ) . '.';
 		}
 
 		$invalidMessage = apply_filters( 'wpum_strong_password_invalid_message', sprintf( __( 'Password must be at least %s characters long', 'wp-user-manager' ), $minLength ) . $error_message );
