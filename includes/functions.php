@@ -248,7 +248,12 @@ function wpum_get_redirect_option_url( $option ) {
 	$url         = false;
 
 	if ( ! empty( $redirect_to ) && is_array( $redirect_to ) ) {
-		$url = 'hp' == $redirect_to[0] ? home_url() :  get_permalink( $redirect_to[0] );
+		if ( 'hp' == $redirect_to[0] ) {
+			$url = home_url();
+		} else {
+			$page_id = apply_filters( 'wpum_redirect_page_id', $redirect_to[0], $option );
+			$url     = get_permalink( $page_id );
+		}
 	}
 
 	return apply_filters( 'wpum_get_' . $option, esc_url( $url ) );
