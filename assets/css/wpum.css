@@ -1232,6 +1232,11 @@
 #profile-posts .wpum-post:first-child {
   padding-top: 0px;
 }
+#profile-posts .wpum-post-thumbnail {
+  float: left;
+  width: 70px;
+  margin-right: 1rem;
+}
 #profile-posts .wpum-post-meta {
   margin: 0px;
   padding: 0px;
