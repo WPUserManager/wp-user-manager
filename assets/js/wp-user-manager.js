@@ -170,7 +170,7 @@ jQuery( function( $ ) {
 	removeProfileImage = function(type, nonce){
 		$.post( wpumFrontend.ajaxurl, {
 			type: type,
-			nonce: nonce,
+			nonce: $('#account_update_nonce').val(),
 			action: 'wpum_delete_profile_image',
 		},
 		function( data, status ){
@@ -219,8 +219,9 @@ jQuery( function( $ ) {
 				process: {
 					method: 'POST',
 					ondata: (formData) => {
-						formData.append('action', 'wpum_upload_profile_image');
-						formData.append('key', 'user_cover');
+						formData.append( 'action', 'wpum_upload_profile_image' );
+						formData.append( 'key', 'user_cover');
+						formData.append( 'nonce', $( '#account_update_nonce' ).val() );
 						return formData;
 					}
 				},
@@ -262,8 +263,9 @@ jQuery( function( $ ) {
 				process: {
 					method: 'POST',
 					ondata: (formData) => {
-						formData.append('action', 'wpum_upload_profile_image');
-						formData.append('key', 'user_avatar');
+						formData.append( 'action', 'wpum_upload_profile_image' );
+						formData.append( 'key', 'user_avatar' );
+						formData.append( 'nonce', $( '#account_update_nonce' ).val() );
 						return formData;
 					}
 				},
