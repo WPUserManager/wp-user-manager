@@ -201,19 +201,7 @@ jQuery( function( $ ) {
 
 		const defaultCover = $('.fieldset-user_cover .wpum-uploaded-files input');
 		const FilePondCover = FilePond.create( $('.fieldset-user_cover input[type="file"]')[0], {
-            credits: false,
-			instantUpload: false,
-			labelIdle: `Drag & Drop your picture or <span class="filepond--label-action">Browse</span>`,
-			imagePreviewHeight: 200,
-			imagePrevieWidth: 250,
-			imageCropAspectRatio: '1:1',
 			stylePanelLayout: 'compact square',
-			styleLoadIndicatorPosition: 'center bottom',
-			styleProgressIndicatorPosition: 'center bottom',
-			styleButtonRemoveItemPosition: 'center bottom',
-			styleButtonProcessItemPosition: 'center bottom',
-			instantUpload: true,
-
 			server: {
 				url: wpumFrontend.ajaxurl,
 				process: {
@@ -243,21 +231,13 @@ jQuery( function( $ ) {
 
 		const defaultAvatar = $('.fieldset-user_avatar .wpum-uploaded-files input');
 		const FilePondAvatar = FilePond.create( $('.fieldset-user_avatar input[type="file"]')[0], {
-            credits: false,
-			instantUpload: false,
-			labelIdle: `Drag & Drop your picture or <span class="filepond--label-action">Browse</span>`,
-			imagePreviewHeight: 150,
-			imagePrevieWidth: 150,
-			imageCropAspectRatio: '1:1',
 			imageResizeTargetWidth: 250,
 			imageResizeTargetHeight: 250,
-			stylePanelLayout: 'compact circle',
 			styleLoadIndicatorPosition: 'center bottom',
 			styleProgressIndicatorPosition: 'center bottom',
 			styleButtonRemoveItemPosition: 'center bottom',
 			styleButtonProcessItemPosition: 'center bottom',
-			instantUpload: true,
-
+			stylePanelLayout: 'compact circle',
 			server: {
 				url: wpumFrontend.ajaxurl,
 				process: {
