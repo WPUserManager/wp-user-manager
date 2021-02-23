@@ -37,6 +37,10 @@ class WPUM_Registration_Forms_Editor {
 		add_action( 'wp_ajax_wpum_save_registration_form_settings', [ $this, 'save_form_settings' ] );
 		add_action( 'wp_ajax_wpum_get_registration_form_field', [ $this, 'get_form_field_data' ] );
 
+		add_action( 'wp_ajax_wpum_upload_profile_image', [ $this, 'wpum_upload_profile_image' ] );
+		add_action( 'wp_ajax_wpum_load_profile_image', [ $this, 'wpum_load_profile_image' ] );
+		add_action( 'wp_ajax_wpum_delete_profile_image', [ $this, 'wpum_delete_profile_image' ] );
+
 		add_filter( 'wpum_form_settings_sanitize_text', array( $this, 'sanitize_text_field' ) );
 		add_filter( 'wpum_form_settings_sanitize_textarea', array( $this, 'sanitize_textarea_field' ) );
 		add_filter( 'wpum_form_settings_sanitize_radio', array( $this, 'sanitize_text_field' ) );
@@ -620,6 +624,48 @@ class WPUM_Registration_Forms_Editor {
 		wp_send_json_error( null, 403 );
 	}
 
+	public function wpum_upload_profile_image(){
+		$allowed_mime_types = wpum_get_allowed_mime_types( 'current_' . $_POST['key'] );
+
+		$data = isset( $_POST[ $_POST['key'] ] ) ? json_decode( stripslashes( $_POST[ $_POST['key'] ] ), true, JSON_UNESCAPED_SLASHES) : [];
+
+		$uploaded = wpum_upload_file( $_FILES[ $_POST['key'] ], array(
+			'file_key'           => $_POST['key'],
+			'allowed_mime_types' => $allowed_mime_types,
+			'file_label'         => $field['label'],
+			'sizes'              => $data
+		) );
+
+		if ( ! empty( $uploaded ) ) {
+
+			$userkey = $_POST['key'] == 'user_avatar' ? 'current_' . $_POST['key'] : $_POST['key'];
+
+			update_user_meta( get_current_user_id(), $userkey, $uploaded->url );
+			update_user_meta( get_current_user_id(), $userkey. '_path', addslashes( $uploaded->file ) );
+		}
+
+		wp_send_json_success( $uploaded );
+	}
+
+	public function wpum_load_profile_image(){
+		$file = get_user_meta( get_current_user_id(), $_GET['type'], true );
+		$image = getimagesize( $file );
+
+		header( 'Content-type: ' . $image['mime'] );
+		readfile( $file );
+
+		exit;
+	}
+
+	public function wpum_delete_profile_image(){
+		$file = get_user_meta( get_current_user_id(), $_POST['type']. '_path', true );
+		@unlink($file);
+
+		update_user_meta( get_current_user_id(), $_POST['type'], '' );
+		update_user_meta( get_current_user_id(), $_POST['type']. '_path', '' );
+
+		exit;
+	}
 }
 
 $wpum_registration_forms_editor = new WPUM_Registration_Forms_Editor;

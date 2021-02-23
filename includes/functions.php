@@ -564,9 +564,29 @@ function wpum_upload_file( $file, $args = array() ) {
 		if ( ! empty( $upload['error'] ) ) {
 			return new WP_Error( 'upload', $upload['error'] );
 		} else {
-			$uploaded_file->url       = $upload['url'];
-			$uploaded_file->file      = $upload['file'];
-			$uploaded_file->name      = basename( $upload['file'] );
+
+			$file_url       = $upload['url'];
+			$file_path      = $upload['file'];
+
+			if ( $wpum_uploading_file === 'user_avatar' || $wpum_uploading_file === 'user_cover' ) {
+
+				$default_name = basename( $upload['file'] );
+
+				//get size from filepond
+				$sizes = $args['sizes']['resize']['size'];
+				$sizes = apply_filters( 'wpum_sizes_'.$args['file_key'], $sizes, $upload );
+
+				if ( ! empty( $sizes ) ) {
+					$meta_data = image_make_intermediate_size( $upload['file'], $sizes['width'], $sizes['height'], false );
+
+					$file_url = str_replace( $default_name, $meta_data['file'], $upload['url'] );
+					$file_path = str_replace( $default_name, $meta_data['file'], $upload['file'] );
+				}
+			}
+
+			$uploaded_file->url       = $file_url;
+			$uploaded_file->file      = $file_path;
+			$uploaded_file->name      = basename( $file_path );
 			$uploaded_file->type      = $upload['type'];
 			$uploaded_file->size      = $file['size'];
 			$uploaded_file->extension = substr( strrchr( $uploaded_file->name, '.' ), 1 );

@@ -1,6 +1,8 @@
 /*! WP User Manager - v2.4
  * https://wpusermanager.com
  * Copyright (c) 2020; * Licensed GPLv2+ */
+window.loadResources=function(e){return new Promise(function(t,n){var o=0,r=function(){++o===e.length&&t()};e.forEach(function(e){var t=e.split("?")[0];/\.css/.test(t)?function(e,t){var n=document.createElement("link");n.rel="stylesheet",n.href=e,n.onload=t,document.head.appendChild(n)}(e,r):/\.js/.test(t)&&function(e,t){var n=document.createElement("script");n.src=e,n.onload=t,document.head.appendChild(n)}(e,r)})})}
+
 jQuery( function( $ ) {
 	function initFields() {
 		$( '.wpum-multiselect:not(.wpum-clone-field)' ).select2( {
@@ -164,5 +166,135 @@ jQuery( function( $ ) {
 		repeater.init();
 		initFields();
 	} );
+
+	removeProfileImage = function(type, nonce){
+		$.post( wpumFrontend.ajaxurl, {
+			type: type,
+			nonce: nonce,
+			action: 'wpum_delete_profile_image',
+		},
+		function( data, status ){
+
+		});
+	}
+
+	// load FilePond resources
+	var resources = [
+		'plugin/filepond-encode.min.js',
+		'plugin/filepond-preview.css',
+		'plugin/filepond-preview.min.js',
+		'plugin/filepond-crop.min.js',
+		'plugin/filepond-resize.min.js',
+		'filepond.min.css',
+		'filepond.min.js',
+	].map(function(resource) { return wpumFrontend.pluginurl + 'assets/js/vendor/filepond/' + resource });
+
+	loadResources(resources).then(function() {
+
+		// register plugins
+		FilePond.registerPlugin(
+			FilePondPluginFileEncode,
+			FilePondPluginImagePreview,
+			FilePondPluginImageCrop,
+			FilePondPluginImageResize,
+		);
+
+		const defaultCover = $('.fieldset-user_cover .wpum-uploaded-files input');
+		const FilePondCover = FilePond.create( $('.fieldset-user_cover input[type="file"]')[0], {
+            credits: false,
+			instantUpload: false,
+			labelIdle: `Drag & Drop your picture or <span class="filepond--label-action">Browse</span>`,
+			imagePreviewHeight: 200,
+			imagePrevieWidth: 250,
+			imageCropAspectRatio: '1:1',
+			stylePanelLayout: 'compact square',
+			styleLoadIndicatorPosition: 'center bottom',
+			styleProgressIndicatorPosition: 'center bottom',
+			styleButtonRemoveItemPosition: 'center bottom',
+			styleButtonProcessItemPosition: 'center bottom',
+			instantUpload: true,
+
+			server: {
+				url: wpumFrontend.ajaxurl,
+				process: {
+					method: 'POST',
+					ondata: (formData) => {
+						formData.append('action', 'wpum_upload_profile_image');
+						formData.append('key', 'user_cover');
+						return formData;
+					}
+				},
+				load: '?action=wpum_load_profile_image&type=user_cover_path&',
+			}
+		});
+
+		if ( defaultCover.length > 0 ) {
+			FilePondCover.files = [ {
+				source: defaultCover.val(),
+				options: {
+					type: 'local',
+					metadata: {
+						poster: defaultCover.length > 0 ? defaultCover.val() : null
+					}
+				}
+			} ];
+		}
+
+		const defaultAvatar = $('.fieldset-user_avatar .wpum-uploaded-files input');
+		const FilePondAvatar = FilePond.create( $('.fieldset-user_avatar input[type="file"]')[0], {
+            credits: false,
+			instantUpload: false,
+			labelIdle: `Drag & Drop your picture or <span class="filepond--label-action">Browse</span>`,
+			imagePreviewHeight: 150,
+			imagePrevieWidth: 150,
+			imageCropAspectRatio: '1:1',
+			imageResizeTargetWidth: 250,
+			imageResizeTargetHeight: 250,
+			stylePanelLayout: 'compact circle',
+			styleLoadIndicatorPosition: 'center bottom',
+			styleProgressIndicatorPosition: 'center bottom',
+			styleButtonRemoveItemPosition: 'center bottom',
+			styleButtonProcessItemPosition: 'center bottom',
+			instantUpload: true,
+
+			server: {
+				url: wpumFrontend.ajaxurl,
+				process: {
+					method: 'POST',
+					ondata: (formData) => {
+						formData.append('action', 'wpum_upload_profile_image');
+						formData.append('key', 'user_avatar');
+						return formData;
+					}
+				},
+				load: defaultAvatar.length > 0 ? '?action=wpum_load_profile_image&type=current_user_avatar_path&' : null,
+			}
+		});
+
+		if ( defaultAvatar.length > 0 ) {
+			FilePondAvatar.files = [ {
+				source: defaultAvatar.val(),
+				options: {
+					type: 'local',
+					metadata: {
+						poster: defaultCover.length > 0 ? defaultCover.val() : null
+					}
+				}
+			} ];
+		}
+
+		const filePondCover = document.querySelector('.fieldset-user_cover .filepond--root');
+		filePondCover.addEventListener('FilePond:removefile', e => {
+			$('.fieldset-user_cover .wpum-uploaded-files').html('');
+			removeProfileImage('user_cover', '')
+		});
+
+		const filePondAvatar = document.querySelector('.fieldset-user_avatar .filepond--root');
+		filePondAvatar.addEventListener('FilePond:removefile', e => {
+			$('.fieldset-user_avatar .wpum-uploaded-files').html('');
+			removeProfileImage('current_user_avatar', '')
+		});
+
+	});
 
 } );
