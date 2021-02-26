@@ -410,12 +410,16 @@ function wpum_load_profile_image(){
 }
 
 function wpum_delete_profile_image(){
-	$file = get_user_meta( get_current_user_id(), $_POST['path_key'], true );
+
+	if ( ! wp_verify_nonce( $_REQUEST['nonce'], 'verify_account_form' ) ) {
+		return;
+	}
+
+	$file = get_user_meta( get_current_user_id(), $_REQUEST['path_key'], true );
 	@unlink($file);
 
-	update_user_meta( get_current_user_id(), $_POST['key'], '' );
-	update_user_meta( get_current_user_id(), 'current_'.$_POST['key'], '' );
-	update_user_meta( get_current_user_id(), $_POST['path_key'], '' );
+	update_user_meta( get_current_user_id(), $_REQUEST['key'] == 'user_avatar' ? 'current_'.$_REQUEST['key'] : $_REQUEST['key'], '' );
+	update_user_meta( get_current_user_id(), $_REQUEST['path_key'], '' );
 
 	exit;
 }

@@ -245,6 +245,7 @@ jQuery( function( $ ) {
 							},
 						});
 					},
+					revert: '?action=wpum_delete_profile_image&path_key='+ $( field ).data( 'file-posterkey' ) + '&key='+$( field ).data( 'file-key' )+'&nonce='+ $( field ).data( 'file-nonce' ),
 				},
 				files: files,
 			});
