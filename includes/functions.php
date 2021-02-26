@@ -1346,7 +1346,7 @@ if ( ! function_exists( 'wp_new_user_notification' ) ) {
 			wp_set_password( $password, $user_id );
 		}
 
-		$user = get_user_by('id', $user_id);
+		$user = get_user_by( 'id', $user_id );
 		$password_reset_key = get_password_reset_key( $user );
 
 		wpum_send_registration_confirmation_email( $user_id, $password, $password_reset_key );
