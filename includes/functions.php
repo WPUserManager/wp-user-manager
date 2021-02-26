@@ -390,7 +390,7 @@ function wpum_log_user_in( $email_or_id ) {
  * @param mixed $psw
  * @return void
  */
-function wpum_send_registration_confirmation_email( $user_id, $psw = false ) {
+function wpum_send_registration_confirmation_email( $user_id, $psw = false, $password_reset_key = false ) {
 
 	$registration_confirmation_email = wpum_get_email( 'registration_confirmation', $user_id );
 
@@ -419,6 +419,10 @@ function wpum_send_registration_confirmation_email( $user_id, $psw = false ) {
 
 			if ( ! empty( $psw ) ) {
 				$emails->__set( 'plain_text_password', $psw );
+			}
+
+			if ( $password_reset_key ){
+				$emails->__set( 'password_reset_key', $password_reset_key );
 			}
 
 			$email   = $user->data->user_email;
@@ -1326,6 +1330,7 @@ if ( ! function_exists( 'wp_new_user_notification' ) ) {
 	 * @return void
 	 */
 	function wp_new_user_notification( $user_id, $plaintext_pass = '' ) {
+
 		$password_set_by_admin = false;
 		if ( isset( $_POST['pass1-text'] ) ) {
 			$password_set_by_admin = $_POST['pass1-text'];
@@ -1341,7 +1346,10 @@ if ( ! function_exists( 'wp_new_user_notification' ) ) {
 			wp_set_password( $password, $user_id );
 		}
 
-		wpum_send_registration_confirmation_email( $user_id, $password );
+		$user = get_user_by('id', $user_id);
+		$password_reset_key = get_password_reset_key( $user );
+
+		wpum_send_registration_confirmation_email( $user_id, $password, $password_reset_key );
 	}
 }
 

@@ -554,8 +554,10 @@ class WPUM_Form_Registration extends WPUM_Form {
 			// Allow developers to extend signup process.
 			do_action( 'wpum_before_registration_end', $new_user_id, $values, $form );
 
+			$password_reset_key = get_password_reset_key( $user );
+
 			// Now send a confirmation email to the user.
-			wpum_send_registration_confirmation_email( $new_user_id, $password );
+			wpum_send_registration_confirmation_email( $new_user_id, $password, $password_reset_key );
 
 			// Allow developers to extend signup process.
 			do_action( 'wpum_after_registration', $new_user_id, $values, $form );
