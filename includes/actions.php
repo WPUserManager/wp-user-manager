@@ -371,3 +371,51 @@ function wpum_register_profile_privacy_fields() {
 	         ) );
 }
 add_action( 'carbon_fields_register_fields', 'wpum_register_profile_privacy_fields' );
+
+add_action( 'wp_ajax_wpum_upload_profile_image', 'wpum_upload_profile_image' );
+add_action( 'wp_ajax_wpum_load_profile_image', 'wpum_load_profile_image' );
+add_action( 'wp_ajax_wpum_delete_profile_image', 'wpum_delete_profile_image' );
+
+function wpum_upload_profile_image(){
+	$allowed_mime_types = wpum_get_allowed_mime_types( 'current_' . $_POST['key'] );
+
+	$data = isset( $_POST[ $_POST['key'] ] ) ? json_decode( stripslashes( $_POST[ $_POST['key'] ] ), true, JSON_UNESCAPED_SLASHES) : [];
+
+	$uploaded = wpum_upload_file( $_FILES[ $_POST['key'] ], array(
+		'file_key'           => $_POST['key'],
+		'allowed_mime_types' => $allowed_mime_types,
+		'file_label'         => '',
+		'sizes'              => $data
+	) );
+
+	if ( ! empty( $uploaded ) ) {
+
+		$userkey = $_POST['key'] == 'user_avatar' ? 'current_' . $_POST['key'] : $_POST['key'];
+
+		update_user_meta( get_current_user_id(), $userkey, $uploaded->url );
+		update_user_meta( get_current_user_id(), $userkey. '_path', addslashes( $uploaded->file ) );
+	}
+
+	wp_send_json_success( $uploaded );
+}
+
+function wpum_load_profile_image(){
+	$file = get_user_meta( get_current_user_id(), $_GET['path_key'], true );
+	$image = getimagesize( $file );
+
+	header( 'Content-type: ' . $image['mime'] );
+	readfile( $file );
+
+	exit;
+}
+
+function wpum_delete_profile_image(){
+	$file = get_user_meta( get_current_user_id(), $_POST['path_key'], true );
+	@unlink($file);
+
+	update_user_meta( get_current_user_id(), $_POST['key'], '' );
+	update_user_meta( get_current_user_id(), 'current_'.$_POST['key'], '' );
+	update_user_meta( get_current_user_id(), $_POST['path_key'], '' );
+
+	exit;
+}

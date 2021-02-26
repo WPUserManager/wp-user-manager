@@ -167,27 +167,16 @@ jQuery( function( $ ) {
 		initFields();
 	} );
 
-	removeProfileImage = function(type, nonce){
-		$.post( wpumFrontend.ajaxurl, {
-			type: type,
-			nonce: $('#account_update_nonce').val(),
-			action: 'wpum_delete_profile_image',
-		},
-		function( data, status ){
-
-		});
-	}
-
 	// load FilePond resources
 	var resources = [
-		'plugin/filepond-encode.min.js',
-		'plugin/filepond-preview.css',
-		'plugin/filepond-preview.min.js',
-		'plugin/filepond-crop.min.js',
-		'plugin/filepond-resize.min.js',
-		'filepond.min.css',
-		'filepond.min.js',
-	].map(function(resource) { return wpumFrontend.pluginurl + 'assets/js/vendor/filepond/' + resource });
+		'assets/css/vendor/filepond/filepond-preview.css',
+		'assets/css/vendor/filepond/filepond.min.css',
+		'assets/js/vendor/filepond/plugin/filepond-encode.min.js',
+		'assets/js/vendor/filepond/plugin/filepond-preview.min.js',
+		'assets/js/vendor/filepond/plugin/filepond-crop.min.js',
+		'assets/js/vendor/filepond/plugin/filepond-resize.min.js',
+		'assets/js/vendor/filepond/filepond.min.js',
+	].map(function(resource) { return wpumFrontend.pluginurl + resource });
 
 	loadResources(resources).then(function() {
 
@@ -199,84 +188,66 @@ jQuery( function( $ ) {
 			FilePondPluginImageResize,
 		);
 
-		const defaultCover = $('.fieldset-user_cover .wpum-uploaded-files input');
-		const FilePondCover = FilePond.create( $('.fieldset-user_cover input[type="file"]')[0], {
-			stylePanelLayout: 'compact square',
-			server: {
-				url: wpumFrontend.ajaxurl,
-				process: {
-					method: 'POST',
-					ondata: (formData) => {
-						formData.append( 'action', 'wpum_upload_profile_image' );
-						formData.append( 'key', 'user_cover');
-						formData.append( 'nonce', $( '#account_update_nonce' ).val() );
-						return formData;
+		var fields = [].slice.call(document.querySelectorAll('input[type="file"]'));
+		var ponds = fields.map(function(field, index) {
+
+			var files = [];
+
+			if ( $( field ).data( 'file-poster' ) !== '' ) {
+				files = [ {
+					source: $( field ).data( 'file-poster' ),
+					options: {
+						type: 'local',
 					}
-				},
-				load: '?action=wpum_load_profile_image&type=user_cover_path&',
+				} ];
 			}
-		});
 
-		if ( defaultCover.length > 0 ) {
-			FilePondCover.files = [ {
-				source: defaultCover.val(),
-				options: {
-					type: 'local',
-					metadata: {
-						poster: defaultCover.length > 0 ? defaultCover.val() : null
-					}
-				}
-			} ];
-		}
-
-		const defaultAvatar = $('.fieldset-user_avatar .wpum-uploaded-files input');
-		const FilePondAvatar = FilePond.create( $('.fieldset-user_avatar input[type="file"]')[0], {
-			imageResizeTargetWidth: 250,
-			imageResizeTargetHeight: 250,
-			styleLoadIndicatorPosition: 'center bottom',
-			styleProgressIndicatorPosition: 'center bottom',
-			styleButtonRemoveItemPosition: 'center bottom',
-			styleButtonProcessItemPosition: 'center bottom',
-			stylePanelLayout: 'compact circle',
-			server: {
-				url: wpumFrontend.ajaxurl,
-				process: {
-					method: 'POST',
-					ondata: (formData) => {
-						formData.append( 'action', 'wpum_upload_profile_image' );
-						formData.append( 'key', 'user_avatar' );
-						formData.append( 'nonce', $( '#account_update_nonce' ).val() );
-						return formData;
-					}
+			return FilePond.create( field, {
+				credits: false,
+				allowFilePoster: true,
+				allowFileMetadata: true,
+				fileMetadataObject: {
+					fieldkey: $( field ).data( 'file-key' )
 				},
-				load: defaultAvatar.length > 0 ? '?action=wpum_load_profile_image&type=current_user_avatar_path&' : null,
-			}
+
+				imageResizeTargetWidth: $( field ).data( 'file-width' ) ? $( field ).data( 'file-width' ) : null,
+				imageResizeTargetHeight: $( field ).data( 'file-height' ) ? $( field ).data( 'file-height' ) : null,
+				styleLoadIndicatorPosition: 'center bottom',
+				styleProgressIndicatorPosition: 'center bottom',
+				styleButtonRemoveItemPosition: 'center bottom',
+				styleButtonProcessItemPosition: 'center bottom',
+				stylePanelLayout: $( field ).data( 'file-layout' ) ? $( field ).data( 'file-layout' ) : '',
+				server: {
+					url: wpumFrontend.ajaxurl,
+					process: {
+						method: 'POST',
+						ondata: ( formData ) => {
+							formData.append( 'action', $( field ).data( 'file-action' ) );
+							formData.append( 'key', $( field ).data( 'file-key' ) );
+							formData.append( 'nonce', $( field ).data( 'file-nonce' ) );
+							return formData;
+						},
+					},
+					load: '?action=wpum_load_profile_image&path_key='+ $( field ).data( 'file-posterkey' ) + '&',
+					remove: (source, load, error) => {
+						$.ajax({
+							type: 'POST',
+							url: wpumFrontend.ajaxurl,
+							data: {
+								key: $( field ).data( 'file-key' ),
+								path_key: $( field ).data( 'file-posterkey' ),
+								nonce: $( field ).data( 'file-nonce' ),
+								action: 'wpum_delete_profile_image',
+							},
+							success: function (d) {
+								$( field ).closest( 'field ' ).find( '.wpum-uploaded-files' ).html( '' );
+								load();
+							},
+						});
+					},
+				},
+				files: files,
+			});
 		});
-
-		if ( defaultAvatar.length > 0 ) {
-			FilePondAvatar.files = [ {
-				source: defaultAvatar.val(),
-				options: {
-					type: 'local',
-					metadata: {
-						poster: defaultCover.length > 0 ? defaultCover.val() : null
-					}
-				}
-			} ];
-		}
-
-		const filePondCover = document.querySelector('.fieldset-user_cover .filepond--root');
-		filePondCover.addEventListener('FilePond:removefile', e => {
-			$('.fieldset-user_cover .wpum-uploaded-files').html('');
-			removeProfileImage('user_cover', '')
-		});
-
-		const filePondAvatar = document.querySelector('.fieldset-user_avatar .filepond--root');
-		filePondAvatar.addEventListener('FilePond:removefile', e => {
-			$('.fieldset-user_avatar .wpum-uploaded-files').html('');
-			removeProfileImage('current_user_avatar', '')
-		});
-
 	});
-
 } );
