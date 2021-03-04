@@ -372,54 +372,46 @@ function wpum_register_profile_privacy_fields() {
 }
 add_action( 'carbon_fields_register_fields', 'wpum_register_profile_privacy_fields' );
 
-add_action( 'wp_ajax_wpum_upload_profile_image', 'wpum_upload_profile_image' );
-add_action( 'wp_ajax_wpum_load_profile_image', 'wpum_load_profile_image' );
-add_action( 'wp_ajax_wpum_delete_profile_image', 'wpum_delete_profile_image' );
+add_action( 'wp_ajax_wpum_upload_image', 'wpum_upload_image' );
+add_action( 'wp_ajax_wpum_load_image', 'wpum_load_image' );
+add_action( 'wp_ajax_wpum_delete_image', 'wpum_delete_image' );
 
-function wpum_upload_profile_image(){
+function wpum_upload_image(){
 	$allowed_mime_types = wpum_get_allowed_mime_types( 'current_' . $_POST['key'] );
-
 	$data = isset( $_POST[ $_POST['key'] ] ) ? json_decode( stripslashes( $_POST[ $_POST['key'] ] ), true, JSON_UNESCAPED_SLASHES) : [];
-
 	$uploaded = wpum_upload_file( $_FILES[ $_POST['key'] ], array(
 		'file_key'           => $_POST['key'],
 		'allowed_mime_types' => $allowed_mime_types,
 		'file_label'         => '',
 		'sizes'              => $data
 	) );
-
 	if ( ! empty( $uploaded ) ) {
-
-		$userkey = $_POST['key'] == 'user_avatar' ? 'current_' . $_POST['key'] : $_POST['key'];
-
-		update_user_meta( get_current_user_id(), $userkey, $uploaded->url );
-		update_user_meta( get_current_user_id(), $userkey. '_path', addslashes( $uploaded->file ) );
+		$key = $_POST['key'] == 'user_avatar' ? 'current_' . $_POST['key'] : $_POST['key'];
+		update_user_meta( get_current_user_id(), $key, $uploaded->url );
+		update_user_meta( get_current_user_id(), $key. '_path', addslashes( $uploaded->file ) );
 	}
-
 	wp_send_json_success( $uploaded );
 }
 
-function wpum_load_profile_image(){
-	$file = get_user_meta( get_current_user_id(), $_GET['path_key'], true );
+function wpum_load_image(){
+	$pathkey = $_REQUEST['key'] == 'user_avatar' ? 'current_' . $_REQUEST['key'] : $_REQUEST['key'];
+	$pathkey = $pathkey . '_path';
+	$file = get_user_meta( get_current_user_id(), $pathkey, true );
 	$image = getimagesize( $file );
-
 	header( 'Content-type: ' . $image['mime'] );
 	readfile( $file );
-
 	exit;
 }
 
-function wpum_delete_profile_image(){
-
+function wpum_delete_image(){
 	if ( ! wp_verify_nonce( $_REQUEST['nonce'], 'verify_account_form' ) ) {
 		return;
 	}
-
-	$file = get_user_meta( get_current_user_id(), $_REQUEST['path_key'], true );
+	$key = $_REQUEST['key'] == 'user_avatar' ? 'current_' . $_REQUEST['key'] : $_REQUEST['key'];
+	$pathkey = $keypath . '_path';
+	$file = get_user_meta( get_current_user_id(), $pathkey, true );
 	@unlink($file);
-
-	update_user_meta( get_current_user_id(), $_REQUEST['key'] == 'user_avatar' ? 'current_'.$_REQUEST['key'] : $_REQUEST['key'], '' );
-	update_user_meta( get_current_user_id(), $_REQUEST['path_key'], '' );
-
+	update_user_meta( get_current_user_id(), $key, false );
+	update_user_meta( get_current_user_id(), $pathkey, false );
 	exit;
 }

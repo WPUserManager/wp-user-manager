@@ -568,21 +568,16 @@ function wpum_upload_file( $file, $args = array() ) {
 			$file_url       = $upload['url'];
 			$file_path      = $upload['file'];
 
-			if ( $wpum_uploading_file === 'user_avatar' || $wpum_uploading_file === 'user_cover' ) {
+			$default_name = basename( $upload['file'] );
+			if ( isset($args['sizes']['resize']['size']) ) {
+				$sizes = $args['sizes']['resize']['size'];
+				$sizes = apply_filters( 'wpum_sizes_'.$args['file_key'], $sizes, $upload );
 
-				$default_name = basename( $upload['file'] );
-
-				//get size from filepond
-				if ( isset($args['sizes']['resize']['size']) ) {
-					$sizes = $args['sizes']['resize']['size'];
-					$sizes = apply_filters( 'wpum_sizes_'.$args['file_key'], $sizes, $upload );
-
-					if ( ! empty( $sizes ) ) {
-						$meta_data = image_make_intermediate_size( $upload['file'], $sizes['width'], $sizes['height'], false );
-						if ( $meta_data ) {
-							$file_url = str_replace( $default_name, $meta_data['file'], $upload['url'] );
-							$file_path = str_replace( $default_name, $meta_data['file'], $upload['file'] );
-						}
+				if ( ! empty( $sizes ) ) {
+					$meta_data = image_make_intermediate_size( $upload['file'], $sizes['width'], $sizes['height'], false );
+					if ( $meta_data ) {
+						$file_url = str_replace( $default_name, $meta_data['file'], $upload['url'] );
+						$file_path = str_replace( $default_name, $meta_data['file'], $upload['file'] );
 					}
 				}
 			}
