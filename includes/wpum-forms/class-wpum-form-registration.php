@@ -493,7 +493,9 @@ class WPUM_Form_Registration extends WPUM_Form {
 			if ( is_wp_error( ( $return = $this->validate_fields( $values ) ) ) ) {
 				throw new Exception( $return->get_error_message() );
 			}
-
+		
+			do_action( 'wpum_before_registration_start', $values );
+			
 			// Detect what we're going to use to register the new account.
 			$register_with = $this->get_register_by();
 			$username      = '';
