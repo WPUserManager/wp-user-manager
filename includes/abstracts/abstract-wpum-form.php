@@ -136,7 +136,8 @@ abstract class WPUM_Form {
 	 * Displays errors.
 	 */
 	public function show_errors() {
-		foreach ( $this->errors as $error ) {
+		$errors = apply_filters( 'wpum_form_errors', $this->errors, $this->form_name );
+		foreach ( $errors as $error ) {
 			echo '<div class="wpum-message error">' . $error . '</div>';
 		}
 	}
