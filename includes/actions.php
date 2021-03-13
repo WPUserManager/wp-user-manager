@@ -375,6 +375,8 @@ add_action( 'carbon_fields_register_fields', 'wpum_register_profile_privacy_fiel
 add_action( 'wp_ajax_wpum_upload_profile_image', 'wpum_upload_profile_image' );
 add_action( 'wp_ajax_wpum_load_profile_image', 'wpum_load_profile_image' );
 add_action( 'wp_ajax_wpum_delete_profile_image', 'wpum_delete_profile_image' );
+add_action( 'wp_ajax_nopriv_wpum_upload_profile_image', 'wpum_upload_profile_image' );
+add_action( 'wp_ajax_nopriv_wpum_delete_profile_image', 'wpum_delete_profile_image' );
 
 function wpum_upload_profile_image(){
 	$allowed_mime_types = wpum_get_allowed_mime_types( 'current_' . $_POST['key'] );

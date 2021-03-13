@@ -227,6 +227,12 @@ jQuery( function( $ ) {
 							formData.append( 'nonce', $( field ).data( 'file-nonce' ) );
 							return formData;
 						},
+						onload: ( data ) => {
+							const resp = JSON.parse( data );
+							if ( resp ) {
+								$( '#' + $( field ).data( 'file-key' ) ).closest( '.field' ).find( '.wpum-uploaded-files' ).html('<div class="wpum-uploaded-file"><input type="hidden" class="input-text" name="current_'+ $( field ).data( 'file-key' ) +'[url]" value="'+ resp.data.url +'" /><input type="hidden" class="input-text" name="current_'+ $( field ).data( 'file-key' ) +'[path]" value="'+ resp.data.file +'" /></div>');
+							}
+						},
 					},
 					load: '?action=wpum_load_profile_image&path_key='+ $( field ).data( 'file-posterkey' ) + '&',
 					remove: (source, load, error) => {
