@@ -391,12 +391,14 @@ function wpum_upload_profile_image(){
 	) );
 
 	if ( ! empty( $uploaded ) ) {
-
-		$userkey = $_POST['key'] == 'user_avatar' ? 'current_' . $_POST['key'] : $_POST['key'];
-
-		update_user_meta( get_current_user_id(), $userkey, $uploaded->url );
-		update_user_meta( get_current_user_id(), $userkey. '_path', addslashes( $uploaded->file ) );
+		if ( is_user_logged_in() ) {
+			$userkey = $_POST['key'] == 'user_avatar' ? 'current_' . $_POST['key'] : $_POST['key'];
+			update_user_meta( get_current_user_id(), $userkey, $uploaded->url );
+			update_user_meta( get_current_user_id(), $userkey. '_path', addslashes( $uploaded->file ) );
+		}
 	}
+
+	$uploaded->is_loggedin = is_user_logged_in() ? 1 : 0; // use for filepond
 
 	wp_send_json_success( $uploaded );
 }

@@ -230,7 +230,8 @@ jQuery( function( $ ) {
 						onload: ( data ) => {
 							const resp = JSON.parse( data );
 							if ( resp ) {
-								$( '#' + $( field ).data( 'file-key' ) ).closest( '.field' ).find( '.wpum-uploaded-files' ).html('<div class="wpum-uploaded-file"><input type="hidden" class="input-text" name="current_'+ $( field ).data( 'file-key' ) +'[url]" value="'+ resp.data.url +'" /><input type="hidden" class="input-text" name="current_'+ $( field ).data( 'file-key' ) +'[path]" value="'+ resp.data.file +'" /></div>');
+								var uploaded = resp.data.is_loggedin == 0 ? '<input type="hidden" class="input-text" name="current_'+ $( field ).data( 'file-key' ) +'[url]" value="'+ resp.data.url +'" /><input type="hidden" class="input-text" name="current_'+ $( field ).data( 'file-key' ) +'[path]" value="'+ resp.data.file +'" />' : '<input type="hidden" class="input-text" name="current_'+ $( field ).data( 'file-key' ) +'" value="'+ resp.data.url +'" />';
+								$( '#' + $( field ).data( 'file-key' ) ).closest( '.field' ).find( '.wpum-uploaded-files' ).html(`<div class="wpum-uploaded-file">${uploaded}</div>`);
 							}
 						},
 					},
