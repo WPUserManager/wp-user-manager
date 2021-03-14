@@ -16,7 +16,10 @@
 // Exit if accessed directly
 if ( ! defined( 'ABSPATH' ) ) exit;
 
+$field_settings = property_exists( $data, 'field_settings' ) ? $data->field_settings : array();
+
+// var_dump($field_settings);
 ?>
 
-<?php wp_editor( $data->value, esc_attr( $data->key ) ); ?>
+<?php wp_editor( $data->value, esc_attr( $data->key ), $field_settings ); ?>
 <?php if ( ! empty( $data->description ) ) : ?><small class="description"><?php echo wp_kses_post( $data->description ); ?></small><?php endif; ?>
