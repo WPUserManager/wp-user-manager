@@ -17,8 +17,6 @@
 if ( ! defined( 'ABSPATH' ) ) exit;
 
 $field_settings = property_exists( $data, 'field_settings' ) ? $data->field_settings : array();
-
-// var_dump($field_settings);
 ?>
 
 <?php wp_editor( $data->value, esc_attr( $data->key ), $field_settings ); ?>
