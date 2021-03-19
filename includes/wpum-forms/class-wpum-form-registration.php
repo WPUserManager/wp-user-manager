@@ -77,7 +77,7 @@ class WPUM_Form_Registration extends WPUM_Form {
 		add_filter( 'submit_wpum_form_validate_fields', [ $this, 'validate_honeypot' ], 10, 4 );
 		add_filter( 'submit_wpum_form_validate_fields', [ $this, 'validate_role' ], 10, 4 );
 		add_filter( 'submit_wpum_form_validate_fields', [ $this, 'validate_repeater' ], 10, 4 );
-		add_action( 'wpum_registration_form_field', [ $this, 'render_registration_form_fields' ], 10, 2 );
+		add_action( 'wpum_registration_form_field', [ $this, 'render_registration_form_fields' ], 10, 3 );
 
 		$this->steps = (array) apply_filters(
 			'registration_steps',
@@ -625,29 +625,31 @@ class WPUM_Form_Registration extends WPUM_Form {
 	/**
 	 * Rendering built in form fields
 	 *
+	 * @param array  $field
+	 * @param string $key
+	 * @param array  $fields
 	 */
-	public function render_registration_form_fields($field, $key){
-		$registered_groups = array_column(wpum_get_registered_field_types(), 'fields');
-		$registered_fields = $registered_groups ? call_user_func_array('array_merge', $registered_groups) : [];
-		$registered_types  = $registered_fields ? array_column($registered_fields, 'type') : [];
+	public function render_registration_form_fields( $field, $key, $fields ) {
+		$registered_groups = array_column( wpum_get_registered_field_types(), 'fields' );
+		$registered_fields = $registered_groups ? call_user_func_array( 'array_merge', $registered_groups ) : [];
+		$registered_types  = $registered_fields ? array_column( $registered_fields, 'type' ) : [];
 
-		if( in_array( $field['type'], $registered_types ) ){
+		if ( in_array( $field['type'], $registered_types ) ) {
 
 			// Parent field should handle the child field rendering
-			if( in_array( $field['type'], wpum_get_registered_parent_field_types() ) ){
+			if ( in_array( $field['type'], wpum_get_registered_parent_field_types() ) ) {
 
-				$field[ 'key' ] = $key;
-				$template 		= isset( $field['template'] ) ? $field['template'] : $field['type'];
+				$field['key'] = $key;
+				$template     = isset( $field['template'] ) ? $field['template'] : $field['type'];
 
-				WPUM()->templates
-					->set_template_data( $field )
-					->get_template_part( 'form-fields/' . $template, 'field' );
+				WPUM()->templates->set_template_data( $field )
+				                 ->get_template_part( 'form-fields/' . $template, 'field' );
+
 				return;
 			}
 
-			WPUM()->templates
-				->set_template_data( [ 'field' => $field, 'key' => $key ] )
-				->get_template_part( 'forms/form-registration-fields', 'field' );
+			WPUM()->templates->set_template_data( [ 'field' => $field, 'key' => $key ] )
+			                 ->get_template_part( 'forms/form-registration-fields', 'field' );
 		}
 	}
 
