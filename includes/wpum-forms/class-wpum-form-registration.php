@@ -49,6 +49,11 @@ class WPUM_Form_Registration extends WPUM_Form {
 	protected $registration_form;
 
 	/**
+	 * @var array|false
+	 */
+	protected $registration_form_fields = false;
+
+	/**
 	 * Returns static instance of class.
 	 *
 	 * @return self
@@ -303,6 +308,9 @@ class WPUM_Form_Registration extends WPUM_Form {
 	 * @return array
 	 */
 	protected function get_registration_fields() {
+		if ( false !== $this->registration_form_fields ) {
+			return $this->registration_form_fields;
+		}
 
 		$fields            = [];
 		$registration_form = $this->get_registration_form();
@@ -389,7 +397,9 @@ class WPUM_Form_Registration extends WPUM_Form {
 			}
 		}
 
-		return apply_filters( 'wpum_get_registration_fields', $fields, $registration_form );
+		$this->registration_form_fields = apply_filters( 'wpum_get_registration_fields', $fields, $registration_form );
+
+		return $this->registration_form_fields;
 	}
 
 	/**
@@ -493,9 +503,9 @@ class WPUM_Form_Registration extends WPUM_Form {
 			if ( is_wp_error( ( $return = $this->validate_fields( $values ) ) ) ) {
 				throw new Exception( $return->get_error_message() );
 			}
-		
+
 			do_action( 'wpum_before_registration_start', $values );
-			
+
 			// Detect what we're going to use to register the new account.
 			$register_with = $this->get_register_by();
 			$username      = '';
