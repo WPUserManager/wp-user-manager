@@ -388,58 +388,63 @@ function wpum_log_user_in( $email_or_id ) {
  *
  * @param int   $user_id
  * @param mixed $psw
+ * @param bool  $password_reset_key
+ *
  * @return void
  */
 function wpum_send_registration_confirmation_email( $user_id, $psw = false, $password_reset_key = false ) {
-
-	$registration_confirmation_email = wpum_get_email( 'registration_confirmation', $user_id );
-
 	if ( ! $user_id ) {
 		return;
 	}
 
-	if ( is_array( $registration_confirmation_email ) && ! empty( $registration_confirmation_email ) ) {
+	$user = get_user_by( 'id', $user_id );
 
-		$user = get_user_by( 'id', $user_id );
-
-		// The blogname option is escaped with esc_html on the way into the database in sanitize_option
-		// we want to reverse this for the plain text arena of emails.
-
-		// Send notification to admin if not disabled.
-		$disable_admin_email = wpum_get_option( 'disable_admin_register_email' );
-		if ( ! $disable_admin_email && apply_filters( 'wpum_send_registration_admin_email', true ) ) {
-			wpum_send_registration_admin_email( $user );
-		}
-
-		if ( $user instanceof WP_User && $user->data->user_email ) {
-
-			$emails = new WPUM_Emails();
-			$emails->__set( 'user_id', $user_id );
-			$emails->__set( 'heading', $registration_confirmation_email['title'] );
-
-			if ( ! empty( $psw ) ) {
-				$emails->__set( 'plain_text_password', $psw );
-			}
-
-			if ( $password_reset_key ){
-				$emails->__set( 'password_reset_key', $password_reset_key );
-			}
-
-			$email   = $user->data->user_email;
-			$subject = $registration_confirmation_email['subject'];
-			$message = $registration_confirmation_email['content'];
-			$emails->send( $email, $subject, $message );
-			$emails->__set( 'plain_text_password', null );
-
-		}
+	if ( ! $user instanceof WP_User || empty( $user->data->user_email ) ) {
+		return;
 	}
 
+	// Send notification to admin if not disabled.
+	$disable_admin_email = wpum_get_option( 'disable_admin_register_email' );
+	if ( ! $disable_admin_email && apply_filters( 'wpum_send_registration_admin_email', true ) ) {
+		wpum_send_registration_admin_email( $user );
+	}
+
+	$registration_confirmation_email = wpum_get_email( 'registration_confirmation', $user_id );
+
+	if ( ! is_array( $registration_confirmation_email ) || empty( $registration_confirmation_email ) ) {
+		return;
+	}
+
+	if ( ! apply_filters( 'wpum_send_registration_user_email', true ) ) {
+		return;
+	}
+
+	$emails = new WPUM_Emails();
+	$emails->__set( 'user_id', $user_id );
+	$emails->__set( 'heading', $registration_confirmation_email['title'] );
+
+	if ( ! empty( $psw ) ) {
+		$emails->__set( 'plain_text_password', $psw );
+	}
+
+	if ( $password_reset_key ){
+		$emails->__set( 'password_reset_key', $password_reset_key );
+	}
+
+	$email   = $user->data->user_email;
+	$subject = $registration_confirmation_email['subject'];
+	$message = $registration_confirmation_email['content'];
+	$emails->send( $email, $subject, $message );
+	$emails->__set( 'plain_text_password', null );
 }
 
 /**
  * @param WP_User $user
  */
 function wpum_send_registration_admin_email( $user ) {
+	// The blogname option is escaped with esc_html on the way into the database in sanitize_option
+	// we want to reverse this for the plain text arena of emails.
+
 	$blogname = wp_specialchars_decode( get_option( 'blogname' ), ENT_QUOTES );
 
 	$message  = sprintf( esc_html__( 'New user registration on your site %s:', 'wp-user-manager' ), $blogname ) . "\r\n\r\n";
