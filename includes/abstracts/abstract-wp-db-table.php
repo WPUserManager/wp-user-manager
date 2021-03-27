@@ -10,6 +10,7 @@
 // Exit if accessed directly
 if ( ! defined( 'ABSPATH' ) ) exit;
 
+if ( ! class_exists( 'WP_DB_Table' ) ) :
 /**
  * A base WordPress database table class, which facilitates the creation of
  * and schema changes to individual database tables.
@@ -349,3 +350,5 @@ abstract class WP_DB_Table {
 		return $clean;
 	}
 }
+
+endif;
