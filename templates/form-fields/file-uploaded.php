@@ -15,19 +15,18 @@
 
  // Exit if accessed directly
 if ( ! defined( 'ABSPATH' ) ) exit;
-
 ?>
+<?php
+if ( is_numeric( $data->value ) ) {
+	$image_src = wp_get_attachment_image_src( absint( $data->value ) );
+	$image_src = $image_src ? $image_src[0] : '';
+} else {
+	$image_src = $data->value;
+}
 
-<div class="wpum-uploaded-file">
-	<?php
-	if ( is_numeric( $data->value ) ) {
-		$image_src = wp_get_attachment_image_src( absint( $data->value ) );
-		$image_src = $image_src ? $image_src[0] : '';
-	} else {
-		$image_src = $data->value;
-	}
-	$extension = ! empty( $data->extension ) ? $data->extension : substr( strrchr( $image_src, '.' ), 1 );
-				if ( 'image' === wp_ext2type( $extension ) ) : ?>
+$extension = ! empty( $data->extension ) ? $data->extension : substr( strrchr( $image_src, '.' ), 1 );
+if ( ! $data->key == 'user_avatar' && ! $data->key == 'user_cover' && ! $data->type == 'image' ) :
+	if ( 'image' === wp_ext2type( $extension ) ) : ?>
 		<span class="wpum-uploaded-file-preview"><img src="<?php echo esc_url( $image_src ); ?>" /> <a class="wpum-remove-uploaded-file" href="#">[<?php esc_html_e( 'remove', 'wp-user-manager' ); ?>]</a></span>
 	<?php elseif ( 'video' === wp_ext2type( $extension ) && $data->type === 'video' ) : ?>
 		<span class="wpum-uploaded-file-preview"><?php echo wp_video_shortcode( array( 'src' => $image_src ) ); ?> <a class="wpum-remove-uploaded-file" href="#">[<?php esc_html_e( 'remove', 'wp-user-manager' ); ?>]</a></span>
@@ -36,6 +35,7 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 	<?php else : ?>
 		<span class="wpum-uploaded-file-name"><code><?php echo esc_html( basename( $image_src ) ); ?></code> <a class="wpum-remove-uploaded-file" href="#">[<?php esc_html_e( 'remove', 'wp-user-manager' ); ?>]</a></span>
 	<?php endif; ?>
-
+<?php endif; ?>
+<div class="wpum-uploaded-file">
 	<input type="hidden" class="input-text" name="<?php echo esc_attr( $data->name ); ?>" value="<?php echo esc_attr( $data->value ); ?>" />
 </div>

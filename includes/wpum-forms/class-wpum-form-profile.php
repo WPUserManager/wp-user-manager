@@ -181,6 +181,7 @@ class WPUM_Form_Profile extends WPUM_Form {
 					'description'   => $field->get_description(),
 					'read_only'     => $field->get_meta( 'read_only' ),
 					'max_file_size' => $field->get_meta( 'max_file_size' ),
+					'default_image_size' => $field->get_meta( 'default_image_size' ),
 					'options'       => $this->get_field_dropdown_options( $field, $this->user ),
 					'value'         => $this->get_user_field_value( $field ),
 					'priority'      => $priority,

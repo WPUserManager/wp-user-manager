@@ -1,6 +1,8 @@
 /*! WP User Manager - v2.4
  * https://wpusermanager.com
  * Copyright (c) 2020; * Licensed GPLv2+ */
+window.loadResources=function(e){return new Promise(function(t,n){var o=0,r=function(){++o===e.length&&t()};e.forEach(function(e){var t=e.split("?")[0];/\.css/.test(t)?function(e,t){var n=document.createElement("link");n.rel="stylesheet",n.href=e,n.onload=t,document.head.appendChild(n)}(e,r):/\.js/.test(t)&&function(e,t){var n=document.createElement("script");n.src=e,n.onload=t,document.head.appendChild(n)}(e,r)})})}
+
 jQuery( function( $ ) {
 	function initFields() {
 		$( '.wpum-multiselect:not(.wpum-clone-field)' ).select2( {
@@ -165,4 +167,111 @@ jQuery( function( $ ) {
 		initFields();
 	} );
 
+	function removeFiles( field ) {
+		$.ajax({
+			type: 'POST',
+			url: wpumFrontend.ajaxurl,
+			data: {
+				key: $( field ).data( 'file-key' ),
+				path_key: $( field ).data( 'file-key' ),
+				nonce: $( field ).data( 'file-nonce' ),
+				action: 'wpum_delete_image',
+			},
+			success: function (d) {
+				$( '#' + $( field ).data( 'file-key' ) ).closest( '.field' ).find( '.wpum-uploaded-files' ).html( '' );
+			},
+		});
+	}
+	// load FilePond resources
+	var resources = [
+		'assets/css/vendor/filepond/filepond-preview.css',
+		'assets/css/vendor/filepond/filepond.min.css',
+		'assets/js/vendor/filepond/plugin/filepond-encode.min.js',
+		'assets/js/vendor/filepond/plugin/filepond-preview.min.js',
+		'assets/js/vendor/filepond/plugin/filepond-crop.min.js',
+		'assets/js/vendor/filepond/plugin/filepond-resize.min.js',
+		'assets/js/vendor/filepond/plugin/filepond-validate-type.js',
+		'assets/js/vendor/filepond/filepond.min.js',
+	].map(function(resource) { return wpumFrontend.pluginurl + resource });
+
+	loadResources(resources).then(function() {
+
+		// register plugins
+		FilePond.registerPlugin(
+			FilePondPluginFileEncode,
+			FilePondPluginImagePreview,
+			FilePondPluginImageCrop,
+			FilePondPluginImageResize,
+			FilePondPluginFileValidateType,
+		);
+
+		var fields = [].slice.call(document.querySelectorAll('input[data-input-type="image"], #user_cover, #user_avatar'));
+		var ponds = fields.map(function(field, index) {
+
+			var files = [];
+
+			if ( $( field ).data( 'file-poster' ) !== '' ) {
+				files = [ {
+					source: $( field ).data( 'file-poster' ),
+					options: {
+						type: 'local',
+					}
+				} ];
+			}
+
+			var filetypes = $( field ).data( 'file_types' ).toString().split( '|' );
+			var acceptedtypes = filetypes.map( function( type ) {
+				return type.includes( '/') ? type : 'image/' + type;
+			});
+
+			return FilePond.create( field, {
+				credits: false,
+				allowFilePoster: true,
+				allowFileMetadata: true,
+				fileMetadataObject: {
+					fieldkey: $( field ).data( 'file-key' )
+				},
+				acceptedFileTypes: acceptedtypes,
+				fileValidateTypeDetectType: (source, type) => new Promise((resolve, reject) => {
+					resolve(type);
+				}),
+				imageResizeTargetWidth: $( field ).data( 'file-width' ) ? $( field ).data( 'file-width' ) : $( field ).data( 'file-key' ) == 'user_avatar' ? 200  : null,
+				imageResizeTargetHeight: $( field ).data( 'file-height' ) ? $( field ).data( 'file-height' ) : $( field ).data( 'file-key' ) == 'user_avatar' ? 200  : null,
+				styleLoadIndicatorPosition: 'center bottom',
+				styleProgressIndicatorPosition: 'center bottom',
+				styleButtonRemoveItemPosition: 'center bottom',
+				styleButtonProcessItemPosition: 'center bottom',
+				stylePanelLayout: $( field ).data( 'file-key' ) == 'user_avatar' ? 'compact circle' : '',
+				server: {
+					url: wpumFrontend.ajaxurl,
+					process: {
+						method: 'POST',
+						ondata: ( formData ) => {
+							formData.append( 'action', 'wpum_upload_image' );
+							formData.append( 'key', $( field ).data( 'file-key' ) );
+							formData.append( 'nonce', $( field ).data( 'file-nonce' ) );
+							return formData;
+						},
+						onload: ( data ) => {
+							const resp = JSON.parse( data );
+							if ( resp ) {
+								$( '#' + $( field ).data( 'file-key' ) ).closest( '.field' ).find( '.wpum-uploaded-files' ).html('<div class="wpum-uploaded-file"><input type="hidden" class="input-text" name="current_'+ $( field ).data( 'file-key' ) +'" value="'+ resp.data.url +'" /></div>');
+							}
+						},
+					},
+					load: '?action=wpum_load_image&key='+ $( field ).data( 'file-key' ) + '&',
+					remove: (source, load, error) => {
+						load();
+						removeFiles( field );
+					},
+					revert: '?action=wpum_delete_image&key='+$( field ).data( 'file-key' )+'&nonce='+ $( field ).data( 'file-nonce' ),
+					revert: (uniqueFileId, load, error) => {
+						load();
+						removeFiles( field );
+					}
+				},
+				files: files,
+			});
+		});
+	});
 } );
