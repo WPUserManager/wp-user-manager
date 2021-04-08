@@ -1,7 +1,14 @@
 jQuery( function( $ ) {
 	function initFields() {
-		$( '.wpum-multiselect:not(.wpum-clone-field)' ).select2( {
-			theme: 'default'
+		$( '.wpum-multiselect:not(.wpum-clone-field)' ).each( function() {
+			var args = {
+				theme: 'default'
+			};
+			var placeholder = $( this ).attr( 'placeholder' );
+			if ( placeholder ) {
+				args[ 'placeholder' ] = placeholder;
+			}
+			$( this ).select2( args );
 		} );
 
 		$( '.wpum-datepicker:not([readonly]):not(.wpum-clone-field)' ).flatpickr( {
