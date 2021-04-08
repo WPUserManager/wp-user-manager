@@ -208,6 +208,10 @@ class WPUM_Form_Password_Recovery extends WPUM_Form {
 				throw new Exception( $return->get_error_message() );
 			}
 
+			if ( ! apply_filters( 'wpum_send_email_id_enabled', true, 'password_recovery_request' ) ) {
+				return;
+			}
+
 			$username = $values['user']['username_email'];
 			$user     = false;
 

@@ -1399,3 +1399,16 @@ function wpum_get_display_name_options() {
 		),
 	);
 }
+
+/**
+ * Check if email is enabled
+ *
+ * @param string $email_id
+ *
+ * @return boolean
+ */
+function wpum_check_email_enabled( $email_id ) {
+	$settings = wpum_get_emails();
+	$enabled  = isset( $settings[ $email_id ] ) && array_key_exists( 'enabled', $settings[ $email_id ] ) ? rest_sanitize_boolean( $settings[ $email_id ]['enabled'] ) : true;
+	return $enabled;
+}

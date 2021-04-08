@@ -31,6 +31,7 @@ class WPUM_Emails_List {
 		add_action( 'admin_menu', [ $this, 'setup_menu_page' ], 9 );
 		add_action( 'admin_enqueue_scripts', [ $this, 'load_scripts' ] );
 		add_action( 'wp_ajax_wpum_send_test_email', array( $this, 'send_test_email' ) );
+		add_action( 'wp_ajax_wpum_enabled_email', array( $this, 'wpum_enabled_email' ) );
 	}
 
 	/**
@@ -143,6 +144,26 @@ class WPUM_Emails_List {
 
 	}
 
+	public function wpum_enabled_email() {
+
+		check_ajax_referer( 'wpum_test_email', 'nonce' );
+
+		$enabled = sanitize_text_field( $_POST['enabled'] );
+		$key     = isset( $_POST['key'] ) ? sanitize_text_field( $_POST['key'] ) : '';
+
+		if ( ! empty( $key ) && current_user_can( apply_filters( 'wpum_admin_pages_capability', 'manage_options' ) ) && is_admin() ) {
+			$emails = wpum_get_emails();
+			$emails[ $key ]['enabled'] = $enabled;
+
+			update_option( 'wpum_email' , $emails );
+
+		} else {
+			wp_die( -1, 403 );
+		}
+
+		wp_send_json_success();
+
+	}
 }
 
 new WPUM_Emails_List;
