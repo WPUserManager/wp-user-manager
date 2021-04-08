@@ -43,7 +43,8 @@
 					<td><a :href="getCustomizationURL( index )" v-text="sanitized(email.name)"></a></td>
 					<td v-text="sanitized(email.description)"></td>
 					<td v-text="sanitized(email.recipient)"></td>
-					<td><a :href="getCustomizationURL( index )" class="button"><span class="dashicons dashicons-edit"></span> <span v-text="sanitized(labels.customize)"></span></a></td>
+					<td><a :href="getCustomizationURL( index )" class="button"><span class="dashicons dashicons-edit"></span> <span v-text="sanitized(labels.customize)"></span></a> &nbsp; <toggle-button v-model="email.enabled" @change="emailEnabledChange( index, $event )" /> <div class="spinner is-active" v-if="emailkey === index" ></div></td>
+
 				</tr>
 			</tbody>
 			<tfoot>
@@ -76,7 +77,8 @@ export default {
 			test_email: wpumEmailsEditor.default_email,
 			emails: wpumEmailsEditor.emails,
 			labels: wpumEmailsEditor.labels,
-			url: wpumEmailsEditor.pluginURL
+			url: wpumEmailsEditor.pluginURL,
+			emailkey: '',
 		}
 	},
 	methods: {
@@ -158,7 +160,30 @@ export default {
 				this.success = false
 			});
 
-		}
+		},
+		emailEnabledChange: function ( key, event ) {
+			this.emailkey = key
+			axios.post( wpumEmailsEditor.ajax,
+				qs.stringify({
+					key: key,
+					nonce: wpumEmailsEditor.nonce,
+					enabled: event.value,
+				}),
+				{
+					params: {
+						action: 'wpum_enabled_email'
+					},
+				}
+			)
+			.then( response => {
+				if( response.data.success === true ) {
+					this.emailkey = ''
+				}
+			})
+			.catch( response => {
+				this.emailkey = ''
+			});
+		},
 	}
 }
 </script>

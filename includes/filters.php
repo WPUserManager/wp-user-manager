@@ -289,3 +289,39 @@ function wpum_set_displayname_on_registration( $user_data ) {
 }
 
 add_filter( 'wpum_registration_user_data', 'wpum_set_displayname_on_registration', 10 );
+
+function wpum_registered_emails_customizer( $emails ){
+
+	$settings = wpum_get_emails();
+
+	foreach ( $emails  as $key => $email) {
+		if ( isset( $settings[ $key ] ) ) {
+			if ( array_key_exists( 'enabled', $settings[ $key ] ) ) {
+				$emails[ $key ]['enabled'] = rest_sanitize_boolean( $settings[ $key ]['enabled'] ) ? 1 : 0;
+			}else{
+				$emails[ $key ]['enabled'] = 1;
+			}
+		}else{
+			$emails[ $key ]['enabled'] = 1;
+		}
+	}
+
+	return $emails;
+}
+
+add_filter( 'wpum_registered_emails', 'wpum_registered_emails_customizer', 20 );
+
+function wpum_send_email_id_enabled( $enabled, $email_id ){
+	$enabled  = wpum_check_email_enabled( $email_id );
+	return $enabled;
+}
+
+add_filter( 'wpum_send_email_id_enabled', 'wpum_send_email_id_enabled', 10, 2 );
+
+function wpum_send_registration_user_email_enabled( $enabled ){
+	$enabled  = wpum_check_email_enabled( 'registration_confirmation' );
+	return $enabled;
+}
+
+add_filter( 'wpum_send_registration_user_email', 'wpum_send_registration_user_email_enabled', 12 );
+
