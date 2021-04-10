@@ -139,6 +139,7 @@ Please note that using WPUM and the mentioned add-ons does NOT guarantee complia
 - Fix: Undefined function 'use_block_editor_for_post_type' on WordPress installs before 5.0
 - Fix: 'WP_DB_Table' class already exists on some installs
 - Fix: File extension validation not working if there are spaces after commas
+- Fix: Block restriction by logged in state not working for some blocks
 
 = 2.5 (25th January 2021) =
 
