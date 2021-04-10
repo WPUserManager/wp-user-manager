@@ -1,14 +1,14 @@
-# Copyright (C) 2020 WP User Manager
+# Copyright (C) 2021 WP User Manager
 # This file is distributed under the GPLv3+.
 msgid ""
 msgstr ""
-"Project-Id-Version: WP User Manager 2.3.12\n"
+"Project-Id-Version: WP User Manager 2.6\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/wp-user-manager\n"
-"POT-Creation-Date: 2020-11-19 11:06:19+00:00\n"
+"POT-Creation-Date: 2021-04-10 22:30:26+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"PO-Revision-Date: 2020-MO-DA HO:MI+ZONE\n"
+"PO-Revision-Date: 2021-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: en\n"
@@ -47,7 +47,7 @@ msgid "The \"%s\" option is required."
 msgstr ""
 
 #: includes/abstracts/abstract-shortcode-generator.php:318
-#: includes/wpum-fields/types/class-wpum-field-checkbox.php:34
+#: includes/wpum-fields/types/class-wpum-field-checkbox.php:36
 msgid "Yes"
 msgstr ""
 
@@ -55,29 +55,29 @@ msgstr ""
 msgid "No"
 msgstr ""
 
-#: includes/abstracts/abstract-wpum-field-type.php:134
+#: includes/abstracts/abstract-wpum-field-type.php:148
 msgid "Field title"
 msgstr ""
 
-#: includes/abstracts/abstract-wpum-field-type.php:137
+#: includes/abstracts/abstract-wpum-field-type.php:151
 msgid "Enter a title for this field"
 msgstr ""
 
-#: includes/abstracts/abstract-wpum-field-type.php:144
+#: includes/abstracts/abstract-wpum-field-type.php:158
 msgid "Field description (optional)"
 msgstr ""
 
-#: includes/abstracts/abstract-wpum-field-type.php:147
+#: includes/abstracts/abstract-wpum-field-type.php:161
 msgid ""
 "This is the text that appears as a description within the forms. Leave "
 "blank if not needed."
 msgstr ""
 
-#: includes/abstracts/abstract-wpum-field-type.php:152
+#: includes/abstracts/abstract-wpum-field-type.php:166
 msgid "Unique meta key"
 msgstr ""
 
-#: includes/abstracts/abstract-wpum-field-type.php:155
+#: includes/abstracts/abstract-wpum-field-type.php:169
 msgid ""
 "The key must be unique for each field and written in lowercase with an "
 "underscore ( _ ) separating words e.g country_list or job_title. This will "
@@ -85,112 +85,139 @@ msgid ""
 "website."
 msgstr ""
 
-#: includes/abstracts/abstract-wpum-field-type.php:162
+#: includes/abstracts/abstract-wpum-field-type.php:176
 msgid "Placeholder"
 msgstr ""
 
-#: includes/abstracts/abstract-wpum-field-type.php:164
+#: includes/abstracts/abstract-wpum-field-type.php:178
 msgid ""
 "This text will appear within the field when empty. Leave blank if not "
 "needed."
 msgstr ""
 
-#: includes/abstracts/abstract-wpum-field-type.php:170
+#: includes/abstracts/abstract-wpum-field-type.php:184
 msgid "Set as required"
 msgstr ""
 
-#: includes/abstracts/abstract-wpum-field-type.php:173
+#: includes/abstracts/abstract-wpum-field-type.php:187
 msgid ""
 "Enable this option so the field must be filled before the form can be "
 "processed."
 msgstr ""
 
-#: includes/abstracts/abstract-wpum-field-type.php:179
+#: includes/abstracts/abstract-wpum-field-type.php:193
 msgid "Profile visibility"
 msgstr ""
 
-#: includes/abstracts/abstract-wpum-field-type.php:181
+#: includes/abstracts/abstract-wpum-field-type.php:195
 msgid "Set the visibility of this field on users profiles."
 msgstr ""
 
-#: includes/abstracts/abstract-wpum-field-type.php:183
+#: includes/abstracts/abstract-wpum-field-type.php:197
 msgid "Publicly visible"
 msgstr ""
 
-#: includes/abstracts/abstract-wpum-field-type.php:184
+#: includes/abstracts/abstract-wpum-field-type.php:198
+#: includes/wpum-fields/types/class-wpum-field-hidden.php:19
 msgid "Hidden"
 msgstr ""
 
-#: includes/abstracts/abstract-wpum-field-type.php:193
+#: includes/abstracts/abstract-wpum-field-type.php:207
 msgid "Profile editing"
 msgstr ""
 
-#: includes/abstracts/abstract-wpum-field-type.php:195
+#: includes/abstracts/abstract-wpum-field-type.php:209
 msgid ""
 "Set who can edit this field. Hidden fields will not be editable within the "
 "front-end account page."
 msgstr ""
 
-#: includes/abstracts/abstract-wpum-field-type.php:197
+#: includes/abstracts/abstract-wpum-field-type.php:211
 msgid "Publicly editable"
 msgstr ""
 
-#: includes/abstracts/abstract-wpum-field-type.php:198
+#: includes/abstracts/abstract-wpum-field-type.php:212
 msgid "Hidden (admins only)"
 msgstr ""
 
-#: includes/abstracts/abstract-wpum-field-type.php:203
+#: includes/abstracts/abstract-wpum-field-type.php:217
 msgid "Set as read only"
 msgstr ""
 
-#: includes/abstracts/abstract-wpum-field-type.php:206
+#: includes/abstracts/abstract-wpum-field-type.php:220
 msgid ""
 "Enable to prevent users from editing this field. Note: if the profile "
 "editing option is set to publicly editable, the field will still be visible "
 "within the account page but will not be customizable."
 msgstr ""
 
-#: includes/abstracts/abstract-wpum-form.php:297
+#: includes/abstracts/abstract-wpum-field-type.php:229
+msgid "Default Value"
+msgstr ""
+
+#: includes/abstracts/abstract-wpum-form.php:298
 msgid "%s is a required field"
 msgstr ""
 
-#: includes/abstracts/abstract-wpum-form.php:307
+#: includes/abstracts/abstract-wpum-form.php:308
 msgid "%s is invalid"
 msgstr ""
 
-#: includes/abstracts/abstract-wpum-form.php:323
+#: includes/abstracts/abstract-wpum-form.php:327
 msgid "\"%s\" (filetype %s) needs to be one of the following file types: %s"
 msgstr ""
 
-#: includes/abstracts/abstract-wpum-form.php:348
-msgid ""
-"Password must be at least 8 characters long and contain at least 1 number "
-"and 1 uppercase letter and 1 special character."
+#: includes/abstracts/abstract-wpum-form.php:357
+msgid "1 uppercase letter"
 msgstr ""
 
-#: includes/actions.php:48
+#: includes/abstracts/abstract-wpum-form.php:361
+msgid "1 letter"
+msgstr ""
+
+#: includes/abstracts/abstract-wpum-form.php:365
+msgid "1 number"
+msgstr ""
+
+#: includes/abstracts/abstract-wpum-form.php:369
+msgid "1 special character"
+msgstr ""
+
+#: includes/abstracts/abstract-wpum-form.php:373
+msgid "and contain at least"
+msgstr ""
+
+#: includes/abstracts/abstract-wpum-form.php:373
+msgid " and "
+msgstr ""
+
+#: includes/abstracts/abstract-wpum-form.php:376
+msgid "Password must be at least %s characters long"
+msgstr ""
+
+#: includes/actions.php:51
 msgid " Users"
 msgstr ""
 
-#: includes/actions.php:55 includes/wpum-admin/class-wpum-options-panel.php:99
+#: includes/actions.php:58 includes/wpum-admin/class-wpum-options-panel.php:99
 #: includes/wpum-emails/class-wpum-emails-list.php:44
 msgid "Emails"
 msgstr ""
 
-#: includes/actions.php:63
+#: includes/actions.php:66
 msgid "Custom fields"
 msgstr ""
 
-#: includes/actions.php:71
-#: includes/wpum-forms/class-wpum-registration-forms-editor.php:54
-#: includes/wpum-forms/class-wpum-registration-forms-editor.php:55
-#: includes/wpum-forms/class-wpum-registration-forms-editor.php:129
+#: includes/actions.php:74
+#: includes/wpum-forms/class-wpum-registration-forms-editor.php:58
+#: includes/wpum-forms/class-wpum-registration-forms-editor.php:59
+#: includes/wpum-forms/class-wpum-registration-forms-editor.php:134
 msgid "Registration Forms"
 msgstr ""
 
-#: includes/actions.php:79 includes/filters.php:42 includes/functions.php:667
+#: includes/actions.php:82 includes/filters.php:42 includes/functions.php:692
 #: includes/wpum-admin/class-wpum-options-panel.php:84
-#: includes/wpum-forms/class-wpum-registration-forms-editor.php:152
+#: includes/wpum-forms/class-wpum-registration-forms-editor.php:157
 #: vendor/wp-user-manager/wpum-blocks/includes/classes/Blocks/AccountPage.php:32
 #: vendor/wp-user-manager/wpum-blocks/includes/classes/Blocks/LoginForm.php:32
 #: vendor/wp-user-manager/wpum-blocks/includes/classes/Blocks/LoginLink.php:32
@@ -204,19 +231,40 @@ msgstr ""
 msgid "Settings"
 msgstr ""
 
-#: includes/actions.php:240 includes/wpum-forms/class-wpum-form-profile.php:131
+#: includes/actions.php:278 includes/wpum-forms/class-wpum-form-profile.php:131
 msgid ""
 "This display name is already in use by someone else. Display names must be "
 "unique."
 msgstr ""
 
-#: includes/actions.php:249 includes/wpum-forms/class-wpum-form-profile.php:135
+#: includes/actions.php:287 includes/wpum-forms/class-wpum-form-profile.php:135
 msgid "This nickname is already in use by someone else. Nicknames must be unique."
 msgstr ""
 
-#: includes/actions.php:261 templates/already-logged-in.php:25
+#: includes/actions.php:299 templates/already-logged-in.php:25
 #: templates/profile-card.php:42
 msgid "View Profile"
+msgstr ""
+
+#: includes/actions.php:365 includes/functions.php:715
+#: includes/wpum-forms/class-wpum-form-privacy.php:74
+msgid "Profile Privacy"
+msgstr ""
+
+#: includes/actions.php:367
+msgid "Hide profile from guests"
+msgstr ""
+
+#: includes/actions.php:368
+msgid "Hide this profile from guests. Overrides the global profile options."
+msgstr ""
+
+#: includes/actions.php:369
+msgid "Hide profile from members"
+msgstr ""
+
+#: includes/actions.php:370
+msgid "Hide this profile from members. Overrides the global profile options."
 msgstr ""
 
 #: includes/assets.php:40
@@ -275,12 +323,12 @@ msgid "Username or Email"
 msgstr ""
 
 #: includes/functions.php:226 includes/wpum-emails/class-wpum-emails.php:367
-#: includes/wpum-fields/class-wpum-field.php:327
+#: includes/wpum-fields/class-wpum-field.php:345
 msgid "Username"
 msgstr ""
 
 #: includes/functions.php:230
-#: includes/wpum-emails/class-wpum-emails-list.php:87
+#: includes/wpum-emails/class-wpum-emails-list.php:88
 #: includes/wpum-fields/types/class-wpum-field-email.php:19
 msgid "Email"
 msgstr ""
@@ -290,57 +338,57 @@ msgstr ""
 msgid "Username or email"
 msgstr ""
 
-#: includes/functions.php:436
+#: includes/functions.php:450
 msgid "New user registration on your site %s:"
 msgstr ""
 
-#: includes/functions.php:437
+#: includes/functions.php:451
 msgid "Username: %s"
 msgstr ""
 
-#: includes/functions.php:438
+#: includes/functions.php:452
 msgid "E-mail: %s"
 msgstr ""
 
-#: includes/functions.php:456
+#: includes/functions.php:470
 msgid "[%s] New User Registration"
 msgstr ""
 
-#: includes/functions.php:553
+#: includes/functions.php:567
 msgid "\"%1$s\" (filetype %2$s) needs to be one of the following file types: %3$s"
 msgstr ""
 
-#: includes/functions.php:555
+#: includes/functions.php:569
 msgid "Uploaded files need to be one of the following file types: %s"
 msgstr ""
 
-#: includes/functions.php:671
+#: includes/functions.php:696
 #: includes/wpum-fields/types/class-wpum-field-password.php:19
 #: includes/wpum-forms/class-wpum-form-login.php:98
 #: includes/wpum-forms/class-wpum-form-password.php:104
 msgid "Password"
 msgstr ""
 
-#: includes/functions.php:675 templates/directory/single-user.php:38
+#: includes/functions.php:700 templates/directory/single-user.php:38
 msgid "View profile"
 msgstr ""
 
-#: includes/functions.php:679 includes/wpum-shortcodes/shortcodes.php:147
+#: includes/functions.php:704 includes/wpum-shortcodes/shortcodes.php:147
 #: templates/already-logged-in.php:27 templates/profile-card.php:45
 #: templates/user-overview.php:38
 #: vendor/wp-user-manager/wpum-blocks/includes/classes/Blocks/LogoutLink.php:50
 msgid "Logout"
 msgstr ""
 
-#: includes/functions.php:859
+#: includes/functions.php:891
 msgid "About"
 msgstr ""
 
-#: includes/functions.php:863
+#: includes/functions.php:895
 msgid "Posts"
 msgstr ""
 
-#: includes/functions.php:867
+#: includes/functions.php:899
 msgid "Comments"
 msgstr ""
 
@@ -366,8 +414,8 @@ msgstr ""
 msgid "Profile"
 msgstr ""
 
-#: includes/install.php:136
-#: includes/wpum-upgrades/class-wpum-plugin-updates.php:511
+#: includes/install.php:138
+#: includes/wpum-upgrades/class-wpum-plugin-updates.php:522
 msgid "Default registration form"
 msgstr ""
 
@@ -391,7 +439,7 @@ msgid "WP User Manager "
 msgstr ""
 
 #: includes/wpum-admin/class-wpum-avatars.php:91
-#: includes/wpum-fields/class-wpum-field.php:354
+#: includes/wpum-fields/class-wpum-field.php:372
 msgid "Avatar"
 msgstr ""
 
@@ -439,12 +487,12 @@ msgstr ""
 #: includes/wpum-admin/class-wpum-getting-started.php:161
 #: includes/wpum-directories/class-wpum-directories-editor.php:162
 #: includes/wpum-directories/wpum-directories-functions.php:23
-#: includes/wpum-fields/class-wpum-field.php:336
+#: includes/wpum-fields/class-wpum-field.php:354
 msgid "First name"
 msgstr ""
 
 #: includes/wpum-admin/class-wpum-getting-started.php:166
-#: includes/wpum-fields/class-wpum-field.php:339
+#: includes/wpum-fields/class-wpum-field.php:357
 msgid "Last name"
 msgstr ""
 
@@ -483,7 +531,7 @@ msgid "Customize profiles"
 msgstr ""
 
 #: includes/wpum-admin/class-wpum-getting-started.php:208
-#: includes/wpum-fields/class-wpum-fields-editor.php:141
+#: includes/wpum-fields/class-wpum-fields-editor.php:145
 msgid "Customize fields"
 msgstr ""
 
@@ -532,39 +580,39 @@ msgstr ""
 msgid "Go To WP User Manager &rarr; Settings"
 msgstr ""
 
-#: includes/wpum-admin/class-wpum-menus.php:50
+#: includes/wpum-admin/class-wpum-menus.php:52
 msgid "Set as logout url"
 msgstr ""
 
-#: includes/wpum-admin/class-wpum-menus.php:51
+#: includes/wpum-admin/class-wpum-menus.php:53
 msgid "Enable to make this link a logout link."
 msgstr ""
 
-#: includes/wpum-admin/class-wpum-menus.php:53
+#: includes/wpum-admin/class-wpum-menus.php:55
 msgid "Display to:"
 msgstr ""
 
-#: includes/wpum-admin/class-wpum-menus.php:56
+#: includes/wpum-admin/class-wpum-menus.php:58
 msgid "Everyone"
 msgstr ""
 
-#: includes/wpum-admin/class-wpum-menus.php:57
+#: includes/wpum-admin/class-wpum-menus.php:59
 msgid "Logged in users"
 msgstr ""
 
-#: includes/wpum-admin/class-wpum-menus.php:58
+#: includes/wpum-admin/class-wpum-menus.php:60
 msgid "Logged out users"
 msgstr ""
 
-#: includes/wpum-admin/class-wpum-menus.php:62
+#: includes/wpum-admin/class-wpum-menus.php:64
 msgid "Set the visibility of this menu item."
 msgstr ""
 
-#: includes/wpum-admin/class-wpum-menus.php:63
+#: includes/wpum-admin/class-wpum-menus.php:65
 msgid "Select roles:"
 msgstr ""
 
-#: includes/wpum-admin/class-wpum-menus.php:66
+#: includes/wpum-admin/class-wpum-menus.php:68
 msgid "Select the roles that should see this menu item. Leave blank for all roles."
 msgstr ""
 
@@ -587,7 +635,17 @@ msgid ""
 "the issue please click the button below."
 msgstr ""
 
-#: includes/wpum-admin/class-wpum-notices.php:145
+#: includes/wpum-admin/class-wpum-notices.php:66
+msgid ""
+"<strong>WP User Manager</strong> requires your site to have a 'pretty' "
+"permalink structure enabled instead of the default 'Plain'."
+msgstr ""
+
+#: includes/wpum-admin/class-wpum-notices.php:69
+msgid "Change permalinks"
+msgstr ""
+
+#: includes/wpum-admin/class-wpum-notices.php:156
 msgid ""
 "WP User Manager has installed default data. You can go back to your <a "
 "href=\"%s\">admin panel.</a>"
@@ -602,7 +660,8 @@ msgid "WP User Manager Settings"
 msgstr ""
 
 #: includes/wpum-admin/class-wpum-options-panel.php:98
-#: includes/wpum-fields/wpum-fields-functions.php:236
+#: includes/wpum-fields/wpum-fields-functions.php:238
+#: includes/wpum-roles/functions.php:853
 #: vendor/htmlburger/carbon-fields/core/Container/Container.php:711
 msgid "General"
 msgstr ""
@@ -640,7 +699,8 @@ msgid "Backend Redirects"
 msgstr ""
 
 #: includes/wpum-admin/class-wpum-options-panel.php:147
-#: includes/wpum-forms/class-wpum-registration-forms-editor.php:154
+#: includes/wpum-forms/class-wpum-registration-forms-editor.php:159
+#: includes/wpum-roles/class-wpum-roles-editor.php:151
 #: vendor/htmlburger/carbon-fields/templates/Container/common/options-page.php:43
 msgid "Save Changes"
 msgstr ""
@@ -744,245 +804,284 @@ msgid "Hide WordPress admin bar for specific user roles."
 msgstr ""
 
 #: includes/wpum-admin/class-wpum-options-panel.php:232
-#: includes/wpum-admin/class-wpum-options-panel.php:255
+#: includes/wpum-admin/class-wpum-options-panel.php:241
+#: includes/wpum-admin/class-wpum-options-panel.php:270
 msgid "Select one or more user roles from the list."
 msgstr ""
 
 #: includes/wpum-admin/class-wpum-options-panel.php:237
-msgid "Excluded Usernames"
+msgid "Restrict Dashboard Access"
 msgstr ""
 
 #: includes/wpum-admin/class-wpum-options-panel.php:238
+msgid ""
+"Restrict access to the WordPress dashboard for specific user roles. "
+"Administrators will always have access."
+msgstr ""
+
+#: includes/wpum-admin/class-wpum-options-panel.php:246
+msgid "Excluded Usernames"
+msgstr ""
+
+#: includes/wpum-admin/class-wpum-options-panel.php:247
 msgid ""
 "Enter the usernames that you wish to disable. Separate each username on a "
 "new line."
 msgstr ""
 
-#: includes/wpum-admin/class-wpum-options-panel.php:245
+#: includes/wpum-admin/class-wpum-options-panel.php:252
+msgid "Roles Editor"
+msgstr ""
+
+#: includes/wpum-admin/class-wpum-options-panel.php:253
+msgid "Enable the roles editor in the Users menu."
+msgstr ""
+
+#: includes/wpum-admin/class-wpum-options-panel.php:260
 msgid "Allow Role Section"
 msgstr ""
 
-#: includes/wpum-admin/class-wpum-options-panel.php:246
+#: includes/wpum-admin/class-wpum-options-panel.php:261
 msgid "Enable to allow users to select a user role on registration."
 msgstr ""
 
-#: includes/wpum-admin/class-wpum-options-panel.php:251
+#: includes/wpum-admin/class-wpum-options-panel.php:266
 msgid "Allowed Roles"
 msgstr ""
 
-#: includes/wpum-admin/class-wpum-options-panel.php:252
+#: includes/wpum-admin/class-wpum-options-panel.php:267
 msgid "Select which roles can be selected upon registration."
 msgstr ""
 
-#: includes/wpum-admin/class-wpum-options-panel.php:261
+#: includes/wpum-admin/class-wpum-options-panel.php:276
 msgid "Login After Registration"
 msgstr ""
 
-#: includes/wpum-admin/class-wpum-options-panel.php:262
+#: includes/wpum-admin/class-wpum-options-panel.php:277
 msgid "Enable this option to automatically authenticate users after registration."
 msgstr ""
 
-#: includes/wpum-admin/class-wpum-options-panel.php:269
+#: includes/wpum-admin/class-wpum-options-panel.php:284
 msgid "Enable Terms & Conditions"
 msgstr ""
 
-#: includes/wpum-admin/class-wpum-options-panel.php:270
+#: includes/wpum-admin/class-wpum-options-panel.php:285
 msgid "Enable to force users to agree to your terms before registering an account."
 msgstr ""
 
-#: includes/wpum-admin/class-wpum-options-panel.php:275
+#: includes/wpum-admin/class-wpum-options-panel.php:290
 msgid "Terms Page"
 msgstr ""
 
-#: includes/wpum-admin/class-wpum-options-panel.php:276
+#: includes/wpum-admin/class-wpum-options-panel.php:291
 msgid "Select the page that contains your terms."
 msgstr ""
 
-#: includes/wpum-admin/class-wpum-options-panel.php:285
+#: includes/wpum-admin/class-wpum-options-panel.php:300
 msgid "From Name"
 msgstr ""
 
-#: includes/wpum-admin/class-wpum-options-panel.php:286
+#: includes/wpum-admin/class-wpum-options-panel.php:301
 msgid ""
 "The name emails are said to come from. This should probably be your site "
 "name."
 msgstr ""
 
-#: includes/wpum-admin/class-wpum-options-panel.php:292
+#: includes/wpum-admin/class-wpum-options-panel.php:307
 msgid "From Email"
 msgstr ""
 
-#: includes/wpum-admin/class-wpum-options-panel.php:293
+#: includes/wpum-admin/class-wpum-options-panel.php:308
 msgid "This will act as the \"from\" and \"reply-to\" address."
 msgstr ""
 
-#: includes/wpum-admin/class-wpum-options-panel.php:299
+#: includes/wpum-admin/class-wpum-options-panel.php:314
 msgid "Email Template"
 msgstr ""
 
-#: includes/wpum-admin/class-wpum-options-panel.php:300
+#: includes/wpum-admin/class-wpum-options-panel.php:315
 msgid "Select the email template you wish to use for all emails sent by WPUM."
 msgstr ""
 
-#: includes/wpum-admin/class-wpum-options-panel.php:307
+#: includes/wpum-admin/class-wpum-options-panel.php:322
 msgid "Logo"
 msgstr ""
 
-#: includes/wpum-admin/class-wpum-options-panel.php:308
+#: includes/wpum-admin/class-wpum-options-panel.php:323
 msgid ""
 "Upload or choose a logo to be displayed at the top of emails. Displayed on "
 "HTML emails only."
 msgstr ""
 
-#: includes/wpum-admin/class-wpum-options-panel.php:315
+#: includes/wpum-admin/class-wpum-options-panel.php:330
 msgid "Disable Admin Registration Email"
 msgstr ""
 
-#: includes/wpum-admin/class-wpum-options-panel.php:316
+#: includes/wpum-admin/class-wpum-options-panel.php:331
 msgid ""
 "Enable this option to stop receiving notifications when a new user "
 "registers."
 msgstr ""
 
-#: includes/wpum-admin/class-wpum-options-panel.php:321
+#: includes/wpum-admin/class-wpum-options-panel.php:336
 msgid "Disable Admin Password Recovery Email"
 msgstr ""
 
-#: includes/wpum-admin/class-wpum-options-panel.php:322
+#: includes/wpum-admin/class-wpum-options-panel.php:337
 msgid ""
 "Enable this option to stop receiving notifications when a new user resets "
 "his password."
 msgstr ""
 
-#: includes/wpum-admin/class-wpum-options-panel.php:329
+#: includes/wpum-admin/class-wpum-options-panel.php:344
 msgid "Allow Guests to View Profiles"
 msgstr ""
 
-#: includes/wpum-admin/class-wpum-options-panel.php:330
+#: includes/wpum-admin/class-wpum-options-panel.php:345
 msgid "Enable this option to allow guests to view users profiles."
 msgstr ""
 
-#: includes/wpum-admin/class-wpum-options-panel.php:335
+#: includes/wpum-admin/class-wpum-options-panel.php:350
 msgid "Allow Members to View Profiles"
 msgstr ""
 
-#: includes/wpum-admin/class-wpum-options-panel.php:336
+#: includes/wpum-admin/class-wpum-options-panel.php:351
 msgid ""
 "Enable this option to allow members to view users profiles. If disabled, "
 "users can only see their own profile."
 msgstr ""
 
-#: includes/wpum-admin/class-wpum-options-panel.php:341
+#: includes/wpum-admin/class-wpum-options-panel.php:356
+msgid "Allow Members to set their profile privacy"
+msgstr ""
+
+#: includes/wpum-admin/class-wpum-options-panel.php:357
+msgid ""
+"Adds a Privacy account tab where members can override the global settings "
+"above."
+msgstr ""
+
+#: includes/wpum-admin/class-wpum-options-panel.php:362
 msgid "Custom Avatars"
 msgstr ""
 
-#: includes/wpum-admin/class-wpum-options-panel.php:342
+#: includes/wpum-admin/class-wpum-options-panel.php:363
 msgid ""
 "Enable this option to allow users to upload custom avatars for their "
 "profiles."
 msgstr ""
 
-#: includes/wpum-admin/class-wpum-options-panel.php:347
+#: includes/wpum-admin/class-wpum-options-panel.php:368
 msgid "Disable Profile Cover Image"
 msgstr ""
 
-#: includes/wpum-admin/class-wpum-options-panel.php:348
+#: includes/wpum-admin/class-wpum-options-panel.php:369
 msgid ""
 "Enable this option to prevent users from uploading a custom profile cover "
 "image."
 msgstr ""
 
-#: includes/wpum-admin/class-wpum-options-panel.php:353
+#: includes/wpum-admin/class-wpum-options-panel.php:374
 msgid "Disable Strong Passwords"
 msgstr ""
 
-#: includes/wpum-admin/class-wpum-options-panel.php:354
+#: includes/wpum-admin/class-wpum-options-panel.php:375
 msgid ""
 "Enable this option to disable the built-in strong passwords validation "
 "system of WP User Manager."
 msgstr ""
 
-#: includes/wpum-admin/class-wpum-options-panel.php:361
+#: includes/wpum-admin/class-wpum-options-panel.php:380
+msgid "Default Display Name"
+msgstr ""
+
+#: includes/wpum-admin/class-wpum-options-panel.php:381
+msgid ""
+"Select the default format for the user display name at registration. The "
+"user can change their display name later in their account."
+msgstr ""
+
+#: includes/wpum-admin/class-wpum-options-panel.php:390
 msgid "Display Posts"
 msgstr ""
 
-#: includes/wpum-admin/class-wpum-options-panel.php:362
+#: includes/wpum-admin/class-wpum-options-panel.php:391
 msgid "Enable this option to display users submitted post on their profile page."
 msgstr ""
 
-#: includes/wpum-admin/class-wpum-options-panel.php:367
+#: includes/wpum-admin/class-wpum-options-panel.php:396
 msgid "Display Comments"
 msgstr ""
 
-#: includes/wpum-admin/class-wpum-options-panel.php:368
+#: includes/wpum-admin/class-wpum-options-panel.php:397
 msgid ""
 "Enable this option to display users submitted comments on their profile "
 "page."
 msgstr ""
 
-#: includes/wpum-admin/class-wpum-options-panel.php:375
+#: includes/wpum-admin/class-wpum-options-panel.php:404
 msgid "Require Current Password"
 msgstr ""
 
-#: includes/wpum-admin/class-wpum-options-panel.php:376
+#: includes/wpum-admin/class-wpum-options-panel.php:405
 msgid "Ask user for current password when resetting password on the account page"
 msgstr ""
 
-#: includes/wpum-admin/class-wpum-options-panel.php:383
+#: includes/wpum-admin/class-wpum-options-panel.php:412
 msgid "After Login"
 msgstr ""
 
-#: includes/wpum-admin/class-wpum-options-panel.php:384
+#: includes/wpum-admin/class-wpum-options-panel.php:413
 msgid ""
 "Select the page where you want to redirect users after they login. If empty "
 "it will reload the login page."
 msgstr ""
 
-#: includes/wpum-admin/class-wpum-options-panel.php:390
+#: includes/wpum-admin/class-wpum-options-panel.php:419
 msgid "After Logout"
 msgstr ""
 
-#: includes/wpum-admin/class-wpum-options-panel.php:391
+#: includes/wpum-admin/class-wpum-options-panel.php:420
 msgid ""
 "Select the page where you want to redirect users after they logout. If "
 "empty will return to wp-login.php"
 msgstr ""
 
-#: includes/wpum-admin/class-wpum-options-panel.php:397
+#: includes/wpum-admin/class-wpum-options-panel.php:426
 msgid "After Registration"
 msgstr ""
 
-#: includes/wpum-admin/class-wpum-options-panel.php:398
+#: includes/wpum-admin/class-wpum-options-panel.php:427
 msgid ""
 "Select the page where you want to redirect users after they successfully "
 "register. If empty a message will be displayed instead."
 msgstr ""
 
-#: includes/wpum-admin/class-wpum-options-panel.php:406
+#: includes/wpum-admin/class-wpum-options-panel.php:435
 msgid "Backend Register"
 msgstr ""
 
-#: includes/wpum-admin/class-wpum-options-panel.php:407
+#: includes/wpum-admin/class-wpum-options-panel.php:436
 msgid ""
 "Select a page if you wish to redirect users who try to signup through "
 "wp-login.php"
 msgstr ""
 
-#: includes/wpum-admin/class-wpum-options-panel.php:413
+#: includes/wpum-admin/class-wpum-options-panel.php:442
 msgid "Backend lost password"
 msgstr ""
 
-#: includes/wpum-admin/class-wpum-options-panel.php:414
+#: includes/wpum-admin/class-wpum-options-panel.php:443
 msgid ""
 "Select a page if you wish to redirect users who try to recover a lost "
 "password through wp-login.php"
 msgstr ""
 
-#: includes/wpum-admin/class-wpum-options-panel.php:420
+#: includes/wpum-admin/class-wpum-options-panel.php:449
 msgid "Backend Profile"
 msgstr ""
 
-#: includes/wpum-admin/class-wpum-options-panel.php:421
+#: includes/wpum-admin/class-wpum-options-panel.php:450
 msgid ""
 "Select the page where you want to redirect users who try to access their "
 "profile on the backend."
@@ -1171,7 +1270,7 @@ msgid "Select how many profiles you wish to display per page."
 msgstr ""
 
 #: includes/wpum-directories/class-wpum-directories-editor.php:127
-#: includes/wpum-fields/class-wpum-fields-editor.php:174
+#: includes/wpum-fields/class-wpum-fields-editor.php:178
 msgid "General settings"
 msgstr ""
 
@@ -1273,8 +1372,8 @@ msgid "First Name"
 msgstr ""
 
 #: includes/wpum-directories/class-wpum-directories-editor.php:213
-#: includes/wpum-emails/class-wpum-emails-list.php:88
-#: includes/wpum-fields/class-wpum-field.php:351
+#: includes/wpum-emails/class-wpum-emails-list.php:89
+#: includes/wpum-fields/class-wpum-field.php:369
 msgid "Description"
 msgstr ""
 
@@ -1287,7 +1386,8 @@ msgid "Search form"
 msgstr ""
 
 #: includes/wpum-directories/class-wpum-directories-editor.php:256
-#: includes/wpum-forms/class-wpum-registration-forms-editor.php:135
+#: includes/wpum-forms/class-wpum-registration-forms-editor.php:140
+#: includes/wpum-roles/class-wpum-roles-editor.php:137
 msgid "Shortcode"
 msgstr ""
 
@@ -1442,45 +1542,45 @@ msgstr ""
 msgid "WP User Manager Emails"
 msgstr ""
 
-#: includes/wpum-emails/class-wpum-emails-list.php:86
+#: includes/wpum-emails/class-wpum-emails-list.php:87
 msgid "WP User Manager Emails Customization"
 msgstr ""
 
-#: includes/wpum-emails/class-wpum-emails-list.php:89
+#: includes/wpum-emails/class-wpum-emails-list.php:90
 msgid "Recipient(s)"
 msgstr ""
 
-#: includes/wpum-emails/class-wpum-emails-list.php:90
+#: includes/wpum-emails/class-wpum-emails-list.php:91
 msgid "Sent automatically"
 msgstr ""
 
-#: includes/wpum-emails/class-wpum-emails-list.php:91
+#: includes/wpum-emails/class-wpum-emails-list.php:92
 msgid "Manually triggered"
 msgstr ""
 
-#: includes/wpum-emails/class-wpum-emails-list.php:92
+#: includes/wpum-emails/class-wpum-emails-list.php:93
 msgid "Enter email address..."
 msgstr ""
 
-#: includes/wpum-emails/class-wpum-emails-list.php:93
+#: includes/wpum-emails/class-wpum-emails-list.php:94
 msgid "Customize"
 msgstr ""
 
-#: includes/wpum-emails/class-wpum-emails-list.php:94
+#: includes/wpum-emails/class-wpum-emails-list.php:95
 msgid "Send test email"
 msgstr ""
 
-#: includes/wpum-emails/class-wpum-emails-list.php:95
+#: includes/wpum-emails/class-wpum-emails-list.php:96
 msgid "Test email successfully sent."
 msgstr ""
 
-#: includes/wpum-emails/class-wpum-emails-list.php:96
+#: includes/wpum-emails/class-wpum-emails-list.php:97
 msgid ""
 "Something went wrong while sending the test email. Please verify the email "
 "address you typed is correct or check your server logs."
 msgstr ""
 
-#: includes/wpum-emails/class-wpum-emails-list.php:129
+#: includes/wpum-emails/class-wpum-emails-list.php:130
 msgid "Test email"
 msgstr ""
 
@@ -1519,7 +1619,7 @@ msgid "Display the user's username."
 msgstr ""
 
 #: includes/wpum-emails/class-wpum-emails.php:373
-#: includes/wpum-fields/class-wpum-field.php:330
+#: includes/wpum-fields/class-wpum-field.php:348
 msgid "User email"
 msgstr ""
 
@@ -1567,151 +1667,156 @@ msgstr ""
 msgid "Display the password recovery url."
 msgstr ""
 
-#: includes/wpum-emails/wpum-email-functions.php:186
+#: includes/wpum-emails/wpum-email-functions.php:194
 msgid "Registration confirmation"
 msgstr ""
 
-#: includes/wpum-emails/wpum-email-functions.php:187
+#: includes/wpum-emails/wpum-email-functions.php:195
 msgid "This is the email that is sent to the user upon successful registration."
 msgstr ""
 
-#: includes/wpum-emails/wpum-email-functions.php:188
+#: includes/wpum-emails/wpum-email-functions.php:196
 msgid "User's email."
 msgstr ""
 
-#: includes/wpum-emails/wpum-email-functions.php:192
+#: includes/wpum-emails/wpum-email-functions.php:200
 msgid "Password recovery request"
 msgstr ""
 
-#: includes/wpum-emails/wpum-email-functions.php:193
+#: includes/wpum-emails/wpum-email-functions.php:201
 msgid "This is the email that is sent to the visitor upon password reset request."
 msgstr ""
 
-#: includes/wpum-emails/wpum-email-functions.php:194
+#: includes/wpum-emails/wpum-email-functions.php:202
 msgid "Email address of the requested user."
 msgstr ""
 
 #: includes/wpum-fields/class-wpum-field-group.php:111
-#: includes/wpum-fields/class-wpum-field.php:162
-#: includes/wpum-forms/class-wpum-registration-form.php:103
+#: includes/wpum-fields/class-wpum-field.php:170
+#: includes/wpum-forms/class-wpum-registration-form.php:104
 msgid "Can't get property %s"
 msgstr ""
 
-#: includes/wpum-fields/class-wpum-field.php:333
+#: includes/wpum-fields/class-wpum-field.php:351
 msgid "User password"
 msgstr ""
 
-#: includes/wpum-fields/class-wpum-field.php:342
+#: includes/wpum-fields/class-wpum-field.php:360
 msgid "Nickname"
 msgstr ""
 
-#: includes/wpum-fields/class-wpum-field.php:345
+#: includes/wpum-fields/class-wpum-field.php:363
 msgid "Display name"
 msgstr ""
 
-#: includes/wpum-fields/class-wpum-field.php:348
+#: includes/wpum-fields/class-wpum-field.php:366
 msgid "Website"
 msgstr ""
 
-#: includes/wpum-fields/class-wpum-field.php:357
+#: includes/wpum-fields/class-wpum-field.php:375
 msgid "Cover Image"
 msgstr ""
 
-#: includes/wpum-fields/class-wpum-fields-editor.php:57
-#: includes/wpum-fields/class-wpum-fields-editor.php:95
+#: includes/wpum-fields/class-wpum-fields-editor.php:60
+#: includes/wpum-fields/class-wpum-fields-editor.php:99
 msgid "Fields Editor"
 msgstr ""
 
-#: includes/wpum-fields/class-wpum-fields-editor.php:58
+#: includes/wpum-fields/class-wpum-fields-editor.php:61
 msgid "Custom Fields"
 msgstr ""
 
-#: includes/wpum-fields/class-wpum-fields-editor.php:96
-#: includes/wpum-forms/class-wpum-registration-forms-editor.php:150
-#: includes/wpum-forms/class-wpum-registration-forms-editor.php:160
+#: includes/wpum-fields/class-wpum-fields-editor.php:100
+#: includes/wpum-forms/class-wpum-registration-forms-editor.php:155
+#: includes/wpum-forms/class-wpum-registration-forms-editor.php:167
+#: includes/wpum-roles/class-wpum-roles-editor.php:148
+#: includes/wpum-roles/class-wpum-roles-editor.php:156
 msgid "Changes successfully saved."
 msgstr ""
 
-#: includes/wpum-fields/class-wpum-fields-editor.php:134
+#: includes/wpum-fields/class-wpum-fields-editor.php:138
 msgid "Group name"
 msgstr ""
 
-#: includes/wpum-fields/class-wpum-fields-editor.php:135
+#: includes/wpum-fields/class-wpum-fields-editor.php:139
 msgid "Group description"
 msgstr ""
 
-#: includes/wpum-fields/class-wpum-fields-editor.php:136
-#: includes/wpum-forms/class-wpum-registration-forms-editor.php:132
+#: includes/wpum-fields/class-wpum-fields-editor.php:140
+#: includes/wpum-forms/class-wpum-registration-forms-editor.php:137
+#: includes/wpum-roles/class-wpum-roles-editor.php:133
 msgid "Default"
 msgstr ""
 
-#: includes/wpum-fields/class-wpum-fields-editor.php:137
-#: includes/wpum-forms/class-wpum-registration-forms-editor.php:131
+#: includes/wpum-fields/class-wpum-fields-editor.php:141
+#: includes/wpum-fields/wpum-fields-functions.php:234
+#: includes/wpum-forms/class-wpum-registration-forms-editor.php:136
 msgid "Fields"
 msgstr ""
 
-#: includes/wpum-fields/class-wpum-fields-editor.php:138
-#: includes/wpum-forms/class-wpum-registration-forms-editor.php:136
+#: includes/wpum-fields/class-wpum-fields-editor.php:142
+#: includes/wpum-forms/class-wpum-registration-forms-editor.php:141
+#: includes/wpum-roles/class-wpum-roles-editor.php:138
 #: vendor/htmlburger/carbon-fields/templates/Container/common/options-page.php:34
 msgid "Actions"
 msgstr ""
 
-#: includes/wpum-fields/class-wpum-fields-editor.php:139
+#: includes/wpum-fields/class-wpum-fields-editor.php:143
 msgid "Add New Field Group"
 msgstr ""
 
-#: includes/wpum-fields/class-wpum-fields-editor.php:140
+#: includes/wpum-fields/class-wpum-fields-editor.php:144
 msgid "Edit group settings"
 msgstr ""
 
-#: includes/wpum-fields/class-wpum-fields-editor.php:142
+#: includes/wpum-fields/class-wpum-fields-editor.php:146
 msgid "Delete group"
 msgstr ""
 
-#: includes/wpum-fields/class-wpum-fields-editor.php:143
+#: includes/wpum-fields/class-wpum-fields-editor.php:147
 msgid "Drag and drop the rows below to change the order."
 msgstr ""
 
-#: includes/wpum-fields/class-wpum-fields-editor.php:144
+#: includes/wpum-fields/class-wpum-fields-editor.php:148
 msgid "The default fields group cannot be deleted."
 msgstr ""
 
-#: includes/wpum-fields/class-wpum-fields-editor.php:145
+#: includes/wpum-fields/class-wpum-fields-editor.php:149
 msgid "You are about to delete the group:"
 msgstr ""
 
-#: includes/wpum-fields/class-wpum-fields-editor.php:146
+#: includes/wpum-fields/class-wpum-fields-editor.php:150
 msgid ""
 "This action cannot be reversed. Are you sure you want to continue? All "
 "fields within this group will be deleted too."
 msgstr ""
 
-#: includes/wpum-fields/class-wpum-fields-editor.php:147
+#: includes/wpum-fields/class-wpum-fields-editor.php:151
 msgid "Confirm delete?"
 msgstr ""
 
-#: includes/wpum-fields/class-wpum-fields-editor.php:148
+#: includes/wpum-fields/class-wpum-fields-editor.php:152
 msgid "Save changes"
 msgstr ""
 
-#: includes/wpum-fields/class-wpum-fields-editor.php:149
+#: includes/wpum-fields/class-wpum-fields-editor.php:153
 msgid "Customize the name of group. This may be used in your theme."
 msgstr ""
 
-#: includes/wpum-fields/class-wpum-fields-editor.php:150
+#: includes/wpum-fields/class-wpum-fields-editor.php:154
 msgid "Customize the description of the group. This may be used into your theme."
 msgstr ""
 
-#: includes/wpum-fields/class-wpum-fields-editor.php:151
-#: includes/wpum-forms/class-wpum-registration-forms-editor.php:159
+#: includes/wpum-fields/class-wpum-fields-editor.php:155
+#: includes/wpum-forms/class-wpum-registration-forms-editor.php:166
 msgid "Purchase"
 msgstr ""
 
-#: includes/wpum-fields/class-wpum-fields-editor.php:152
+#: includes/wpum-fields/class-wpum-fields-editor.php:156
 msgid "Create Fields Group"
 msgstr ""
 
-#: includes/wpum-fields/class-wpum-fields-editor.php:153
+#: includes/wpum-fields/class-wpum-fields-editor.php:157
 msgid ""
 "Create <a href=\"%1$s\" target=\"_blank\">unlimited custom fields and "
 "groups</a> for user profiles and registration forms with a drag & drop "
@@ -1719,164 +1824,172 @@ msgid ""
 "is required if you wish to extend your community."
 msgstr ""
 
-#: includes/wpum-fields/class-wpum-fields-editor.php:154
+#: includes/wpum-fields/class-wpum-fields-editor.php:158
 msgid "Editing:"
 msgstr ""
 
-#: includes/wpum-fields/class-wpum-fields-editor.php:155
+#: includes/wpum-fields/class-wpum-fields-editor.php:159
 msgid "Back to the groups list"
 msgstr ""
 
-#: includes/wpum-fields/class-wpum-fields-editor.php:156
+#: includes/wpum-fields/class-wpum-fields-editor.php:160
 msgid "Add new custom field"
 msgstr ""
 
-#: includes/wpum-fields/class-wpum-fields-editor.php:157
+#: includes/wpum-fields/class-wpum-fields-editor.php:161
 msgid "Create custom field"
 msgstr ""
 
-#: includes/wpum-fields/class-wpum-fields-editor.php:158
-#: includes/wpum-fields/class-wpum-fields-editor.php:172
-#: includes/wpum-forms/class-wpum-registration-forms-editor.php:147
+#: includes/wpum-fields/class-wpum-fields-editor.php:162
+#: includes/wpum-fields/class-wpum-fields-editor.php:176
+#: includes/wpum-forms/class-wpum-registration-forms-editor.php:152
 msgid "Field name"
 msgstr ""
 
-#: includes/wpum-fields/class-wpum-fields-editor.php:159
+#: includes/wpum-fields/class-wpum-fields-editor.php:163
 msgid "Type"
 msgstr ""
 
-#: includes/wpum-fields/class-wpum-fields-editor.php:160
+#: includes/wpum-fields/class-wpum-fields-editor.php:164
 msgid "Required"
 msgstr ""
 
-#: includes/wpum-fields/class-wpum-fields-editor.php:161
-#: includes/wpum-fields/wpum-fields-functions.php:244
+#: includes/wpum-fields/class-wpum-fields-editor.php:165
+#: includes/wpum-fields/wpum-fields-functions.php:246
 msgid "Privacy"
 msgstr ""
 
-#: includes/wpum-fields/class-wpum-fields-editor.php:162
+#: includes/wpum-fields/class-wpum-fields-editor.php:166
 msgid "Edit field"
 msgstr ""
 
-#: includes/wpum-fields/class-wpum-fields-editor.php:163
+#: includes/wpum-fields/class-wpum-fields-editor.php:167
 msgid "Delete field"
 msgstr ""
 
-#: includes/wpum-fields/class-wpum-fields-editor.php:164
+#: includes/wpum-fields/class-wpum-fields-editor.php:168
 msgid "Editable"
 msgstr ""
 
-#: includes/wpum-fields/class-wpum-fields-editor.php:165
+#: includes/wpum-fields/class-wpum-fields-editor.php:169
 msgid "Default fields cannot be deleted."
 msgstr ""
 
-#: includes/wpum-fields/class-wpum-fields-editor.php:166
+#: includes/wpum-fields/class-wpum-fields-editor.php:170
 msgid ""
 "Fields marked as required will be compulsory within the registration and "
 "account form."
 msgstr ""
 
-#: includes/wpum-fields/class-wpum-fields-editor.php:167
+#: includes/wpum-fields/class-wpum-fields-editor.php:171
 msgid ""
 "Fields marked as locked, can only be edited by an administrator and will "
 "not be visible in any form."
 msgstr ""
 
-#: includes/wpum-fields/class-wpum-fields-editor.php:168
+#: includes/wpum-fields/class-wpum-fields-editor.php:172
 msgid "Hidden fields are not publicly visible within profiles."
 msgstr ""
 
-#: includes/wpum-fields/class-wpum-fields-editor.php:169
+#: includes/wpum-fields/class-wpum-fields-editor.php:173
 msgid "This fields group is empty."
 msgstr ""
 
-#: includes/wpum-fields/class-wpum-fields-editor.php:170
+#: includes/wpum-fields/class-wpum-fields-editor.php:174
 msgid "You are about to delete the field:"
 msgstr ""
 
-#: includes/wpum-fields/class-wpum-fields-editor.php:171
+#: includes/wpum-fields/class-wpum-fields-editor.php:175
 msgid ""
 "This action cannot be reversed. Are you sure you want to continue? Please "
 "note any users data associated with this field will not be removed."
 msgstr ""
 
-#: includes/wpum-fields/class-wpum-fields-editor.php:173
+#: includes/wpum-fields/class-wpum-fields-editor.php:177
 msgid "Enter a name for this field"
 msgstr ""
 
-#: includes/wpum-fields/class-wpum-fields-editor.php:175
+#: includes/wpum-fields/class-wpum-fields-editor.php:179
 msgid "Privacy settings"
 msgstr ""
 
-#: includes/wpum-fields/class-wpum-fields-editor.php:176
+#: includes/wpum-fields/class-wpum-fields-editor.php:180
 msgid "Editing permissions"
 msgstr ""
 
-#: includes/wpum-fields/class-wpum-fields-editor.php:177
+#: includes/wpum-fields/class-wpum-fields-editor.php:181
 msgid "Something went wrong, could not find the settings for this field type."
 msgstr ""
 
-#: includes/wpum-fields/class-wpum-fields-editor.php:178
+#: includes/wpum-fields/class-wpum-fields-editor.php:182
 msgid "Error: this setting is required."
 msgstr ""
 
-#: includes/wpum-fields/class-wpum-fields-editor.php:179
+#: includes/wpum-fields/class-wpum-fields-editor.php:183
 msgid "Error: this setting cannot contain special characters."
 msgstr ""
 
-#: includes/wpum-fields/class-wpum-fields-editor.php:180
+#: includes/wpum-fields/class-wpum-fields-editor.php:184
 msgid ""
 "There are some errors with your changes. Please check the errors "
 "highlighted below."
 msgstr ""
 
-#: includes/wpum-fields/class-wpum-fields-editor.php:181
+#: includes/wpum-fields/class-wpum-fields-editor.php:185
 msgid "Something went wrong, no changes were saved."
 msgstr ""
 
-#: includes/wpum-fields/class-wpum-fields-editor.php:182
+#: includes/wpum-fields/class-wpum-fields-editor.php:186
 msgid ""
 "To display this field during signup, select one or more registration forms "
 "below."
 msgstr ""
 
-#: includes/wpum-fields/class-wpum-fields-editor.php:183
+#: includes/wpum-fields/class-wpum-fields-editor.php:187
 msgid "Available registration forms"
 msgstr ""
 
-#: includes/wpum-fields/class-wpum-fields-editor.php:184
+#: includes/wpum-fields/class-wpum-fields-editor.php:188
 msgid "Field options"
 msgstr ""
 
-#: includes/wpum-fields/class-wpum-fields-editor.php:185
+#: includes/wpum-fields/class-wpum-fields-editor.php:189
 msgid "Add option"
 msgstr ""
 
-#: includes/wpum-fields/class-wpum-fields-editor.php:186
+#: includes/wpum-fields/class-wpum-fields-editor.php:190
 msgid "Option label"
 msgstr ""
 
-#: includes/wpum-fields/class-wpum-fields-editor.php:187
+#: includes/wpum-fields/class-wpum-fields-editor.php:191
 msgid "Option value"
 msgstr ""
 
-#: includes/wpum-fields/class-wpum-fields-editor.php:233
-#: includes/wpum-fields/class-wpum-fields-editor.php:246
+#: includes/wpum-fields/class-wpum-fields-editor.php:192
+msgid "Add new sub field"
+msgstr ""
+
+#: includes/wpum-fields/class-wpum-fields-editor.php:193
+msgid "Add sub field"
+msgstr ""
+
+#: includes/wpum-fields/class-wpum-fields-editor.php:239
+#: includes/wpum-fields/class-wpum-fields-editor.php:252
 msgid "Something went wrong: could not update the groups order."
 msgstr ""
 
-#: includes/wpum-fields/class-wpum-fields-editor.php:263
-#: includes/wpum-fields/class-wpum-fields-editor.php:280
+#: includes/wpum-fields/class-wpum-fields-editor.php:269
+#: includes/wpum-fields/class-wpum-fields-editor.php:286
 msgid "Something went wrong: could not update the group details."
 msgstr ""
 
-#: includes/wpum-fields/class-wpum-fields-editor.php:303
-#: includes/wpum-fields/class-wpum-fields-editor.php:339
+#: includes/wpum-fields/class-wpum-fields-editor.php:309
+#: includes/wpum-fields/class-wpum-fields-editor.php:348
 msgid "Something went wrong while retrieving the list of fields."
 msgstr ""
 
-#: includes/wpum-fields/class-wpum-fields-editor.php:361
-#: includes/wpum-fields/class-wpum-fields-editor.php:374
+#: includes/wpum-fields/class-wpum-fields-editor.php:370
+#: includes/wpum-fields/class-wpum-fields-editor.php:383
 msgid "Something went wrong: could not update the fields order."
 msgstr ""
 
@@ -1900,25 +2013,25 @@ msgstr ""
 msgid "File"
 msgstr ""
 
-#: includes/wpum-fields/types/class-wpum-field-file.php:39
+#: includes/wpum-fields/types/class-wpum-field-file.php:41
 msgid "Maximum file size"
 msgstr ""
 
-#: includes/wpum-fields/types/class-wpum-field-file.php:41
+#: includes/wpum-fields/types/class-wpum-field-file.php:43
 msgid ""
 "Enter the maximum file size users can upload through this field. The amount "
 "must be in bytes."
 msgstr ""
 
-#: includes/wpum-fields/types/class-wpum-field-file.php:46
+#: includes/wpum-fields/types/class-wpum-field-file.php:48
 msgid "Allowed File Types"
 msgstr ""
 
-#: includes/wpum-fields/types/class-wpum-field-file.php:48
+#: includes/wpum-fields/types/class-wpum-field-file.php:50
 msgid "Comma Separated List of allowed file types, (i.e. jpg, gif, png, pdf)"
 msgstr ""
 
-#: includes/wpum-fields/types/class-wpum-field-file.php:101
+#: includes/wpum-fields/types/class-wpum-field-file.php:103
 msgid "The uploaded %s file is too big."
 msgstr ""
 
@@ -1934,38 +2047,89 @@ msgstr ""
 msgid "Number"
 msgstr ""
 
-#: includes/wpum-fields/types/class-wpum-field-number.php:38
-#: includes/wpum-fields/types/class-wpum-field-telephone.php:45
+#: includes/wpum-fields/types/class-wpum-field-number.php:41
+#: includes/wpum-fields/types/class-wpum-field-telephone.php:47
 msgid "Minimum Value"
 msgstr ""
 
-#: includes/wpum-fields/types/class-wpum-field-number.php:44
-#: includes/wpum-fields/types/class-wpum-field-telephone.php:51
+#: includes/wpum-fields/types/class-wpum-field-number.php:47
+#: includes/wpum-fields/types/class-wpum-field-telephone.php:53
 msgid "Maximum Value"
 msgstr ""
 
-#: includes/wpum-fields/types/class-wpum-field-number.php:50
+#: includes/wpum-fields/types/class-wpum-field-number.php:53
 msgid "Step Size"
+msgstr ""
+
+#: includes/wpum-fields/types/class-wpum-field-number.php:59
+#: includes/wpum-fields/types/class-wpum-field-telephone.php:40
+#: includes/wpum-fields/types/class-wpum-field-text.php:41
+msgid "Pattern"
+msgstr ""
+
+#: includes/wpum-fields/types/class-wpum-field-number.php:61
+#: includes/wpum-fields/types/class-wpum-field-text.php:43
+msgid "A regular expression to validate number formats."
+msgstr ""
+
+#: includes/wpum-fields/types/class-wpum-field-number.php:61
+#: includes/wpum-fields/types/class-wpum-field-telephone.php:42
+#: includes/wpum-fields/types/class-wpum-field-text.php:43
+msgid "Example patterns"
 msgstr ""
 
 #: includes/wpum-fields/types/class-wpum-field-radio.php:19
 msgid "Radio buttons"
 msgstr ""
 
+#: includes/wpum-fields/types/class-wpum-field-repeater.php:20
+msgid "Repeater"
+msgstr ""
+
+#: includes/wpum-fields/types/class-wpum-field-repeater.php:40
+msgid "Button Label"
+msgstr ""
+
+#: includes/wpum-fields/types/class-wpum-field-repeater.php:42
+#: templates/form-fields/complex-field.php:134
+msgid "Add row"
+msgstr ""
+
+#: includes/wpum-fields/types/class-wpum-field-repeater.php:43
+msgid "Enter the button label of add row."
+msgstr ""
+
+#: includes/wpum-fields/types/class-wpum-field-repeater.php:50
+msgid "Minimum Rows"
+msgstr ""
+
+#: includes/wpum-fields/types/class-wpum-field-repeater.php:52
+msgid "Enter the minimum rows required for the field."
+msgstr ""
+
+#: includes/wpum-fields/types/class-wpum-field-repeater.php:57
+msgid "Maximum Rows"
+msgstr ""
+
+#: includes/wpum-fields/types/class-wpum-field-repeater.php:59
+msgid "Enter the maximum rows for the field."
+msgstr ""
+
+#: includes/wpum-fields/types/class-wpum-field-taxonomy.php:19
+#: includes/wpum-fields/types/class-wpum-field-taxonomy.php:40
+msgid "Taxonomy"
+msgstr ""
+
+#: includes/wpum-fields/types/class-wpum-field-taxonomy.php:47
+msgid "Field Type"
+msgstr ""
+
 #: includes/wpum-fields/types/class-wpum-field-telephone.php:19
 msgid "Telephone"
 msgstr ""
 
-#: includes/wpum-fields/types/class-wpum-field-telephone.php:38
-msgid "Pattern"
-msgstr ""
-
-#: includes/wpum-fields/types/class-wpum-field-telephone.php:40
+#: includes/wpum-fields/types/class-wpum-field-telephone.php:42
 msgid "A regular expression to validate telephone number formats."
-msgstr ""
-
-#: includes/wpum-fields/types/class-wpum-field-telephone.php:40
-msgid "Example patterns"
 msgstr ""
 
 #: includes/wpum-fields/types/class-wpum-field-text.php:19
@@ -1980,6 +2144,26 @@ msgstr ""
 msgid "URL"
 msgstr ""
 
+#: includes/wpum-fields/types/class-wpum-field-user.php:19
+msgid "User"
+msgstr ""
+
+#: includes/wpum-fields/types/class-wpum-field-user.php:49
+msgid "Filter by role"
+msgstr ""
+
+#: includes/wpum-fields/types/class-wpum-field-user.php:59
+msgid "Allow multiple selection"
+msgstr ""
+
+#: includes/wpum-fields/types/class-wpum-field-user.php:65
+msgid "Show users with hidden profiles"
+msgstr ""
+
+#: includes/wpum-fields/types/class-wpum-field-user.php:72
+msgid "Type label"
+msgstr ""
+
 #: includes/wpum-fields/types/class-wpum-field-video.php:20
 msgid "Video"
 msgstr ""
@@ -1988,28 +2172,28 @@ msgstr ""
 msgid "WYSIWYG"
 msgstr ""
 
-#: includes/wpum-fields/wpum-fields-functions.php:25
-#: includes/wpum-upgrades/class-wpum-plugin-updates.php:229
+#: includes/wpum-fields/wpum-fields-functions.php:23
+#: includes/wpum-upgrades/class-wpum-plugin-updates.php:240
 msgid "Primary fields"
 msgstr ""
 
-#: includes/wpum-fields/wpum-fields-functions.php:240
+#: includes/wpum-fields/wpum-fields-functions.php:242
 msgid "Validation"
 msgstr ""
 
-#: includes/wpum-fields/wpum-fields-functions.php:248
+#: includes/wpum-fields/wpum-fields-functions.php:250
 msgid "Permissions"
 msgstr ""
 
-#: includes/wpum-fields/wpum-fields-functions.php:265
+#: includes/wpum-fields/wpum-fields-functions.php:267
 msgid "Default Fields"
 msgstr ""
 
-#: includes/wpum-fields/wpum-fields-functions.php:269
+#: includes/wpum-fields/wpum-fields-functions.php:271
 msgid "Standard Fields"
 msgstr ""
 
-#: includes/wpum-fields/wpum-fields-functions.php:273
+#: includes/wpum-fields/wpum-fields-functions.php:275
 msgid "Advanced Fields"
 msgstr ""
 
@@ -2036,7 +2220,7 @@ msgstr ""
 
 #: includes/wpum-forms/class-wpum-form-password-recovery.php:66
 #: includes/wpum-widgets/class-wpum-password-recovery-form-widget.php:41
-#: templates/forms/form-password-recovery.php:78
+#: templates/forms/form-password-recovery.php:81
 msgid "Reset password"
 msgstr ""
 
@@ -2110,170 +2294,592 @@ msgstr ""
 msgid "Error: incorrect current password."
 msgstr ""
 
+#: includes/wpum-forms/class-wpum-form-privacy.php:103
+msgid "Hide my profile from guests"
+msgstr ""
+
+#: includes/wpum-forms/class-wpum-form-privacy.php:110
+msgid "Hide my profile from members"
+msgstr ""
+
+#: includes/wpum-forms/class-wpum-form-privacy.php:206
+msgid "Something went wrong while updating your details."
+msgstr ""
+
 #: includes/wpum-forms/class-wpum-form-profile.php:77
 msgid "Profile settings"
 msgstr ""
 
-#: includes/wpum-forms/class-wpum-form-registration.php:80
+#: includes/wpum-forms/class-wpum-form-registration.php:86
 msgid "Registration Details"
 msgstr ""
 
-#: includes/wpum-forms/class-wpum-form-registration.php:125
+#: includes/wpum-forms/class-wpum-form-registration.php:131
 msgid "%s is not a valid email address."
 msgstr ""
 
-#: includes/wpum-forms/class-wpum-form-registration.php:168
+#: includes/wpum-forms/class-wpum-form-registration.php:174
 msgid "This username cannot be used."
 msgstr ""
 
-#: includes/wpum-forms/class-wpum-form-registration.php:189
+#: includes/wpum-forms/class-wpum-form-registration.php:195
 msgid "Failed honeypot validation."
 msgstr ""
 
-#: includes/wpum-forms/class-wpum-form-registration.php:218
+#: includes/wpum-forms/class-wpum-form-registration.php:224
 msgid "Select a valid role from the list."
 msgstr ""
 
-#: includes/wpum-forms/class-wpum-form-registration.php:296
+#: includes/wpum-forms/class-wpum-form-registration.php:257
+msgid "%s requires at least %d rows"
+msgstr ""
+
+#: includes/wpum-forms/class-wpum-form-registration.php:261
+msgid "%s accepts maximum %d rows"
+msgstr ""
+
+#: includes/wpum-forms/class-wpum-form-registration.php:268
+msgid "Please fill out %s data"
+msgstr ""
+
+#: includes/wpum-forms/class-wpum-form-registration.php:351
 msgid "If you're human leave this blank:"
 msgstr ""
 
-#: includes/wpum-forms/class-wpum-form-registration.php:306
+#: includes/wpum-forms/class-wpum-form-registration.php:361
 msgid "Select Role"
 msgstr ""
 
-#: includes/wpum-forms/class-wpum-form-registration.php:310
+#: includes/wpum-forms/class-wpum-form-registration.php:365
 msgid "Select your user role"
 msgstr ""
 
-#: includes/wpum-forms/class-wpum-form-registration.php:322
+#: includes/wpum-forms/class-wpum-form-registration.php:378
 msgid ""
 "By registering to this website you agree to the <a href=\"%s\" "
 "target=\"_blank\">terms & conditions</a>."
 msgstr ""
 
-#: includes/wpum-forms/class-wpum-form-registration.php:333
+#: includes/wpum-forms/class-wpum-form-registration.php:393
 msgid ""
 "I have read and accept the <a href=\"%1$s\" target=\"_blank\">privacy "
 "policy</a> and allow \"%2$s\" to collect and store the data I submit "
 "through this form."
 msgstr ""
 
-#: includes/wpum-forms/class-wpum-form-registration.php:413
+#: includes/wpum-forms/class-wpum-form-registration.php:475
 msgid ""
 "The registration form cannot be used because either a username or email "
 "field is required to process registrations. Please edit the form and add at "
 "least the email field."
 msgstr ""
 
-#: includes/wpum-forms/class-wpum-registration-forms-editor.php:126
+#: includes/wpum-forms/class-wpum-registration-forms-editor.php:131
 msgid "Confirm Form Deletion?"
 msgstr ""
 
-#: includes/wpum-forms/class-wpum-registration-forms-editor.php:127
+#: includes/wpum-forms/class-wpum-registration-forms-editor.php:132
 msgid "You are about to delete the registration form:"
 msgstr ""
 
-#: includes/wpum-forms/class-wpum-registration-forms-editor.php:128
+#: includes/wpum-forms/class-wpum-registration-forms-editor.php:133
+#: includes/wpum-roles/class-wpum-roles-editor.php:125
 msgid "This action cannot be reversed. Are you sure you want to continue?"
 msgstr ""
 
-#: includes/wpum-forms/class-wpum-registration-forms-editor.php:130
+#: includes/wpum-forms/class-wpum-registration-forms-editor.php:135
 msgid "Form Name"
 msgstr ""
 
-#: includes/wpum-forms/class-wpum-registration-forms-editor.php:133
+#: includes/wpum-forms/class-wpum-registration-forms-editor.php:138
 msgid "Registration Role"
 msgstr ""
 
-#: includes/wpum-forms/class-wpum-registration-forms-editor.php:134
+#: includes/wpum-forms/class-wpum-registration-forms-editor.php:139
+#: includes/wpum-roles/class-wpum-roles-editor.php:136
 msgid "Total Signups"
 msgstr ""
 
-#: includes/wpum-forms/class-wpum-registration-forms-editor.php:137
+#: includes/wpum-forms/class-wpum-registration-forms-editor.php:142
 msgid "No registration forms have been found."
 msgstr ""
 
-#: includes/wpum-forms/class-wpum-registration-forms-editor.php:138
+#: includes/wpum-forms/class-wpum-registration-forms-editor.php:143
 msgid "Add New Form"
 msgstr ""
 
-#: includes/wpum-forms/class-wpum-registration-forms-editor.php:139
+#: includes/wpum-forms/class-wpum-registration-forms-editor.php:144
 msgid "Edit Form Name"
 msgstr ""
 
-#: includes/wpum-forms/class-wpum-registration-forms-editor.php:140
+#: includes/wpum-forms/class-wpum-registration-forms-editor.php:145
 msgid "The default registration form cannot be deleted."
 msgstr ""
 
-#: includes/wpum-forms/class-wpum-registration-forms-editor.php:141
+#: includes/wpum-forms/class-wpum-registration-forms-editor.php:146
 msgid "Delete Form"
 msgstr ""
 
-#: includes/wpum-forms/class-wpum-registration-forms-editor.php:142
+#: includes/wpum-forms/class-wpum-registration-forms-editor.php:147
 msgid "Customize Form"
 msgstr ""
 
-#: includes/wpum-forms/class-wpum-registration-forms-editor.php:143
+#: includes/wpum-forms/class-wpum-registration-forms-editor.php:148
 msgid "Return to the registration forms list"
 msgstr ""
 
-#: includes/wpum-forms/class-wpum-registration-forms-editor.php:144
+#: includes/wpum-forms/class-wpum-registration-forms-editor.php:149
 msgid "Available Fields"
 msgstr ""
 
-#: includes/wpum-forms/class-wpum-registration-forms-editor.php:145
+#: includes/wpum-forms/class-wpum-registration-forms-editor.php:150
 msgid "Form Fields"
 msgstr ""
 
-#: includes/wpum-forms/class-wpum-registration-forms-editor.php:146
+#: includes/wpum-forms/class-wpum-registration-forms-editor.php:151
 msgid ""
 "To add a field to this form, drag it into the container on the left. To "
 "remove a field, place it back here."
 msgstr ""
 
-#: includes/wpum-forms/class-wpum-registration-forms-editor.php:148
+#: includes/wpum-forms/class-wpum-registration-forms-editor.php:153
 msgid ""
 "Add fields here to use them in this registration form. Drag fields up and "
 "down to change their order within the form."
 msgstr ""
 
-#: includes/wpum-forms/class-wpum-registration-forms-editor.php:149
+#: includes/wpum-forms/class-wpum-registration-forms-editor.php:154
 msgid "This form does not have any fields yet. Drag and drop fields here."
 msgstr ""
 
-#: includes/wpum-forms/class-wpum-registration-forms-editor.php:151
+#: includes/wpum-forms/class-wpum-registration-forms-editor.php:156
+#: includes/wpum-roles/class-wpum-roles-editor.php:150
 msgid "Something went wrong no changes saved."
 msgstr ""
 
-#: includes/wpum-forms/class-wpum-registration-forms-editor.php:153
+#: includes/wpum-forms/class-wpum-registration-forms-editor.php:158
 msgid "Registration role"
 msgstr ""
 
-#: includes/wpum-forms/class-wpum-registration-forms-editor.php:155
+#: includes/wpum-forms/class-wpum-registration-forms-editor.php:160
 msgid ""
 "Select the user role that will be assigned to users upon successfull "
 "registration."
 msgstr ""
 
-#: includes/wpum-forms/class-wpum-registration-forms-editor.php:156
+#: includes/wpum-forms/class-wpum-registration-forms-editor.php:161
 msgid "Customize the name of the registration form."
 msgstr ""
 
-#: includes/wpum-forms/class-wpum-registration-forms-editor.php:157
+#: includes/wpum-forms/class-wpum-registration-forms-editor.php:162
 msgid "Create Form"
 msgstr ""
 
-#: includes/wpum-forms/class-wpum-registration-forms-editor.php:158
+#: includes/wpum-forms/class-wpum-registration-forms-editor.php:163
 msgid ""
 "Create <a href=\"%1$s\" target=\"_blank\">unlimited registration forms</a>. "
 "The <a href=\"%1$s\" target=\"_blank\">Registration Forms</a> addon is "
 "required if you wish to add more forms."
 msgstr ""
 
-#: includes/wpum-forms/class-wpum-registration-forms-editor.php:213
-#: includes/wpum-forms/class-wpum-registration-forms-editor.php:228
+#: includes/wpum-forms/class-wpum-registration-forms-editor.php:164
+msgid ""
+"Create <a href=\"%1$s\" target=\"_blank\">multi-step registration "
+"forms</a>. The <a href=\"%1$s\" target=\"_blank\">Registration Forms</a> "
+"addon is required if you wish to add steps to your forms."
+msgstr ""
+
+#: includes/wpum-forms/class-wpum-registration-forms-editor.php:165
+msgid ""
+"Add <a href=\"%1$s\" target=\"_blank\">custom HTML to your registration "
+"forms</a>. The <a href=\"%1$s\" target=\"_blank\">Registration Forms</a> "
+"addon is required if you wish to add HTML to your forms."
+msgstr ""
+
+#: includes/wpum-forms/class-wpum-registration-forms-editor.php:220
+#: includes/wpum-forms/class-wpum-registration-forms-editor.php:235
+#: includes/wpum-roles/class-wpum-roles-editor.php:357
 msgid "Something went wrong: could not update the registration form details."
+msgstr ""
+
+#: includes/wpum-roles/class-wpum-roles-editor.php:52
+#: includes/wpum-roles/class-wpum-roles-editor.php:126
+msgid "Roles"
+msgstr ""
+
+#: includes/wpum-roles/class-wpum-roles-editor.php:123
+msgid "Confirm Role Deletion?"
+msgstr ""
+
+#: includes/wpum-roles/class-wpum-roles-editor.php:124
+msgid "You are about to delete the role:"
+msgstr ""
+
+#: includes/wpum-roles/class-wpum-roles-editor.php:127
+msgid "Role Name"
+msgstr ""
+
+#: includes/wpum-roles/class-wpum-roles-editor.php:128
+msgid "Capability Name"
+msgstr ""
+
+#: includes/wpum-roles/class-wpum-roles-editor.php:129
+msgid "Role"
+msgstr ""
+
+#: includes/wpum-roles/class-wpum-roles-editor.php:130
+#: includes/wpum-roles/functions.php:922
+#: includes/wpum-upgrades/class-wpum-updates.php:217
+msgid "Users"
+msgstr ""
+
+#: includes/wpum-roles/class-wpum-roles-editor.php:131
+msgid "Granted"
+msgstr ""
+
+#: includes/wpum-roles/class-wpum-roles-editor.php:132
+msgid "Denied"
+msgstr ""
+
+#: includes/wpum-roles/class-wpum-roles-editor.php:134
+msgid "Edit"
+msgstr ""
+
+#: includes/wpum-roles/class-wpum-roles-editor.php:135
+msgid "Edit Role"
+msgstr ""
+
+#: includes/wpum-roles/class-wpum-roles-editor.php:139
+msgid "No roles have been found."
+msgstr ""
+
+#: includes/wpum-roles/class-wpum-roles-editor.php:140
+msgid "Add New Role"
+msgstr ""
+
+#: includes/wpum-roles/class-wpum-roles-editor.php:141
+msgid "Add New Capability"
+msgstr ""
+
+#: includes/wpum-roles/class-wpum-roles-editor.php:142
+msgid "The default role cannot be deleted."
+msgstr ""
+
+#: includes/wpum-roles/class-wpum-roles-editor.php:143
+msgid "Duplicate"
+msgstr ""
+
+#: includes/wpum-roles/class-wpum-roles-editor.php:144
+msgid "Delete"
+msgstr ""
+
+#: includes/wpum-roles/class-wpum-roles-editor.php:145
+msgid "Edit Capabilities"
+msgstr ""
+
+#: includes/wpum-roles/class-wpum-roles-editor.php:146
+msgid "Add Custom Capability"
+msgstr ""
+
+#: includes/wpum-roles/class-wpum-roles-editor.php:147
+msgid "Return to the roles list"
+msgstr ""
+
+#: includes/wpum-roles/class-wpum-roles-editor.php:149
+msgid "Capabilities successfully saved."
+msgstr ""
+
+#: includes/wpum-roles/class-wpum-roles-editor.php:152
+msgid "Customize the name of the role."
+msgstr ""
+
+#: includes/wpum-roles/class-wpum-roles-editor.php:153
+msgid "Customize the name of the capability."
+msgstr ""
+
+#: includes/wpum-roles/class-wpum-roles-editor.php:154
+msgid "Create Role"
+msgstr ""
+
+#: includes/wpum-roles/class-wpum-roles-editor.php:155
+msgid "Create Capability"
+msgstr ""
+
+#: includes/wpum-roles/class-wpum-roles-editor.php:342
+msgid "Something went wrong: could not update the role details."
+msgstr ""
+
+#: includes/wpum-roles/class-wpum-roles-editor.php:372
+msgid "Something went wrong: could not delete the role."
+msgstr ""
+
+#: includes/wpum-roles/class-wpum-roles-editor.php:380
+msgid "Something went wrong: cannot delete the default role."
+msgstr ""
+
+#: includes/wpum-roles/class-wpum-roles-editor.php:412
+#: includes/wpum-roles/class-wpum-roles-editor.php:466
+msgid "Something went wrong: could not create new role."
+msgstr ""
+
+#: includes/wpum-roles/functions.php:316
+msgid "Edit Dashboard"
+msgstr ""
+
+#: includes/wpum-roles/functions.php:317
+msgid "Edit Files"
+msgstr ""
+
+#: includes/wpum-roles/functions.php:318
+msgid "Export"
+msgstr ""
+
+#: includes/wpum-roles/functions.php:319
+msgid "Import"
+msgstr ""
+
+#: includes/wpum-roles/functions.php:320
+msgid "Manage Links"
+msgstr ""
+
+#: includes/wpum-roles/functions.php:321
+msgid "Manage Options"
+msgstr ""
+
+#: includes/wpum-roles/functions.php:322
+msgid "Moderate Comments"
+msgstr ""
+
+#: includes/wpum-roles/functions.php:323
+msgid "Read"
+msgstr ""
+
+#: includes/wpum-roles/functions.php:324
+msgid "Unfiltered HTML"
+msgstr ""
+
+#: includes/wpum-roles/functions.php:325
+msgid "Update Core"
+msgstr ""
+
+#: includes/wpum-roles/functions.php:329
+msgid "Delete Others' Posts"
+msgstr ""
+
+#: includes/wpum-roles/functions.php:333
+msgid "Delete Posts"
+msgstr ""
+
+#: includes/wpum-roles/functions.php:337
+msgid "Delete Private Posts"
+msgstr ""
+
+#: includes/wpum-roles/functions.php:341
+msgid "Delete Published Posts"
+msgstr ""
+
+#: includes/wpum-roles/functions.php:345
+msgid "Edit Others' Posts"
+msgstr ""
+
+#: includes/wpum-roles/functions.php:348
+msgid "Edit Posts"
+msgstr ""
+
+#: includes/wpum-roles/functions.php:350
+msgid "Edit Private Posts"
+msgstr ""
+
+#: includes/wpum-roles/functions.php:354
+msgid "Edit Published Posts"
+msgstr ""
+
+#: includes/wpum-roles/functions.php:358
+msgid "Publish Posts"
+msgstr ""
+
+#: includes/wpum-roles/functions.php:362
+msgid "Read Private Posts"
+msgstr ""
+
+#: includes/wpum-roles/functions.php:368
+msgid "Delete Others' Pages"
+msgstr ""
+
+#: includes/wpum-roles/functions.php:372
+msgid "Delete Pages"
+msgstr ""
+
+#: includes/wpum-roles/functions.php:376
+msgid "Delete Private Pages"
+msgstr ""
+
+#: includes/wpum-roles/functions.php:380
+msgid "Delete Published Pages"
+msgstr ""
+
+#: includes/wpum-roles/functions.php:384
+msgid "Edit Others' Pages"
+msgstr ""
+
+#: includes/wpum-roles/functions.php:387
+msgid "Edit Pages"
+msgstr ""
+
+#: includes/wpum-roles/functions.php:389
+msgid "Edit Private Pages"
+msgstr ""
+
+#: includes/wpum-roles/functions.php:393
+msgid "Edit Published Pages"
+msgstr ""
+
+#: includes/wpum-roles/functions.php:397
+msgid "Publish Pages"
+msgstr ""
+
+#: includes/wpum-roles/functions.php:401
+msgid "Read Private Pages"
+msgstr ""
+
+#: includes/wpum-roles/functions.php:406
+msgid "Upload Files"
+msgstr ""
+
+#: includes/wpum-roles/functions.php:410
+msgid "Manage Categories"
+msgstr ""
+
+#: includes/wpum-roles/functions.php:415
+msgid "Delete Themes"
+msgstr ""
+
+#: includes/wpum-roles/functions.php:416
+msgid "Edit Theme Options"
+msgstr ""
+
+#: includes/wpum-roles/functions.php:417
+msgid "Edit Themes"
+msgstr ""
+
+#: includes/wpum-roles/functions.php:418
+msgid "Install Themes"
+msgstr ""
+
+#: includes/wpum-roles/functions.php:419
+msgid "Switch Themes"
+msgstr ""
+
+#: includes/wpum-roles/functions.php:420
+msgid "Update Themes"
+msgstr ""
+
+#: includes/wpum-roles/functions.php:423
+msgid "Activate Plugins"
+msgstr ""
+
+#: includes/wpum-roles/functions.php:424
+msgid "Delete Plugins"
+msgstr ""
+
+#: includes/wpum-roles/functions.php:425
+msgid "Edit Plugins"
+msgstr ""
+
+#: includes/wpum-roles/functions.php:426
+msgid "Install Plugins"
+msgstr ""
+
+#: includes/wpum-roles/functions.php:427
+msgid "Update Plugins"
+msgstr ""
+
+#: includes/wpum-roles/functions.php:430
+msgid "Create Roles"
+msgstr ""
+
+#: includes/wpum-roles/functions.php:431
+msgid "Create Users"
+msgstr ""
+
+#: includes/wpum-roles/functions.php:432
+msgid "Delete Roles"
+msgstr ""
+
+#: includes/wpum-roles/functions.php:433
+msgid "Delete Users"
+msgstr ""
+
+#: includes/wpum-roles/functions.php:434
+msgid "Edit Roles"
+msgstr ""
+
+#: includes/wpum-roles/functions.php:435
+msgid "Edit Users"
+msgstr ""
+
+#: includes/wpum-roles/functions.php:436
+msgid "List Roles"
+msgstr ""
+
+#: includes/wpum-roles/functions.php:437
+msgid "List Users"
+msgstr ""
+
+#: includes/wpum-roles/functions.php:438
+msgid "Promote Users"
+msgstr ""
+
+#: includes/wpum-roles/functions.php:439
+msgid "Remove Users"
+msgstr ""
+
+#: includes/wpum-roles/functions.php:442
+msgid "Restrict Content"
+msgstr ""
+
+#: includes/wpum-roles/functions.php:453
+msgid "Assign Categories"
+msgstr ""
+
+#: includes/wpum-roles/functions.php:457
+msgid "Edit Categories"
+msgstr ""
+
+#: includes/wpum-roles/functions.php:461
+msgid "Delete Categories"
+msgstr ""
+
+#: includes/wpum-roles/functions.php:465
+msgid "Assign Post Tags"
+msgstr ""
+
+#: includes/wpum-roles/functions.php:469
+msgid "Edit Post Tags"
+msgstr ""
+
+#: includes/wpum-roles/functions.php:473
+msgid "Delete Post Tags"
+msgstr ""
+
+#: includes/wpum-roles/functions.php:477
+msgid "Manage Post Tags"
+msgstr ""
+
+#: includes/wpum-roles/functions.php:899
+msgid "Taxonomies"
+msgstr ""
+
+#: includes/wpum-roles/functions.php:908
+msgid "Appearance"
+msgstr ""
+
+#: includes/wpum-roles/functions.php:915
+msgid "Plugins"
+msgstr ""
+
+#: includes/wpum-roles/functions.php:929
+msgid "Custom"
 msgstr ""
 
 #: includes/wpum-shortcodes/class-wpum-shortcode-button.php:131
@@ -2291,6 +2897,18 @@ msgstr ""
 #: includes/wpum-shortcodes/class-wpum-shortcode-content-loggedin.php:22
 #: includes/wpum-shortcodes/class-wpum-shortcode-content-loggedin.php:23
 msgid "Members only content"
+msgstr ""
+
+#: includes/wpum-shortcodes/class-wpum-shortcode-content-loggedin.php:37
+#: includes/wpum-shortcodes/class-wpum-shortcode-content-loggedout.php:37
+#: includes/wpum-shortcodes/class-wpum-shortcode-content-roles.php:40
+#: includes/wpum-shortcodes/class-wpum-shortcode-content-users.php:40
+msgid "Show message"
+msgstr ""
+
+#: includes/wpum-shortcodes/class-wpum-shortcode-content-loggedout.php:22
+#: includes/wpum-shortcodes/class-wpum-shortcode-content-loggedout.php:23
+msgid "Logged out only user content"
 msgstr ""
 
 #: includes/wpum-shortcodes/class-wpum-shortcode-content-roles.php:19
@@ -2456,83 +3074,138 @@ msgid "Registrations are currently disabled."
 msgstr ""
 
 #: includes/wpum-shortcodes/shortcodes.php:273
-#: includes/wpum-shortcodes/shortcodes.php:359
-#: includes/wpum-shortcodes/shortcodes.php:422
-#: includes/wpum-shortcodes/shortcodes.php:487
-#: vendor/wp-user-manager/wpum-blocks/blocks-loader.php:176
+#: includes/wpum-shortcodes/shortcodes.php:373
+#: includes/wpum-shortcodes/shortcodes.php:437
+#: includes/wpum-shortcodes/shortcodes.php:504
+#: includes/wpum-shortcodes/shortcodes.php:573
+#: vendor/wp-user-manager/wpum-blocks/blocks-loader.php:201
 msgid ""
 "This content is available to members only. Please <a "
 "href=\"%1$s\">login</a> or <a href=\"%2$s\">register</a> to view this area."
 msgstr ""
 
-#: includes/wpum-shortcodes/shortcodes.php:309
+#: includes/wpum-shortcodes/shortcodes.php:311
 msgid "You are not authorized to access this area."
 msgstr ""
 
-#: includes/wpum-updater/EDD_SL_Plugin_Updater.php:236
+#: includes/wpum-updater/EDD_SL_Plugin_Updater.php:250
 msgid "There is a new version of %1$s available. %2$sView version %3$s details%4$s."
 msgstr ""
 
-#: includes/wpum-updater/EDD_SL_Plugin_Updater.php:244
+#: includes/wpum-updater/EDD_SL_Plugin_Updater.php:258
 msgid ""
 "There is a new version of %1$s available. %2$sView version %3$s details%4$s "
 "or %5$supdate now%6$s."
 msgstr ""
 
-#: includes/wpum-updater/EDD_SL_Plugin_Updater.php:487
+#: includes/wpum-updater/EDD_SL_Plugin_Updater.php:502
 msgid "You do not have permission to install plugin updates"
 msgstr ""
 
-#: includes/wpum-updater/EDD_SL_Plugin_Updater.php:487
+#: includes/wpum-updater/EDD_SL_Plugin_Updater.php:502
 #: includes/wpum-upgrades/upgrade-functions.php:124
 msgid "Error"
 msgstr ""
 
-#: includes/wpum-updater/class-wpum-license.php:159
+#: includes/wpum-updater/class-wpum-license.php:161
 msgid "%1$s License Key"
 msgstr ""
 
-#: includes/wpum-updater/class-wpum-license.php:212
-#: includes/wpum-updater/class-wpum-license.php:270
+#: includes/wpum-updater/class-wpum-license.php:258
 msgid "An error occurred, please try again."
 msgstr ""
 
-#: includes/wpum-updater/class-wpum-license.php:330
-msgid "Your license key expired on %s."
+#: includes/wpum-updater/class-wpum-license.php:434
+msgid ""
+"There is a new version of %1$s available. <a href=\"%2$s\" %3$s>View "
+"version %4$s details</a>."
 msgstr ""
 
-#: includes/wpum-updater/class-wpum-license.php:336
-msgid "Your license key has been disabled."
+#: includes/wpum-updater/class-wpum-license.php:434
+msgid "View %1$s version %2$s details"
 msgstr ""
 
-#: includes/wpum-updater/class-wpum-license.php:339
-msgid "Invalid license."
+#: includes/wpum-updater/class-wpum-license.php:479
+msgid "<a href=\"%1$s\">Activate your license</a> to update."
 msgstr ""
 
-#: includes/wpum-updater/class-wpum-license.php:343
-msgid "Your license is not active for this URL."
+#: includes/wpum-updater/class-wpum-license.php:488
+msgid "<a href=\"%1$s\" target=\"_blank\">Renew your license</a> to update."
 msgstr ""
 
-#: includes/wpum-updater/class-wpum-license.php:346
-msgid "This appears to be an invalid license key for %s."
-msgstr ""
-
-#: includes/wpum-updater/class-wpum-license.php:349
-msgid "Your license key has reached its activation limit."
-msgstr ""
-
-#: includes/wpum-updater/class-wpum-license.php:366
-msgid "License successfully activated."
-msgstr ""
-
-#: includes/wpum-updater/class-wpum-license.php:368
-msgid "Deactivate license"
-msgstr ""
-
-#: includes/wpum-updater/class-wpum-license.php:422
+#: includes/wpum-updater/class-wpum-license.php:507
 msgid ""
 "Please <a href=\"%1$s\">activate your license</a> to receive updates and "
 "support for the %2$s addon."
+msgstr ""
+
+#: includes/wpum-updater/class-wpum-license.php:511
+msgid "Please <a href=\"%1$s\">activate your license</a> to update."
+msgstr ""
+
+#: includes/wpum-updater/class-wpum-license.php:516
+#: includes/wpum-updater/class-wpum-license.php:578
+msgid "Your license key expired on %s."
+msgstr ""
+
+#: includes/wpum-updater/class-wpum-license.php:516
+#: includes/wpum-updater/class-wpum-license.php:578
+msgid ""
+"<a href=\"%1$s\" target=\"_blank\">Renew your license</a> to get access to "
+"updates and support."
+msgstr ""
+
+#: includes/wpum-updater/class-wpum-license.php:520
+msgid ""
+"Your license key has been disabled. <a href=\"%s\" target=\"_blank\">Please "
+"contact support</a>."
+msgstr ""
+
+#: includes/wpum-updater/class-wpum-license.php:523
+#: includes/wpum-updater/class-wpum-license.php:585
+msgid "Invalid license. Please double-check the license and try again."
+msgstr ""
+
+#: includes/wpum-updater/class-wpum-license.php:527
+msgid "Your license is not active for this site."
+msgstr ""
+
+#: includes/wpum-updater/class-wpum-license.php:530
+#: includes/wpum-updater/class-wpum-license.php:592
+msgid ""
+"This appears to be an invalid license key for %s. Please double-check the "
+"license and try again."
+msgstr ""
+
+#: includes/wpum-updater/class-wpum-license.php:533
+msgid "Your license key has reached its activation limit."
+msgstr ""
+
+#: includes/wpum-updater/class-wpum-license.php:553
+msgid "License successfully activated."
+msgstr ""
+
+#: includes/wpum-updater/class-wpum-license.php:555
+msgid "Deactivate license"
+msgstr ""
+
+#: includes/wpum-updater/class-wpum-license.php:582
+msgid ""
+"Your license key has been disabled. <a href=\"%s\">Please contact "
+"support</a>."
+msgstr ""
+
+#: includes/wpum-updater/class-wpum-license.php:589
+msgid ""
+"Your license is not active for this site. Please click 'Save Changes' to "
+"activate. "
+msgstr ""
+
+#: includes/wpum-updater/class-wpum-license.php:595
+msgid ""
+"Your license key has reached its activation limit. <a target=\"_blank\" "
+"href=\"%s\">Upgrade</a> the license or <a target=\"_blank\" "
+"href=\"%s\">deactivate</a> existing sites."
 msgstr ""
 
 #: includes/wpum-updater/class-wpum-updater-settings.php:50
@@ -2547,12 +3220,8 @@ msgstr ""
 msgid "License successfully deactivated."
 msgstr ""
 
-#: includes/wpum-upgrades/class-wpum-plugin-updates.php:127
+#: includes/wpum-upgrades/class-wpum-plugin-updates.php:138
 msgid "Upgrade database"
-msgstr ""
-
-#: includes/wpum-upgrades/class-wpum-updates.php:217
-msgid "Users"
 msgstr ""
 
 #: includes/wpum-upgrades/class-wpum-updates.php:254
@@ -2846,6 +3515,10 @@ msgstr ""
 msgid "No users have been found."
 msgstr ""
 
+#: templates/form-fields/complex-field.php:75
+msgid "Remove"
+msgstr ""
+
 #: templates/form-fields/file-field.php:59
 msgid "Maximum file size: %s."
 msgstr ""
@@ -2865,8 +3538,16 @@ msgstr ""
 msgid "Password successfully updated."
 msgstr ""
 
-#: templates/forms/form-account.php:92
+#: templates/forms/form-account.php:108
 msgid "Update profile"
+msgstr ""
+
+#: templates/forms/form-privacy.php:27
+msgid "Profile privacy settings successfully updated."
+msgstr ""
+
+#: templates/forms/form-privacy.php:83
+msgid "Save"
 msgstr ""
 
 #: templates/messages/password-reset-request-success.php:24
@@ -2887,35 +3568,35 @@ msgstr ""
 msgid "( Edit account )"
 msgstr ""
 
-#: templates/profiles/posts.php:33
+#: templates/profiles/posts.php:39
 msgid "Posted on:"
 msgstr ""
 
-#: templates/profiles/posts.php:37
+#: templates/profiles/posts.php:43
 msgid "Comments:"
 msgstr ""
 
-#: templates/profiles/posts.php:38
+#: templates/profiles/posts.php:44
 msgid "No Comments"
 msgstr ""
 
-#: templates/profiles/posts.php:38
+#: templates/profiles/posts.php:44
 msgid "1 Comment"
 msgstr ""
 
-#: templates/profiles/posts.php:38
+#: templates/profiles/posts.php:44
 msgid "% Comments"
 msgstr ""
 
-#: templates/profiles/posts.php:57
+#: templates/profiles/posts.php:63
 msgid "Newer Posts"
 msgstr ""
 
-#: templates/profiles/posts.php:58
+#: templates/profiles/posts.php:64
 msgid "Older Posts"
 msgstr ""
 
-#: templates/profiles/posts.php:72
+#: templates/profiles/posts.php:78
 msgid "%s did not submit any posts yet."
 msgstr ""
 
@@ -3358,7 +4039,7 @@ msgstr ""
 msgid "Select Directory"
 msgstr ""
 
-#: wp-user-manager.php:395 wp-user-manager.php:407
+#: wp-user-manager.php:403 wp-user-manager.php:415
 msgid "Cheatin&#8217; huh?"
 msgstr ""
 
@@ -3373,27 +4054,27 @@ msgid ""
 "solution to manage your community and your users for WordPress."
 msgstr ""
 
-#: includes/functions.php:734
+#: includes/functions.php:766
 msgctxt "Permalink structure"
 msgid "Display user ID"
 msgstr ""
 
-#: includes/functions.php:739
+#: includes/functions.php:771
 msgctxt "Permalink structure"
 msgid "Display username"
 msgstr ""
 
-#: includes/functions.php:744
+#: includes/functions.php:776
 msgctxt "Permalink structure"
 msgid "Display nickname"
 msgstr ""
 
-#: includes/functions.php:740
+#: includes/functions.php:772
 msgctxt "Example of permalink setting"
 msgid "username"
 msgstr ""
 
-#: includes/functions.php:745
+#: includes/functions.php:777
 msgctxt "Example of permalink setting"
 msgid "nickname"
 msgstr ""
