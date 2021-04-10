@@ -4,11 +4,11 @@ Plugin URI: https://wpusermanager.com
 Contributors: wpusermanager, polevaultweb, alessandro.tesoro
 Tags: members, membership, community, user profile, user registration
 Requires at least: 4.9
-Tested up to: 5.6
+Tested up to: 5.7
 Requires PHP: 5.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
-Stable Tag: 2.5
+Stable Tag: 2.6
 
 The most customizable profiles & community builder WordPress plugin with front-end login, registration, profile customization and content restriction.
 
@@ -124,6 +124,21 @@ Please note that using WPUM and the mentioned add-ons does NOT guarantee complia
 13. Login form.
 
 == Changelog ==
+
+= 2.6 (12th April 2021) =
+
+- New: [Frontend Posting](https://wpusermanager.com/addons/frontend-posting/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager) addon:
+- New: Conditional logic for custom fields with the [Custom Fields addon](https://wpusermanager.com/addons/custom-fields/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager)
+- New: User field type
+- New: Allow using the {recovery_url} in the registration email
+- New: Filter 'wpum_send_registration_admin_email' to abort sending registration confirmation email to user
+- New: Always allow admins to view member profiles
+- New: Action 'wpum_before_registration_start' before registration
+- New: Add the ability to show the post thumbnails on the profile posts template with the 'wpum_profile_posts_display_thumbnail' filter, turned off by default
+- Improvement: Placeholder used in multiselect fields
+- Fix: Undefined function 'use_block_editor_for_post_type' on WordPress installs before 5.0
+- Fix: 'WP_DB_Table' class already exists on some installs
+- Fix: File extension validation not working if there are spaces after commas
 
 = 2.5 (25th January 2021) =
 
