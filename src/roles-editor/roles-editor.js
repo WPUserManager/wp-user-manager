@@ -5,7 +5,7 @@ import App from './app'
 import router from './router'
 import WPNotice from 'vue-wp-notice'
 import VModal from "vue-js-modal";
-import {Bootstrap} from "../registration-forms-editor/bootstrap";
+import {Bootstrap} from "../bootstrap";
 
 Vue.use(WPNotice)
 Vue.use(VModal, { dialog: true, dynamic: true })

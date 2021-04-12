@@ -41,7 +41,7 @@ function wp_user_manager_install( $network_wide = false ) {
  * @return void
  */
 function wpum_generate_pages() {
-	$is_block_editor = use_block_editor_for_post_type( 'page' );
+	$is_block_editor = function_exists( 'use_block_editor_for_post_type' ) && use_block_editor_for_post_type( 'page' );
 	// Generate login page
 	if ( ! wpum_get_option( 'login_page' ) ) {
 		$login_content = $is_block_editor ? '<!-- wp:wpum/login-form /-->' : '[wpum_login_form psw_link="yes" register_link="yes"]';

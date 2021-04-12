@@ -33,7 +33,7 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 			 *
 			 * @var $field
 			 */
-			do_action( 'wpum_registration_form_field', $field, $key );
+			do_action( 'wpum_registration_form_field', $field, $key, $data->fields );
 			?>
 
 		<?php endforeach; ?>

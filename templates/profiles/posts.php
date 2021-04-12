@@ -27,6 +27,12 @@ $the_query = wpum_get_posts_for_profile( $data->user->ID );
 		<?php while ( $the_query->have_posts() ) : $the_query->the_post(); ?>
 
 			<div class="wpum-post" id="wpum-post-<?php echo the_id();?>">
+				<?php if ( apply_filters( 'wpum_profile_posts_display_thumbnail', false ) && has_post_thumbnail() ) : ?>
+					<div class="wpum-post-thumbnail">
+					<a href="<?php the_permalink(); ?>" class="wpum-post-title">
+						<?php echo get_the_post_thumbnail(); ?></a>
+					</div>
+				<?php endif; ?>
 				<a href="<?php the_permalink();?>" class="wpum-post-title"><?php the_title();?></a>
 				<ul class="wpum-post-meta">
 					<li>

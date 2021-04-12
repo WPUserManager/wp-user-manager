@@ -303,7 +303,7 @@ function wpum_profile( $atts, $content = null ) {
 			)
 			->get_template_part( 'messages/general', 'warning' );
 
-	} elseif ( is_user_logged_in() && $queried_user_id && ! wpum_members_can_view_profiles( $queried_user_id ) && ! wpum_is_own_profile() ) {
+	} elseif ( is_user_logged_in() && $queried_user_id && ! wpum_members_can_view_profiles( $queried_user_id ) && ! wpum_is_own_profile() && ! current_user_can( 'administrator' ) ) {
 
 		WPUM()->templates
 			->set_template_data(

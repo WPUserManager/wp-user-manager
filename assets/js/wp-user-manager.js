@@ -1,10 +1,17 @@
-/*! WP User Manager - v2.4
+/*! WP User Manager - v2.5
  * https://wpusermanager.com
- * Copyright (c) 2020; * Licensed GPLv2+ */
+ * Copyright (c) 2021; * Licensed GPLv2+ */
 jQuery( function( $ ) {
 	function initFields() {
-		$( '.wpum-multiselect:not(.wpum-clone-field)' ).select2( {
-			theme: 'default'
+		$( '.wpum-multiselect:not(.wpum-clone-field)' ).each( function() {
+			var args = {
+				theme: 'default'
+			};
+			var placeholder = $( this ).attr( 'placeholder' );
+			if ( placeholder ) {
+				args[ 'placeholder' ] = placeholder;
+			}
+			$( this ).select2( args );
 		} );
 
 		$( '.wpum-datepicker:not([readonly]):not(.wpum-clone-field)' ).flatpickr( {
@@ -14,6 +21,7 @@ jQuery( function( $ ) {
 
 	var repeater = {
 
+		form: $( 'form' ),
 		repeaters: {},
 
 		init: function() {
@@ -39,12 +47,12 @@ jQuery( function( $ ) {
 				$( this ).removeAttr( 'required' )
 			} );
 
-			$('body').on( 'click', '.add-repeater-row', function() {
+			self.form.on( 'click', '.add-repeater-row', function() {
 				var parent = $( this ).parents( 'fieldset' );
 				self.addNewInstance( parent.get( 0 ).classList[ 0 ] );
 			} );
 
-			$('body').on( 'click', '.remove-repeater-row', function(e) {
+			self.form.on( 'click', '.remove-repeater-row', function(e) {
 				e.preventDefault();
 				var parent = $( this ).parents( 'fieldset' );
 				var $row = $( this ).parents( '.fieldset-wpum_field_group' );

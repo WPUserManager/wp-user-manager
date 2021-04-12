@@ -425,7 +425,7 @@ class WPUM_Fields_Editor {
 
 			// Deregister some settings from the editor.
 			$wpum_field       = new WPUM_Field( $wpum_field_id );
-			$settings         = $this->deregister_settings( $settings, $wpum_field->get_primary_id() );
+			$settings         = $this->deregister_settings( $settings, $wpum_field );
 			$model            = $this->deregister_model( $model, $wpum_field->get_primary_id() );
 			$dropdown_options = $wpum_field->get_meta( 'dropdown_options' );
 
@@ -448,19 +448,19 @@ class WPUM_Fields_Editor {
 	 * Deregister settings for fields that do not require all of them.
 	 *
 	 * @param array $settings
-	 * @param string $primary_field_id
+	 * @param WPUM_Field      $wpum_field
 	 *
 	 * @return array
 	 */
-	private function deregister_settings( $settings, $primary_field_id ) {
+	private function deregister_settings( $settings, $wpum_field ) {
 
 		$this->deregistered_settings = [];
 
-		if ( ! empty( $primary_field_id ) ) {
+		if ( ! empty( $wpum_field->get_primary_id() ) ) {
 			// All primary fields do not need the meta key setting.
 			$this->deregistered_settings[] = 'user_meta_key';
 
-			switch ( $primary_field_id ) {
+			switch ( $wpum_field->get_primary_id() ) {
 				case 'username':
 				case 'user_displayname':
 				case 'user_avatar':
@@ -476,7 +476,7 @@ class WPUM_Fields_Editor {
 			}
 		}
 
-		return apply_filters( 'wpum_fields_editor_deregister_settings', $settings, $primary_field_id );
+		return apply_filters( 'wpum_fields_editor_deregister_settings', $settings, $wpum_field->get_primary_id(), $wpum_field );
 
 	}
 

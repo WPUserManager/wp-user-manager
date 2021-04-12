@@ -110,6 +110,8 @@ add_action(
 				}
 			}
 
+			$page_slug = apply_filters( 'wpum_profile_page_slug', $page_slug, $profile_page_id );
+
 			if ( in_array( $page_slug, $profile_page_slugs ) ) {
 				continue;
 			}
