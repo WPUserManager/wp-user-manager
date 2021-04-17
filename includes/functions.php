@@ -697,7 +697,7 @@ function wpum_get_account_page_tabs() {
 			'priority' => 800,
 		],
 		'view'     => [
-			'name'     => esc_html__( 'View profile', 'wp-user-manager' ),
+			'name'     => esc_html__( 'View Profile', 'wp-user-manager' ),
 			'priority' => 900,
 		],
 		'logout'   => [
