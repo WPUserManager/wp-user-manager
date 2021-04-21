@@ -340,8 +340,9 @@ class WPUM_Form_Registration extends WPUM_Form {
 						);
 
 						$data = array_merge( $data, $field->get_field_data() );
+						$field_key = $this->get_parsed_id( $field->get_name(), $field->get_primary_id(), $field );
 
-						$fields[ $this->get_parsed_id( $field->get_name(), $field->get_primary_id(), $field ) ] = $data;
+						$fields[ $field_key ] = $data;
 					}
 				}
 			}
@@ -413,7 +414,7 @@ class WPUM_Form_Registration extends WPUM_Form {
 	 *
 	 * @return void
 	 */
-	private function get_register_by() {
+	protected function get_register_by() {
 
 		$by = false;
 
