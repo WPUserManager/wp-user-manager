@@ -1,6 +1,6 @@
 <template>
 	<li :class="selected" @click="enable()">
-		<div class="attachment-preview js--select-attachment">
+		<div class="attachment-preview js--select-attachment" :style="divStyle" :title="divTitle">
 			<div class="thumbnail">
 				<div class="table-fixed">
 					<div class="table-cell">
@@ -11,6 +11,9 @@
 			<div class="filename">
 				<div>{{name}}</div>
 			</div>
+		</div>
+		<div class="locked-type" v-if="locked">
+			<span class="dashicons-lock dashicons"></span>
 		</div>
 		<button type="button" class="check" tabindex="-1">
 			<span class="media-modal-icon"></span>
@@ -26,7 +29,9 @@ export default {
 		name: '',
 		icon: '',
 		type: '',
-		enabled: false
+		enabled: false,
+		locked: false,
+		min_version: false,
 	},
 	computed: {
 		classes() {
@@ -40,11 +45,19 @@ export default {
 				'attachment save-ready',
 				this.enabled ? 'details selected' : ''
 			]
+		},
+		divStyle() {
+			return this.locked ? 'opacity: 40%' : ''
+		},
+		divTitle() {
+			return this.locked ? 'Requires the Custom Fields addon version ' + this.min_version + ' or higher' : ''
 		}
 	},
 	methods: {
 		enable(event) {
-			this.$emit('click', event);
+			if ( ! this.locked ) {
+				this.$emit( 'click', event );
+			}
 		},
 	}
 }

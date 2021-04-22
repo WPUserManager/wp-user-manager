@@ -104,6 +104,11 @@ abstract class WPUM_Field_Type {
 	protected $default_type = 'input';
 
 	/**
+	 * @var bool|string
+	 */
+	public $min_addon_version = false;
+
+	/**
 	 * Register the field
 	 *
 	 * @since 2.0.0
@@ -245,12 +250,17 @@ abstract class WPUM_Field_Type {
 	public function register_field_type( $fields ) {
 		$settings =  array_merge_recursive( $this->get_default_editor_settings(), $this->get_editor_settings() );
 
+		$addon_version = defined( 'WPUMCF_VERSION' ) ? WPUMCF_VERSION : false;
+		$min_addon_version =  $this->min_addon_version ? $this->min_addon_version : $addon_version;
+
 		$fields[ $this->group ]['fields'][] = array(
-			'order'    => $this->order,
-			'name'     => $this->name,
-			'type'     => $this->type,
-			'icon'     => $this->icon,
-			'settings' => apply_filters( 'wpum_register_field_type_settings', $settings, $this->type )
+			'order'             => $this->order,
+			'name'              => $this->name,
+			'type'              => $this->type,
+			'icon'              => $this->icon,
+			'min_addon_version' => $min_addon_version,
+			'locked'            => $addon_version ? version_compare( $min_addon_version, $addon_version, '>' ) : false,
+			'settings'          => apply_filters( 'wpum_register_field_type_settings', $settings, $this->type ),
 		);
 
 		return $fields;

@@ -281,6 +281,20 @@ body.users_page_wpum-roles {
 				}
 			}
 		}
+
+		.locked-type {
+			position: absolute;
+			top: 0;
+			right: 0;
+			span {
+				margin-top: 20px;
+				height: 20px;
+				width: 20px;
+				font-size: 30px;
+				margin-right: 25px;
+				color: #016afe;
+			}
+		}
 	}
 
 	button:disabled {

@@ -22,6 +22,7 @@ class WPUM_Field_Repeater extends WPUM_Field_Type {
 		$this->template = 'complex';
 		$this->icon  = 'dashicons-menu-alt';
 		$this->order = 1;
+		$this->min_addon_version = '2.2';
 
 		add_filter( 'wpum_fields_editor_deregister_model', array( $this, 'parent_field_model_data' ), 10, 2 );
 		add_filter( 'wpum_register_field_type_settings', array( $this, 'settings_fields' ), 10, 2 );

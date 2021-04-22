@@ -21,6 +21,7 @@ class WPUM_Field_Hidden extends WPUM_Field_Type {
 		$this->icon  = 'dashicons-hidden';
 		$this->group = 'advanced';
 		$this->allow_default = true;
+		$this->min_addon_version = '2.2.1';
 	}
 }
 

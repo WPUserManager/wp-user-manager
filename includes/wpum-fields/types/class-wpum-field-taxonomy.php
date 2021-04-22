@@ -21,6 +21,7 @@ class WPUM_Field_Taxonomy extends WPUM_Field_Type {
 		$this->icon  = 'dashicons-tag';
 		$this->group = 'advanced';
 		$this->allow_default = true;
+		$this->min_addon_version = '2.2.1';
 	}
 
 	public function get_data_keys() {
