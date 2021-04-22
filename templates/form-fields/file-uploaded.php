@@ -23,9 +23,6 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 	if ( is_numeric( $data->value ) ) {
 		$image_src = wp_get_attachment_image_src( absint( $data->value ) );
 		$image_src = $image_src ? $image_src[0] : '';
-		if ( empty( $image_src ) ) {
-			$image_src = wp_mime_type_icon( $data->value );
-		}
 	} else {
 		$image_src = $data->value;
 	}
