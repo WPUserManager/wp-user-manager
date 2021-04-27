@@ -69,12 +69,11 @@ if( count( $fields ) ){
 		$clone_row = $index == $clone_row_index;
 		echo '<div class="fieldset-wpum_field_group' . ( $clone_row ? ' fieldset-wpum_field_group-clone' : '' ) . '">';
 
-		if ( $index != 0 ) {
-			echo sprintf(
-				'<a href="#" class="remove-repeater-row" title="%s">x</a>',
+		echo sprintf(
+			'<a href="#" class="remove-repeater-row" title="%s">x</a>',
 				esc_html__( 'Remove', 'wp-user-manager' )
-			);
-		}
+		);
+
 		foreach( $fields as $field ){
 
 			$options 		= [];
@@ -94,8 +93,7 @@ if( count( $fields ) ){
 			$value = isset( $values[ $index ][ $key ] ) ? $values[ $index ][ $key ] : '';
 
 			if ( $index > 0 && ! $clone_row ) {
-				$key .= '_' . $index;
-
+				//$key .= '_' . $index;
 				if ( isset( $values[ $index ][ $key ] ) ) {
 					$value = $values[ $index ][ $key ];
 				}
