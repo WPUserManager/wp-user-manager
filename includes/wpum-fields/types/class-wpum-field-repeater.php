@@ -185,7 +185,7 @@ class WPUM_Field_Repeater extends WPUM_Field_Type {
 					continue;
 				}
 
-				if ( isset( $value[ $child->get_key() ] ) && !empty( $value[ $child->get_key() ] ) ) {
+				if ( isset( $value[ $child->get_key() ] ) && ! empty( $value[ $child->get_key() ] ) ) {
 					$formatted = $child->field_type->get_formatted_output( $child, $value[ $child->get_key() ] );
 					$html      .= sprintf( '<li><strong>%s</strong>: %s</li>', $child->get_name(), $formatted );
 				}
