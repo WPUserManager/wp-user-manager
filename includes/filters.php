@@ -26,7 +26,7 @@ function wpum_admin_rate_us( $footer_text ) {
 	$rate_text = sprintf(
 		__( 'Please support the future of <a href="%1$s" target="_blank">WP User Manager</a> by <a href="%2$s" target="_blank">rating us</a> on <a href="%2$s" target="_blank">WordPress.org</a>', 'wp-user-manager' ),
 		'https://wpusermanager.com/?utm_source=WP%20User%20Manager&utm_medium=insideplugin&utm_campaign=WP%20User%20Manager&utm_content=settings-footer',
-		'http://wordpress.org/support/view/plugin-reviews/wp-user-manager?filter=5#postform'
+		'http://wordpress.org/support/view/plugin-reviews/wp-user-manager?filter=5#new-post'
 	);
 	return str_replace( '</span>', '', $footer_text ) . ' | ' . $rate_text . ' <span class="dashicons dashicons-star-filled footer-star"></span><span class="dashicons dashicons-star-filled footer-star"></span><span class="dashicons dashicons-star-filled footer-star"></span><span class="dashicons dashicons-star-filled footer-star"></span><span class="dashicons dashicons-star-filled footer-star"></span></span>';
 }
