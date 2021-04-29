@@ -217,26 +217,18 @@ class WPUM_Field_Repeater extends WPUM_Field_Type {
 			$files = $this->upload_file( $key, $field );
 		}
 
-		if ( count( $posted) > 0 ) {
-			foreach ( $posted as $index => &$post ) {
-				$file = isset( $files[ $index ] ) ? $files[ $index ] : [];
+		$current_repeater = parent::get_posted_field( 'current_' . $key, $field );
+
+		foreach ( $_FILES[ $key ]['name'] as $index => $post ) {
+			$post_keys = array_keys( $post );
+			foreach ( $post_keys as $key ) {
+				$file = isset( $files[ $index ][ $key ] ) ? $files[ $index ][ $key ] : '';
 				if ( empty( $file ) ) {
-					$current_repeater = parent::get_posted_field( 'current_' . $key, $field );
-					$file = isset( $current_repeater[ $index ] ) ? $current_repeater[ $index ] : [];
+					$file = isset( $current_repeater[ $index ][ $key ] ) ? $current_repeater[ $index ][ $key ] : '';
 				}
-				$post = array_merge( $post, $file );
-			}
-		}else{
-			foreach ( $_FILES[ $key ]['name'] as $index => $post ) {
-				$file = isset( $files[ $index ] ) ? $files[ $index ] : [];
-				if ( empty( $file ) ) {
-					$current_repeater = parent::get_posted_field( 'current_' . $key, $field );
-					$file = isset( $current_repeater[ $index ] ) ? $current_repeater[ $index ] : [];
-				}
-				$posted[] = $file;
+				$posted[ $index ][ $key ] = $file;
 			}
 		}
-
 		return $posted;
 	}
 
@@ -252,64 +244,65 @@ class WPUM_Field_Repeater extends WPUM_Field_Type {
 		if ( isset( $_FILES[ $field_key ] ) && ! empty( $_FILES[ $field_key ] ) ) {
 			$allowed_mime_types = wpum_get_allowed_mime_types();
 			$files = array();
-			$primary_key = '';
+
 			foreach ( $_FILES[ $field_key ] as $file_key => $file ) {
-				array_walk_recursive( $file, function ($item, $key, $file_key) use (&$results, &$primary_key) {
-					$results[$file_key][] = $item;
-					$primary_key = $key;
+				array_walk_recursive( $file, function ( $item, $key, $file_key ) use ( &$results ) {
+					$results[$key][$file_key][] = $item;
 				}, $file_key );
 			}
 
-			$id = str_replace( 'wpum_field_file_', '', $primary_key );
-			$file_field = new WPUM_Field( $id );
+			$file_urls       = array();
+			foreach ( $results as $primary_key => $upload ) {
 
-			$field_name = $file_field->get_name();
-			$field_max_size = $file_field->get_meta( 'max_file_size' );
-			$field_mime_types = $file_field->get_meta('allowed_mime_types');
+				$id = str_replace( 'wpum_field_file_', '', $primary_key );
+				$file_field = new WPUM_Field( $id );
 
-			if ( ! empty( $field_mime_types ) ) {
-				$extensions         = explode( ',', $field_mime_types );
-				$allowed_mime_types = [];
-				foreach ( $extensions as $extension ) {
-					$extension = strtolower( trim( str_replace( '.', '', $extension ) ) );
-					foreach ( get_allowed_mime_types() as $allowed_ext => $allowed_mime_type ) {
-						if ( in_array( $extension, explode( '|', $allowed_ext ) ) ) {
-							$allowed_mime_types[ $allowed_ext ] = $allowed_mime_type;
-							break;
+				$field_name = $file_field->get_name();
+				$field_max_size = $file_field->get_meta( 'max_file_size' );
+				$field_mime_types = $file_field->get_meta('allowed_mime_types');
+
+				if ( ! empty( $field_mime_types ) ) {
+					$extensions         = explode( ',', $field_mime_types );
+					$allowed_mime_types = [];
+					foreach ( $extensions as $extension ) {
+						$extension = strtolower( trim( str_replace( '.', '', $extension ) ) );
+						foreach ( get_allowed_mime_types() as $allowed_ext => $allowed_mime_type ) {
+							if ( in_array( $extension, explode( '|', $allowed_ext ) ) ) {
+								$allowed_mime_types[ $allowed_ext ] = $allowed_mime_type;
+								break;
+							}
 						}
 					}
 				}
-			}
 
-			$cloned_keys = array();
-			foreach ( $results['name'] as $key => $name ) {
-				if ( ! empty( $name ) ) {
-					$cloned_keys[] = $key;
-				}
-			}
-
-			$file_urls       = array();
-			$files_to_upload = wpum_prepare_uploaded_files( $results );
-
-			foreach ( $files_to_upload as $field_key => $file_to_upload ) {
-
-				$too_big_message = sprintf( esc_html__( 'The uploaded %s file is too big.', 'wp-user-manager' ), $field_name );
-
-				if ( isset( $field_max_size ) && ! empty( $field_max_size ) && $file_to_upload['size'] > $field['max_file_size'] ) {
-					throw new Exception( $too_big_message );
+				$cloned_keys = array();
+				foreach ( $upload['name'] as $key => $name ) {
+					if ( ! empty( $name ) ) {
+						$cloned_keys[] = $key;
+					}
 				}
 
-				$uploaded_file = wpum_upload_file( $file_to_upload, array(
-					'file_key'           => $primary_key,
-					'allowed_mime_types' => $allowed_mime_types,
-					'file_label'         => $field_name,
-				) );
+				$files_to_upload = wpum_prepare_uploaded_files( $upload );
+				foreach ( $files_to_upload as $field_key => $file_to_upload ) {
+
+					$too_big_message = sprintf( esc_html__( 'The uploaded %s file is too big.', 'wp-user-manager' ), $field_name );
+
+					if ( isset( $field_max_size ) && ! empty( $field_max_size ) && $file_to_upload['size'] > $field['max_file_size'] ) {
+						throw new Exception( $too_big_message );
+					}
+
+					$uploaded_file = wpum_upload_file( $file_to_upload, array(
+						'file_key'           => $primary_key,
+						'allowed_mime_types' => $allowed_mime_types,
+						'file_label'         => $field_name,
+					) );
 
 
-				if ( is_wp_error( $uploaded_file ) ) {
-					throw new Exception( $uploaded_file->get_error_message() );
-				} else {
-					$file_urls[ $cloned_keys[ $field_key ] ][ $primary_key ] = $uploaded_file->url;
+					if ( is_wp_error( $uploaded_file ) ) {
+						throw new Exception( $uploaded_file->get_error_message() );
+					} else {
+						$file_urls[ $cloned_keys[ $field_key ] ][ $primary_key ] = $uploaded_file->url;
+					}
 				}
 			}
 
