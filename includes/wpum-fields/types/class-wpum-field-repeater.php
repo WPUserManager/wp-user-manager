@@ -260,6 +260,27 @@ class WPUM_Field_Repeater extends WPUM_Field_Type {
 				}, $file_key );
 			}
 
+			$id = str_replace( 'wpum_field_file_', '', $primary_key );
+			$file_field = new WPUM_Field( $id );
+
+			$field_name = $file_field->get_name();
+			$field_max_size = $file_field->get_meta( 'max_file_size' );
+			$field_mime_types = $file_field->get_meta('allowed_mime_types');
+
+			if ( ! empty( $field_mime_types ) ) {
+				$extensions         = explode( ',', $field_mime_types );
+				$allowed_mime_types = [];
+				foreach ( $extensions as $extension ) {
+					$extension = strtolower( trim( str_replace( '.', '', $extension ) ) );
+					foreach ( get_allowed_mime_types() as $allowed_ext => $allowed_mime_type ) {
+						if ( in_array( $extension, explode( '|', $allowed_ext ) ) ) {
+							$allowed_mime_types[ $allowed_ext ] = $allowed_mime_type;
+							break;
+						}
+					}
+				}
+			}
+
 			$cloned_keys = array();
 			foreach ( $results['name'] as $key => $name ) {
 				if ( ! empty( $name ) ) {
@@ -271,11 +292,6 @@ class WPUM_Field_Repeater extends WPUM_Field_Type {
 			$files_to_upload = wpum_prepare_uploaded_files( $results );
 
 			foreach ( $files_to_upload as $field_key => $file_to_upload ) {
-
-				$id = str_replace( 'wpum_field_file_', '', $primary_key );
-				$file_field = new WPUM_Field( $id );
-				$field_name = $file_field->get_name();
-				$field_max_size = $file_field->get_meta( 'max_file_size' );
 
 				$too_big_message = sprintf( esc_html__( 'The uploaded %s file is too big.', 'wp-user-manager' ), $field_name );
 
