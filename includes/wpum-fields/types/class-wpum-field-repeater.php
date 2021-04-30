@@ -287,7 +287,7 @@ class WPUM_Field_Repeater extends WPUM_Field_Type {
 
 					$too_big_message = sprintf( esc_html__( 'The uploaded %s file is too big.', 'wp-user-manager' ), $field_name );
 
-					if ( isset( $field_max_size ) && ! empty( $field_max_size ) && $file_to_upload['size'] > $field['max_file_size'] ) {
+					if ( ! empty( $field_max_size ) && $file_to_upload['size'] > $field_max_size) {
 						throw new Exception( $too_big_message );
 					}
 
