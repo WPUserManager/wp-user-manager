@@ -37,7 +37,7 @@ class WPUM_Admin_Notices {
 		$past_date    = strtotime( '-14 days' );
 
 		if ( $install_date && $past_date >= $install_date ) {
-			$url_rate       = 'http://wordpress.org/support/view/plugin-reviews/wp-user-manager?filter=5#postform';
+			$url_rate       = 'http://wordpress.org/support/view/plugin-reviews/wp-user-manager?filter=5#new-post';
 			$current_user   = wp_get_current_user();
 			$current_user   = $current_user->display_name;
 			$rating_message = sprintf(

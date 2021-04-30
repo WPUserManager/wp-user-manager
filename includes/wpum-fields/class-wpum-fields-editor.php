@@ -628,6 +628,7 @@ class WPUM_Fields_Editor {
 				} elseif ( $setting_id == 'user_meta_key' && ! $field_to_update->is_primary() ) {
 					if ( strpos( $setting_data, 'wpum_') !== 0 ) {
 						$setting_data = 'wpum_' . $setting_data;
+						$setting_data = $field_to_update->wpum_sanitize_key( $setting_data );
 						if ( $field_to_update->get_type() == 'file' ) {
 							$append_key   = str_replace( 'wpum_file_field_', '', $setting_data );
 							$append_key   = str_replace( 'wpum_', '', $append_key );

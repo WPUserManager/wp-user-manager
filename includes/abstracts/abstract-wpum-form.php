@@ -415,7 +415,8 @@ abstract class WPUM_Form {
 	 * @param string $name
 	 * @param string $nicename
 	 * @param object $field
-	 * @return void
+	 *
+	 * @return string
 	 */
 	protected function get_parsed_id( $name, $nicename, $field ) {
 

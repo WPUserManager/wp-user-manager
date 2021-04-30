@@ -22,5 +22,6 @@ class WPUM_Field_Wysiwyg extends WPUM_Field_Textarea {
 		$this->icon     = 'dashicons-align-left';
 		$this->order    = 3;
 		$this->template = 'wysiwyg';
+		$this->min_addon_version = '2.1';
 	}
 }

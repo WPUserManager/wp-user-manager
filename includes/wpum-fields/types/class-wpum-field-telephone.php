@@ -20,6 +20,7 @@ class WPUM_Field_Telephone extends WPUM_Field_Type {
 		$this->type  = 'telephone';
 		$this->icon  = 'dashicons-phone';
 		$this->order = 3;
+		$this->min_addon_version = '2.1';
 	}
 
 	public function get_data_keys() {

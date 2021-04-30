@@ -8,7 +8,7 @@ Tested up to: 5.7
 Requires PHP: 5.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
-Stable Tag: 2.6
+Stable Tag: 2.6.1
 
 The most customizable profiles & community builder WordPress plugin with front-end login, registration, profile customization and content restriction.
 
@@ -126,9 +126,18 @@ Please note that using WPUM and the mentioned add-ons does NOT guarantee complia
 
 == Changelog ==
 
+= 2.6.1 (30th April 2021) =
+
+- New: Support for creating forms to capture data after registration with the [Registration Forms](https://wpusermanager.com/addons/registration-forms/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager) addon
+- New: Groups directory block for the [Groups](https://wpusermanager.com/addons/groups/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager) addon
+- New: Frontend Posting form block for the [Frontend Posting](https://wpusermanager.com/addons/frontend-posting/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager) addon
+- Fix: Content restriction block settings not working with some blocks
+- Fix: Fatal error when field user meta key contains special characters
+- Fix: Don't allow field types to be used if not supported by the installed version of the [Custom Fields](https://wpusermanager.com/addons/custom-fields/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager) addon
+
 = 2.6 (12th April 2021) =
 
-- New: [Frontend Posting](https://wpusermanager.com/addons/frontend-posting/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager) addon:
+- New: [Frontend Posting](https://wpusermanager.com/addons/frontend-posting/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager) addon
 - New: Conditional logic for custom fields with the [Custom Fields addon](https://wpusermanager.com/addons/custom-fields/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager)
 - New: User field type
 - New: Allow using the {recovery_url} in the registration email

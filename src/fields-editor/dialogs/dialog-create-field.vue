@@ -38,6 +38,8 @@
 								:name="field.name"
 								:icon="field.icon"
 								:type="field.type"
+								:locked="field.locked"
+								:min_version="field.min_addon_version"
 								:enabled="isTypeSelected(field.type)"
 								@click="selectFieldType(field.type)"
 							></field-type-box>
