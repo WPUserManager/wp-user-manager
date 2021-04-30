@@ -371,3 +371,20 @@ function wpum_register_profile_privacy_fields() {
 	         ) );
 }
 add_action( 'carbon_fields_register_fields', 'wpum_register_profile_privacy_fields' );
+
+/**
+ * Install default data when new site is added.
+ * @param  object $site
+ * @return void
+ */
+function wpum_multisite_new_site( $site ){
+	if ( ! function_exists( 'is_plugin_active_for_network' ) ) {
+		require_once( ABSPATH . '/wp-admin/includes/plugin.php' );
+	}
+	if ( is_plugin_active_for_network( 'wp-user-manager/wp-user-manager.php' ) ) {
+		switch_to_blog( $site->blog_id );
+		wpum_run_install();
+		restore_current_blog();
+	}
+}
+add_action( 'wp_initialize_site', 'wpum_multisite_new_site' );
