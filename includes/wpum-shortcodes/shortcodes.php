@@ -187,12 +187,13 @@ function wpum_registration_form( $atts, $content = null ) {
 
 	if ( wpum_is_registration_enabled() ) {
 
-		if ( is_user_logged_in() && ! $is_success && ! ( isset( $_GET['context'] ) && 'edit' === $_GET['context'] ) ) {
+		$finalstep = apply_filters( 'wpum_check_next_step', true );
+		if ( is_user_logged_in() && ! $is_success && ! ( isset( $_GET['context'] ) && 'edit' === $_GET['context'] ) && $finalstep ) {
 
 			WPUM()->templates
 				->get_template_part( 'already-logged-in' );
 
-		} elseif ( $is_success ) {
+		} elseif ( $is_success && $finalstep ) {
 
 			$success_message = apply_filters( 'wpum_registration_success_message', esc_html__( 'Registration complete. We have sent you a confirmation email with your details.', 'wp-user-manager' ) );
 
