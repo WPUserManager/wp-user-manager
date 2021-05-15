@@ -619,7 +619,6 @@ class WPUM_Registration_Forms_Editor {
 	private function send_json_error() {
 		wp_send_json_error( null, 403 );
 	}
-
 }
 
 $wpum_registration_forms_editor = new WPUM_Registration_Forms_Editor;

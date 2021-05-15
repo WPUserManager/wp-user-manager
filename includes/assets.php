@@ -76,10 +76,13 @@ function wpum_enqueue_scripts() {
 	wp_enqueue_style( 'wpum-datepicker-style', 'https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css', false, WPUM_VERSION );
 
 	$suffix = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
+
 	wp_enqueue_script( 'wpum-frontend-js', WPUM_PLUGIN_URL . 'assets/js/wp-user-manager' . $suffix . '.js', array( 'jquery' ), WPUM_VERSION, true );
 
 	$js_variables = [
 		'dateFormat' => get_option( 'date_format' ),
+		'ajaxurl' => admin_url( 'admin-ajax.php' ),
+		'pluginurl' => plugin_dir_url( __DIR__ ),
 	];
 
 	wp_localize_script( 'wpum-frontend-js', 'wpumFrontend', $js_variables );
