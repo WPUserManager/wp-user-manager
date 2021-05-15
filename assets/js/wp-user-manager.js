@@ -1,6 +1,6 @@
 /*! WP User Manager - v2.4
  * https://wpusermanager.com
- * Copyright (c) 2020; * Licensed GPLv2+ */
+ * Copyright (c) 2021; * Licensed GPLv2+ */
 window.loadResources=function(e){return new Promise(function(t,n){var o=0,r=function(){++o===e.length&&t()};e.forEach(function(e){var t=e.split("?")[0];/\.css/.test(t)?function(e,t){var n=document.createElement("link");n.rel="stylesheet",n.href=e,n.onload=t,document.head.appendChild(n)}(e,r):/\.js/.test(t)&&function(e,t){var n=document.createElement("script");n.src=e,n.onload=t,document.head.appendChild(n)}(e,r)})})}
 
 jQuery( function( $ ) {
@@ -16,6 +16,7 @@ jQuery( function( $ ) {
 
 	var repeater = {
 
+		form: $( 'form' ),
 		repeaters: {},
 
 		init: function() {
@@ -41,12 +42,12 @@ jQuery( function( $ ) {
 				$( this ).removeAttr( 'required' )
 			} );
 
-			$('body').on( 'click', '.add-repeater-row', function() {
+			self.form.on( 'click', '.add-repeater-row', function() {
 				var parent = $( this ).parents( 'fieldset' );
 				self.addNewInstance( parent.get( 0 ).classList[ 0 ] );
 			} );
 
-			$('body').on( 'click', '.remove-repeater-row', function(e) {
+			self.form.on( 'click', '.remove-repeater-row', function(e) {
 				e.preventDefault();
 				var parent = $( this ).parents( 'fieldset' );
 				var $row = $( this ).parents( '.fieldset-wpum_field_group' );
@@ -256,7 +257,7 @@ jQuery( function( $ ) {
 						},
 					},
 					load: '?action=wpum_load_image&key='+ $( field ).data( 'file-key' ) + '&',
-					remove: (source, load, error) => {
+					remove: ( source, load, error ) => {
 						load();
 						removeFiles( field );
 					},
@@ -267,7 +268,8 @@ jQuery( function( $ ) {
 					}
 				},
 				files: files,
-			});
-		});
-	});
+			} );
+		} );
+	} );
+
 } );
