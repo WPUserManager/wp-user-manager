@@ -1,12 +1,17 @@
-/*! WP User Manager - v2.4
+/*! WP User Manager - v2.5
  * https://wpusermanager.com
  * Copyright (c) 2021; * Licensed GPLv2+ */
-window.loadResources=function(e){return new Promise(function(t,n){var o=0,r=function(){++o===e.length&&t()};e.forEach(function(e){var t=e.split("?")[0];/\.css/.test(t)?function(e,t){var n=document.createElement("link");n.rel="stylesheet",n.href=e,n.onload=t,document.head.appendChild(n)}(e,r):/\.js/.test(t)&&function(e,t){var n=document.createElement("script");n.src=e,n.onload=t,document.head.appendChild(n)}(e,r)})})}
-
 jQuery( function( $ ) {
 	function initFields() {
-		$( '.wpum-multiselect:not(.wpum-clone-field)' ).select2( {
-			theme: 'default'
+		$( '.wpum-multiselect:not(.wpum-clone-field)' ).each( function() {
+			var args = {
+				theme: 'default'
+			};
+			var placeholder = $( this ).attr( 'placeholder' );
+			if ( placeholder ) {
+				args[ 'placeholder' ] = placeholder;
+			}
+			$( this ).select2( args );
 		} );
 
 		$( '.wpum-datepicker:not([readonly]):not(.wpum-clone-field)' ).flatpickr( {

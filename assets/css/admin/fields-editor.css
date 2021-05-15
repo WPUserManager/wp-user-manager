@@ -317,6 +317,19 @@ body.users_page_wpum-roles #wpum-fields-editor-list .vue-wp-notice {
 #create-field-dialog ul.attachments .check:hover .media-modal-icon {
   background-position: -21px 0;
 }
+#create-field-dialog ul.attachments .locked-type {
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+#create-field-dialog ul.attachments .locked-type span {
+  margin-top: 20px;
+  height: 20px;
+  width: 20px;
+  font-size: 30px;
+  margin-right: 25px;
+  color: #016afe;
+}
 #create-field-dialog button:disabled {
   cursor: not-allowed;
 }

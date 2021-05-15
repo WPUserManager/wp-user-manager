@@ -669,7 +669,12 @@ class WPUM_Field {
 	 * @since   2.0
 	 */
 	public function get_meta( $meta_key = '', $single = true ) {
-		return WPUM()->field_meta->get_meta( $this->id, $meta_key, $single );
+		$meta = WPUM()->field_meta->get_meta( $this->id, $meta_key, $single );
+		if ( 'user_meta_key' === $meta_key ) {
+			$this->wpum_sanitize_key( $meta );
+		}
+
+		return $meta;
 	}
 
 	/**
@@ -761,4 +766,7 @@ class WPUM_Field {
 		return str_replace( ' ', '_', strtolower( $this->get_name() ) );
 	}
 
+	public function wpum_sanitize_key( $key ){
+		return preg_replace( "/[^A-Za-z0-9_]/", '', $key );
+	}
 }

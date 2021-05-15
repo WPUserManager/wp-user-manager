@@ -22,6 +22,7 @@ class WPUM_Field_Video extends WPUM_Field_File {
 		$this->template = 'file';
 		$this->icon  = 'dashicons-video-alt2';
 		$this->order = 3;
+		$this->min_addon_version = '2.1';
 	}
 
 	public function default_allowed_mime_types() {

@@ -33,7 +33,7 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 			 *
 			 * @var $field
 			 */
-			do_action( 'wpum_registration_form_field', $field, $key );
+			do_action( 'wpum_registration_form_field', $field, $key, $data->fields );
 			?>
 
 		<?php endforeach; ?>
@@ -44,7 +44,10 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 
 		<?php do_action( 'wpum_before_submit_button_registration_form', $data ); ?>
 
-		<input type="submit" name="submit_registration" class="button" value="<?php esc_html_e( 'Register', 'wp-user-manager' ); ?>" />
+		<?php
+		$label = isset( $data->submit_label ) ? $data->submit_label : esc_html__( 'Register', 'wp-user-manager' );
+		?>
+		<input type="submit" name="submit_registration" class="button" value="<?php echo apply_filters( 'wpum_registration_form_submit_label', $label ); ?>" />
 
 	</form>
 

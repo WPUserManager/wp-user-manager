@@ -136,7 +136,8 @@ abstract class WPUM_Form {
 	 * Displays errors.
 	 */
 	public function show_errors() {
-		foreach ( $this->errors as $error ) {
+		$errors = apply_filters( 'wpum_form_errors', $this->errors, $this->form_name );
+		foreach ( $errors as $error ) {
 			echo '<div class="wpum-message error">' . $error . '</div>';
 		}
 	}
@@ -310,6 +311,9 @@ abstract class WPUM_Form {
 				}
 				$template = isset( $field['template'] ) ? $field['template'] : $field['type'];
 				if ( 'file' === $template && ! empty( $field['allowed_mime_types'] ) ) {
+					$allowed_exts = explode( ',', $field['allowed_mime_types'] );
+					$allowed_exts = array_map( 'trim', $allowed_exts );
+
 					if ( is_array( $values[ $group_key ][ $key ] ) ) {
 						$check_value = array_filter( $values[ $group_key ][ $key ] );
 					} else {
@@ -319,8 +323,8 @@ abstract class WPUM_Form {
 						foreach ( $check_value as $file_url ) {
 							$file_url  = current( explode( '?', $file_url ) );
 							$file_info = wp_check_filetype( $file_url );
-							if ( ! is_numeric( $file_url ) && $file_info && ! in_array( $file_info['ext'], explode( ',', $field['allowed_mime_types'] ) ) ) {
-								throw new Exception( sprintf( __( '"%s" (filetype %s) needs to be one of the following file types: %s', 'wp-user-manager' ), $field['label'], $file_info['ext'], $field['allowed_mime_types'] ) );
+							if ( ! is_numeric( $file_url ) && $file_info && ! in_array( $file_info['ext'], $allowed_exts ) ) {
+								throw new Exception( sprintf( __( '"%s" (filetype %s) needs to be one of the following file types: %s', 'wp-user-manager' ), $field['label'], $file_info['ext'], $allowed_exts ) );
 							}
 						}
 					}
@@ -411,7 +415,8 @@ abstract class WPUM_Form {
 	 * @param string $name
 	 * @param string $nicename
 	 * @param object $field
-	 * @return void
+	 *
+	 * @return string
 	 */
 	protected function get_parsed_id( $name, $nicename, $field ) {
 

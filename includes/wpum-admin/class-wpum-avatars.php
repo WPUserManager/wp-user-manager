@@ -144,7 +144,7 @@ class WPUM_Avatars {
 			$url = $custom_avatar;
 		}
 
-		return apply_filters( 'wpum_get_avatar_url', $url, $id_or_email );
+		return apply_filters( 'wpum_get_avatar_url', $url, $id_or_email, $args );
 	}
 
 	/**

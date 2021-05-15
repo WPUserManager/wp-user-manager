@@ -3,7 +3,7 @@
 Plugin Name: WP User Manager
 Plugin URI:  https://wpusermanager.com
 Description: Beautifully simple user profile directories with frontend login, registration and account customization. WP User Manager is the best solution to manage your community and your users for WordPress.
-Version:     2.5
+Version:     2.6.1
 Author:      WP User Manager
 Author URI:  https://wpusermanager.com
 License:     GPLv3+
@@ -48,7 +48,7 @@ if ( ! class_exists( 'WP_User_Manager' ) ) :
 		/**
 		 * @var string
 		 */
-		protected $version = '2.5';
+		protected $version = '2.6.1';
 
 		/**
 		 * WPUM Instance.
@@ -202,6 +202,7 @@ if ( ! class_exists( 'WP_User_Manager' ) ) :
 		private function includes() {
 
 			require_once WPUM_PLUGIN_DIR . 'includes/functions.php';
+			require_once WPUM_PLUGIN_DIR . 'includes/wpum-forms/trait-wpum-account.php';
 			require_once WPUM_PLUGIN_DIR . 'includes/permalinks.php';
 			require_once WPUM_PLUGIN_DIR . 'includes/actions.php';
 			require_once WPUM_PLUGIN_DIR . 'includes/filters.php';
