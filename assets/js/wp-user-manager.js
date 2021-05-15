@@ -1,6 +1,8 @@
-/*! WP User Manager - v2.5
+/*! WP User Manager - v2.6.1
  * https://wpusermanager.com
  * Copyright (c) 2021; * Licensed GPLv2+ */
+window.loadResources=function(e){return new Promise(function(t,n){var o=0,r=function(){++o===e.length&&t()};e.forEach(function(e){var t=e.split("?")[0];/\.css/.test(t)?function(e,t){var n=document.createElement("link");n.rel="stylesheet",n.href=e,n.onload=t,document.head.appendChild(n)}(e,r):/\.js/.test(t)&&function(e,t){var n=document.createElement("script");n.src=e,n.onload=t,document.head.appendChild(n)}(e,r)})})}
+
 jQuery( function( $ ) {
 	function initFields() {
 		$( '.wpum-multiselect:not(.wpum-clone-field)' ).each( function() {
