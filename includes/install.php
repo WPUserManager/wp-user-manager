@@ -220,6 +220,7 @@ function wpum_run_install() {
 	wpum_update_option( 'from_name', get_option( 'blogname' ) );
 	wpum_update_option( 'guests_can_view_profiles', true );
 	wpum_update_option( 'members_can_view_profiles', true );
+	wpum_update_option( 'roles_editor', true );
 
 	// Clear the permalinks.
 	flush_rewrite_rules();
