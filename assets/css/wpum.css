@@ -994,6 +994,11 @@
   border-color: #bce8f1;
   color: #3a87ad;
 }
+.wpum-message.warning {
+  background-color: #fcf8e3;
+  border-color: #faebcc;
+  color: #C09853;
+}
 
 /* Form elements */
 .wpum-form > h2 {
