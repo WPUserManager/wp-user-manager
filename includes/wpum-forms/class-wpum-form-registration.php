@@ -483,7 +483,7 @@ class WPUM_Form_Registration extends WPUM_Form {
 	/**
 	 * Process the registration form.
 	 *
-	 * @return void
+	 * @return int|false
 	 */
 	public function submit_handler() {
 
@@ -494,11 +494,11 @@ class WPUM_Form_Registration extends WPUM_Form {
 			$values = $this->get_posted_fields();
 
 			if ( ! wp_verify_nonce( $_POST['registration_nonce'], 'verify_registration_form' ) ) {
-				return;
+				return false;
 			}
 
 			if ( empty( $_POST['submit_registration'] ) ) {
-				return;
+				return false;
 			}
 
 			if ( is_wp_error( ( $return = $this->validate_fields( $values ) ) ) ) {
@@ -588,9 +588,10 @@ class WPUM_Form_Registration extends WPUM_Form {
 
 		} catch ( Exception $e ) {
 			$this->add_error( $e->getMessage(), 'registration_submit' );
-			return;
+			return false;
 		}
 
+		return $new_user_id;
 	}
 
 	/**

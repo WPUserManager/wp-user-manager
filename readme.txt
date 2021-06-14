@@ -8,7 +8,7 @@ Tested up to: 5.7
 Requires PHP: 5.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
-Stable Tag: 2.6.1
+Stable Tag: 2.6.2
 
 The most customizable profiles & community builder WordPress plugin with front-end login, registration, profile customization and content restriction.
 
@@ -125,6 +125,12 @@ Please note that using WPUM and the mentioned add-ons does NOT guarantee complia
 13. Login form.
 
 == Changelog ==
+
+= 2.6.2 (14th June 2021) =
+
+- Improvement: Added $args as the third parameter to the 'wpum_get_avatar_url' filter
+- Fix: Uncaught TypeError: wpum_blocks.blocks['post-form'] is undefined console error
+- Fix: Role editor not enabled by default on new installs
 
 = 2.6.1 (30th April 2021) =
 

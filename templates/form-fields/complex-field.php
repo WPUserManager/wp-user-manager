@@ -111,7 +111,8 @@ if( count( $fields ) ){
 				'options'     => $options,
 				'template'    => $field->get_parent_type(),
 				'name'		  => "{$parent_key}[{$index}][{$key}]",
-				'value'		  => $value
+				'value'		  => $value,
+				'max_file_size' => $field->get_meta( 'max_file_size' ),
 			);
 
 			WPUM()->templates

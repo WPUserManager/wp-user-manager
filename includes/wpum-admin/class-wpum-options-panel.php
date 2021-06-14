@@ -229,7 +229,7 @@ class WPUM_Options_Panel {
 					'desc'     => __( 'Hide WordPress admin bar for specific user roles.', 'wp-user-manager' ),
 					'type'     => 'multiselect',
 					'multiple' => true,
-					'labels'   => array( 'placeholder' => __( 'Select one or more user roles from the list.', 'wp-user-manager' ) ),
+					'labels'   => array( 'placeholder' => __( 'Select one or more user roles', 'wp-user-manager' ) ),
 					'options'  => wpum_get_roles(),
 				),
 				array(
@@ -238,7 +238,7 @@ class WPUM_Options_Panel {
 					'desc'     => __( 'Restrict access to the WordPress dashboard for specific user roles. Administrators will always have access.', 'wp-user-manager' ),
 					'type'     => 'multiselect',
 					'multiple' => true,
-					'labels'   => array( 'placeholder' => __( 'Select one or more user roles from the list.', 'wp-user-manager' ) ),
+					'labels'   => array( 'placeholder' => __( 'Select one or more user roles', 'wp-user-manager' ) ),
 					'options'  => wpum_get_roles(),
 				),
 				array(
@@ -267,7 +267,7 @@ class WPUM_Options_Panel {
 					'desc'     => __( 'Select which roles can be selected upon registration.', 'wp-user-manager' ),
 					'type'     => 'multiselect',
 					'multiple' => true,
-					'labels'   => array( 'placeholder' => __( 'Select one or more user roles from the list.', 'wp-user-manager' ) ),
+					'labels'   => array( 'placeholder' => __( 'Select one or more user roles', 'wp-user-manager' ) ),
 					'options'  => wpum_get_roles(),
 					'toggle'   => array( 'key' => 'allow_role_select', 'value' => true ),
 				),
