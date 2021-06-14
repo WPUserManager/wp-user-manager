@@ -148,7 +148,7 @@ abstract class WPUM_Form {
 	 * @return string
 	 */
 	public function get_action() {
-		return esc_url_raw( $this->action ? $this->action : wp_unslash( $_SERVER['REQUEST_URI'] ) );
+		return apply_filters( 'wpum_form_action', esc_url_raw( $this->action ? $this->action : wp_unslash( $_SERVER['REQUEST_URI'] ) ), $this );
 	}
 
 	/**
