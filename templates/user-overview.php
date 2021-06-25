@@ -31,7 +31,9 @@ $user = wp_get_current_user();
 			</span>
 			<ul>
 				<li>
-					<a href="<?php echo get_permalink( wpum_get_core_page_id( 'account' ) ); ?>"><?php echo esc_html__( 'Edit account', 'wp-user-manager' ); ?></a>
+					<?php
+					$edit_account_text = apply_filters( 'wpun_profile_edit_account_text', 'Edit account', $user->data->ID ); ?>
+					<a href="<?php echo get_permalink( wpum_get_core_page_id( 'account' ) ); ?>"><?php echo esc_html( $edit_account_text ); ?></a>
 				</li>
 				<li>|</li>
 				<li>
