@@ -464,16 +464,17 @@ class WPUM_Registration_Forms_Editor {
 		}
 		$stored_settings_model = $form->get_settings_model();
 
-		foreach ( $settings_model as $key => $value ) {
+		foreach ( $stored_settings_model as $key => $stored_value ) {
 			if ( ! isset( $settings[ $key ] ) ) {
 				continue;
 			}
 
 			$setting = $settings[ $key ];
+			$value 	 = isset( $settings_model[$key] ) ? $settings_model[$key] : null;
 
 			$value = apply_filters( 'wpum_form_settings_sanitize_' . $setting['type'], $value );
 
-			if ( isset( $stored_settings_model[ $key ] ) && $value === $stored_settings_model[ $key ] ) {
+			if ( $value === $stored_value ) {
 				// Setting not changed
 				continue;
 			}
