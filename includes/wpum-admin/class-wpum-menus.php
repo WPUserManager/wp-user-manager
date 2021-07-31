@@ -113,6 +113,14 @@ class WPUM_Menus {
 		}
 	}
 
+	protected function is_nav_item_logout( $item ) {
+		if ( ! apply_filters( 'wpum_pre_is_nav_item_logout', true, $item ) ) {
+			return false;
+		}
+
+		return carbon_get_nav_menu_item_meta( $item->ID, 'convert_to_logout' );
+	}
+
 	/**
 	 * Modify a nav menu item url to a logout url if the option is enabled.
 	 *
@@ -123,7 +131,7 @@ class WPUM_Menus {
 	 */
 	public function set_nav_item_as_logout( $atts, $item, $args ) {
 
-		$is_logout = carbon_get_nav_menu_item_meta( $item->ID, 'convert_to_logout' );
+		$is_logout = $this->is_nav_item_logout( $item );
 
 		if ( $is_logout ) {
 			$atts['href'] = wp_logout_url();
@@ -148,7 +156,7 @@ class WPUM_Menus {
 
 			$status    = carbon_get_nav_menu_item_meta( $item->ID, 'link_visibility' );
 			$roles     = carbon_get_nav_menu_item_meta( $item->ID, 'link_roles' );
-			$is_logout = carbon_get_nav_menu_item_meta( $item->ID, 'convert_to_logout' );
+			$is_logout = $this->is_nav_item_logout( $item );
 			$visible   = true;
 
 			switch ( $status ) {
