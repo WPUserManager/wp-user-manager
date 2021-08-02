@@ -378,8 +378,8 @@ function wpum_register_profile_privacy_fields() {
 		define( 'IS_PROFILE_PAGE', ( $user_id == $current_user->ID ) );
 	}
 
-	$profileuser = get_user_by( 'id', $user_id );
-
+	$profileuser = isset( $user_id ) ? get_user_by( 'id', $user_id ) : false;
+	$existing_roles = ( $profileuser ) ? $profileuser->roles : [];
 
 	$fields = array(
 		Field::make( 'checkbox', 'hide_profile_guests', esc_html__( 'Hide profile from guests', 'wp-user-manager' ) )
@@ -388,10 +388,10 @@ function wpum_register_profile_privacy_fields() {
 			->set_help_text( esc_html__( 'Hide this profile from members. Overrides the global profile options.', 'wp-user-manager' ) ),
 	);
 
-	if ( $allow_multiple_roles && ! IS_PROFILE_PAGE && ! is_network_admin() && $profileuser && current_user_can( 'promote_user', $profileuser->ID )  ) {
+	if ( $allow_multiple_roles && ! IS_PROFILE_PAGE && ! is_network_admin() ) {
 		$fields[] = Field::make( 'multiselect', 'wpum_user_roles', '' )
 		->add_options( $roles )
-		->set_default_value( $profileuser->roles )
+		->set_default_value( $existing_roles )
 		->set_classes( 'wpum-multilple-user-roles' )
 		->set_help_text( esc_html__( 'Select one or more roles for this user.', 'wp-user-manager' ) );
 	}
