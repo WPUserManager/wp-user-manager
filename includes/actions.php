@@ -362,6 +362,7 @@ function wpum_finish_db_setup_after_plugin_init() {
 add_action( 'after_wpum_init', 'wpum_finish_db_setup_after_plugin_init' );
 
 function wpum_register_profile_privacy_fields() {
+	global $pagenow;
 
 	$roles = [];
 
@@ -374,10 +375,6 @@ function wpum_register_profile_privacy_fields() {
 	$user_id = isset( $_GET['user_id'] ) ? absint( $_GET['user_id'] ) : false;
 	$current_user = wp_get_current_user();
 
-	if ( ! defined( 'IS_PROFILE_PAGE' ) ) {
-		define( 'IS_PROFILE_PAGE', ( $user_id == $current_user->ID ) );
-	}
-
 	$profileuser = isset( $user_id ) ? get_user_by( 'id', $user_id ) : false;
 	$existing_roles = ( $profileuser ) ? $profileuser->roles : [];
 
@@ -388,7 +385,7 @@ function wpum_register_profile_privacy_fields() {
 			->set_help_text( esc_html__( 'Hide this profile from members. Overrides the global profile options.', 'wp-user-manager' ) ),
 	);
 
-	if ( $allow_multiple_roles && ! IS_PROFILE_PAGE && ! is_network_admin() ) {
+	if ( $allow_multiple_roles && ( $profileuser || $pagenow == 'user-new.php' ) && ! is_network_admin() ) {
 		$fields[] = Field::make( 'multiselect', 'wpum_user_roles', '' )
 		->add_options( $roles )
 		->set_default_value( $existing_roles )
