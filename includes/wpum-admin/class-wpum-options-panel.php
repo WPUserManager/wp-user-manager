@@ -253,6 +253,12 @@ class WPUM_Options_Panel {
 					'desc' => __( 'Enable the roles editor in the Users menu.', 'wp-user-manager' ),
 					'type' => 'checkbox'
 				),
+				array(
+					'id'   => 'allow_multiple_user_roles',
+					'name' => __( 'Allow Multiple Roles', 'wp-user-manager' ),
+					'desc' => __( 'Allow multiple user roles.', 'wp-user-manager' ),
+					'type' => 'checkbox'
+				),
 			],
 			'registration' => [
 				array(
