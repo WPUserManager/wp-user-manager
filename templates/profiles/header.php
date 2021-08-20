@@ -22,8 +22,10 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 	<div id="header-name-container">
 		<h2>
 			<?php echo esc_html( $data->user->display_name ); ?>
-			<?php if( $data->current_user_id === $data->user->ID ) : ?>
-				<a href="<?php echo esc_url( get_permalink( wpum_get_core_page_id( 'account' ) ) ); ?>"><small><?php esc_html_e( '( Edit account )', 'wp-user-manager' ); ?></small></a>
+			<?php if ( $data->current_user_id === $data->user->ID ) :
+				$edit_account_text = apply_filters( 'wpum_profile_edit_account_text', 'Edit account', $data->user->ID );
+				?>
+				<a href="<?php echo esc_url( get_permalink( wpum_get_core_page_id( 'account' ) ) ); ?>"><small><?php echo esc_html( $edit_account_text ); ?></small></a>
 			<?php endif; ?>
 		</h2>
 	</div>

@@ -39,6 +39,10 @@ class WPUM_Form_Password_Recovery extends WPUM_Form {
 		return self::$_instance;
 	}
 
+	public static function get_cookie() {
+		return 'wpum-resetpass-' . COOKIEHASH;
+	}
+
 	/**
 	 * Get things started.
 	 */
@@ -230,6 +234,7 @@ class WPUM_Form_Password_Recovery extends WPUM_Form {
 
 					$emails = new WPUM_Emails;
 					$emails->__set( 'user_id', $user->data->ID );
+					$emails->__set( 'user_login', $user->data->user_login );
 					$emails->__set( 'heading', $password_reset_email['title'] );
 					$emails->__set( 'password_reset_key', $password_reset_key );
 
@@ -292,24 +297,22 @@ class WPUM_Form_Password_Recovery extends WPUM_Form {
 
 		$this->init_fields();
 
-		// Grab all the details form the URL first.
-		$user_id          = isset( $_GET['user_id'] ) && ! empty( $_GET['user_id'] ) ? (int) $_GET['user_id'] : false;
-		$get_user         = get_user_by( 'id', $user_id );
-		$verification_key = isset( $_GET['key'] ) && ! empty( $_GET['key'] ) ? $_GET['key'] : false;
+		$cookie_key = self::get_cookie();
+		if ( isset( $_COOKIE[ $cookie_key ] ) && 0 < strpos( $_COOKIE[ $cookie_key  ], ':' ) ) {
+			list( $rp_login, $verification_key ) = explode( ':', wp_unslash( $_COOKIE[ $cookie_key  ] ), 2 );
 
-		// Verify the url is properly formatted and has correct information.
-		if( $user_id && $get_user instanceof WP_User && $verification_key ) {
+			$verify_key = check_password_reset_key( $verification_key, $rp_login );
 
-			$verify_key = check_password_reset_key( $verification_key, $get_user->data->user_login );
-
-			if( is_wp_error( $verify_key ) ) {
+			if ( is_wp_error( $verify_key ) ) {
 				$data = [
-					'message'  => esc_html__( 'The reset key is wrong or expired. Please check that you used the right reset link or request a new one.', 'wp-user-manager' ),
+					'message' => esc_html__( 'The reset key is wrong or expired. Please check that you used the right reset link or request a new one.', 'wp-user-manager' ),
 				];
 
-				WPUM()->templates
-					->set_template_data( $data )
-					->get_template_part( 'messages/general', 'error' );
+				list( $rp_path ) = explode( '?', wp_unslash( $_SERVER['REQUEST_URI'] ) );
+
+				setcookie( self::get_cookie(), ' ', time() - YEAR_IN_SECONDS, $rp_path, COOKIE_DOMAIN, is_ssl(), true );
+
+				WPUM()->templates->set_template_data( $data )->get_template_part( 'messages/general', 'error' );
 			} else {
 
 				$data = [
@@ -398,9 +401,25 @@ class WPUM_Form_Password_Recovery extends WPUM_Form {
 
 			$password_1 = $values['password']['password'];
 			$password_2 = $values['password']['password_2'];
-			$user_id    = isset( $_GET['user_id'] ) && ! empty( $_GET['user_id'] ) ? (int) $_GET['user_id'] : false;
+
+			$cookie_key = self::get_cookie();
+			if ( isset( $_COOKIE[ $cookie_key ] ) && 0 < strpos( $_COOKIE[ $cookie_key  ], ':' ) ) {
+				list( $rp_login, $verification_key ) = explode( ':', wp_unslash( $_COOKIE[ $cookie_key ] ), 2 );
+
+				$verify_key = check_password_reset_key( $verification_key, $rp_login );
+
+				if ( is_wp_error( $verify_key ) ) {
+					throw new Exception( $verify_key->get_error_message() );
+				}
+			}
+
+			$user_id = $verify_key->ID;
 
 			wp_set_password( $password_1, $user_id );
+
+			list( $rp_path ) = explode( '?', wp_unslash( $_SERVER['REQUEST_URI'] ) );
+
+			setcookie( self::get_cookie(), ' ', time() - YEAR_IN_SECONDS, $rp_path, COOKIE_DOMAIN, is_ssl(), true );
 
 			/**
 			 * Hook: allow developers to hook after the user recovers his password from the account page.

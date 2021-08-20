@@ -371,3 +371,30 @@ function wpum_register_profile_privacy_fields() {
 	         ) );
 }
 add_action( 'carbon_fields_register_fields', 'wpum_register_profile_privacy_fields' );
+
+add_action( 'template_redirect', 'wpum_reset_password_redirect' );
+function wpum_reset_password_redirect() {
+	if ( ! isset( $_GET['action'] ) || 'wpum-reset' !== $_GET['action'] ) {
+		return;
+	}
+
+	if ( is_user_logged_in() ) {
+		return;
+	}
+
+
+	if ( ! isset( $_GET['login'] ) || ! isset( $_GET['key'] ) ) {
+		return;
+	}
+
+	list( $rp_path ) = explode( '?', wp_unslash( $_SERVER['REQUEST_URI'] ) );
+
+	$value = sprintf( '%s:%s', wp_unslash( $_GET['login'] ), wp_unslash( $_GET['key'] ) );
+	setcookie( 'wpum-resetpass-' . COOKIEHASH, $value, 0, $rp_path, COOKIE_DOMAIN, is_ssl(), true );
+
+	$url = remove_query_arg( array( 'key', 'login', 'action' ) );
+	$url = add_query_arg( 'step', 'reset', $url );
+
+	wp_safe_redirect( $url );
+	exit;
+}

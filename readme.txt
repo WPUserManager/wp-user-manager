@@ -4,11 +4,11 @@ Plugin URI: https://wpusermanager.com
 Contributors: wpusermanager, polevaultweb, alessandro.tesoro
 Tags: members, membership, community, user profile, user registration
 Requires at least: 4.9
-Tested up to: 5.7
+Tested up to: 5.8
 Requires PHP: 5.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
-Stable Tag: 2.6.2
+Stable Tag: 2.6.3
 
 The most customizable profiles & community builder WordPress plugin with front-end login, registration, profile customization and content restriction.
 
@@ -125,6 +125,12 @@ Please note that using WPUM and the mentioned add-ons does NOT guarantee complia
 13. Login form.
 
 == Changelog ==
+
+= 2.6.3 (20th August 2021) =
+
+- Security Fix: Use cookie based flow for password recovery process to match WordPress core (props @stiofansisland)
+- Fix: WP_DB_Table class could be loaded by other plugins
+- Improvement: 'wpum_profile_edit_account_text' filter added for 'Edit account' string
 
 = 2.6.2 (14th June 2021) =
 

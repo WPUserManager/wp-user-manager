@@ -10,7 +10,7 @@
 // Exit if accessed directly
 if ( ! defined( 'ABSPATH' ) ) exit;
 
-if ( ! class_exists( 'WP_DB_Table' ) ) :
+if ( ! class_exists( 'WPUM_WP_DB_Table' ) ) :
 /**
  * A base WordPress database table class, which facilitates the creation of
  * and schema changes to individual database tables.
@@ -28,7 +28,7 @@ if ( ! class_exists( 'WP_DB_Table' ) ) :
  *
  * @since 1.1.0
  */
-abstract class WP_DB_Table {
+abstract class WPUM_WP_DB_Table {
 	/**
 	 * @var string Table name, without the global table prefix
 	 */
