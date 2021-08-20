@@ -28,7 +28,8 @@ function wpum_login_form( $atts, $content = null ) {
 				'psw_link'      => '',
 				'register_link' => '',
 			),
-			$atts
+			$atts,
+			'wpum_login_form'
 		)
 	);
 
