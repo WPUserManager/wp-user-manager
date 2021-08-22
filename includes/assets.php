@@ -29,6 +29,7 @@ function wpum_load_admin_scripts() {
 	wp_register_script( 'wpum-vue-vendor', WPUM_PLUGIN_URL . 'dist/static/js/vendor.js', array(), WPUM_VERSION, true );
 
 	if ( in_array( $screen->base, $allowed_screens ) ) {
+		wp_enqueue_script( 'wpum-settings', WPUM_PLUGIN_URL . 'assets/js/admin/settings.min.js', array(), WPUM_VERSION, true );
 		wp_enqueue_style( 'wpum-logo', WPUM_PLUGIN_URL . 'assets/css/admin/wpum-logo.css', array(), WPUM_VERSION );
 	}
 

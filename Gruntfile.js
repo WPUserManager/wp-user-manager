@@ -50,9 +50,9 @@ module.exports = function( grunt ) {
 				files: {
 					'assets/js/admin/tinymce/mce-plugin.min.js': ['assets/js/src/admin/tinymce/mce-plugin.js'],
 					'assets/js/admin/admin-shortcodes.min.js': ['assets/js/src/admin/admin-shortcodes.js'],
+					'assets/js/admin/settings.min.js': ['assets/js/src/admin/settings.js'],
 					'assets/js/admin/admin-email-customizer-preview.min.js': ['assets/js/src/admin/admin-email-customizer-preview.js'],
 					'assets/js/admin/admin-email-customizer-controls.min.js': ['assets/js/src/admin/admin-email-customizer-controls.js'],
-					'assets/js/admin/admin-email-customizer.min.js': ['assets/js/src/admin/admin-email-customizer.js'],
 					'assets/js/admin/admin-menus.min.js': ['assets/js/src/admin/admin-menus.js'],
 					'assets/js/admin/admin-upgrades.min.js': ['assets/js/src/admin/admin-upgrades.js'],
 					'assets/js/wp-user-manager.min.js': ['assets/js/src/wp-user-manager.js'],
