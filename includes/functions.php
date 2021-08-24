@@ -421,6 +421,7 @@ function wpum_send_registration_confirmation_email( $user_id, $psw = false, $pas
 
 	$emails = new WPUM_Emails();
 	$emails->__set( 'user_id', $user_id );
+	$emails->__set( 'user_login', $user->user_login );
 	$emails->__set( 'heading', $registration_confirmation_email['title'] );
 
 	if ( ! empty( $psw ) ) {
