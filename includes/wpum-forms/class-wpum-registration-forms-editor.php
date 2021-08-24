@@ -464,6 +464,12 @@ class WPUM_Registration_Forms_Editor {
 		}
 		$stored_settings_model = $form->get_settings_model();
 
+		$deleted_settings = array_diff_key( $stored_settings_model, $settings_model );
+
+		foreach ( $deleted_settings as $deleted_key => $deleted_setting ) {
+			$form->delete_meta( $deleted_key, '' );
+		}
+
 		foreach ( $settings_model as $key => $value ) {
 			if ( ! isset( $settings[ $key ] ) ) {
 				continue;
