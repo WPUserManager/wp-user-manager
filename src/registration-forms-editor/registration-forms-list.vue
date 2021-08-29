@@ -39,8 +39,8 @@
 						<strong>
 							<router-link :to="{ name: 'form', params: { id: form.id }}">{{form.name}}</router-link></strong><br>
 						<div class="row-actions">
-							<span>
-								<a href="#" @click="showEditFormDialog( form )" v-text="sanitized(labels.table_edit_form)"></a>
+							<span v-for="(action, key) in rowActions" :key="key">
+								<a href="#" @click="onRowActionClick( form, action.action )" v-text="sanitized( action.text )"></a>
 							</span>
 						</div>
 					</td>
@@ -80,6 +80,7 @@ import PremiumFormsDialog from './dialogs/dialog-premium'
 import CreateFormDialog from './dialogs/dialog-create-form'
 import removeFormByID from 'lodash.remove'
 import findFormIndex from 'lodash.findindex'
+import hooks from './../hooks'
 
 export default {
 	name: 'registration-forms-list',
@@ -97,6 +98,21 @@ export default {
 			messageStatus: 'success',
 			isAddonInstalled: wpumRegistrationFormsEditor.is_addon_installed,
 			messageText: wpumRegistrationFormsEditor.labels.success_message,
+		}
+	},
+	computed: {
+		rowActions(){
+			return hooks.applyFilters(
+				'wpumrfListRowActions',
+				[
+					{
+						text: this.labels.table_edit_form,
+						action: (form) => {
+							this.showEditFormDialog(form)
+						}
+					}
+				]
+			);
 		}
 	},
 	created() {
@@ -251,6 +267,9 @@ export default {
 			} else {
 				this.$modal.show( PremiumFormsDialog, {},{ height: '220px' })
 			}
+		},
+		onRowActionClick( form, action ) {
+			action( form, this )
 		}
 	}
 }
