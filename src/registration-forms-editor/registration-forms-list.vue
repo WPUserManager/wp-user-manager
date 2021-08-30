@@ -19,8 +19,8 @@
 			<thead>
 				<tr>
 					<th scope="col" class="column-primary">{{labels.table_name}}</th>
-					<th scope="col">{{labels.table_fields}}</th>
-					<th scope="col" :data-balloon="labels.table_default_tooltip" data-balloon-pos="left">{{labels.table_default}}</th>
+					<th scope="col" style="width: 50px;">{{labels.table_fields}}</th>
+					<th scope="col" style="width: 50px;" :data-balloon="labels.table_default_tooltip" data-balloon-pos="left">{{labels.table_default}}</th>
 					<th scope="col">{{labels.table_role}}</th>
 					<th scope="col" v-if="isAddonInstalled">{{labels.table_shortcode}}</th>
 					<th scope="col" v-if="isAddonInstalled">{{labels.table_signup_total}}</th>
