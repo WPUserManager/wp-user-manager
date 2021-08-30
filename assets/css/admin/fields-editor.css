@@ -55,14 +55,6 @@ body.users_page_wpum-registration-forms .wpum-roles-list .delete-btn,
 body.users_page_wpum-roles .wpum-registration-forms-list .delete-btn,
 body.users_page_wpum-roles .wpum-roles-list .delete-btn {
   margin-top: 5px; }
-body.users_page_wpum-custom-fields .wpum-registration-forms-list .row-actions > span:not(:first-child), body.users_page_wpum-custom-fields .wpum-roles-list .row-actions > span:not(:first-child),
-body.users_page_wpum-registration-forms .wpum-registration-forms-list .row-actions > span:not(:first-child),
-body.users_page_wpum-registration-forms .wpum-roles-list .row-actions > span:not(:first-child),
-body.users_page_wpum-roles .wpum-registration-forms-list .row-actions > span:not(:first-child),
-body.users_page_wpum-roles .wpum-roles-list .row-actions > span:not(:first-child) {
-  padding-left: 3px;
-  margin-left: 3px;
-  border-left: 2px solid currentColor; }
 body.users_page_wpum-custom-fields .wpum-fields-groups-table tbody tr:hover, body.users_page_wpum-custom-fields .wpum-registration-forms-table tbody tr:hover, body.users_page_wpum-custom-fields .wpum-roles-table tbody tr:hover,
 body.users_page_wpum-registration-forms .wpum-fields-groups-table tbody tr:hover,
 body.users_page_wpum-registration-forms .wpum-registration-forms-table tbody tr:hover,
@@ -78,7 +70,11 @@ body.users_page_wpum-registration-forms .wpum-roles-table .button,
 body.users_page_wpum-roles .wpum-fields-groups-table .button,
 body.users_page_wpum-roles .wpum-registration-forms-table .button,
 body.users_page_wpum-roles .wpum-roles-table .button {
-  margin: 3px 5px 3px 0; }
+  margin: 3px 5px 3px 0;
+  max-width: 100%;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis; }
   body.users_page_wpum-custom-fields .wpum-fields-groups-table .button:last-child, body.users_page_wpum-custom-fields .wpum-registration-forms-table .button:last-child, body.users_page_wpum-custom-fields .wpum-roles-table .button:last-child,
   body.users_page_wpum-registration-forms .wpum-fields-groups-table .button:last-child,
   body.users_page_wpum-registration-forms .wpum-registration-forms-table .button:last-child,
