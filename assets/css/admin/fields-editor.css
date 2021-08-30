@@ -4,8 +4,7 @@ body.users_page_wpum-roles .wp-heading-inline img {
   width: 26px;
   float: left;
   padding-right: 15px;
-  margin-top: -6px;
-}
+  margin-top: -6px; }
 body.users_page_wpum-custom-fields #wpum-add-field-group span.dashicons, body.users_page_wpum-custom-fields #wpum-add-form span.dashicons, body.users_page_wpum-custom-fields #wpum-add-role span.dashicons,
 body.users_page_wpum-registration-forms #wpum-add-field-group span.dashicons,
 body.users_page_wpum-registration-forms #wpum-add-form span.dashicons,
@@ -20,14 +19,12 @@ body.users_page_wpum-roles #wpum-add-role span.dashicons {
   position: relative;
   top: 3px;
   margin-right: 2px;
-  color: #0071a1;
-}
+  color: #0071a1; }
 body.users_page_wpum-custom-fields .wpum-icon-button.circular,
 body.users_page_wpum-registration-forms .wpum-icon-button.circular,
 body.users_page_wpum-roles .wpum-icon-button.circular {
   padding: 4px !important;
-  border-radius: 9999px !important;
-}
+  border-radius: 9999px !important; }
 body.users_page_wpum-custom-fields .wpum-icon-button span.dashicons,
 body.users_page_wpum-registration-forms .wpum-icon-button span.dashicons,
 body.users_page_wpum-roles .wpum-icon-button span.dashicons {
@@ -36,33 +33,28 @@ body.users_page_wpum-roles .wpum-icon-button span.dashicons {
   font-size: 16px;
   vertical-align: inherit;
   position: relative;
-  top: 3px;
-}
+  top: 3px; }
 body.users_page_wpum-custom-fields .order-column,
 body.users_page_wpum-registration-forms .order-column,
 body.users_page_wpum-roles .order-column {
   width: 30px;
   border-right: 1px solid #e1e1e1;
-  text-align: center !important;
-}
+  text-align: center !important; }
 body.users_page_wpum-custom-fields .order-anchor,
 body.users_page_wpum-registration-forms .order-anchor,
 body.users_page_wpum-roles .order-anchor {
   border-right: 1px solid #e1e1e1;
-  text-align: center !important;
-}
+  text-align: center !important; }
 body.users_page_wpum-custom-fields .small-column,
 body.users_page_wpum-registration-forms .small-column,
 body.users_page_wpum-roles .small-column {
-  width: 100px;
-}
+  width: 100px; }
 body.users_page_wpum-custom-fields .wpum-registration-forms-list .delete-btn, body.users_page_wpum-custom-fields .wpum-roles-list .delete-btn,
 body.users_page_wpum-registration-forms .wpum-registration-forms-list .delete-btn,
 body.users_page_wpum-registration-forms .wpum-roles-list .delete-btn,
 body.users_page_wpum-roles .wpum-registration-forms-list .delete-btn,
 body.users_page_wpum-roles .wpum-roles-list .delete-btn {
-  margin-top: 5px;
-}
+  margin-top: 5px; }
 body.users_page_wpum-custom-fields .wpum-fields-groups-table tbody tr:hover, body.users_page_wpum-custom-fields .wpum-registration-forms-table tbody tr:hover, body.users_page_wpum-custom-fields .wpum-roles-table tbody tr:hover,
 body.users_page_wpum-registration-forms .wpum-fields-groups-table tbody tr:hover,
 body.users_page_wpum-registration-forms .wpum-registration-forms-table tbody tr:hover,
@@ -70,8 +62,7 @@ body.users_page_wpum-registration-forms .wpum-roles-table tbody tr:hover,
 body.users_page_wpum-roles .wpum-fields-groups-table tbody tr:hover,
 body.users_page_wpum-roles .wpum-registration-forms-table tbody tr:hover,
 body.users_page_wpum-roles .wpum-roles-table tbody tr:hover {
-  background: #f5f5f5;
-}
+  background: #f5f5f5; }
 body.users_page_wpum-custom-fields .wpum-fields-groups-table .button, body.users_page_wpum-custom-fields .wpum-registration-forms-table .button, body.users_page_wpum-custom-fields .wpum-roles-table .button,
 body.users_page_wpum-registration-forms .wpum-fields-groups-table .button,
 body.users_page_wpum-registration-forms .wpum-registration-forms-table .button,
@@ -80,36 +71,36 @@ body.users_page_wpum-roles .wpum-fields-groups-table .button,
 body.users_page_wpum-roles .wpum-registration-forms-table .button,
 body.users_page_wpum-roles .wpum-roles-table .button {
   margin: 3px 5px 3px 0;
-}
-body.users_page_wpum-custom-fields .wpum-fields-groups-table .button:last-child, body.users_page_wpum-custom-fields .wpum-registration-forms-table .button:last-child, body.users_page_wpum-custom-fields .wpum-roles-table .button:last-child,
-body.users_page_wpum-registration-forms .wpum-fields-groups-table .button:last-child,
-body.users_page_wpum-registration-forms .wpum-registration-forms-table .button:last-child,
-body.users_page_wpum-registration-forms .wpum-roles-table .button:last-child,
-body.users_page_wpum-roles .wpum-fields-groups-table .button:last-child,
-body.users_page_wpum-roles .wpum-registration-forms-table .button:last-child,
-body.users_page_wpum-roles .wpum-roles-table .button:last-child {
-  margin-right: 0;
-}
-body.users_page_wpum-custom-fields .wpum-fields-groups-table .button span.dashicons, body.users_page_wpum-custom-fields .wpum-registration-forms-table .button span.dashicons, body.users_page_wpum-custom-fields .wpum-roles-table .button span.dashicons,
-body.users_page_wpum-registration-forms .wpum-fields-groups-table .button span.dashicons,
-body.users_page_wpum-registration-forms .wpum-registration-forms-table .button span.dashicons,
-body.users_page_wpum-registration-forms .wpum-roles-table .button span.dashicons,
-body.users_page_wpum-roles .wpum-fields-groups-table .button span.dashicons,
-body.users_page_wpum-roles .wpum-registration-forms-table .button span.dashicons,
-body.users_page_wpum-roles .wpum-roles-table .button span.dashicons {
-  position: relative;
-  top: 3px;
-  margin-right: 3px;
-}
-body.users_page_wpum-custom-fields .wpum-fields-groups-table .button.delete-btn:hover span.dashicons, body.users_page_wpum-custom-fields .wpum-registration-forms-table .button.delete-btn:hover span.dashicons, body.users_page_wpum-custom-fields .wpum-roles-table .button.delete-btn:hover span.dashicons,
-body.users_page_wpum-registration-forms .wpum-fields-groups-table .button.delete-btn:hover span.dashicons,
-body.users_page_wpum-registration-forms .wpum-registration-forms-table .button.delete-btn:hover span.dashicons,
-body.users_page_wpum-registration-forms .wpum-roles-table .button.delete-btn:hover span.dashicons,
-body.users_page_wpum-roles .wpum-fields-groups-table .button.delete-btn:hover span.dashicons,
-body.users_page_wpum-roles .wpum-registration-forms-table .button.delete-btn:hover span.dashicons,
-body.users_page_wpum-roles .wpum-roles-table .button.delete-btn:hover span.dashicons {
-  color: red;
-}
+  max-width: 100%;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis; }
+  body.users_page_wpum-custom-fields .wpum-fields-groups-table .button:last-child, body.users_page_wpum-custom-fields .wpum-registration-forms-table .button:last-child, body.users_page_wpum-custom-fields .wpum-roles-table .button:last-child,
+  body.users_page_wpum-registration-forms .wpum-fields-groups-table .button:last-child,
+  body.users_page_wpum-registration-forms .wpum-registration-forms-table .button:last-child,
+  body.users_page_wpum-registration-forms .wpum-roles-table .button:last-child,
+  body.users_page_wpum-roles .wpum-fields-groups-table .button:last-child,
+  body.users_page_wpum-roles .wpum-registration-forms-table .button:last-child,
+  body.users_page_wpum-roles .wpum-roles-table .button:last-child {
+    margin-right: 0; }
+  body.users_page_wpum-custom-fields .wpum-fields-groups-table .button span.dashicons, body.users_page_wpum-custom-fields .wpum-registration-forms-table .button span.dashicons, body.users_page_wpum-custom-fields .wpum-roles-table .button span.dashicons,
+  body.users_page_wpum-registration-forms .wpum-fields-groups-table .button span.dashicons,
+  body.users_page_wpum-registration-forms .wpum-registration-forms-table .button span.dashicons,
+  body.users_page_wpum-registration-forms .wpum-roles-table .button span.dashicons,
+  body.users_page_wpum-roles .wpum-fields-groups-table .button span.dashicons,
+  body.users_page_wpum-roles .wpum-registration-forms-table .button span.dashicons,
+  body.users_page_wpum-roles .wpum-roles-table .button span.dashicons {
+    position: relative;
+    top: 3px;
+    margin-right: 3px; }
+  body.users_page_wpum-custom-fields .wpum-fields-groups-table .button.delete-btn:hover span.dashicons, body.users_page_wpum-custom-fields .wpum-registration-forms-table .button.delete-btn:hover span.dashicons, body.users_page_wpum-custom-fields .wpum-roles-table .button.delete-btn:hover span.dashicons,
+  body.users_page_wpum-registration-forms .wpum-fields-groups-table .button.delete-btn:hover span.dashicons,
+  body.users_page_wpum-registration-forms .wpum-registration-forms-table .button.delete-btn:hover span.dashicons,
+  body.users_page_wpum-registration-forms .wpum-roles-table .button.delete-btn:hover span.dashicons,
+  body.users_page_wpum-roles .wpum-fields-groups-table .button.delete-btn:hover span.dashicons,
+  body.users_page_wpum-roles .wpum-registration-forms-table .button.delete-btn:hover span.dashicons,
+  body.users_page_wpum-roles .wpum-roles-table .button.delete-btn:hover span.dashicons {
+    color: red; }
 body.users_page_wpum-custom-fields .wpum-fields-groups-table .dashicons-yes, body.users_page_wpum-custom-fields .wpum-registration-forms-table .dashicons-yes, body.users_page_wpum-custom-fields .wpum-roles-table .dashicons-yes,
 body.users_page_wpum-registration-forms .wpum-fields-groups-table .dashicons-yes,
 body.users_page_wpum-registration-forms .wpum-registration-forms-table .dashicons-yes,
@@ -117,8 +108,7 @@ body.users_page_wpum-registration-forms .wpum-roles-table .dashicons-yes,
 body.users_page_wpum-roles .wpum-fields-groups-table .dashicons-yes,
 body.users_page_wpum-roles .wpum-registration-forms-table .dashicons-yes,
 body.users_page_wpum-roles .wpum-roles-table .dashicons-yes {
-  color: green;
-}
+  color: green; }
 body.users_page_wpum-custom-fields .wpum-fields-groups-table .align-middle, body.users_page_wpum-custom-fields .wpum-registration-forms-table .align-middle, body.users_page_wpum-custom-fields .wpum-roles-table .align-middle,
 body.users_page_wpum-registration-forms .wpum-fields-groups-table .align-middle,
 body.users_page_wpum-registration-forms .wpum-registration-forms-table .align-middle,
@@ -126,8 +116,7 @@ body.users_page_wpum-registration-forms .wpum-roles-table .align-middle,
 body.users_page_wpum-roles .wpum-fields-groups-table .align-middle,
 body.users_page_wpum-roles .wpum-registration-forms-table .align-middle,
 body.users_page_wpum-roles .wpum-roles-table .align-middle {
-  vertical-align: middle;
-}
+  vertical-align: middle; }
 body.users_page_wpum-custom-fields .wpum-fields-groups-table td, body.users_page_wpum-custom-fields .wpum-registration-forms-table td, body.users_page_wpum-custom-fields .wpum-roles-table td,
 body.users_page_wpum-registration-forms .wpum-fields-groups-table td,
 body.users_page_wpum-registration-forms .wpum-registration-forms-table td,
@@ -136,8 +125,7 @@ body.users_page_wpum-roles .wpum-fields-groups-table td,
 body.users_page_wpum-roles .wpum-registration-forms-table td,
 body.users_page_wpum-roles .wpum-roles-table td {
   vertical-align: middle;
-  padding: 12px 10px;
-}
+  padding: 12px 10px; }
 body.users_page_wpum-custom-fields .wpum-fields-groups-table .spinner, body.users_page_wpum-custom-fields .wpum-registration-forms-table .spinner, body.users_page_wpum-custom-fields .wpum-roles-table .spinner,
 body.users_page_wpum-registration-forms .wpum-fields-groups-table .spinner,
 body.users_page_wpum-registration-forms .wpum-registration-forms-table .spinner,
@@ -146,55 +134,46 @@ body.users_page_wpum-roles .wpum-fields-groups-table .spinner,
 body.users_page_wpum-roles .wpum-registration-forms-table .spinner,
 body.users_page_wpum-roles .wpum-roles-table .spinner {
   margin: 0;
-  float: none !important;
-}
+  float: none !important; }
 body.users_page_wpum-custom-fields #wpum-fields-editor-wrapper .vue-wp-notice,
 body.users_page_wpum-registration-forms #wpum-fields-editor-wrapper .vue-wp-notice,
 body.users_page_wpum-roles #wpum-fields-editor-wrapper .vue-wp-notice {
   margin-right: 0;
-  margin-bottom: 20px;
-}
+  margin-bottom: 20px; }
 body.users_page_wpum-custom-fields .sortable-ghost,
 body.users_page_wpum-registration-forms .sortable-ghost,
 body.users_page_wpum-roles .sortable-ghost {
-  background: #fffecc;
-}
+  background: #fffecc; }
 body.users_page_wpum-custom-fields .sortable-chosen,
 body.users_page_wpum-registration-forms .sortable-chosen,
 body.users_page_wpum-roles .sortable-chosen {
-  background: #fffecc;
-}
+  background: #fffecc; }
 body.users_page_wpum-custom-fields .spinner,
 body.users_page_wpum-registration-forms .spinner,
 body.users_page_wpum-roles .spinner {
   float: none;
-  margin-top: -8px;
-}
+  margin-top: -8px; }
 body.users_page_wpum-custom-fields .dashicons-menu:hover,
 body.users_page_wpum-registration-forms .dashicons-menu:hover,
 body.users_page_wpum-roles .dashicons-menu:hover {
   cursor: move;
-  color: #0073aa;
-}
+  color: #0073aa; }
 body.users_page_wpum-custom-fields .v--modal-overlay,
 body.users_page_wpum-registration-forms .v--modal-overlay,
 body.users_page_wpum-roles .v--modal-overlay {
   background: rgba(0, 0, 0, 0.7);
-  z-index: 99999;
-}
+  z-index: 99999; }
 body.users_page_wpum-custom-fields .v--modal,
 body.users_page_wpum-registration-forms .v--modal,
 body.users_page_wpum-roles .v--modal {
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.7);
   background: #fcfcfc;
-  border-radius: 0;
-}
+  border-radius: 0; }
 body.users_page_wpum-custom-fields .media-modal-content,
 body.users_page_wpum-registration-forms .media-modal-content,
 body.users_page_wpum-roles .media-modal-content {
   min-height: initial;
-  background: #efefef;
-}
+  background: #efefef; }
 body.users_page_wpum-custom-fields .media-frame-title,
 body.users_page_wpum-custom-fields .media-frame-content,
 body.users_page_wpum-custom-fields .media-frame-toolbar,
@@ -204,224 +183,182 @@ body.users_page_wpum-registration-forms .media-frame-toolbar,
 body.users_page_wpum-roles .media-frame-title,
 body.users_page_wpum-roles .media-frame-content,
 body.users_page_wpum-roles .media-frame-toolbar {
-  left: 0;
-}
+  left: 0; }
 body.users_page_wpum-custom-fields .media-frame-title .dashicons,
 body.users_page_wpum-registration-forms .media-frame-title .dashicons,
 body.users_page_wpum-roles .media-frame-title .dashicons {
   display: inline-block;
   margin-top: 16px;
-  margin-right: 10px;
-}
-body.users_page_wpum-custom-fields .media-frame-title .dashicons.dashicons-warning,
-body.users_page_wpum-registration-forms .media-frame-title .dashicons.dashicons-warning,
-body.users_page_wpum-roles .media-frame-title .dashicons.dashicons-warning {
-  color: green;
-}
+  margin-right: 10px; }
+  body.users_page_wpum-custom-fields .media-frame-title .dashicons.dashicons-warning,
+  body.users_page_wpum-registration-forms .media-frame-title .dashicons.dashicons-warning,
+  body.users_page_wpum-roles .media-frame-title .dashicons.dashicons-warning {
+    color: green; }
 body.users_page_wpum-custom-fields .media-frame-content,
 body.users_page_wpum-registration-forms .media-frame-content,
 body.users_page_wpum-roles .media-frame-content {
   top: 50px;
   padding: 10px 16px;
   font-size: 13px;
-  line-height: 1.6em;
-}
+  line-height: 1.6em; }
 body.users_page_wpum-custom-fields .wpum-dialog .spinner,
 body.users_page_wpum-registration-forms .wpum-dialog .spinner,
 body.users_page_wpum-roles .wpum-dialog .spinner {
   float: none;
-  margin-top: 20px !important;
-}
+  margin-top: 20px !important; }
 body.users_page_wpum-custom-fields .dialog-form,
 body.users_page_wpum-registration-forms .dialog-form,
 body.users_page_wpum-roles .dialog-form {
-  padding-top: 10px;
-}
-body.users_page_wpum-custom-fields .dialog-form label,
-body.users_page_wpum-registration-forms .dialog-form label,
-body.users_page_wpum-roles .dialog-form label {
-  display: inline-block;
-  font-weight: bold;
-  color: #000;
-  margin-bottom: 5px;
-}
-body.users_page_wpum-custom-fields .dialog-form input,
-body.users_page_wpum-custom-fields .dialog-form textarea,
-body.users_page_wpum-registration-forms .dialog-form input,
-body.users_page_wpum-registration-forms .dialog-form textarea,
-body.users_page_wpum-roles .dialog-form input,
-body.users_page_wpum-roles .dialog-form textarea {
-  display: block;
-  width: 100%;
-  margin-bottom: 15px;
-  font-size: 13px !important;
-}
-body.users_page_wpum-custom-fields .dialog-form input:last-child,
-body.users_page_wpum-custom-fields .dialog-form textarea:last-child,
-body.users_page_wpum-registration-forms .dialog-form input:last-child,
-body.users_page_wpum-registration-forms .dialog-form textarea:last-child,
-body.users_page_wpum-roles .dialog-form input:last-child,
-body.users_page_wpum-roles .dialog-form textarea:last-child {
-  margin-bottom: 0;
-}
+  padding-top: 10px; }
+  body.users_page_wpum-custom-fields .dialog-form label,
+  body.users_page_wpum-registration-forms .dialog-form label,
+  body.users_page_wpum-roles .dialog-form label {
+    display: inline-block;
+    font-weight: bold;
+    color: #000;
+    margin-bottom: 5px; }
+  body.users_page_wpum-custom-fields .dialog-form input,
+  body.users_page_wpum-custom-fields .dialog-form textarea,
+  body.users_page_wpum-registration-forms .dialog-form input,
+  body.users_page_wpum-registration-forms .dialog-form textarea,
+  body.users_page_wpum-roles .dialog-form input,
+  body.users_page_wpum-roles .dialog-form textarea {
+    display: block;
+    width: 100%;
+    margin-bottom: 15px;
+    font-size: 13px !important; }
+    body.users_page_wpum-custom-fields .dialog-form input:last-child,
+    body.users_page_wpum-custom-fields .dialog-form textarea:last-child,
+    body.users_page_wpum-registration-forms .dialog-form input:last-child,
+    body.users_page_wpum-registration-forms .dialog-form textarea:last-child,
+    body.users_page_wpum-roles .dialog-form input:last-child,
+    body.users_page_wpum-roles .dialog-form textarea:last-child {
+      margin-bottom: 0; }
 body.users_page_wpum-custom-fields #wpum-fields-editor-list .vue-wp-notice,
 body.users_page_wpum-registration-forms #wpum-fields-editor-list .vue-wp-notice,
 body.users_page_wpum-roles #wpum-fields-editor-list .vue-wp-notice {
   margin-right: 0 !important;
-  margin-top: 20px;
-}
+  margin-top: 20px; }
 
 #create-field-dialog .media-frame-router {
-  left: 10px;
-}
+  left: 10px; }
 #create-field-dialog .media-frame-content {
   top: 84px;
-  padding: 0;
-}
+  padding: 0; }
 #create-field-dialog .media-router a:hover {
-  cursor: pointer;
-}
+  cursor: pointer; }
 #create-field-dialog form {
   padding: 20px 15px;
-  border-bottom: 1px solid #ddd;
-}
-#create-field-dialog form label {
-  display: block;
-  font-weight: 500;
-  margin-bottom: 0.5em;
-  font-size: 18px;
-}
-#create-field-dialog form input {
-  padding: 3px 8px;
-  font-size: 1.7em;
-  line-height: 100%;
-  height: 1.7em;
-  width: 100%;
-  outline: 0;
-  margin: 0 0 3px;
-  background-color: #fff;
-}
+  border-bottom: 1px solid #ddd; }
+  #create-field-dialog form label {
+    display: block;
+    font-weight: 500;
+    margin-bottom: 0.5em;
+    font-size: 18px; }
+  #create-field-dialog form input {
+    padding: 3px 8px;
+    font-size: 1.7em;
+    line-height: 100%;
+    height: 1.7em;
+    width: 100%;
+    outline: 0;
+    margin: 0 0 3px;
+    background-color: #fff; }
 #create-field-dialog ul.attachments {
-  padding: 20px 10px;
-}
-#create-field-dialog ul.attachments .attachment {
-  width: 16.6%;
-  padding: 10px;
-}
-#create-field-dialog ul.attachments .dashicons {
-  font-size: 48px;
-  height: 48px;
-  width: 48px;
-  margin-top: -20px;
-}
-#create-field-dialog ul.attachments .check:hover .media-modal-icon {
-  background-position: -21px 0;
-}
-#create-field-dialog ul.attachments .locked-type {
-  position: absolute;
-  top: 0;
-  right: 0;
-}
-#create-field-dialog ul.attachments .locked-type span {
-  margin-top: 20px;
-  height: 20px;
-  width: 20px;
-  font-size: 30px;
-  margin-right: 25px;
-  color: #016afe;
-}
+  padding: 20px 10px; }
+  #create-field-dialog ul.attachments .attachment {
+    width: 16.6%;
+    padding: 10px; }
+  #create-field-dialog ul.attachments .dashicons {
+    font-size: 48px;
+    height: 48px;
+    width: 48px;
+    margin-top: -20px; }
+  #create-field-dialog ul.attachments .check:hover .media-modal-icon {
+    background-position: -21px 0; }
+  #create-field-dialog ul.attachments .locked-type {
+    position: absolute;
+    top: 0;
+    right: 0; }
+    #create-field-dialog ul.attachments .locked-type span {
+      margin-top: 20px;
+      height: 20px;
+      width: 20px;
+      font-size: 30px;
+      margin-right: 25px;
+      color: #016afe; }
 #create-field-dialog button:disabled {
-  cursor: not-allowed;
-}
+  cursor: not-allowed; }
 
 .table-fixed {
   display: table;
   height: 100%;
   table-layout: fixed;
-  width: 100%;
-}
-.table-fixed .table-cell {
-  display: table-cell;
-  height: 100%;
-  text-align: center;
-  vertical-align: middle;
-  width: 100%;
-}
+  width: 100%; }
+  .table-fixed .table-cell {
+    display: table-cell;
+    height: 100%;
+    text-align: center;
+    vertical-align: middle;
+    width: 100%; }
 
 #edit-field-dialog.media-modal-content {
-  background: #f3f3f3;
-}
+  background: #f3f3f3; }
 #edit-field-dialog .media-frame-title,
 #edit-field-dialog .media-frame-content {
   left: 200px;
-  padding: 0;
-}
-#edit-field-dialog .media-frame-title .spinner,
-#edit-field-dialog .media-frame-content .spinner {
-  margin-left: 20px;
-}
-#edit-field-dialog .media-frame-title .vue-wp-notice,
-#edit-field-dialog .media-frame-content .vue-wp-notice {
-  margin-top: 0 !important;
-}
+  padding: 0; }
+  #edit-field-dialog .media-frame-title .spinner,
+  #edit-field-dialog .media-frame-content .spinner {
+    margin-left: 20px; }
+  #edit-field-dialog .media-frame-title .vue-wp-notice,
+  #edit-field-dialog .media-frame-content .vue-wp-notice {
+    margin-top: 0 !important; }
 #edit-field-dialog .vue-form-generator .form-group {
   padding: 20px 20px;
-  border-bottom: 1px solid #f3f3f3;
-}
-#edit-field-dialog .vue-form-generator .form-group label {
-  display: block;
-  font-weight: 600;
-  margin-bottom: 0.4em;
-}
-#edit-field-dialog .vue-form-generator .form-group input[type=text],
-#edit-field-dialog .vue-form-generator .form-group textarea {
-  box-sizing: border-box;
-  width: 100%;
-  font-size: 13px;
-}
-#edit-field-dialog .vue-form-generator .form-group select {
-  width: 100%;
-  height: 30px;
-  font-size: 13px;
-}
-#edit-field-dialog .vue-form-generator .form-group select option:first-child {
-  display: none;
-}
-#edit-field-dialog .vue-form-generator .form-group.field-checkbox .field-wrap {
-  float: left;
-}
-#edit-field-dialog .vue-form-generator .form-group .hint {
-  font-size: 12px;
-  color: #717171;
-}
-#edit-field-dialog .vue-form-generator .form-group.error {
-  margin: 0;
-  border: none;
-  border-bottom: 1px solid #f3f3f3;
-  box-shadow: none;
-}
-#edit-field-dialog .vue-form-generator .form-group .errors {
-  background: #fbeaea;
-  border-left: 4px solid #dc3232;
-  margin: 5px 0px 2px 0;
-  padding: 1px 12px;
-}
-#edit-field-dialog .vue-form-generator .form-group .errors span {
-  display: block;
-  margin: 0.5em 0;
-  padding: 2px;
-  font-weight: bold;
-}
+  border-bottom: 1px solid #f3f3f3; }
+  #edit-field-dialog .vue-form-generator .form-group label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 0.4em; }
+  #edit-field-dialog .vue-form-generator .form-group input[type="text"],
+  #edit-field-dialog .vue-form-generator .form-group textarea {
+    box-sizing: border-box;
+    width: 100%;
+    font-size: 13px; }
+  #edit-field-dialog .vue-form-generator .form-group select {
+    width: 100%;
+    height: 30px;
+    font-size: 13px; }
+    #edit-field-dialog .vue-form-generator .form-group select option:first-child {
+      display: none; }
+  #edit-field-dialog .vue-form-generator .form-group.field-checkbox .field-wrap {
+    float: left; }
+  #edit-field-dialog .vue-form-generator .form-group .hint {
+    font-size: 12px;
+    color: #717171; }
+  #edit-field-dialog .vue-form-generator .form-group.error {
+    margin: 0;
+    border: none;
+    border-bottom: 1px solid #f3f3f3;
+    box-shadow: none; }
+  #edit-field-dialog .vue-form-generator .form-group .errors {
+    background: #fbeaea;
+    border-left: 4px solid #dc3232;
+    margin: 5px 0px 2px 0;
+    padding: 1px 12px; }
+    #edit-field-dialog .vue-form-generator .form-group .errors span {
+      display: block;
+      margin: 0.5em 0;
+      padding: 2px;
+      font-weight: bold; }
 
 .wpum-registration-forms-list .spinner {
-  margin: 0 !important;
-}
+  margin: 0 !important; }
 .wpum-registration-forms-list table .dashicons {
-  color: #00be28;
-}
+  color: #00be28; }
 .wpum-registration-forms-list table .button .dashicons {
-  color: #0071a1;
-}
+  color: #0071a1; }
 
 .wpum-registration-form h3 .dashicons {
   width: 15px;
@@ -429,16 +366,13 @@ body.users_page_wpum-roles #wpum-fields-editor-list .vue-wp-notice {
   margin-right: 10px;
   display: inline-block;
   font-size: 18px;
-  vertical-align: bottom;
-}
+  vertical-align: bottom; }
 
 .wpum-role-wrapper {
-  margin: 1rem 0;
-}
+  margin: 1rem 0; }
 
 .wpum-roles-table .col-stat, .wpum-roles-table .col-default {
-  width: 100px;
-}
+  width: 100px; }
 
 .wpum-role-caps-wrapper {
   display: flex;
@@ -446,150 +380,117 @@ body.users_page_wpum-roles #wpum-fields-editor-list .vue-wp-notice {
   flex-wrap: nowrap;
   justify-content: normal;
   align-items: normal;
-  align-content: normal;
-}
-.wpum-role-caps-wrapper ul {
-  display: block;
-  flex-grow: 0;
-  flex-shrink: 1;
-  flex-basis: auto;
-  align-self: auto;
-  order: 0;
-  margin: 0;
-}
-.wpum-role-caps-wrapper ul li {
-  padding: 0.5rem 1rem;
-  border: 1px solid #ccd0d4;
-  border-right: none;
-  margin: 0;
-  border-bottom: none;
-}
-.wpum-role-caps-wrapper ul li:last-child {
-  border-bottom: 1px solid #ccd0d4;
-}
-.wpum-role-caps-wrapper ul li.active, .wpum-role-caps-wrapper ul li:hover {
-  background: #fff;
-  cursor: pointer;
-}
-.wpum-role-caps-wrapper ul li a {
-  text-decoration: none;
-}
-.wpum-role-caps-wrapper ul li a:focus {
-  box-shadow: none;
-  outline: none;
-}
-.wpum-role-caps-wrapper ul li a span.label {
-  font-size: 14px;
-  padding-left: 10px;
-}
-.wpum-role-caps-wrapper .wpum-caps {
-  display: block;
-  flex-grow: 1;
-  flex-shrink: 1;
-  flex-basis: auto;
-  align-self: auto;
-  order: 0;
-  background: #fff;
-  border: 1px solid #ccd0d4;
-}
-.wpum-role-caps-wrapper .wpum-caps .wp-list-table {
-  border: none;
-  border-bottom: 1px solid #ccd0d4;
-}
-.wpum-role-caps-wrapper .wpum-caps .widefat th {
-  padding: 8px 16px 9px;
-  font-weight: bold;
-}
-.wpum-role-caps-wrapper .wpum-caps .widefat td {
-  padding: 12px 16px;
-}
-.wpum-role-caps-wrapper .wpum-caps .button {
-  margin: 1rem;
-}
+  align-content: normal; }
+  .wpum-role-caps-wrapper ul {
+    display: block;
+    flex-grow: 0;
+    flex-shrink: 1;
+    flex-basis: auto;
+    align-self: auto;
+    order: 0;
+    margin: 0; }
+    .wpum-role-caps-wrapper ul li {
+      padding: 0.5rem 1rem;
+      border: 1px solid #ccd0d4;
+      border-right: none;
+      margin: 0;
+      border-bottom: none; }
+      .wpum-role-caps-wrapper ul li:last-child {
+        border-bottom: 1px solid #ccd0d4; }
+      .wpum-role-caps-wrapper ul li.active, .wpum-role-caps-wrapper ul li:hover {
+        background: #fff;
+        cursor: pointer; }
+      .wpum-role-caps-wrapper ul li a {
+        text-decoration: none; }
+        .wpum-role-caps-wrapper ul li a:focus {
+          box-shadow: none;
+          outline: none; }
+        .wpum-role-caps-wrapper ul li a span.label {
+          font-size: 14px;
+          padding-left: 10px; }
+  .wpum-role-caps-wrapper .wpum-caps {
+    display: block;
+    flex-grow: 1;
+    flex-shrink: 1;
+    flex-basis: auto;
+    align-self: auto;
+    order: 0;
+    background: #fff;
+    border: 1px solid #ccd0d4; }
+    .wpum-role-caps-wrapper .wpum-caps .wp-list-table {
+      border: none;
+      border-bottom: 1px solid #ccd0d4; }
+    .wpum-role-caps-wrapper .wpum-caps .widefat th {
+      padding: 8px 16px 9px;
+      font-weight: bold; }
+    .wpum-role-caps-wrapper .wpum-caps .widefat td {
+      padding: 12px 16px; }
+    .wpum-role-caps-wrapper .wpum-caps .button {
+      margin: 1rem; }
 
 .cap-counts {
   float: right;
   font-size: 16px;
   font-weight: bold;
-  line-height: 3rem;
-}
+  line-height: 3rem; }
 
 .dragArea {
-  min-height: 50px;
-}
+  min-height: 50px; }
 
 .droppable-fields {
   min-height: 50px;
   border: 2px dashed #eee;
-  padding: 20px;
-}
+  padding: 20px; }
 
 .available-fields-holder {
   height: 400px;
   overflow: hidden;
   overflow-y: visible;
   padding: 20px;
-  border: 2px dashed #ccc;
-}
+  border: 2px dashed #ccc; }
 
 .empty-fields {
-  margin: 20px;
-}
+  margin: 20px; }
 
 .widgets-holder-wrap .vue-wp-notice {
   margin: 0;
-  font-weight: bold;
-}
+  font-weight: bold; }
 .widgets-holder-wrap .settings-wrapper {
-  padding: 0 8px;
-}
-.widgets-holder-wrap .settings-wrapper label {
-  display: block;
-  font-weight: 600;
-  margin-bottom: 0.3em;
-}
-.widgets-holder-wrap .settings-wrapper select {
-  width: 100%;
-}
+  padding: 0 8px; }
+  .widgets-holder-wrap .settings-wrapper label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 0.3em; }
+  .widgets-holder-wrap .settings-wrapper select {
+    width: 100%; }
 .widgets-holder-wrap #publishing-action .spinner {
-  margin-top: 5px;
-}
+  margin-top: 5px; }
 
 body.users_page_wpum-registration-forms .wpum-registration-form .widget-liquid-right {
-  width: 38%;
-}
+  width: 38%; }
 body.users_page_wpum-registration-forms .wpum-registration-form .widget-liquid-left {
-  width: 58%;
-}
+  width: 58%; }
 body.users_page_wpum-registration-forms .wpum-registration-form .optionskit-form-wrapper {
-  padding: 0;
-}
+  padding: 0; }
 body.users_page_wpum-registration-forms .wpum-registration-form #optionskit-navigation {
   margin: 0 0 0 -22px;
-  width: calc(100% + 42px);
-}
+  width: calc(100% + 42px); }
 body.users_page_wpum-registration-forms .wpum-registration-form .optionskit-navigation-wrapper {
-  margin: 20px 0;
-}
+  margin: 20px 0; }
 body.users_page_wpum-registration-forms .wpum-registration-form #optionskit-navigation a.router-link-active {
   color: inherit;
-  border: none;
-}
+  border: none; }
 body.users_page_wpum-registration-forms .wpum-registration-form #optionskit-navigation a.router-link-exact-active {
   box-shadow: none;
   border-bottom: 4px solid #0085ba;
-  color: #0085ba;
-}
+  color: #0085ba; }
 body.users_page_wpum-registration-forms .registration-form-settings .registration-form-setting {
-  margin-bottom: 10px;
-}
-body.users_page_wpum-registration-forms .registration-form-settings .registration-form-setting .formit-checkbox-wrapper {
-  width: 20px;
-  float: left;
-  margin: 5px 10px 0 0;
-}
-body.users_page_wpum-registration-forms .registration-form-settings .registration-form-setting p.description {
-  padding-bottom: 0;
-}
+  margin-bottom: 10px; }
+  body.users_page_wpum-registration-forms .registration-form-settings .registration-form-setting .formit-checkbox-wrapper {
+    width: 20px;
+    float: left;
+    margin: 5px 10px 0 0; }
+  body.users_page_wpum-registration-forms .registration-form-settings .registration-form-setting p.description {
+    padding-bottom: 0; }
 
 /*# sourceMappingURL=fields-editor.css.map */
