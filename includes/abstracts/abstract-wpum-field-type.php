@@ -223,6 +223,15 @@ abstract class WPUM_Field_Type {
 					'model'   => 'read_only',
 					'default' => false,
 					'hint'    => esc_html__( 'Enable to prevent users from editing this field. Note: if the profile editing option is set to publicly editable, the field will still be visible within the account page but will not be customizable.', 'wp-user-manager' ),
+				),
+				'roles' => array(
+					'type' => 'multiselect',
+					'label' => esc_html__( 'Roles', 'wp-user-manager' ),
+					'model' => 'roles',
+					'default' => array(),
+					'options' => wpum_get_roles( true ),
+					'multiple' => true,
+					'hint' => esc_html__( 'Show the fields only for selected users', 'wp-user-manager' )
 				)
 			]
 		];
