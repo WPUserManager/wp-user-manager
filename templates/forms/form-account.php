@@ -45,6 +45,16 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 			<?php foreach ( $data->fields as $key => $field ) : ?>
 
 				<?php
+					// Check if user has atleast one selected role
+					$user          = wp_get_current_user();
+					$is_renderable = ! ( is_array( $field['roles'] ) && count( $field['roles'] ) && !count( array_intersect( $user->roles, $field['roles'] ) ) );
+
+					if( ! apply_filters( 'wpum_account_form_field_can_render', $is_renderable, $field, $data ) ){
+						continue;
+					}
+				?>
+
+				<?php
 				// Parent field should handle the child field rendering
 				if( in_array( $field['type'], wpum_get_registered_parent_field_types() ) ){
 

@@ -187,6 +187,7 @@ class WPUM_Form_Profile extends WPUM_Form {
 					'value'         => $this->get_user_field_value( $this->user, $field ),
 					'priority'      => $priority,
 					'template'      => $field->get_parent_type(),
+					'roles'         => $field->get_meta( 'roles' )
 				);
 
 				$data = array_merge( $data, $field->get_field_data() );

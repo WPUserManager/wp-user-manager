@@ -229,7 +229,7 @@ abstract class WPUM_Field_Type {
 					'label' => esc_html__( 'Roles', 'wp-user-manager' ),
 					'model' => 'roles',
 					'default' => array(),
-					'options' => wpum_get_roles( true ),
+					'options' => wpum_get_roles( true, true ),
 					'multiple' => true,
 					'hint' => esc_html__( 'Show the fields only for selected users', 'wp-user-manager' )
 				)
