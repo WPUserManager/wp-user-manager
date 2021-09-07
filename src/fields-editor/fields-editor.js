@@ -5,12 +5,16 @@ import App from './app'
 import router from './router'
 import WPNotice from 'vue-wp-notice'
 import VModal from 'vue-js-modal'
+
 import FieldRepeater from './settings/field-type-repeater'
 import {Bootstrap} from './../bootstrap'
 
-Vue.component('field-repeater', FieldRepeater)
+import MultiselectField from "./components/multiselect.vue"
+
 Vue.use(WPNotice)
 Vue.use(VModal, { dialog: true, dynamic: true })
+Vue.component('fieldMultiselect', MultiselectField)
+Vue.component('field-repeater', FieldRepeater)
 
 Vue.config.productionTip = false
 

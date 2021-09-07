@@ -662,6 +662,9 @@ class WPUM_Fields_Editor {
 							case 'checkbox':
 								$setting_data = $setting_data === 'true' ? true : false;
 								break;
+							case 'multiselect':
+								$setting_data = apply_filters( 'wpum_form_settings_sanitize_' . $setting_type, $setting_data );
+								break;
 							default:
 								$setting_data = sanitize_text_field( $setting_data );
 								break;

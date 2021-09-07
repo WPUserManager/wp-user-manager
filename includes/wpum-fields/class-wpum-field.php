@@ -394,7 +394,8 @@ class WPUM_Field {
 	}
 
 	public function get_parent_type() {
-		return $this->field_type->template();
+		$template = apply_filters( 'wpum_get_field_template', $this->field_type->template(), $this );
+		return $template;
 	}
 
 	/**

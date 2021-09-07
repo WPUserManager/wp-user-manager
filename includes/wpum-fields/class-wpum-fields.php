@@ -66,6 +66,7 @@ class WPUM_Fields {
 			'hidden',
 			'taxonomy',
 			'user',
+			'userrole'
 		] );
 
 		foreach ( $fields as $field ) {

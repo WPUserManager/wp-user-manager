@@ -63,7 +63,69 @@
 	</div>
 </template>
 
-<style lang="scss" scoped>
+<style lang="scss">
+@import "vue-multiselect/dist/vue-multiselect.min.css";
+
+.opk-form table {
+    .multiselect__tags {
+        color: #555;
+        border-color: #ccc;
+        background: #f7f7f7;
+        box-shadow: 0 1px 0 #ccc;
+        border-radius: 3px;
+        &:hover {
+            border-color: #999;
+        }
+    }
+    .multiselect__input {
+        border:none;
+        background: transparent;
+        box-shadow: none;
+        padding: 0;
+    }
+    .opk-multiselect-field-wrapper {
+        display: block;
+        width: 25em;
+    }
+    .multiselect__content-wrapper {
+        box-shadow: 0 3px 5px rgba(0,0,0,.2);
+        border: 1px solid #ddd;
+        border-radius: 0;
+        margin-top: 5px;
+    }
+    .multiselect__option--highlight {
+        background: #0073aa;
+        color: #fff;
+        &:after {
+            background: #0073aa;
+            color: #fff;
+        }
+    }
+    .multiselect__tags-wrap {
+        .multiselect__tag {
+            background: #0085ba;
+            border-radius: 3px;
+            margin-bottom: 3px;
+            padding: 5px 30px 5px 10px;
+            i {
+                border-radius: 0;
+                &:hover {
+                    background: #dd3e3e;
+                }
+            }
+        }
+    }
+	.multiselect__spinner {
+		background: #f7f7f7;
+		&:before,
+		&:after {
+			border-color: #0085ba transparent transparent
+		}
+	}
+	.multiselect__single {
+		background: transparent;
+	}
+}
 	.dropdown-option {
 		margin-bottom: 10px;
 		.button {
