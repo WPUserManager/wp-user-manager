@@ -389,7 +389,7 @@ function wpum_register_profile_privacy_fields() {
 		$fields[] = Field::make( 'multiselect', 'wpum_user_roles', '' )
 		->add_options( $roles )
 		->set_default_value( $existing_roles )
-		->set_classes( 'wpum-multilple-user-roles' )
+		->set_classes( 'wpum-multiple-user-roles' )
 		->set_help_text( esc_html__( 'Select one or more roles for this user.', 'wp-user-manager' ) );
 	}
 
@@ -454,7 +454,7 @@ function wpum_modify_multiple_roles_ui( $user ) {
 				return;
 			}
 			var el_userrole = $('.user-role-wrap select#role, #createuser select#role');
-			$( $( '.wpum-multilple-user-roles' ) ).insertAfter( el_userrole );
+			$( $( '.wpum-multiple-user-roles' ) ).insertAfter( el_userrole ).css('padding', 0);
 			$( el_userrole ).hide();
 		});
 	</script>
