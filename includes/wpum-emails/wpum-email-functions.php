@@ -167,7 +167,7 @@ function wpum_email_tag_password_recovery_url( $user_id, $password_reset_key, $p
 	$reset_page = wpum_get_core_page_id( 'password' );
 	$reset_page = get_permalink( $reset_page );
 	$reset_page = add_query_arg( [
-		'login'  => $email->user_login,
+		'login'  => rawurlencode( $email->user_login ),
 		'key'    => $password_reset_key,
 		'action' => 'wpum-reset',
 	], $reset_page );
