@@ -28,6 +28,8 @@ if ( ! empty( $field['default_value'] ) ) {
 			$field['value'] = ! empty( $_GET[ $query_var ] ) ? wp_unslash( sanitize_text_field( $_GET[ $query_var ] ) ) : '';
 		}
 	}
+
+	$field['value'] = apply_filters( 'wpum_registration_form_field_default', $field['value'], $field, $key, $data->form_id );
 }
 ?>
 
