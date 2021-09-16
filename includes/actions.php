@@ -133,7 +133,8 @@ function wpum_restrict_wp_admin_dashboard_access() {
 
 	$redirect = apply_filters( 'wpum_restrict_wp_admin_dashboard_access_redirect', home_url() );
 
-	wp_redirect( $redirect );
+	nocache_headers();
+	wp_safe_redirect( $redirect );
 	exit;
 }
 

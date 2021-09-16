@@ -172,7 +172,7 @@ class WPUM_Directories_Editor {
 			Field::make( 'select', 'directory_template', esc_html__( 'Template', 'wp-user-manager' ) )
 			     ->set_help_text( esc_html__( 'Select a template for this directory.', 'wp-user-manager' ) )
 			     ->add_options( wpum_get_directory_templates() ),
-			Field::make( 'select', 'directory_user_template', esc_html__( 'User template', 'wp-user-manager' ) )
+			Field::make( 'select', 'directory_user_template', esc_html__( 'User Template', 'wp-user-manager' ) )
 			     ->set_help_text( esc_html__( 'Select a template for the users within this directory.', 'wp-user-manager' ) )
 			     ->add_options( wpum_get_directory_user_templates() ),
 		);
