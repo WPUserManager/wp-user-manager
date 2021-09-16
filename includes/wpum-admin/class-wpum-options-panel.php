@@ -334,7 +334,7 @@ class WPUM_Options_Panel {
 				array(
 					'id'   => 'disable_admin_password_recovery_email',
 					'name' => __( 'Disable Admin Password Recovery Email', 'wp-user-manager' ),
-					'desc' => __( 'Enable this option to stop receiving notifications when a new user resets his password.', 'wp-user-manager' ),
+					'desc' => __( 'Enable this option to stop receiving notifications when user resets their password.', 'wp-user-manager' ),
 					'type' => 'checkbox',
 				),
 			],
