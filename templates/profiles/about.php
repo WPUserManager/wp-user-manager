@@ -37,7 +37,7 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 				<table class="profile-fields-table">
 					<tbody>
 						<?php while ( wpum_profile_fields() ) : wpum_the_profile_field(); ?>
-							<?php if ( wpum_field_has_data() ) : ?>
+							<?php if ( wpum_field_has_data() && apply_filters( 'wpum_about_field_can_render', wpum_field_has_user_role_permission() ) ) : ?>
 								<tr class="<?php wpum_the_field_css_class(); ?>">
 									<td class="label"><?php wpum_the_field_name(); ?></td>
 									<td class="data"><?php wpum_the_field_value(); ?></td>
