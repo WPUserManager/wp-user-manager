@@ -512,7 +512,6 @@ function load_users_role_bulk_add() {
 			wp_die(
 				sprintf(
 					'<h1>%s</h1> <p>%s</p>',
-					esc_html__( 'Whoah, partner!', 'wp-user-manager' ),
 					esc_html__( 'One of the selected users is not a member of this site.', 'wp-user-manager' )
 				),
 				403
@@ -568,7 +567,6 @@ function load_users_role_bulk_remove() {
 			wp_die(
 				sprintf(
 					'<h1>%s</h1> <p>%s</p>',
-					esc_html__( 'Whoah, partner!', 'wp-user-manager' ),
 					esc_html__( 'One of the selected users is not a member of this site.', 'wp-user-manager' )
 				),
 				403
