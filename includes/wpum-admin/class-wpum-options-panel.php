@@ -340,6 +340,12 @@ class WPUM_Options_Panel {
 			],
 			'profiles'            => [
 				array(
+					'id'   => 'disable_profiles',
+					'name' => __( 'Disable User Profiles', 'wp-user-manager' ),
+					'desc' => __( 'Enable this option to disable user profiles from frontend.', 'wp-user-manager' ),
+					'type' => 'checkbox',
+				),
+				array(
 					'id'   => 'guests_can_view_profiles',
 					'name' => __( 'Allow Guests to View Profiles', 'wp-user-manager' ),
 					'desc' => __( 'Enable this option to allow guests to view users profiles.', 'wp-user-manager' ),
