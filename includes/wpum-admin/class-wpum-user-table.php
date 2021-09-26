@@ -19,10 +19,18 @@ class WPUM_User_Table {
 	 * Get things started.
 	 */
 	public function __construct() {
-
 		add_filter( 'manage_users_columns', [ $this, 'add_user_id_column' ] );
-		add_action( 'manage_users_custom_column',  [ $this, 'show_user_id' ], 10, 3 );
+		add_action( 'manage_users_custom_column', [ $this, 'show_user_id' ], 10, 3 );
+		add_action( 'admin_head', [ $this, 'hide_change_role_field' ] );
+	}
 
+	public function hide_change_role_field() {
+		?>
+		<style type="text/css">
+			label[for="new_role"], #new_role, #changeit,
+			label[for="new_role2"], #new_role2, #changeit2 { display: none !important; }
+		</style>
+		<?php
 	}
 
 	/**
