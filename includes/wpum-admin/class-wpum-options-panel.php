@@ -342,7 +342,7 @@ class WPUM_Options_Panel {
 				array(
 					'id'   => 'disable_profiles',
 					'name' => __( 'Disable User Profiles', 'wp-user-manager' ),
-					'desc' => __( 'Enable this option to disable user profiles from frontend.', 'wp-user-manager' ),
+					'desc' => __( 'Enable this option to disable frontend user profiles.', 'wp-user-manager' ),
 					'type' => 'checkbox',
 				),
 				array(
