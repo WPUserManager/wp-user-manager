@@ -22,6 +22,9 @@ class WPUM_User_Table {
 		add_filter( 'manage_users_columns', [ $this, 'add_user_id_column' ] );
 		add_action( 'manage_users_custom_column', [ $this, 'show_user_id' ], 10, 3 );
 		add_action( 'admin_head', [ $this, 'hide_change_role_field' ] );
+		add_action( 'load-users.php', [ $this, 'load_users' ] );
+		add_action( 'load-users.php', [ $this, 'load_users_role_bulk_add' ] );
+		add_action( 'load-users.php', [ $this, 'load_users_role_bulk_remove' ] );
 	}
 
 	public function hide_change_role_field() {
@@ -31,6 +34,172 @@ class WPUM_User_Table {
 			label[for="new_role2"], #new_role2, #changeit2 { display: none !important; }
 		</style>
 		<?php
+	}
+
+	public function bulk_fields_dropdown( $which ) {
+		if ( ! current_user_can( 'promote_users' ) ) {
+			return;
+		}
+
+		wp_nonce_field( 'wpum-bulk-users', 'wpum-bulk-users-nonce' ); ?>
+
+		<label class="screen-reader-text" for="<?php echo esc_attr( "wpum-add-role-{$which}" ); ?>">
+			<?php esc_html_e( 'Add role&hellip;', 'wp-user-manager' ); ?>
+		</label>
+		<select name="<?php echo esc_attr( "wpum-add-role-{$which}" ); ?>"
+		        id="<?php echo esc_attr( "wpum-add-role-{$which}" ); ?>" style="display: inline-block; float: none;">
+			<option value=""><?php esc_html_e( 'Add role&hellip;', 'wp-user-manager' ); ?></option>
+			<?php wp_dropdown_roles(); ?>
+		</select>
+
+		<?php submit_button( esc_html__( 'Add', 'wp-user-manager' ), 'secondary', esc_attr( "wpum-add-role-submit-{$which}" ), false ); ?>
+
+		<label class="screen-reader-text" for="<?php echo esc_attr( "wpum-remove-role-{$which}" ); ?>">
+			<?php esc_html_e( 'Remove role&hellip;', 'wp-user-manager' ); ?>
+		</label>
+
+		<select name="<?php echo esc_attr( "wpum-remove-role-{$which}" ); ?>"
+		        id="<?php echo esc_attr( "wpum-remove-role-{$which}" ); ?>" style="display: inline-block; float: none;">
+			<option value=""><?php esc_html_e( 'Remove role&hellip;', 'wp-user-manager' ); ?></option>
+			<?php wp_dropdown_roles(); ?>
+		</select>
+
+		<?php submit_button( esc_html__( 'Remove', 'wp-user-manager' ), 'secondary', esc_attr( "wpum-remove-role-submit-{$which}" ), false );
+	}
+
+	public function load_users() {
+		add_action( 'restrict_manage_users',[ $this, 'bulk_fields_dropdown' ], 5 );
+
+		if ( isset( $_GET['update'] ) ) {
+			$action = sanitize_key( $_GET['update'] );
+
+			if ( 'wpum-role-added' === $action ) {
+				WPUM()->notices->register_notice( 'wpum_db_upgrade_completed', 'success', esc_html__( 'Role added to selected users.', 'wp-user-manager' ) );
+			} elseif ( 'wpum-role-removed' === $action ) {
+				WPUM()->notices->register_notice( 'wpum_db_upgrade_completed', 'success', esc_html__( 'Role removed from selected users.', 'wp-user-manager' ) );
+			} elseif ( 'wpum-error-remove-admin' === $action ) {
+				WPUM()->notices->register_notice( 'wpum_db_upgrade_completed', 'success', esc_html__( 'Role removed from other selected users.', 'wp-user-manager' ) );
+			}
+		}
+	}
+
+	public function load_users_role_bulk_add() {
+		if ( empty( $_REQUEST['users'] ) ) {
+			return;
+		}
+
+		if ( ! empty( $_REQUEST['wpum-add-role-top'] ) && ! empty( $_REQUEST['wpum-add-role-submit-top'] ) ) {
+			$role = sanitize_text_field( $_REQUEST['wpum-add-role-top'] );
+		} else if ( ! empty( $_REQUEST['wpum-add-role-bottom'] ) && ! empty( $_REQUEST['wpum-add-role-submit-bottom'] ) ) {
+			$role = sanitize_text_field( $_REQUEST['wpum-add-role-bottom'] );
+		}
+
+		$roles = array_column( wpum_get_roles( false, true ), 'value' );
+
+		if ( empty( $role ) || ! in_array( $role, $roles ) ) {
+			return;
+		}
+
+		check_admin_referer( 'wpum-bulk-users', 'wpum-bulk-users-nonce' );
+
+		if ( ! current_user_can( 'promote_users' ) ) {
+			return;
+		}
+
+		foreach ( (array) $_REQUEST['users'] as $user_id ) {
+
+			$user_id = absint( $user_id );
+			if ( is_multisite() && ! is_user_member_of_blog( $user_id ) ) {
+
+				wp_die( sprintf( '<h1>%s</h1> <p>%s</p>', esc_html__( 'One of the selected users is not a member of this site.', 'wp-user-manager' ) ), 403 );
+			}
+
+			if ( ! current_user_can( 'promote_user', $user_id ) ) {
+				continue;
+			}
+
+			$user = new \WP_User( $user_id );
+
+			if ( ! in_array( $role, $user->roles ) ) {
+				$user->add_role( $role );
+			}
+		}
+
+		wp_redirect( add_query_arg( 'update', 'wpum-role-added', 'users.php' ) );
+	}
+
+	public function load_users_role_bulk_remove() {
+
+		if ( empty( $_REQUEST['users'] ) ) {
+			return;
+		}
+
+		if ( ! empty( $_REQUEST['wpum-remove-role-top'] ) && ! empty( $_REQUEST['wpum-remove-role-submit-top'] ) ) {
+			$role = sanitize_text_field( $_REQUEST['wpum-remove-role-top'] );
+		} elseif ( ! empty( $_REQUEST['wpum-remove-role-bottom'] ) && ! empty( $_REQUEST['wpum-remove-role-submit-bottom'] ) ) {
+			$role = sanitize_text_field( $_REQUEST['wpum-remove-role-bottom'] );
+		}
+
+
+		$roles = array_column( wpum_get_roles(), 'value' );
+
+		if ( empty( $role ) || ! in_array( $role, $roles ) ) {
+			return;
+		}
+
+		check_admin_referer( 'wpum-bulk-users', 'wpum-bulk-users-nonce' );
+
+		if ( ! current_user_can( 'promote_users' ) ) {
+			return;
+		}
+
+		$current_user = wp_get_current_user();
+		$m_role       = wpum_get_role( $role );
+		$update       = 'wpum-role-removed';
+
+		foreach ( (array) $_REQUEST['users'] as $user_id ) {
+
+			$user_id = absint( $user_id );
+
+			if ( is_multisite() && ! is_user_member_of_blog( $user_id ) ) {
+
+				wp_die( sprintf( '<h1>%s</h1> <p>%s</p>', esc_html__( 'One of the selected users is not a member of this site.', 'wp-user-manager' ) ), 403 );
+			}
+
+			if ( ! current_user_can( 'promote_user', $user_id ) ) {
+				continue;
+			}
+
+			$is_current_user    = $user_id == $current_user->ID;
+			$role_can_promote   = in_array( 'promote_users', $m_role->granted_caps );
+			$can_manage_network = is_multisite() && current_user_can( 'manage_network_users' );
+
+			if ( $is_current_user && $role_can_promote && ! $can_manage_network ) {
+				$can_remove = false;
+
+				foreach ( $current_user->roles as $_r ) {
+
+					if ( $role !== $_r && in_array( 'promote_users', wpum_get_role( $_r )->granted_caps ) ) {
+
+						$can_remove = true;
+						break;
+					}
+				}
+
+				if ( ! $can_remove ) {
+					$update = 'wpum-error-remove-admin';
+					continue;
+				}
+			}
+
+			$user = new \WP_User( $user_id );
+
+			if ( in_array( $role, $user->roles ) ) {
+				$user->remove_role( $role );
+			}
+		}
+
+		wp_redirect( add_query_arg( 'update', $update, 'users.php' ) );
 	}
 
 	/**
