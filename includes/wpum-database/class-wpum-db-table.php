@@ -14,7 +14,7 @@ if ( ! defined( 'ABSPATH' ) ) exit;
  * Setup the WPUM specific database table class, which sets the plugin
  * file variable for all future subclasses.
  */
-class WPUM_DB_Table extends WP_DB_Table {
+class WPUM_DB_Table extends WPUM_WP_DB_Table {
 
 	/**
 	 * File passed to register_activation_hook()
