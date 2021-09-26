@@ -258,6 +258,7 @@ class WPUM_Form_Profile extends WPUM_Form {
 			}
 
 			do_action( 'wpum_before_user_update', $this, $values, $this->user->ID );
+			$values = apply_filters( 'wpum_before_user_update_fields' , $this, $values, $this->user->ID );
 
 			$updated_user_id = $this->update_account_values( $this->user, $values );
 
