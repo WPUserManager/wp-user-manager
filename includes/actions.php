@@ -406,13 +406,12 @@ function wpum_reset_password_redirect() {
  * @return void
  */
 function wpum_restrict_profile_page() {
+	$profile_page = wpum_get_core_page_id( 'profile' );
 
-	$is_profile_disabled = wpum_get_option( 'disable_profiles' );
-	$profile_page        = wpum_get_core_page_id( 'profile' );
-
-	if ( true === boolval( $is_profile_disabled ) && is_page( $profile_page ) ) {
+	if ( $profile_page && is_page( $profile_page ) && true === boolval( wpum_get_option( 'disable_profiles' ) ) ) {
 		wp_safe_redirect( home_url() );
 		die();
 	}
 }
+
 add_action( 'template_redirect', 'wpum_restrict_profile_page' );
