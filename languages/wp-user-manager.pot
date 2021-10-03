@@ -2,9 +2,9 @@
 # This file is distributed under the GPLv3+.
 msgid ""
 msgstr ""
-"Project-Id-Version: WP User Manager 2.6.4\n"
+"Project-Id-Version: WP User Manager 2.6.5\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/wp-user-manager\n"
-"POT-Creation-Date: 2021-08-24 11:26:55+00:00\n"
+"POT-Creation-Date: 2021-09-16 20:39:47+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -233,38 +233,38 @@ msgstr ""
 msgid "Settings"
 msgstr ""
 
-#: includes/actions.php:278 includes/wpum-forms/class-wpum-form-profile.php:133
+#: includes/actions.php:279 includes/wpum-forms/class-wpum-form-profile.php:133
 msgid ""
 "This display name is already in use by someone else. Display names must be "
 "unique."
 msgstr ""
 
-#: includes/actions.php:287 includes/wpum-forms/class-wpum-form-profile.php:137
+#: includes/actions.php:288 includes/wpum-forms/class-wpum-form-profile.php:137
 msgid "This nickname is already in use by someone else. Nicknames must be unique."
 msgstr ""
 
-#: includes/actions.php:299 templates/profile-card.php:42
+#: includes/actions.php:300 templates/profile-card.php:42
 msgid "View Profile"
 msgstr ""
 
-#: includes/actions.php:365 includes/functions.php:716
+#: includes/actions.php:366 includes/functions.php:716
 #: includes/wpum-forms/class-wpum-form-privacy.php:74
 msgid "Profile Privacy"
 msgstr ""
 
-#: includes/actions.php:367
+#: includes/actions.php:368
 msgid "Hide profile from guests"
 msgstr ""
 
-#: includes/actions.php:368
+#: includes/actions.php:369
 msgid "Hide this profile from guests. Overrides the global profile options."
 msgstr ""
 
-#: includes/actions.php:369
+#: includes/actions.php:370
 msgid "Hide profile from members"
 msgstr ""
 
-#: includes/actions.php:370
+#: includes/actions.php:371
 msgid "Hide this profile from members. Overrides the global profile options."
 msgstr ""
 
@@ -393,29 +393,30 @@ msgstr ""
 msgid "Comments"
 msgstr ""
 
-#: includes/install.php:51
+#: includes/install.php:52
 msgid "Log In"
 msgstr ""
 
-#: includes/install.php:67
+#: includes/install.php:68
 msgid "Password Reset"
 msgstr ""
 
-#: includes/install.php:83
+#: includes/install.php:84
 #: includes/wpum-widgets/class-wpum-registration-form-widget.php:41
 #: templates/forms/form-registration.php:48
 msgid "Register"
 msgstr ""
 
-#: includes/install.php:99 includes/wpum-admin/class-wpum-options-panel.php:128
+#: includes/install.php:100
+#: includes/wpum-admin/class-wpum-options-panel.php:128
 msgid "Account"
 msgstr ""
 
-#: includes/install.php:115
+#: includes/install.php:116
 msgid "Profile"
 msgstr ""
 
-#: includes/install.php:138
+#: includes/install.php:139
 #: includes/wpum-upgrades/class-wpum-plugin-updates.php:522
 msgid "Default registration form"
 msgstr ""
@@ -930,8 +931,8 @@ msgstr ""
 
 #: includes/wpum-admin/class-wpum-options-panel.php:337
 msgid ""
-"Enable this option to stop receiving notifications when a new user resets "
-"his password."
+"Enable this option to stop receiving notifications when user resets their "
+"password."
 msgstr ""
 
 #: includes/wpum-admin/class-wpum-options-panel.php:344
@@ -1357,7 +1358,7 @@ msgid "Select a template for this directory."
 msgstr ""
 
 #: includes/wpum-directories/class-wpum-directories-editor.php:175
-msgid "User template"
+msgid "User Template"
 msgstr ""
 
 #: includes/wpum-directories/class-wpum-directories-editor.php:176

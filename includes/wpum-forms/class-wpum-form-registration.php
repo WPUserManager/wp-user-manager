@@ -650,7 +650,7 @@ class WPUM_Form_Registration extends WPUM_Form {
 				return;
 			}
 
-			WPUM()->templates->set_template_data( [ 'field' => $field, 'key' => $key ] )
+			WPUM()->templates->set_template_data( [ 'field' => $field, 'key' => $key, 'form_id' => $this->form_id ] )
 			                 ->get_template_part( 'forms/form-registration-fields', 'field' );
 		}
 	}

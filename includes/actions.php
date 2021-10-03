@@ -133,7 +133,8 @@ function wpum_restrict_wp_admin_dashboard_access() {
 
 	$redirect = apply_filters( 'wpum_restrict_wp_admin_dashboard_access_redirect', home_url() );
 
-	wp_redirect( $redirect );
+	nocache_headers();
+	wp_safe_redirect( $redirect );
 	exit;
 }
 
@@ -426,7 +427,6 @@ function wpum_reset_password_redirect() {
 	exit;
 }
 
-
 function wpum_action_profile_update( $userId, $oldUserData = [] ) {
 
 	$allow_multiple_roles = wpum_get_option( 'allow_multiple_user_roles' );
@@ -491,3 +491,20 @@ HTML;
 add_action( 'user_new_form', 'wpum_modify_multiple_roles_ui', 0 );
 add_action( 'show_user_profile', 'wpum_modify_multiple_roles_ui', 0 );
 add_action( 'edit_user_profile', 'wpum_modify_multiple_roles_ui', 0 );
+
+/**
+ * Restrict profile page when disabled.
+ *
+ * @return void
+ */
+function wpum_restrict_profile_page() {
+	$profile_page = wpum_get_core_page_id( 'profile' );
+
+	if ( $profile_page && is_page( $profile_page ) && true === boolval( wpum_get_option( 'disable_profiles' ) ) ) {
+		wp_safe_redirect( home_url() );
+		die();
+	}
+}
+
+add_action( 'template_redirect', 'wpum_restrict_profile_page' );
+
