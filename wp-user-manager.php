@@ -142,6 +142,11 @@ if ( ! class_exists( 'WP_User_Manager' ) ) :
 		public $async_process;
 
 		/**
+		 * @var WPUM_Fields
+		 */
+		public $field_types;
+
+		/**
 		 * Main WPUM Instance.
 		 *
 		 * Ensures that only one instance of WPUM exists in memory at any one
@@ -336,6 +341,9 @@ if ( ! class_exists( 'WP_User_Manager' ) ) :
 			register_activation_hook( WPUM_PLUGIN_FILE, 'wp_user_manager_install' );
 			add_action( 'plugins_loaded', array( $this, 'load_textdomain' ), 0 );
 			add_action( 'plugins_loaded', array( $this, 'init' ), 0 );
+
+			$this->field_types = new WPUM_Fields();
+			$this->field_types->init();
 		}
 
 		/**
