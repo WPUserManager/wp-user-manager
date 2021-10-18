@@ -374,7 +374,6 @@ function wpum_register_profile_privacy_fields() {
 	$allow_multiple_roles = wpum_get_option( 'allow_multiple_user_roles' );
 
 	$user_id = isset( $_GET['user_id'] ) ? absint( $_GET['user_id'] ) : false;
-	$current_user = wp_get_current_user();
 
 	$profileuser = isset( $user_id ) ? get_user_by( 'id', $user_id ) : false;
 	$existing_roles = ( $profileuser ) ? $profileuser->roles : [];
