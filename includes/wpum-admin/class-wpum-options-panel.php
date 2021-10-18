@@ -256,7 +256,7 @@ class WPUM_Options_Panel {
 				array(
 					'id'   => 'allow_multiple_user_roles',
 					'name' => __( 'Allow Multiple Roles', 'wp-user-manager' ),
-					'desc' => __( 'Allow multiple user roles.', 'wp-user-manager' ),
+					'desc' => __( 'Users can be assigned multiple roles.', 'wp-user-manager' ),
 					'type' => 'checkbox'
 				),
 			],
