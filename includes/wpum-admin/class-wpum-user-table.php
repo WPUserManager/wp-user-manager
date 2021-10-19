@@ -70,156 +70,166 @@ class WPUM_User_Table {
 	public function load_users() {
 		add_action( 'restrict_manage_users',[ $this, 'bulk_fields_dropdown' ], 5 );
 
-		if ( isset( $_GET['update'] ) ) {
+		if ( ! isset( $_GET['update'] ) ) {
+			return;
+		}
 
-			$action = sanitize_key( $_GET['update'] );
-			$role = sanitize_key( $_GET['role'] );
-			$count = intval( $_GET['count'] );
-			if ( 'wpum-role-added' === $action ) {
-				WPUM()->notices->register_notice( 'wpum_role_added', 'success', sprintf( '<b>%s</b> role added to <b>%d</b> %s.', ucwords( $role ), $count, $count > 1 ? 'users': 'user' ), 'wp-user-manager' );
-			} elseif ( 'wpum-role-removed' === $action ) {
-				WPUM()->notices->register_notice( 'wpum_role_removed', 'success', sprintf( '<b>%s</b> role removed from <b>%d</b> %s.', ucwords( $role ), $count, $count > 1 ? 'users': 'user' ), 'wp-user-manager' );
-			} elseif ( 'wpum-error-remove-admin' === $action ) {
-				WPUM()->notices->register_notice( 'wpum_admin_error', 'error', sprintf( 'You cannot remove <b>%s</b> role from your account.', ucwords( $role ) ), 'wp-user-manager' );
-			}
+		$action = sanitize_key( $_GET['update'] );
+		$role = sanitize_key( $_GET['name'] );
+		$count = intval( $_GET['count'] );
+		if ( 'wpum-role-added' === $action ) {
+			WPUM()->notices->register_notice( 'wpum_role_added', 'success', sprintf( '<b>%s</b> role added to <b>%d</b> %s.', ucwords( $role ), $count, $count > 1 ? 'users': 'user' ), 'wp-user-manager' );
+		} elseif ( 'wpum-role-removed' === $action ) {
+			WPUM()->notices->register_notice( 'wpum_role_removed', 'success', sprintf( '<b>%s</b> role removed from <b>%d</b> %s.', ucwords( $role ), $count, $count > 1 ? 'users': 'user' ), 'wp-user-manager' );
+		} elseif ( 'wpum-error-remove-admin' === $action ) {
+			WPUM()->notices->register_notice( 'wpum_admin_error', 'error', sprintf( 'You cannot remove the <b>%s</b> role from your account.', ucwords( $role ) ), 'wp-user-manager' );
 		}
 	}
 
 	public function load_users_role_bulk_add() {
-		if ( ! empty( $_REQUEST['users'] ) ) {
-
-			if ( ! empty( $_REQUEST['wpum-add-role-top'] ) && ! empty( $_REQUEST['wpum-add-role-submit-top'] ) ) {
-				$role = sanitize_text_field( $_REQUEST['wpum-add-role-top'] );
-			} else if ( ! empty( $_REQUEST['wpum-add-role-bottom'] ) && ! empty( $_REQUEST['wpum-add-role-submit-bottom'] ) ) {
-				$role = sanitize_text_field( $_REQUEST['wpum-add-role-bottom'] );
-			}
-
-			$m_role       = wpum_get_role( $role );
-			$roles = array_column( wpum_get_roles( false, true ), 'value' );
-
-			if ( empty( $role ) || ! in_array( $role, $roles ) ) {
-				return;
-			}
-
-			check_admin_referer( 'wpum-bulk-users', 'wpum-bulk-users-nonce' );
-
-			if ( ! current_user_can( 'promote_users' ) ) {
-				return;
-			}
-
-			$count = 0;
-
-			foreach ( (array) $_REQUEST['users'] as $user_id ) {
-
-				$user_id = absint( $user_id );
-				if ( is_multisite() && ! is_user_member_of_blog( $user_id ) ) {
-
-					wp_die( sprintf( '<h1>%s</h1> <p>%s</p>', esc_html__( 'One of the selected users is not a member of this site.', 'wp-user-manager' ) ), 403 );
-				}
-
-				if ( ! current_user_can( 'promote_user', $user_id ) ) {
-					continue;
-				}
-
-				$user = new \WP_User( $user_id );
-
-				if ( ! in_array( $role, $user->roles ) ) {
-					$user->add_role( $role );
-					$count++;
-				}
-			}
-			wp_redirect( add_query_arg( [ 'update' => 'wpum-role-added', 'role' => $m_role->label, 'count' => $count ], 'users.php' ) );
-			exit;
+		if ( empty( $_REQUEST['users'] ) ) {
+			return;
 		}
+
+		check_admin_referer( 'wpum-bulk-users', 'wpum-bulk-users-nonce' );
+
+		if ( ! current_user_can( 'promote_users' ) ) {
+			return;
+		}
+
+		if ( ! empty( $_REQUEST['wpum-add-role-top'] ) && ! empty( $_REQUEST['wpum-add-role-submit-top'] ) ) {
+			$role = sanitize_text_field( $_REQUEST['wpum-add-role-top'] );
+		} else if ( ! empty( $_REQUEST['wpum-add-role-bottom'] ) && ! empty( $_REQUEST['wpum-add-role-submit-bottom'] ) ) {
+			$role = sanitize_text_field( $_REQUEST['wpum-add-role-bottom'] );
+		}
+
+		$m_role = wpum_get_role( $role );
+		$roles  = array_column( wpum_get_roles( false, true ), 'value' );
+
+		if ( empty( $role ) || ! in_array( $role, $roles ) ) {
+			return;
+		}
+
+		$count = 0;
+
+		foreach ( (array) $_REQUEST['users'] as $user_id ) {
+
+			$user_id = absint( $user_id );
+			if ( is_multisite() && ! is_user_member_of_blog( $user_id ) ) {
+
+				wp_die( sprintf( '<h1>%s</h1> <p>%s</p>', esc_html__( 'One of the selected users is not a member of this site.', 'wp-user-manager' ) ), 403 );
+			}
+
+			if ( ! current_user_can( 'promote_user', $user_id ) ) {
+				continue;
+			}
+
+			$user = new \WP_User( $user_id );
+
+			if ( ! in_array( $role, $user->roles ) ) {
+				$user->add_role( $role );
+				$count ++;
+			}
+		}
+		wp_redirect( add_query_arg( [
+			'update' => 'wpum-role-added',
+			'name'   => $m_role->label,
+			'count'  => $count,
+		], 'users.php' ) );
+
+		exit;
 	}
 
 	public function load_users_role_bulk_remove() {
+		if ( empty( $_REQUEST['users'] ) ) {
+			return;
+		}
 
-		if ( ! empty( $_REQUEST['users'] ) ) {
+		check_admin_referer( 'wpum-bulk-users', 'wpum-bulk-users-nonce' );
 
-			if ( ! empty( $_REQUEST['wpum-remove-role-top'] ) && ! empty( $_REQUEST['wpum-remove-role-submit-top'] ) ) {
-				$role = sanitize_text_field( $_REQUEST['wpum-remove-role-top'] );
-			} elseif ( ! empty( $_REQUEST['wpum-remove-role-bottom'] ) && ! empty( $_REQUEST['wpum-remove-role-submit-bottom'] ) ) {
-				$role = sanitize_text_field( $_REQUEST['wpum-remove-role-bottom'] );
+		if ( ! current_user_can( 'promote_users' ) ) {
+			return;
+		}
+
+		if ( ! empty( $_REQUEST['wpum-remove-role-top'] ) && ! empty( $_REQUEST['wpum-remove-role-submit-top'] ) ) {
+			$role = sanitize_text_field( $_REQUEST['wpum-remove-role-top'] );
+		} elseif ( ! empty( $_REQUEST['wpum-remove-role-bottom'] ) && ! empty( $_REQUEST['wpum-remove-role-submit-bottom'] ) ) {
+			$role = sanitize_text_field( $_REQUEST['wpum-remove-role-bottom'] );
+		}
+
+		$roles = array_column( wpum_get_roles(), 'value' );
+
+		if ( empty( $role ) || ! in_array( $role, $roles ) ) {
+			return;
+		}
+
+		$current_user = wp_get_current_user();
+		$m_role       = wpum_get_role( $role );
+		$update       = 'wpum-role-removed';
+
+		$count = 0;
+
+		foreach ( (array) $_REQUEST['users'] as $user_id ) {
+
+			$user_id = absint( $user_id );
+
+			if ( is_multisite() && ! is_user_member_of_blog( $user_id ) ) {
+
+				wp_die( sprintf( '<h1>%s</h1> <p>%s</p>', esc_html__( 'One of the selected users is not a member of this site.', 'wp-user-manager' ) ), 403 );
 			}
 
-
-			$roles = array_column( wpum_get_roles(), 'value' );
-
-			if ( empty( $role ) || ! in_array( $role, $roles ) ) {
-				return;
+			if ( ! current_user_can( 'promote_user', $user_id ) ) {
+				continue;
 			}
 
-			check_admin_referer( 'wpum-bulk-users', 'wpum-bulk-users-nonce' );
+			$is_current_user    = $user_id == $current_user->ID;
+			$role_can_promote   = in_array( 'promote_users', $m_role->granted_caps );
+			$can_manage_network = is_multisite() && current_user_can( 'manage_network_users' );
 
-			if ( ! current_user_can( 'promote_users' ) ) {
-				return;
-			}
+			if ( $is_current_user && $role_can_promote && ! $can_manage_network ) {
+				$can_remove = false;
 
-			$current_user = wp_get_current_user();
-			$m_role       = wpum_get_role( $role );
-			$update       = 'wpum-role-removed';
+				foreach ( $current_user->roles as $_r ) {
 
-			$count = 0;
+					if ( $role !== $_r && in_array( 'promote_users', wpum_get_role( $_r )->granted_caps ) ) {
 
-			foreach ( (array) $_REQUEST['users'] as $user_id ) {
-
-				$user_id = absint( $user_id );
-
-				if ( is_multisite() && ! is_user_member_of_blog( $user_id ) ) {
-
-					wp_die( sprintf( '<h1>%s</h1> <p>%s</p>', esc_html__( 'One of the selected users is not a member of this site.', 'wp-user-manager' ) ), 403 );
+						$can_remove = true;
+						break;
+					}
 				}
 
-				if ( ! current_user_can( 'promote_user', $user_id ) ) {
+				if ( ! $can_remove ) {
+					$update = 'wpum-error-remove-admin';
 					continue;
 				}
-
-				$is_current_user    = $user_id == $current_user->ID;
-				$role_can_promote   = in_array( 'promote_users', $m_role->granted_caps );
-				$can_manage_network = is_multisite() && current_user_can( 'manage_network_users' );
-
-				if ( $is_current_user && $role_can_promote && ! $can_manage_network ) {
-					$can_remove = false;
-
-					foreach ( $current_user->roles as $_r ) {
-
-						if ( $role !== $_r && in_array( 'promote_users', wpum_get_role( $_r )->granted_caps ) ) {
-
-							$can_remove = true;
-							break;
-						}
-					}
-
-					if ( ! $can_remove ) {
-						$update = 'wpum-error-remove-admin';
-						continue;
-					}
-				}
-
-				$user = new \WP_User( $user_id );
-
-				if ( in_array( $role, $user->roles ) ) {
-					$user->remove_role( $role );
-					$count++;
-				}
 			}
-			wp_redirect( add_query_arg( [ 'update' => $update, 'role' => $m_role->label, 'count' => $count ], 'users.php' ) );
-			exit;
+
+			$user = new \WP_User( $user_id );
+
+			if ( in_array( $role, $user->roles ) ) {
+				$user->remove_role( $role );
+				$count ++;
+			}
 		}
+		wp_redirect( add_query_arg( [
+			'update' => $update,
+			'name'   => $m_role->label,
+			'count'  => $count,
+		], 'users.php' ) );
+
+		exit;
 	}
 
 	/**
 	 * Add the user id column.
 	 *
 	 * @param array $columns
-	 * @return void
+	 * @return array
 	 */
 	public function add_user_id_column( $columns ) {
-
 		$columns['user_id'] = __( 'ID', 'wp-user-manager' );
-		return $columns;
 
+		return $columns;
 	}
 
 	/**
@@ -228,12 +238,13 @@ class WPUM_User_Table {
 	 * @param string $value
 	 * @param string $column_name
 	 * @param int $user_id
-	 * @return void
+	 * @return mixed
 	 */
 	public function show_user_id( $value, $column_name, $user_id ) {
 		if ( 'user_id' == $column_name ) {
 			return $user_id;
 		}
+
 		return $value;
 	}
 
