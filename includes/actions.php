@@ -34,6 +34,24 @@ function wpum_delete_pages_transient( $post_id ) {
 add_action( 'save_post_page', 'wpum_delete_pages_transient' );
 
 /**
+ * Delete cached list of pages when a page is deleted.
+ *
+ * @param int $post_id
+ * @param WP_Post $post
+ * @return void
+ */
+function wpum_delete_pages_transient_on_delete( $post_id, $post ) {
+
+	if ( wp_is_post_revision( $post_id ) || $post->post_type !== 'page' ) {
+		return;
+	}
+
+	delete_transient( 'wpum_get_pages' );
+
+}
+add_action( 'delete_post', 'wpum_delete_pages_transient_on_delete', 99, 2 );
+
+/**
  * Add WPUM specific admin bar links.
  *
  * @param object $wp_admin_bar
@@ -399,3 +417,19 @@ function wpum_reset_password_redirect() {
 	wp_safe_redirect( $url );
 	exit;
 }
+
+/**
+ * Restrict profile page when disabled.
+ *
+ * @return void
+ */
+function wpum_restrict_profile_page() {
+	$profile_page = wpum_get_core_page_id( 'profile' );
+
+	if ( $profile_page && is_page( $profile_page ) && true === boolval( wpum_get_option( 'disable_profiles' ) ) ) {
+		wp_safe_redirect( home_url() );
+		die();
+	}
+}
+
+add_action( 'template_redirect', 'wpum_restrict_profile_page' );

@@ -707,7 +707,7 @@ function wpum_get_account_page_tabs() {
 		],
 	];
 
-	if ( ! wpum_get_core_page_id( 'profile' ) ) {
+	if ( ! wpum_get_core_page_id( 'profile' ) || boolval( wpum_get_option( 'disable_profiles' ) ) === true ) {
 		unset( $tabs['view'] );
 	}
 

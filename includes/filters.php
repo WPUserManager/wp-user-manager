@@ -143,6 +143,11 @@ if ( wpum_get_option( 'lock_wplogin' ) ) {
  */
 function wpum_authentication( $user, $username, $password ) {
 
+	// Skip authentication method for admin users
+	if ( ! is_wp_error( $user ) && user_can( $user, 'administrator' ) ) {
+		return $user;
+	}
+
 	$authentication_method = wpum_get_option( 'login_method' );
 
 	if ( $authentication_method == 'username' ) {
