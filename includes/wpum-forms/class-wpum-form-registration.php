@@ -53,6 +53,8 @@ class WPUM_Form_Registration extends WPUM_Form {
 	 */
 	protected $registration_form_fields = false;
 
+	protected $form_id;
+
 	/**
 	 * Returns static instance of class.
 	 *
@@ -298,6 +300,8 @@ class WPUM_Form_Registration extends WPUM_Form {
 
 		$form = WPUM()->registration_forms->get_forms();
 		$this->registration_form = $form[0];
+
+		$this->form_id = $this->registration_form->get_ID();
 
 		return $this->registration_form;
 	}
