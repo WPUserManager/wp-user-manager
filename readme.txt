@@ -8,7 +8,7 @@ Tested up to: 5.8
 Requires PHP: 5.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
-Stable Tag: 2.6.7
+Stable Tag: 2.6.8
 
 The most customizable profiles & community builder WordPress plugin with front-end login, registration, profile customization and content restriction.
 
@@ -125,6 +125,10 @@ Please note that using WPUM and the mentioned add-ons does NOT guarantee complia
 13. Login form.
 
 == Changelog ==
+
+= 2.6.8 (6th November 2021) =
+
+- New: Compatibility with the [Frontend Posting](https://wpusermanager.com/addons/frontend-posting/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager) addon version 2.1
 
 = 2.6.7 (26th October 2021) =
 

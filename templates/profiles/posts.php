@@ -34,6 +34,7 @@ $the_query = wpum_get_posts_for_profile( $data->user->ID );
 					</div>
 				<?php endif; ?>
 				<a href="<?php the_permalink();?>" class="wpum-post-title"><?php the_title();?></a>
+				<?php do_action( 'wpum_profile_posts_after_title' ); ?>
 				<ul class="wpum-post-meta">
 					<li>
 						<strong><?php esc_html_e( 'Posted on:', 'wp-user-manager' ); ?></strong>
@@ -44,6 +45,7 @@ $the_query = wpum_get_posts_for_profile( $data->user->ID );
 						<?php comments_popup_link( esc_html__( 'No Comments', 'wp-user-manager' ), esc_html__( '1 Comment', 'wp-user-manager' ), esc_html__( '% Comments', 'wp-user-manager' ) ); ?>
 					</li>
 				</ul>
+				<?php do_action( 'wpum_profile_posts_after_meta' ); ?>
 			</div>
 
 		<?php endwhile; ?>
