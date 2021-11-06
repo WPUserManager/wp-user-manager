@@ -2,9 +2,9 @@
 # This file is distributed under the GPLv3+.
 msgid ""
 msgstr ""
-"Project-Id-Version: WP User Manager 2.6.7\n"
+"Project-Id-Version: WP User Manager 2.6.8\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/wp-user-manager\n"
-"POT-Creation-Date: 2021-10-26 07:56:45+00:00\n"
+"POT-Creation-Date: 2021-11-06 12:49:03+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -3579,35 +3579,35 @@ msgstr ""
 msgid "%s has not made any comment yet."
 msgstr ""
 
-#: templates/profiles/posts.php:39
+#: templates/profiles/posts.php:40
 msgid "Posted on:"
 msgstr ""
 
-#: templates/profiles/posts.php:43
+#: templates/profiles/posts.php:44
 msgid "Comments:"
 msgstr ""
 
-#: templates/profiles/posts.php:44
+#: templates/profiles/posts.php:45
 msgid "No Comments"
 msgstr ""
 
-#: templates/profiles/posts.php:44
+#: templates/profiles/posts.php:45
 msgid "1 Comment"
 msgstr ""
 
-#: templates/profiles/posts.php:44
+#: templates/profiles/posts.php:45
 msgid "% Comments"
 msgstr ""
 
-#: templates/profiles/posts.php:63
+#: templates/profiles/posts.php:65
 msgid "Newer Posts"
 msgstr ""
 
-#: templates/profiles/posts.php:64
+#: templates/profiles/posts.php:66
 msgid "Older Posts"
 msgstr ""
 
-#: templates/profiles/posts.php:78
+#: templates/profiles/posts.php:80
 msgid "%s did not submit any posts yet."
 msgstr ""
 
