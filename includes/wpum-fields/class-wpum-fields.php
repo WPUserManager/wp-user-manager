@@ -107,6 +107,10 @@ class WPUM_Fields {
 		return $this->fields;
 	}
 
+	public function set_registered_field_types( $fields ) {
+		$this->fields = $fields;
+	}
+
 	/**
 	 * Retrieve a list of the registered field types names.
 	 *

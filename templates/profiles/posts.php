@@ -77,7 +77,7 @@ $the_query = wpum_get_posts_for_profile( $data->user->ID );
 		<?php
 			WPUM()->templates
 				->set_template_data( [
-					'message' => sprintf( esc_html__( '%s did not submit any posts yet.', 'wp-user-manager' ), $data->user->display_name )
+					'message' => sprintf( esc_html__( '%s has not submitted any posts yet.', 'wp-user-manager' ), $data->user->display_name )
 				] )
 				->get_template_part( 'messages/general', 'warning' );
 		?>

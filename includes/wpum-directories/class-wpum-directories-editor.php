@@ -27,13 +27,9 @@ class WPUM_Directories_Editor {
 	 */
 	protected $builder;
 
-	/**
-	 * Get things started.
-	 */
-	public function __construct() {
-
+	public function init() {
 		add_action( 'init', [ $this, 'register_post_type' ], 0 );
-		add_action( 'carbon_fields_register_fields', [ $this, 'register_directory_settings' ] );
+		add_action( 'carbon_fields_register_fields', [ $this, 'maybe_register_directory_settings' ] );
 		add_action( 'admin_footer', [ $this, 'css' ] );
 
 		if ( is_admin() ) {
@@ -101,6 +97,45 @@ class WPUM_Directories_Editor {
 		);
 		register_post_type( 'wpum_directory', $args );
 
+	}
+
+	/**
+	 * Get post type for page request (in admin)
+	 *
+	 * @return string
+	 */
+	public function get_post_type() {
+		global $pagenow;
+
+		if ( isset( $_GET['post_type'] ) && 'post-new.php' === $pagenow ) {
+			return $_GET['post_type'];
+		}
+
+		if ( ! isset( $_GET['post'] ) && ! isset( $_POST['post_ID'] ) ) {
+			return '';
+		}
+
+		$post_id = filter_input( INPUT_GET, 'post', FILTER_VALIDATE_INT );
+		if ( empty( $post_id ) ) {
+			$post_id = filter_input( INPUT_POST, 'post_ID', FILTER_VALIDATE_INT );
+		}
+
+		$post = get_post( $post_id );
+
+		if ( empty( $post ) || empty( $post->post_type ) ) {
+			return '';
+		}
+
+		return $post->post_type;
+	}
+
+	public function maybe_register_directory_settings() {
+		$post_type = $this->get_post_type();
+		if ( ! $post_type || 'wpum_directory' !== $post_type ) {
+			return;
+		}
+
+		$this->register_directory_settings();
 	}
 
 	/**
@@ -355,5 +390,3 @@ class WPUM_Directories_Editor {
 		return $bulk_messages;
 	}
 }
-
-new WPUM_Directories_Editor;
