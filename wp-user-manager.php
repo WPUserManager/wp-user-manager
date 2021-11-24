@@ -147,6 +147,11 @@ if ( ! class_exists( 'WP_User_Manager' ) ) :
 		public $field_types;
 
 		/**
+		 * @var WPUM_Directories_Editor
+		 */
+		public $directories_editor;
+
+		/**
 		 * Main WPUM Instance.
 		 *
 		 * Ensures that only one instance of WPUM exists in memory at any one
@@ -344,6 +349,9 @@ if ( ! class_exists( 'WP_User_Manager' ) ) :
 
 			$this->field_types = new WPUM_Fields();
 			$this->field_types->init();
+
+			$this->directories_editor = new WPUM_Directories_Editor();
+			$this->directories_editor->init();
 		}
 
 		/**
