@@ -45,13 +45,6 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 			<?php foreach ( $data->fields as $key => $field ) : ?>
 
 				<?php
-				//Checks user has role perimission
-				if( ! apply_filters( 'wpum_account_form_field_can_render', wpum_field_has_user_role_permission( $field['id'] ), $field, $data ) ){
-					continue;
-				}
-				?>
-
-				<?php
 				// Parent field should handle the child field rendering
 				if( in_array( $field['type'], wpum_get_registered_parent_field_types() ) ){
 

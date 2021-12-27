@@ -489,19 +489,7 @@ function wpum_is_field_required() {
 	return apply_filters( 'wpum_is_field_required', $wpum_field->is_required(), $wpum_field->get_ID() );
 }
 
-/**
- * Verify if the field has correct user role permission.
- *
- * @return bool
- */
-function wpum_field_has_user_role_permission( $field_id = null ) {
-	global $wpum_field;
 
-	$field         = $field_id ? new WPUM_Field( $field_id ) : $wpum_field;
-	$field_roles   = $field->get_meta( 'roles' );
-
-	return ! ( is_array( $field_roles ) && count( $field_roles ) && !count( array_intersect( wp_get_current_user()->roles, $field_roles ) ) );
-}
 
 /**
  * Retrieve the current field type within a loop.

@@ -294,3 +294,38 @@ function wpum_set_displayname_on_registration( $user_data ) {
 }
 
 add_filter( 'wpum_registration_user_data', 'wpum_set_displayname_on_registration', 10 );
+
+add_filter( 'wpum_account_display_field', 'wpum_maybe_display_field', 10, 2 );
+add_filter( 'wpum_profile_display_field', 'wpum_maybe_display_field' );
+
+/**
+ * Verify if the field has correct user role permission.
+ *
+ * @param bool $display
+ * @param WPUM_Field $field
+ *
+ * @return bool
+ */
+function wpum_maybe_display_field( $display, $field = null ) {
+	if ( ! $display ) {
+		return $display;
+	}
+
+	if ( empty( $field ) ) {
+		global $wpum_field;
+
+		$field = $wpum_field;
+	}
+
+	$field_roles = $field->get_meta( 'roles' );
+
+	if ( empty( $field_roles ) ) {
+		return true;
+	}
+
+	if ( ! is_user_logged_in() ) {
+		return false;
+	}
+
+	return count( array_intersect( wp_get_current_user()->roles, $field_roles ) ) > 0;
+}
