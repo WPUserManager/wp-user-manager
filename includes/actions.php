@@ -381,14 +381,40 @@ function wpum_finish_db_setup_after_plugin_init() {
 add_action( 'after_wpum_init', 'wpum_finish_db_setup_after_plugin_init' );
 
 function wpum_register_profile_privacy_fields() {
+	global $pagenow;
+
+	$roles = [];
+
+	foreach ( wpum_get_roles( true, true ) as $role ) {
+		$roles[ $role['value'] ] = $role['label'];
+	}
+
+	$allow_multiple_roles = wpum_get_option( 'allow_multiple_user_roles' );
+
+	$user_id = isset( $_GET['user_id'] ) ? absint( $_GET['user_id'] ) : false;
+
+	$profileuser = isset( $user_id ) ? get_user_by( 'id', $user_id ) : false;
+	$existing_roles = ( $profileuser ) ? $profileuser->roles : [];
+
+	$fields = array(
+		Field::make( 'checkbox', 'hide_profile_guests', esc_html__( 'Hide profile from guests', 'wp-user-manager' ) )
+			->set_help_text( esc_html__( 'Hide this profile from guests. Overrides the global profile options.', 'wp-user-manager' ) ),
+  		Field::make( 'checkbox', 'hide_profile_members', esc_html__( 'Hide profile from members', 'wp-user-manager' ) )
+			->set_help_text( esc_html__( 'Hide this profile from members. Overrides the global profile options.', 'wp-user-manager' ) ),
+	);
+
+	if ( $allow_multiple_roles && ( $profileuser || $pagenow == 'user-new.php' ) && ! is_network_admin() ) {
+		$fields[] = Field::make( 'multiselect', 'wpum_user_roles', '' )
+		->add_options( $roles )
+		->set_default_value( $existing_roles )
+		->set_classes( 'wpum-multiple-user-roles' )
+		->set_help_text( esc_html__( 'Select one or more roles for this user.', 'wp-user-manager' ) );
+	}
+
 	Container::make( 'user_meta', esc_html__( 'Profile Privacy', 'wp-user-manager' ) )
-	         ->add_fields( array(
-		         Field::make( 'checkbox', 'hide_profile_guests', esc_html__( 'Hide profile from guests', 'wp-user-manager' ) )
-		              ->set_help_text( esc_html__( 'Hide this profile from guests. Overrides the global profile options.', 'wp-user-manager' ) ),
-		         Field::make( 'checkbox', 'hide_profile_members', esc_html__( 'Hide profile from members', 'wp-user-manager' ) )
-		              ->set_help_text( esc_html__( 'Hide this profile from members. Overrides the global profile options.', 'wp-user-manager' ) )
-	         ) );
+	        ->add_fields( $fields );
 }
+
 add_action( 'carbon_fields_register_fields', 'wpum_register_profile_privacy_fields' );
 
 add_action( 'template_redirect', 'wpum_reset_password_redirect' );
@@ -418,6 +444,71 @@ function wpum_reset_password_redirect() {
 	exit;
 }
 
+function wpum_action_profile_update( $userId, $oldUserData = [] ) {
+
+	$allow_multiple_roles = wpum_get_option( 'allow_multiple_user_roles' );
+	if ( ! $allow_multiple_roles ) {
+		return;
+	}
+
+	if ( isset( $_POST['_wpum_user_roles'] ) && current_user_can( 'promote_user' ) ) {
+
+		$user = get_user_by('ID', $userId);
+
+		$wpum_roles = explode( '|', $_POST['_wpum_user_roles'] );
+		$currentRoles = $user->roles;
+
+		if ( empty( $wpum_roles ) || ! is_array( $wpum_roles )) {
+			return;
+		}
+
+		// Remove unselected roles
+		foreach ( $currentRoles as $role ) {
+			if ( ! in_array( $role, $wpum_roles ) ) {
+				$user->remove_role( $role );
+			}
+		}
+
+		// Add new roles
+		foreach ( $wpum_roles as $role ) {
+			if ( ! in_array( $role, $currentRoles ) ) {
+				$user->add_role( $role );
+			}
+		}
+	}
+}
+
+add_action( 'profile_update', 'wpum_action_profile_update', 99, 2 );
+if ( is_multisite() ) {
+	add_action( 'add_user_to_blog', 'wpum_action_profile_update', 99 );
+} else {
+	add_action( 'user_register', 'wpum_action_profile_update', 99 );
+}
+
+function wpum_modify_multiple_roles_ui( $user ) {
+	$allow_multiple_roles = wpum_get_option( 'allow_multiple_user_roles' );
+	if ( ! $allow_multiple_roles ) {
+		return;
+	}
+
+	echo <<<HTML
+	<script>
+		jQuery(function ( $ ) {
+			if ( ! $( '.user-role-wrap select#role, #createuser select#role' ).length ) {
+				return;
+			}
+			var el_userrole = $('.user-role-wrap select#role, #createuser select#role');
+			$( $( '.wpum-multiple-user-roles' ) ).insertAfter( el_userrole ).css('padding', 0);
+			$( el_userrole ).hide();
+		});
+	</script>
+HTML;
+}
+
+add_action( 'user_new_form', 'wpum_modify_multiple_roles_ui', 0 );
+add_action( 'show_user_profile', 'wpum_modify_multiple_roles_ui', 0 );
+add_action( 'edit_user_profile', 'wpum_modify_multiple_roles_ui', 0 );
+
 /**
  * Restrict profile page when disabled.
  *
@@ -433,3 +524,4 @@ function wpum_restrict_profile_page() {
 }
 
 add_action( 'template_redirect', 'wpum_restrict_profile_page' );
+
