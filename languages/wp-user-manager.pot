@@ -2,9 +2,9 @@
 # This file is distributed under the GPLv3+.
 msgid ""
 msgstr ""
-"Project-Id-Version: WP User Manager 2.6.4\n"
+"Project-Id-Version: WP User Manager 2.6.9\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/wp-user-manager\n"
-"POT-Creation-Date: 2021-08-24 11:26:55+00:00\n"
+"POT-Creation-Date: 2021-11-24 14:35:57+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -195,27 +195,27 @@ msgstr ""
 msgid "Password must be at least %s characters long"
 msgstr ""
 
-#: includes/actions.php:51
+#: includes/actions.php:69
 msgid " Users"
 msgstr ""
 
-#: includes/actions.php:58 includes/wpum-admin/class-wpum-options-panel.php:99
+#: includes/actions.php:76 includes/wpum-admin/class-wpum-options-panel.php:99
 #: includes/wpum-emails/class-wpum-emails-list.php:44
 msgid "Emails"
 msgstr ""
 
-#: includes/actions.php:66
+#: includes/actions.php:84
 msgid "Custom fields"
 msgstr ""
 
-#: includes/actions.php:74
+#: includes/actions.php:92
 #: includes/wpum-forms/class-wpum-registration-forms-editor.php:58
 #: includes/wpum-forms/class-wpum-registration-forms-editor.php:59
 #: includes/wpum-forms/class-wpum-registration-forms-editor.php:134
 msgid "Registration Forms"
 msgstr ""
 
-#: includes/actions.php:82 includes/filters.php:42 includes/functions.php:693
+#: includes/actions.php:100 includes/filters.php:42 includes/functions.php:693
 #: includes/wpum-admin/class-wpum-options-panel.php:84
 #: includes/wpum-forms/class-wpum-registration-forms-editor.php:157
 #: vendor/wp-user-manager/wpum-blocks/includes/classes/Blocks/AccountPage.php:32
@@ -233,38 +233,38 @@ msgstr ""
 msgid "Settings"
 msgstr ""
 
-#: includes/actions.php:278 includes/wpum-forms/class-wpum-form-profile.php:133
+#: includes/actions.php:297 includes/wpum-forms/class-wpum-form-profile.php:133
 msgid ""
 "This display name is already in use by someone else. Display names must be "
 "unique."
 msgstr ""
 
-#: includes/actions.php:287 includes/wpum-forms/class-wpum-form-profile.php:137
+#: includes/actions.php:306 includes/wpum-forms/class-wpum-form-profile.php:137
 msgid "This nickname is already in use by someone else. Nicknames must be unique."
 msgstr ""
 
-#: includes/actions.php:299 templates/profile-card.php:42
+#: includes/actions.php:318 templates/profile-card.php:42
 msgid "View Profile"
 msgstr ""
 
-#: includes/actions.php:365 includes/functions.php:716
+#: includes/actions.php:384 includes/functions.php:716
 #: includes/wpum-forms/class-wpum-form-privacy.php:74
 msgid "Profile Privacy"
 msgstr ""
 
-#: includes/actions.php:367
+#: includes/actions.php:386
 msgid "Hide profile from guests"
 msgstr ""
 
-#: includes/actions.php:368
+#: includes/actions.php:387
 msgid "Hide this profile from guests. Overrides the global profile options."
 msgstr ""
 
-#: includes/actions.php:369
+#: includes/actions.php:388
 msgid "Hide profile from members"
 msgstr ""
 
-#: includes/actions.php:370
+#: includes/actions.php:389
 msgid "Hide this profile from members. Overrides the global profile options."
 msgstr ""
 
@@ -303,7 +303,7 @@ msgstr ""
 msgid "Addons"
 msgstr ""
 
-#: includes/filters.php:168
+#: includes/filters.php:173
 msgid "Invalid email address or incorrect password."
 msgstr ""
 
@@ -393,29 +393,30 @@ msgstr ""
 msgid "Comments"
 msgstr ""
 
-#: includes/install.php:51
+#: includes/install.php:52
 msgid "Log In"
 msgstr ""
 
-#: includes/install.php:67
+#: includes/install.php:68
 msgid "Password Reset"
 msgstr ""
 
-#: includes/install.php:83
+#: includes/install.php:84
 #: includes/wpum-widgets/class-wpum-registration-form-widget.php:41
 #: templates/forms/form-registration.php:48
 msgid "Register"
 msgstr ""
 
-#: includes/install.php:99 includes/wpum-admin/class-wpum-options-panel.php:128
+#: includes/install.php:100
+#: includes/wpum-admin/class-wpum-options-panel.php:128
 msgid "Account"
 msgstr ""
 
-#: includes/install.php:115
+#: includes/install.php:116
 msgid "Profile"
 msgstr ""
 
-#: includes/install.php:138
+#: includes/install.php:139
 #: includes/wpum-upgrades/class-wpum-plugin-updates.php:522
 msgid "Default registration form"
 msgstr ""
@@ -486,7 +487,7 @@ msgid "Email address*"
 msgstr ""
 
 #: includes/wpum-admin/class-wpum-getting-started.php:161
-#: includes/wpum-directories/class-wpum-directories-editor.php:162
+#: includes/wpum-directories/class-wpum-directories-editor.php:197
 #: includes/wpum-directories/wpum-directories-functions.php:23
 #: includes/wpum-fields/class-wpum-field.php:354
 msgid "First name"
@@ -930,159 +931,167 @@ msgstr ""
 
 #: includes/wpum-admin/class-wpum-options-panel.php:337
 msgid ""
-"Enable this option to stop receiving notifications when a new user resets "
-"his password."
+"Enable this option to stop receiving notifications when user resets their "
+"password."
 msgstr ""
 
 #: includes/wpum-admin/class-wpum-options-panel.php:344
-msgid "Allow Guests to View Profiles"
+msgid "Disable User Profiles"
 msgstr ""
 
 #: includes/wpum-admin/class-wpum-options-panel.php:345
-msgid "Enable this option to allow guests to view users profiles."
+msgid "Enable this option to disable frontend user profiles."
 msgstr ""
 
 #: includes/wpum-admin/class-wpum-options-panel.php:350
-msgid "Allow Members to View Profiles"
+msgid "Allow Guests to View Profiles"
 msgstr ""
 
 #: includes/wpum-admin/class-wpum-options-panel.php:351
+msgid "Enable this option to allow guests to view users profiles."
+msgstr ""
+
+#: includes/wpum-admin/class-wpum-options-panel.php:356
+msgid "Allow Members to View Profiles"
+msgstr ""
+
+#: includes/wpum-admin/class-wpum-options-panel.php:357
 msgid ""
 "Enable this option to allow members to view users profiles. If disabled, "
 "users can only see their own profile."
 msgstr ""
 
-#: includes/wpum-admin/class-wpum-options-panel.php:356
+#: includes/wpum-admin/class-wpum-options-panel.php:362
 msgid "Allow Members to set their profile privacy"
 msgstr ""
 
-#: includes/wpum-admin/class-wpum-options-panel.php:357
+#: includes/wpum-admin/class-wpum-options-panel.php:363
 msgid ""
 "Adds a Privacy account tab where members can override the global settings "
 "above."
 msgstr ""
 
-#: includes/wpum-admin/class-wpum-options-panel.php:362
+#: includes/wpum-admin/class-wpum-options-panel.php:368
 msgid "Custom Avatars"
 msgstr ""
 
-#: includes/wpum-admin/class-wpum-options-panel.php:363
+#: includes/wpum-admin/class-wpum-options-panel.php:369
 msgid ""
 "Enable this option to allow users to upload custom avatars for their "
 "profiles."
 msgstr ""
 
-#: includes/wpum-admin/class-wpum-options-panel.php:368
+#: includes/wpum-admin/class-wpum-options-panel.php:374
 msgid "Disable Profile Cover Image"
 msgstr ""
 
-#: includes/wpum-admin/class-wpum-options-panel.php:369
+#: includes/wpum-admin/class-wpum-options-panel.php:375
 msgid ""
 "Enable this option to prevent users from uploading a custom profile cover "
 "image."
 msgstr ""
 
-#: includes/wpum-admin/class-wpum-options-panel.php:374
+#: includes/wpum-admin/class-wpum-options-panel.php:380
 msgid "Disable Strong Passwords"
 msgstr ""
 
-#: includes/wpum-admin/class-wpum-options-panel.php:375
+#: includes/wpum-admin/class-wpum-options-panel.php:381
 msgid ""
 "Enable this option to disable the built-in strong passwords validation "
 "system of WP User Manager."
 msgstr ""
 
-#: includes/wpum-admin/class-wpum-options-panel.php:380
+#: includes/wpum-admin/class-wpum-options-panel.php:386
 msgid "Default Display Name"
 msgstr ""
 
-#: includes/wpum-admin/class-wpum-options-panel.php:381
+#: includes/wpum-admin/class-wpum-options-panel.php:387
 msgid ""
 "Select the default format for the user display name at registration. The "
 "user can change their display name later in their account."
 msgstr ""
 
-#: includes/wpum-admin/class-wpum-options-panel.php:390
+#: includes/wpum-admin/class-wpum-options-panel.php:396
 msgid "Display Posts"
 msgstr ""
 
-#: includes/wpum-admin/class-wpum-options-panel.php:391
+#: includes/wpum-admin/class-wpum-options-panel.php:397
 msgid "Enable this option to display users submitted post on their profile page."
 msgstr ""
 
-#: includes/wpum-admin/class-wpum-options-panel.php:396
+#: includes/wpum-admin/class-wpum-options-panel.php:402
 msgid "Display Comments"
 msgstr ""
 
-#: includes/wpum-admin/class-wpum-options-panel.php:397
+#: includes/wpum-admin/class-wpum-options-panel.php:403
 msgid ""
 "Enable this option to display users submitted comments on their profile "
 "page."
 msgstr ""
 
-#: includes/wpum-admin/class-wpum-options-panel.php:404
+#: includes/wpum-admin/class-wpum-options-panel.php:410
 msgid "Require Current Password"
 msgstr ""
 
-#: includes/wpum-admin/class-wpum-options-panel.php:405
+#: includes/wpum-admin/class-wpum-options-panel.php:411
 msgid "Ask user for current password when resetting password on the account page"
 msgstr ""
 
-#: includes/wpum-admin/class-wpum-options-panel.php:412
+#: includes/wpum-admin/class-wpum-options-panel.php:418
 msgid "After Login"
 msgstr ""
 
-#: includes/wpum-admin/class-wpum-options-panel.php:413
+#: includes/wpum-admin/class-wpum-options-panel.php:419
 msgid ""
 "Select the page where you want to redirect users after they login. If empty "
 "it will reload the login page."
 msgstr ""
 
-#: includes/wpum-admin/class-wpum-options-panel.php:419
+#: includes/wpum-admin/class-wpum-options-panel.php:425
 msgid "After Logout"
 msgstr ""
 
-#: includes/wpum-admin/class-wpum-options-panel.php:420
+#: includes/wpum-admin/class-wpum-options-panel.php:426
 msgid ""
 "Select the page where you want to redirect users after they logout. If "
 "empty will return to wp-login.php"
 msgstr ""
 
-#: includes/wpum-admin/class-wpum-options-panel.php:426
+#: includes/wpum-admin/class-wpum-options-panel.php:432
 msgid "After Registration"
 msgstr ""
 
-#: includes/wpum-admin/class-wpum-options-panel.php:427
+#: includes/wpum-admin/class-wpum-options-panel.php:433
 msgid ""
 "Select the page where you want to redirect users after they successfully "
 "register. If empty a message will be displayed instead."
 msgstr ""
 
-#: includes/wpum-admin/class-wpum-options-panel.php:435
+#: includes/wpum-admin/class-wpum-options-panel.php:441
 msgid "Backend Register"
 msgstr ""
 
-#: includes/wpum-admin/class-wpum-options-panel.php:436
+#: includes/wpum-admin/class-wpum-options-panel.php:442
 msgid ""
 "Select a page if you wish to redirect users who try to signup through "
 "wp-login.php"
 msgstr ""
 
-#: includes/wpum-admin/class-wpum-options-panel.php:442
+#: includes/wpum-admin/class-wpum-options-panel.php:448
 msgid "Backend lost password"
 msgstr ""
 
-#: includes/wpum-admin/class-wpum-options-panel.php:443
+#: includes/wpum-admin/class-wpum-options-panel.php:449
 msgid ""
 "Select a page if you wish to redirect users who try to recover a lost "
 "password through wp-login.php"
 msgstr ""
 
-#: includes/wpum-admin/class-wpum-options-panel.php:449
+#: includes/wpum-admin/class-wpum-options-panel.php:455
 msgid "Backend Profile"
 msgstr ""
 
-#: includes/wpum-admin/class-wpum-options-panel.php:450
+#: includes/wpum-admin/class-wpum-options-panel.php:456
 msgid ""
 "Select the page where you want to redirect users who try to access their "
 "profile on the backend."
@@ -1138,319 +1147,319 @@ msgstr ""
 msgid "Read more"
 msgstr ""
 
-#: includes/wpum-directories/class-wpum-directories-editor.php:58
+#: includes/wpum-directories/class-wpum-directories-editor.php:54
 msgid "Users Directories"
 msgstr ""
 
-#: includes/wpum-directories/class-wpum-directories-editor.php:59
-#: includes/wpum-directories/class-wpum-directories-editor.php:85
+#: includes/wpum-directories/class-wpum-directories-editor.php:55
+#: includes/wpum-directories/class-wpum-directories-editor.php:81
 #: includes/wpum-shortcodes/class-wpum-shortcode-directory.php:19
 #: includes/wpum-shortcodes/class-wpum-shortcode-directory.php:20
 msgid "Directory"
 msgstr ""
 
-#: includes/wpum-directories/class-wpum-directories-editor.php:60
+#: includes/wpum-directories/class-wpum-directories-editor.php:56
 msgid "Directory Archives"
 msgstr ""
 
-#: includes/wpum-directories/class-wpum-directories-editor.php:61
+#: includes/wpum-directories/class-wpum-directories-editor.php:57
 msgid "Directory Attributes"
 msgstr ""
 
-#: includes/wpum-directories/class-wpum-directories-editor.php:62
+#: includes/wpum-directories/class-wpum-directories-editor.php:58
 msgid "Parent Directory:"
 msgstr ""
 
-#: includes/wpum-directories/class-wpum-directories-editor.php:63
+#: includes/wpum-directories/class-wpum-directories-editor.php:59
 msgid "Directories"
 msgstr ""
 
-#: includes/wpum-directories/class-wpum-directories-editor.php:64
+#: includes/wpum-directories/class-wpum-directories-editor.php:60
 msgid "Add new directory"
 msgstr ""
 
-#: includes/wpum-directories/class-wpum-directories-editor.php:65
+#: includes/wpum-directories/class-wpum-directories-editor.php:61
 msgid "Add New"
 msgstr ""
 
-#: includes/wpum-directories/class-wpum-directories-editor.php:66
+#: includes/wpum-directories/class-wpum-directories-editor.php:62
 msgid "New Directory"
 msgstr ""
 
-#: includes/wpum-directories/class-wpum-directories-editor.php:67
+#: includes/wpum-directories/class-wpum-directories-editor.php:63
 msgid "Edit Directory"
 msgstr ""
 
-#: includes/wpum-directories/class-wpum-directories-editor.php:68
+#: includes/wpum-directories/class-wpum-directories-editor.php:64
 msgid "Update Directory"
 msgstr ""
 
-#: includes/wpum-directories/class-wpum-directories-editor.php:69
+#: includes/wpum-directories/class-wpum-directories-editor.php:65
 msgid "View Directory"
 msgstr ""
 
-#: includes/wpum-directories/class-wpum-directories-editor.php:70
+#: includes/wpum-directories/class-wpum-directories-editor.php:66
 msgid "View Directories"
 msgstr ""
 
-#: includes/wpum-directories/class-wpum-directories-editor.php:71
+#: includes/wpum-directories/class-wpum-directories-editor.php:67
 msgid "Search Directory"
 msgstr ""
 
-#: includes/wpum-directories/class-wpum-directories-editor.php:72
+#: includes/wpum-directories/class-wpum-directories-editor.php:68
 msgid "Not found"
 msgstr ""
 
-#: includes/wpum-directories/class-wpum-directories-editor.php:73
+#: includes/wpum-directories/class-wpum-directories-editor.php:69
 msgid "Not found in Trash"
 msgstr ""
 
-#: includes/wpum-directories/class-wpum-directories-editor.php:74
+#: includes/wpum-directories/class-wpum-directories-editor.php:70
 msgid "Featured Image"
 msgstr ""
 
-#: includes/wpum-directories/class-wpum-directories-editor.php:75
+#: includes/wpum-directories/class-wpum-directories-editor.php:71
 msgid "Set featured image"
 msgstr ""
 
-#: includes/wpum-directories/class-wpum-directories-editor.php:76
+#: includes/wpum-directories/class-wpum-directories-editor.php:72
 msgid "Remove featured image"
 msgstr ""
 
-#: includes/wpum-directories/class-wpum-directories-editor.php:77
+#: includes/wpum-directories/class-wpum-directories-editor.php:73
 msgid "Use as featured image"
 msgstr ""
 
-#: includes/wpum-directories/class-wpum-directories-editor.php:78
+#: includes/wpum-directories/class-wpum-directories-editor.php:74
 msgid "Insert into directory"
 msgstr ""
 
-#: includes/wpum-directories/class-wpum-directories-editor.php:79
+#: includes/wpum-directories/class-wpum-directories-editor.php:75
 msgid "Uploaded to this directory"
 msgstr ""
 
-#: includes/wpum-directories/class-wpum-directories-editor.php:80
+#: includes/wpum-directories/class-wpum-directories-editor.php:76
 msgid "Directories list"
 msgstr ""
 
-#: includes/wpum-directories/class-wpum-directories-editor.php:81
+#: includes/wpum-directories/class-wpum-directories-editor.php:77
 msgid "Directories list navigation"
 msgstr ""
 
-#: includes/wpum-directories/class-wpum-directories-editor.php:82
+#: includes/wpum-directories/class-wpum-directories-editor.php:78
 msgid "Filter directories list"
 msgstr ""
 
-#: includes/wpum-directories/class-wpum-directories-editor.php:115
+#: includes/wpum-directories/class-wpum-directories-editor.php:150
 msgid "User roles"
 msgstr ""
 
-#: includes/wpum-directories/class-wpum-directories-editor.php:116
+#: includes/wpum-directories/class-wpum-directories-editor.php:151
 msgid "Leave blank to display all user roles."
 msgstr ""
 
-#: includes/wpum-directories/class-wpum-directories-editor.php:118
+#: includes/wpum-directories/class-wpum-directories-editor.php:153
 msgid "Exclude users"
 msgstr ""
 
-#: includes/wpum-directories/class-wpum-directories-editor.php:119
+#: includes/wpum-directories/class-wpum-directories-editor.php:154
 msgid "Example: 1, 6, 32"
 msgstr ""
 
-#: includes/wpum-directories/class-wpum-directories-editor.php:120
+#: includes/wpum-directories/class-wpum-directories-editor.php:155
 msgid "Comma separated list of users id you wish to exclude."
 msgstr ""
 
-#: includes/wpum-directories/class-wpum-directories-editor.php:121
-#: includes/wpum-directories/class-wpum-directories-editor.php:255
+#: includes/wpum-directories/class-wpum-directories-editor.php:156
+#: includes/wpum-directories/class-wpum-directories-editor.php:290
 msgid "Profiles per page"
 msgstr ""
 
-#: includes/wpum-directories/class-wpum-directories-editor.php:124
+#: includes/wpum-directories/class-wpum-directories-editor.php:159
 msgid "Select how many profiles you wish to display per page."
 msgstr ""
 
-#: includes/wpum-directories/class-wpum-directories-editor.php:127
+#: includes/wpum-directories/class-wpum-directories-editor.php:162
 #: includes/wpum-fields/class-wpum-fields-editor.php:178
 msgid "General settings"
 msgstr ""
 
-#: includes/wpum-directories/class-wpum-directories-editor.php:132
+#: includes/wpum-directories/class-wpum-directories-editor.php:167
 msgid ""
 "Select the fields to search in. Search custom fields using the <a "
 "href=\"%s\" target=\"_blank\">Custom Fields</a> addon."
 msgstr ""
 
-#: includes/wpum-directories/class-wpum-directories-editor.php:136
+#: includes/wpum-directories/class-wpum-directories-editor.php:171
 msgid "Display search form"
 msgstr ""
 
-#: includes/wpum-directories/class-wpum-directories-editor.php:138
+#: includes/wpum-directories/class-wpum-directories-editor.php:173
 msgid "Enable this option to display the user search form"
 msgstr ""
 
-#: includes/wpum-directories/class-wpum-directories-editor.php:139
+#: includes/wpum-directories/class-wpum-directories-editor.php:174
 msgid "Search fields"
 msgstr ""
 
-#: includes/wpum-directories/class-wpum-directories-editor.php:145
+#: includes/wpum-directories/class-wpum-directories-editor.php:180
 #: templates/directory/search-form.php:36
 msgid "Search"
 msgstr ""
 
-#: includes/wpum-directories/class-wpum-directories-editor.php:151
+#: includes/wpum-directories/class-wpum-directories-editor.php:186
 msgid "Display sorter"
 msgstr ""
 
-#: includes/wpum-directories/class-wpum-directories-editor.php:153
+#: includes/wpum-directories/class-wpum-directories-editor.php:188
 msgid ""
 "Enable this setting to display a dropdown menu into the directory with the "
 "sorting options."
 msgstr ""
 
-#: includes/wpum-directories/class-wpum-directories-editor.php:154
+#: includes/wpum-directories/class-wpum-directories-editor.php:189
 msgid "Display amount filter"
 msgstr ""
 
-#: includes/wpum-directories/class-wpum-directories-editor.php:156
+#: includes/wpum-directories/class-wpum-directories-editor.php:191
 msgid ""
 "Enable this setting to display a dropdown menu into the directory with the "
 "results amount filter."
 msgstr ""
 
-#: includes/wpum-directories/class-wpum-directories-editor.php:157
+#: includes/wpum-directories/class-wpum-directories-editor.php:192
 msgid "Sorting method"
 msgstr ""
 
-#: includes/wpum-directories/class-wpum-directories-editor.php:158
+#: includes/wpum-directories/class-wpum-directories-editor.php:193
 msgid ""
 "Select the sorting method for the directory. If the sorter field is "
 "visible, this will be used as default option."
 msgstr ""
 
-#: includes/wpum-directories/class-wpum-directories-editor.php:160
+#: includes/wpum-directories/class-wpum-directories-editor.php:195
 #: includes/wpum-directories/wpum-directories-functions.php:21
 msgid "Newest users first"
 msgstr ""
 
-#: includes/wpum-directories/class-wpum-directories-editor.php:161
+#: includes/wpum-directories/class-wpum-directories-editor.php:196
 #: includes/wpum-directories/wpum-directories-functions.php:22
 msgid "Oldest users first"
 msgstr ""
 
-#: includes/wpum-directories/class-wpum-directories-editor.php:163
-#: includes/wpum-directories/class-wpum-directories-editor.php:212
+#: includes/wpum-directories/class-wpum-directories-editor.php:198
+#: includes/wpum-directories/class-wpum-directories-editor.php:247
 #: includes/wpum-directories/wpum-directories-functions.php:24
 msgid "Last Name"
 msgstr ""
 
-#: includes/wpum-directories/class-wpum-directories-editor.php:167
+#: includes/wpum-directories/class-wpum-directories-editor.php:202
 msgid "Sorting"
 msgstr ""
 
-#: includes/wpum-directories/class-wpum-directories-editor.php:172
+#: includes/wpum-directories/class-wpum-directories-editor.php:207
 msgid "Template"
 msgstr ""
 
-#: includes/wpum-directories/class-wpum-directories-editor.php:173
+#: includes/wpum-directories/class-wpum-directories-editor.php:208
 msgid "Select a template for this directory."
 msgstr ""
 
-#: includes/wpum-directories/class-wpum-directories-editor.php:175
-msgid "User template"
-msgstr ""
-
-#: includes/wpum-directories/class-wpum-directories-editor.php:176
-msgid "Select a template for the users within this directory."
-msgstr ""
-
-#: includes/wpum-directories/class-wpum-directories-editor.php:180
-msgid "Directory template"
+#: includes/wpum-directories/class-wpum-directories-editor.php:210
+msgid "User Template"
 msgstr ""
 
 #: includes/wpum-directories/class-wpum-directories-editor.php:211
+msgid "Select a template for the users within this directory."
+msgstr ""
+
+#: includes/wpum-directories/class-wpum-directories-editor.php:215
+msgid "Directory template"
+msgstr ""
+
+#: includes/wpum-directories/class-wpum-directories-editor.php:246
 msgid "First Name"
 msgstr ""
 
-#: includes/wpum-directories/class-wpum-directories-editor.php:213
+#: includes/wpum-directories/class-wpum-directories-editor.php:248
 #: includes/wpum-emails/class-wpum-emails-list.php:89
 #: includes/wpum-fields/class-wpum-field.php:369
 msgid "Description"
 msgstr ""
 
-#: includes/wpum-directories/class-wpum-directories-editor.php:253
+#: includes/wpum-directories/class-wpum-directories-editor.php:288
 msgid "User Roles"
 msgstr ""
 
-#: includes/wpum-directories/class-wpum-directories-editor.php:254
+#: includes/wpum-directories/class-wpum-directories-editor.php:289
 msgid "Search form"
 msgstr ""
 
-#: includes/wpum-directories/class-wpum-directories-editor.php:256
+#: includes/wpum-directories/class-wpum-directories-editor.php:291
 #: includes/wpum-forms/class-wpum-registration-forms-editor.php:140
 #: includes/wpum-roles/class-wpum-roles-editor.php:137
 msgid "Shortcode"
 msgstr ""
 
-#: includes/wpum-directories/class-wpum-directories-editor.php:276
+#: includes/wpum-directories/class-wpum-directories-editor.php:311
 msgid "All"
 msgstr ""
 
-#: includes/wpum-directories/class-wpum-directories-editor.php:319
-#: includes/wpum-directories/class-wpum-directories-editor.php:322
+#: includes/wpum-directories/class-wpum-directories-editor.php:354
+#: includes/wpum-directories/class-wpum-directories-editor.php:357
 msgid "Directory updated."
 msgstr ""
 
-#: includes/wpum-directories/class-wpum-directories-editor.php:320
+#: includes/wpum-directories/class-wpum-directories-editor.php:355
 msgid "Custom field updated."
 msgstr ""
 
-#: includes/wpum-directories/class-wpum-directories-editor.php:321
+#: includes/wpum-directories/class-wpum-directories-editor.php:356
 msgid "Custom field deleted."
 msgstr ""
 
-#: includes/wpum-directories/class-wpum-directories-editor.php:324
+#: includes/wpum-directories/class-wpum-directories-editor.php:359
 #. translators: %s: date and time of the revision
 msgid "Directory restored to revision from %s"
 msgstr ""
 
-#: includes/wpum-directories/class-wpum-directories-editor.php:325
+#: includes/wpum-directories/class-wpum-directories-editor.php:360
 msgid "Directory created. Use the following shortcode to display this directory %s"
 msgstr ""
 
-#: includes/wpum-directories/class-wpum-directories-editor.php:326
+#: includes/wpum-directories/class-wpum-directories-editor.php:361
 msgid "Directory saved."
 msgstr ""
 
-#: includes/wpum-directories/class-wpum-directories-editor.php:327
+#: includes/wpum-directories/class-wpum-directories-editor.php:362
 msgid "Directory submitted."
 msgstr ""
 
-#: includes/wpum-directories/class-wpum-directories-editor.php:349
+#: includes/wpum-directories/class-wpum-directories-editor.php:384
 msgid "%s directory updated."
 msgid_plural "%s directory updated."
 msgstr[0] ""
 msgstr[1] ""
 
-#: includes/wpum-directories/class-wpum-directories-editor.php:350
+#: includes/wpum-directories/class-wpum-directories-editor.php:385
 msgid "%s directory not updated, somebody is editing it."
 msgid_plural "%s directories not updated, somebody is editing them."
 msgstr[0] ""
 msgstr[1] ""
 
-#: includes/wpum-directories/class-wpum-directories-editor.php:351
+#: includes/wpum-directories/class-wpum-directories-editor.php:386
 msgid "%s directory permanently deleted."
 msgid_plural "%s directories permanently deleted."
 msgstr[0] ""
 msgstr[1] ""
 
-#: includes/wpum-directories/class-wpum-directories-editor.php:352
+#: includes/wpum-directories/class-wpum-directories-editor.php:387
 msgid "%s directory has been deleted."
 msgid_plural "%s directories have been deleted."
 msgstr[0] ""
 msgstr[1] ""
 
-#: includes/wpum-directories/class-wpum-directories-editor.php:353
+#: includes/wpum-directories/class-wpum-directories-editor.php:388
 msgid "%s directory restored from the Trash."
 msgid_plural "%s directories restored from the Trash."
 msgstr[0] ""
@@ -1994,6 +2003,18 @@ msgstr ""
 msgid "Something went wrong: could not update the fields order."
 msgstr ""
 
+#: includes/wpum-fields/class-wpum-fields.php:92
+msgid "Default Fields"
+msgstr ""
+
+#: includes/wpum-fields/class-wpum-fields.php:96
+msgid "Standard Fields"
+msgstr ""
+
+#: includes/wpum-fields/class-wpum-fields.php:100
+msgid "Advanced Fields"
+msgstr ""
+
 #: includes/wpum-fields/types/class-wpum-field-audio.php:20
 msgid "Audio"
 msgstr ""
@@ -2187,18 +2208,6 @@ msgstr ""
 msgid "Permissions"
 msgstr ""
 
-#: includes/wpum-fields/wpum-fields-functions.php:267
-msgid "Default Fields"
-msgstr ""
-
-#: includes/wpum-fields/wpum-fields-functions.php:271
-msgid "Standard Fields"
-msgstr ""
-
-#: includes/wpum-fields/wpum-fields-functions.php:275
-msgid "Advanced Fields"
-msgstr ""
-
 #: includes/wpum-forms/class-wpum-form-login.php:57
 msgid "Login Details"
 msgstr ""
@@ -2312,64 +2321,64 @@ msgstr ""
 msgid "Profile settings"
 msgstr ""
 
-#: includes/wpum-forms/class-wpum-form-registration.php:86
+#: includes/wpum-forms/class-wpum-form-registration.php:88
 msgid "Registration Details"
 msgstr ""
 
-#: includes/wpum-forms/class-wpum-form-registration.php:131
+#: includes/wpum-forms/class-wpum-form-registration.php:133
 msgid "%s is not a valid email address."
 msgstr ""
 
-#: includes/wpum-forms/class-wpum-form-registration.php:174
+#: includes/wpum-forms/class-wpum-form-registration.php:176
 msgid "This username cannot be used."
 msgstr ""
 
-#: includes/wpum-forms/class-wpum-form-registration.php:195
+#: includes/wpum-forms/class-wpum-form-registration.php:197
 msgid "Failed honeypot validation."
 msgstr ""
 
-#: includes/wpum-forms/class-wpum-form-registration.php:224
+#: includes/wpum-forms/class-wpum-form-registration.php:226
 msgid "Select a valid role from the list."
 msgstr ""
 
-#: includes/wpum-forms/class-wpum-form-registration.php:257
+#: includes/wpum-forms/class-wpum-form-registration.php:259
 msgid "%s requires at least %d rows"
 msgstr ""
 
-#: includes/wpum-forms/class-wpum-form-registration.php:261
+#: includes/wpum-forms/class-wpum-form-registration.php:263
 msgid "%s accepts maximum %d rows"
 msgstr ""
 
-#: includes/wpum-forms/class-wpum-form-registration.php:268
+#: includes/wpum-forms/class-wpum-form-registration.php:270
 msgid "Please fill out %s data"
 msgstr ""
 
-#: includes/wpum-forms/class-wpum-form-registration.php:352
+#: includes/wpum-forms/class-wpum-form-registration.php:356
 msgid "If you're human leave this blank:"
 msgstr ""
 
-#: includes/wpum-forms/class-wpum-form-registration.php:362
+#: includes/wpum-forms/class-wpum-form-registration.php:366
 msgid "Select Role"
 msgstr ""
 
-#: includes/wpum-forms/class-wpum-form-registration.php:366
+#: includes/wpum-forms/class-wpum-form-registration.php:370
 msgid "Select your user role"
 msgstr ""
 
-#: includes/wpum-forms/class-wpum-form-registration.php:379
+#: includes/wpum-forms/class-wpum-form-registration.php:383
 msgid ""
 "By registering to this website you agree to the <a href=\"%s\" "
 "target=\"_blank\">terms & conditions</a>."
 msgstr ""
 
-#: includes/wpum-forms/class-wpum-form-registration.php:394
+#: includes/wpum-forms/class-wpum-form-registration.php:398
 msgid ""
 "I have read and accept the <a href=\"%1$s\" target=\"_blank\">privacy "
 "policy</a> and allow \"%2$s\" to collect and store the data I submit "
 "through this form."
 msgstr ""
 
-#: includes/wpum-forms/class-wpum-form-registration.php:476
+#: includes/wpum-forms/class-wpum-form-registration.php:480
 msgid ""
 "The registration form cannot be used because either a username or email "
 "field is required to process registrations. Please edit the form and add at "
@@ -3570,36 +3579,36 @@ msgstr ""
 msgid "%s has not made any comment yet."
 msgstr ""
 
-#: templates/profiles/posts.php:39
+#: templates/profiles/posts.php:40
 msgid "Posted on:"
 msgstr ""
 
-#: templates/profiles/posts.php:43
+#: templates/profiles/posts.php:44
 msgid "Comments:"
 msgstr ""
 
-#: templates/profiles/posts.php:44
+#: templates/profiles/posts.php:45
 msgid "No Comments"
 msgstr ""
 
-#: templates/profiles/posts.php:44
+#: templates/profiles/posts.php:45
 msgid "1 Comment"
 msgstr ""
 
-#: templates/profiles/posts.php:44
+#: templates/profiles/posts.php:45
 msgid "% Comments"
 msgstr ""
 
-#: templates/profiles/posts.php:63
+#: templates/profiles/posts.php:65
 msgid "Newer Posts"
 msgstr ""
 
-#: templates/profiles/posts.php:64
+#: templates/profiles/posts.php:66
 msgid "Older Posts"
 msgstr ""
 
-#: templates/profiles/posts.php:78
-msgid "%s did not submit any posts yet."
+#: templates/profiles/posts.php:80
+msgid "%s has not submitted any posts yet."
 msgstr ""
 
 #: vendor/a5hleyrich/wp-background-processing/classes/wp-background-process.php:425
@@ -4094,7 +4103,7 @@ msgstr ""
 msgid "Select Directory"
 msgstr ""
 
-#: wp-user-manager.php:404 wp-user-manager.php:416
+#: wp-user-manager.php:420 wp-user-manager.php:432
 msgid "Cheatin&#8217; huh?"
 msgstr ""
 
@@ -4149,12 +4158,12 @@ msgctxt "_doing_it_wrong error message"
 msgid "You have no rights to access this page"
 msgstr ""
 
-#: includes/wpum-directories/class-wpum-directories-editor.php:56
+#: includes/wpum-directories/class-wpum-directories-editor.php:52
 msgctxt "Post Type General Name"
 msgid "Users Directories"
 msgstr ""
 
-#: includes/wpum-directories/class-wpum-directories-editor.php:57
+#: includes/wpum-directories/class-wpum-directories-editor.php:53
 msgctxt "Post Type Singular Name"
 msgid "Directory"
 msgstr ""

@@ -98,10 +98,19 @@ class WPUM_Form_Password_Recovery extends WPUM_Form {
 			return;
 		}
 
+		$authentication_method = wpum_get_option( 'login_method' );
+		$username_label        = __( 'Username or email', 'wp-user-manager' );
+		if ( $authentication_method == 'username' ) {
+			$username_label = __( 'Username', 'wp-user-manager' );
+		}
+		if ( $authentication_method == 'email' ) {
+			$username_label = __( 'Email', 'wp-user-manager' );
+		}
+
 		$this->fields = apply_filters( 'password_recover_form_fields', array(
 			'user' => array(
 				'username_email' => array(
-					'label'       => __( 'Username or email', 'wp-user-manager' ),
+					'label'       => $username_label,
 					'type'        => 'text',
 					'required'    => true,
 					'placeholder' => '',

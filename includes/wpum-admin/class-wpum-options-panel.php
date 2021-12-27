@@ -253,6 +253,12 @@ class WPUM_Options_Panel {
 					'desc' => __( 'Enable the roles editor in the Users menu.', 'wp-user-manager' ),
 					'type' => 'checkbox'
 				),
+				array(
+					'id'   => 'allow_multiple_user_roles',
+					'name' => __( 'Allow Multiple Roles', 'wp-user-manager' ),
+					'desc' => __( 'Users can be assigned multiple roles.', 'wp-user-manager' ),
+					'type' => 'checkbox'
+				),
 			],
 			'registration' => [
 				array(
@@ -334,11 +340,17 @@ class WPUM_Options_Panel {
 				array(
 					'id'   => 'disable_admin_password_recovery_email',
 					'name' => __( 'Disable Admin Password Recovery Email', 'wp-user-manager' ),
-					'desc' => __( 'Enable this option to stop receiving notifications when a new user resets his password.', 'wp-user-manager' ),
+					'desc' => __( 'Enable this option to stop receiving notifications when user resets their password.', 'wp-user-manager' ),
 					'type' => 'checkbox',
 				),
 			],
 			'profiles'            => [
+				array(
+					'id'   => 'disable_profiles',
+					'name' => __( 'Disable User Profiles', 'wp-user-manager' ),
+					'desc' => __( 'Enable this option to disable frontend user profiles.', 'wp-user-manager' ),
+					'type' => 'checkbox',
+				),
 				array(
 					'id'   => 'guests_can_view_profiles',
 					'name' => __( 'Allow Guests to View Profiles', 'wp-user-manager' ),

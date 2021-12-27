@@ -43,7 +43,8 @@ function wp_user_manager_install( $network_wide = false ) {
 function wpum_generate_pages() {
 	$is_block_editor = function_exists( 'use_block_editor_for_post_type' ) && use_block_editor_for_post_type( 'page' );
 	// Generate login page
-	if ( ! wpum_get_option( 'login_page' ) ) {
+
+	if ( ! wpum_get_option( 'login_page' ) || FALSE === get_post_status( wpum_get_option( 'login_page' )[0] ) ) {
 		$login_content = $is_block_editor ? '<!-- wp:wpum/login-form /-->' : '[wpum_login_form psw_link="yes" register_link="yes"]';
 
 		$login = wp_insert_post(
@@ -59,7 +60,7 @@ function wpum_generate_pages() {
 		wpum_update_option( 'login_page', [ $login ] );
 	}
 	// Generate password recovery page
-	if ( ! wpum_get_option( 'password_recovery_page' ) ) {
+	if ( ! wpum_get_option( 'password_recovery_page' ) || FALSE === get_post_status( wpum_get_option( 'password_recovery_page' )[0] ) ) {
 		$psw_content = $is_block_editor ? '<!-- wp:wpum/password-recovery-form /-->' : '[wpum_password_recovery login_link="yes" register_link="yes"]';
 
 		$psw = wp_insert_post(
@@ -75,7 +76,7 @@ function wpum_generate_pages() {
 		wpum_update_option( 'password_recovery_page', [ $psw ] );
 	}
 	// Generate password recovery page
-	if ( ! wpum_get_option( 'registration_page' ) ) {
+	if ( ! wpum_get_option( 'registration_page' ) || FALSE === get_post_status( wpum_get_option( 'registration_page' )[0] ) ) {
 		$reg_content = $is_block_editor ? '<!-- wp:wpum/registration-form /-->' : '[wpum_register login_link="yes" psw_link="yes"]';
 
 		$register = wp_insert_post(
@@ -91,7 +92,7 @@ function wpum_generate_pages() {
 		wpum_update_option( 'registration_page', [ $register ] );
 	}
 	// Generate account page
-	if ( ! wpum_get_option( 'account_page' ) ) {
+	if ( ! wpum_get_option( 'account_page' ) || FALSE === get_post_status( wpum_get_option( 'account_page' )[0] ) ) {
 		$account_content = $is_block_editor ? '<!-- wp:wpum/account-page /-->' : '[wpum_account]';
 
 		$account = wp_insert_post(
@@ -107,7 +108,7 @@ function wpum_generate_pages() {
 		wpum_update_option( 'account_page', [ $account ] );
 	}
 	// Generate password recovery page
-	if ( ! wpum_get_option( 'profile_page' ) ) {
+	if ( ! wpum_get_option( 'profile_page' ) || FALSE === get_post_status( wpum_get_option( 'profile_page' )[0] ) ) {
 		$profile_content = $is_block_editor ? '<!-- wp:wpum/profile-page /-->' : '[wpum_profile]';
 
 		$profile = wp_insert_post(
@@ -257,3 +258,20 @@ function wpum_run_install() {
 	set_transient( '_wpum_activation_redirect', true, 30 );
 
 }
+
+/**
+ * Install default data when new site is added.
+ * @param  object $site
+ * @return void
+ */
+function wpum_multisite_new_site( $site ){
+	if ( ! function_exists( 'is_plugin_active_for_network' ) ) {
+		require_once( ABSPATH . '/wp-admin/includes/plugin.php' );
+	}
+	if ( is_plugin_active_for_network( 'wp-user-manager/wp-user-manager.php' ) ) {
+		switch_to_blog( $site->blog_id );
+		wpum_run_install();
+		restore_current_blog();
+	}
+}
+add_action( 'wp_initialize_site', 'wpum_multisite_new_site' );

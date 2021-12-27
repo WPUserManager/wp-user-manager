@@ -333,7 +333,7 @@ class WPUM_Field {
 	 */
 	private function get_field_type_name( $type ) {
 
-		$registered_types = wpum_get_registered_field_types_names();
+		$registered_types = WPUM()->field_types->get_registered_field_types_names();
 		$type_name        = '';
 
 		if ( array_key_exists( $type, $registered_types ) ) {
