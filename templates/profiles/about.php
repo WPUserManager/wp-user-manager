@@ -36,14 +36,14 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 
 				<table class="profile-fields-table">
 					<tbody>
-						<?php while ( wpum_profile_fields() ) : wpum_the_profile_field(); ?>
-							<?php if ( wpum_field_has_data() ) : ?>
-								<tr class="<?php wpum_the_field_css_class(); ?>">
-									<td class="label"><?php wpum_the_field_name(); ?></td>
-									<td class="data"><?php wpum_the_field_value(); ?></td>
-								</tr>
-							<?php endif; ?>
-						<?php endwhile; ?>
+					<?php while ( wpum_profile_fields() ) : wpum_the_profile_field(); ?>
+						<?php if ( wpum_field_has_data() && apply_filters( 'wpum_profile_display_field', true ) ) : ?>
+							<tr class="<?php wpum_the_field_css_class(); ?>">
+								<td class="label"><?php wpum_the_field_name(); ?></td>
+								<td class="data"><?php wpum_the_field_value(); ?></td>
+							</tr>
+						<?php endif; ?>
+					<?php endwhile; ?>
 					</tbody>
 				</table>
 				</div>
