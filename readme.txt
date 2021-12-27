@@ -4,11 +4,11 @@ Plugin URI: https://wpusermanager.com
 Contributors: wpusermanager, polevaultweb, alessandro.tesoro
 Tags: members, membership, community, user profile, user registration
 Requires at least: 4.9
-Tested up to: 5.8
+Tested up to: 5.8.2
 Requires PHP: 5.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
-Stable Tag: 2.6.3
+Stable Tag: 2.6.9
 
 The most customizable profiles & community builder WordPress plugin with front-end login, registration, profile customization and content restriction.
 
@@ -125,6 +125,41 @@ Please note that using WPUM and the mentioned add-ons does NOT guarantee complia
 13. Login form.
 
 == Changelog ==
+
+= 2.6.9 (24th November 2021) =
+
+- Improvement: Directory meta fields only registered when needed, improves performance
+- Improvement: Field types can now be set with the class as well as the filter
+- Fix: Text displayed on the profile when a user does not have any posts improved
+- Fix: Screenshots removed from the plugin directory
+
+= 2.6.8 (6th November 2021) =
+
+- New: Compatibility with the [Frontend Posting](https://wpusermanager.com/addons/frontend-posting/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager) addon version 2.1
+
+= 2.6.7 (26th October 2021) =
+
+- Fix: Notice: Undefined property: WPUM_Form_Registration::$form_id
+
+= 2.6.6 (19th October 2021) =
+
+- New: Frontend user profile pages can now be disabled for sites that don't require that functionality
+- Improvement: Administrators can now log in with email address or username regardless of setting
+- Fix: Calls to get registered field types now reduced to improve performance
+- Fix: Dropdown containing pages now updated when a page is deleted
+
+= 2.6.5 (16th September 2021) =
+
+- Improvement: 'wpum_registration_form_field_default' filter added for registration form fields with default values
+- Fix: Password reset flow not working for usernames with spaces in them
+- Fix: Registration forms list table has buttons overspilling at some widths
+- Fix: wp-admin redirect gets cached by the browser
+
+= 2.6.4 (24th August 2021) =
+
+- Fix: Some registration form settings not saving correctly
+- Fix: Admin notices breaking the styling of the plugin settings page
+- Fix: PHP Notice: Undefined property: WPUM_Emails::$user_login during user registration
 
 = 2.6.3 (20th August 2021) =
 

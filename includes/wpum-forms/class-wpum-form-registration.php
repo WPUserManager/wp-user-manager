@@ -53,6 +53,8 @@ class WPUM_Form_Registration extends WPUM_Form {
 	 */
 	protected $registration_form_fields = false;
 
+	protected $form_id;
+
 	/**
 	 * Returns static instance of class.
 	 *
@@ -298,6 +300,8 @@ class WPUM_Form_Registration extends WPUM_Form {
 
 		$form = WPUM()->registration_forms->get_forms();
 		$this->registration_form = $form[0];
+
+		$this->form_id = $this->registration_form->get_ID();
 
 		return $this->registration_form;
 	}
@@ -650,7 +654,7 @@ class WPUM_Form_Registration extends WPUM_Form {
 				return;
 			}
 
-			WPUM()->templates->set_template_data( [ 'field' => $field, 'key' => $key ] )
+			WPUM()->templates->set_template_data( [ 'field' => $field, 'key' => $key, 'form_id' => $this->form_id ] )
 			                 ->get_template_part( 'forms/form-registration-fields', 'field' );
 		}
 	}

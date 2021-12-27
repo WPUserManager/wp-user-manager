@@ -698,6 +698,8 @@ function wpum_directory( $atts, $content = null ) {
 
 	ob_start();
 
+	WPUM()->directories_editor->register_directory_settings();
+
 	$directory_id = intval( $id );
 
 	// Check if directory exists
