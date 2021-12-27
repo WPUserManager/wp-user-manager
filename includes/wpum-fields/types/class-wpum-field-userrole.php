@@ -21,7 +21,7 @@ class WPUM_Field_Userrole extends WPUM_Field_Type {
 		$this->icon  = 'dashicons-admin-generic';
 		$this->group = 'advanced';
 		$this->allow_default = true;
-		$this->min_addon_version = '2.3';
+		$this->min_addon_version = '2.5';
 	}
 
 	public function get_data_keys() {
