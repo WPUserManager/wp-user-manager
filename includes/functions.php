@@ -441,6 +441,32 @@ function wpum_send_registration_confirmation_email( $user_id, $psw = false, $pas
 }
 
 /**
+ * @param array $roles
+ * @param WP_User $user
+ */
+function wpum_update_roles( $roles, $user, $remove_whitelist = array() ) {
+	$currentRoles = $user->roles;
+
+	if ( empty( $roles ) || ! is_array( $roles )) {
+		return;
+	}
+
+	// Remove unselected roles
+	foreach ( $currentRoles as $role ) {
+		if ( ( empty( $remove_whitelist ) || in_array( $role, $remove_whitelist ) ) && ! in_array( $role, $roles ) ) {
+			$user->remove_role( $role );
+		}
+	}
+
+	// Add new roles
+	foreach ( $roles as $role ) {
+		if ( ! in_array( $role, $currentRoles ) ) {
+			$user->add_role( $role );
+		}
+	}
+}
+
+/**
  * @param WP_User $user
  */
 function wpum_send_registration_admin_email( $user ) {
