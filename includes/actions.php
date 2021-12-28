@@ -456,25 +456,7 @@ function wpum_action_profile_update( $userId, $oldUserData = [] ) {
 		$user = get_user_by('ID', $userId);
 
 		$wpum_roles = explode( '|', $_POST['_wpum_user_roles'] );
-		$currentRoles = $user->roles;
-
-		if ( empty( $wpum_roles ) || ! is_array( $wpum_roles )) {
-			return;
-		}
-
-		// Remove unselected roles
-		foreach ( $currentRoles as $role ) {
-			if ( ! in_array( $role, $wpum_roles ) ) {
-				$user->remove_role( $role );
-			}
-		}
-
-		// Add new roles
-		foreach ( $wpum_roles as $role ) {
-			if ( ! in_array( $role, $currentRoles ) ) {
-				$user->add_role( $role );
-			}
-		}
+		wpum_update_roles( $wpum_roles, $user );
 	}
 }
 
