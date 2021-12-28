@@ -28,8 +28,9 @@ function wpum_get_pages( $force = false ) {
 		$pages = $transient;
 	} else {
 		$available_pages = get_pages( [
-				'post_status' => 'publish,private',
-			] );
+			'post_status'          => 'publish,private',
+			'wpum_restrict_bypass' => true,
+		] );
 		if ( ! empty( $available_pages ) ) {
 			foreach ( $available_pages as $page ) {
 				$pages[] = array(
