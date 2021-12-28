@@ -57,7 +57,7 @@ class WPUM_Field_Userrole extends WPUM_Field_Type {
 		];
 
 		if ( wpum_get_option( 'allow_multiple_user_roles' ) ) {
-			$settings['allow_multiple'] = array(
+			$settings['general']['allow_multiple'] = array(
 				'type'    => 'checkbox',
 				'label'   => esc_html__( 'Allow multiple selection', 'wp-user-manager' ),
 				'hint'    => esc_html__( 'Allow users to select multiple roles for themselves', 'wp-user-manager' ),
