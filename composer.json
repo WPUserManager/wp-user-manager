@@ -1,4 +1,17 @@
 {
+  "name": "wp-user-manager/wp-user-manager",
+  "description": "The most customizable profiles & community builder WordPress plugin with front-end login, registration, profile customization and content restriction.",
+  "keywords": [
+    "wordpress"
+  ],
+  "homepage": "https://wpusermanager.com",
+  "authors": [{
+    "name": "WP User Manager",
+    "email": "hello@wpusermanager.com"
+  }],
+  "license": [
+    "GPL-3.0-or-later"
+  ],
   "require": {
     "a5hleyrich/wp-background-processing": "^1.0",
     "alessandrotesoro/wp-notices": "^1.0",
@@ -7,7 +20,7 @@
     "htmlburger/carbon-fields": "^2.1",
     "wearerequired/wp-requirements-check": "^1.0",
     "wp-user-manager/wp-optionskit": "^1.0",
-    "wp-user-manager/wpum-blocks": "^1.0",
+    "wp-user-manager/wpum-blocks": "1.12",
     "wpbp/widgets-helper": "dev-master"
   },
   "minimum-stability": "dev",
