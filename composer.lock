@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "b2a9e291d280603fe3188deaaa95deaf",
+    "content-hash": "6bd9900cc0288985d04ba9af72b895d1",
     "packages": [
         {
             "name": "a5hleyrich/wp-background-processing",
@@ -653,16 +653,16 @@
         },
         {
             "name": "wp-user-manager/wpum-blocks",
-            "version": "1.12",
+            "version": "1.13",
             "source": {
                 "type": "git",
                 "url": "https://github.com/WPUserManager/wpum-blocks.git",
-                "reference": "6695030c9f85f53bb0ceb2f810a2d2bf69d1082d"
+                "reference": "ab123d2095046fdd16a908c15db9388934cb4795"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/WPUserManager/wpum-blocks/zipball/6695030c9f85f53bb0ceb2f810a2d2bf69d1082d",
-                "reference": "6695030c9f85f53bb0ceb2f810a2d2bf69d1082d",
+                "url": "https://api.github.com/repos/WPUserManager/wpum-blocks/zipball/ab123d2095046fdd16a908c15db9388934cb4795",
+                "reference": "ab123d2095046fdd16a908c15db9388934cb4795",
                 "shasum": ""
             },
             "require": {
@@ -693,7 +693,7 @@
             "keywords": [
                 "wordpress"
             ],
-            "time": "2021-12-29T17:24:51+00:00"
+            "time": "2021-12-30T09:42:09+00:00"
         },
         {
             "name": "wpbp/widgets-helper",
