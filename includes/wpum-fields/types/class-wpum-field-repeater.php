@@ -213,6 +213,10 @@ class WPUM_Field_Repeater extends WPUM_Field_Type {
 
 		$posted = isset( $_POST[ $key ] ) ? $this->sanitize_posted_field( $_POST[ $key ], $field['sanitizer'] ) : [];
 
+		if ( ! isset( $_FILES[ $key ] ) ) {
+			return $posted;
+		}
+
 		if ( isset( $_FILES[ $key ] ) && ! empty( $_FILES[ $key ] ) ) {
 			$files = $this->upload_file( $key, $field );
 		}
@@ -229,6 +233,7 @@ class WPUM_Field_Repeater extends WPUM_Field_Type {
 				$posted[ $index ][ $key ] = $file;
 			}
 		}
+
 		return $posted;
 	}
 
