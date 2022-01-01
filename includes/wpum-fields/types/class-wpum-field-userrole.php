@@ -20,7 +20,6 @@ class WPUM_Field_Userrole extends WPUM_Field_Type {
 		$this->type  = 'userrole';
 		$this->icon  = 'dashicons-admin-generic';
 		$this->group = 'advanced';
-		$this->allow_default = true;
 		$this->min_addon_version = '2.5';
 	}
 
@@ -81,10 +80,14 @@ class WPUM_Field_Userrole extends WPUM_Field_Type {
 			$value = array( $value );
 		}
 
-		return implode( ', ', $value );
-	}
+		global $wp_roles;
+		$available_roles = $wp_roles->get_names();
 
-	public function template() {
-		return $this->type;
+		$selected_roles = [];
+		foreach ( $value as $role ) {
+			$selected_roles[] = $available_roles[ $role ];
+		}
+
+		return implode( ', ', $selected_roles );
 	}
 }
