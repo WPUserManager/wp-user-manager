@@ -28,8 +28,9 @@ function wpum_get_pages( $force = false ) {
 		$pages = $transient;
 	} else {
 		$available_pages = get_pages( [
-				'post_status' => 'publish,private',
-			] );
+			'post_status'          => 'publish,private',
+			'wpum_restrict_bypass' => true,
+		] );
 		if ( ! empty( $available_pages ) ) {
 			foreach ( $available_pages as $page ) {
 				$pages[] = array(
@@ -437,6 +438,32 @@ function wpum_send_registration_confirmation_email( $user_id, $psw = false, $pas
 	$message = $registration_confirmation_email['content'];
 	$emails->send( $email, $subject, $message );
 	$emails->__set( 'plain_text_password', null );
+}
+
+/**
+ * @param array $roles
+ * @param WP_User $user
+ */
+function wpum_update_roles( $roles, $user, $remove_whitelist = array() ) {
+	$currentRoles = $user->roles;
+
+	if ( empty( $roles ) || ! is_array( $roles )) {
+		return;
+	}
+
+	// Remove unselected roles
+	foreach ( $currentRoles as $role ) {
+		if ( ( empty( $remove_whitelist ) || in_array( $role, $remove_whitelist ) ) && ! in_array( $role, $roles ) ) {
+			$user->remove_role( $role );
+		}
+	}
+
+	// Add new roles
+	foreach ( $roles as $role ) {
+		if ( ! in_array( $role, $currentRoles ) ) {
+			$user->add_role( $role );
+		}
+	}
 }
 
 /**

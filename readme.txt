@@ -8,7 +8,7 @@ Tested up to: 5.8.2
 Requires PHP: 5.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
-Stable Tag: 2.6.9
+Stable Tag: 2.7
 
 The most customizable profiles & community builder WordPress plugin with front-end login, registration, profile customization and content restriction.
 
@@ -125,6 +125,15 @@ Please note that using WPUM and the mentioned add-ons does NOT guarantee complia
 13. Login form.
 
 == Changelog ==
+
+= 2.7 (3rd January 2022) =
+
+- New: Compatibility with the [WooCommerce](https://wpusermanager.com/addons/woocommerce/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager) addon version 1.2, integrated checkout in registration forms
+- New: Users can now have multiple roles
+- New: Custom fields can now be conditionally visible by user role
+- Fix: Most WPUM blocks can now be restricted using the block settings
+- Fix: Block restriction now working for legacy widgets in the widget editor
+- Fix: PHP notice block_categories is <strong>deprecated</strong> since version 5.8.0!
 
 = 2.6.9 (24th November 2021) =
 

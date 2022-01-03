@@ -63,6 +63,7 @@ class WPUM_Fields {
 			'hidden',
 			'taxonomy',
 			'user',
+			'userrole',
 		] );
 
 		foreach ( $fields as $field ) {
@@ -71,8 +72,9 @@ class WPUM_Fields {
 			}
 
 			$class = 'WPUM_Field_' . ucfirst( $field );
-			if( class_exists($class) )
+			if ( class_exists( $class ) ) {
 				( new $class )->register();
+			}
 		}
 
 	}

@@ -489,6 +489,8 @@ function wpum_is_field_required() {
 	return apply_filters( 'wpum_is_field_required', $wpum_field->is_required(), $wpum_field->get_ID() );
 }
 
+
+
 /**
  * Retrieve the current field type within a loop.
  *

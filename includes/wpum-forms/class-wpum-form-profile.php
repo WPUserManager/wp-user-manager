@@ -167,7 +167,11 @@ class WPUM_Form_Profile extends WPUM_Form {
 
 			$field = new WPUM_Field( $field );
 
-			if ( $field->exists() && $field->get_meta( 'editing' ) == 'public' && $field->get_primary_id() !== 'user_password' ) {
+			if ( $field->exists() && $field->get_primary_id() !== 'user_password' ) {
+
+				if ( ! apply_filters( 'wpum_account_display_field', $field->get_meta( 'editing' ) === 'public', $field ) ) {
+					continue;
+				}
 
 				// Skip the avatar field if disabled.
 				if ( $field->get_primary_id() == 'user_avatar' && ! wpum_get_option( 'custom_avatars' ) ) {
@@ -187,6 +191,7 @@ class WPUM_Form_Profile extends WPUM_Form {
 					'value'         => $this->get_user_field_value( $this->user, $field ),
 					'priority'      => $priority,
 					'template'      => $field->get_parent_type(),
+					'roles'         => $field->get_meta( 'roles' )
 				);
 
 				$data = array_merge( $data, $field->get_field_data() );
