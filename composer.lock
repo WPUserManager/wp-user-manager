@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "6bd9900cc0288985d04ba9af72b895d1",
+    "content-hash": "c6ed1ba4dc11bc481c78d98312466c8d",
     "packages": [
         {
             "name": "a5hleyrich/wp-background-processing",
@@ -41,49 +41,6 @@
             ],
             "description": "WP Background Processing can be used to fire off non-blocking asynchronous requests or as a background processing tool, allowing you to queue tasks.",
             "time": "2018-02-12T09:24:05+00:00"
-        },
-        {
-            "name": "alessandrotesoro/wp-notices",
-            "version": "1.0.3",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/alessandrotesoro/wp-notices.git",
-                "reference": "6d3a3d9f695520e8a6b35f13ea7c477500d940ba"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/alessandrotesoro/wp-notices/zipball/6d3a3d9f695520e8a6b35f13ea7c477500d940ba",
-                "reference": "6d3a3d9f695520e8a6b35f13ea7c477500d940ba",
-                "shasum": ""
-            },
-            "require": {
-                "composer/installers": "~1.0",
-                "php": ">=5.3.2"
-            },
-            "type": "library",
-            "autoload": {
-                "classmap": [
-                    "wp-notices.php"
-                ]
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "GPL-3.0-or-later"
-            ],
-            "authors": [
-                {
-                    "name": "Alessandro Tesoro",
-                    "homepage": "http://alessandrotesoro.me"
-                }
-            ],
-            "description": "An helper library to create persistent and dismissible WordPress admin notices.",
-            "homepage": "https://github.com/alessandrotesoro/wp-notices/",
-            "keywords": [
-                "notices",
-                "wordpress"
-            ],
-            "abandoned": true,
-            "time": "2019-05-29T11:24:20+00:00"
         },
         {
             "name": "brain/cortex",
@@ -606,6 +563,53 @@
             "time": "2019-03-11T11:11:33+00:00"
         },
         {
+            "name": "wp-user-manager/wp-notices",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/WPUserManager/wp-notices.git",
+                "reference": "5498f209c6667e88e944194a93a50f9ffc25ea24"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/WPUserManager/wp-notices/zipball/5498f209c6667e88e944194a93a50f9ffc25ea24",
+                "reference": "5498f209c6667e88e944194a93a50f9ffc25ea24",
+                "shasum": ""
+            },
+            "require": {
+                "composer/installers": "~1.0",
+                "php": ">=5.3.2"
+            },
+            "default-branch": true,
+            "type": "library",
+            "autoload": {
+                "classmap": [
+                    "wp-notices.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-3.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "WP User Manager",
+                    "homepage": "https://wpusermanager.com"
+                }
+            ],
+            "description": "An helper library to create persistent and dismissible WordPress admin notices.",
+            "homepage": "https://github.com/WPUserManager/wp-notices/",
+            "keywords": [
+                "notices",
+                "wordpress"
+            ],
+            "support": {
+                "issues": "https://github.com/WPUserManager/wp-notices/issues/",
+                "source": "https://github.com/WPUserManager/wp-notices/tree/master"
+            },
+            "time": "2022-01-05T09:27:29+00:00"
+        },
+        {
             "name": "wp-user-manager/wp-optionskit",
             "version": "1.0.15",
             "source": {
@@ -740,11 +744,12 @@
     "aliases": [],
     "minimum-stability": "dev",
     "stability-flags": {
+        "wp-user-manager/wp-notices": 20,
         "wpbp/widgets-helper": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": [],
     "platform-dev": [],
-    "plugin-api-version": "1.1.0"
+    "plugin-api-version": "2.1.0"
 }
