@@ -94,7 +94,13 @@ class WPUM_Emails_List {
 					'customize'         => esc_html__( 'Customize', 'wp-user-manager' ),
 					'send'              => esc_html__( 'Send test email', 'wp-user-manager' ),
 					'success'           => esc_html__( 'Test email successfully sent.', 'wp-user-manager' ),
-					'error'             => esc_html__( 'Something went wrong while sending the test email. Please verify the email address you typed is correct or check your server logs.', 'wp-user-manager' )
+					'error'             => esc_html__( 'Something went wrong while sending the test email. Please verify the email address you typed is correct or check your server logs.', 'wp-user-manager' ),
+					'create_email_template'              => esc_html__( 'Add Email Template', 'wp-user-manager' ),
+					'email_subject'              => esc_html__( 'Email Subject', 'wp-user-manager' ),
+					'email_heading'              => esc_html__( 'Email Heading', 'wp-user-manager' ),
+					'email_body'              => esc_html__( 'Email Body', 'wp-user-manager' ),
+					'email_attachment'              => esc_html__( 'Email Attachment', 'wp-user-manager' ),
+					'create_email_template_title'              => esc_html__( 'Create Email Attachment', 'wp-user-manager' ),
 				]
 			];
 

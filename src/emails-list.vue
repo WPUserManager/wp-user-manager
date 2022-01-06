@@ -1,10 +1,10 @@
 <template>
 	<div id="wpum-emails-list">
-		<h1>
+		<h1 class="wp-heading-inline">
 			<img :src="url + 'assets/images/logo.svg'" alt="WP User Manager">
 			{{labels.title}}
 		</h1>
-
+		<a href="#" class="page-title-action" id="wpum-add-field-email" @click="showAddEmailDialog()"><span class="dashicons dashicons-plus-alt"></span> <span v-text="sanitized(labels.create_email_template)"></span></a>
 		<div class="notice notice-success is-dismissible" v-if="success">
 			<p><strong v-text="sanitized(labels.success)"></strong></p>
 		</div>
@@ -22,7 +22,8 @@
 				<div class="spinner is-active" v-if="loading"></div>
 			</form>
 		</div>
-
+		<v-dialog/>
+		<modals-container/>
 		<table class="wp-list-table widefat fixed striped">
 			<thead>
 				<tr>
@@ -64,6 +65,7 @@ import axios from 'axios'
 import qs from 'qs'
 import Sanitize from 'sanitize-html'
 import balloon from 'balloon-css'
+import CreateEmailDialog from './email-editor/dialogs/dialog-create-email'
 
 export default {
 	name: 'emails-editor',
@@ -158,7 +160,24 @@ export default {
 				this.success = false
 			});
 
+		},
+
+		/**
+		 * Show the add new email modal.
+		 */
+		showAddEmailDialog() {
+			this.$modal.show( CreateEmailDialog, {
+				addNewGroup: ( status, data_or_message ) => {
+					if( status == 'error' ) {
+						this.showError(data_or_message)
+					} else {
+						this.showSuccess()
+						this.groups.push(data_or_message)
+					}
+				}
+			},{ width: '70%' })
 		}
+
 	}
 }
 </script>
@@ -236,6 +255,15 @@ export default {
 	.spinner {
 		float: none;
 		margin-top: -1px;
+	}
+	.dashicons.dashicons-plus-alt{
+		width: 16px;
+		height: 16px;
+		font-size: 16px;
+		vertical-align: inherit;
+		position: relative;
+		top: 3px;
+		margin-right: 2px;
 	}
 }
 </style>

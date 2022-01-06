@@ -222,6 +222,21 @@ class WPUM_Emails_Customizer {
 			'section'     => $email_id . '_settings',
 		) ) );
 
+		$wp_customize->add_setting( 'wpum_email[' . $email_id . '][attachment]', array(
+			'sanitize_callback' => 'esc_url_raw'
+		));
+
+		$wp_customize->add_control( new WP_Customize_Upload_Control( $wp_customize, 'wpum_email[' . $email_id . '][attachment]', array(
+			'label' 	=> 'File Attachment',
+			'priority' 	=> 20,
+			'section'	=> $email_id . '_settings',
+			'settings'	=> 'wpum_email[' . $email_id . '][attachment]',
+			'button_labels' => array(
+				'select' => 'Select File',
+				'remove' => 'Remove File',
+				'change' => 'Change File'
+			)
+		) ) );
 	}
 
 	/**
