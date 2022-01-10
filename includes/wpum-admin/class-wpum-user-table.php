@@ -70,7 +70,7 @@ class WPUM_User_Table {
 	public function load_users() {
 		add_action( 'restrict_manage_users',[ $this, 'bulk_fields_dropdown' ], 5 );
 
-		if ( ! isset( $_GET['update'] ) ) {
+		if ( ! isset( $_GET['update'] ) || ! isset( $_GET['name'] ) ) {
 			return;
 		}
 
@@ -88,6 +88,10 @@ class WPUM_User_Table {
 
 	public function load_users_role_bulk_add() {
 		if ( empty( $_REQUEST['users'] ) ) {
+			return;
+		}
+
+		if ( empty( $_REQUEST['wpum-add-role-top'] ) && empty( $_REQUEST['wpum-add-role-bottom'] ) ) {
 			return;
 		}
 
@@ -142,6 +146,10 @@ class WPUM_User_Table {
 
 	public function load_users_role_bulk_remove() {
 		if ( empty( $_REQUEST['users'] ) ) {
+			return;
+		}
+
+		if ( empty( $_REQUEST['wpum-remove-role-top'] ) && empty( $_REQUEST['wpum-remove-role-bottom'] ) ) {
 			return;
 		}
 
