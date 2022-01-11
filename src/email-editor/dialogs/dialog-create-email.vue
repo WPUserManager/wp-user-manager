@@ -11,7 +11,7 @@
               <tr>
                   <td scope="row">
                     <label for="email-name" :data-balloon="labels.email_name" data-balloon-pos="right"><span>{{labels.email_name}}</span> <span class="dashicons dashicons-editor-help"></span></label>
-                    <input type="text" name="email-name" id="email-name" :disabled="loading" v-model="email_name">                    
+                    <input @input="onChangeName($event)" type="text" name="email-name" id="email-name" :disabled="loading" v-model="email_name">                    
                   </td>
                   <td scope="row">
                     <label for="email-description" :data-balloon="labels.email_description" data-balloon-pos="right"><span>{{labels.email_description}}</span> <span class="dashicons dashicons-editor-help"></span></label>
@@ -170,13 +170,8 @@ export default {
 	components: {
 		VueEditor
 	},
-	props: {
-		group_id:    '',
-		addNewField: '',
-		parent: {
-			type: Number,
-			default: 0
-		}
+  props: {
+		emails: []
 	},
 	data() {
 		return {
@@ -189,7 +184,8 @@ export default {
       email_description: '',
       email_subject: '',
       email_heading: '',
-      email_body: ''
+      email_body: '',
+      email_key: ''
 		}
 	},
 	methods: {
@@ -210,6 +206,14 @@ export default {
 				return false
 			}
 		},
+    /**
+		* Generate unique email key.
+		*/
+		onChangeName( e ) {
+      let key = e.target.value.trim().replace( /[\W]+/g,"-" ).toLowerCase()
+      let exists = key in this.emails ? true : false
+      this.email_key = exists ? key + '1' : key
+		},
 		/**
 		 * Create the new field into the database.
 		 */
@@ -219,14 +223,15 @@ export default {
 			// Make a call via ajax.
 			axios.post( wpumEmailsEditor.ajax,
 				qs.stringify({
-					nonce: wpumEmailsEditor.create_field_nonce,
+					nonce: wpumEmailsEditor.nonce_create,
           email_description: this.email_description,
           email_subject: this.email_subject,
           email_heading: this.email_heading,
           email_body: this.email_body,
           email_name: this.email_name,
           email_recipient_email: this.email_recipient_email,
-          email_recipient: this.email_recipient
+          email_recipient: this.email_recipient,
+          email_key: this.email_key
 
 				}),
 				{

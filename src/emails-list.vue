@@ -170,6 +170,7 @@ export default {
 		 */
 		showAddEmailDialog() {
 			this.$modal.show( CreateEmailDialog, {
+				emails: this.emails
 			},{ width: '70%', height: '70%' })
 		},
 

@@ -81,6 +81,7 @@ class WPUM_Emails_List {
 				'url'           => site_url( '/' ),
 				'pluginURL'     => WPUM_PLUGIN_URL,
 				'nonce'         => wp_create_nonce( 'wpum_test_email' ),
+				'nonce_create'         => wp_create_nonce( 'wpum_create_email' ),
 				'default_email' => get_option( 'admin_email' ),
 				//'emails'        => wpum_get_registered_emails(),
 				'labels'        => [

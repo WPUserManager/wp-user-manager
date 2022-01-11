@@ -286,6 +286,11 @@ if ( wpum_get_option( 'disable_admin_password_recovery_email' ) && ! function_ex
 }
 
 function wpum_create_emailtemplate(){
+
+	if ( ! wp_verify_nonce( $_POST['nonce'], 'wpum_create_email' ) ) {
+		return;
+	}
+
 	$db = new WPUM_DB_Emails();
 
 	switch ( trim( $_POST['email_recipient'] ) ) {
@@ -299,16 +304,30 @@ function wpum_create_emailtemplate(){
 			$recipient = sanitize_text_field( $_POST['email_recipient_email'] );
 	}
 	
+	$email_key = strtolower( sanitize_text_field( $_POST['email_key'] ) );
 	$data = [
-		'email_key'             => strtolower( preg_replace("/[^A-Za-z0-9]/", '-', trim( $_POST['email_name'] ) ) ),
+		'email_key'             => $email_key,
 		'email_name'            => sanitize_text_field( $_POST['email_name'] ),
 		'email_description'     => sanitize_text_field( $_POST['email_description'] ),
 		'email_recipient'       => sanitize_text_field( $recipient  ),
 	];
 
-	print_r( $data );
-
 	$result = $db->insert( $data, 'emails' );
+
+	$email_content = [
+		$email_key => [
+			'subject' => sanitize_text_field( $_POST['email_subject'] ),
+			'title' => sanitize_text_field( $_POST['email_heading'] ),
+			'content' => sanitize_text_field( $_POST['email_body'] ),
+			'footer' => ''
+		]
+	];
+
+	$existing_emails = get_option( 'wpum_email' );
+
+	$emails = array_merge( $email_content, $existing_emails );
+	update_option( 'wpum_email', $emails );
+
 	wp_send_json_success(
 		[
 			wpum_get_registered_emails(),
