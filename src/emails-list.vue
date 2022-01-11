@@ -4,7 +4,7 @@
 			<img :src="url + 'assets/images/logo.svg'" alt="WP User Manager">
 			{{labels.title}}
 		</h1>
-		<a href="#" class="page-title-action" id="wpum-add-field-email" @click="showAddEmailDialog()"><span class="dashicons dashicons-plus-alt"></span> <span v-text="sanitized(labels.create_email_template)"></span></a>
+		<a href="#" class="page-title-action" id="wpum-add-field-email" @click="showAddEmailDialog()"><span class="dashicons dashicons-plus-alt"></span> <span v-text="sanitized(labels.email_form.create_email_template)"></span></a>
 		<div class="notice notice-success is-dismissible" v-if="success">
 			<p><strong v-text="sanitized(labels.success)"></strong></p>
 		</div>
@@ -76,10 +76,13 @@ export default {
 			error: false,
 			placeholder: wpumEmailsEditor.placeholder,
 			test_email: wpumEmailsEditor.default_email,
-			emails: wpumEmailsEditor.emails,
+			emails: [],
 			labels: wpumEmailsEditor.labels,
 			url: wpumEmailsEditor.pluginURL
 		}
+	},
+	created() {
+		this.getEmails()
 	},
 	methods: {
 		/**
@@ -167,16 +170,33 @@ export default {
 		 */
 		showAddEmailDialog() {
 			this.$modal.show( CreateEmailDialog, {
-				addNewGroup: ( status, data_or_message ) => {
-					if( status == 'error' ) {
-						this.showError(data_or_message)
-					} else {
-						this.showSuccess()
-						this.groups.push(data_or_message)
-					}
+			},{ width: '70%', height: '70%' })
+		},
+
+		/**
+		 * Load emails from the database.
+		 */
+		getEmails() {
+
+			this.loading = true
+			axios.get( wpumEmailsEditor.ajax, {
+				params: {
+					nonce: wpumEmailsEditor.get_fields_nonce,
+					action: 'wpum_get_emails'
 				}
-			},{ width: '70%' })
-		}
+			})
+			.then( response => {
+				this.loading = false
+				if ( response.data.data.emails ) {
+					this.emails = response.data.data.emails
+				}
+			})
+			.catch( error => {
+				this.loading = false
+				console.error(error);
+			})
+
+		},
 
 	}
 }

@@ -623,6 +623,7 @@ class WPUM_Plugin_Updates {
 				'registrationforms'     => new WPUM_DB_Table_Registration_Forms(),
 				'registrationformsmeta' => new WPUM_DB_Table_Registration_Forms_Meta(),
 				'searchfields'          => new WPUM_DB_Table_Search_Fields(),
+				'emails'          		=> new WPUM_DB_Table_Emails(),
 			);
 
 			foreach ( $tables as $key => $table ) {

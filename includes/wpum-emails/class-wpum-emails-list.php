@@ -82,7 +82,7 @@ class WPUM_Emails_List {
 				'pluginURL'     => WPUM_PLUGIN_URL,
 				'nonce'         => wp_create_nonce( 'wpum_test_email' ),
 				'default_email' => get_option( 'admin_email' ),
-				'emails'        => wpum_get_registered_emails(),
+				//'emails'        => wpum_get_registered_emails(),
 				'labels'        => [
 					'title'             => esc_html__( 'WP User Manager Emails Customization', 'wp-user-manager' ),
 					'email'             => esc_html__( 'Email', 'wp-user-manager' ),
@@ -95,12 +95,21 @@ class WPUM_Emails_List {
 					'send'              => esc_html__( 'Send test email', 'wp-user-manager' ),
 					'success'           => esc_html__( 'Test email successfully sent.', 'wp-user-manager' ),
 					'error'             => esc_html__( 'Something went wrong while sending the test email. Please verify the email address you typed is correct or check your server logs.', 'wp-user-manager' ),
-					'create_email_template'              => esc_html__( 'Add Email Template', 'wp-user-manager' ),
-					'email_subject'              => esc_html__( 'Email Subject', 'wp-user-manager' ),
-					'email_heading'              => esc_html__( 'Email Heading', 'wp-user-manager' ),
-					'email_body'              => esc_html__( 'Email Body', 'wp-user-manager' ),
-					'email_attachment'              => esc_html__( 'Email Attachment', 'wp-user-manager' ),
-					'create_email_template_title'              => esc_html__( 'Create Email Attachment', 'wp-user-manager' ),
+					'email_form'					=> array(
+						'create_email_template'		=> esc_html__( 'Add Email Template', 'wp-user-manager' ),
+						'email_form_title'          => esc_html__( 'Create Email Template', 'wp-user-manager' ),
+						'email_name'          => esc_html__( 'Email Template Name', 'wp-user-manager' ),
+						'email_description'          => esc_html__( 'Email Template Description', 'wp-user-manager' ),
+						'email_subject'             => esc_html__( 'Email Subject', 'wp-user-manager' ),
+						'email_heading'             => esc_html__( 'Email Heading', 'wp-user-manager' ),
+						'email_body'              	=> esc_html__( 'Email Body', 'wp-user-manager' ),
+						'email_attachment'          => esc_html__( 'Email Attachment', 'wp-user-manager' ),
+						'email_recipient'           => esc_html__( 'Email Recipient', 'wp-user-manager' ),
+						'email_save'      			=> esc_html__( 'Save Template', 'wp-user-manager' ),
+						'email_merge_tags'      	=> wpum_get_emails_tags_list()
+					)
+					
+
 				]
 			];
 

@@ -230,6 +230,8 @@ if ( ! class_exists( 'WP_User_Manager' ) ) :
 			require_once WPUM_PLUGIN_DIR . 'includes/wpum-database/class-wpum-db-registration-forms.php';
 			require_once WPUM_PLUGIN_DIR . 'includes/wpum-database/class-wpum-db-registration-form-meta.php';
 			require_once WPUM_PLUGIN_DIR . 'includes/wpum-database/class-wpum-db-search-fields.php';
+			require_once WPUM_PLUGIN_DIR . 'includes/wpum-database/class-wpum-db-table-emails.php';
+			require_once WPUM_PLUGIN_DIR . 'includes/wpum-database/class-wpum-db-emails.php';
 
 			$this->setup_database_tables();
 

@@ -1,4 +1,7 @@
 <?php
+    ini_set ('display_errors', 1);  
+    ini_set ('display_startup_errors', 1);  
+    error_reporting (E_ALL);  
 /**
  * Set of functions that deals with the emails of the plugin.
  *
@@ -281,3 +284,63 @@ if ( wpum_get_option( 'disable_admin_password_recovery_email' ) && ! function_ex
 		return;
 	}
 }
+
+function wpum_create_emailtemplate(){
+	$db = new WPUM_DB_Emails();
+
+	switch ( trim( $_POST['email_recipient'] ) ) {
+		case 'admin':
+			$recipient = 'Admin\'s email address';
+		  	break;
+		case 'user':
+			$recipient = 'Email address of the user.';
+			break;			  
+		default:
+			$recipient = sanitize_text_field( $_POST['email_recipient_email'] );
+	}
+	
+	$data = [
+		'email_key'             => strtolower( preg_replace("/[^A-Za-z0-9]/", '-', trim( $_POST['email_name'] ) ) ),
+		'email_name'            => sanitize_text_field( $_POST['email_name'] ),
+		'email_description'     => sanitize_text_field( $_POST['email_description'] ),
+		'email_recipient'       => sanitize_text_field( $recipient  ),
+	];
+
+	print_r( $data );
+
+	$result = $db->insert( $data, 'emails' );
+	wp_send_json_success(
+		[
+			wpum_get_registered_emails(),
+		]
+	);
+	exit;
+}
+add_action( 'wp_ajax_wpum_create_emailtemplate', 'wpum_create_emailtemplate' );
+
+function wpum_get_emails_db(){
+	wp_send_json_success(
+		[
+			'emails'   => wpum_get_registered_emails(),
+		]
+	);
+}
+add_action( 'wp_ajax_wpum_get_emails', 'wpum_get_emails_db' );
+
+function wpum_registered_emails_db( $emails ){
+	$db = new WPUM_DB_Emails();
+	$db_emails = $db->get_emails();
+
+	foreach( $db_emails  as $email ) {
+		$emails[ $email['email_key'] ] = array(
+			'status' 		=> 'manual',
+			'name' 			=> $email['email_name'],
+			'recipient' 	=> $email['email_recipient'],
+			'description' 	=> $email['email_description'],
+		);
+	}
+
+	return $emails;
+}
+
+add_filter( 'wpum_registered_emails', 'wpum_registered_emails_db', 99 );
