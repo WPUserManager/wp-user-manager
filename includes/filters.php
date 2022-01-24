@@ -129,7 +129,7 @@ function wpum_login_url( $login_url, $redirect, $force_reauth ) {
 	return $wpum_login_page;
 
 }
-if ( wpum_get_option( 'lock_wplogin' ) ) {
+if ( wpum_get_option( 'lock_wplogin' ) || wpum_get_option( 'lock_complete_site' ) ) {
 	add_filter( 'login_url', 'wpum_login_url', 10, 3 );
 }
 

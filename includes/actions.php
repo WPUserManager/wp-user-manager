@@ -353,9 +353,10 @@ function wpum_prevent_wp_login() {
 
 	global $pagenow;
 
-	$action = ( isset( $_GET['action'] ) ) ? $_GET['action'] : '';
+	$action        = ( isset( $_GET['action'] ) ) ? $_GET['action'] : '';
+	$wpum_override = isset( $_GET['wpum_override'] ) ? $_GET['wpum_override'] : '';
 
-	if ( $pagenow == 'wp-login.php' && ( ! $action || ( $action && ! in_array( $action, array( 'logout', 'lostpassword', 'rp', 'resetpass', 'postpass' ) ) ) ) ) {
+	if ( $pagenow == 'wp-login.php' && ! $wpum_override && ( ! $action || ( $action && ! in_array( $action, array( 'logout', 'lostpassword', 'rp', 'resetpass', 'postpass' ) ) ) ) ) {
 		$page = wp_login_url();
 		wp_safe_redirect( $page );
 		exit();
@@ -363,6 +364,38 @@ function wpum_prevent_wp_login() {
 }
 if ( wpum_get_option( 'lock_wplogin' ) ) {
 	add_action( 'init', 'wpum_prevent_wp_login' );
+}
+
+/**
+ * Prevent acccess to site unless logged in
+ *
+ * @return void
+ */
+function wpum_prevent_entire_site() {
+
+	global $pagenow;
+
+	if ( is_user_logged_in() ) {
+		return;
+	}
+
+	$login_page      = wp_login_url();
+	$wp_login_locked = wpum_get_option( 'lock_wplogin' );
+	$is_wp_login     = $pagenow == 'wp-login.php';
+
+	if ( home_url( $_SERVER['REQUEST_URI'] ) == $login_page || ( $is_wp_login && ( ! empty( $_GET['wpum_override'] ) || ! $wp_login_locked ) ) ) {
+		return;
+	}
+
+	if ( $wp_login_locked && $is_wp_login ) {
+		$login_page = add_query_arg( array( 'wpum_override' => 1 ) );
+	}
+
+	wp_safe_redirect( $login_page );
+	exit();
+}
+if ( wpum_get_option( 'lock_complete_site' ) ) {
+	add_action( 'init', 'wpum_prevent_entire_site', 9 );
 }
 
 /**
