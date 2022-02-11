@@ -311,13 +311,13 @@ class WPUM_Registration_Forms_Editor {
 
 			if( is_array( $stored_fields ) && ! empty( $stored_fields ) ) {
 				foreach ( $stored_fields as $field ) {
-
+					$field_data = [];
 					$stored_field = new WPUM_Field( $field );
 
 					if( $stored_field->exists() ) {
 						$icon = isset( $stored_field->field_type->icon ) ? $stored_field->field_type->icon : 'dashicons-editor-justify';
 
-						$fields[] = [
+						$field_data = [
 							'id'   => $stored_field->get_ID(),
 							'name' => $stored_field->get_name(),
 							'icon' => $icon,
@@ -325,6 +325,11 @@ class WPUM_Registration_Forms_Editor {
 						];
 					}
 
+					$field_data = apply_filters( 'wpum_registration_form_get_stored_field', $field_data, $field, $form );
+
+					if ( ! empty( $field_data ) ) {
+						$fields[] = $field_data;
+					}
 				}
 			}
 
@@ -388,8 +393,7 @@ class WPUM_Registration_Forms_Editor {
 			];
 		}
 
-		return $fields;
-
+		return apply_filters( 'wpum_registration_form_available_fields', $fields, $form_id );
 	}
 
 	/**
@@ -410,9 +414,9 @@ class WPUM_Registration_Forms_Editor {
 				$registration_form = new WPUM_Registration_Form( $form_id );
 				$fields_to_save    = [];
 
-				if( $registration_form->exists() ) {
-					foreach( $fields as $field ) {
-						$fields_to_save[] = absint( $field['id'] );
+				if ( $registration_form->exists() ) {
+					foreach ( $fields as $field ) {
+						$fields_to_save[] = apply_filters( 'wpum_save_registration_form_field_id', absint( $field['id'] ), $field['id'], $field );
 					}
 				}
 

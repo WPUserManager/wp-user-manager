@@ -252,7 +252,7 @@ function wpum_registration_form_valid_fields( $fields ) {
 		$field          = new WPUM_Field( $field_id );
 		$is_valid_field = $field->exists() && class_exists( 'WPUM_Field_' . ucfirst( $field->get_type() ) );
 
-		if ( ! $is_valid_field ) {
+		if ( ! apply_filters( 'wpum_registration_form_valid_field', $is_valid_field, $field_id )  ) {
 			unset( $fields[ $index ] );
 			continue;
 		}
