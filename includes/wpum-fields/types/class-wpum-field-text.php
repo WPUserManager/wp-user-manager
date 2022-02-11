@@ -35,6 +35,13 @@ class WPUM_Field_Text extends WPUM_Field_Type {
 	public function get_editor_settings() {
 		return [
 			'validation' => [
+				'maxlength' => array(
+					'type'      => 'input',
+					'inputType' => 'number',
+					'label'     => esc_html__( 'Character Limit', 'wp-user-manager' ),
+					'model'     => 'maxlength',
+					'hint'      => esc_html__( 'Leave blank for no limit.', 'wp-user-manager' ),
+				),
 				'pattern' => array(
 					'type'      => 'input',
 					'inputType' => 'text',
