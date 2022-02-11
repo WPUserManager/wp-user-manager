@@ -32,4 +32,27 @@ class WPUM_Field_Email extends WPUM_Field_Type {
 	function get_formatted_output( $field, $value ) {
 		return esc_html( antispambot( $value ) );
 	}
+
+	public function get_data_keys() {
+		$keys = parent::get_data_keys();
+
+		return array_merge( $keys, array_keys( $this->get_editor_settings()['validation'] ) );
+	}
+
+	/**
+	 * @return array
+	 */
+	public function get_editor_settings() {
+		return [
+			'validation' => [
+				'maxlength' => array(
+					'type'      => 'input',
+					'inputType' => 'number',
+					'label'     => esc_html__( 'Character Limit', 'wp-user-manager' ),
+					'model'     => 'maxlength',
+					'hint'      => esc_html__( 'Leave blank for no limit.', 'wp-user-manager' ),
+				),
+			],
+		];
+	}
 }

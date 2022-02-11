@@ -33,7 +33,7 @@ if ( ! empty( $field['default_value'] ) ) {
 }
 ?>
 
-<fieldset class="fieldset-<?php echo esc_attr( $key ); ?>">
+<fieldset <?php echo isset( $field['wrapper_id'] ) ? 'id="' . esc_attr( $field['wrapper_id'] ) . '"' : ''; ?> class="fieldset-<?php echo esc_attr( $key ); ?> <?php echo isset( $field['wrapper_class'] ) ? esc_attr( $field['wrapper_class'] ) : ''; ?>"  <?php echo isset( $field['wrapper_width'] ) ? 'style="width: ' . esc_attr( $field['wrapper_width'] ) . '%; "' : ''; ?>>
 
 	<?php if( $field['type'] == 'checkbox' ) : ?>
 

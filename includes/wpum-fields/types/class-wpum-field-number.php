@@ -53,6 +53,13 @@ class WPUM_Field_Number extends WPUM_Field_Type {
 					'label'     => esc_html__( 'Step Size', 'wp-user-manager' ),
 					'model'     => 'step_size',
 				),
+				'maxlength' => array(
+					'type'      => 'input',
+					'inputType' => 'number',
+					'label'     => esc_html__( 'Character Limit', 'wp-user-manager' ),
+					'model'     => 'maxlength',
+					'hint'      => esc_html__( 'Leave blank for no limit.', 'wp-user-manager' ),
+				),
 				'pattern' => array(
 					'type'      => 'input',
 					'inputType' => 'text',
