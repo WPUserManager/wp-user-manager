@@ -230,24 +230,28 @@ function wpum_get_edit_field_dialog_tabs() {
 
 	$tabs = [
 		array(
-				'id'   => 'fields',
-				'name' => esc_html__( 'Fields', 'wp-user-manager' )
+			'id'   => 'fields',
+			'name' => esc_html__( 'Fields', 'wp-user-manager' ),
 		),
 		array(
 			'id'   => 'general',
-			'name' => esc_html__( 'General', 'wp-user-manager' )
+			'name' => esc_html__( 'General', 'wp-user-manager' ),
 		),
 		array(
 			'id'   => 'validation',
-			'name' => esc_html__( 'Validation', 'wp-user-manager' )
+			'name' => esc_html__( 'Validation', 'wp-user-manager' ),
 		),
 		array(
 			'id'   => 'privacy',
-			'name' => esc_html__( 'Privacy', 'wp-user-manager' )
+			'name' => esc_html__( 'Privacy', 'wp-user-manager' ),
 		),
 		array(
 			'id'   => 'permissions',
-			'name' => esc_html__( 'Permissions', 'wp-user-manager' )
+			'name' => esc_html__( 'Permissions', 'wp-user-manager' ),
+		),
+		array(
+			'id'   => 'appearance',
+			'name' => esc_html__( 'Appearance', 'wp-user-manager' ),
 		),
 	];
 

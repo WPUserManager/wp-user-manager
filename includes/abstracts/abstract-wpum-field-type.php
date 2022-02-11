@@ -132,7 +132,7 @@ abstract class WPUM_Field_Type {
 
 	public function get_data_keys() {
 		if ( $this->allow_default ) {
-			return [ 'default_value' ];
+			return [ 'default_value', 'wrapper_class', 'wrapper_id', 'wrapper_width'];
 		}
 
 		return [];
@@ -232,6 +232,29 @@ abstract class WPUM_Field_Type {
 					'options'  => wpum_get_roles( true, true ),
 					'multiple' => true,
 					'hint'     => esc_html__( 'Show the field on the profile and account pages to users with the selected roles.', 'wp-user-manager' ),
+				),
+			],
+			'appearance' => [
+				'wrapper_class' => array(
+					'type'      => 'input',
+					'inputType' => 'text',
+					'label'     => esc_html__( 'Wrapper Class', 'wp-user-manager' ),
+					'model'     => 'wrapper_class',
+					'hint'      => esc_html__( 'CSS class added to the field fieldset wrapper element.', 'wp-user-manager' ),
+				),
+				'wrapper_id'    => array(
+					'type'      => 'input',
+					'inputType' => 'text',
+					'label'     => esc_html__( 'Wrapper ID', 'wp-user-manager' ),
+					'model'     => 'wrapper_id',
+					'hint'      => esc_html__( 'ID added to the field fieldset wrapper element.', 'wp-user-manager' ),
+				),
+				'wrapper_width' => array(
+					'type'      => 'input',
+					'inputType' => 'number',
+					'label'     => esc_html__( 'Wrapper Width %', 'wp-user-manager' ),
+					'model'     => 'wrapper_width',
+					'hint'      => esc_html__( 'Width % property added to the field fieldset wrapper element.', 'wp-user-manager' ),
 				),
 			],
 		];
