@@ -2,9 +2,9 @@
 # This file is distributed under the GPLv3+.
 msgid ""
 msgstr ""
-"Project-Id-Version: WP User Manager 2.7\n"
+"Project-Id-Version: WP User Manager 2.7.2\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/wp-user-manager\n"
-"POT-Creation-Date: 2022-01-03 08:39:40+00:00\n"
+"POT-Creation-Date: 2022-02-11 15:37:23+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -162,47 +162,75 @@ msgid ""
 "roles."
 msgstr ""
 
+#: includes/abstracts/abstract-wpum-field-type.php:241
+msgid "Wrapper Class"
+msgstr ""
+
 #: includes/abstracts/abstract-wpum-field-type.php:243
+msgid "CSS class added to the field fieldset wrapper element."
+msgstr ""
+
+#: includes/abstracts/abstract-wpum-field-type.php:248
+msgid "Wrapper ID"
+msgstr ""
+
+#: includes/abstracts/abstract-wpum-field-type.php:250
+msgid "ID added to the field fieldset wrapper element."
+msgstr ""
+
+#: includes/abstracts/abstract-wpum-field-type.php:255
+msgid "Wrapper Width %"
+msgstr ""
+
+#: includes/abstracts/abstract-wpum-field-type.php:257
+msgid "Width % property added to the field fieldset wrapper element."
+msgstr ""
+
+#: includes/abstracts/abstract-wpum-field-type.php:266
 msgid "Default Value"
 msgstr ""
 
-#: includes/abstracts/abstract-wpum-form.php:298
+#: includes/abstracts/abstract-wpum-form.php:302
 msgid "%s is a required field"
 msgstr ""
 
-#: includes/abstracts/abstract-wpum-form.php:308
+#: includes/abstracts/abstract-wpum-form.php:305
+msgid "%s must not exceed %d characters"
+msgstr ""
+
+#: includes/abstracts/abstract-wpum-form.php:315
 msgid "%s is invalid"
 msgstr ""
 
-#: includes/abstracts/abstract-wpum-form.php:327
+#: includes/abstracts/abstract-wpum-form.php:334
 msgid "\"%s\" (filetype %s) needs to be one of the following file types: %s"
 msgstr ""
 
-#: includes/abstracts/abstract-wpum-form.php:357
+#: includes/abstracts/abstract-wpum-form.php:364
 msgid "1 uppercase letter"
 msgstr ""
 
-#: includes/abstracts/abstract-wpum-form.php:361
+#: includes/abstracts/abstract-wpum-form.php:368
 msgid "1 letter"
 msgstr ""
 
-#: includes/abstracts/abstract-wpum-form.php:365
+#: includes/abstracts/abstract-wpum-form.php:372
 msgid "1 number"
 msgstr ""
 
-#: includes/abstracts/abstract-wpum-form.php:369
+#: includes/abstracts/abstract-wpum-form.php:376
 msgid "1 special character"
 msgstr ""
 
-#: includes/abstracts/abstract-wpum-form.php:373
+#: includes/abstracts/abstract-wpum-form.php:380
 msgid "and contain at least"
 msgstr ""
 
-#: includes/abstracts/abstract-wpum-form.php:373
+#: includes/abstracts/abstract-wpum-form.php:380
 msgid " and "
 msgstr ""
 
-#: includes/abstracts/abstract-wpum-form.php:376
+#: includes/abstracts/abstract-wpum-form.php:383
 msgid "Password must be at least %s characters long"
 msgstr ""
 
@@ -1167,12 +1195,12 @@ msgstr ""
 msgid "Remove"
 msgstr ""
 
-#: includes/wpum-admin/class-wpum-user-table.php:120
-#: includes/wpum-admin/class-wpum-user-table.php:178
+#: includes/wpum-admin/class-wpum-user-table.php:124
+#: includes/wpum-admin/class-wpum-user-table.php:186
 msgid "One of the selected users is not a member of this site."
 msgstr ""
 
-#: includes/wpum-admin/class-wpum-user-table.php:230
+#: includes/wpum-admin/class-wpum-user-table.php:238
 msgid "ID"
 msgstr ""
 
@@ -2077,6 +2105,24 @@ msgstr ""
 msgid "Dropdown"
 msgstr ""
 
+#: includes/wpum-fields/types/class-wpum-field-email.php:51
+#: includes/wpum-fields/types/class-wpum-field-number.php:59
+#: includes/wpum-fields/types/class-wpum-field-password.php:40
+#: includes/wpum-fields/types/class-wpum-field-text.php:41
+#: includes/wpum-fields/types/class-wpum-field-textarea.php:64
+#: includes/wpum-fields/types/class-wpum-field-url.php:52
+msgid "Character Limit"
+msgstr ""
+
+#: includes/wpum-fields/types/class-wpum-field-email.php:53
+#: includes/wpum-fields/types/class-wpum-field-number.php:61
+#: includes/wpum-fields/types/class-wpum-field-password.php:42
+#: includes/wpum-fields/types/class-wpum-field-text.php:43
+#: includes/wpum-fields/types/class-wpum-field-textarea.php:66
+#: includes/wpum-fields/types/class-wpum-field-url.php:54
+msgid "Leave blank for no limit."
+msgstr ""
+
 #: includes/wpum-fields/types/class-wpum-field-file.php:20
 msgid "File"
 msgstr ""
@@ -2130,20 +2176,20 @@ msgstr ""
 msgid "Step Size"
 msgstr ""
 
-#: includes/wpum-fields/types/class-wpum-field-number.php:59
+#: includes/wpum-fields/types/class-wpum-field-number.php:66
 #: includes/wpum-fields/types/class-wpum-field-telephone.php:41
-#: includes/wpum-fields/types/class-wpum-field-text.php:41
+#: includes/wpum-fields/types/class-wpum-field-text.php:48
 msgid "Pattern"
 msgstr ""
 
-#: includes/wpum-fields/types/class-wpum-field-number.php:61
-#: includes/wpum-fields/types/class-wpum-field-text.php:43
+#: includes/wpum-fields/types/class-wpum-field-number.php:68
+#: includes/wpum-fields/types/class-wpum-field-text.php:50
 msgid "A regular expression to validate number formats."
 msgstr ""
 
-#: includes/wpum-fields/types/class-wpum-field-number.php:61
+#: includes/wpum-fields/types/class-wpum-field-number.php:68
 #: includes/wpum-fields/types/class-wpum-field-telephone.php:43
-#: includes/wpum-fields/types/class-wpum-field-text.php:43
+#: includes/wpum-fields/types/class-wpum-field-text.php:50
 msgid "Example patterns"
 msgstr ""
 
@@ -2266,6 +2312,11 @@ msgstr ""
 
 #: includes/wpum-fields/wpum-fields-functions.php:250
 msgid "Permissions"
+msgstr ""
+
+#: includes/wpum-fields/wpum-fields-functions.php:254
+#: includes/wpum-roles/functions.php:908
+msgid "Appearance"
 msgstr ""
 
 #: includes/wpum-forms/class-wpum-form-login.php:57
@@ -2939,10 +2990,6 @@ msgstr ""
 
 #: includes/wpum-roles/functions.php:899
 msgid "Taxonomies"
-msgstr ""
-
-#: includes/wpum-roles/functions.php:908
-msgid "Appearance"
 msgstr ""
 
 #: includes/wpum-roles/functions.php:915
