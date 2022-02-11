@@ -301,7 +301,7 @@ abstract class WPUM_Form {
 				if ( $field['required'] && empty( $values[ $group_key ][ $key ] ) ) {
 					return new WP_Error( 'validation-error', sprintf( __( '%s is a required field', 'wp-user-manager' ), $field['label'] ) );
 				}
-				if ( $field['maxlength'] && ( $this->str_len( $values[ $group_key ][ $key ] ) > $field['maxlength'] ) ) {
+				if ( isset( $field['maxlength'] ) && is_numeric( $field['maxlength'] ) && ( $this->str_len( $values[ $group_key ][ $key ] ) > $field['maxlength'] ) ) {
 					return new WP_Error( 'validation-error', sprintf( __( '%s must not exceed %d characters', 'wp-user-manager' ), $field['label'], $field['maxlength'] ) );
 				}
 				if ( ! empty( $field['taxonomy'] ) && in_array( $field['type'], array( 'term-checklist', 'term-select', 'term-multiselect' ) ) ) {
