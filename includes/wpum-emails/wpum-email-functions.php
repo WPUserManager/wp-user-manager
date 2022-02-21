@@ -200,7 +200,7 @@ function wpum_get_registered_emails() {
 		],
 		'registration_admin_notification' => [
 			'status'      => 'active',
-			'name'        => esc_html__( 'New User Registration', 'wp-user-manager' ),
+			'name'        => esc_html__( 'New user notification', 'wp-user-manager' ),
 			'description' => esc_html__( 'This is the email sent to the site admin when a new user registers.', 'wp-user-manager' ),
 			'recipient'   => esc_html__( 'Site admin\'s email.', 'wp-user-manager' ),
 			'enabled'     => true,
