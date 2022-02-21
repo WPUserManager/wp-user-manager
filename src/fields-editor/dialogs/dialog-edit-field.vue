@@ -120,6 +120,8 @@ export default {
 			// Current field data.
 			model: {},
 
+			originalModel: {},
+
 			// Setup the settings fields for the current field.
 			schema: {
       			fields: []
@@ -136,7 +138,6 @@ export default {
 		}
 	},
 	created() {
-
 		//setup tabs
 		this.setupTabs();
 
@@ -154,6 +155,18 @@ export default {
 			res.invalidTextContainSpec = this.labels.field_error_special
 	},
 	methods: {
+		confirmLeave() {
+			return window.confirm(this.labels.confirm_message)
+		},
+
+		confirmStayInDirtyForm() {
+			return this.isFormDirty() && !this.confirmLeave()
+		},
+
+		isFormDirty() {
+			return JSON.stringify( this.model ) !== JSON.stringify( this.originalModel );
+		},
+
 		/**
 		 * Lookup the settings for this field.
 		 */
@@ -187,6 +200,7 @@ export default {
 					// Load the setting fields into the app.
 					this.schema.fields   = response.data.data.settings
 					this.model           = response.data.data.model
+					this.originalModel   = {...this.model}
 					this.dropdownOptions = response.data.data.dropdownOptions
 
 				}
@@ -200,6 +214,10 @@ export default {
 		 * Activate the selected tab and load the appropriate fields via ajax.
 		 */
 		activateTab( tab_id ) {
+			if (this.confirmStayInDirtyForm()) {
+				return;
+			}
+
 			this.activeTab = tab_id
 			this.getSettings()
 		},
