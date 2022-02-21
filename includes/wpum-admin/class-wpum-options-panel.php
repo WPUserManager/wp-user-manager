@@ -223,8 +223,8 @@ class WPUM_Options_Panel {
 				),
 				array(
 					'id'      => 'lock_complete_site',
-					'name'    => __( 'Lock the site completely', 'wp-user-manager'),
-					'desc'    => __( 'Enable to lock the site completely unless user is logged in. Users will be redirected to the WPUM login page.', 'wp-user-manager' ),
+					'name'    => __( 'Prevent site access to visitors', 'wp-user-manager'),
+					'desc'    => __( 'Prevent access to the site for visitors who are not logged in. Users will be redirected to the login page.', 'wp-user-manager' ),
 					'type'    => 'checkbox',
 				)
 			],
