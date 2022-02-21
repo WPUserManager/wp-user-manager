@@ -127,7 +127,7 @@ class WPUM_Plugin_Updates {
 	}
 
 	protected function upgrade_v2_7_3() {
-		$existing_emails = get_option( 'wpum_emails', array() );
+		$existing_emails = get_option( 'wpum_email', array() );
 		$emails          = wpum_install_emails();
 
 		if ( ! isset( $existing_emails['registration_admin_notification'] ) ) {
