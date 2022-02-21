@@ -432,7 +432,10 @@ function wpum_send_registration_confirmation_email( $user_id, $psw = false, $pas
 	$email   = $user->data->user_email;
 	$subject = $registration_confirmation_email['subject'];
 	$message = $registration_confirmation_email['content'];
-	$emails->send( $email, $subject, $message );
+
+	$attachments = apply_filters( 'wpum_user_registration_confirmation_email_attachments', array(), $user );
+
+	$emails->send( $email, $subject, $message, $attachments );
 	$emails->__set( 'plain_text_password', null );
 }
 
