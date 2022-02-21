@@ -264,7 +264,7 @@ function wpum_get_email( $email_id = false, $user_id = null ) {
 
 	$enabled = array_key_exists( 'enabled', $email ) ? rest_sanitize_boolean( $email['enabled'] ) : true;
 
-	if ( ! $enabled ) {
+	if ( ! apply_filters( 'wpum_email_enabled', $enabled, $email_id, $email ) ) {
 		return false;
 	}
 
