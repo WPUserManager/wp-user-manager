@@ -94,8 +94,11 @@ function wpum_get_roles( $force = false, $admin = false ) {
 	} else {
 
 		global $wp_roles;
-		$available_roles = $wp_roles->get_names();
+		if ( ! isset( $wp_roles ) ) {
+			return $roles;
+		}
 
+		$available_roles = $wp_roles->get_names();
 		foreach ( $available_roles as $role_id => $role ) {
 			if ( $role_id == 'administrator' && ! $admin ) {
 				continue;
