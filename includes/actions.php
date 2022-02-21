@@ -372,12 +372,15 @@ if ( wpum_get_option( 'lock_wplogin' ) ) {
  * @return void
  */
 function wpum_prevent_entire_site() {
-
-	global $pagenow;
+	if ( wp_doing_cron() || wp_doing_ajax() ) {
+		return;
+	}
 
 	if ( is_user_logged_in() ) {
 		return;
 	}
+
+	global $pagenow;
 
 	$login_page      = wp_login_url();
 	$wp_login_locked = wpum_get_option( 'lock_wplogin' );
