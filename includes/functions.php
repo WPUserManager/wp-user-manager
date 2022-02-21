@@ -71,7 +71,7 @@ function wpum_get_login_methods() {
 		array(
 			'username'       => __( 'Username only', 'wp-user-manager' ),
 			'email'          => __( 'Email only', 'wp-user-manager' ),
-			'username_email' => __( 'Username or Email', 'wp-user-manager' ),
+			'username_email' => __( 'Username or Email Address' ),
 		)
 	);
 }
@@ -230,7 +230,7 @@ function wpum_get_login_label() {
 	if ( $login_method == 'email' ) {
 		$label = esc_html__( 'Email', 'wp-user-manager' );
 	} elseif ( $login_method == 'username_email' ) {
-		$label = esc_html__( 'Username or email', 'wp-user-manager' );
+		$label = esc_html__( 'Username or Email Address' );
 	}
 
 	return $label;
