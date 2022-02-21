@@ -221,6 +221,12 @@ class WPUM_Options_Panel {
 					'std'     => 'email',
 					'options' => wpum_get_login_methods(),
 				),
+				array(
+					'id'      => 'lock_complete_site',
+					'name'    => __( 'Prevent site access to visitors', 'wp-user-manager'),
+					'desc'    => __( 'Prevent access to the site for visitors who are not logged in. Users will be redirected to the login page.', 'wp-user-manager' ),
+					'type'    => 'checkbox',
+				)
 			],
 			'misc'                => [
 				array(
