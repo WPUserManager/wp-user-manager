@@ -31,6 +31,7 @@ class WPUM_Emails_List {
 		add_action( 'admin_menu', [ $this, 'setup_menu_page' ], 9 );
 		add_action( 'admin_enqueue_scripts', [ $this, 'load_scripts' ] );
 		add_action( 'wp_ajax_wpum_send_test_email', array( $this, 'send_test_email' ) );
+		add_action( 'wp_ajax_wpum_enabled_email', array( $this, 'wpum_enabled_email' ) );
 	}
 
 	/**
@@ -83,19 +84,20 @@ class WPUM_Emails_List {
 				'nonce'         => wp_create_nonce( 'wpum_test_email' ),
 				'default_email' => get_option( 'admin_email' ),
 				'emails'        => wpum_get_registered_emails(),
-				'labels'        => [
+				'labels' => [
 					'title'             => esc_html__( 'WP User Manager Emails Customization', 'wp-user-manager' ),
 					'email'             => esc_html__( 'Email', 'wp-user-manager' ),
 					'description'       => esc_html__( 'Description', 'wp-user-manager' ),
 					'recipients'        => esc_html__( 'Recipient(s)', 'wp-user-manager' ),
+					'active'            => esc_html__( 'Enabled', 'wp-user-manager' ),
 					'tooltip_automatic' => esc_html__( 'Sent automatically', 'wp-user-manager' ),
 					'tooltip_manual'    => esc_html__( 'Manually triggered', 'wp-user-manager' ),
 					'placeholder'       => esc_html__( 'Enter email address...', 'wp-user-manager' ),
 					'customize'         => esc_html__( 'Customize', 'wp-user-manager' ),
 					'send'              => esc_html__( 'Send test email', 'wp-user-manager' ),
 					'success'           => esc_html__( 'Test email successfully sent.', 'wp-user-manager' ),
-					'error'             => esc_html__( 'Something went wrong while sending the test email. Please verify the email address you typed is correct or check your server logs.', 'wp-user-manager' )
-				]
+					'error'             => esc_html__( 'Something went wrong while sending the test email. Please verify the email address you typed is correct or check your server logs.', 'wp-user-manager' ),
+				],
 			];
 
 			wp_localize_script( 'wpum-emails-editor', 'wpumEmailsEditor', $js_variables );
@@ -143,6 +145,26 @@ class WPUM_Emails_List {
 
 	}
 
+	public function wpum_enabled_email() {
+
+		check_ajax_referer( 'wpum_test_email', 'nonce' );
+
+		$enabled = sanitize_text_field( $_POST['enabled'] );
+		$key     = isset( $_POST['key'] ) ? sanitize_text_field( $_POST['key'] ) : '';
+
+		if ( ! empty( $key ) && current_user_can( apply_filters( 'wpum_admin_pages_capability', 'manage_options' ) ) && is_admin() ) {
+			$emails = wpum_get_emails();
+			$emails[ $key ]['enabled'] = $enabled;
+
+			update_option( 'wpum_email' , $emails );
+
+		} else {
+			wp_die( -1, 403 );
+		}
+
+		wp_send_json_success();
+
+	}
 }
 
 new WPUM_Emails_List;
