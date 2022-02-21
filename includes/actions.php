@@ -350,7 +350,6 @@ function wpum_complete_setup() {
  * @return void
  */
 function wpum_prevent_wp_login() {
-
 	global $pagenow;
 
 	$action        = ( isset( $_GET['action'] ) ) ? $_GET['action'] : '';
@@ -362,6 +361,7 @@ function wpum_prevent_wp_login() {
 		exit();
 	}
 }
+
 if ( wpum_get_option( 'lock_wplogin' ) ) {
 	add_action( 'init', 'wpum_prevent_wp_login' );
 }
@@ -387,13 +387,14 @@ function wpum_prevent_entire_site() {
 		return;
 	}
 
-	if ( $wp_login_locked && $is_wp_login ) {
-		$login_page = add_query_arg( array( 'wpum_override' => 1 ) );
+	if ( isset( $_POST['wp-submit'] ) && isset( $_POST['log'] ) ) {
+		return;
 	}
 
 	wp_safe_redirect( $login_page );
 	exit();
 }
+
 if ( wpum_get_option( 'lock_complete_site' ) ) {
 	add_action( 'init', 'wpum_prevent_entire_site', 9 );
 }
