@@ -404,11 +404,7 @@ function wpum_send_registration_confirmation_email( $user_id, $psw = false, $pas
 		return;
 	}
 
-	// Send notification to admin if not disabled.
-	$disable_admin_email = wpum_get_option( 'disable_admin_register_email' );
-	if ( ! $disable_admin_email && apply_filters( 'wpum_send_registration_admin_email', true ) ) {
-		wpum_send_registration_admin_email( $user );
-	}
+	wpum_send_registration_admin_email( $user );
 
 	$registration_confirmation_email = wpum_get_email( 'registration_confirmation', $user_id );
 
@@ -436,7 +432,10 @@ function wpum_send_registration_confirmation_email( $user_id, $psw = false, $pas
 	$email   = $user->data->user_email;
 	$subject = $registration_confirmation_email['subject'];
 	$message = $registration_confirmation_email['content'];
-	$emails->send( $email, $subject, $message );
+
+	$attachments = apply_filters( 'wpum_user_registration_confirmation_email_attachments', array(), $user );
+
+	$emails->send( $email, $subject, $message, $attachments );
 	$emails->__set( 'plain_text_password', null );
 }
 
@@ -467,64 +466,33 @@ function wpum_update_roles( $roles, $user, $remove_whitelist = array() ) {
 }
 
 /**
- * @param WP_User $user
+ * @param $user
  */
 function wpum_send_registration_admin_email( $user ) {
-	// The blogname option is escaped with esc_html on the way into the database in sanitize_option
-	// we want to reverse this for the plain text arena of emails.
+	$registration_admin_email = wpum_get_email( 'registration_admin_notification', $user->ID );
 
-	$blogname = wp_specialchars_decode( get_option( 'blogname' ), ENT_QUOTES );
+	if ( ! is_array( $registration_admin_email ) || empty( $registration_admin_email ) ) {
+		return;
+	}
 
-	$message  = sprintf( esc_html__( 'New user registration on your site %s:', 'wp-user-manager' ), $blogname ) . "\r\n\r\n";
-	$message .= sprintf( esc_html__( 'Username: %s', 'wp-user-manager' ), $user->user_login ) . "\r\n\r\n";
-	$message .= sprintf( esc_html__( 'E-mail: %s', 'wp-user-manager' ), $user->user_email ) . "\r\n";
+	// Send notification to admin if not disabled.
+	$disable_admin_email = wpum_get_option( 'disable_admin_register_email' );
+	if ( $disable_admin_email || ! apply_filters( 'wpum_send_registration_admin_email', true ) ) {
+		return;
+	}
 
-	/**
-	 * Filter: allow developers to customize the message of the admin registration confirmation email.
-	 *
-	 * @param string $message the message.
-	 * @param WP_User $user user details.
-	 * @return string
-	 */
-	$message = apply_filters( 'wpum_admin_registration_confirmation_email_message', $message, $user );
+	$emails = new WPUM_Emails();
+	$emails->__set( 'user_id', $user->ID );
+	$emails->__set( 'user_login', $user->user_login );
+	$emails->__set( 'heading', apply_filters( 'wpum_admin_registration_confirmation_email_subject', $registration_admin_email['title'], $user ) );
 
-	/**
-	 * Filter: allow developers to customize the subject of the admin registration confirmation email.
-	 *
-	 * @param string $subject the subject.
-	 * @param WP_User $user user details.
-	 * @return string
-	 */
-	$subject = apply_filters( 'wpum_admin_registration_confirmation_email_subject', sprintf( esc_html__( '[%s] New User Registration', 'wp-user-manager' ), $blogname ), $user );
+	$email   = apply_filters( 'wpum_admin_registration_confirmation_email_recipient', get_option( 'admin_email' ) );
+	$subject = apply_filters( 'wpum_admin_registration_confirmation_email_subject', $registration_admin_email['subject'], $user );
+	$message = apply_filters( 'wpum_admin_registration_confirmation_email_message', $registration_admin_email['content'], $user );
 
-	/**
-	 * Filter: allow developers to customize the email recipient of the admin registration confirmation email.
-	 *
-	 * @param string $to_email the admin email address.
-	 *
-	 * @return string
-	 */
-	$to_email = apply_filters( 'wpum_admin_registration_confirmation_email_recipient', get_option( 'admin_email' ) );
-
-	/**
-	 * Filter: allow developers to customize the email headers of the admin registration confirmation email.
-	 *
-	 * @param string $headers the admin email headers.
-	 *
-	 * @return string|array
-	 */
-	$headers = apply_filters( 'wpum_admin_registration_confirmation_email_headers', '' );
-
-	/**
-	 * Filter: allow developers to customize the email attachments of the admin registration confirmation email.
-	 *
-	 * @param array
-	 *
-	 * @return array
-	 */
 	$attachments = apply_filters( 'wpum_admin_registration_confirmation_email_attachments', array(), $user );
 
-	wp_mail( $to_email, $subject, $message, $headers, $attachments );
+	$emails->send( $email, $subject, $message, $attachments );
 }
 
 /**

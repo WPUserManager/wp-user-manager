@@ -198,6 +198,13 @@ function wpum_get_registered_emails() {
 			'recipient'   => esc_html__( 'User\'s email.', 'wp-user-manager' ),
 			'enabled'     => true,
 		],
+		'registration_admin_notification' => [
+			'status'      => 'active',
+			'name'        => esc_html__( 'New user notification', 'wp-user-manager' ),
+			'description' => esc_html__( 'This is the email sent to the site admin when a new user registers.', 'wp-user-manager' ),
+			'recipient'   => esc_html__( 'Site admin\'s email.', 'wp-user-manager' ),
+			'enabled'     => true,
+		],
 		'password_recovery_request' => [
 			'status'      => 'active',
 			'name'        => esc_html__( 'Password recovery request', 'wp-user-manager' ),
