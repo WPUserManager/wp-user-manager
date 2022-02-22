@@ -191,12 +191,12 @@ class WPUM_Directories_Editor {
 			     ->set_help_text( esc_html__( 'Enable this setting to display a dropdown menu into the directory with the results amount filter.', 'wp-user-manager' ) ),
 			Field::make( 'select', 'directory_sorting_method', esc_html__( 'Sorting method', 'wp-user-manager' ) )
 			     ->set_help_text( esc_html__( 'Select the sorting method for the directory. If the sorter field is visible, this will be used as default option.', 'wp-user-manager' ) )
-			     ->add_options( array(
+			     ->add_options( apply_filters( 'wpum_directory_sort_options', array(
 				     'newest'    => esc_html__( 'Newest users first', 'wp-user-manager' ),
 				     'oldest'    => esc_html__( 'Oldest users first', 'wp-user-manager' ),
 				     'name'      => esc_html__( 'First name', 'wp-user-manager' ),
 				     'last_name' => esc_html__( 'Last Name', 'wp-user-manager' ),
-			     ) ),
+			     ) ) ),
 		);
 
 		Container::make( 'post_meta', esc_html__( 'Sorting', 'wp-user-manager' ) )
