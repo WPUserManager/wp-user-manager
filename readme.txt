@@ -8,7 +8,7 @@ Tested up to: 5.9
 Requires PHP: 5.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
-Stable Tag: 2.7.2
+Stable Tag: 2.8
 
 The most customizable profiles & community builder WordPress plugin with front-end login, registration, profile customization and content restriction.
 
@@ -125,6 +125,16 @@ Please note that using WPUM and the mentioned add-ons does NOT guarantee complia
 13. Login form.
 
 == Changelog ==
+
+= 2.8 (24th February 2022) =
+
+- New: Sites can now be completely locked from access unless users are logged in
+- New: Email sent to the site administrator when a new user registers can now be customized like other emails from the email screen
+- New: File fields can now be attached to new user registration emails with the [Custom Fields addon](https://wpusermanager.com/addons/custom-fields/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager)
+- New: Emails can now be disabled from the email screen
+- New: Directory sorting option is now filterable with 'wpum_directory_sort_options' to allow setting custom sort field
+- Improvement: User is now alerted if they have unsaved field settings and try to change settings tabs
+- Fix: 'Username or email' string now used to match WordPress and leverage existing string translations
 
 = 2.7.2 (11th February 2022) =
 
