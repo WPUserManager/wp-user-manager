@@ -226,6 +226,13 @@ class WPUM_Options_Panel {
 					'name'    => __( 'Prevent site access to visitors', 'wp-user-manager'),
 					'desc'    => __( 'Prevent access to the site for visitors who are not logged in. Users will be redirected to the login page.', 'wp-user-manager' ),
 					'type'    => 'checkbox',
+				),
+				array(
+					'id'      => 'lock_complete_site_allow_register',
+					'name'    => __( 'Allow site registration', 'wp-user-manager'),
+					'desc'    => __( 'Allow access to the \'Register page\' for site registration despite the site being locked.', 'wp-user-manager' ),
+					'type'    => 'checkbox',
+					'toggle'   => array( 'key' => 'lock_complete_site', 'value' => true ),
 				)
 			],
 			'misc'                => [

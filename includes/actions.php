@@ -394,6 +394,16 @@ function wpum_prevent_entire_site() {
 		return;
 	}
 
+	if ( wpum_get_option( 'lock_complete_site_allow_register' ) ) {
+		$registration_pages   = array();
+		$registration_pages[] = get_permalink( wpum_get_core_page_id( 'register' ) );
+		foreach ( apply_filters( 'wpum_registration_pages', $registration_pages ) as $registration_page ) {
+			if ( home_url( $_SERVER['REQUEST_URI'] ) == $registration_page ) {
+				return;
+			}
+		}
+	}
+
 	wp_safe_redirect( $login_page );
 	exit();
 }
