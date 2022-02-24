@@ -191,6 +191,7 @@ class WPUM_Fields_Editor {
 			'field_option_value'        => esc_html__( 'Option value', 'wp-user-manager' ),
 			'repeater_fields_add_new'	=> esc_html__( 'Add new sub field', 'wp-user-manager' ),
 			'repeater_fields_create'	=> esc_html__( 'Add sub field', 'wp-user-manager' ),
+			'confirm_message'           => esc_html__( 'Are you sure you want to leave? You have unsaved field settings.', 'wp-user-manager' ),
 		];
 
 	}

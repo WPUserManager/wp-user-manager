@@ -196,12 +196,22 @@ function wpum_get_registered_emails() {
 			'name'        => esc_html__( 'Registration confirmation', 'wp-user-manager' ),
 			'description' => esc_html__( 'This is the email that is sent to the user upon successful registration.', 'wp-user-manager' ),
 			'recipient'   => esc_html__( 'User\'s email.', 'wp-user-manager' ),
+			'enabled'     => true,
+		],
+		'registration_admin_notification' => [
+			'status'      => 'active',
+			'name'        => esc_html__( 'New user notification', 'wp-user-manager' ),
+			'description' => esc_html__( 'This is the email sent to the site admin when a new user registers.', 'wp-user-manager' ),
+			'recipient'   => esc_html__( 'Site admin\'s email.', 'wp-user-manager' ),
+			'enabled'     => true,
 		],
 		'password_recovery_request' => [
 			'status'      => 'active',
 			'name'        => esc_html__( 'Password recovery request', 'wp-user-manager' ),
 			'description' => esc_html__( 'This is the email that is sent to the visitor upon password reset request.', 'wp-user-manager' ),
 			'recipient'   => esc_html__( 'Email address of the requested user.', 'wp-user-manager' ),
+			'enabled'     => true,
+			'disabled'    => true,
 		],
 	];
 
@@ -255,6 +265,14 @@ function wpum_get_email( $email_id = false, $user_id = null ) {
 
 	if ( array_key_exists( $email_id, $emails ) && is_array( $emails[ $email_id ] ) ) {
 		$email = $emails[ $email_id ];
+	} else {
+		return false;
+	}
+
+	$enabled = array_key_exists( 'enabled', $email ) ? rest_sanitize_boolean( $email['enabled'] ) : true;
+
+	if ( ! apply_filters( 'wpum_email_enabled', $enabled, $email_id, $email ) ) {
+		return false;
 	}
 
 	return apply_filters( 'wpum_get_email', $email, $email_id, $user_id );
@@ -281,3 +299,23 @@ if ( wpum_get_option( 'disable_admin_password_recovery_email' ) && ! function_ex
 		return;
 	}
 }
+
+function wpum_registered_emails_customizer( $emails ) {
+	$settings = wpum_get_emails();
+
+	foreach ( $emails as $key => $email ) {
+		if ( isset( $settings[ $key ] ) ) {
+			if ( array_key_exists( 'enabled', $settings[ $key ] ) ) {
+				$emails[ $key ]['enabled'] = rest_sanitize_boolean( $settings[ $key ]['enabled'] ) ? 1 : 0;
+			} else {
+				$emails[ $key ]['enabled'] = 1;
+			}
+		} else {
+			$emails[ $key ]['enabled'] = 1;
+		}
+	}
+
+	return $emails;
+}
+
+add_filter( 'wpum_registered_emails', 'wpum_registered_emails_customizer', 20 );

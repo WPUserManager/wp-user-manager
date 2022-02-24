@@ -67,6 +67,10 @@ class WPUM_Plugin_Updates {
 			$this->upgrade_v2_4();
 		}
 
+		if ( version_compare( $installed_version, '2.8', '<' ) ) {
+			$this->upgrade_v2_8();
+		}
+
 		update_option( 'wpum_version', $latest_version );
 	}
 
@@ -120,6 +124,16 @@ class WPUM_Plugin_Updates {
 	 */
 	protected function upgrade_v2_4() {
 		wpum_update_option( 'roles_editor', true );
+	}
+
+	protected function upgrade_v2_8() {
+		$existing_emails = get_option( 'wpum_email', array() );
+		$emails          = wpum_install_emails();
+
+		if ( ! isset( $existing_emails['registration_admin_notification'] ) ) {
+			$existing_emails['registration_admin_notification'] = $emails['registration_admin_notification'];
+			update_option( 'wpum_email', $existing_emails );
+		}
 	}
 
 	/**

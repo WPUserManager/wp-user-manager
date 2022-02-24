@@ -1,1 +1,7 @@
-{"version":3,"sourceRoot":"","sources":["../src/admin/wpum-logo.scss"],"names":[],"mappings":"AACC;EACC;EACA;EACA;EACA","file":"wpum-logo.css"}
+{
+"version": 3,
+"mappings": "AACC,yBAAO;EACN,KAAK,EAAE,IAAI;EACX,KAAK,EAAE,IAAI;EACX,aAAa,EAAE,IAAI;EACnB,UAAU,EAAE,IAAI",
+"sources": ["../src/admin/wpum-logo.scss"],
+"names": [],
+"file": "wpum-logo.css"
+}

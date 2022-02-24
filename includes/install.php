@@ -172,7 +172,13 @@ function wpum_install_emails() {
 <p>Thanks,<br />{sitename}</p>',
 			'subject' => 'Welcome to {sitename}'
 		],
-
+		'registration_admin_notification' => [
+			'title'   => 'New User Registration',
+			'content' => '<p>New user registration on your site {sitename}:<br></p>
+<p>Username: {username}</p>
+<p>E-mail: {email}</p>',
+			'subject' => '[{sitename}] New User Registration',
+		],
 		'password_recovery_request' => [
 			'subject' => 'Reset your {sitename} password',
 			'title' => 'Reset your {sitename} password',

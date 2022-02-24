@@ -775,6 +775,10 @@ function wpum_directory( $atts, $content = null ) {
 			$args['orderby']  = 'meta_value';
 			$args['order']    = 'ASC';
 			break;
+		default:
+			$args['meta_key'] = $sortby;
+			$args['orderby']  = 'meta_value';
+			$args['order']    = 'ASC';
 	}
 
 	$privacy_meta_query_key    = is_user_logged_in() ? '_hide_profile_members' : '_hide_profile_guests';

@@ -129,23 +129,23 @@ function wpum_login_url( $login_url, $redirect, $force_reauth ) {
 	return $wpum_login_page;
 
 }
-if ( wpum_get_option( 'lock_wplogin' ) ) {
+if ( wpum_get_option( 'lock_wplogin' ) || wpum_get_option( 'lock_complete_site' ) ) {
 	add_filter( 'login_url', 'wpum_login_url', 10, 3 );
 }
 
 /**
  * Validate authentication with the selected login method.
  *
- * @param object $user
+ * @param object $wp_user
  * @param string $username
  * @param string $password
  * @return void
  */
-function wpum_authentication( $user, $username, $password ) {
+function wpum_authentication( $wp_user, $username, $password ) {
 
 	// Skip authentication method for admin users
-	if ( ! is_wp_error( $user ) && user_can( $user, 'administrator' ) ) {
-		return $user;
+	if ( ! is_wp_error( $wp_user ) && user_can( $wp_user, 'administrator' ) ) {
+		return $wp_user;
 	}
 
 	$authentication_method = wpum_get_option( 'login_method' );
@@ -175,7 +175,7 @@ function wpum_authentication( $user, $username, $password ) {
 		}
 	}
 
-	return $user;
+	return $wp_user;
 
 }
 add_filter( 'authenticate', 'wpum_authentication', 20, 3 );

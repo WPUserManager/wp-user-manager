@@ -99,7 +99,7 @@ class WPUM_Form_Password_Recovery extends WPUM_Form {
 		}
 
 		$authentication_method = wpum_get_option( 'login_method' );
-		$username_label        = __( 'Username or email', 'wp-user-manager' );
+		$username_label        = __( 'Username or Email Address' );
 		if ( $authentication_method == 'username' ) {
 			$username_label = __( 'Username', 'wp-user-manager' );
 		}
