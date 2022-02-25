@@ -1343,9 +1343,20 @@ if ( ! function_exists( 'wp_new_user_notification' ) ) {
 			$password_set_by_admin = $_POST['pass1'];
 		}
 
+		$password = false;
 		if ( is_admin() && current_user_can( 'create_users' ) && $password_set_by_admin ) {
 			$password = sanitize_text_field( $password_set_by_admin );
-		} else {
+		}
+
+		if ( empty( $password ) && isset( $_POST['password'] ) ) {
+			$password = sanitize_text_field( $_POST['password'] );
+		}
+
+		if ( empty( $password ) ) {
+			$password = apply_filters( 'wpum_new_user_notification_password', $password, $user_id );
+		}
+
+		if ( empty( $password ) && apply_filters( 'wpum_new_user_notification_generate_password', true, $user_id ) ) {
 			$password = wp_generate_password( 24, true, true );
 			wp_set_password( $password, $user_id );
 		}
