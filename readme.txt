@@ -8,7 +8,7 @@ Tested up to: 5.9
 Requires PHP: 5.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
-Stable Tag: 2.8
+Stable Tag: 2.8.1
 
 The most customizable profiles & community builder WordPress plugin with front-end login, registration, profile customization and content restriction.
 
@@ -125,6 +125,11 @@ Please note that using WPUM and the mentioned add-ons does NOT guarantee complia
 13. Login form.
 
 == Changelog ==
+
+= 2.8.1 (25th February 2022) =
+
+- Fix: User password now not regenerated when other plugins create users when using a 'password' field
+- Fix: WP CLI commands now working when the site is locked
 
 = 2.8 (24th February 2022) =
 

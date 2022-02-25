@@ -376,6 +376,10 @@ function wpum_prevent_entire_site() {
 		return;
 	}
 
+	if ( defined( 'WP_CLI' ) && WP_CLI ) {
+		return;
+	}
+
 	if ( is_user_logged_in() ) {
 		return;
 	}
