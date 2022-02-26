@@ -20,6 +20,18 @@ module.exports = function( grunt ) {
 					'assets/js/src/wp-user-manager.js'
 				],
 				dest: 'assets/js/wp-user-manager.js'
+			},
+			wpum_directories: {
+				src: [
+					'assets/js/src/wpum-directories.js'
+				],
+				dest: 'assets/js/wpum-directories.js'
+			},
+			wpum_stripe: {
+				src: [
+					'assets/js/src/wpum-stripe.js'
+				],
+				dest: 'assets/js/wpum-stripe.js'
 			}
 		},
 		shell: {
@@ -61,7 +73,8 @@ module.exports = function( grunt ) {
 					'assets/js/admin/admin-menus.min.js': ['assets/js/src/admin/admin-menus.js'],
 					'assets/js/admin/admin-upgrades.min.js': ['assets/js/src/admin/admin-upgrades.js'],
 					'assets/js/wp-user-manager.min.js': ['assets/js/src/wp-user-manager.js'],
-					'assets/js/wpum-directories.min.js': ['assets/js/src/wpum-directories.js']
+					'assets/js/wpum-directories.min.js': ['assets/js/src/wpum-directories.js'],
+					'assets/js/wpum-stripe.min.js': ['assets/js/src/wpum-stripe.js']
 				},
 				options: {
 					banner: '/*! <%= pkg.title %> - v<%= pkg.version %>\n' +
