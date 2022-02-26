@@ -46,12 +46,16 @@ class WPUM_Forms {
 
 	/**
 	 * If a form was posted, load its class so that it can be processed before display.
+	 *
+	 * @return false|WPUM_Form
 	 */
 	public function load_posted_form() {
 		$form = filter_input( INPUT_POST, 'wpum_form' );
 		if ( ! empty( $form ) ) {
 			$this->load_form_class( sanitize_title( $form ) );
 		}
+
+		return false;
 	}
 
 	/**
