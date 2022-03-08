@@ -348,6 +348,16 @@ class WPUM_EDD_SL_Plugin_Updater {
 			$_data->plugin = $this->name;
 		}
 
+		// Ensure minor versions of WordPress are still shown as compatible with the addon.
+		// Do not remove when updating this class from upstream.
+		if ( empty( $_data->tested ) ) {
+			$_data->tested = get_bloginfo( 'version' );
+		} else {
+			if ( version_compare( $_data->tested, get_bloginfo( 'version' ), '<' ) && 0 == stripos( get_bloginfo( 'version' ), $_data->tested . '.' ) ) {
+				$_data->tested = get_bloginfo( 'version' );
+			}
+		}
+
 		return $_data;
 	}
 
