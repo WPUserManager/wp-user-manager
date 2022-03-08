@@ -333,6 +333,10 @@ export default {
 				this.tabs = this.tabs.filter( tab => tab.id !== 'fields' )
 			}
 
+			if(this.field_type !== 'file'){
+				this.tabs = this.tabs.filter( tab => tab.id !== 'emails' )
+			}
+
 			this.activeTab = this.tabs && this.tabs[0].id
 		}
 	}
