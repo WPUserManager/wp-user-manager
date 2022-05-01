@@ -226,7 +226,7 @@ function wpum_restrict_account_page() {
 		$redirect = get_permalink( $login_page );
 		$redirect = add_query_arg(
 			[
-				'redirect_to' => get_permalink(),
+				'redirect_to' => apply_filters( 'wpum_login_redirect_to_url', get_permalink() ),
 			],
 			$redirect
 		);
