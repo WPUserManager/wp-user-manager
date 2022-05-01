@@ -8,7 +8,7 @@ Tested up to: 5.9
 Requires PHP: 5.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
-Stable Tag: 2.8.1
+Stable Tag: 2.8.2
 
 The most customizable profiles & community builder WordPress plugin with front-end login, registration, profile customization and content restriction.
 
@@ -125,6 +125,14 @@ Please note that using WPUM and the mentioned add-ons does NOT guarantee complia
 13. Login form.
 
 == Changelog ==
+
+= 2.8.2 (1st May 2022) =
+
+- Improvement: Redirect URL after login can now be filtered with 'wpum_login_redirect_to_url' filter when restricting content
+- Fix: Password reset page now accessible when preventing access to the whole site
+- Fix: Email settings tab now only showing for File fields
+- Fix: File field help hint now includes jpeg in the example file extensions for clarity
+- Fix: WP User Manager addons now showing as tested up to the minor WordPress versions correctly
 
 = 2.8.1 (25th February 2022) =
 

@@ -115,7 +115,7 @@ function wpum_login_link( $atts, $content = null ) {
 		$wpum_login_page = get_permalink( $wpum_login_page );
 
 		if ( $redirect ) {
-			$wpum_login_page = add_query_arg( [ 'redirect_to' => $redirect ], $wpum_login_page );
+			$wpum_login_page = add_query_arg( [ 'redirect_to' => apply_filters( 'wpum_login_redirect_to_url', $redirect ) ], $wpum_login_page );
 		}
 
 		if ( $wpum_login_page ) {
@@ -270,7 +270,7 @@ function wpum_profile( $atts, $content = null ) {
 	if ( ! is_user_logged_in() && wpum_get_queried_user_id() ) {
 		$user       = get_user_by( 'id', wpum_get_queried_user_id() );
 		$redirect   = wpum_get_profile_url( $user );
-		$login_page = add_query_arg( [ 'redirect_to' => $redirect ], $login_page );
+		$login_page = add_query_arg( [ 'redirect_to' => apply_filters( 'wpum_login_redirect_to_url', $redirect ) ], $login_page );
 	}
 
 	$warning_message  = sprintf( __( 'This content is available to members only. Please <a href="%1$s">login</a> or <a href="%2$s">register</a> to view this area.', 'wp-user-manager' ), $login_page, $registration_page );
@@ -368,7 +368,7 @@ function wpum_restrict_logged_in( $atts, $content = null ) {
 		$login_page = get_permalink( wpum_get_core_page_id( 'login' ) );
 		$login_page = add_query_arg(
 			[
-				'redirect_to' => get_permalink(),
+				'redirect_to' => apply_filters( 'wpum_login_redirect_to_url', get_permalink() ),
 			],
 			$login_page
 		);
@@ -432,7 +432,7 @@ function wpum_restrict_logged_out( $atts, $content = null ) {
 		$login_page = get_permalink( wpum_get_core_page_id( 'login' ) );
 		$login_page = add_query_arg(
 			[
-				'redirect_to' => get_permalink(),
+				'redirect_to' => apply_filters( 'wpum_login_redirect_to_url', get_permalink() ),
 			],
 			$login_page
 		);
@@ -499,7 +499,7 @@ function wpum_restrict_to_users( $atts, $content = null ) {
 		$login_page = get_permalink( wpum_get_core_page_id( 'login' ) );
 		$login_page = add_query_arg(
 			[
-				'redirect_to' => get_permalink(),
+				'redirect_to' => apply_filters( 'wpum_login_redirect_to_url', get_permalink() ),
 			],
 			$login_page
 		);
@@ -568,7 +568,7 @@ function wpum_restrict_to_user_roles( $atts, $content = null ) {
 		$login_page = get_permalink( wpum_get_core_page_id( 'login' ) );
 		$login_page = add_query_arg(
 			[
-				'redirect_to' => get_permalink(),
+				'redirect_to' => apply_filters( 'wpum_login_redirect_to_url', get_permalink() ),
 			],
 			$login_page
 		);

@@ -2,9 +2,9 @@
 # This file is distributed under the GPLv3+.
 msgid ""
 msgstr ""
-"Project-Id-Version: WP User Manager 2.8.1\n"
+"Project-Id-Version: WP User Manager 2.8.2\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/wp-user-manager\n"
-"POT-Creation-Date: 2022-02-25 22:52:32+00:00\n"
+"POT-Creation-Date: 2022-05-01 16:29:15+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -286,27 +286,27 @@ msgstr ""
 msgid "View Profile"
 msgstr ""
 
-#: includes/actions.php:451
+#: includes/actions.php:459
 msgid "Hide profile from guests"
 msgstr ""
 
-#: includes/actions.php:452
+#: includes/actions.php:460
 msgid "Hide this profile from guests. Overrides the global profile options."
 msgstr ""
 
-#: includes/actions.php:453
+#: includes/actions.php:461
 msgid "Hide profile from members"
 msgstr ""
 
-#: includes/actions.php:454
+#: includes/actions.php:462
 msgid "Hide this profile from members. Overrides the global profile options."
 msgstr ""
 
-#: includes/actions.php:462
+#: includes/actions.php:470
 msgid "Select one or more roles for this user."
 msgstr ""
 
-#: includes/actions.php:465 includes/functions.php:714
+#: includes/actions.php:473 includes/functions.php:714
 #: includes/wpum-forms/class-wpum-form-privacy.php:74
 msgid "Profile Privacy"
 msgstr ""
@@ -2162,7 +2162,7 @@ msgid "Allowed File Types"
 msgstr ""
 
 #: includes/wpum-fields/types/class-wpum-field-file.php:50
-msgid "Comma Separated List of allowed file types, (i.e. jpg, gif, png, pdf)"
+msgid "Comma Separated List of allowed file types, (i.e. jpg, jpeg, gif, png, pdf)"
 msgstr ""
 
 #: includes/wpum-fields/types/class-wpum-field-file.php:103
@@ -3216,7 +3216,6 @@ msgstr ""
 #: includes/wpum-shortcodes/shortcodes.php:440
 #: includes/wpum-shortcodes/shortcodes.php:507
 #: includes/wpum-shortcodes/shortcodes.php:576
-#: vendor/wp-user-manager/wpum-blocks/blocks-loader.php:216
 msgid ""
 "This content is available to members only. Please <a "
 "href=\"%1$s\">login</a> or <a href=\"%2$s\">register</a> to view this area."
@@ -3236,11 +3235,11 @@ msgid ""
 "or %5$supdate now%6$s."
 msgstr ""
 
-#: includes/wpum-updater/EDD_SL_Plugin_Updater.php:502
+#: includes/wpum-updater/EDD_SL_Plugin_Updater.php:512
 msgid "You do not have permission to install plugin updates"
 msgstr ""
 
-#: includes/wpum-updater/EDD_SL_Plugin_Updater.php:502
+#: includes/wpum-updater/EDD_SL_Plugin_Updater.php:512
 #: includes/wpum-upgrades/upgrade-functions.php:124
 msgid "Error"
 msgstr ""
@@ -3914,6 +3913,12 @@ msgstr ""
 
 #: vendor/htmlburger/carbon-fields/templates/Container/widget.php:4
 msgid "No options are available for this widget."
+msgstr ""
+
+#: vendor/wp-user-manager/wpum-blocks/blocks-loader.php:216
+msgid ""
+"AThis content is available to members only. Please <a "
+"href=\"%1$s\">login</a> or <a href=\"%2$s\">register</a> to view this area."
 msgstr ""
 
 #: vendor/wp-user-manager/wpum-blocks/includes/classes/Blocks/AccountPage.php:27

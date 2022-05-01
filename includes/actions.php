@@ -226,7 +226,7 @@ function wpum_restrict_account_page() {
 		$redirect = get_permalink( $login_page );
 		$redirect = add_query_arg(
 			[
-				'redirect_to' => get_permalink(),
+				'redirect_to' => apply_filters( 'wpum_login_redirect_to_url', get_permalink() ),
 			],
 			$redirect
 		);
@@ -396,6 +396,14 @@ function wpum_prevent_entire_site() {
 
 	if ( isset( $_POST['wp-submit'] ) && isset( $_POST['log'] ) ) {
 		return;
+	}
+
+	$password_reset_page_id = wpum_get_core_page_id( 'password' );
+	if ( ! empty( $password_reset_page_id ) ) {
+		$password_reset_page = get_permalink( $password_reset_page_id );
+		if ( 0 === strpos( home_url( $_SERVER['REQUEST_URI'] ), $password_reset_page ) ) {
+			return;
+		}
 	}
 
 	if ( wpum_get_option( 'lock_complete_site_allow_register' ) ) {

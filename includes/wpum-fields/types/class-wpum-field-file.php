@@ -47,7 +47,7 @@ class WPUM_Field_File extends WPUM_Field_Type {
 					'inputType' => 'text',
 					'label'     => esc_html__( 'Allowed File Types', 'wp-user-manager' ),
 					'model'     => 'allowed_mime_types',
-					'hint'      => esc_html__( 'Comma Separated List of allowed file types, (i.e. jpg, gif, png, pdf)', 'wp-user-manager' ),
+					'hint'      => esc_html__( 'Comma Separated List of allowed file types, (i.e. jpg, jpeg, gif, png, pdf)', 'wp-user-manager' ),
 				),
 			],
 		];
