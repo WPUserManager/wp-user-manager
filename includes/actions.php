@@ -416,6 +416,10 @@ function wpum_prevent_entire_site() {
 		}
 	}
 
+	if ( ! apply_filters( 'wpum_prevent_entire_site_access', true ) ) {
+		return;
+	}
+
 	wp_safe_redirect( $login_page );
 	exit();
 }

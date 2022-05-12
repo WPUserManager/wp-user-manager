@@ -329,3 +329,10 @@ function wpum_maybe_display_field( $display, $field = null ) {
 
 	return count( array_intersect( wp_get_current_user()->roles, $field_roles ) ) > 0;
 }
+
+function wpum_remove_slashes_from_field_data( $field_name ) {
+	return wpum_strip_slashes( $field_name );
+}
+
+add_filter( 'wpum_field_name', 'wpum_remove_slashes_from_field_data' );
+add_filter( 'wpum_field_description', 'wpum_remove_slashes_from_field_data' );

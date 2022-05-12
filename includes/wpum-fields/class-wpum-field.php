@@ -261,7 +261,7 @@ class WPUM_Field {
 	 * @return void
 	 */
 	public function get_name() {
-		return $this->name;
+		return apply_filters( 'wpum_field_name', $this->name );
 	}
 
 	/**
@@ -279,7 +279,7 @@ class WPUM_Field {
 	 * @return void
 	 */
 	public function get_description() {
-		return $this->description;
+		return apply_filters( 'wpum_field_description', $this->description );
 	}
 
 	/**
