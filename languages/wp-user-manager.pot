@@ -2,9 +2,9 @@
 # This file is distributed under the GPLv3+.
 msgid ""
 msgstr ""
-"Project-Id-Version: WP User Manager 2.8.2\n"
+"Project-Id-Version: WP User Manager 2.8.3\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/wp-user-manager\n"
-"POT-Creation-Date: 2022-05-01 16:29:15+00:00\n"
+"POT-Creation-Date: 2022-05-12 19:17:20+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -286,27 +286,27 @@ msgstr ""
 msgid "View Profile"
 msgstr ""
 
-#: includes/actions.php:459
+#: includes/actions.php:463
 msgid "Hide profile from guests"
 msgstr ""
 
-#: includes/actions.php:460
+#: includes/actions.php:464
 msgid "Hide this profile from guests. Overrides the global profile options."
 msgstr ""
 
-#: includes/actions.php:461
+#: includes/actions.php:465
 msgid "Hide profile from members"
 msgstr ""
 
-#: includes/actions.php:462
+#: includes/actions.php:466
 msgid "Hide this profile from members. Overrides the global profile options."
 msgstr ""
 
-#: includes/actions.php:470
+#: includes/actions.php:474
 msgid "Select one or more roles for this user."
 msgstr ""
 
-#: includes/actions.php:473 includes/functions.php:714
+#: includes/actions.php:477 includes/functions.php:714
 #: includes/wpum-forms/class-wpum-form-privacy.php:74
 msgid "Profile Privacy"
 msgstr ""
