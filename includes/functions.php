@@ -1410,10 +1410,10 @@ function wpum_get_display_name_options() {
 	);
 }
 
-function wpum_removed_slashes( $content ) {
+function wpum_strip_slashes( $content ) {
 	$content = preg_replace( "/\\\+'/", "'", $content );
 	$content = preg_replace( '/\\\+"/', '"', $content );
 	$content = preg_replace( '/\\\+/', '\\', $content );
- 
+
 	return $content;
 }
