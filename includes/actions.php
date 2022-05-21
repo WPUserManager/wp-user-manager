@@ -570,3 +570,9 @@ function wpum_restrict_profile_page() {
 
 add_action( 'template_redirect', 'wpum_restrict_profile_page' );
 
+function wpum_flush_user_object_cache( $form, $values, $updated_user_id ) {
+	wp_cache_delete( $updated_user_id, 'user_meta' );
+}
+add_action( 'wpum_after_custom_user_update', 'wpum_flush_user_object_cache', 100, 3 );
+add_action( 'wpum_after_user_update', 'wpum_flush_user_object_cache', 100, 3 );
+
