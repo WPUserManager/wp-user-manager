@@ -46,6 +46,10 @@ class WPUM_Registration_Forms_Editor {
 		add_filter( 'wpum_form_settings_sanitize_multicheckbox', array( $this, 'sanitize_multiple_field' )  );
 		add_filter( 'wpum_form_settings_sanitize_file', array( $this, 'sanitize_file_field' ) );
 
+		// Object Caching hooks
+		add_action( 'wpum_registration_form_insert', [ $this, 'delete_registration_forms_cache'] );
+		add_action( 'wpum_before_registration_form_delete', [ $this, 'delete_registration_forms_cache'] );
+		add_action( 'wpum_registration_form_duplicated', [ $this, 'delete_registration_forms_cache'] );
 	}
 
 	/**
@@ -230,6 +234,8 @@ class WPUM_Registration_Forms_Editor {
 			], $form_id );
 
 			$updated_form = WPUM()->registration_forms->update( $form_id, $data );
+
+			$this->delete_registration_forms_cache();
 
 		} else {
 			wp_die( esc_html__( 'Something went wrong: could not update the registration form details.', 'wp-user-manager' ), 403 );
@@ -422,6 +428,8 @@ class WPUM_Registration_Forms_Editor {
 
 				if( ! empty( $fields_to_save ) ) {
 					$registration_form->update_meta( 'fields', $fields_to_save );
+
+					$this->delete_registration_forms_cache();
 					wp_send_json_success();
 				}
 
@@ -628,6 +636,12 @@ class WPUM_Registration_Forms_Editor {
 	 */
 	private function send_json_error() {
 		wp_send_json_error( null, 403 );
+	}
+
+	public function delete_registration_forms_cache() {
+		$cache_key = WPUM()->registration_forms->get_cache_key_from_args();
+
+		wp_cache_delete( $cache_key, WPUM()->registration_forms->cache_group );
 	}
 
 }
