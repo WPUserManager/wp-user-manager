@@ -2,9 +2,9 @@
 # This file is distributed under the GPLv3+.
 msgid ""
 msgstr ""
-"Project-Id-Version: WP User Manager 2.8.3\n"
+"Project-Id-Version: WP User Manager 2.8.4\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/wp-user-manager\n"
-"POT-Creation-Date: 2022-05-12 19:17:20+00:00\n"
+"POT-Creation-Date: 2022-05-22 14:50:34+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -248,15 +248,15 @@ msgid "Custom fields"
 msgstr ""
 
 #: includes/actions.php:92
-#: includes/wpum-forms/class-wpum-registration-forms-editor.php:58
-#: includes/wpum-forms/class-wpum-registration-forms-editor.php:59
-#: includes/wpum-forms/class-wpum-registration-forms-editor.php:134
+#: includes/wpum-forms/class-wpum-registration-forms-editor.php:62
+#: includes/wpum-forms/class-wpum-registration-forms-editor.php:63
+#: includes/wpum-forms/class-wpum-registration-forms-editor.php:138
 msgid "Registration Forms"
 msgstr ""
 
 #: includes/actions.php:100 includes/filters.php:42 includes/functions.php:691
 #: includes/wpum-admin/class-wpum-options-panel.php:84
-#: includes/wpum-forms/class-wpum-registration-forms-editor.php:157
+#: includes/wpum-forms/class-wpum-registration-forms-editor.php:161
 #: vendor/wp-user-manager/wpum-blocks/includes/classes/Blocks/AccountPage.php:32
 #: vendor/wp-user-manager/wpum-blocks/includes/classes/Blocks/GroupDirectory.php:33
 #: vendor/wp-user-manager/wpum-blocks/includes/classes/Blocks/LoginForm.php:32
@@ -558,7 +558,7 @@ msgid "Customize profiles"
 msgstr ""
 
 #: includes/wpum-admin/class-wpum-getting-started.php:208
-#: includes/wpum-fields/class-wpum-fields-editor.php:145
+#: includes/wpum-fields/class-wpum-fields-editor.php:151
 msgid "Customize fields"
 msgstr ""
 
@@ -726,7 +726,7 @@ msgid "Backend Redirects"
 msgstr ""
 
 #: includes/wpum-admin/class-wpum-options-panel.php:147
-#: includes/wpum-forms/class-wpum-registration-forms-editor.php:159
+#: includes/wpum-forms/class-wpum-registration-forms-editor.php:163
 #: includes/wpum-roles/class-wpum-roles-editor.php:151
 #: vendor/htmlburger/carbon-fields/templates/Container/common/options-page.php:43
 msgid "Save Changes"
@@ -1353,7 +1353,7 @@ msgid "Select how many profiles you wish to display per page."
 msgstr ""
 
 #: includes/wpum-directories/class-wpum-directories-editor.php:162
-#: includes/wpum-fields/class-wpum-fields-editor.php:178
+#: includes/wpum-fields/class-wpum-fields-editor.php:184
 msgid "General settings"
 msgstr ""
 
@@ -1470,7 +1470,7 @@ msgid "Search form"
 msgstr ""
 
 #: includes/wpum-directories/class-wpum-directories-editor.php:291
-#: includes/wpum-forms/class-wpum-registration-forms-editor.php:140
+#: includes/wpum-forms/class-wpum-registration-forms-editor.php:144
 #: includes/wpum-roles/class-wpum-roles-editor.php:137
 msgid "Shortcode"
 msgstr ""
@@ -1817,106 +1817,106 @@ msgstr ""
 msgid "Cover Image"
 msgstr ""
 
-#: includes/wpum-fields/class-wpum-fields-editor.php:60
-#: includes/wpum-fields/class-wpum-fields-editor.php:99
+#: includes/wpum-fields/class-wpum-fields-editor.php:66
+#: includes/wpum-fields/class-wpum-fields-editor.php:105
 msgid "Fields Editor"
 msgstr ""
 
-#: includes/wpum-fields/class-wpum-fields-editor.php:61
+#: includes/wpum-fields/class-wpum-fields-editor.php:67
 msgid "Custom Fields"
 msgstr ""
 
-#: includes/wpum-fields/class-wpum-fields-editor.php:100
-#: includes/wpum-forms/class-wpum-registration-forms-editor.php:155
-#: includes/wpum-forms/class-wpum-registration-forms-editor.php:167
+#: includes/wpum-fields/class-wpum-fields-editor.php:106
+#: includes/wpum-forms/class-wpum-registration-forms-editor.php:159
+#: includes/wpum-forms/class-wpum-registration-forms-editor.php:171
 #: includes/wpum-roles/class-wpum-roles-editor.php:148
 #: includes/wpum-roles/class-wpum-roles-editor.php:156
 msgid "Changes successfully saved."
 msgstr ""
 
-#: includes/wpum-fields/class-wpum-fields-editor.php:138
+#: includes/wpum-fields/class-wpum-fields-editor.php:144
 msgid "Group name"
 msgstr ""
 
-#: includes/wpum-fields/class-wpum-fields-editor.php:139
+#: includes/wpum-fields/class-wpum-fields-editor.php:145
 msgid "Group description"
 msgstr ""
 
-#: includes/wpum-fields/class-wpum-fields-editor.php:140
-#: includes/wpum-forms/class-wpum-registration-forms-editor.php:137
+#: includes/wpum-fields/class-wpum-fields-editor.php:146
+#: includes/wpum-forms/class-wpum-registration-forms-editor.php:141
 #: includes/wpum-roles/class-wpum-roles-editor.php:133
 msgid "Default"
 msgstr ""
 
-#: includes/wpum-fields/class-wpum-fields-editor.php:141
+#: includes/wpum-fields/class-wpum-fields-editor.php:147
 #: includes/wpum-fields/wpum-fields-functions.php:234
-#: includes/wpum-forms/class-wpum-registration-forms-editor.php:136
+#: includes/wpum-forms/class-wpum-registration-forms-editor.php:140
 msgid "Fields"
 msgstr ""
 
-#: includes/wpum-fields/class-wpum-fields-editor.php:142
-#: includes/wpum-forms/class-wpum-registration-forms-editor.php:141
+#: includes/wpum-fields/class-wpum-fields-editor.php:148
+#: includes/wpum-forms/class-wpum-registration-forms-editor.php:145
 #: includes/wpum-roles/class-wpum-roles-editor.php:138
 #: vendor/htmlburger/carbon-fields/templates/Container/common/options-page.php:34
 msgid "Actions"
 msgstr ""
 
-#: includes/wpum-fields/class-wpum-fields-editor.php:143
+#: includes/wpum-fields/class-wpum-fields-editor.php:149
 msgid "Add New Field Group"
 msgstr ""
 
-#: includes/wpum-fields/class-wpum-fields-editor.php:144
+#: includes/wpum-fields/class-wpum-fields-editor.php:150
 msgid "Edit group settings"
 msgstr ""
 
-#: includes/wpum-fields/class-wpum-fields-editor.php:146
+#: includes/wpum-fields/class-wpum-fields-editor.php:152
 msgid "Delete group"
 msgstr ""
 
-#: includes/wpum-fields/class-wpum-fields-editor.php:147
+#: includes/wpum-fields/class-wpum-fields-editor.php:153
 msgid "Drag and drop the rows below to change the order."
 msgstr ""
 
-#: includes/wpum-fields/class-wpum-fields-editor.php:148
+#: includes/wpum-fields/class-wpum-fields-editor.php:154
 msgid "The default fields group cannot be deleted."
 msgstr ""
 
-#: includes/wpum-fields/class-wpum-fields-editor.php:149
+#: includes/wpum-fields/class-wpum-fields-editor.php:155
 msgid "You are about to delete the group:"
 msgstr ""
 
-#: includes/wpum-fields/class-wpum-fields-editor.php:150
+#: includes/wpum-fields/class-wpum-fields-editor.php:156
 msgid ""
 "This action cannot be reversed. Are you sure you want to continue? All "
 "fields within this group will be deleted too."
 msgstr ""
 
-#: includes/wpum-fields/class-wpum-fields-editor.php:151
+#: includes/wpum-fields/class-wpum-fields-editor.php:157
 msgid "Confirm delete?"
 msgstr ""
 
-#: includes/wpum-fields/class-wpum-fields-editor.php:152
+#: includes/wpum-fields/class-wpum-fields-editor.php:158
 msgid "Save changes"
 msgstr ""
 
-#: includes/wpum-fields/class-wpum-fields-editor.php:153
+#: includes/wpum-fields/class-wpum-fields-editor.php:159
 msgid "Customize the name of group. This may be used in your theme."
 msgstr ""
 
-#: includes/wpum-fields/class-wpum-fields-editor.php:154
+#: includes/wpum-fields/class-wpum-fields-editor.php:160
 msgid "Customize the description of the group. This may be used into your theme."
 msgstr ""
 
-#: includes/wpum-fields/class-wpum-fields-editor.php:155
-#: includes/wpum-forms/class-wpum-registration-forms-editor.php:166
+#: includes/wpum-fields/class-wpum-fields-editor.php:161
+#: includes/wpum-forms/class-wpum-registration-forms-editor.php:170
 msgid "Purchase"
 msgstr ""
 
-#: includes/wpum-fields/class-wpum-fields-editor.php:156
+#: includes/wpum-fields/class-wpum-fields-editor.php:162
 msgid "Create Fields Group"
 msgstr ""
 
-#: includes/wpum-fields/class-wpum-fields-editor.php:157
+#: includes/wpum-fields/class-wpum-fields-editor.php:163
 msgid ""
 "Create <a href=\"%1$s\" target=\"_blank\">unlimited custom fields and "
 "groups</a> for user profiles and registration forms with a drag & drop "
@@ -1924,176 +1924,176 @@ msgid ""
 "is required if you wish to extend your community."
 msgstr ""
 
-#: includes/wpum-fields/class-wpum-fields-editor.php:158
+#: includes/wpum-fields/class-wpum-fields-editor.php:164
 msgid "Editing:"
 msgstr ""
 
-#: includes/wpum-fields/class-wpum-fields-editor.php:159
+#: includes/wpum-fields/class-wpum-fields-editor.php:165
 msgid "Back to the groups list"
 msgstr ""
 
-#: includes/wpum-fields/class-wpum-fields-editor.php:160
+#: includes/wpum-fields/class-wpum-fields-editor.php:166
 msgid "Add new custom field"
 msgstr ""
 
-#: includes/wpum-fields/class-wpum-fields-editor.php:161
+#: includes/wpum-fields/class-wpum-fields-editor.php:167
 msgid "Create custom field"
 msgstr ""
 
-#: includes/wpum-fields/class-wpum-fields-editor.php:162
-#: includes/wpum-fields/class-wpum-fields-editor.php:176
-#: includes/wpum-forms/class-wpum-registration-forms-editor.php:152
+#: includes/wpum-fields/class-wpum-fields-editor.php:168
+#: includes/wpum-fields/class-wpum-fields-editor.php:182
+#: includes/wpum-forms/class-wpum-registration-forms-editor.php:156
 msgid "Field name"
 msgstr ""
 
-#: includes/wpum-fields/class-wpum-fields-editor.php:163
+#: includes/wpum-fields/class-wpum-fields-editor.php:169
 msgid "Type"
 msgstr ""
 
-#: includes/wpum-fields/class-wpum-fields-editor.php:164
+#: includes/wpum-fields/class-wpum-fields-editor.php:170
 msgid "Required"
 msgstr ""
 
-#: includes/wpum-fields/class-wpum-fields-editor.php:165
+#: includes/wpum-fields/class-wpum-fields-editor.php:171
 #: includes/wpum-fields/wpum-fields-functions.php:246
 msgid "Privacy"
 msgstr ""
 
-#: includes/wpum-fields/class-wpum-fields-editor.php:166
+#: includes/wpum-fields/class-wpum-fields-editor.php:172
 msgid "Edit field"
 msgstr ""
 
-#: includes/wpum-fields/class-wpum-fields-editor.php:167
+#: includes/wpum-fields/class-wpum-fields-editor.php:173
 msgid "Delete field"
 msgstr ""
 
-#: includes/wpum-fields/class-wpum-fields-editor.php:168
+#: includes/wpum-fields/class-wpum-fields-editor.php:174
 msgid "Editable"
 msgstr ""
 
-#: includes/wpum-fields/class-wpum-fields-editor.php:169
+#: includes/wpum-fields/class-wpum-fields-editor.php:175
 msgid "Default fields cannot be deleted."
 msgstr ""
 
-#: includes/wpum-fields/class-wpum-fields-editor.php:170
+#: includes/wpum-fields/class-wpum-fields-editor.php:176
 msgid ""
 "Fields marked as required will be compulsory within the registration and "
 "account form."
 msgstr ""
 
-#: includes/wpum-fields/class-wpum-fields-editor.php:171
+#: includes/wpum-fields/class-wpum-fields-editor.php:177
 msgid ""
 "Fields marked as locked, can only be edited by an administrator and will "
 "not be visible in any form."
 msgstr ""
 
-#: includes/wpum-fields/class-wpum-fields-editor.php:172
+#: includes/wpum-fields/class-wpum-fields-editor.php:178
 msgid "Hidden fields are not publicly visible within profiles."
 msgstr ""
 
-#: includes/wpum-fields/class-wpum-fields-editor.php:173
+#: includes/wpum-fields/class-wpum-fields-editor.php:179
 msgid "This fields group is empty."
 msgstr ""
 
-#: includes/wpum-fields/class-wpum-fields-editor.php:174
+#: includes/wpum-fields/class-wpum-fields-editor.php:180
 msgid "You are about to delete the field:"
 msgstr ""
 
-#: includes/wpum-fields/class-wpum-fields-editor.php:175
+#: includes/wpum-fields/class-wpum-fields-editor.php:181
 msgid ""
 "This action cannot be reversed. Are you sure you want to continue? Please "
 "note any users data associated with this field will not be removed."
 msgstr ""
 
-#: includes/wpum-fields/class-wpum-fields-editor.php:177
+#: includes/wpum-fields/class-wpum-fields-editor.php:183
 msgid "Enter a name for this field"
 msgstr ""
 
-#: includes/wpum-fields/class-wpum-fields-editor.php:179
+#: includes/wpum-fields/class-wpum-fields-editor.php:185
 msgid "Privacy settings"
 msgstr ""
 
-#: includes/wpum-fields/class-wpum-fields-editor.php:180
+#: includes/wpum-fields/class-wpum-fields-editor.php:186
 msgid "Editing permissions"
 msgstr ""
 
-#: includes/wpum-fields/class-wpum-fields-editor.php:181
+#: includes/wpum-fields/class-wpum-fields-editor.php:187
 msgid "Something went wrong, could not find the settings for this field type."
 msgstr ""
 
-#: includes/wpum-fields/class-wpum-fields-editor.php:182
+#: includes/wpum-fields/class-wpum-fields-editor.php:188
 msgid "Error: this setting is required."
 msgstr ""
 
-#: includes/wpum-fields/class-wpum-fields-editor.php:183
+#: includes/wpum-fields/class-wpum-fields-editor.php:189
 msgid "Error: this setting cannot contain special characters."
 msgstr ""
 
-#: includes/wpum-fields/class-wpum-fields-editor.php:184
+#: includes/wpum-fields/class-wpum-fields-editor.php:190
 msgid ""
 "There are some errors with your changes. Please check the errors "
 "highlighted below."
 msgstr ""
 
-#: includes/wpum-fields/class-wpum-fields-editor.php:185
+#: includes/wpum-fields/class-wpum-fields-editor.php:191
 msgid "Something went wrong, no changes were saved."
 msgstr ""
 
-#: includes/wpum-fields/class-wpum-fields-editor.php:186
+#: includes/wpum-fields/class-wpum-fields-editor.php:192
 msgid ""
 "To display this field during signup, select one or more registration forms "
 "below."
 msgstr ""
 
-#: includes/wpum-fields/class-wpum-fields-editor.php:187
+#: includes/wpum-fields/class-wpum-fields-editor.php:193
 msgid "Available registration forms"
 msgstr ""
 
-#: includes/wpum-fields/class-wpum-fields-editor.php:188
+#: includes/wpum-fields/class-wpum-fields-editor.php:194
 msgid "Field options"
 msgstr ""
 
-#: includes/wpum-fields/class-wpum-fields-editor.php:189
+#: includes/wpum-fields/class-wpum-fields-editor.php:195
 msgid "Add option"
 msgstr ""
 
-#: includes/wpum-fields/class-wpum-fields-editor.php:190
+#: includes/wpum-fields/class-wpum-fields-editor.php:196
 msgid "Option label"
 msgstr ""
 
-#: includes/wpum-fields/class-wpum-fields-editor.php:191
+#: includes/wpum-fields/class-wpum-fields-editor.php:197
 msgid "Option value"
 msgstr ""
 
-#: includes/wpum-fields/class-wpum-fields-editor.php:192
+#: includes/wpum-fields/class-wpum-fields-editor.php:198
 msgid "Add new sub field"
 msgstr ""
 
-#: includes/wpum-fields/class-wpum-fields-editor.php:193
+#: includes/wpum-fields/class-wpum-fields-editor.php:199
 msgid "Add sub field"
 msgstr ""
 
-#: includes/wpum-fields/class-wpum-fields-editor.php:194
+#: includes/wpum-fields/class-wpum-fields-editor.php:200
 msgid "Are you sure you want to leave? You have unsaved field settings."
 msgstr ""
 
-#: includes/wpum-fields/class-wpum-fields-editor.php:240
-#: includes/wpum-fields/class-wpum-fields-editor.php:253
+#: includes/wpum-fields/class-wpum-fields-editor.php:246
+#: includes/wpum-fields/class-wpum-fields-editor.php:259
 msgid "Something went wrong: could not update the groups order."
 msgstr ""
 
-#: includes/wpum-fields/class-wpum-fields-editor.php:270
-#: includes/wpum-fields/class-wpum-fields-editor.php:287
+#: includes/wpum-fields/class-wpum-fields-editor.php:276
+#: includes/wpum-fields/class-wpum-fields-editor.php:293
 msgid "Something went wrong: could not update the group details."
 msgstr ""
 
-#: includes/wpum-fields/class-wpum-fields-editor.php:310
-#: includes/wpum-fields/class-wpum-fields-editor.php:349
+#: includes/wpum-fields/class-wpum-fields-editor.php:342
+#: includes/wpum-fields/class-wpum-fields-editor.php:381
 msgid "Something went wrong while retrieving the list of fields."
 msgstr ""
 
-#: includes/wpum-fields/class-wpum-fields-editor.php:371
-#: includes/wpum-fields/class-wpum-fields-editor.php:384
+#: includes/wpum-fields/class-wpum-fields-editor.php:403
+#: includes/wpum-fields/class-wpum-fields-editor.php:417
 msgid "Something went wrong: could not update the fields order."
 msgstr ""
 
@@ -2516,130 +2516,130 @@ msgid ""
 "least the email field."
 msgstr ""
 
-#: includes/wpum-forms/class-wpum-registration-forms-editor.php:131
+#: includes/wpum-forms/class-wpum-registration-forms-editor.php:135
 msgid "Confirm Form Deletion?"
 msgstr ""
 
-#: includes/wpum-forms/class-wpum-registration-forms-editor.php:132
+#: includes/wpum-forms/class-wpum-registration-forms-editor.php:136
 msgid "You are about to delete the registration form:"
 msgstr ""
 
-#: includes/wpum-forms/class-wpum-registration-forms-editor.php:133
+#: includes/wpum-forms/class-wpum-registration-forms-editor.php:137
 #: includes/wpum-roles/class-wpum-roles-editor.php:125
 msgid "This action cannot be reversed. Are you sure you want to continue?"
 msgstr ""
 
-#: includes/wpum-forms/class-wpum-registration-forms-editor.php:135
+#: includes/wpum-forms/class-wpum-registration-forms-editor.php:139
 msgid "Form Name"
 msgstr ""
 
-#: includes/wpum-forms/class-wpum-registration-forms-editor.php:138
+#: includes/wpum-forms/class-wpum-registration-forms-editor.php:142
 msgid "Registration Role"
 msgstr ""
 
-#: includes/wpum-forms/class-wpum-registration-forms-editor.php:139
+#: includes/wpum-forms/class-wpum-registration-forms-editor.php:143
 #: includes/wpum-roles/class-wpum-roles-editor.php:136
 msgid "Total Signups"
 msgstr ""
 
-#: includes/wpum-forms/class-wpum-registration-forms-editor.php:142
+#: includes/wpum-forms/class-wpum-registration-forms-editor.php:146
 msgid "No registration forms have been found."
 msgstr ""
 
-#: includes/wpum-forms/class-wpum-registration-forms-editor.php:143
+#: includes/wpum-forms/class-wpum-registration-forms-editor.php:147
 msgid "Add New Form"
 msgstr ""
 
-#: includes/wpum-forms/class-wpum-registration-forms-editor.php:144
+#: includes/wpum-forms/class-wpum-registration-forms-editor.php:148
 msgid "Edit Form Name"
 msgstr ""
 
-#: includes/wpum-forms/class-wpum-registration-forms-editor.php:145
+#: includes/wpum-forms/class-wpum-registration-forms-editor.php:149
 msgid "The default registration form cannot be deleted."
 msgstr ""
 
-#: includes/wpum-forms/class-wpum-registration-forms-editor.php:146
+#: includes/wpum-forms/class-wpum-registration-forms-editor.php:150
 msgid "Delete Form"
 msgstr ""
 
-#: includes/wpum-forms/class-wpum-registration-forms-editor.php:147
+#: includes/wpum-forms/class-wpum-registration-forms-editor.php:151
 msgid "Customize Form"
 msgstr ""
 
-#: includes/wpum-forms/class-wpum-registration-forms-editor.php:148
+#: includes/wpum-forms/class-wpum-registration-forms-editor.php:152
 msgid "Return to the registration forms list"
 msgstr ""
 
-#: includes/wpum-forms/class-wpum-registration-forms-editor.php:149
+#: includes/wpum-forms/class-wpum-registration-forms-editor.php:153
 msgid "Available Fields"
 msgstr ""
 
-#: includes/wpum-forms/class-wpum-registration-forms-editor.php:150
+#: includes/wpum-forms/class-wpum-registration-forms-editor.php:154
 msgid "Form Fields"
 msgstr ""
 
-#: includes/wpum-forms/class-wpum-registration-forms-editor.php:151
+#: includes/wpum-forms/class-wpum-registration-forms-editor.php:155
 msgid ""
 "To add a field to this form, drag it into the container on the left. To "
 "remove a field, place it back here."
 msgstr ""
 
-#: includes/wpum-forms/class-wpum-registration-forms-editor.php:153
+#: includes/wpum-forms/class-wpum-registration-forms-editor.php:157
 msgid ""
 "Add fields here to use them in this registration form. Drag fields up and "
 "down to change their order within the form."
 msgstr ""
 
-#: includes/wpum-forms/class-wpum-registration-forms-editor.php:154
+#: includes/wpum-forms/class-wpum-registration-forms-editor.php:158
 msgid "This form does not have any fields yet. Drag and drop fields here."
 msgstr ""
 
-#: includes/wpum-forms/class-wpum-registration-forms-editor.php:156
+#: includes/wpum-forms/class-wpum-registration-forms-editor.php:160
 #: includes/wpum-roles/class-wpum-roles-editor.php:150
 msgid "Something went wrong no changes saved."
 msgstr ""
 
-#: includes/wpum-forms/class-wpum-registration-forms-editor.php:158
+#: includes/wpum-forms/class-wpum-registration-forms-editor.php:162
 msgid "Registration role"
 msgstr ""
 
-#: includes/wpum-forms/class-wpum-registration-forms-editor.php:160
+#: includes/wpum-forms/class-wpum-registration-forms-editor.php:164
 msgid ""
 "Select the user role that will be assigned to users upon successfull "
 "registration."
 msgstr ""
 
-#: includes/wpum-forms/class-wpum-registration-forms-editor.php:161
+#: includes/wpum-forms/class-wpum-registration-forms-editor.php:165
 msgid "Customize the name of the registration form."
 msgstr ""
 
-#: includes/wpum-forms/class-wpum-registration-forms-editor.php:162
+#: includes/wpum-forms/class-wpum-registration-forms-editor.php:166
 msgid "Create Form"
 msgstr ""
 
-#: includes/wpum-forms/class-wpum-registration-forms-editor.php:163
+#: includes/wpum-forms/class-wpum-registration-forms-editor.php:167
 msgid ""
 "Create <a href=\"%1$s\" target=\"_blank\">unlimited registration forms</a>. "
 "The <a href=\"%1$s\" target=\"_blank\">Registration Forms</a> addon is "
 "required if you wish to add more forms."
 msgstr ""
 
-#: includes/wpum-forms/class-wpum-registration-forms-editor.php:164
+#: includes/wpum-forms/class-wpum-registration-forms-editor.php:168
 msgid ""
 "Create <a href=\"%1$s\" target=\"_blank\">multi-step registration "
 "forms</a>. The <a href=\"%1$s\" target=\"_blank\">Registration Forms</a> "
 "addon is required if you wish to add steps to your forms."
 msgstr ""
 
-#: includes/wpum-forms/class-wpum-registration-forms-editor.php:165
+#: includes/wpum-forms/class-wpum-registration-forms-editor.php:169
 msgid ""
 "Add <a href=\"%1$s\" target=\"_blank\">custom HTML to your registration "
 "forms</a>. The <a href=\"%1$s\" target=\"_blank\">Registration Forms</a> "
 "addon is required if you wish to add HTML to your forms."
 msgstr ""
 
-#: includes/wpum-forms/class-wpum-registration-forms-editor.php:220
-#: includes/wpum-forms/class-wpum-registration-forms-editor.php:235
+#: includes/wpum-forms/class-wpum-registration-forms-editor.php:224
+#: includes/wpum-forms/class-wpum-registration-forms-editor.php:241
 #: includes/wpum-roles/class-wpum-roles-editor.php:357
 msgid "Something went wrong: could not update the registration form details."
 msgstr ""
