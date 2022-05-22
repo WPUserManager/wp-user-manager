@@ -48,6 +48,12 @@ class WPUM_Fields_Editor {
 		add_action( 'wp_ajax_wpum_update_fields_order', [ $this, 'update_fields_order' ] );
 		add_action( 'wp_ajax_wpum_get_field_settings', [ $this, 'get_field_settings' ] );
 		add_action( 'wp_ajax_wpum_update_field', [ $this, 'update_field' ] );
+		// Object Caching hooks
+		add_action( 'wpum_field_group_insert', [ $this, 'trigger_delete_groups_cache'] );
+		add_action( 'wpum_field_group_delete', [ $this, 'trigger_delete_groups_cache'] );
+		add_action( 'wpum_field_group_delete', [ $this, 'trigger_delete_groups_cache_by_id'] );
+		add_action( 'wpum_field_insert', [ $this, 'trigger_delete_group_fields_cache'], 10, 2 );
+		add_action( 'wpum_before_field_delete', [ $this, 'trigger_delete_group_fields_cache_by_id'] );
 	}
 
 	/**
@@ -252,7 +258,7 @@ class WPUM_Fields_Editor {
 		} else {
 			wp_die( esc_html__( 'Something went wrong: could not update the groups order.', 'wp-user-manager' ), 403 );
 		}
-
+		$this->delete_groups_cache();
 		wp_send_json_success( $groups );
 
 	}
@@ -287,6 +293,8 @@ class WPUM_Fields_Editor {
 			wp_die( esc_html__( 'Something went wrong: could not update the group details.', 'wp-user-manager' ), 403 );
 		}
 
+		$this->delete_groups_cache();
+
 		wp_send_json_success(
 			[
 				'id'          => $group_id,
@@ -295,6 +303,30 @@ class WPUM_Fields_Editor {
 			]
 		);
 
+	}
+
+	protected function delete_groups_cache() {
+		$args = [
+			'orderby' => 'group_order',
+			'order'   => 'ASC',
+		];
+
+		$cache_key = WPUM()->fields_groups->get_cache_key_from_args( $args );
+
+		wp_cache_delete( $cache_key, WPUM()->fields_groups->cache_group );
+	}
+
+	protected function delete_group_fields_cache( $group_id, $parent = 0 ) {
+		$args = [
+			'group_id' => (int) $group_id,
+			'orderby'  => 'field_order',
+			'order'    => 'ASC',
+			'parent'   => $parent,
+		];
+
+		$cache_key = WPUM()->fields->get_cache_key_from_args( $args );
+
+		wp_cache_delete( $cache_key, WPUM()->fields->cache_group );
 	}
 
 	/**
@@ -372,9 +404,10 @@ class WPUM_Fields_Editor {
 		}
 
 		$fields = isset( $_POST['fields'] ) && is_array( $_POST['fields'] ) && ! empty( $_POST['fields'] ) ? $_POST['fields'] : false;
-
+		$group_id = false;
 		if ( $fields ) {
 			foreach ( $fields as $order => $field ) {
+				$group_id =  $field['group_id'];
 				$field_id = (int) $field['id'];
 				if ( $field_id ) {
 					$updated_field = WPUM()->fields->update( $field_id, [ 'field_order' => $order ] );
@@ -384,6 +417,7 @@ class WPUM_Fields_Editor {
 			wp_die( esc_html__( 'Something went wrong: could not update the fields order.', 'wp-user-manager' ), 403 );
 		}
 
+		$this->delete_group_fields_cache( $group_id );
 		wp_send_json_success( $fields );
 
 	}
@@ -597,6 +631,25 @@ class WPUM_Fields_Editor {
 		return $value;
 	}
 
+	public function trigger_delete_groups_cache() {
+		$this->delete_groups_cache();
+	}
+
+	public function trigger_delete_groups_cache_by_id( $group_id ) {
+		$this->delete_groups_cache();
+		$this->delete_group_fields_cache( $group_id );
+	}
+
+	public function trigger_delete_group_fields_cache( $data, $field_id ) {
+		$field = new WPUM_Field( $field_id );
+		$this->delete_group_fields_cache( $field->get_group_id() );
+	}
+
+	public function trigger_delete_group_fields_cache_by_id( $field_id ) {
+		$field = new WPUM_Field( $field_id );
+		$this->delete_group_fields_cache( $field->get_group_id() );
+	}
+
 	/**
 	 * Update a field within the database.
 	 * Verify the field exists first, sanitize the given data and then update the db.
@@ -693,6 +746,7 @@ class WPUM_Fields_Editor {
 				$field_to_update->update_meta( 'dropdown_options', $options );
 			}
 
+			$this->delete_group_fields_cache( $field_to_update->get_group_id() );
 			wp_send_json_success( $data );
 
 		} else {
