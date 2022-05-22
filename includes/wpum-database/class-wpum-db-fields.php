@@ -158,17 +158,17 @@ class WPUM_DB_Fields extends WPUM_DB {
 		return $last_changed;
 	}
 
-	/**
-	 * Retrieve fields from the database
-	 *
-	 * @access public
-	 *
-	 * @param array $args
-	 *
-	 * @return array $groups Array of `WPUM_Field` objects.
-	 */
-	public function get_fields( $args = array() ) {
+	protected function get_cache_key( $args ) {
+		return md5( 'wpum_fields_' . serialize( $args ) );
+	}
 
+	public function get_cache_key_from_args( $args ) {
+		$args = $this->get_args( $args );
+
+		return $this->get_cache_key( $args );
+	}
+
+	protected function get_args( $args = array() ) {
 		global $wpdb;
 
 		$defaults = array(
@@ -191,11 +191,29 @@ class WPUM_DB_Fields extends WPUM_DB {
 			$args['search'] = $wpdb->esc_like( $args['search'] );
 		}
 
-		$where = $this->parse_where( $args );
-
 		$args['orderby'] = ! array_key_exists( $args['orderby'], $this->get_columns() ) ? 'id' : $args['orderby'];
 
-		$cache_key = md5( 'wpum_fields_' . serialize( $args ) );
+		return $args;
+	}
+
+	/**
+	 * Retrieve fields from the database
+	 *
+	 * @access public
+	 *
+	 * @param array $args
+	 *
+	 * @return array $groups Array of `WPUM_Field` objects.
+	 */
+	public function get_fields( $args = array() ) {
+
+		global $wpdb;
+
+		$args = $this->get_args( $args );
+
+		$where = $this->parse_where( $args );
+
+		$cache_key = $this->get_cache_key( $args );
 
 		$fields = wp_cache_get( $cache_key, $this->cache_group );
 

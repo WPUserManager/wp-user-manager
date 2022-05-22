@@ -164,18 +164,17 @@ class WPUM_DB_Fields_Groups extends WPUM_DB {
 		return $last_changed;
 	}
 
-	/**
-	 * Retrieve groups from the database
-	 *
-	 * @access public
-	 *
-	 * @param array $args {
-	 *      Query arguments.
-	 * }
-	 *
-	 * @return array $groups Array of `WPUM_Field_Group` objects.
-	 */
-	public function get_groups( $args = array() ) {
+	protected function get_cache_key( $args ) {
+		return md5( 'wpum_fields_groups_' . serialize( $args ) );
+	}
+
+	public function get_cache_key_from_args( $args ) {
+		$args = $this->get_args( $args );
+
+		return $this->get_cache_key( $args );
+	}
+
+	protected function get_args( $args = array() ) {
 		global $wpdb;
 
 		$defaults = array(
@@ -199,11 +198,31 @@ class WPUM_DB_Fields_Groups extends WPUM_DB {
 			$args['search'] = $wpdb->esc_like( $args['search'] );
 		}
 
-		$where = $this->parse_where( $args );
 
 		$args['orderby'] = ! array_key_exists( $args['orderby'], $this->get_columns() ) ? 'id' : $args['orderby'];
 
-		$cache_key = md5( 'wpum_fields_groups_' . serialize( $args ) );
+		return $args;
+	}
+
+	/**
+	 * Retrieve groups from the database
+	 *
+	 * @access public
+	 *
+	 * @param array $args {
+	 *      Query arguments.
+	 * }
+	 *
+	 * @return array $groups Array of `WPUM_Field_Group` objects.
+	 */
+	public function get_groups( $args = array() ) {
+		global $wpdb;
+
+		$args = $this->get_args( $args );
+
+		$where = $this->parse_where( $args );
+
+		$cache_key = $this->get_cache_key( $args );
 
 		$groups = wp_cache_get( $cache_key, $this->cache_group );
 
