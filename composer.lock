@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "c6ed1ba4dc11bc481c78d98312466c8d",
+    "content-hash": "14f58289e353f91cf0738dd9048d37e1",
     "packages": [
         {
             "name": "a5hleyrich/wp-background-processing",
@@ -44,16 +44,16 @@
         },
         {
             "name": "brain/cortex",
-            "version": "1.0.0-alpha.7",
+            "version": "dev-31-wp-6.0-do_parse_request",
             "source": {
                 "type": "git",
-                "url": "https://github.com/Brain-WP/Cortex.git",
-                "reference": "0f33ad8578fa051ab5e46e14c9478df4d728e49a"
+                "url": "https://github.com/WPUserManager/Cortex.git",
+                "reference": "c33bd59a22051d4dbbdce452e9099d9e00c7a0cd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Brain-WP/Cortex/zipball/0f33ad8578fa051ab5e46e14c9478df4d728e49a",
-                "reference": "0f33ad8578fa051ab5e46e14c9478df4d728e49a",
+                "url": "https://api.github.com/repos/WPUserManager/Cortex/zipball/c33bd59a22051d4dbbdce452e9099d9e00c7a0cd",
+                "reference": "c33bd59a22051d4dbbdce452e9099d9e00c7a0cd",
                 "shasum": ""
             },
             "require": {
@@ -73,7 +73,11 @@
                     "Brain\\": "src/"
                 }
             },
-            "notification-url": "https://packagist.org/downloads/",
+            "autoload-dev": {
+                "psr-4": {
+                    "Brain\\Cortex\\Tests\\": "tests/src/"
+                }
+            },
             "license": [
                 "MIT"
             ],
@@ -95,7 +99,11 @@
                 "routing",
                 "wordpress"
             ],
-            "time": "2016-07-14T19:53:27+00:00"
+            "support": {
+                "issues": "https://github.com/Brain-WP/Cortex/issues",
+                "source": "https://github.com/Brain-WP/Cortex"
+            },
+            "time": "2022-05-25T21:45:05+00:00"
         },
         {
             "name": "composer/installers",
@@ -439,12 +447,12 @@
             },
             "type": "library",
             "autoload": {
-                "psr-4": {
-                    "FastRoute\\": "src/"
-                },
                 "files": [
                     "src/functions.php"
-                ]
+                ],
+                "psr-4": {
+                    "FastRoute\\": "src/"
+                }
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
@@ -461,6 +469,10 @@
                 "router",
                 "routing"
             ],
+            "support": {
+                "issues": "https://github.com/nikic/FastRoute/issues",
+                "source": "https://github.com/nikic/FastRoute/tree/master"
+            },
             "time": "2015-12-20T19:50:12+00:00"
         },
         {
@@ -469,17 +481,18 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-fig/http-message.git",
-                "reference": "f6561bf28d520154e4b0ec72be95418abe6d9363"
+                "reference": "efd67d1dc14a7ef4fc4e518e7dee91c271d524e4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-fig/http-message/zipball/f6561bf28d520154e4b0ec72be95418abe6d9363",
-                "reference": "f6561bf28d520154e4b0ec72be95418abe6d9363",
+                "url": "https://api.github.com/repos/php-fig/http-message/zipball/efd67d1dc14a7ef4fc4e518e7dee91c271d524e4",
+                "reference": "efd67d1dc14a7ef4fc4e518e7dee91c271d524e4",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.3.0"
             },
+            "default-branch": true,
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -511,7 +524,10 @@
                 "request",
                 "response"
             ],
-            "time": "2016-08-06T14:39:51+00:00"
+            "support": {
+                "source": "https://github.com/php-fig/http-message/tree/master"
+            },
+            "time": "2019-08-29T13:16:46+00:00"
         },
         {
             "name": "wearerequired/wp-requirements-check",
@@ -744,6 +760,7 @@
     "aliases": [],
     "minimum-stability": "dev",
     "stability-flags": {
+        "brain/cortex": 20,
         "wp-user-manager/wp-notices": 20,
         "wpbp/widgets-helper": 20
     },
@@ -751,5 +768,5 @@
     "prefer-lowest": false,
     "platform": [],
     "platform-dev": [],
-    "plugin-api-version": "2.1.0"
+    "plugin-api-version": "2.3.0"
 }
