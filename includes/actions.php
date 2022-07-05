@@ -576,3 +576,30 @@ function wpum_flush_user_object_cache( $form, $values, $updated_user_id ) {
 add_action( 'wpum_after_custom_user_update', 'wpum_flush_user_object_cache', 100, 3 );
 add_action( 'wpum_after_user_update', 'wpum_flush_user_object_cache', 100, 3 );
 
+
+function wpum_field_conditional_logic_rules( $data ) {
+	$rulesets = apply_filters( 'wpum_field_conditional_logic_rules', array(), $data );
+
+	if ( empty( $rulesets ) ) {
+		return;
+	}
+	?>
+	<script type="text/javascript">
+		(function() {
+			var ruleset = <?php echo json_encode( $rulesets ) ?>;
+			Object.keys( ruleset ).forEach( function( fieldName ) {
+				var field = document.querySelector( '.fieldset-' + fieldName );
+				if ( field ) {
+					field.style.display = 'none';
+					field.dataset.condition = JSON.stringify( ruleset[ fieldName ] );
+				}
+			} );
+		})();
+	</script>
+	<?php
+}
+
+add_action( 'wpum_after_registration_form', 'wpum_field_conditional_logic_rules', 1 );
+add_action( 'wpum_after_account_form', 'wpum_field_conditional_logic_rules', 1 );
+add_action( 'wpum_after_custom_account_form', 'wpum_field_conditional_logic_rules', 1 );
+
