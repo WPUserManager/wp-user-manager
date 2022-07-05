@@ -301,6 +301,8 @@ if ( ! class_exists( 'WP_User_Manager' ) ) :
 				require_once WPUM_PLUGIN_DIR . 'includes/wpum-shortcodes/class-wpum-shortcode-directory.php';
 			}
 
+			require_once WPUM_PLUGIN_DIR . 'includes/install.php';
+
 			if ( defined( 'DOING_AJAX' ) || ( isset( $_GET['wpum_email_customizer'] ) && 'true' == $_GET['wpum_email_customizer'] ) ) {
 				require_once WPUM_PLUGIN_DIR . 'includes/wpum-emails/class-wpum-emails-customizer-scripts.php';
 				require_once WPUM_PLUGIN_DIR . 'includes/wpum-emails/class-wpum-emails-customizer.php';
@@ -309,7 +311,6 @@ if ( ! class_exists( 'WP_User_Manager' ) ) :
 			require_once WPUM_PLUGIN_DIR . 'includes/wpum-updater/class-wpum-license.php';
 			require_once WPUM_PLUGIN_DIR . 'includes/wpum-updater/free-plugins.php';
 
-			require_once WPUM_PLUGIN_DIR . 'includes/install.php';
 			WPUM_Blocks::get_instance();
 		}
 
