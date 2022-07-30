@@ -180,7 +180,11 @@ jQuery( function( $ ) {
 		this.validateFields = function(){
 			form.find('fieldset[data-condition]').each(function(){
 				var rules = $(this).data('condition');
-				$(this).toggle( self.validateRules(rules) );
+				var validRule = self.validateRules(rules);
+				$(this).toggle( validRule );
+				$(this).find("input").prop("required", validRule);
+				$(this).find("select").prop("required", validRule);
+				$(this).find("textarea").prop("required", validRule);
 			});
 		}
 
