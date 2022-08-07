@@ -298,6 +298,10 @@ abstract class WPUM_Form {
 	protected function validate_fields( $values ) {
 		foreach ( $this->fields as $group_key => $group_fields ) {
 			foreach ( $group_fields as $key => $field ) {
+				// Skip validation if field conditional logic not met.
+				if ( apply_filters( 'wpum_form_skip_field_validation', false, $key, $values[ $group_key ], $group_fields ) ) {
+					continue;
+				}
 				if ( $field['required'] && empty( $values[ $group_key ][ $key ] ) ) {
 					return new WP_Error( 'validation-error', sprintf( __( '%s is a required field', 'wp-user-manager' ), $field['label'] ) );
 				}

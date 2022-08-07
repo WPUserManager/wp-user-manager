@@ -603,3 +603,70 @@ add_action( 'wpum_after_registration_form', 'wpum_field_conditional_logic_rules'
 add_action( 'wpum_after_account_form', 'wpum_field_conditional_logic_rules', 1 );
 add_action( 'wpum_after_custom_account_form', 'wpum_field_conditional_logic_rules', 1 );
 
+function wpum_conditional_fields_maybe_skip_validation( $skip, $field_key, $values, $fields ) {
+	$form_data         = (object) array();
+	$form_data->fields = $fields;
+
+	$rulesets    = apply_filters( 'wpum_field_conditional_logic_rules', array(), $form_data );
+	$field_rules = $rulesets[ $field_key ];
+
+	if ( ! $field_rules ) {
+		return false;
+	}
+
+	foreach ( $field_rules as $rules ) {
+		foreach ( $rules as $rule ) {
+			$valid_rule = apply_filters( "wpum_conditional_field_validate_rule_{$rule['condition']}", true, $rule, $values );
+			if ( ! $valid_rule ) {
+				return true;
+			}
+		}
+	}
+
+	return false;
+}
+
+add_filter( 'wpum_form_skip_field_validation', 'wpum_conditional_fields_maybe_skip_validation', 10, 4 );
+
+function wpum_validate_rule_value_not_equals( $valid, $rule, $values ) {
+	return $values[ $rule['field'] ] !== $rule['value'] ? true : false;
+}
+
+add_filter( 'wpum_conditional_field_validate_rule_value_not_equals', 'wpum_validate_rule_value_not_equals', 10, 3 );
+
+function wpum_validate_rule_value_equals( $valid, $rule, $values ) {
+	return $values[ $rule['field'] ] === $rule['value'] ? true : false;
+}
+
+add_filter( 'wpum_conditional_field_validate_rule_value_equals', 'wpum_validate_rule_value_equals', 10, 3 );
+
+function wpum_validate_rule_value_contains( $valid, $rule, $values ) {
+	return strpos( $values[ $rule['field'] ], $rule['value'] );
+}
+
+add_filter( 'wpum_conditional_field_validate_rule_value_contains', 'wpum_validate_rule_value_contains', 10, 3 );
+
+function wpum_validate_rule_has_value( $valid, $rule, $values ) {
+	return $values[ $rule['field'] ] !== '';
+}
+
+add_filter( 'wpum_conditional_field_validate_rule_has_value', 'wpum_validate_rule_has_value', 10, 3 );
+
+function wpum_validate_rule_has_no_value( $valid, $rule, $values ) {
+	return $values[ $rule['field'] ] === '';
+}
+
+add_filter( 'wpum_conditional_field_validate_rule_has_no_value', 'wpum_validate_rule_has_no_value', 10, 3 );
+
+function wpum_validate_rule_value_greater( $valid, $rule, $values ) {
+	return $values[ $rule['field'] ] > $rule['value'];
+}
+
+add_filter( 'wpum_conditional_field_validate_rule_value_greater', 'wpum_validate_rule_value_greater', 10, 3 );
+
+function wpum_validate_rule_value_less( $valid, $rule, $values ) {
+	return $values[ $rule['field'] ] < $rule['value'];
+}
+
+add_filter( 'wpum_conditional_field_validate_rule_value_less', 'wpum_validate_rule_value_less', 10, 3 );
+
