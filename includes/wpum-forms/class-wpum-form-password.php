@@ -247,8 +247,11 @@ class WPUM_Form_Password extends WPUM_Form {
 				if ( empty( $active_tab ) ) {
 					$active_tab = isset( $_GET['tab'] ) ? $_GET['tab'] : 'password';
 				}
-
-				$redirect = rtrim( get_permalink(), '/' ) . '/' . 'password';
+				$redirect = get_permalink();
+				if ( ! $redirect ) {
+					$redirect = get_permalink( wpum_get_core_page_id( 'account' ) );
+				}
+				$redirect = rtrim( $redirect, '/' ) . '/' . 'password';
 				$redirect = add_query_arg(
 					[
 						'password-updated' => 'success',

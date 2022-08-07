@@ -138,7 +138,9 @@ abstract class WPUM_Form {
 	public function show_errors() {
 		$errors = apply_filters( 'wpum_form_errors', $this->errors, $this->form_name );
 		foreach ( $errors as $error ) {
-			echo '<div class="wpum-message error">' . $error . '</div>';
+			WPUM()->templates
+			->set_template_data( [ 'message' => esc_html__( $error, 'wp-user-manager' ) ] )
+			->get_template_part( 'messages/general', 'error' );
 		}
 	}
 
@@ -298,6 +300,10 @@ abstract class WPUM_Form {
 	protected function validate_fields( $values ) {
 		foreach ( $this->fields as $group_key => $group_fields ) {
 			foreach ( $group_fields as $key => $field ) {
+				// Skip validation if field conditional logic not met.
+				if ( apply_filters( 'wpum_form_skip_field_validation', false, $key, $values[ $group_key ], $group_fields ) ) {
+					continue;
+				}
 				if ( $field['required'] && empty( $values[ $group_key ][ $key ] ) ) {
 					return new WP_Error( 'validation-error', sprintf( __( '%s is a required field', 'wp-user-manager' ), $field['label'] ) );
 				}

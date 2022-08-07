@@ -8,7 +8,7 @@ Tested up to: 6.0
 Requires PHP: 5.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
-Stable Tag: 2.8.5
+Stable Tag: 2.8.6
 
 The most customizable profiles & community builder WordPress plugin with front-end login, registration, profile customization and content restriction.
 
@@ -125,6 +125,14 @@ Please note that using WPUM and the mentioned add-ons does NOT guarantee complia
 13. Login form.
 
 == Changelog ==
+
+= 2.8.6 (7th August 2022) =
+
+- Improvement: Conditional logic for fields now supported for both the [Custom Fields](https://wpusermanager.com/addons/custom-fields/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager) and [ACF](https://wpusermanager.com/addons/acf/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager) addons
+- Fix: Change Password account form now loading correctly after save
+- Fix: Account and profile sub pages now inheriting the parent page template which was broken in WordPress 6.0
+- Fix: Saving Divi pages now not throwing fatal errors on some installs
+- Fix: Registration form error messages now using the general-error.php template
 
 = 2.8.5 (25th May 2022) =
 

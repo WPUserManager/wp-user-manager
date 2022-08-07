@@ -3,7 +3,7 @@
 Plugin Name: WP User Manager
 Plugin URI:  https://wpusermanager.com
 Description: Beautifully simple user profile directories with frontend login, registration and account customization. WP User Manager is the best solution to manage your community and your users for WordPress.
-Version:     2.8.5
+Version:     2.8.6
 Author:      WP User Manager
 Author URI:  https://wpusermanager.com
 License:     GPLv3+
@@ -48,7 +48,7 @@ if ( ! class_exists( 'WP_User_Manager' ) ) :
 		/**
 		 * @var string
 		 */
-		protected $version = '2.8.5';
+		protected $version = '2.8.6';
 
 		/**
 		 * WPUM Instance.
@@ -301,6 +301,8 @@ if ( ! class_exists( 'WP_User_Manager' ) ) :
 				require_once WPUM_PLUGIN_DIR . 'includes/wpum-shortcodes/class-wpum-shortcode-directory.php';
 			}
 
+			require_once WPUM_PLUGIN_DIR . 'includes/install.php';
+
 			if ( defined( 'DOING_AJAX' ) || ( isset( $_GET['wpum_email_customizer'] ) && 'true' == $_GET['wpum_email_customizer'] ) ) {
 				require_once WPUM_PLUGIN_DIR . 'includes/wpum-emails/class-wpum-emails-customizer-scripts.php';
 				require_once WPUM_PLUGIN_DIR . 'includes/wpum-emails/class-wpum-emails-customizer.php';
@@ -309,7 +311,6 @@ if ( ! class_exists( 'WP_User_Manager' ) ) :
 			require_once WPUM_PLUGIN_DIR . 'includes/wpum-updater/class-wpum-license.php';
 			require_once WPUM_PLUGIN_DIR . 'includes/wpum-updater/free-plugins.php';
 
-			require_once WPUM_PLUGIN_DIR . 'includes/install.php';
 			WPUM_Blocks::get_instance();
 		}
 
