@@ -182,9 +182,11 @@ jQuery( function( $ ) {
 				var rules = $(this).data('condition');
 				var validRule = self.validateRules(rules);
 				$(this).toggle( validRule );
-				$(this).find("input").prop("required", validRule);
-				$(this).find("select").prop("required", validRule);
-				$(this).find("textarea").prop("required", validRule);
+				if ( $(this).find('.field').hasClass('required-field') ) {
+					$( this ).find( "input" ).prop( "required", validRule );
+					$( this ).find( "select" ).prop( "required", validRule );
+					$( this ).find( "textarea" ).prop( "required", validRule );
+				}
 			});
 		}
 
