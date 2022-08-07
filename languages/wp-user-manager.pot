@@ -2,9 +2,9 @@
 # This file is distributed under the GPLv3+.
 msgid ""
 msgstr ""
-"Project-Id-Version: WP User Manager 2.8.5\n"
+"Project-Id-Version: WP User Manager 2.8.6\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/wp-user-manager\n"
-"POT-Creation-Date: 2022-05-25 22:06:59+00:00\n"
+"POT-Creation-Date: 2022-08-07 09:24:40+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -190,47 +190,47 @@ msgstr ""
 msgid "Default Value"
 msgstr ""
 
-#: includes/abstracts/abstract-wpum-form.php:302
+#: includes/abstracts/abstract-wpum-form.php:308
 msgid "%s is a required field"
 msgstr ""
 
-#: includes/abstracts/abstract-wpum-form.php:305
+#: includes/abstracts/abstract-wpum-form.php:311
 msgid "%s must not exceed %d characters"
 msgstr ""
 
-#: includes/abstracts/abstract-wpum-form.php:315
+#: includes/abstracts/abstract-wpum-form.php:321
 msgid "%s is invalid"
 msgstr ""
 
-#: includes/abstracts/abstract-wpum-form.php:334
+#: includes/abstracts/abstract-wpum-form.php:340
 msgid "\"%s\" (filetype %s) needs to be one of the following file types: %s"
 msgstr ""
 
-#: includes/abstracts/abstract-wpum-form.php:364
+#: includes/abstracts/abstract-wpum-form.php:370
 msgid "1 uppercase letter"
 msgstr ""
 
-#: includes/abstracts/abstract-wpum-form.php:368
+#: includes/abstracts/abstract-wpum-form.php:374
 msgid "1 letter"
 msgstr ""
 
-#: includes/abstracts/abstract-wpum-form.php:372
+#: includes/abstracts/abstract-wpum-form.php:378
 msgid "1 number"
 msgstr ""
 
-#: includes/abstracts/abstract-wpum-form.php:376
+#: includes/abstracts/abstract-wpum-form.php:382
 msgid "1 special character"
 msgstr ""
 
-#: includes/abstracts/abstract-wpum-form.php:380
+#: includes/abstracts/abstract-wpum-form.php:386
 msgid "and contain at least"
 msgstr ""
 
-#: includes/abstracts/abstract-wpum-form.php:380
+#: includes/abstracts/abstract-wpum-form.php:386
 msgid " and "
 msgstr ""
 
-#: includes/abstracts/abstract-wpum-form.php:383
+#: includes/abstracts/abstract-wpum-form.php:389
 msgid "Password must be at least %s characters long"
 msgstr ""
 
@@ -3216,6 +3216,7 @@ msgstr ""
 #: includes/wpum-shortcodes/shortcodes.php:440
 #: includes/wpum-shortcodes/shortcodes.php:507
 #: includes/wpum-shortcodes/shortcodes.php:576
+#: vendor/wp-user-manager/wpum-blocks/blocks-loader.php:216
 msgid ""
 "This content is available to members only. Please <a "
 "href=\"%1$s\">login</a> or <a href=\"%2$s\">register</a> to view this area."
@@ -3915,12 +3916,6 @@ msgstr ""
 msgid "No options are available for this widget."
 msgstr ""
 
-#: vendor/wp-user-manager/wpum-blocks/blocks-loader.php:216
-msgid ""
-"AThis content is available to members only. Please <a "
-"href=\"%1$s\">login</a> or <a href=\"%2$s\">register</a> to view this area."
-msgstr ""
-
 #: vendor/wp-user-manager/wpum-blocks/includes/classes/Blocks/AccountPage.php:27
 msgid "WP User Manager account page."
 msgstr ""
@@ -4231,7 +4226,7 @@ msgstr ""
 msgid "Select Directory"
 msgstr ""
 
-#: wp-user-manager.php:420 wp-user-manager.php:432
+#: wp-user-manager.php:421 wp-user-manager.php:433
 msgid "Cheatin&#8217; huh?"
 msgstr ""
 
