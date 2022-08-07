@@ -336,3 +336,28 @@ function wpum_remove_slashes_from_field_data( $field_name ) {
 
 add_filter( 'wpum_field_name', 'wpum_remove_slashes_from_field_data' );
 add_filter( 'wpum_field_description', 'wpum_remove_slashes_from_field_data' );
+
+/**
+ * In WP 6.0+, virtual pages for our Account and Profile subpages (eg. account/posts or profile/comments)
+ * no longer inherit the page template of the parent page. This fixes that.
+ */
+add_filter( 'template_include', function ( $template ) {
+	global $wp;
+
+	if ( ! isset( $wp->query_vars ) ) {
+		return $template;
+	}
+
+	if ( ! isset( $wp->query_vars['page_id'] ) ) {
+		return $template;
+	}
+
+	if ( $wp->query_vars['page_id'] === wpum_get_core_page_id( 'account' ) || $wp->query_vars['page_id'] === wpum_get_core_page_id( 'profile' ) ) {
+		$new_template_slug = get_page_template_slug( $wp->query_vars['page_id'] );
+		if ( $new_template_slug && basename( $template ) !== $new_template_slug ) {
+			$template = dirname( $template ) . '/' . $new_template_slug;
+		}
+	}
+
+	return $template;
+}, 100 );
