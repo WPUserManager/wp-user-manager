@@ -607,7 +607,12 @@ function wpum_conditional_fields_maybe_skip_validation( $skip, $field_key, $valu
 	$form_data         = (object) array();
 	$form_data->fields = $fields;
 
-	$rulesets    = apply_filters( 'wpum_field_conditional_logic_rules', array(), $form_data );
+	$rulesets = apply_filters( 'wpum_field_conditional_logic_rules', array(), $form_data );
+
+	if ( empty( $rulesets ) || ! isset( $rulesets[ $field_key ] ) ) {
+		return false;
+	}
+
 	$field_rules = $rulesets[ $field_key ];
 
 	if ( ! $field_rules ) {
