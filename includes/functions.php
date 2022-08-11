@@ -502,7 +502,8 @@ function wpum_send_registration_admin_email( $user ) {
  * Prepare file information for upload.
  *
  * @param array $file_data
- * @return void
+ *
+ * @return array
  */
 function wpum_prepare_uploaded_files( $file_data ) {
 	$files_to_upload = array();
@@ -524,6 +525,7 @@ function wpum_prepare_uploaded_files( $file_data ) {
 		$file_data['type'] = $type['type'];
 		$files_to_upload[] = $file_data;
 	}
+
 	return apply_filters( 'wpum_prepare_uploaded_files', $files_to_upload );
 }
 
