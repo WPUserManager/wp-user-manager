@@ -561,6 +561,11 @@ function wpum_upload_file( $file, $args = array() ) {
 		return $file;
 	}
 
+	$check = wp_check_filetype_and_ext( $file['tmp_name'], $file['name'] );
+	if ( ! $check['ext'] || ! $check['type'] ) {
+		return new WP_Error( 'upload', __( 'Sorry, you are not allowed to upload this file type.' ) );
+	}
+
 	if ( ! in_array( $file['type'], $allowed_mime_types ) ) {
 		if ( $args['file_label'] ) {
 			return new WP_Error( 'upload', sprintf( __( '"%1$s" (filetype %2$s) needs to be one of the following file types: %3$s', 'wp-user-manager' ), $args['file_label'], $file['type'], implode( ', ', array_keys( $allowed_mime_types ) ) ) );
