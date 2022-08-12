@@ -10,6 +10,7 @@
 	<exclude-pattern>assets</exclude-pattern>
 	<exclude-pattern>src</exclude-pattern>
 	<exclude-pattern>static</exclude-pattern>
+	<exclude-pattern>Gruntfile.js</exclude-pattern>
 	<exclude-pattern>.sass-cache</exclude-pattern>
 	<exclude-pattern>node_modules/</exclude-pattern>
 	<rule ref="WordPress">
@@ -17,5 +18,6 @@
 		<exclude name="Squiz.Commenting.InlineComment.InvalidEndChar" />
 		<exclude name="Generic.Commenting.DocComment.MissingShort"/>
 		<exclude name="WordPress.NamingConventions.ValidFunctionName"/>
+		<exclude name="Squiz.Commenting.FunctionComment.MissingParamComment"/>
 	</rule>
 </ruleset>
