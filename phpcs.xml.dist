@@ -19,5 +19,6 @@
 		<exclude name="Generic.Commenting.DocComment.MissingShort"/>
 		<exclude name="WordPress.NamingConventions.ValidFunctionName"/>
 		<exclude name="Squiz.Commenting.FunctionComment.MissingParamComment"/>
+		<exclude name="Squiz.Commenting.FunctionComment.ParamCommentFullStop"/>
 	</rule>
 </ruleset>
