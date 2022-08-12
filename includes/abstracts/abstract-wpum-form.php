@@ -139,7 +139,7 @@ abstract class WPUM_Form {
 		$errors = apply_filters( 'wpum_form_errors', $this->errors, $this->form_name );
 		foreach ( $errors as $error ) {
 			WPUM()->templates
-			->set_template_data( [ 'message' => esc_html__( $error, 'wp-user-manager' ) ] )
+			->set_template_data( [ 'message' => $error ] )
 			->get_template_part( 'messages/general', 'error' );
 		}
 	}
