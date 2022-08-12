@@ -1,0 +1,9 @@
+<?xml version="1.0" ?>
+<ruleset name="WP_User_Manager">
+	<exclude-pattern>vendor</exclude-pattern>
+	<exclude-pattern>node_modules/</exclude-pattern>
+	<rule ref="WordPress">
+		<exclude name="Squiz.Commenting.FileComment.MissingPackageTag" />
+		<exclude name="Squiz.Commenting.InlineComment.InvalidEndChar" />
+	</rule>
+</ruleset>

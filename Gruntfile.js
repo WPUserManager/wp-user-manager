@@ -211,6 +211,7 @@ module.exports = function( grunt ) {
 					'!.gitignore',
 					'!.gitmodules',
 					'!distributewp.json',
+					'!phpcs.xml.dist',
 					'!yarn.lock'
 				],
 				dest: 'release/<%= pkg.version %>/'
