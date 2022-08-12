@@ -26,11 +26,11 @@ Domain Path: /languages
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
  *
- * @author     WP User Manager
- * @version    2.3.6
+ * @author         WP User Manager
+ * @version        2.3.6
  * @copyright  (c) 2020 WP User Manager
- * @license    http://www.gnu.org/licenses/gpl-3.0.txt GNU LESSER GENERAL PUBLIC LICENSE
- * @package    wp-user-manager
+ * @license        http://www.gnu.org/licenses/gpl-3.0.txt GNU LESSER GENERAL PUBLIC LICENSE
+ * @package        wp-user-manager
  */
 
 // Exit if accessed directly
@@ -412,9 +412,9 @@ if ( ! class_exists( 'WP_User_Manager' ) ) :
 		 * The whole idea of the singleton design pattern is that there is a single
 		 * object therefore, we don't want the object to be cloned.
 		 *
-		 * @since 1.0.0
-		 * @access protected
 		 * @return void
+		 * @since  1.0.0
+		 * @access protected
 		 */
 		public function __clone() {
 			// Cloning instances of the class is forbidden
@@ -424,9 +424,9 @@ if ( ! class_exists( 'WP_User_Manager' ) ) :
 		/**
 		 * Disable unserializing of the class
 		 *
-		 * @since 1.0.0
-		 * @access protected
 		 * @return void
+		 * @since  1.0.0
+		 * @access protected
 		 */
 		public function __wakeup() {
 			// Unserializing instances of the class is forbidden
@@ -437,8 +437,8 @@ if ( ! class_exists( 'WP_User_Manager' ) ) :
 		 * Setup plugin constants
 		 *
 		 * @access private
-		 * @since 1.0.0
 		 * @return void
+		 * @since  1.0.0
 		 */
 		private function setup_constants() {
 
