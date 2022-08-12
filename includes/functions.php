@@ -20,17 +20,19 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @return array
  */
 function wpum_get_pages( $force = false ) {
-	$pages = [];
+	$pages = array();
 
 	$transient = get_transient( 'wpum_get_pages' );
 
 	if ( $transient && ! $force ) {
 		$pages = $transient;
 	} else {
-		$available_pages = get_pages( [
-			'post_status'          => 'publish,private',
-			'wpum_restrict_bypass' => true,
-		] );
+		$available_pages = get_pages(
+			array(
+				'post_status'          => 'publish,private',
+				'wpum_restrict_bypass' => true,
+			)
+		);
 		if ( ! empty( $available_pages ) ) {
 			foreach ( $available_pages as $page ) {
 				$pages[] = array(
@@ -49,10 +51,12 @@ function wpum_get_redirect_pages() {
 	$pages = wpum_get_pages();
 
 	if ( 'posts' == get_option( 'show_on_front' ) ) {
-		$homepage = array( array(
-			'value' => 'hp',
-			'label' => __( 'Homepage', 'wp-user-manager' ),
-		) );
+		$homepage = array(
+			array(
+				'value' => 'hp',
+				'label' => __( 'Homepage', 'wp-user-manager' ),
+			),
+		);
 
 		$pages = array_merge( $homepage, $pages );
 	}
@@ -85,7 +89,7 @@ function wpum_get_login_methods() {
  * @return array
  */
 function wpum_get_roles( $force = false, $admin = false ) {
-	$roles = [];
+	$roles = array();
 
 	$transient = get_transient( 'wpum_get_roles' );
 
@@ -428,7 +432,7 @@ function wpum_send_registration_confirmation_email( $user_id, $psw = false, $pas
 		$emails->__set( 'plain_text_password', $psw );
 	}
 
-	if ( $password_reset_key ){
+	if ( $password_reset_key ) {
 		$emails->__set( 'password_reset_key', $password_reset_key );
 	}
 
@@ -443,13 +447,13 @@ function wpum_send_registration_confirmation_email( $user_id, $psw = false, $pas
 }
 
 /**
- * @param array $roles
+ * @param array   $roles
  * @param WP_User $user
  */
 function wpum_update_roles( $roles, $user, $remove_whitelist = array() ) {
 	$currentRoles = $user->roles;
 
-	if ( empty( $roles ) || ! is_array( $roles )) {
+	if ( empty( $roles ) || ! is_array( $roles ) ) {
 		return;
 	}
 
@@ -686,34 +690,34 @@ function wpum_is_account_tab_active( $step_key, $first_tab ) {
  */
 function wpum_get_account_page_tabs() {
 
-	$tabs = [
-		'settings' => [
+	$tabs = array(
+		'settings' => array(
 			'name'     => esc_html__( 'Settings', 'wp-user-manager' ),
 			'priority' => 0,
-		],
-		'password' => [
+		),
+		'password' => array(
 			'name'     => esc_html__( 'Password', 'wp-user-manager' ),
 			'priority' => 800,
-		],
-		'view'     => [
+		),
+		'view'     => array(
 			'name'     => esc_html__( 'View profile', 'wp-user-manager' ),
 			'priority' => 900,
-		],
-		'logout'   => [
+		),
+		'logout'   => array(
 			'name'     => esc_html__( 'Logout', 'wp-user-manager' ),
 			'priority' => 999,
-		],
-	];
+		),
+	);
 
 	if ( ! wpum_get_core_page_id( 'profile' ) || boolval( wpum_get_option( 'disable_profiles' ) ) === true ) {
 		unset( $tabs['view'] );
 	}
 
 	if ( wpum_get_option( 'members_can_set_privacy' ) ) {
-		$tabs['privacy'] = [
+		$tabs['privacy'] = array(
 			'name'     => esc_html__( 'Profile Privacy', 'wp-user-manager' ),
 			'priority' => 700,
-		];
+		);
 	}
 
 	$tabs = apply_filters( 'wpum_get_account_page_tabs', $tabs );
@@ -735,11 +739,11 @@ function wpum_get_full_page_hierarchy( $page_id ) {
 	$page = get_post( $page_id );
 
 	if ( empty( $page ) || is_wp_error( $page ) ) {
-		return [];
+		return array();
 	}
 
-	$return         = [];
-	$page_obj       = [];
+	$return         = array();
+	$page_obj       = array();
 	$page_obj['id'] = $page_id;
 	$return[]       = $page_obj;
 
@@ -885,20 +889,20 @@ function wpum_get_profile_url( $user ) {
  */
 function wpum_get_registered_profile_tabs() {
 
-	$tabs = [
-		'about'    => [
+	$tabs = array(
+		'about'    => array(
 			'name'     => esc_html__( 'About', 'wp-user-manager' ),
 			'priority' => 0,
-		],
-		'posts'    => [
+		),
+		'posts'    => array(
 			'name'     => esc_html__( 'Posts', 'wp-user-manager' ),
 			'priority' => 1,
-		],
-		'comments' => [
+		),
+		'comments' => array(
 			'name'     => esc_html__( 'Comments', 'wp-user-manager' ),
 			'priority' => 2,
-		],
-	];
+		),
+	);
 
 	if ( ! wpum_get_option( 'profile_posts' ) ) {
 		unset( $tabs['posts'] );
@@ -919,7 +923,7 @@ function wpum_get_registered_profile_tabs() {
  * Retrieve the url a profile tab for the given user.
  *
  * @param \WP_User $user
- * @param string  $tab
+ * @param string   $tab
  * @return string
  */
 function wpum_get_profile_tab_url( $user, $tab ) {
@@ -960,12 +964,15 @@ function wpum_get_posts_for_profile( $user_id, $post_type = 'post' ) {
 
 	$paged = ( get_query_var( 'paged' ) ) ? get_query_var( 'paged' ) : 1;
 
-	$args = apply_filters( 'wpum_get_posts_for_profile', [
-		'post_type'   => $post_type,
-		'author'      => $user_id,
-		'paged'       => $paged,
-		'post_status' => 'publish',
-	] );
+	$args = apply_filters(
+		'wpum_get_posts_for_profile',
+		array(
+			'post_type'   => $post_type,
+			'author'      => $user_id,
+			'paged'       => $paged,
+			'post_status' => 'publish',
+		)
+	);
 
 	$query = new WP_Query( $args );
 
@@ -1158,15 +1165,15 @@ function wpum_custom_admin_notice_inline_css() {
 function wpum_setup_default_custom_search_fields() {
 
 	WPUM()->search_meta->insert(
-		[
+		array(
 			'meta_key' => 'first_name',
-		]
+		)
 	);
 
 	WPUM()->search_meta->insert(
-		[
+		array(
 			'meta_key' => 'last_name',
-		]
+		)
 	);
 
 }
@@ -1310,15 +1317,15 @@ function wpum_get_completed_upgrades() {
  */
 function wpum_get_mime_types_for_selection() {
 
-	$types = [];
+	$types = array();
 
 	$mimes = get_allowed_mime_types();
 
 	foreach ( $mimes as $key => $type ) {
-		$types[] = [
+		$types[] = array(
 			'value' => $type,
 			'name'  => $key,
-		];
+		);
 	}
 
 	return $types;
@@ -1361,7 +1368,7 @@ if ( ! function_exists( 'wp_new_user_notification' ) ) {
 			wp_set_password( $password, $user_id );
 		}
 
-		$user = get_user_by( 'id', $user_id );
+		$user               = get_user_by( 'id', $user_id );
 		$password_reset_key = get_password_reset_key( $user );
 
 		wpum_send_registration_confirmation_email( $user_id, $password, $password_reset_key );
