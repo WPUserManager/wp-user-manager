@@ -16,3 +16,4 @@ wp-user-manager
 languages/*
 !languages/wp-user-manager.pot
 release
+codereport.csv
