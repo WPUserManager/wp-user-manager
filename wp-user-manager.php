@@ -1,15 +1,15 @@
 <?php
-/*
-Plugin Name: WP User Manager
-Plugin URI:  https://wpusermanager.com
-Description: Beautifully simple user profile directories with frontend login, registration and account customization. WP User Manager is the best solution to manage your community and your users for WordPress.
-Version:     2.8.7
-Author:      WP User Manager
-Author URI:  https://wpusermanager.com
-License:     GPLv3+
-Text Domain: wp-user-manager
-Domain Path: /languages
-*/
+/**
+ * Plugin Name: WP User Manager
+ * Plugin URI:  https://wpusermanager.com
+ * Description: Beautifully simple user profile directories with frontend login, registration and account customization. WP User Manager is the best solution to manage your community and your users for WordPress.
+ * Version:     2.8.7
+ * Author:      WP User Manager
+ * Author URI:  https://wpusermanager.com
+ * License:     GPLv3+
+ * Text Domain: wp-user-manager
+ * Domain Path: /languages
+ **/
 
 /**
  * WP User Manager.
@@ -46,6 +46,8 @@ if ( ! class_exists( 'WP_User_Manager' ) ) :
 	final class WP_User_Manager {
 
 		/**
+		 * Plugin version
+		 *
 		 * @var string
 		 */
 		protected $version = '2.8.7';
@@ -55,7 +57,7 @@ if ( ! class_exists( 'WP_User_Manager' ) ) :
 		 *
 		 * @var WP_User_Manager the WPUM Instance
 		 */
-		protected static $_instance;
+		protected static $instance;
 
 		/**
 		 * Holds the admin notice creation helper class.
@@ -160,11 +162,11 @@ if ( ! class_exists( 'WP_User_Manager' ) ) :
 		 * @return WP_User_Manager
 		 */
 		public static function instance() {
-			if ( is_null( self::$_instance ) ) {
-				self::$_instance = new self();
+			if ( is_null( self::$instance ) ) {
+				self::$instance = new self();
 			}
 
-			return self::$_instance;
+			return self::$instance;
 		}
 
 		/**
@@ -303,7 +305,7 @@ if ( ! class_exists( 'WP_User_Manager' ) ) :
 
 			require_once WPUM_PLUGIN_DIR . 'includes/install.php';
 
-			if ( defined( 'DOING_AJAX' ) || ( isset( $_GET['wpum_email_customizer'] ) && 'true' == $_GET['wpum_email_customizer'] ) ) {
+			if ( defined( 'DOING_AJAX' ) || ( isset( $_GET['wpum_email_customizer'] ) && 'true' === filter_input( INPUT_GET, 'wpum_email_customizer' ) ) ) { // phpcs:ignore
 				require_once WPUM_PLUGIN_DIR . 'includes/wpum-emails/class-wpum-emails-customizer-scripts.php';
 				require_once WPUM_PLUGIN_DIR . 'includes/wpum-emails/class-wpum-emails-customizer.php';
 			}
