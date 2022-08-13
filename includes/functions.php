@@ -47,10 +47,15 @@ function wpum_get_pages( $force = false ) {
 	return $pages;
 }
 
+/**
+ * Get page options for redirects
+ *
+ * @return array|array[]
+ */
 function wpum_get_redirect_pages() {
 	$pages = wpum_get_pages();
 
-	if ( 'posts' == get_option( 'show_on_front' ) ) {
+	if ( 'posts' === get_option( 'show_on_front' ) ) {
 		$homepage = array(
 			array(
 				'value' => 'hp',
@@ -104,7 +109,7 @@ function wpum_get_roles( $force = false, $admin = false ) {
 
 		$available_roles = $wp_roles->get_names();
 		foreach ( $available_roles as $role_id => $role ) {
-			if ( $role_id == 'administrator' && ! $admin ) {
+			if ( 'administrator' === $role_id && ! $admin ) {
 				continue;
 			}
 			$roles[] = array(
@@ -200,6 +205,7 @@ function wpum_list_pluck( $list, $field, $index_key = null ) {
 		}
 		return $list;
 	}
+
 	/*
 	 * When index_key is not set for a particular item, push the value
 	 * to the end of the stack. This is how array_column() behaves.
@@ -234,9 +240,9 @@ function wpum_get_login_label() {
 	$label        = esc_html__( 'Username', 'wp-user-manager' );
 	$login_method = wpum_get_option( 'login_method' );
 
-	if ( $login_method == 'email' ) {
+	if ( 'email' === $login_method ) {
 		$label = esc_html__( 'Email', 'wp-user-manager' );
-	} elseif ( $login_method == 'username_email' ) {
+	} elseif ( 'username_email' === $login_method ) {
 		$label = esc_html__( 'Username or Email Address' );
 	}
 
@@ -256,7 +262,7 @@ function wpum_get_redirect_option_url( $option ) {
 	$url         = false;
 
 	if ( ! empty( $redirect_to ) && is_array( $redirect_to ) ) {
-		if ( 'hp' == $redirect_to[0] ) {
+		if ( 'hp' === $redirect_to[0] ) {
 			$url = home_url();
 		} else {
 			$page_id = apply_filters( 'wpum_redirect_page_id', $redirect_to[0], $option );
@@ -299,7 +305,8 @@ function wpum_get_logout_redirect() {
  * Replace during email parsing characters.
  *
  * @param string $str
- * @return void
+ *
+ * @return false|string
  */
 function wpum_starmid( $str ) {
 	switch ( strlen( $str ) ) {
@@ -318,7 +325,8 @@ function wpum_starmid( $str ) {
  * Mask an email address.
  *
  * @param string $email_address
- * @return void
+ *
+ * @return false|string
  */
 function wpum_mask_email_address( $email_address ) {
 
@@ -449,16 +457,17 @@ function wpum_send_registration_confirmation_email( $user_id, $psw = false, $pas
 /**
  * @param array   $roles
  * @param WP_User $user
+ * @param array   $remove_whitelist
  */
 function wpum_update_roles( $roles, $user, $remove_whitelist = array() ) {
-	$currentRoles = $user->roles;
+	$current_roles = $user->roles;
 
 	if ( empty( $roles ) || ! is_array( $roles ) ) {
 		return;
 	}
 
 	// Remove unselected roles
-	foreach ( $currentRoles as $role ) {
+	foreach ( $current_roles as $role ) {
 		if ( ( empty( $remove_whitelist ) || in_array( $role, $remove_whitelist ) ) && ! in_array( $role, $roles ) ) {
 			$user->remove_role( $role );
 		}
@@ -466,14 +475,14 @@ function wpum_update_roles( $roles, $user, $remove_whitelist = array() ) {
 
 	// Add new roles
 	foreach ( $roles as $role ) {
-		if ( ! in_array( $role, $currentRoles ) ) {
+		if ( ! in_array( $role, $current_roles ) ) {
 			$user->add_role( $role );
 		}
 	}
 }
 
 /**
- * @param $user
+ * @param \WP_User $user
  */
 function wpum_send_registration_admin_email( $user ) {
 	$registration_admin_email = wpum_get_email( 'registration_admin_notification', $user->ID );
@@ -506,7 +515,8 @@ function wpum_send_registration_admin_email( $user ) {
  * Prepare file information for upload.
  *
  * @param array $file_data
- * @return void
+ *
+ * @return array
  */
 function wpum_prepare_uploaded_files( $file_data ) {
 	$files_to_upload = array();
