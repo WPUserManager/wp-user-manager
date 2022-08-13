@@ -12,28 +12,6 @@
  **/
 
 /**
- * WP User Manager.
- *
- * Copyright (c) 2020 WP User Manager
- *
- * WP User Manager. is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 2 of the License, or
- * any later version.
- *
- * WP User Manager. is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU General Public License for more details.
- *
- * @author         WP User Manager
- * @version        2.3.6
- * @copyright  (c) 2020 WP User Manager
- * @license        http://www.gnu.org/licenses/gpl-3.0.txt GNU LESSER GENERAL PUBLIC LICENSE
- * @package        wp-user-manager
- */
-
-/**
  * Start WP User Manager.
  * The main function responsible for returning the one true WP User Manager instance to functions everywhere.
  *
