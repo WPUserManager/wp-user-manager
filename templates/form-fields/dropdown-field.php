@@ -1,4 +1,5 @@
 <?php
+
 /**
  * The template for displaying the select field.
  *
@@ -13,17 +14,17 @@
  * @version 1.0.0
  */
 
- // Exit if accessed directly
-if ( ! defined( 'ABSPATH' ) ) exit;
+// Exit if accessed directly
+if (!defined('ABSPATH')) exit;
 
 ?>
 
-<select name="<?php echo esc_attr( isset( $data->name ) ? $data->name : $data->key ); ?>" id="<?php echo esc_attr( $data->key ); ?>" <?php if ( ! empty( $data->required ) ) echo 'required'; ?> <?php if ( ! empty( $data->read_only ) ) echo 'disabled'; ?>>
-	<?php foreach ( $data->options as $key => $value ) : ?>
-		<option value="<?php echo esc_attr( $key ); ?>" <?php if ( isset( $data->value ) || isset( $data->default ) ) selected( isset( $data->value ) ? $data->value : $data->default, $key ); ?>><?php echo esc_html( $value ); ?></option>
+<select name="<?php echo esc_attr(isset($data->name) ? $data->name : $data->key); ?>" id="<?php echo esc_attr($data->key); ?>" <?php if (!empty($data->required)) echo 'required'; ?> <?php if (!empty($data->read_only)) echo 'disabled'; ?> <?php if (!empty($data->ui)) echo 'class="wpum-select2"' ?> placeholder="<?php echo empty($data->placeholder) ? '' : esc_attr($data->placeholder); ?>">
+	<?php foreach ($data->options as $key => $value) : ?>
+		<option value="<?php echo esc_attr($key); ?>" <?php if (isset($data->value) || isset($data->default)) selected(isset($data->value) ? $data->value : $data->default, $key); ?>><?php echo esc_html($value); ?></option>
 	<?php endforeach; ?>
 </select>
-<?php if ( ! empty( $data->read_only ) ) : ?>
-	<input type="hidden" name="<?php echo esc_attr( isset( $data->name ) ? $data->name : $data->key ); ?>" id="<?php echo esc_attr( $data->key ); ?>" value="<?php echo isset( $data->value ) ? esc_attr( $data->value ) : ''; ?>" />
+<?php if (!empty($data->read_only)) : ?>
+	<input type="hidden" name="<?php echo esc_attr(isset($data->name) ? $data->name : $data->key); ?>" id="<?php echo esc_attr($data->key); ?>" value="<?php echo isset($data->value) ? esc_attr($data->value) : ''; ?>" />
 <?php endif; ?>
-<?php if ( ! empty( $data->description ) ) : ?><small class="description"><?php echo $data->description; ?></small><?php endif; ?>
+<?php if (!empty($data->description)) : ?><small class="description"><?php echo $data->description; ?></small><?php endif; ?>

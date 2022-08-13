@@ -14,6 +14,17 @@ jQuery( function( $ ) {
 			$( this ).select2( args );
 		} );
 
+		$('.wpum-select2').each(function () {
+			var args = {
+				theme: 'default'
+			};
+			var placeholder = $(this).attr('placeholder');
+			if (placeholder) {
+				args['placeholder'] = placeholder;
+			}
+			$(this).select2(args);
+		});
+
 		$( '.wpum-datepicker:not([readonly]):not(.wpum-clone-field)' ).flatpickr( {
 			dateFormat: wpumFrontend.dateFormat
 		} );
