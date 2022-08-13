@@ -210,7 +210,6 @@ module.exports = function( grunt ) {
 					'!package.json',
 					'!.gitignore',
 					'!.gitmodules',
-					'!distributewp.json',
 					'!phpcs.xml.dist',
 					'!yarn.lock'
 				],
