@@ -200,6 +200,7 @@ module.exports = function( grunt ) {
 				src:  [
 					'**',
 					'!node_modules/**',
+					'!tests/**',
 					'!release/**',
 					'!.git/**',
 					'!.sass-cache/**',
