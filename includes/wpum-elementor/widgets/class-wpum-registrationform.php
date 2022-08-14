@@ -97,5 +97,8 @@ class RegistrationForm extends \Elementor\Widget_Base {
 	public function render() {
 		$attributes = $this->get_settings_for_display();
 		echo call_user_func( $this->shortcode_function, $attributes );
+
+		// Enqueue JS scripts
+		wpum_enqueue_scripts();
 	}
 }
