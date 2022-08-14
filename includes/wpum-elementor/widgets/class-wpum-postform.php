@@ -37,11 +37,11 @@ class PostForm extends \Elementor\Widget_Base {
 
 	protected function register_controls() {
 
-		$post_forms = WPUMFR()->post_forms->get_forms();
+		$post_forms = $this->get_post_forms();
 		$default    = 0;
 
-		if ( isset( $post_forms[0])) {
-			$default = $post_forms[0]->ID;
+		if ( ! empty( $post_forms ) ) {
+			$default = array_key_first( $post_forms );
 		}
 
 		$this->start_controls_section(
@@ -63,6 +63,23 @@ class PostForm extends \Elementor\Widget_Base {
 		);
 
 		$this->end_controls_section();
+	}
+
+	private function get_post_forms() {
+		$post_forms = WPUMFR()->post_forms->get_forms();
+		$forms      = [];
+
+		foreach ($post_forms as $post_form) {
+			$name = $post_form->name;
+
+			if( !empty( $post_form->get_settings_model()['form_name'] ) ) {
+				$name = $post_form->get_settings_model()['form_name'];
+			}
+
+			$forms[$post_form->ID] = $name;
+		}
+
+		return $forms;
 	}
 
 	public function render() {
