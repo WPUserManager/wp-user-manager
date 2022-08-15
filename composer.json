@@ -24,6 +24,7 @@
     "wpbp/widgets-helper": "dev-master"
   },
   "minimum-stability": "dev",
+  "prefer-stable": true,
   "config": {
     "sort-packages": true,
     "allow-plugins": {
@@ -39,6 +40,8 @@
     "codeception/module-phpbrowser": "^1.0",
     "codeception/module-webdriver": "^1.0",
     "codeception/util-universalframework": "^1.0",
-    "lucatume/wp-browser": "^3.0"
+    "lucatume/wp-browser": "^3.0",
+    "voku/simple_html_dom": "^4.8",
+    "whatdafox/codeception-mailtrap": "^1.4"
   }
 }

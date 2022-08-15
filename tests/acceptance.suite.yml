@@ -8,28 +8,29 @@
 actor: AcceptanceTester
 modules:
     enabled:
-        # - WPDb
-        # - WPBrowser
+        - WPDb
+        - WPBrowser
         - \Helper\Acceptance
+        - Mailtrap
     config:
         WPDb:
-            dsn: '%TEST_SITE_DB_DSN%'
-            user: '%TEST_SITE_DB_USER%'
-            password: '%TEST_SITE_DB_PASSWORD%'
-            dump: 'tests/_data/dump.sql'
-            #import the dump before the tests; this means the test site database will be repopulated before the tests.
-            populate: true
-            # re-import the dump between tests; this means the test site database will be repopulated between the tests.
-            cleanup: true
-            waitlock: 10
-            url: '%TEST_SITE_WP_URL%'
-            urlReplacement: true #replace the hardcoded dump URL with the one above
-            tablePrefix: '%TEST_SITE_TABLE_PREFIX%'
+          dsn: 'mysql:host=%DB_HOST%;port=%DB_PORT%;dbname=%DB_NAME%'
+          user: '%DB_USER%'
+          password: '%DB_PASSWORD%'
+          populate: false #import the dump before the tests
+          cleanup: false #import the dump between tests
+          url: '%WP_URL%'
+          urlReplacement: true #replace the hardcoded dump URL with the one above
+          tablePrefix: '%TABLE_PREFIX%'
         WPBrowser:
-            url: '%TEST_SITE_WP_URL%'
-            adminUsername: '%TEST_SITE_ADMIN_USERNAME%'
-            adminPassword: '%TEST_SITE_ADMIN_PASSWORD%'
-            adminPath: '%TEST_SITE_WP_ADMIN_PATH%'
+            url: '%WP_URL%'
+            adminUsername: '%ADMIN_USERNAME%'
+            adminPassword: '%ADMIN_PASSWORD%'
+            adminPath: '%WP_ADMIN_PATH%'
             headers:
                 X_TEST_REQUEST: 1
                 X_WPBROWSER_REQUEST: 1
+        Mailtrap:
+          client_id: '%MAILTRAP_CLIENT_ID%'
+          inbox_id: '%MAILTRAP_INBOX_ID%'
+          cleanup: false

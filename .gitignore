@@ -16,3 +16,7 @@ wp-user-manager
 languages/*
 !languages/wp-user-manager.pot
 release
+
+/tests/reports
+/tests/codeception.yml
+/tests/.env.local
