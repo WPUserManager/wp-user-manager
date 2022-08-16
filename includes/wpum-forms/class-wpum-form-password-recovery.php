@@ -150,24 +150,26 @@ class WPUM_Form_Password_Recovery extends WPUM_Form {
 	}
 
 	/**
-	 * Validate the requested username or email.
+	 * Validate the requested username or email. Called by filter 'submit_wpum_form_validate_fields'
 	 *
-	 * @param boolean $pass
-	 * @param array $fields
-	 * @param array $values
-	 * @param string $form
-	 * @return void
+	 * @param boolean|WP_Error $pass   True in case of success or WP_Error if failed
+	 * @param array            $fields The registered fields in the form.
+	 * @param array            $values The submitted form values.
+	 * @param string           $form   The name of the Form.
+	 *
+	 * @return boolean|WP_Error
 	 */
 	public function validate_username_or_email( $pass, $fields, $values, $form ) {
+		if ( $form !== 'password-recovery' || ! isset( $values['user']['username_email'] ) ) {
+			return $pass;
+		}
 
-		if( $form == 'password-recovery' && isset( $values['user']['username_email'] ) ) {
-			$username = sanitize_text_field( $values['user']['username_email'] );
-			if( is_email( $username ) && !email_exists( $username ) || !is_email( $username ) && !username_exists( $username ) )
-				return new WP_Error( 'username-validation-error', esc_html__( 'A user with this username or email does not exist. Please check your entry and try again.', 'wp-user-manager' ) );
+		$username = sanitize_text_field( $values['user']['username_email'] );
+		if ( ! email_exists( $values['user']['username_email'] ) && ! username_exists( $values['user']['username_email'] ) ) {
+			return new WP_Error( 'username-validation-error', esc_html__( 'A user with this username or email does not exist. Please check your entry and try again.', 'wp-user-manager' ) );
 		}
 
 		return $pass;
-
 	}
 
 	/**
@@ -225,9 +227,9 @@ class WPUM_Form_Password_Recovery extends WPUM_Form {
 			$user     = false;
 
 			// Retrieve the user from the DB.
-			if( is_email( $username ) ) {
-				$user = get_user_by( 'email', $username );
-			} else {
+			$user = get_user_by( 'email', $username );
+
+			if ( ! $user instanceof WP_User ) {
 				$user = get_user_by( 'login', $username );
 			}
 
@@ -280,11 +282,13 @@ class WPUM_Form_Password_Recovery extends WPUM_Form {
 
 		$username = $values['user']['username_email'];
 
-		if( is_email( $username ) ) {
-			$user = get_user_by( 'email', $username );
-		} else {
+		// Retrieve the user from the DB.
+		$user = get_user_by( 'email', $username );
+
+		if ( ! $user instanceof WP_User ) {
 			$user = get_user_by( 'login', $username );
 		}
+
 
 		$data = [
 			'email' => $user->data->user_email,
