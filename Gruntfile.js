@@ -226,6 +226,7 @@ module.exports = function( grunt ) {
 					'!.gitignore',
 					'!.gitmodules',
 					'!phpcs.xml.dist',
+					'!README.md',
 					'!yarn.lock'
 				],
 				dest: 'release/<%= pkg.version %>/'
