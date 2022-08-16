@@ -22,6 +22,11 @@ module.exports = function( grunt ) {
 				dest: 'assets/js/wp-user-manager.js'
 			}
 		},
+		shell: {
+			composerDependencies: {
+				command: 'composer install --no-dev'
+			}
+		},
 		jshint: {
 			all: [
 				'Gruntfile.js',
@@ -73,7 +78,14 @@ module.exports = function( grunt ) {
 		test:   {
 			files: ['assets/js/test/**/*.js']
 		},
-
+		composer : {
+			options : {
+				usePhp: true,
+				flags: ['arg'],
+				cwd: 'release/<%= pkg.version %>/',
+				composerLocation: '/usr/local/bin/composer'
+			},
+		},
 		sass:   {
 			all: {
 				files: {
@@ -162,7 +174,8 @@ module.exports = function( grunt ) {
 			}
 		},
 		clean: {
-			main: ['release']
+			main: ['release'],
+			build: ['release/<%= pkg.version %>/build', 'release/<%= pkg.version %>/vendor/nikic/fast-route/test', 'release/<%= pkg.version %>/vendor/typisttech/imposter', 'release/<%= pkg.version %>/vendor/typisttech/imposter-plugin']
 		},
 		gittag: {
            addtag: {
@@ -199,6 +212,7 @@ module.exports = function( grunt ) {
 			main: {
 				src:  [
 					'**',
+					'!vendor/**',
 					'!node_modules/**',
 					'!tests/**',
 					'!release/**',
@@ -297,7 +311,7 @@ module.exports = function( grunt ) {
 	grunt.registerTask( 'do_git', [  'gitcommit', 'gittag', 'gitpush' ] );
 	grunt.registerTask( 'release', [ 'pre_vcs', 'do_svn', 'do_git'  ] );
 
-	grunt.registerTask( 'build', ['clean', 'copy', 'compress'] );
+	grunt.registerTask( 'build', ['clean:main', 'copy', 'composer:install:no-dev', 'clean:build', 'compress'] );
 
 	grunt.util.linefeed = '\n';
 };
