@@ -35,9 +35,9 @@ class LoginLink extends \Elementor\Widget_Base {
 
 	protected function register_controls() {
 		$this->start_controls_section(
-			'content_section',
+			'wpum_content_section',
 			[
-				'label' => esc_html__( 'Content', 'wp-user-manager' ),
+				'label' => esc_html__( 'Settings', 'wp-user-manager' ),
 				'tab'   => \Elementor\Controls_Manager::TAB_CONTENT,
 			]
 		);
@@ -60,8 +60,10 @@ class LoginLink extends \Elementor\Widget_Base {
 		);
 
 		$this->end_controls_section();
+
 	}
 
+	
 	public function render() {
 		$attributes = $this->get_settings_for_display();
 		echo call_user_func( $this->shortcode_function, $attributes );

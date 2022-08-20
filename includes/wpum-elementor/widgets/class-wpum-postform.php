@@ -45,9 +45,9 @@ class PostForm extends \Elementor\Widget_Base {
 		}
 
 		$this->start_controls_section(
-			'content_section',
+			'wpum_content_section',
 			[
-				'label' => esc_html__( 'Content', 'wp-user-manager' ),
+				'label' => esc_html__( 'Settings', 'wp-user-manager' ),
 				'tab'   => \Elementor\Controls_Manager::TAB_CONTENT,
 			]
 		);
