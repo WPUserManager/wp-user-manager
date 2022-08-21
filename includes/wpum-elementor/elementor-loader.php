@@ -83,7 +83,6 @@ class WPUM_Elementor {
 	 * @return string                     The changed widget content.
 	 */
 	function wpum_restrict_widget_content( $widget_content, $widget ) {
-
 		if ( ( is_admin() && isset( $_GET['action'] ) && $_GET['action'] === 'elementor' ) ) {
 			return $widget_content;
 		}
