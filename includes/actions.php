@@ -693,6 +693,10 @@ add_filter( 'wpum_conditional_field_validate_rule_value_equals', 'wpum_validate_
  * @return bool
  */
 function wpum_validate_rule_value_contains( $valid, $rule, $values ) {
+	if ( is_array( $values[ $rule['field'] ] ) ) {
+		return in_array( $rule['value'], $values[ $rule['field'] ] );
+	}
+
 	return strpos( $values[ $rule['field'] ], $rule['value'] );
 }
 
@@ -706,6 +710,10 @@ add_filter( 'wpum_conditional_field_validate_rule_value_contains', 'wpum_validat
  * @return bool
  */
 function wpum_validate_rule_has_value( $valid, $rule, $values ) {
+	if ( is_array( $values[ $rule['field'] ] ) ) {
+		return ! empty( $values[ $rule['field'] ] );
+	}
+
 	return '' !== $values[ $rule['field'] ];
 }
 
@@ -719,6 +727,10 @@ add_filter( 'wpum_conditional_field_validate_rule_has_value', 'wpum_validate_rul
  * @return bool
  */
 function wpum_validate_rule_has_no_value( $valid, $rule, $values ) {
+	if ( is_array( $values[ $rule['field'] ] ) ) {
+		return empty( $values[ $rule['field'] ] );
+	}
+
 	return '' === $values[ $rule['field'] ];
 }
 
@@ -750,3 +762,30 @@ function wpum_validate_rule_value_less( $valid, $rule, $values ) {
 
 add_filter( 'wpum_conditional_field_validate_rule_value_less', 'wpum_validate_rule_value_less', 10, 3 );
 
+// Ensure the global post is set for account/profile subpage§
+add_action( 'wp', function () {
+	global $post;
+
+	if ( ! empty( $post ) ) {
+		return;
+	}
+
+	global $wp;
+
+	if ( ! isset( $wp->query_vars['page_id'] ) ) {
+		return;
+	}
+
+	$account_id = wpum_get_core_page_id( 'account' );
+	$profile_id = wpum_get_core_page_id( 'profile' );
+
+	if ( $wp->query_vars['page_id'] === $account_id ) {
+		$post = get_post( $account_id );
+
+		return;
+	}
+
+	if ( $wp->query_vars['page_id'] === $profile_id ) {
+		$post = get_post( $profile_id );
+	}
+}, 9 );
