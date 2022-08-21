@@ -687,3 +687,30 @@ function wpum_validate_rule_value_less( $valid, $rule, $values ) {
 
 add_filter( 'wpum_conditional_field_validate_rule_value_less', 'wpum_validate_rule_value_less', 10, 3 );
 
+// Ensure the global post is set for account/profile subpage§
+add_action( 'wp', function () {
+	global $post;
+
+	if ( ! empty( $post ) ) {
+		return;
+	}
+
+	global $wp;
+
+	if ( ! isset( $wp->query_vars['page_id'] ) ) {
+		return;
+	}
+
+	$account_id = wpum_get_core_page_id( 'account' );
+	$profile_id = wpum_get_core_page_id( 'profile' );
+
+	if ( $wp->query_vars['page_id'] === $account_id ) {
+		$post = get_post( $account_id );
+
+		return;
+	}
+
+	if ( $wp->query_vars['page_id'] === $profile_id ) {
+		$post = get_post( $profile_id );
+	}
+}, 9 );
