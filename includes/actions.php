@@ -646,18 +646,30 @@ function wpum_validate_rule_value_equals( $valid, $rule, $values ) {
 add_filter( 'wpum_conditional_field_validate_rule_value_equals', 'wpum_validate_rule_value_equals', 10, 3 );
 
 function wpum_validate_rule_value_contains( $valid, $rule, $values ) {
+	if ( is_array( $values[ $rule['field'] ] ) ) {
+		return in_array( $rule['value'], $values[ $rule['field'] ] );
+	}
+
 	return strpos( $values[ $rule['field'] ], $rule['value'] );
 }
 
 add_filter( 'wpum_conditional_field_validate_rule_value_contains', 'wpum_validate_rule_value_contains', 10, 3 );
 
 function wpum_validate_rule_has_value( $valid, $rule, $values ) {
+	if ( is_array( $values[ $rule['field'] ] ) ) {
+		return ! empty( $values[ $rule['field'] ] );
+	}
+
 	return $values[ $rule['field'] ] !== '';
 }
 
 add_filter( 'wpum_conditional_field_validate_rule_has_value', 'wpum_validate_rule_has_value', 10, 3 );
 
 function wpum_validate_rule_has_no_value( $valid, $rule, $values ) {
+	if ( is_array( $values[ $rule['field'] ] ) ) {
+		return empty( $values[ $rule['field'] ] );
+	}
+
 	return $values[ $rule['field'] ] === '';
 }
 
