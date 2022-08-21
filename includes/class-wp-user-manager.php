@@ -45,7 +45,7 @@ if ( ! class_exists( 'WP_User_Manager' ) ) :
 		 *
 		 * @var string
 		 */
-		protected $version = '2.8.7';
+		protected $version = '2.8.8';
 
 		/**
 		 * WPUM Instance.
