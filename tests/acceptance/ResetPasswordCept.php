@@ -2,7 +2,14 @@
 
 use voku\helper\HtmlDomParser;
 
-$I = new AcceptanceTester( $scenario );
+$I = new \Step\Acceptance\Administrator( $scenario );
+$I->amOnSettingsPage('profiles');
+$I->waitForText('Disable Strong Passwords');
+$I->checkOption('#disable_strong_passwords');
+$I->click('Save Changes');
+$I->waitForText( 'Settings successfully saved.' );
+$I->logOut();
+
 $I->amOnPage( '/login' );
 $I->see( 'Login' );
 $I->click( 'Lost your password?' );
