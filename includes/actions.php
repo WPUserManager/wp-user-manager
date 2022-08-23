@@ -278,9 +278,12 @@ function wpum_check_display_name( $user_id ) {
 
 	global $wpdb;
 
+	$display_name = filter_input( INPUT_POST, 'display_name' );
+	$nickname     = filter_input( INPUT_POST, 'nickname' );
+
 	// Getting user data and user meta data.
-	$err['display'] = $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(ID) FROM $wpdb->users WHERE display_name = %s AND ID <> %d", $_POST['display_name'], $_POST['user_id'] ) );
-	$err['nick']    = $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(ID) FROM $wpdb->users as users, $wpdb->usermeta as meta WHERE users.ID = meta.user_id AND meta.meta_key = 'nickname' AND meta.meta_value = %s AND users.ID <> %d", $_POST['nickname'], $_POST['user_id'] ) );
+	$err['display'] = $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(ID) FROM $wpdb->users WHERE display_name = %s AND ID <> %d", $display_name, $user_id ) );
+	$err['nick']    = $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(ID) FROM $wpdb->users as users, $wpdb->usermeta as meta WHERE users.ID = meta.user_id AND meta.meta_key = 'nickname' AND meta.meta_value = %s AND users.ID <> %d", $nickname, $user_id ) );
 
 	foreach ( $err as $key => $e ) {
 		if ( $e >= 1 ) {
@@ -294,6 +297,10 @@ add_action( 'edit_user_profile_update', 'wpum_check_display_name' );
 /**
  * Trigger the unique error for the display field.
  *
+ * @param WP_Error $errors
+ * @param bool     $update
+ * @param stdClass $user
+ *
  * @return void
  */
 function wpum_check_display_field( $errors, $update, $user ) {
@@ -302,6 +309,10 @@ function wpum_check_display_field( $errors, $update, $user ) {
 
 /**
  * Trigger the unique error for the nickname field.
+ *
+ * @param WP_Error $errors
+ * @param bool     $update
+ * @param stdClass $user
  *
  * @return void
  */
@@ -355,10 +366,10 @@ function wpum_complete_setup() {
 function wpum_prevent_wp_login() {
 	global $pagenow;
 
-	$action        = ( isset( $_GET['action'] ) ) ? $_GET['action'] : '';
-	$wpum_override = isset( $_GET['wpum_override'] ) ? $_GET['wpum_override'] : '';
+	$action        = ( isset( $_GET['action'] ) ) ? $_GET['action'] : ''; // phpcs:ignore
+	$wpum_override = isset( $_GET['wpum_override'] ) ? $_GET['wpum_override'] : ''; // phpcs:ignore
 
-	if ( $pagenow == 'wp-login.php' && ! $wpum_override && ( ! $action || ( $action && ! in_array( $action, array( 'logout', 'lostpassword', 'rp', 'resetpass', 'postpass' ) ) ) ) ) {
+	if ( $pagenow && 'wp-login.php' === $pagenow && ! $wpum_override && ( ! $action || ( $action && ! in_array( $action, array( 'logout', 'lostpassword', 'rp', 'resetpass', 'postpass' ), true ) ) ) ) {
 		$page = wp_login_url();
 		wp_safe_redirect( $page );
 		exit();
@@ -391,20 +402,28 @@ function wpum_prevent_entire_site() {
 
 	$login_page      = wp_login_url();
 	$wp_login_locked = wpum_get_option( 'lock_wplogin' );
-	$is_wp_login     = $pagenow == 'wp-login.php';
+	$is_wp_login     = $pagenow && 'wp-login.php' === $pagenow;
 
-	if ( home_url( $_SERVER['REQUEST_URI'] ) == $login_page || ( $is_wp_login && ( ! empty( $_GET['wpum_override'] ) || ! $wp_login_locked ) ) ) {
+	$url_part = filter_input( INPUT_SERVER, 'REQUEST_URI' );
+
+	if ( empty( $url_part ) ) {
+		$url_part = '';
+	}
+
+	$url = home_url( $url_part );
+
+	if ( isset( $_SERVER['REQUEST_URI'] ) && $url === $login_page || ( $is_wp_login && ( ! empty( $_GET['wpum_override'] ) || ! $wp_login_locked ) ) ) { // phpcs:ignore
 		return;
 	}
 
-	if ( isset( $_POST['wp-submit'] ) && isset( $_POST['log'] ) ) {
+	if ( isset( $_POST['wp-submit'] ) && isset( $_POST['log'] ) ) { // phpcs:ignore
 		return;
 	}
 
 	$password_reset_page_id = wpum_get_core_page_id( 'password' );
 	if ( ! empty( $password_reset_page_id ) ) {
 		$password_reset_page = get_permalink( $password_reset_page_id );
-		if ( 0 === strpos( home_url( $_SERVER['REQUEST_URI'] ), $password_reset_page ) ) {
+		if ( 0 === strpos( $url, $password_reset_page ) ) {
 			return;
 		}
 	}
@@ -412,8 +431,9 @@ function wpum_prevent_entire_site() {
 	if ( wpum_get_option( 'lock_complete_site_allow_register' ) ) {
 		$registration_pages   = array();
 		$registration_pages[] = get_permalink( wpum_get_core_page_id( 'register' ) );
+
 		foreach ( apply_filters( 'wpum_registration_pages', $registration_pages ) as $registration_page ) {
-			if ( home_url( $_SERVER['REQUEST_URI'] ) == $registration_page ) {
+			if ( $url === $registration_page ) {
 				return;
 			}
 		}
@@ -446,6 +466,9 @@ function wpum_finish_db_setup_after_plugin_init() {
 }
 add_action( 'after_wpum_init', 'wpum_finish_db_setup_after_plugin_init' );
 
+/**
+ * Register user profile privacy fields
+ */
 function wpum_register_profile_privacy_fields() {
 	global $pagenow;
 
@@ -457,7 +480,7 @@ function wpum_register_profile_privacy_fields() {
 
 	$allow_multiple_roles = wpum_get_option( 'allow_multiple_user_roles' );
 
-	$user_id = isset( $_GET['user_id'] ) ? absint( $_GET['user_id'] ) : false;
+	$user_id = filter_input( INPUT_GET, 'user_id', FILTER_VALIDATE_INT );
 
 	$profileuser    = isset( $user_id ) ? get_user_by( 'id', $user_id ) : false;
 	$existing_roles = ( $profileuser ) ? $profileuser->roles : array();
@@ -489,7 +512,9 @@ add_action( 'template_redirect', 'wpum_reset_password_redirect' );
  * Handle redirecting after user clicks on password reset email link
  */
 function wpum_reset_password_redirect() {
-	if ( ! isset( $_GET['action'] ) || 'wpum-reset' !== $_GET['action'] ) {
+	$action = filter_input( INPUT_GET, 'action' );
+
+	if ( ! $action || 'wpum-reset' !== $action ) {
 		return;
 	}
 
@@ -497,13 +522,20 @@ function wpum_reset_password_redirect() {
 		return;
 	}
 
-	if ( ! isset( $_GET['login'] ) || ! isset( $_GET['key'] ) ) {
+	if ( ! isset( $_GET['login'] ) || ! isset( $_GET['key'] ) ) { // phpcs:ignore
 		return;
 	}
 
-	list( $rp_path ) = explode( '?', wp_unslash( $_SERVER['REQUEST_URI'] ) );
+	if ( ! isset( $_SERVER['REQUEST_URI'] ) ) {
+		return;
+	}
 
-	$value = sprintf( '%s:%s', wp_unslash( $_GET['login'] ), wp_unslash( $_GET['key'] ) );
+	list( $rp_path ) = explode( '?', wp_unslash( filter_input( INPUT_SERVER, 'REQUEST_URI' ) ) );
+
+	$login = wp_unslash( filter_input( INPUT_GET, 'login' ) );
+	$key   = wp_unslash( filter_input( INPUT_GET, 'key' ) );
+
+	$value = sprintf( '%s:%s', $login, $key );
 	setcookie( 'wpum-resetpass-' . COOKIEHASH, $value, 0, $rp_path, COOKIE_DOMAIN, is_ssl(), true );
 
 	$url = remove_query_arg( array( 'key', 'login', 'action' ) );
@@ -522,11 +554,13 @@ function wpum_action_profile_update( $user_id ) {
 		return;
 	}
 
-	if ( isset( $_POST['_wpum_user_roles'] ) && current_user_can( 'promote_user' ) ) {
+	if ( isset( $_POST['_wpum_user_roles'] ) && current_user_can( 'promote_user' ) ) { // phpcs:ignore
 
 		$user = get_user_by( 'ID', $user_id );
 
-		$wpum_roles = explode( '|', $_POST['_wpum_user_roles'] );
+		$roles = filter_input( INPUT_POST, '_wpum_user_roles' );
+
+		$wpum_roles = explode( '|', $roles );
 		wpum_update_roles( $wpum_roles, $user );
 	}
 }
@@ -547,18 +581,18 @@ function wpum_modify_multiple_roles_ui( $user ) {
 		return;
 	}
 
-	echo <<<HTML
+	?>
 	<script>
-		jQuery(function ( $ ) {
-			if ( ! $( '.user-role-wrap select#role, #createuser select#role' ).length ) {
+		jQuery( function( $ ) {
+			if ( !$( '.user-role-wrap select#role, #createuser select#role' ).length ) {
 				return;
 			}
-			var el_userrole = $('.user-role-wrap select#role, #createuser select#role');
-			$( $( '.wpum-multiple-user-roles' ) ).insertAfter( el_userrole ).css('padding', 0);
+			var el_userrole = $( '.user-role-wrap select#role, #createuser select#role' );
+			$( $( '.wpum-multiple-user-roles' ) ).insertAfter( el_userrole ).css( 'padding', 0 );
 			$( el_userrole ).hide();
-		});
+		} );
 	</script>
-HTML;
+	<?php
 }
 
 add_action( 'user_new_form', 'wpum_modify_multiple_roles_ui', 0 );
@@ -604,7 +638,7 @@ function wpum_field_conditional_logic_rules( $data ) {
 	?>
 	<script type="text/javascript">
 		(function() {
-			var ruleset = <?php echo json_encode( $rulesets ) ?>;
+			var ruleset = <?php echo wp_json_encode( $rulesets ); ?>;
 			Object.keys( ruleset ).forEach( function( fieldName ) {
 				var field = document.querySelector( '.fieldset-' + fieldName );
 				if ( field ) {
@@ -694,7 +728,7 @@ add_filter( 'wpum_conditional_field_validate_rule_value_equals', 'wpum_validate_
  */
 function wpum_validate_rule_value_contains( $valid, $rule, $values ) {
 	if ( is_array( $values[ $rule['field'] ] ) ) {
-		return in_array( $rule['value'], $values[ $rule['field'] ] );
+		return in_array( $rule['value'], $values[ $rule['field'] ], true );
 	}
 
 	return strpos( $values[ $rule['field'] ], $rule['value'] );
@@ -780,12 +814,12 @@ add_action( 'wp', function () {
 	$profile_id = wpum_get_core_page_id( 'profile' );
 
 	if ( $wp->query_vars['page_id'] === $account_id ) {
-		$post = get_post( $account_id );
+		$post = get_post( $account_id ); // phpcs:ignore
 
 		return;
 	}
 
 	if ( $wp->query_vars['page_id'] === $profile_id ) {
-		$post = get_post( $profile_id );
+		$post = get_post( $profile_id ); // phpcs:ignore
 	}
 }, 9 );
