@@ -7,7 +7,7 @@ $I->amOnPage( '/login' );
 $I->see( 'Login' );
 $I->click( 'Lost your password?' );
 $I->see( 'Password Reset' );
-$I->fillField( 'username_email', 'wpwp_admin' );
+$I->fillField( 'username_email', $_ENV['ADMIN_USERNAME'] );
 $I->click( 'Reset password' );
 $I->see( "We've sent an email to" );
 $I->waitForEmailWithSubject( "Reset your " . $I->grabOptionFromDatabase( 'blogname' ) . " password" );
