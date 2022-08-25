@@ -8,7 +8,9 @@
  * @since       1.0.0
  */
 
-if ( ! defined( 'ABSPATH' ) ) exit;
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 
 /**
  * Register all widgets for WPUM.
@@ -21,4 +23,5 @@ function wpum_register_custom_widgets() {
 	register_widget( 'WPUM_Recently_Registered_Users' );
 	register_widget( 'WPUM_Registration_Form_Widget' );
 }
+
 add_action( 'widgets_init', 'wpum_register_custom_widgets', 1 );

@@ -5,10 +5,12 @@
  * @package     wp-user-manager
  * @copyright   Copyright (c) 2018, Alessandro Tesoro
  * @license     https://opensource.org/licenses/GPL-3.0 GNU Public License
-*/
+ */
 
 // Exit if accessed directly
-if ( ! defined( 'ABSPATH' ) ) exit;
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 
 /**
  * Initialize all forms and prepare them to be handled by Vuejs.
@@ -81,7 +83,7 @@ abstract class WPUM_Form {
 	 * Set properties of the class.
 	 *
 	 * @param string $key
-	 * @param mixed $value
+	 * @param mixed  $value
 	 */
 	public function __set( $key, $value ) {
 		$this->$key = $value;
@@ -139,7 +141,7 @@ abstract class WPUM_Form {
 		$errors = apply_filters( 'wpum_form_errors', $this->errors, $this->form_name );
 		foreach ( $errors as $error ) {
 			WPUM()->templates
-			->set_template_data( [ 'message' => $error ] )
+			->set_template_data( array( 'message' => $error ) )
 			->get_template_part( 'messages/general', 'error' );
 		}
 	}
@@ -240,10 +242,10 @@ abstract class WPUM_Form {
 	 * @return int
 	 */
 	protected function sort_by_priority( $a, $b ) {
-	    if ( $a['priority'] == $b['priority'] ) {
-	        return 0;
-	    }
-	    return ( $a['priority'] < $b['priority'] ) ? -1 : 1;
+		if ( $a['priority'] == $b['priority'] ) {
+			return 0;
+		}
+		return ( $a['priority'] < $b['priority'] ) ? -1 : 1;
 	}
 
 	/**
@@ -272,7 +274,7 @@ abstract class WPUM_Form {
 					continue;
 				}
 
-				$field_object = new $class;
+				$field_object = new $class();
 
 				if ( $handler = apply_filters( "wpum_get_posted_{$field_type}_field", false ) ) {
 					$values[ $group_key ][ $key ] = call_user_func( $handler, $key, $field );
@@ -287,7 +289,7 @@ abstract class WPUM_Form {
 	}
 
 	protected function str_len( $str ) {
-		return mb_strlen( str_replace("\r\n", "\n", wp_specialchars_decode( wp_unslash( $str ) ) ) );
+		return mb_strlen( str_replace( "\r\n", "\n", wp_specialchars_decode( wp_unslash( $str ) ) ) );
 	}
 
 	/**
@@ -308,7 +310,7 @@ abstract class WPUM_Form {
 					return new WP_Error( 'validation-error', sprintf( __( '%s is a required field', 'wp-user-manager' ), $field['label'] ) );
 				}
 				if ( isset( $field['maxlength'] ) && is_numeric( $field['maxlength'] ) && ( $this->str_len( $values[ $group_key ][ $key ] ) > $field['maxlength'] ) ) {
-					return new WP_Error( 'validation-error', sprintf( __( '%s must not exceed %d characters', 'wp-user-manager' ), $field['label'], $field['maxlength'] ) );
+					return new WP_Error( 'validation-error', sprintf( __( '%1$s must not exceed %2$d characters', 'wp-user-manager' ), $field['label'], $field['maxlength'] ) );
 				}
 				if ( ! empty( $field['taxonomy'] ) && in_array( $field['type'], array( 'term-checklist', 'term-select', 'term-multiselect' ) ) ) {
 					if ( is_array( $values[ $group_key ][ $key ] ) ) {
@@ -337,7 +339,7 @@ abstract class WPUM_Form {
 							$file_url  = current( explode( '?', $file_url ) );
 							$file_info = wp_check_filetype( $file_url );
 							if ( ! is_numeric( $file_url ) && $file_info && ! in_array( $file_info['ext'], $allowed_exts ) ) {
-								throw new Exception( sprintf( __( '"%s" (filetype %s) needs to be one of the following file types: %s', 'wp-user-manager' ), $field['label'], $file_info['ext'], $allowed_exts ) );
+								throw new Exception( sprintf( __( '"%1$s" (filetype %2$s) needs to be one of the following file types: %3$s', 'wp-user-manager' ), $field['label'], $file_info['ext'], $allowed_exts ) );
 							}
 						}
 					}
@@ -358,7 +360,7 @@ abstract class WPUM_Form {
 		}
 
 		$checkUppercase = apply_filters( 'wpum_strong_password_check_uppercase', true );
-		$checkLetter     = apply_filters( 'wpum_strong_password_check_letter', false );
+		$checkLetter    = apply_filters( 'wpum_strong_password_check_letter', false );
 		$checkDigit     = apply_filters( 'wpum_strong_password_check_digit', true );
 		$checkSpecial   = apply_filters( 'wpum_strong_password_check_special', true );
 
@@ -383,7 +385,7 @@ abstract class WPUM_Form {
 		}
 
 		if ( ! empty( $error_message ) ) {
-			$error_message = ' ' . __( 'and contain at least', 'wp-user-manager' ) . ' ' . implode( __( ' and ', 'wp-user-manager' ) , $error_message ) . '.';
+			$error_message = ' ' . __( 'and contain at least', 'wp-user-manager' ) . ' ' . implode( __( ' and ', 'wp-user-manager' ), $error_message ) . '.';
 		}
 
 		$invalidMessage = apply_filters( 'wpum_strong_password_invalid_message', sprintf( __( 'Password must be at least %s characters long', 'wp-user-manager' ), $minLength ) . $error_message );
@@ -456,10 +458,12 @@ abstract class WPUM_Form {
 		$public_display['display_username'] = $user->user_login;
 		$public_display['display_nickname'] = $user->nickname;
 
-		if ( ! empty( $user->first_name ) )
+		if ( ! empty( $user->first_name ) ) {
 			$public_display['display_firstname'] = $user->first_name;
-		if ( ! empty( $user->last_name ) )
+		}
+		if ( ! empty( $user->last_name ) ) {
 			$public_display['display_lastname'] = $user->last_name;
+		}
 		if ( ! empty( $user->first_name ) && ! empty( $user->last_name ) ) {
 			$public_display['display_firstlast'] = $user->first_name . ' ' . $user->last_name;
 			$public_display['display_lastfirst'] = $user->last_name . ' ' . $user->first_name;
@@ -488,7 +492,7 @@ abstract class WPUM_Form {
 	 */
 	protected function get_field_dropdown_options( $field, $user ) {
 
-		$options = [];
+		$options = array();
 
 		if ( ! empty( $field->get_primary_id() ) ) {
 			switch ( $field->get_primary_id() ) {
@@ -517,12 +521,12 @@ abstract class WPUM_Form {
 	 */
 	protected function get_custom_field_dropdown_options( $field ) {
 		if ( $field->is_primary() ) {
-			return [];
+			return array();
 		}
 
-		$options = [];
+		$options = array();
 
-		$allowed_types = [ 'dropdown', 'multiselect', 'radio', 'multicheckbox' ];
+		$allowed_types = array( 'dropdown', 'multiselect', 'radio', 'multicheckbox' );
 
 		if ( in_array( $field->get_type(), $allowed_types ) ) {
 			$stored_options = $field->get_meta( 'dropdown_options' );

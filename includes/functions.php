@@ -128,6 +128,7 @@ function wpum_get_roles( $force = false, $admin = false ) {
  * Retrieve the ID of a WPUM core page.
  *
  * @param string $page Available core pages are login, register, password, account, profile.
+ *
  * @return int $page_id the ID of the requested page.
  */
 function wpum_get_core_page_id( $page = null ) {
@@ -203,6 +204,7 @@ function wpum_list_pluck( $list, $field, $index_key = null ) {
 				}
 			}
 		}
+
 		return $list;
 	}
 
@@ -227,6 +229,7 @@ function wpum_list_pluck( $list, $field, $index_key = null ) {
 		}
 	}
 	$list = $newlist;
+
 	return $list;
 }
 
@@ -317,7 +320,7 @@ function wpum_starmid( $str ) {
 		case 2:
 			return $str[0] . '*';
 		default:
-			return $str[0] . str_repeat( '*', strlen( $str ) - 2 ) . substr( $str, -1 );
+			return $str[0] . str_repeat( '*', strlen( $str ) - 2 ) . substr( $str, - 1 );
 	}
 }
 
@@ -369,6 +372,7 @@ function wpum_get_disabled_usernames() {
 			$usernames[] = strtolower( $username );
 		}
 	}
+
 	return array_flip( $usernames );
 }
 
@@ -378,6 +382,7 @@ function wpum_get_disabled_usernames() {
  * This function should usually be followed by a redirect.
  *
  * @param mixed $email_or_id
+ *
  * @return void
  */
 function wpum_log_user_in( $email_or_id ) {
@@ -468,14 +473,14 @@ function wpum_update_roles( $roles, $user, $remove_whitelist = array() ) {
 
 	// Remove unselected roles
 	foreach ( $current_roles as $role ) {
-		if ( ( empty( $remove_whitelist ) || in_array( $role, $remove_whitelist ) ) && ! in_array( $role, $roles ) ) {
+		if ( ( empty( $remove_whitelist ) || in_array( $role, $remove_whitelist, true ) ) && ! in_array( $role, $roles, true ) ) {
 			$user->remove_role( $role );
 		}
 	}
 
 	// Add new roles
 	foreach ( $roles as $role ) {
-		if ( ! in_array( $role, $current_roles ) ) {
+		if ( ! in_array( $role, $current_roles, true ) ) {
 			$user->add_role( $role );
 		}
 	}
@@ -545,8 +550,9 @@ function wpum_prepare_uploaded_files( $file_data ) {
 /**
  * Uploads a file using WordPress file API.
  *
- * @param  array|WP_Error      $file Array of $_FILE data to upload.
- * @param  string|array|object $args Optional arguments
+ * @param array|WP_Error      $file Array of $_FILE data to upload.
+ * @param string|array|object $args Optional arguments
+ *
  * @return stdClass|WP_Error Object containing file information, or error
  */
 function wpum_upload_file( $file, $args = array() ) {
@@ -581,10 +587,12 @@ function wpum_upload_file( $file, $args = array() ) {
 		return new WP_Error( 'upload', __( 'Sorry, you are not allowed to upload this file type.' ) );
 	}
 
-	if ( ! in_array( $file['type'], $allowed_mime_types ) ) {
+	if ( ! in_array( $file['type'], $allowed_mime_types, true ) ) {
 		if ( $args['file_label'] ) {
+			/* translators: %1$s: file label %2$s: file type  %3$s: allowed types */
 			return new WP_Error( 'upload', sprintf( __( '"%1$s" (filetype %2$s) needs to be one of the following file types: %3$s', 'wp-user-manager' ), $args['file_label'], $file['type'], implode( ', ', array_keys( $allowed_mime_types ) ) ) );
 		} else {
+			/* translators: %s: allowed file types */
 			return new WP_Error( 'upload', sprintf( __( 'Uploaded files need to be one of the following file types: %s', 'wp-user-manager' ), implode( ', ', array_keys( $allowed_mime_types ) ) ) );
 		}
 	} else {
@@ -648,36 +656,36 @@ function wpum_sort_array_by_priority( $a, $b ) {
 	}
 
 	if ( ! isset( $b['priority'] ) ) {
-		return -1;
+		return - 1;
 	}
 
-	if ( $a['priority'] == $b['priority'] ) {
+	if ( $a['priority'] === $b['priority'] ) {
 		return 0;
 	}
 
-	return ( $a['priority'] < $b['priority'] ) ? -1 : 1;
+	return ( $a['priority'] < $b['priority'] ) ? - 1 : 1;
 }
 
 /**
  * Retrieve the url of a given account tab.
  *
  * @param string $step_key
+ *
  * @return string
  */
 function wpum_get_account_tab_url( $step_key ) {
 
 	$tab_url = trailingslashit( get_permalink() );
 
-	if ( $step_key == 'logout' ) {
+	if ( 'logout' === $step_key ) {
 		$tab_url = wp_logout_url();
-	} elseif ( $step_key == 'view' ) {
+	} elseif ( 'view' === $step_key ) {
 		$tab_url = get_permalink( wpum_get_core_page_id( 'profile' ) );
 	} else {
 		$tab_url = $tab_url . rawurlencode( $step_key );
 	}
 
 	return apply_filters( 'wpum_get_account_tab_url', $tab_url, $step_key );
-
 }
 
 /**
@@ -685,18 +693,17 @@ function wpum_get_account_tab_url( $step_key ) {
  *
  * @param string $step_key
  * @param string $first_tab
+ *
  * @return boolean
  */
 function wpum_is_account_tab_active( $step_key, $first_tab ) {
+	$active = ! empty( get_query_var( 'tab' ) ) && get_query_var( 'tab' ) === $step_key;
 
-	$active = ! empty( get_query_var( 'tab' ) ) && get_query_var( 'tab' ) == $step_key ? true : false;
-
-	if ( ! get_query_var( 'tab' ) && $step_key == $first_tab ) {
+	if ( ! get_query_var( 'tab' ) && $step_key === $first_tab ) {
 		$active = true;
 	}
 
 	return $active;
-
 }
 
 /**
@@ -748,7 +755,8 @@ function wpum_get_account_page_tabs() {
  * Retrieve the full hierarchy of a given page or post.
  *
  * @param int $page_id
- * @return void
+ *
+ * @return array
  */
 function wpum_get_full_page_hierarchy( $page_id ) {
 
@@ -774,8 +782,8 @@ function wpum_get_full_page_hierarchy( $page_id ) {
 /**
  * Get a list of available permalink structures.
  *
- * @since 1.0.0
  * @return array of all the structures.
+ * @since 1.0.0
  */
 function wpum_get_permalink_structures() {
 
@@ -865,15 +873,14 @@ function wpum_get_queried_user_id() {
  * @return boolean
  */
 function wpum_is_own_profile() {
-
-	return wpum_get_queried_user_id() == get_current_user_id() ? true : false;
-
+	return wpum_get_queried_user_id() === get_current_user_id();
 }
 
 /**
  * Retrieve the user url for a given user.
  *
  * @param object $user instance of WP_User ( $user->data )
+ *
  * @return string
  */
 function wpum_get_profile_url( $user ) {
@@ -884,13 +891,13 @@ function wpum_get_profile_url( $user ) {
 
 	switch ( $permalink_structure ) {
 		case 'user_id':
-			$page_url .= urlencode( $user->ID );
+			$page_url .= rawurlencode( $user->ID );
 			break;
 		case 'username':
-			$page_url .= urlencode( $user->user_login );
+			$page_url .= rawurlencode( $user->user_login );
 			break;
 		case 'nickname':
-			$page_url .= urlencode( get_user_meta( $user->ID, 'nickname', true ) );
+			$page_url .= rawurlencode( get_user_meta( $user->ID, 'nickname', true ) );
 			break;
 	}
 
@@ -940,10 +947,11 @@ function wpum_get_registered_profile_tabs() {
  *
  * @param \WP_User $user
  * @param string   $tab
+ *
  * @return string
  */
 function wpum_get_profile_tab_url( $user, $tab ) {
-	$url  = wpum_get_profile_url( $user );
+	$url = wpum_get_profile_url( $user );
 	$url .= '/' . $tab;
 
 	return apply_filters( 'wpum_get_profile_tab_url', $url, $tab, $user );
@@ -953,16 +961,13 @@ function wpum_get_profile_tab_url( $user, $tab ) {
  * Retrieve the currently active profile tab.
  * If no profile tab is found active, automatically set the first found tab as active.
  *
- * @param string $tab
- * @return void
+ * @return string
  */
 function wpum_get_active_profile_tab() {
-
 	$first_tab   = key( wpum_get_registered_profile_tabs() );
 	$profile_tab = get_query_var( 'tab', $first_tab );
 
 	return $profile_tab;
-
 }
 
 /**
@@ -999,7 +1004,8 @@ function wpum_get_posts_for_profile( $user_id, $post_type = 'post' ) {
  * Retrieve comments submitted by a given user.
  *
  * @param string $user_id
- * @return void
+ *
+ * @return false|int|int[]|WP_Comment[]
  */
 function wpum_get_comments_for_profile( $user_id ) {
 
@@ -1048,6 +1054,7 @@ function wpum_members_can_view_profiles( $user_id ) {
 	if ( carbon_get_user_meta( $user_id, 'hide_profile_members' ) ) {
 		return false;
 	}
+
 	return wpum_get_option( 'members_can_view_profiles' );
 }
 
@@ -1055,7 +1062,8 @@ function wpum_members_can_view_profiles( $user_id ) {
  * Gets a list of users orderded by most recent registration date.
  *
  * @param int $amount amount of users to load.
- * @return void
+ *
+ * @return array
  */
 function wpum_get_recent_users( $amount ) {
 
@@ -1077,55 +1085,66 @@ function wpum_get_recent_users( $amount ) {
 /**
  * Inline css for the fancy WPUM admin notices.
  *
- * @return string
+ * @return void
  */
 function wpum_custom_admin_notice_inline_css() {
 
 	?>
 	<style>
 		.notice.wpum-notice {
-				border-left-color: #008ec2 !important;
-				padding: 20px;
+			border-left-color: #008ec2 !important;
+			padding: 20px;
 		}
+
 		.rtl .notice.wpum-notice {
 			border-right-color: #008ec2 !important;
 		}
+
 		.notice.notice.wpum-notice .wpum-notice-inner {
 			display: table;
 			width: 100%;
 		}
+
 		.notice.wpum-notice .wpum-notice-inner .wpum-notice-icon,
 		.notice.wpum-notice .wpum-notice-inner .wpum-notice-content,
 		.notice.wpum-notice .wpum-notice-inner .wpum-install-now {
 			display: table-cell;
 			vertical-align: middle;
 		}
+
 		.notice.wpum-notice .wpum-notice-icon {
 			color: #509ed2;
 			font-size: 50px;
 			width: 32px;
 		}
+
 		.notice.wpum-notice .wpum-notice-icon img {
 			width: 32px;
 		}
+
 		.notice.wpum-notice .wpum-notice-content {
 			padding: 0 40px 0 20px;
 		}
+
 		.notice.wpum-notice p {
 			padding: 0;
 			margin: 0;
 		}
+
 		.notice.wpum-notice h3 {
 			margin: 0 0 5px;
 		}
+
 		.notice.wpum-notice .wpum-install-now {
 			text-align: center;
 		}
+
 		.notice.wpum-notice .wpum-install-now .wpum-install-button {
 			padding: 6px 50px;
 			height: auto;
 			line-height: 20px;
 		}
+
 		.notice.wpum-notice a.no-thanks {
 			display: block;
 			margin-top: 10px;
@@ -1142,16 +1161,20 @@ function wpum_custom_admin_notice_inline_css() {
 			.notice.notice.wpum-notice .wpum-notice-inner {
 				display: block;
 			}
+
 			.notice.wpum-notice {
 				padding: 20px !important;
 			}
+
 			.notice.wpum-noticee .wpum-notice-inner {
 				display: block;
 			}
+
 			.notice.wpum-notice .wpum-notice-inner .wpum-notice-content {
 				display: block;
 				padding: 0;
 			}
+
 			.notice.wpum-notice .wpum-notice-inner .wpum-notice-icon {
 				display: none;
 			}
@@ -1197,17 +1220,17 @@ function wpum_setup_default_custom_search_fields() {
 /**
  * Retrieve a list of allowed users role on the registration page
  *
- * @since 1.0.0
- *
  * @param array $selected_roles
  *
  * @return array $roles An array of the roles
+ * @since 1.0.0
+ *
  */
 function wpum_get_allowed_user_roles( $selected_roles = array() ) {
 	global $wp_roles;
 
 	if ( ! isset( $wp_roles ) ) {
-		$wp_roles = new WP_Roles();
+		$wp_roles = new WP_Roles(); // phpcs:ignore
 	}
 
 	$user_roles         = array();
@@ -1240,7 +1263,7 @@ function wpum_get_plugins() {
 	}
 	foreach ( $plugins as $plugin_path => $plugin_data ) {
 		// Is plugin active?
-		if ( in_array( $plugin_path, $active_plugin_paths ) ) {
+		if ( in_array( $plugin_path, $active_plugin_paths, true ) ) {
 			$plugins[ $plugin_path ]['Status'] = 'active';
 		} else {
 			$plugins[ $plugin_path ]['Status'] = 'inactive';
@@ -1258,13 +1281,15 @@ function wpum_get_plugins() {
 			$plugins[ $plugin_path ]['Type'] = 'other';
 		}
 	}
+
 	return $plugins;
 }
 
 /**
  * Check if the upgrade routine has been run for a specific action
  *
- * @param  string $upgrade_action The upgrade action to check completion for
+ * @param string $upgrade_action The upgrade action to check completion for
+ *
  * @return bool                   If the action has been added to the completed actions array
  */
 function wpum_has_upgrade_completed( $upgrade_action = '' ) {
@@ -1279,7 +1304,8 @@ function wpum_has_upgrade_completed( $upgrade_action = '' ) {
 		return true;
 	}
 	$completed_upgrades = wpum_get_completed_upgrades();
-	return in_array( $upgrade_action, $completed_upgrades );
+
+	return in_array( $upgrade_action, $completed_upgrades, true );
 }
 
 /**
@@ -1292,13 +1318,15 @@ function wpum_maybe_resume_upgrade() {
 	if ( empty( $doing_upgrade ) ) {
 		return false;
 	}
+
 	return $doing_upgrade;
 }
 
 /**
  * Adds an upgrade action to the completed upgrades array
  *
- * @param  string $upgrade_action The action to add to the completed upgrades array
+ * @param string $upgrade_action The action to add to the completed upgrades array
+ *
  * @return bool                   If the function was successfully added
  */
 function wpum_set_upgrade_complete( $upgrade_action = '' ) {
@@ -1313,14 +1341,15 @@ function wpum_set_upgrade_complete( $upgrade_action = '' ) {
 	 * Fire the action when any upgrade set to complete.
 	 */
 	do_action( 'wpum_set_upgrade_completed', $upgrade_action, $completed_upgrades );
+
 	return update_option( 'wpum_completed_upgrades', $completed_upgrades, 'no' );
 }
 
 /**
  * Get's the array of completed upgrade actions
  *
- * @since  1.0
  * @return array The array of completed upgrades
+ * @since  1.0
  */
 function wpum_get_completed_upgrades() {
 	return (array) get_option( 'wpum_completed_upgrades' );
@@ -1352,18 +1381,19 @@ if ( ! function_exists( 'wp_new_user_notification' ) ) {
 	/**
 	 * Sends WPUM email notification by replacing the core emails.
 	 *
-	 * @param string $user_id the user id.
+	 * @param string $user_id        the user id.
 	 * @param string $plaintext_pass password.
+	 *
 	 * @return void
 	 */
 	function wp_new_user_notification( $user_id, $plaintext_pass = '' ) {
 
 		$password_set_by_admin = false;
-		if ( isset( $_POST['pass1-text'] ) ) {
-			$password_set_by_admin = $_POST['pass1-text'];
+		if ( isset( $_POST['pass1-text'] ) ) { // phpcs:ignore
+			$password_set_by_admin = filter_input( INPUT_POST, 'pass1-text' );
 		}
-		if ( empty( $password_set_by_admin ) && isset( $_POST['pass1'] ) ) {
-			$password_set_by_admin = $_POST['pass1'];
+		if ( empty( $password_set_by_admin ) && isset( $_POST['pass1'] ) ) { // phpcs:ignore
+			$password_set_by_admin = filter_input( INPUT_POST, 'pass1' );
 		}
 
 		$password = false;
@@ -1371,8 +1401,8 @@ if ( ! function_exists( 'wp_new_user_notification' ) ) {
 			$password = sanitize_text_field( $password_set_by_admin );
 		}
 
-		if ( empty( $password ) && isset( $_POST['password'] ) ) {
-			$password = sanitize_text_field( $_POST['password'] );
+		if ( empty( $password ) && isset( $_POST['password'] ) ) { // phpcs:ignore
+			$password = sanitize_text_field( filter_input( INPUT_POST, 'password' ) );
 		}
 
 		if ( empty( $password ) ) {
@@ -1408,6 +1438,9 @@ function wpum_get_registration_form( $form_id = null ) {
 	return new \WPUM_Registration_Form( $form_id );
 }
 
+/**
+ * @return array
+ */
 function wpum_get_display_name_options() {
 	return array(
 		array(
@@ -1433,6 +1466,11 @@ function wpum_get_display_name_options() {
 	);
 }
 
+/**
+ * @param string $content
+ *
+ * @return string
+ */
 function wpum_strip_slashes( $content ) {
 	$content = preg_replace( "/\\\+'/", "'", $content );
 	$content = preg_replace( '/\\\+"/', '"', $content );

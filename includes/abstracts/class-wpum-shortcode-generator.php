@@ -6,10 +6,12 @@
  * @package     wp-user-manager
  * @copyright   Copyright (c) 2018, Alessandro Tesoro
  * @license     https://opensource.org/licenses/GPL-3.0 GNU Public License
-*/
+ */
 
 // Exit if accessed directly
-if ( ! defined( 'ABSPATH' ) ) exit;
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 
 /**
  * Handles the shortcode generator modal window.
@@ -71,8 +73,8 @@ abstract class WPUM_Shortcode_Generator {
 		if ( $this->shortcode_tag ) {
 			$this->self = get_class( $this );
 
-			$this->errors   = [];
-			$this->required = [];
+			$this->errors   = array();
+			$this->required = array();
 
 			// Generate the fields, errors, and requirements.
 			$fields = $this->get_fields();
@@ -90,7 +92,6 @@ abstract class WPUM_Shortcode_Generator {
 			if ( user_can_richedit() ) {
 				WPUM_Shortcode_Button::$shortcodes[ $this->shortcode_tag ] = wp_parse_args( $this->shortcode, $defaults );
 			}
-
 		}
 
 	}
@@ -98,7 +99,7 @@ abstract class WPUM_Shortcode_Generator {
 	/**
 	 * List of fields for this shortcode.
 	 *
-	 * @return void
+	 * @return array[]|false
 	 */
 	public function define_fields() {
 		return false;
@@ -108,7 +109,8 @@ abstract class WPUM_Shortcode_Generator {
 	 * Retrieve the list of defined fields.
 	 *
 	 * @param array $defined_fields
-	 * @return void
+	 *
+	 * @return array
 	 */
 	protected function generate_fields( $defined_fields ) {
 
@@ -126,7 +128,7 @@ abstract class WPUM_Shortcode_Generator {
 					'type'        => '',
 				);
 
-				$field  = wp_parse_args( (array) $field, $defaults );
+				$field = wp_parse_args( (array) $field, $defaults );
 
 				$method = 'generate_' . strtolower( $field['type'] );
 
@@ -136,7 +138,6 @@ abstract class WPUM_Shortcode_Generator {
 						$fields[] = $field;
 					}
 				}
-
 			}
 		}
 
@@ -147,7 +148,7 @@ abstract class WPUM_Shortcode_Generator {
 	/**
 	 * Generate the dialog fields.
 	 *
-	 * @return void
+	 * @return array
 	 */
 	protected function get_fields() {
 		$class            = strtolower( get_called_class() );
@@ -158,7 +159,7 @@ abstract class WPUM_Shortcode_Generator {
 
 		if ( ! empty( $this->errors ) ) {
 			foreach ( $this->required as $name => $alert ) {
-				if ( false === array_search( $name, wpum_list_pluck( $generated_fields, 'name' ) ) ) {
+				if ( false === array_search( $name, wpum_list_pluck( $generated_fields, 'name' ), true ) ) {
 					$errors[] = $this->errors[ $name ];
 				}
 			}
@@ -170,14 +171,14 @@ abstract class WPUM_Shortcode_Generator {
 		}
 
 		return $generated_fields;
-
 	}
 
 	/**
 	 * Generate a tinymce container field.
 	 *
 	 * @param array $field
-	 * @return void
+	 *
+	 * @return array|false
 	 */
 	protected function generate_container( $field ) {
 		if ( array_key_exists( 'html', $field ) ) {
@@ -186,6 +187,7 @@ abstract class WPUM_Shortcode_Generator {
 				'html' => $field['html'],
 			);
 		}
+
 		return false;
 	}
 
@@ -193,7 +195,8 @@ abstract class WPUM_Shortcode_Generator {
 	 * Generate a list field for the modal window.
 	 *
 	 * @param array $field
-	 * @return void
+	 *
+	 * @return array|false
 	 */
 	protected function generate_listbox( $field ) {
 
@@ -204,22 +207,22 @@ abstract class WPUM_Shortcode_Generator {
 			'tooltip'  => '',
 			'type'     => '',
 			'value'    => '',
-			'classes'  => ''
+			'classes'  => '',
 		), $field );
 
 		if ( $this->validate( $field ) ) {
 			$new_listbox = array();
 			foreach ( $listbox as $key => $value ) {
-				if ( $key == 'value' && empty( $value ) ) {
+				if ( 'value' === $key && empty( $value ) ) {
 					$new_listbox[ $key ] = $listbox['name'];
-				} else if ( $value ) {
+				} elseif ( $value ) {
 					$new_listbox[ $key ] = $value;
 				}
 			}
 			// do not reindex array!
-			$field['options'] = array(
-				'' => ( $field['placeholder'] ? $field['placeholder'] : esc_attr__( '- Select -', 'wp-user-manager' ) ),
-			) + $field['options'];
+			$placeholder = $field['placeholder'] ? $field['placeholder'] : esc_attr__( '- Select -', 'wp-user-manager' );
+
+			$field['options'] = array( '' => $placeholder ) + $field['options'];
 
 			foreach ( $field['options'] as $value => $text ) {
 				$new_listbox['values'][] = array(
@@ -238,7 +241,8 @@ abstract class WPUM_Shortcode_Generator {
 	 * Generate a textbox for the window.
 	 *
 	 * @param [type] $field
-	 * @return void
+	 *
+	 * @return array|false
 	 */
 	protected function generate_textbox( $field ) {
 		$textbox = shortcode_atts( array(
@@ -251,11 +255,12 @@ abstract class WPUM_Shortcode_Generator {
 			'tooltip'   => '',
 			'type'      => '',
 			'value'     => '',
-			'classes'   => ''
+			'classes'   => '',
 		), $field );
 		if ( $this->validate( $field ) ) {
 			return array_filter( $textbox, array( $this, 'return_textbox_value' ) );
 		}
+
 		return false;
 	}
 
@@ -263,49 +268,54 @@ abstract class WPUM_Shortcode_Generator {
 	 * Retrieve  the value of the textbox.
 	 *
 	 * @param string $value
-	 * @return void
+	 *
+	 * @return bool
 	 */
-	function return_textbox_value( $value ) {
-		return $value !== '';
+	public function return_textbox_value( $value ) {
+		return '' !== $value;
 	}
 
 	/**
 	 * Validate the modal window.
 	 *
 	 * @param array $field
-	 * @return void
+	 *
+	 * @return bool
 	 */
 	protected function validate( $field ) {
-		extract( shortcode_atts(
-				array(
-					'name'     => false,
-					'required' => false,
-					'label'    => '',
-				), $field )
+		$defaults = array(
+			'name'     => false,
+			'required' => false,
+			'label'    => '',
 		);
-		if ( $name ) {
-			if ( isset( $required['error'] ) ) {
+
+		$args = shortcode_atts( $defaults, $field );
+		if ( $args['name'] ) {
+			if ( isset( $args['required']['error'] ) ) {
 				$error = array(
 					'type' => 'container',
-					'html' => $required['error'],
+					'html' => $args['required']['error'],
 				);
-				$this->errors[ $name ] = $this->generate_container( $error );
+
+				$this->errors[ $args['name'] ] = $this->generate_container( $error );
 			}
-			if ( ! ! $required || is_array( $required ) ) {
+			if ( ! ! $args['required'] || is_array( $args['required'] ) ) {
 				$alert = esc_html__( 'Some of the shortcode options are required.', 'wp-user-manager' );
-				if ( isset( $required['alert'] ) ) {
-					$alert = $required['alert'];
-				} else if ( ! empty( $label ) ) {
+				if ( isset( $args['required']['alert'] ) ) {
+					$alert = $args['required']['alert'];
+				} elseif ( ! empty( $args['label'] ) ) {
 					$alert = sprintf(
-						/* translators: %s: option label */
+					/* translators: %s: option label */
 						esc_html__( 'The "%s" option is required.', 'wp-user-manager' ),
-						str_replace( ':', '', $label )
+						str_replace( ':', '', $args['label'] )
 					);
 				}
-				$this->required[ $name ] = $alert;
+				$this->required[ $args['name'] ] = $alert;
 			}
+
 			return true;
 		}
+
 		return false;
 	}
 
@@ -315,7 +325,10 @@ abstract class WPUM_Shortcode_Generator {
 	 * @return array
 	 */
 	protected function get_yes_no() {
-		return [ 'yes' => esc_html__( 'Yes', 'wp-user-manager' ), 'no' => esc_html__( 'No', 'wp-user-manager' ) ];
+		return array(
+			'yes' => esc_html__( 'Yes', 'wp-user-manager' ),
+			'no'  => esc_html__( 'No', 'wp-user-manager' ),
+		);
 	}
 
 }

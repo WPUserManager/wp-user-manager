@@ -5,10 +5,12 @@
  * @package     wp-user-manager
  * @copyright   Copyright (c) 2018, Alessandro Tesoro
  * @license     https://opensource.org/licenses/GPL-3.0 GNU Public License
-*/
+ */
 
 // Exit if accessed directly
-if ( ! defined( 'ABSPATH' ) ) exit;
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 
 /**
  * Main class that handles registration of field types.
@@ -127,15 +129,15 @@ abstract class WPUM_Field_Type {
 	 * @return array
 	 */
 	public function get_editor_settings() {
-		return [];
+		return array();
 	}
 
 	public function get_data_keys() {
 		if ( $this->allow_default ) {
-			return [ 'default_value', 'wrapper_class', 'wrapper_id', 'wrapper_width'];
+			return array( 'default_value', 'wrapper_class', 'wrapper_id', 'wrapper_width' );
 		}
 
-		return [];
+		return array();
 	}
 
 	/**
@@ -145,8 +147,8 @@ abstract class WPUM_Field_Type {
 	 */
 	protected function get_default_editor_settings() {
 
-		$settings = [
-			'general'     => [
+		$settings = array(
+			'general'     => array(
 				'field_title'       => array(
 					'type'        => 'input',
 					'inputType'   => 'text',
@@ -154,7 +156,7 @@ abstract class WPUM_Field_Type {
 					'model'       => 'field_title',
 					'required'    => true,
 					'placeholder' => esc_html__( 'Enter a title for this field', 'wp-user-manager' ),
-					'validator'   => [ 'string' ],
+					'validator'   => array( 'string' ),
 					'min'         => 1,
 				),
 				'field_description' => array(
@@ -172,7 +174,7 @@ abstract class WPUM_Field_Type {
 					'model'     => 'user_meta_key',
 					'required'  => true,
 					'hint'      => esc_html__( 'The key must be unique for each field and written in lowercase with an underscore ( _ ) separating words e.g country_list or job_title. This will be used to store information about your users into the database of your website.', 'wp-user-manager' ),
-					'validator' => [ 'string' ],
+					'validator' => array( 'string' ),
 					'min'       => 1,
 				),
 				'placeholder'       => array(
@@ -182,8 +184,8 @@ abstract class WPUM_Field_Type {
 					'model'     => 'placeholder',
 					'hint'      => esc_html__( 'This text will appear within the field when empty. Leave blank if not needed.', 'wp-user-manager' ),
 				),
-			],
-			'validation'  => [
+			),
+			'validation'  => array(
 				'required' => array(
 					'type'    => 'checkbox',
 					'label'   => esc_html__( 'Set as required', 'wp-user-manager' ),
@@ -191,31 +193,43 @@ abstract class WPUM_Field_Type {
 					'default' => false,
 					'hint'    => esc_html__( 'Enable this option so the field must be filled before the form can be processed.', 'wp-user-manager' ),
 				),
-			],
-			'privacy'     => [
+			),
+			'privacy'     => array(
 				'visibility' => array(
 					'type'                 => 'radios',
 					'label'                => esc_html__( 'Profile visibility', 'wp-user-manager' ),
 					'model'                => 'visibility',
 					'hint'                 => esc_html__( 'Set the visibility of this field on users profiles.', 'wp-user-manager' ),
-					'values'               => [
-						[ 'value' => 'public', 'name' => esc_html__( 'Publicly visible', 'wp-user-manager' ) ],
-						[ 'value' => 'hidden', 'name' => esc_html__( 'Hidden', 'wp-user-manager' ) ],
-					],
+					'values'               => array(
+						array(
+							'value' => 'public',
+							'name'  => esc_html__( 'Publicly visible', 'wp-user-manager' ),
+						),
+						array(
+							'value' => 'hidden',
+							'name'  => esc_html__( 'Hidden', 'wp-user-manager' ),
+						),
+					),
 					'noneSelectedText'     => '',
 					'hideNoneSelectedText' => true,
 				),
-			],
-			'permissions' => [
+			),
+			'permissions' => array(
 				'editing'   => array(
 					'type'   => 'radios',
 					'label'  => esc_html__( 'Profile editing', 'wp-user-manager' ),
 					'model'  => 'editing',
 					'hint'   => esc_html__( 'Set who can edit this field. Hidden fields will not be editable within the front-end account page.', 'wp-user-manager' ),
-					'values' => [
-						[ 'value' => 'public', 'name' => esc_html__( 'Publicly editable', 'wp-user-manager' ) ],
-						[ 'value' => 'hidden', 'name' => esc_html__( 'Hidden (admins only)', 'wp-user-manager' ) ],
-					],
+					'values' => array(
+						array(
+							'value' => 'public',
+							'name'  => esc_html__( 'Publicly editable', 'wp-user-manager' ),
+						),
+						array(
+							'value' => 'hidden',
+							'name'  => esc_html__( 'Hidden (admins only)', 'wp-user-manager' ),
+						),
+					),
 				),
 				'read_only' => array(
 					'type'    => 'checkbox',
@@ -233,8 +247,8 @@ abstract class WPUM_Field_Type {
 					'multiple' => true,
 					'hint'     => esc_html__( 'Show the field on the profile and account pages to users with the selected roles.', 'wp-user-manager' ),
 				),
-			],
-			'appearance' => [
+			),
+			'appearance'  => array(
 				'wrapper_class' => array(
 					'type'      => 'input',
 					'inputType' => 'text',
@@ -256,8 +270,8 @@ abstract class WPUM_Field_Type {
 					'model'     => 'wrapper_width',
 					'hint'      => esc_html__( 'Width % property added to the field fieldset wrapper element.', 'wp-user-manager' ),
 				),
-			],
-		];
+			),
+		);
 
 		if ( $this->allow_default ) {
 			$settings['general']['default_value'] = array(
@@ -280,10 +294,10 @@ abstract class WPUM_Field_Type {
 	 * @return array
 	 */
 	public function register_field_type( $fields ) {
-		$settings =  array_merge_recursive( $this->get_default_editor_settings(), $this->get_editor_settings() );
+		$settings = array_merge_recursive( $this->get_default_editor_settings(), $this->get_editor_settings() );
 
-		$addon_version = defined( 'WPUMCF_VERSION' ) ? WPUMCF_VERSION : false;
-		$min_addon_version =  $this->min_addon_version ? $this->min_addon_version : $addon_version;
+		$addon_version     = defined( 'WPUMCF_VERSION' ) ? WPUMCF_VERSION : false;
+		$min_addon_version = $this->min_addon_version ? $this->min_addon_version : $addon_version;
 
 		$fields[ $this->group ]['fields'][] = array(
 			'order'             => $this->order,
@@ -363,7 +377,7 @@ abstract class WPUM_Field_Type {
 	 * Format the output onto the profiles for the text field.
 	 *
 	 * @param object $field
-	 * @param mixed $value
+	 * @param mixed  $value
 	 * @return string
 	 */
 	function get_formatted_output( $field, $value ) {
