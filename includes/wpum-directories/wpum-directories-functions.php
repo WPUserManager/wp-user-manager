@@ -8,7 +8,9 @@
  * @since       1.0.0
  */
 
-if ( ! defined( 'ABSPATH' ) ) exit;
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 
 /**
  * Retrieve the list of options for the sort by dropdown on the user directory.
@@ -17,12 +19,12 @@ if ( ! defined( 'ABSPATH' ) ) exit;
  */
 function wpum_get_directory_sort_by_methods() {
 
-	$options = [
+	$options = array(
 		'newest'    => esc_html__( 'Newest users first', 'wp-user-manager' ),
 		'oldest'    => esc_html__( 'Oldest users first', 'wp-user-manager' ),
 		'name'      => esc_html__( 'First name', 'wp-user-manager' ),
-		'last_name' => esc_html__( 'Last Name', 'wp-user-manager' )
-	];
+		'last_name' => esc_html__( 'Last Name', 'wp-user-manager' ),
+	);
 
 	return apply_filters( 'wpum_get_directory_sort_by_methods', $options );
 
@@ -35,13 +37,13 @@ function wpum_get_directory_sort_by_methods() {
  */
 function wpum_get_directory_amount_modifier() {
 
-	$amounts = [
+	$amounts = array(
 		''   => '',
 		'1'  => '1',
 		'10' => '10',
 		'15' => '15',
 		'20' => '20',
-	];
+	);
 
 	return apply_filters( 'wpum_get_directory_amount_modifier', $amounts );
 
@@ -54,9 +56,9 @@ function wpum_get_directory_amount_modifier() {
  */
 function wpum_get_directory_templates() {
 
-	$templates = [
-		'default' => esc_html__( 'Default template', 'wp-user-manager' )
-	];
+	$templates = array(
+		'default' => esc_html__( 'Default template', 'wp-user-manager' ),
+	);
 
 	return apply_filters( 'wpum_get_directory_templates', $templates );
 
@@ -69,9 +71,9 @@ function wpum_get_directory_templates() {
  */
 function wpum_get_directory_user_templates() {
 
-	$templates = [
-		'default' => esc_html__( 'Default template', 'wp-user-manager' )
-	];
+	$templates = array(
+		'default' => esc_html__( 'Default template', 'wp-user-manager' ),
+	);
 
 	return apply_filters( 'wpum_get_directory_user_templates', $templates );
 
@@ -91,13 +93,13 @@ function wpum_user_directory_pagination( $data ) {
 	$search_for   = array( $big, '#038;' );
 	$replace_with = array( '%#%', '&' );
 
-	echo paginate_links( array(
-			'base'      => str_replace( $search_for, $replace_with, esc_url( get_pagenum_link( $big ) ) ),
-			'current'   => $data->paged,
-			'total'     => $data->total_pages,
-			'prev_text' => __( 'Previous page', 'wp-user-manager' ),
-			'next_text' => __( 'Next page', 'wp-user-manager' )
-		) );
+	echo wp_kses_post( paginate_links( array(
+		'base'      => str_replace( $search_for, $replace_with, esc_url( get_pagenum_link( $big ) ) ),
+		'current'   => $data->paged,
+		'total'     => $data->total_pages,
+		'prev_text' => __( 'Previous page', 'wp-user-manager' ),
+		'next_text' => __( 'Next page', 'wp-user-manager' ),
+	) ) );
 
 	echo '</div>';
 
