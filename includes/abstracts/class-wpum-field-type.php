@@ -117,7 +117,7 @@ abstract class WPUM_Field_Type {
 	 */
 	public function register() {
 		// The form ID is to be accessed in the builder.
-		$this->form_id = isset( $_GET['form_id'] ) ? absint( $_GET['form_id'] ) : false;
+		$this->form_id = isset( $_GET['form_id'] ) ? absint( filter_input( INPUT_GET, 'form_id', FILTER_VALIDATE_INT ) ) : false; // phpcs:ignore
 
 		// Add fields tab.
 		add_filter( 'wpum_registered_field_types', array( $this, 'register_field_type' ), 15 );
@@ -132,6 +132,9 @@ abstract class WPUM_Field_Type {
 		return array();
 	}
 
+	/**
+	 * @return array
+	 */
 	public function get_data_keys() {
 		if ( $this->allow_default ) {
 			return array( 'default_value', 'wrapper_class', 'wrapper_id', 'wrapper_width' );
@@ -345,7 +348,7 @@ abstract class WPUM_Field_Type {
 		} elseif ( 'email' === $sanitizer ) {
 			return sanitize_email( $value );
 		} elseif ( 'url_or_email' === $sanitizer ) {
-			if ( null !== parse_url( $value, PHP_URL_HOST ) ) {
+			if ( null !== wp_parse_url( $value, PHP_URL_HOST ) ) {
 				// Sanitize as URL
 				return esc_url_raw( $value );
 			}
@@ -370,7 +373,8 @@ abstract class WPUM_Field_Type {
 		if ( ! isset( $field['sanitizer'] ) ) {
 			$field['sanitizer'] = null;
 		}
-		return isset( $_POST[ $key ] ) ? $this->sanitize_posted_field( $_POST[ $key ], $field['sanitizer'] ) : '';
+
+		return isset( $_POST[ $key ] ) ? $this->sanitize_posted_field( filter_input( INPUT_POST, $key ), $field['sanitizer'] ) : ''; // phpcs:ignore
 	}
 
 	/**
@@ -378,9 +382,10 @@ abstract class WPUM_Field_Type {
 	 *
 	 * @param object $field
 	 * @param mixed  $value
+	 *
 	 * @return string
 	 */
-	function get_formatted_output( $field, $value ) {
+	public function get_formatted_output( $field, $value ) {
 		return esc_html( $value );
 	}
 
