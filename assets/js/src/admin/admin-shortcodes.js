@@ -3,7 +3,6 @@
  */
 
 /* global ajaxurl, jQuery, wpumShortcodes, tinymce */
-var jq = jQuery.noConflict();
 
 var wpumShortcode, wpumButton;
 
@@ -11,13 +10,13 @@ var wpumShortcode, wpumButton;
  * Show continue button title setting field only if display style is not All Fields.
  */
 var render_continue_button_title_field = function () {
-	var selected_display_style = jq('.mce-txt', '.mce-wpum-display-style').text(),
+	var selected_display_style = jQuery('.mce-txt', '.mce-wpum-display-style').text(),
 		expected_display_styles = ['- Select -', 'All Fields'];
 
-	if (-1 !== jq.inArray(selected_display_style, expected_display_styles)) {
-		jq('.mce-wpum-continue-button-title').closest('.mce-container').hide()
+	if (-1 !== jQuery.inArray(selected_display_style, expected_display_styles)) {
+		jQuery('.mce-wpum-continue-button-title').closest('.mce-container').hide()
 	} else {
-		jq('.mce-wpum-continue-button-title').closest('.mce-container').show()
+		jQuery('.mce-wpum-continue-button-title').closest('.mce-container').show()
 	}
 };
 
@@ -37,7 +36,7 @@ var wpumForm = {
 			shortcode: wpumShortcode
 		};
 
-		jq.post(ajaxurl, data, function (response) {
+		jQuery.post(ajaxurl, data, function (response) {
 
 			// what happens if response === false?
 			if (!response.body) {
@@ -56,7 +55,7 @@ var wpumForm = {
 			/**
 			 * Render continue button title setting field on basis of display style value.
 			 */
-			jq.each(response.body, function (index, item) {
+			jQuery.each(response.body, function (index, item) {
 
 				if ('display_style' === item.name) {
 					response.body[index].onselect = function () {
@@ -143,7 +142,7 @@ var wpumForm = {
 	},
 
 	destroy: function () {
-		var tmp = jq('#wpumTemp');
+		var tmp = jQuery('#wpumTemp');
 
 		if (tmp.length) {
 			tinymce.get('wpumTemp').remove();
@@ -152,7 +151,7 @@ var wpumForm = {
 	}
 };
 
-jq(function ($) {
+jQuery(function ($) {
 	var wpumOpen = function () {
 		wpumButton.addClass('active').parent().find('.wpum-menu').show();
 	};
