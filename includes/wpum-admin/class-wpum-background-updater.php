@@ -5,10 +5,12 @@
  * @package     wp-user-manager
  * @copyright   Copyright (c) 2018, Alessandro Tesoro
  * @license     https://opensource.org/licenses/GPL-3.0 GNU Public License
-*/
+ */
 
 // Exit if accessed directly
-if ( ! defined( 'ABSPATH' ) ) exit;
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 
 /**
  * WPUM_Background_Updater Class.
@@ -19,16 +21,6 @@ class WPUM_Background_Updater extends WP_Background_Process {
 	 * @var string
 	 */
 	protected $action = 'wpum_db_updater';
-
-	/**
-	 * Dispatch updater.
-	 * Updater will still run via cron job if this fails for any reason.
-	 */
-	public function dispatch() {
-		/* @var WP_Background_Process $dispatched */
-		parent::dispatch();
-	}
-
 
 	/**
 	 * Get all batches.
@@ -49,7 +41,6 @@ class WPUM_Background_Updater extends WP_Background_Process {
 		return ( ! parent::is_queue_empty() );
 	}
 
-
 	/**
 	 * Lock process
 	 *
@@ -59,14 +50,14 @@ class WPUM_Background_Updater extends WP_Background_Process {
 	 */
 	protected function lock_process() {
 		// Check if admin want to pause upgrade.
-		if( get_option('wpum_pause_upgrade') ) {
+		if ( get_option( 'wpum_pause_upgrade' ) ) {
 			self::flush_cache();
 
 			delete_option( 'wpum_paused_batches' );
 
 			WPUM_Updates::get_instance()->__pause_db_update( true );
 
-			delete_option('wpum_pause_upgrade');
+			delete_option( 'wpum_pause_upgrade' );
 
 			/**
 			 * Fire action when pause db updates
@@ -75,7 +66,6 @@ class WPUM_Background_Updater extends WP_Background_Process {
 
 			wp_die();
 		}
-
 
 		$this->start_time = time(); // Set start time of current process.
 
@@ -92,7 +82,7 @@ class WPUM_Background_Updater extends WP_Background_Process {
 	 * and data exists in the queue.
 	 */
 	public function handle_cron_healthcheck() {
-		if ( $this->is_process_running() || $this->is_paused_process()  ) {
+		if ( $this->is_process_running() || $this->is_paused_process() ) {
 			// Background process already running.
 			return;
 		}
@@ -125,11 +115,12 @@ class WPUM_Background_Updater extends WP_Background_Process {
 	 * item from the queue.
 	 *
 	 * @param array $update Update info
+	 *
 	 * @return mixed
 	 */
 	protected function task( $update ) {
 		// Pause upgrade immediately if admin pausing upgrades.
-		if( $this->is_paused_process() ) {
+		if ( $this->is_paused_process() ) {
 			wp_die();
 		}
 
@@ -140,11 +131,9 @@ class WPUM_Background_Updater extends WP_Background_Process {
 		// Delete cache.
 		self::flush_cache();
 
-		/* @var  WPUM_Updates $wpum_updates */
 		$wpum_updates  = WPUM_Updates::get_instance();
 		$resume_update = get_option(
 			'wpum_doing_upgrade',
-
 			// Default update.
 			array(
 				'update_info'      => $update,
@@ -170,7 +159,6 @@ class WPUM_Background_Updater extends WP_Background_Process {
 		$wpum_updates->update         = absint( $resume_update['update'] );
 		$is_parent_update_completed   = $wpum_updates->is_parent_updates_completed( $update );
 
-
 		// Skip update if dependency update does not complete yet.
 		if ( empty( $is_parent_update_completed ) ) {
 			// @todo: set error when you have only one update with invalid dependency
@@ -181,45 +169,32 @@ class WPUM_Background_Updater extends WP_Background_Process {
 			return false;
 		}
 
-
 		// Pause upgrade immediately if found following:
 		// 1. Running update number greater then total update count
 		// 2. Processing percentage greater then 100%
-		if( (
-			101 < $resume_update['total_percentage'] ) ||
-		    ( $wpum_updates->get_total_db_update_count() < $resume_update['update'] ) ||
-		    ! in_array( $resume_update['update_info']['id'], $wpum_updates->get_update_ids() )
+		if ( ( 101 < $resume_update['total_percentage'] ) || ( $wpum_updates->get_total_db_update_count() < $resume_update['update'] ) || ! in_array( (int) $resume_update['update_info']['id'], $wpum_updates->get_update_ids(), true )
 		) {
-			if( ! $this->is_paused_process() ){
-				$wpum_updates->__pause_db_update(true);
+			if ( ! $this->is_paused_process() ) {
+				$wpum_updates->__pause_db_update( true );
 			}
 
 			update_option( 'wpum_upgrade_error', 1 );
 
-			$log_data = 'Update Task' . "\n";
-			$log_data .= "Total update count: {$wpum_updates->get_total_db_update_count()}\n";
-			$log_data .= 'Update IDs: ' . print_r( $wpum_updates->get_update_ids() , true );
-			$log_data .= 'Update: ' . print_r( $resume_update , true );
-
 			wp_die();
 		}
 
-		try{
+		try {
 			// Run update.
 			if ( is_array( $update['callback'] ) ) {
 				$update['callback'][0]->{$update['callback'][1]}();
 			} else {
 				$update['callback']();
 			}
-		} catch ( Exception $e ){
+		} catch ( Exception $e ) {
 
-			if( ! $this->is_paused_process() ){
-				$wpum_updates->__pause_db_update(true);
+			if ( ! $this->is_paused_process() ) {
+				$wpum_updates->__pause_db_update( true );
 			}
-
-			$log_data = 'Update Task' . "\n";
-			$log_data .= print_r( $resume_update, true ) . "\n\n";
-			$log_data .= "Error\n {$e->getMessage()}";
 
 			update_option( 'wpum_upgrade_error', 1 );
 
@@ -323,11 +298,11 @@ class WPUM_Background_Updater extends WP_Background_Process {
 	 * @access public
 	 * @return bool
 	 */
-	public function is_paused_process(){
+	public function is_paused_process() {
 		// Delete cache.
 		wp_cache_delete( 'wpum_paused_batches', 'options' );
 
-		$paused_batches = get_option('wpum_paused_batches');
+		$paused_batches = get_option( 'wpum_paused_batches' );
 
 		return ! empty( $paused_batches );
 	}
@@ -356,7 +331,6 @@ class WPUM_Background_Updater extends WP_Background_Process {
 
 	/**
 	 * Flush background update related cache to prevent task to go to stalled state.
-	 *
 	 */
 	public static function flush_cache() {
 
@@ -370,7 +344,6 @@ class WPUM_Background_Updater extends WP_Background_Process {
 			'wpum_pause_upgrade',
 			'wpum_show_db_upgrade_complete_notice',
 		);
-
 
 		foreach ( $options as $option ) {
 			wp_cache_delete( $option, 'options' );

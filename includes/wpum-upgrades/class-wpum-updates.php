@@ -1025,7 +1025,7 @@ class WPUM_Updates {
 		$all_updates    = $this->get_updates( 'database', 'all' );
 		$all_update_ids = wp_list_pluck( $all_updates, 'id' );
 
-		return $all_update_ids;
+		return array_map( 'intval', $all_update_ids );
 	}
 
 	/**

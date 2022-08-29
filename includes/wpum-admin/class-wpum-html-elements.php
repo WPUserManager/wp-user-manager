@@ -5,10 +5,12 @@
  * @package     wp-user-manager
  * @copyright   Copyright (c) 2018, Alessandro Tesoro
  * @license     https://opensource.org/licenses/GPL-3.0 GNU Public License
-*/
+ */
 
 // Exit if accessed directly
-if ( ! defined( 'ABSPATH' ) ) exit;
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 
 /**
  * The class that handles the various html input elements.
@@ -23,7 +25,7 @@ class WPUM_HTML_Elements {
 	 */
 	public function select( $args = array() ) {
 
-		$defaults = array(
+		$defaults      = array(
 			'options'          => array(),
 			'name'             => null,
 			'class'            => '',
@@ -38,23 +40,23 @@ class WPUM_HTML_Elements {
 			'readonly'         => false,
 			'disabled'         => false,
 		);
-		$args = wp_parse_args( $args, $defaults );
+		$args          = wp_parse_args( $args, $defaults );
 		$data_elements = '';
 		foreach ( $args['data'] as $key => $value ) {
 			$data_elements .= ' data-' . esc_attr( $key ) . '="' . esc_attr( $value ) . '"';
 		}
-		if( $args['multiple'] ) {
+		if ( $args['multiple'] ) {
 			$multiple = ' MULTIPLE';
 		} else {
 			$multiple = '';
 		}
-		if( $args['chosen'] ) {
+		if ( $args['chosen'] ) {
 			$args['class'] .= ' wpum-select-chosen';
 			if ( is_rtl() ) {
 				$args['class'] .= ' chosen-rtl';
 			}
 		}
-		if( $args['placeholder'] ) {
+		if ( $args['placeholder'] ) {
 			$placeholder = $args['placeholder'];
 		} else {
 			$placeholder = '';
@@ -70,13 +72,13 @@ class WPUM_HTML_Elements {
 			$disabled = '';
 		}
 		$class  = implode( ' ', array_map( 'sanitize_html_class', explode( ' ', $args['class'] ) ) );
-		$output = '<select' . $disabled . $readonly . ' name="' . esc_attr( $args['name'] ) . '" id="' . esc_attr( sanitize_key( str_replace( '-', '_', $args['id'] ) ) ) . '" class="wpum-select ' . $class . '"' . $multiple . ' data-placeholder="' . $placeholder . '"'. $data_elements . '>';
+		$output = '<select' . $disabled . $readonly . ' name="' . esc_attr( $args['name'] ) . '" id="' . esc_attr( sanitize_key( str_replace( '-', '_', $args['id'] ) ) ) . '" class="wpum-select ' . $class . '"' . $multiple . ' data-placeholder="' . $placeholder . '"' . $data_elements . '>';
 		if ( ! isset( $args['selected'] ) || ( is_array( $args['selected'] ) && empty( $args['selected'] ) ) || ! $args['selected'] ) {
-			$selected = "";
+			$selected = '';
 		}
 		if ( $args['show_option_all'] ) {
 			if ( $args['multiple'] && ! empty( $args['selected'] ) ) {
-				$selected = selected( true, in_array( 0, $args['selected'] ), false );
+				$selected = selected( true, in_array( 0, $args['selected'], true ), false );
 			} else {
 				$selected = selected( $args['selected'], 0, false );
 			}
@@ -85,7 +87,7 @@ class WPUM_HTML_Elements {
 		if ( ! empty( $args['options'] ) ) {
 			if ( $args['show_option_none'] ) {
 				if ( $args['multiple'] ) {
-					$selected = selected( true, in_array( -1, $args['selected'] ), false );
+					$selected = selected( true, in_array( -1, $args['selected'], true ), false );
 				} elseif ( isset( $args['selected'] ) && ! is_array( $args['selected'] ) && ! empty( $args['selected'] ) ) {
 					$selected = selected( $args['selected'], -1, false );
 				}
@@ -93,7 +95,7 @@ class WPUM_HTML_Elements {
 			}
 			foreach ( $args['options'] as $key => $option ) {
 				if ( $args['multiple'] && is_array( $args['selected'] ) ) {
-					$selected = selected( true, in_array( (string) $key, $args['selected'] ), false );
+					$selected = selected( true, in_array( (string) $key, $args['selected'], true ), false );
 				} elseif ( isset( $args['selected'] ) && ! is_array( $args['selected'] ) ) {
 					$selected = selected( $args['selected'], $key, false );
 				}

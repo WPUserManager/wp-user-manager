@@ -5,7 +5,7 @@
  * @package     wp-user-manager
  * @copyright   Copyright (c) 2018, Alessandro Tesoro
  * @license     https://opensource.org/licenses/GPL-3.0 GNU Public License
-*/
+ */
 
 // Exit if accessed directly
 if ( ! defined( 'ABSPATH' ) ) {
@@ -29,7 +29,7 @@ class WPUM_Options_Panel {
 	 */
 	public function init() {
 		// Setup labels for the options panel.
-		add_filter( 'wpum_labels', [ $this, 'register_labels' ] );
+		add_filter( 'wpum_labels', array( $this, 'register_labels' ) );
 
 		$this->panel = new TDP\OptionsKit( 'wpum' );
 		$this->panel->set_page_title( 'WP User Manager Settings' );
@@ -41,14 +41,14 @@ class WPUM_Options_Panel {
 		$this->register_action_buttons();
 
 		// Setup the options panel menu.
-		add_filter( 'wpum_menu', [ $this, 'setup_menu' ] );
+		add_filter( 'wpum_menu', array( $this, 'setup_menu' ) );
 
 		// Register settings tabs.
-		add_filter( 'wpum_settings_tabs', [ $this, 'register_settings_tabs' ] );
-		add_filter( 'wpum_registered_settings_sections', [ $this, 'register_settings_subsections' ] );
+		add_filter( 'wpum_settings_tabs', array( $this, 'register_settings_tabs' ) );
+		add_filter( 'wpum_registered_settings_sections', array( $this, 'register_settings_subsections' ) );
 
 		// Register settings fields for the options panel.
-		add_filter( 'wpum_registered_settings', [ $this, 'register_settings' ] );
+		add_filter( 'wpum_registered_settings', array( $this, 'register_settings' ) );
 	}
 
 	/**
@@ -95,10 +95,10 @@ class WPUM_Options_Panel {
 	 */
 	public function register_settings_tabs( $tabs ) {
 		$tabs = array(
-			'general'      => __( 'General', 'wp-user-manager' ),
-			'emails'       => __( 'Emails', 'wp-user-manager' ),
-			'profiles'     => __( 'Profiles', 'wp-user-manager' ),
-			'redirects'    => __( 'Redirects', 'wp-user-manager' ),
+			'general'   => __( 'General', 'wp-user-manager' ),
+			'emails'    => __( 'Emails', 'wp-user-manager' ),
+			'profiles'  => __( 'Profiles', 'wp-user-manager' ),
+			'redirects' => __( 'Redirects', 'wp-user-manager' ),
 		);
 
 		return $tabs;
@@ -113,23 +113,23 @@ class WPUM_Options_Panel {
 	 */
 	public function register_settings_subsections( $sections ) {
 		$sections = array(
-			'general'      => [
+			'general'      => array(
 				'login' => __( 'Login Settings', 'wp-user-manager' ),
 				'misc'  => __( 'Misc Settings', 'wp-user-manager' ),
-			],
-			'registration' => [
+			),
+			'registration' => array(
 				'terms' => __( 'Terms & Conditions', 'wp-user-manager' ),
-			],
-			'emails'       => [
+			),
+			'emails'       => array(
 				'admin_notifications' => __( 'Administration Notifications', 'wp-user-manager' ),
-			],
-			'profiles' => [
+			),
+			'profiles'     => array(
 				'profiles_content' => __( 'Profiles Content', 'wp-user-manager' ),
 				'account'          => __( 'Account', 'wp-user-manager' ),
-			],
-			'redirects'    => [
+			),
+			'redirects'    => array(
 				'backend_redirects' => __( 'Backend Redirects', 'wp-user-manager' ),
-			],
+			),
 		);
 
 		return $sections;
@@ -168,9 +168,9 @@ class WPUM_Options_Panel {
 	 * @return array
 	 */
 	public function register_settings( $settings ) {
-		$plugin_settings = [
+		$plugin_settings = array(
 			// General tab settings.
-			'general'             => [
+			'general'             => array(
 				array(
 					'id'      => 'login_page',
 					'name'    => __( 'Login Page', 'wp-user-manager' ),
@@ -206,8 +206,8 @@ class WPUM_Options_Panel {
 					'type'    => 'multiselect',
 					'options' => wpum_get_pages(),
 				),
-			],
-			'login'               => [
+			),
+			'login'               => array(
 				array(
 					'id'   => 'lock_wplogin',
 					'name' => __( 'Lock Access to wp-login.php', 'wp-user-manager' ),
@@ -222,20 +222,23 @@ class WPUM_Options_Panel {
 					'options' => wpum_get_login_methods(),
 				),
 				array(
-					'id'      => 'lock_complete_site',
-					'name'    => __( 'Prevent site access to visitors', 'wp-user-manager'),
-					'desc'    => __( 'Prevent access to the site for visitors who are not logged in. Users will be redirected to the login page.', 'wp-user-manager' ),
-					'type'    => 'checkbox',
+					'id'   => 'lock_complete_site',
+					'name' => __( 'Prevent site access to visitors', 'wp-user-manager' ),
+					'desc' => __( 'Prevent access to the site for visitors who are not logged in. Users will be redirected to the login page.', 'wp-user-manager' ),
+					'type' => 'checkbox',
 				),
 				array(
-					'id'      => 'lock_complete_site_allow_register',
-					'name'    => __( 'Allow site registration', 'wp-user-manager'),
-					'desc'    => __( 'Allow access to the \'Register page\' for site registration despite the site being locked.', 'wp-user-manager' ),
-					'type'    => 'checkbox',
-					'toggle'   => array( 'key' => 'lock_complete_site', 'value' => true ),
-				)
-			],
-			'misc'                => [
+					'id'     => 'lock_complete_site_allow_register',
+					'name'   => __( 'Allow site registration', 'wp-user-manager' ),
+					'desc'   => __( 'Allow access to the \'Register page\' for site registration despite the site being locked.', 'wp-user-manager' ),
+					'type'   => 'checkbox',
+					'toggle' => array(
+						'key'   => 'lock_complete_site',
+						'value' => true,
+					),
+				),
+			),
+			'misc'                => array(
 				array(
 					'id'       => 'adminbar_roles',
 					'name'     => __( 'Admin Bar', 'wp-user-manager' ),
@@ -264,16 +267,16 @@ class WPUM_Options_Panel {
 					'id'   => 'roles_editor',
 					'name' => __( 'Roles Editor', 'wp-user-manager' ),
 					'desc' => __( 'Enable the roles editor in the Users menu.', 'wp-user-manager' ),
-					'type' => 'checkbox'
+					'type' => 'checkbox',
 				),
 				array(
 					'id'   => 'allow_multiple_user_roles',
 					'name' => __( 'Allow Multiple Roles', 'wp-user-manager' ),
 					'desc' => __( 'Users can be assigned multiple roles.', 'wp-user-manager' ),
-					'type' => 'checkbox'
+					'type' => 'checkbox',
 				),
-			],
-			'registration' => [
+			),
+			'registration'        => array(
 				array(
 					'id'   => 'allow_role_select',
 					'name' => __( 'Allow Role Section', 'wp-user-manager' ),
@@ -288,7 +291,10 @@ class WPUM_Options_Panel {
 					'multiple' => true,
 					'labels'   => array( 'placeholder' => __( 'Select one or more user roles', 'wp-user-manager' ) ),
 					'options'  => wpum_get_roles(),
-					'toggle'   => array( 'key' => 'allow_role_select', 'value' => true ),
+					'toggle'   => array(
+						'key'   => 'allow_role_select',
+						'value' => true,
+					),
 				),
 				array(
 					'id'   => 'login_after_registration',
@@ -296,8 +302,8 @@ class WPUM_Options_Panel {
 					'desc' => __( 'Enable this option to automatically authenticate users after registration.', 'wp-user-manager' ),
 					'type' => 'checkbox',
 				),
-			],
-			'terms'        => [
+			),
+			'terms'               => array(
 				array(
 					'id'   => 'enable_terms',
 					'name' => __( 'Enable Terms & Conditions', 'wp-user-manager' ),
@@ -310,10 +316,13 @@ class WPUM_Options_Panel {
 					'desc'    => __( 'Select the page that contains your terms.', 'wp-user-manager' ),
 					'type'    => 'multiselect',
 					'options' => wpum_get_pages(),
-					'toggle'  => array( 'key' => 'enable_terms', 'value' => true ),
+					'toggle'  => array(
+						'key'   => 'enable_terms',
+						'value' => true,
+					),
 				),
-			],
-			'emails'              => [
+			),
+			'emails'              => array(
 				array(
 					'id'   => 'from_name',
 					'name' => __( 'From Name', 'wp-user-manager' ),
@@ -342,8 +351,8 @@ class WPUM_Options_Panel {
 					'desc' => __( 'Upload or choose a logo to be displayed at the top of emails. Displayed on HTML emails only.', 'wp-user-manager' ),
 					'type' => 'file',
 				),
-			],
-			'admin_notifications' => [
+			),
+			'admin_notifications' => array(
 				array(
 					'id'   => 'disable_admin_register_email',
 					'name' => __( 'Disable Admin Registration Email', 'wp-user-manager' ),
@@ -356,8 +365,8 @@ class WPUM_Options_Panel {
 					'desc' => __( 'Enable this option to stop receiving notifications when user resets their password.', 'wp-user-manager' ),
 					'type' => 'checkbox',
 				),
-			],
-			'profiles'            => [
+			),
+			'profiles'            => array(
 				array(
 					'id'   => 'disable_profiles',
 					'name' => __( 'Disable User Profiles', 'wp-user-manager' ),
@@ -408,8 +417,8 @@ class WPUM_Options_Panel {
 					'options' => wpum_get_display_name_options(),
 					'std'     => 'display_username',
 				),
-			],
-			'profiles_content' => [
+			),
+			'profiles_content'    => array(
 				array(
 					'id'   => 'profile_posts',
 					'name' => __( 'Display Posts', 'wp-user-manager' ),
@@ -422,16 +431,16 @@ class WPUM_Options_Panel {
 					'desc' => __( 'Enable this option to display users submitted comments on their profile page.', 'wp-user-manager' ),
 					'type' => 'checkbox',
 				),
-			],
-			'account'          => [
+			),
+			'account'             => array(
 				array(
 					'id'   => 'current_password',
 					'name' => __( 'Require Current Password', 'wp-user-manager' ),
 					'desc' => __( 'Ask user for current password when resetting password on the account page', 'wp-user-manager' ),
 					'type' => 'checkbox',
 				),
-			],
-			'redirects'           => [
+			),
+			'redirects'           => array(
 				array(
 					'id'      => 'login_redirect',
 					'name'    => __( 'After Login', 'wp-user-manager' ),
@@ -453,8 +462,8 @@ class WPUM_Options_Panel {
 					'type'    => 'multiselect',
 					'options' => wpum_get_redirect_pages(),
 				),
-			],
-			'backend_redirects'   => [
+			),
+			'backend_redirects'   => array(
 				array(
 					'id'      => 'wp_login_signup_redirect',
 					'name'    => __( 'Backend Register', 'wp-user-manager' ),
@@ -476,8 +485,8 @@ class WPUM_Options_Panel {
 					'type'    => 'multiselect',
 					'options' => wpum_get_pages(),
 				),
-			],
-		];
+			),
+		);
 
 		return array_merge( $settings, $plugin_settings );
 	}

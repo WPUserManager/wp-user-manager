@@ -5,11 +5,16 @@
  * @package     wp-user-manager
  * @copyright   Copyright (c) 2018, Alessandro Tesoro
  * @license     https://opensource.org/licenses/GPL-3.0 GNU Public License
-*/
+ */
 
 // Exit if accessed directly
-if ( ! defined( 'ABSPATH' ) ) exit;
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 
+/**
+ * Permalink settings
+ */
 class WPUM_Permalinks_Settings {
 
 	/**
@@ -47,16 +52,20 @@ class WPUM_Permalinks_Settings {
 	public function display_settings() {
 		$structures      = wpum_get_permalink_structures();
 		$saved_structure = get_option( 'wpum_permalink', 'user_id' );
-		ob_start();
 		?>
 
-		<?php if ( get_option( 'permalink_structure' ) == '' ) { ?>
+		<?php if ( '' === get_option( 'permalink_structure', '' ) ) { ?>
 
-		<p><?php printf( __( 'You must <a href="%s">change your permalinks</a> to anything else other than "default" for profiles to work.', 'wp-user-manager' ), admin_url( 'options-permalink.php' ) ) ?></p>
+		<p>
+			<?php
+			// translators: %s permalink settings URL
+			echo wp_kses_post( sprintf( __( 'You must <a href="%s">change your permalinks</a> to anything else other than "default" for profiles to work.', 'wp-user-manager' ), admin_url( 'options-permalink.php' ) ) );
+			?>
+		</p>
 
 		<?php } else { ?>
 
-			<p><?php _e( 'These settings control the permalinks used for users profiles. These settings only apply when <strong>not using "default" permalinks above</strong>.', 'wp-user-manager' ); ?></p>
+			<p><?php echo wp_kses_post( 'These settings control the permalinks used for users profiles. These settings only apply when <strong>not using "default" permalinks above</strong>.', 'wp-user-manager' ); ?></p>
 
 			<table class="form-table">
 				<tbody>
@@ -64,13 +73,13 @@ class WPUM_Permalinks_Settings {
 						<tr>
 							<th>
 								<label>
-									<input name="user_permalink" type="radio" value="<?php echo $settings['name']; ?>" <?php checked( $settings['name'], $saved_structure ); ?> />
-									<?php echo $settings['label']; ?>
+									<input name="user_permalink" type="radio" value="<?php echo esc_html( $settings['name'] ); ?>" <?php checked( $settings['name'], $saved_structure ); ?> />
+									<?php echo esc_html( $settings['label'] ); ?>
 								</label>
 							</th>
 							<td>
 								<code>
-									<?php echo get_permalink( wpum_get_core_page_id( 'profile' ) ); ?><?php echo $settings['sample']; ?>
+									<?php echo esc_url( get_permalink( wpum_get_core_page_id( 'profile' ) ) ); ?><?php echo esc_html( $settings['sample'] ); ?>
 								</code>
 							</td>
 						</tr>
@@ -78,11 +87,8 @@ class WPUM_Permalinks_Settings {
 					<input type="hidden" name="wpum-action" value="save_permalink_structure"/>
 				</tbody>
 			</table>
-
-		<?php } ?>
-
-		<?php
-		echo ob_get_clean();
+			<?php
+		}
 	}
 
 	/**
@@ -98,25 +104,28 @@ class WPUM_Permalinks_Settings {
 			return;
 		}
 
-		if( ! isset( $_POST['user_permalink'] ) ) {
+		if ( ! isset( $_POST['user_permalink'] ) ) {
 			return;
 		}
 
-		if ( ! wp_verify_nonce( $_POST['_wpnonce'], 'update-permalink' ) ) {
+		if ( ! check_admin_referer( 'update-permalink' ) ) {
 			return;
 		}
+
 		// Bail if no cap
 		if ( ! current_user_can( 'manage_options' ) ) {
-			_doing_it_wrong( __FUNCTION__ , _x( 'You have no rights to access this page', '_doing_it_wrong error message', 'wp-user-manager' ), '1.0.0' );
+			_doing_it_wrong( __FUNCTION__, esc_html( _x( 'You have no rights to access this page', '_doing_it_wrong error message', 'wp-user-manager' ) ), '1.0.0' );
 			return;
 		}
+
 		// Check that the saved permalink method is one of the registered structures.
-		if ( isset( $_POST['user_permalink'] ) && array_key_exists( $_POST['user_permalink'] , wpum_get_permalink_structures() ) ) {
-			$user_permalink = sanitize_text_field( $_POST['user_permalink'] );
+		$user_permalink = filter_input( INPUT_POST, 'user_permalink', FILTER_SANITIZE_STRING );
+		if ( array_key_exists( $user_permalink, wpum_get_permalink_structures() ) ) {
+			$user_permalink = sanitize_text_field( $user_permalink );
 			update_option( 'wpum_permalink', $user_permalink );
 		}
 	}
 
 }
 
-new WPUM_Permalinks_Settings;
+new WPUM_Permalinks_Settings();

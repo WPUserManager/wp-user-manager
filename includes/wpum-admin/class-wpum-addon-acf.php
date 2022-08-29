@@ -8,8 +8,13 @@
  */
 
 // Exit if accessed directly
-if ( ! defined( 'ABSPATH' ) ) exit;
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 
+/**
+ * WPUM ACF addon code
+ */
 class WPUM_Addon_ACF {
 
 	/**
@@ -24,6 +29,9 @@ class WPUM_Addon_ACF {
 		add_action( 'add_meta_boxes', array( $this, 'add_group_metabox' ) );
 	}
 
+	/**
+	 * @param string $post_type
+	 */
 	public function add_group_metabox( $post_type ) {
 		if ( 'acf-field-group' !== $post_type ) {
 			return;
@@ -31,9 +39,12 @@ class WPUM_Addon_ACF {
 
 		$mark = '<img style="width:13px; margin-right: 10px;" src="' . WPUM_PLUGIN_URL . '/assets/images/logo.svg" title="WP User Manager">';
 
-		add_meta_box('wpum-acf-group-settings', $mark . __('WP User Manager' ), array( $this, 'setting_metabox' ), 'acf-field-group', 'side');
+		add_meta_box( 'wpum-acf-group-settings', $mark . __( 'WP User Manager' ), array( $this, 'setting_metabox' ), 'acf-field-group', 'side' );
 	}
 
+	/**
+	 * Add metabox
+	 */
 	public function setting_metabox() {
 		$registration_forms = WPUM()->registration_forms->get_forms();
 		?>
@@ -46,7 +57,7 @@ class WPUM_Addon_ACF {
 					<?php foreach ( $registration_forms as $registration_form ) : ?>
 						<p>
 							<label>
-								<input disabled="disabled" type="checkbox" name="" value="">&nbsp;<?php echo $registration_form->get_name(); ?>
+								<input disabled="disabled" type="checkbox" name="" value="">&nbsp;<?php echo esc_html( $registration_form->get_name() ); ?>
 							</label>
 						</p>
 					<?php endforeach; ?>
@@ -78,7 +89,11 @@ class WPUM_Addon_ACF {
 			</tbody>
 		</table>
 		<p><span class="dashicons dashicons-lock"></span>
-			<?php printf( __( 'Integrate your ACF fields with WP&nbsp;User Manager with the <a href="%s" target="_blank">ACF addon</a>.', 'wp-user-manager' ), 'https://wpusermanager.com/addons/acf?utm_source=WP%20User%20Manager&utm_medium=insideplugin&utm_campaign=WP%20User%20Manager&utm_content=edit-field-group' ); ?></p>
+			<?php
+			// translators: %s ACF addon URL
+			echo wp_kses_post( sprintf( __( 'Integrate your ACF fields with WP&nbsp;User Manager with the <a href="%s" target="_blank">ACF addon</a>.', 'wp-user-manager' ), 'https://wpusermanager.com/addons/acf?utm_source=WP%20User%20Manager&utm_medium=insideplugin&utm_campaign=WP%20User%20Manager&utm_content=edit-field-group' ) );
+			?>
+		</p>
 
 		<style type="text/css">
 			#wpum-acf-group-settings table.disabled { color: #888; cursor: default; }

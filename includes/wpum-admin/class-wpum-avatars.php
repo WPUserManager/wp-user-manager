@@ -5,7 +5,7 @@
  * @package     wp-user-manager
  * @copyright   Copyright (c) 2018, Alessandro Tesoro
  * @license     https://opensource.org/licenses/GPL-3.0 GNU Public License
-*/
+ */
 
 use Carbon_Fields\Container;
 use Carbon_Fields\Field;
@@ -35,12 +35,12 @@ class WPUM_Avatars {
 		global $pagenow;
 
 		if ( wpum_get_option( 'custom_avatars' ) ) {
-			add_action( 'carbon_fields_register_fields', [ $this, 'avatar_field' ] );
-			add_filter( 'get_avatar_url', [ $this, 'set_avatar_url' ], 10, 3 );
+			add_action( 'carbon_fields_register_fields', array( $this, 'avatar_field' ) );
+			add_filter( 'get_avatar_url', array( $this, 'set_avatar_url' ), 10, 3 );
 		}
 
 		if ( ! wpum_get_option( 'disable_profile_cover' ) ) {
-			add_action( 'carbon_fields_register_fields', [ $this, 'cover_field' ] );
+			add_action( 'carbon_fields_register_fields', array( $this, 'cover_field' ) );
 		}
 
 	}
@@ -48,10 +48,11 @@ class WPUM_Avatars {
 	/**
 	 * Retrieve the correct user ID based on whichever page we're viewing.
 	 *
+	 * @param string|int $id_or_email
+	 *
 	 * @return int
 	 */
 	private function get_user_id( $id_or_email ) {
-
 		// Default
 		$retval = 0;
 
@@ -79,7 +80,6 @@ class WPUM_Avatars {
 		}
 
 		return (int) apply_filters( 'wpum_avatars_get_user_id', (int) $retval, $id_or_email );
-
 	}
 
 	/**
@@ -118,8 +118,8 @@ class WPUM_Avatars {
 	 * Override WordPress default avatar URL with the custom one.
 	 *
 	 * @param string $url
-	 * @param mixed $id_or_email
-	 * @param array $args
+	 * @param mixed  $id_or_email
+	 * @param array  $args
 	 *
 	 * @return string
 	 */
@@ -140,7 +140,7 @@ class WPUM_Avatars {
 
 		$custom_avatar = carbon_get_user_meta( $this->get_user_id( $id_or_email ), 'current_user_avatar' );
 
-		if ( $custom_avatar && $custom_avatar !== 'false' ) {
+		if ( $custom_avatar && 'false' !== $custom_avatar ) {
 			$url = $custom_avatar;
 		}
 
@@ -153,7 +153,7 @@ class WPUM_Avatars {
 	 * @return bool
 	 */
 	protected function carbon_fields_loaded() {
-		$register_action = 'carbon_fields_register_fields';
+		$register_action   = 'carbon_fields_register_fields';
 		$registered_action = 'carbon_fields_fields_registered';
 		if ( ! doing_action( $register_action ) && ! doing_action( $registered_action ) && did_action( $registered_action ) === 0 ) {
 			return false;
@@ -164,4 +164,4 @@ class WPUM_Avatars {
 
 }
 
-new WPUM_Avatars;
+new WPUM_Avatars();

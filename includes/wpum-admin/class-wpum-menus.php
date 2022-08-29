@@ -5,7 +5,7 @@
  * @package     wp-user-manager
  * @copyright   Copyright (c) 2018, Alessandro Tesoro
  * @license     https://opensource.org/licenses/GPL-3.0 GNU Public License
-*/
+ */
 
 use Carbon_Fields\Container;
 use Carbon_Fields\Field;
@@ -29,12 +29,12 @@ class WPUM_Menus {
 			return;
 		}
 
-		add_action( 'carbon_fields_register_fields', [ $this, 'menu_settings' ] );
-		add_action( 'admin_head', [ $this, 'cssjs' ] );
-		add_action( 'admin_enqueue_scripts', [ $this, 'js' ] );
-		add_filter( 'nav_menu_link_attributes', [ $this, 'set_nav_item_as_logout' ], 10, 3 );
+		add_action( 'carbon_fields_register_fields', array( $this, 'menu_settings' ) );
+		add_action( 'admin_head', array( $this, 'cssjs' ) );
+		add_action( 'admin_enqueue_scripts', array( $this, 'js' ) );
+		add_filter( 'nav_menu_link_attributes', array( $this, 'set_nav_item_as_logout' ), 10, 3 );
 		if ( ! is_admin() ) {
-			add_filter( 'wp_get_nav_menu_items', [ $this, 'exclude_menu_items' ], 10, 3 );
+			add_filter( 'wp_get_nav_menu_items', array( $this, 'exclude_menu_items' ), 10, 3 );
 		}
 
 		add_action( 'wp_nav_menu_item_custom_fields', array( $this, 'nav_walker_overide_fix' ), 10, 4 );
@@ -77,7 +77,7 @@ class WPUM_Menus {
 	 */
 	private function get_roles() {
 
-		$roles = [];
+		$roles = array();
 
 		foreach ( wpum_get_roles( true, true ) as $role ) {
 			$roles[ $role['value'] ] = $role['label'];
@@ -108,11 +108,16 @@ class WPUM_Menus {
 	 */
 	public function js() {
 		$screen = get_current_screen();
-		if ( $screen->base == 'nav-menus' ) {
+		if ( 'nav-menus' === $screen->base ) {
 			wp_enqueue_script( 'wpum-menu-editor', WPUM_PLUGIN_URL . '/assets/js/admin/admin-menus.min.js', false, WPUM_VERSION, true );
 		}
 	}
 
+	/**
+	 * @param object $item
+	 *
+	 * @return false|mixed
+	 */
 	protected function is_nav_item_logout( $item ) {
 		if ( ! apply_filters( 'wpum_pre_is_nav_item_logout', true, $item ) ) {
 			return false;
@@ -124,9 +129,9 @@ class WPUM_Menus {
 	/**
 	 * Modify a nav menu item url to a logout url if the option is enabled.
 	 *
-	 * @param array $atts
+	 * @param array  $atts
 	 * @param object $item
-	 * @param array $args
+	 * @param array  $args
 	 * @return array
 	 */
 	public function set_nav_item_as_logout( $atts, $item, $args ) {
@@ -195,10 +200,10 @@ class WPUM_Menus {
 	 * When other themes or plugins extend the Walker_Nav_Menu_Edit class, ours won't get called
 	 * Use the WP 5.4+ hook to inject what Carbon Fields needs for the menu item settings.
 	 *
-	 * @param $id
-	 * @param $item
-	 * @param $depth
-	 * @param $args
+	 * @param string        $id
+	 * @param WP_Post       $item
+	 * @param int           $depth
+	 * @param stdClass|null $args
 	 */
 	public function nav_walker_overide_fix( $id, $item, $depth, $args ) {
 		if ( is_a( $args->walker, 'Carbon_Fields\\Walker\\Nav_Menu_Item_Edit_Walker' ) ) {
@@ -209,12 +214,12 @@ class WPUM_Menus {
 
 		ob_start();
 		do_action( 'carbon_fields_print_nav_menu_item_container_fields', $item, '', $depth, $args, $id );
-		echo $flag;
+		echo wp_kses_post( $flag );
 		$output = ob_get_clean();
 
-		echo $output;
+		echo wp_kses_post( $output );
 	}
 
 }
 
-new WPUM_Menus;
+new WPUM_Menus();

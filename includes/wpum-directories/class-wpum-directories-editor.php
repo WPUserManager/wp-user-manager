@@ -390,11 +390,11 @@ class WPUM_Directories_Editor {
 	public function bulk_post_updated_messages( $bulk_messages ) {
 		global $post, $post_ID;
 
-		$updated   = filter_input( INPUT_REQUEST, 'updated', FILTER_VALIDATE_INT );
-		$locked    = filter_input( INPUT_REQUEST, 'locked', FILTER_VALIDATE_INT );
-		$deleted   = filter_input( INPUT_REQUEST, 'deleted', FILTER_VALIDATE_INT );
-		$trashed   = filter_input( INPUT_REQUEST, 'trashed', FILTER_VALIDATE_INT );
-		$untrashed = filter_input( INPUT_REQUEST, 'untrashed', FILTER_VALIDATE_INT );
+		$updated   = isset( $_REQUEST['updated'] ) ? filter_var( $_REQUEST['updated'], FILTER_VALIDATE_INT ) : false; // phpcs:ignore
+		$locked    = isset( $_REQUEST['locked'] ) ? filter_var( $_REQUEST['locked'], FILTER_VALIDATE_INT ) : false; // phpcs:ignore
+		$deleted   = isset( $_REQUEST['deleted'] ) ? filter_var( $_REQUEST['deleted'], FILTER_VALIDATE_INT ) : false; // phpcs:ignore
+		$trashed   = isset( $_REQUEST['trashed'] ) ? filter_var( $_REQUEST['trashed'], FILTER_VALIDATE_INT ) : false; // phpcs:ignore
+		$untrashed = isset( $_REQUEST['untrashed'] ) ? filter_var( $_REQUEST['untrashed'], FILTER_VALIDATE_INT ) : false; // phpcs:ignore
 
 		$bulk_counts = array(
 			'updated'   => $updated ? $updated : 0,

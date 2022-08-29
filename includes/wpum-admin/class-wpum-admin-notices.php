@@ -21,8 +21,8 @@ class WPUM_Admin_Notices {
 	 * Get things started.
 	 */
 	public function __construct() {
-		add_action( 'admin_init', [ $this, 'register_notices' ] );
-		add_action( 'admin_init', [ $this, 'fix_data_installation' ] );
+		add_action( 'admin_init', array( $this, 'register_notices' ) );
+		add_action( 'admin_init', array( $this, 'fix_data_installation' ) );
 	}
 
 	/**
@@ -51,7 +51,7 @@ class WPUM_Admin_Notices {
 
 		if ( $this->field_groups_are_empty() && $this->fields_are_empty() && $this->registration_forms_are_empty() ) {
 
-			$url = add_query_arg( [ 'wpum_fix_installation_data' => true ], admin_url() );
+			$url = add_query_arg( array( 'wpum_fix_installation_data' => true ), admin_url() );
 
 			$btn           = '<a href="' . esc_url( $url ) . '" class="button-primary">' . esc_html__( 'Fix data installation', 'wp-user-manager' ) . '</a>';
 			$error_message = esc_html__( 'It looks like WP User Manager failed to install it\'s default data. To fix the issue please click the button below.', 'wp-user-manager' ) . '</br><br/>' . $btn;
@@ -68,7 +68,7 @@ class WPUM_Admin_Notices {
 			if ( isset( $pagenow ) && $page !== $pagenow ) {
 				$message .= ' <a href="' . $update_url . '">' . esc_html__( 'Change permalinks', 'wp-user-manager' ) . '</a>';
 			}
-			WPUM()->notices->register_notice( 'wpum_permalinks', 'warning', $message, [ 'dismissible' => false ] );
+			WPUM()->notices->register_notice( 'wpum_permalinks', 'warning', $message, array( 'dismissible' => false ) );
 		}
 
 	}
@@ -133,7 +133,7 @@ class WPUM_Admin_Notices {
 	 */
 	public function fix_data_installation() {
 
-		if ( current_user_can( 'manage_options' ) && isset( $_GET['wpum_fix_installation_data'] ) ) {
+		if ( current_user_can( 'manage_options' ) && isset( $_GET['wpum_fix_installation_data'] ) ) { // phpcs:ignore
 			delete_option( 'wpum_setup_is_complete' );
 			delete_option( 'wpum_version_upgraded_from' );
 			delete_option( 'wpum_version_upgraded_from' );
@@ -153,10 +153,10 @@ class WPUM_Admin_Notices {
 
 			update_option( 'wpum_data_installation_fix_check', true );
 
+			// translators: %s WPUM admin URL
 			$message = sprintf( __( 'WP User Manager has installed default data. You can go back to your <a href="%s">admin panel.</a>', 'wp-user-manager' ), admin_url() );
 
-			wp_die( $message );
-
+			wp_die( wp_kses_post( $message ) );
 		}
 	}
 

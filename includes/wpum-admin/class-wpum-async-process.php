@@ -20,20 +20,10 @@ class WPUM_Async_Process extends WP_Async_Request {
 	/**
 	 * Prefix
 	 *
-	 *
 	 * @var string
 	 * @access protected
 	 */
 	protected $prefix = 'wpum';
-
-	/**
-	 * Dispatch updater.
-	 * Updater will still run via cron job if this fails for any reason.
-	 */
-	public function dispatch() {
-		/* @var WP_Async_Request $dispatched */
-		parent::dispatch();
-	}
 
 	/**
 	 * Handle
@@ -42,14 +32,7 @@ class WPUM_Async_Process extends WP_Async_Request {
 	 * during the async request.
 	 */
 	protected function handle() {
-		/*
-		 * $data = array(
-		 *  'hook'     => '', // required
-		 *  'data' => {mixed} // required
-		 * )
-		 */
-
-		$_post = $_POST;
+		$_post = $_POST; // phpcs:ignore
 
 		if ( empty( $_post ) || empty( $_post['data'] ) || empty( $_post['hook'] ) ) {
 			exit();

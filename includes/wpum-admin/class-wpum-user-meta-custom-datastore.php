@@ -5,7 +5,7 @@
  * @package     wp-user-manager
  * @copyright   Copyright (c) 2018, Alessandro Tesoro
  * @license     https://opensource.org/licenses/GPL-3.0 GNU Public License
-*/
+ */
 
 use Carbon_Fields\Field\Field;
 use Carbon_Fields\Datastore\Datastore;
@@ -23,9 +23,13 @@ class WPUM_User_Meta_Custom_Datastore extends Datastore {
 
 	}
 
+	/**
+	 * @param Field $field
+	 *
+	 * @return string
+	 */
 	protected function get_key_for_field( Field $field ) {
-		$key = $field->get_base_name();
-		return $key;
+		return $field->get_base_name();
 	}
 
 	/**
@@ -33,7 +37,7 @@ class WPUM_User_Meta_Custom_Datastore extends Datastore {
 	 *
 	 * @param string $key
 	 * @param string $value
-	 * @param bool $autoload
+	 * @param bool   $autoload
 	 */
 	protected function save_key_value_pair_with_autoload( $key, $value, $autoload ) {
 		$value = apply_filters( 'wpum_custom_field_admin_meta_update', $value, $key, $this->object_id, $value );
@@ -58,7 +62,7 @@ class WPUM_User_Meta_Custom_Datastore extends Datastore {
 			$value = array();
 		}
 
-		$id = str_replace( 'wpum_field_', '', $field->get_base_name() );
+		$id         = str_replace( 'wpum_field_', '', $field->get_base_name() );
 		$wpum_field = new WPUM_Field( $id );
 
 		return apply_filters( 'wpum_custom_field_value', $value, $wpum_field, $this->object_id );

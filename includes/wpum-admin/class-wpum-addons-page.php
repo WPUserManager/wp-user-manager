@@ -5,11 +5,16 @@
  * @package     wp-user-manager
  * @copyright   Copyright (c) 2018, Alessandro Tesoro
  * @license     https://opensource.org/licenses/GPL-3.0 GNU Public License
-*/
+ */
 
 // Exit if accessed directly
-if ( ! defined( 'ABSPATH' ) ) exit;
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 
+/**
+ * Addons page
+ */
 class WPUM_Addons_Page {
 
 	/**
@@ -35,10 +40,10 @@ class WPUM_Addons_Page {
 	 * @return void
 	 */
 	public function hooks() {
-		add_action( 'admin_menu', [ $this, 'add_addons_page' ], 20 );
-		add_action( 'admin_enqueue_scripts', [ $this, 'scripts' ] );
-		add_filter( 'install_plugins_tabs', [ $this, 'add_addon_tab' ] );
-		add_action( 'install_plugins_wpum_addons', [ $this, 'view_addons' ] );
+		add_action( 'admin_menu', array( $this, 'add_addons_page' ), 20 );
+		add_action( 'admin_enqueue_scripts', array( $this, 'scripts' ) );
+		add_filter( 'install_plugins_tabs', array( $this, 'add_addon_tab' ) );
+		add_action( 'install_plugins_wpum_addons', array( $this, 'view_addons' ) );
 	}
 
 	/**
@@ -48,9 +53,12 @@ class WPUM_Addons_Page {
 	 */
 	public function get_addons() {
 
-		$addons = [];
+		$addons = array();
 
-		if( isset( $_GET['page'] ) && $_GET['page'] == 'wpum-addons' || isset( $_GET['tab'] ) && $_GET['tab'] == 'wpum_addons' ) {
+		$page = filter_input( INPUT_GET, 'page' );
+		$tab  = filter_input( INPUT_GET, 'tab' );
+
+		if ( 'wpum-addons' === $page || 'wpum_addons' === $tab ) {
 
 			$cached_feed = get_transient( 'wpum_addons_feed' );
 
@@ -64,11 +72,9 @@ class WPUM_Addons_Page {
 					set_transient( 'wpum_addons_feed', $addons, 3600 );
 				}
 			}
-
 		}
 
 		return $addons;
-
 	}
 
 	/**
@@ -80,10 +86,11 @@ class WPUM_Addons_Page {
 
 		$screen = get_current_screen();
 
-		if( $screen->base == 'users_page_wpum-addons' || $screen->base == 'plugin-install' && isset( $_GET['tab'] ) && $_GET['tab'] == 'wpum_addons' ) {
+		$tab = filter_input( INPUT_GET, 'tab' );
+
+		if ( 'users_page_wpum-addons' === $screen->base || 'plugin-install' === $screen->base && 'wpum_addons' === $tab ) {
 			wp_enqueue_style( 'wpum-addons', WPUM_PLUGIN_URL . 'assets/css/admin/addons.css', false, WPUM_VERSION );
 		}
-
 	}
 
 	/**
@@ -92,7 +99,7 @@ class WPUM_Addons_Page {
 	 * @return void
 	 */
 	public function add_addons_page() {
-		add_users_page( esc_html__( 'WP User Manager Addons', 'wp-user-manager' ), esc_html__( 'Addons', 'wp-user-manager' ), apply_filters( 'wpum_admin_pages_capability', 'manage_options' ), 'wpum-addons', [ $this, 'view_addons' ] );
+		add_users_page( esc_html__( 'WP User Manager Addons', 'wp-user-manager' ), esc_html__( 'Addons', 'wp-user-manager' ), apply_filters( 'wpum_admin_pages_capability', 'manage_options' ), 'wpum-addons', array( $this, 'view_addons' ) );
 	}
 
 	/**
@@ -109,10 +116,13 @@ class WPUM_Addons_Page {
 	/**
 	 * Adds a new tab to the install plugins page.
 	 *
-	 * @return void
+	 * @param array $tabs
+	 *
+	 * @return array
 	 */
 	public function add_addon_tab( $tabs ) {
-		$tabs['wpum_addons'] = __( 'WP User Manager ', 'wp-user-manager' ) . '<span class="wpum-addons">'.__('Addons', 'wp-user-manager').'</span>' ;
+		$tabs['wpum_addons'] = __( 'WP User Manager ', 'wp-user-manager' ) . '<span class="wpum-addons">' . __( 'Addons', 'wp-user-manager' ) . '</span>';
+
 		return $tabs;
 	}
 
