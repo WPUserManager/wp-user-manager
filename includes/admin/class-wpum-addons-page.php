@@ -109,7 +109,7 @@ class WPUM_Addons_Page {
 	 */
 	public function view_addons() {
 
-		include WPUM_PLUGIN_DIR . 'includes/wpum-admin/views/addons.php';
+		include WPUM_PLUGIN_DIR . 'includes/admin/views/addons.php';
 
 	}
 

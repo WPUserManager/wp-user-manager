@@ -208,7 +208,7 @@ if ( ! class_exists( 'WP_User_Manager' ) ) :
 		private function includes() {
 
 			require_once WPUM_PLUGIN_DIR . 'includes/functions.php';
-			require_once WPUM_PLUGIN_DIR . 'includes/wpum-forms/trait-wpum-account.php';
+			require_once WPUM_PLUGIN_DIR . 'includes/forms/trait-wpum-account.php';
 			require_once WPUM_PLUGIN_DIR . 'includes/permalinks.php';
 			require_once WPUM_PLUGIN_DIR . 'includes/actions.php';
 			require_once WPUM_PLUGIN_DIR . 'includes/filters.php';
@@ -216,94 +216,94 @@ if ( ! class_exists( 'WP_User_Manager' ) ) :
 			require_once WPUM_PLUGIN_DIR . 'includes/abstracts/class-wpum-wp-db-table.php';
 			require_once WPUM_PLUGIN_DIR . 'includes/abstracts/class-wpum-db.php';
 			require_once WPUM_PLUGIN_DIR . 'includes/abstracts/class-wpum-shortcode-generator.php';
-			require_once WPUM_PLUGIN_DIR . 'includes/wpum-admin/class-wpum-user-meta-custom-datastore.php';
-			require_once WPUM_PLUGIN_DIR . 'includes/wpum-database/class-wpum-db-table.php';
-			require_once WPUM_PLUGIN_DIR . 'includes/wpum-database/class-wpum-db-table-fields.php';
-			require_once WPUM_PLUGIN_DIR . 'includes/wpum-database/class-wpum-db-table-field-meta.php';
-			require_once WPUM_PLUGIN_DIR . 'includes/wpum-database/class-wpum-db-table-fields-groups.php';
-			require_once WPUM_PLUGIN_DIR . 'includes/wpum-database/class-wpum-db-table-registration-forms.php';
-			require_once WPUM_PLUGIN_DIR . 'includes/wpum-database/class-wpum-db-table-registration-forms-meta.php';
-			require_once WPUM_PLUGIN_DIR . 'includes/wpum-database/class-wpum-db-table-search-fields.php';
-			require_once WPUM_PLUGIN_DIR . 'includes/wpum-database/class-wpum-db-fields-groups.php';
-			require_once WPUM_PLUGIN_DIR . 'includes/wpum-database/class-wpum-db-fields.php';
-			require_once WPUM_PLUGIN_DIR . 'includes/wpum-database/class-wpum-db-field-meta.php';
-			require_once WPUM_PLUGIN_DIR . 'includes/wpum-database/class-wpum-db-registration-forms.php';
-			require_once WPUM_PLUGIN_DIR . 'includes/wpum-database/class-wpum-db-registration-form-meta.php';
-			require_once WPUM_PLUGIN_DIR . 'includes/wpum-database/class-wpum-db-search-fields.php';
+			require_once WPUM_PLUGIN_DIR . 'includes/admin/class-wpum-user-meta-custom-datastore.php';
+			require_once WPUM_PLUGIN_DIR . 'includes/database/class-wpum-db-table.php';
+			require_once WPUM_PLUGIN_DIR . 'includes/database/class-wpum-db-table-fields.php';
+			require_once WPUM_PLUGIN_DIR . 'includes/database/class-wpum-db-table-field-meta.php';
+			require_once WPUM_PLUGIN_DIR . 'includes/database/class-wpum-db-table-fields-groups.php';
+			require_once WPUM_PLUGIN_DIR . 'includes/database/class-wpum-db-table-registration-forms.php';
+			require_once WPUM_PLUGIN_DIR . 'includes/database/class-wpum-db-table-registration-forms-meta.php';
+			require_once WPUM_PLUGIN_DIR . 'includes/database/class-wpum-db-table-search-fields.php';
+			require_once WPUM_PLUGIN_DIR . 'includes/database/class-wpum-db-fields-groups.php';
+			require_once WPUM_PLUGIN_DIR . 'includes/database/class-wpum-db-fields.php';
+			require_once WPUM_PLUGIN_DIR . 'includes/database/class-wpum-db-field-meta.php';
+			require_once WPUM_PLUGIN_DIR . 'includes/database/class-wpum-db-registration-forms.php';
+			require_once WPUM_PLUGIN_DIR . 'includes/database/class-wpum-db-registration-form-meta.php';
+			require_once WPUM_PLUGIN_DIR . 'includes/database/class-wpum-db-search-fields.php';
 
 			$this->setup_database_tables();
 
-			require_once WPUM_PLUGIN_DIR . 'includes/wpum-admin/class-wpum-html-elements.php';
-			require_once WPUM_PLUGIN_DIR . 'includes/wpum-fields/wpum-fields-functions.php';
-			require_once WPUM_PLUGIN_DIR . 'includes/wpum-fields/class-wpum-fields.php';
-			require_once WPUM_PLUGIN_DIR . 'includes/wpum-fields/class-wpum-field-group.php';
-			require_once WPUM_PLUGIN_DIR . 'includes/wpum-fields/class-wpum-field.php';
-			require_once WPUM_PLUGIN_DIR . 'includes/wpum-fields/class-wpum-fields-query.php';
-			require_once WPUM_PLUGIN_DIR . 'includes/wpum-forms/class-wpum-registration-form.php';
-			require_once WPUM_PLUGIN_DIR . 'includes/wpum-emails/wpum-email-functions.php';
-			require_once WPUM_PLUGIN_DIR . 'includes/wpum-emails/class-wpum-emails.php';
-			require_once WPUM_PLUGIN_DIR . 'includes/wpum-admin/class-wpum-avatars.php';
-			require_once WPUM_PLUGIN_DIR . 'includes/wpum-admin/class-wpum-prevent-password-change.php';
-			require_once WPUM_PLUGIN_DIR . 'includes/wpum-admin/class-wpum-template-loader.php';
-			require_once WPUM_PLUGIN_DIR . 'includes/wpum-admin/class-wpum-options-panel.php';
+			require_once WPUM_PLUGIN_DIR . 'includes/admin/class-wpum-html-elements.php';
+			require_once WPUM_PLUGIN_DIR . 'includes/fields/wpum-fields-functions.php';
+			require_once WPUM_PLUGIN_DIR . 'includes/fields/class-wpum-fields.php';
+			require_once WPUM_PLUGIN_DIR . 'includes/fields/class-wpum-field-group.php';
+			require_once WPUM_PLUGIN_DIR . 'includes/fields/class-wpum-field.php';
+			require_once WPUM_PLUGIN_DIR . 'includes/fields/class-wpum-fields-query.php';
+			require_once WPUM_PLUGIN_DIR . 'includes/forms/class-wpum-registration-form.php';
+			require_once WPUM_PLUGIN_DIR . 'includes/emails/wpum-email-functions.php';
+			require_once WPUM_PLUGIN_DIR . 'includes/emails/class-wpum-emails.php';
+			require_once WPUM_PLUGIN_DIR . 'includes/admin/class-wpum-avatars.php';
+			require_once WPUM_PLUGIN_DIR . 'includes/admin/class-wpum-prevent-password-change.php';
+			require_once WPUM_PLUGIN_DIR . 'includes/admin/class-wpum-template-loader.php';
+			require_once WPUM_PLUGIN_DIR . 'includes/admin/class-wpum-options-panel.php';
 			( new WPUM_Options_Panel() )->init();
 
-			require_once WPUM_PLUGIN_DIR . 'includes/wpum-forms/class-wpum-forms.php';
-			require_once WPUM_PLUGIN_DIR . 'includes/wpum-widgets/class-wpum-login-form-widget.php';
-			require_once WPUM_PLUGIN_DIR . 'includes/wpum-widgets/class-wpum-password-recovery.php';
-			require_once WPUM_PLUGIN_DIR . 'includes/wpum-widgets/class-wpum-recently-registered-users.php';
-			require_once WPUM_PLUGIN_DIR . 'includes/wpum-widgets/class-wpum-registration-form-widget.php';
-			require_once WPUM_PLUGIN_DIR . 'includes/wpum-admin/class-wpum-menus.php';
-			require_once WPUM_PLUGIN_DIR . 'includes/wpum-directories/class-wpum-directories-editor.php';
-			require_once WPUM_PLUGIN_DIR . 'includes/wpum-directories/wpum-directories-functions.php';
+			require_once WPUM_PLUGIN_DIR . 'includes/forms/class-wpum-forms.php';
+			require_once WPUM_PLUGIN_DIR . 'includes/widgets/class-wpum-login-form-widget.php';
+			require_once WPUM_PLUGIN_DIR . 'includes/widgets/class-wpum-password-recovery.php';
+			require_once WPUM_PLUGIN_DIR . 'includes/widgets/class-wpum-recently-registered-users.php';
+			require_once WPUM_PLUGIN_DIR . 'includes/widgets/class-wpum-registration-form-widget.php';
+			require_once WPUM_PLUGIN_DIR . 'includes/admin/class-wpum-menus.php';
+			require_once WPUM_PLUGIN_DIR . 'includes/directories/class-wpum-directories-editor.php';
+			require_once WPUM_PLUGIN_DIR . 'includes/directories/wpum-directories-functions.php';
 			require_once WPUM_PLUGIN_DIR . 'includes/widgets.php';
 
-			require_once WPUM_PLUGIN_DIR . 'includes/wpum-upgrades/class-wpum-plugin-updates.php';
+			require_once WPUM_PLUGIN_DIR . 'includes/admin/class-wpum-plugin-updates.php';
 
 			if ( is_admin() || ( defined( 'WP_CLI' ) && WP_CLI ) ) {
-				require_once WPUM_PLUGIN_DIR . 'includes/wpum-admin/class-wpum-getting-started.php';
-				require_once WPUM_PLUGIN_DIR . 'includes/wpum-admin/class-wpum-addons-page.php';
-				require_once WPUM_PLUGIN_DIR . 'includes/wpum-admin/class-wpum-admin-notices.php';
-				require_once WPUM_PLUGIN_DIR . 'includes/wpum-admin/class-wpum-user-table.php';
-				require_once WPUM_PLUGIN_DIR . 'includes/wpum-admin/class-wpum-addon-acf.php';
-				require_once WPUM_PLUGIN_DIR . 'includes/wpum-admin/class-wpum-permalinks-settings.php';
-				require_once WPUM_PLUGIN_DIR . 'includes/wpum-fields/class-wpum-fields-editor.php';
-				require_once WPUM_PLUGIN_DIR . 'includes/wpum-forms/class-wpum-registration-forms-editor.php';
-				require_once WPUM_PLUGIN_DIR . 'includes/wpum-roles/class-wpum-role.php';
-				require_once WPUM_PLUGIN_DIR . 'includes/wpum-roles/class-wpum-capability.php';
-				require_once WPUM_PLUGIN_DIR . 'includes/wpum-roles/class-wpum-capability-group.php';
-				require_once WPUM_PLUGIN_DIR . 'includes/wpum-roles/class-wpum-collection.php';
-				require_once WPUM_PLUGIN_DIR . 'includes/wpum-roles/class-wpum-roles.php';
-				require_once WPUM_PLUGIN_DIR . 'includes/wpum-roles/functions.php';
-				require_once WPUM_PLUGIN_DIR . 'includes/wpum-roles/class-wpum-roles-editor.php';
-				require_once WPUM_PLUGIN_DIR . 'includes/wpum-emails/class-wpum-emails-list.php';
-				require_once WPUM_PLUGIN_DIR . 'includes/wpum-updater/class-wpum-updater-settings.php';
-				require_once WPUM_PLUGIN_DIR . 'includes/wpum-shortcodes/class-wpum-shortcode-button.php';
-				require_once WPUM_PLUGIN_DIR . 'includes/wpum-shortcodes/class-wpum-shortcode-login.php';
-				require_once WPUM_PLUGIN_DIR . 'includes/wpum-shortcodes/class-wpum-shortcode-login-link.php';
-				require_once WPUM_PLUGIN_DIR . 'includes/wpum-shortcodes/class-wpum-shortcode-logout-link.php';
-				require_once WPUM_PLUGIN_DIR . 'includes/wpum-shortcodes/class-wpum-shortcode-password.php';
-				require_once WPUM_PLUGIN_DIR . 'includes/wpum-shortcodes/class-wpum-shortcode-registration.php';
-				require_once WPUM_PLUGIN_DIR . 'includes/wpum-shortcodes/class-wpum-shortcode-my-account.php';
-				require_once WPUM_PLUGIN_DIR . 'includes/wpum-shortcodes/class-wpum-shortcode-profile.php';
-				require_once WPUM_PLUGIN_DIR . 'includes/wpum-shortcodes/class-wpum-shortcode-content-loggedin.php';
-				require_once WPUM_PLUGIN_DIR . 'includes/wpum-shortcodes/class-wpum-shortcode-content-loggedout.php';
-				require_once WPUM_PLUGIN_DIR . 'includes/wpum-shortcodes/class-wpum-shortcode-content-users.php';
-				require_once WPUM_PLUGIN_DIR . 'includes/wpum-shortcodes/class-wpum-shortcode-content-roles.php';
-				require_once WPUM_PLUGIN_DIR . 'includes/wpum-shortcodes/class-wpum-shortcode-recently-registered.php';
-				require_once WPUM_PLUGIN_DIR . 'includes/wpum-shortcodes/class-wpum-shortcode-profile-card.php';
-				require_once WPUM_PLUGIN_DIR . 'includes/wpum-shortcodes/class-wpum-shortcode-directory.php';
+				require_once WPUM_PLUGIN_DIR . 'includes/admin/class-wpum-getting-started.php';
+				require_once WPUM_PLUGIN_DIR . 'includes/admin/class-wpum-addons-page.php';
+				require_once WPUM_PLUGIN_DIR . 'includes/admin/class-wpum-admin-notices.php';
+				require_once WPUM_PLUGIN_DIR . 'includes/admin/class-wpum-user-table.php';
+				require_once WPUM_PLUGIN_DIR . 'includes/admin/class-wpum-addon-acf.php';
+				require_once WPUM_PLUGIN_DIR . 'includes/admin/class-wpum-permalinks-settings.php';
+				require_once WPUM_PLUGIN_DIR . 'includes/fields/class-wpum-fields-editor.php';
+				require_once WPUM_PLUGIN_DIR . 'includes/forms/class-wpum-registration-forms-editor.php';
+				require_once WPUM_PLUGIN_DIR . 'includes/roles/class-wpum-role.php';
+				require_once WPUM_PLUGIN_DIR . 'includes/roles/class-wpum-capability.php';
+				require_once WPUM_PLUGIN_DIR . 'includes/roles/class-wpum-capability-group.php';
+				require_once WPUM_PLUGIN_DIR . 'includes/roles/class-wpum-collection.php';
+				require_once WPUM_PLUGIN_DIR . 'includes/roles/class-wpum-roles.php';
+				require_once WPUM_PLUGIN_DIR . 'includes/roles/functions.php';
+				require_once WPUM_PLUGIN_DIR . 'includes/roles/class-wpum-roles-editor.php';
+				require_once WPUM_PLUGIN_DIR . 'includes/emails/class-wpum-emails-list.php';
+				require_once WPUM_PLUGIN_DIR . 'includes/updates/class-wpum-updater-settings.php';
+				require_once WPUM_PLUGIN_DIR . 'includes/shortcodes/class-wpum-shortcode-button.php';
+				require_once WPUM_PLUGIN_DIR . 'includes/shortcodes/class-wpum-shortcode-login.php';
+				require_once WPUM_PLUGIN_DIR . 'includes/shortcodes/class-wpum-shortcode-login-link.php';
+				require_once WPUM_PLUGIN_DIR . 'includes/shortcodes/class-wpum-shortcode-logout-link.php';
+				require_once WPUM_PLUGIN_DIR . 'includes/shortcodes/class-wpum-shortcode-password.php';
+				require_once WPUM_PLUGIN_DIR . 'includes/shortcodes/class-wpum-shortcode-registration.php';
+				require_once WPUM_PLUGIN_DIR . 'includes/shortcodes/class-wpum-shortcode-my-account.php';
+				require_once WPUM_PLUGIN_DIR . 'includes/shortcodes/class-wpum-shortcode-profile.php';
+				require_once WPUM_PLUGIN_DIR . 'includes/shortcodes/class-wpum-shortcode-content-loggedin.php';
+				require_once WPUM_PLUGIN_DIR . 'includes/shortcodes/class-wpum-shortcode-content-loggedout.php';
+				require_once WPUM_PLUGIN_DIR . 'includes/shortcodes/class-wpum-shortcode-content-users.php';
+				require_once WPUM_PLUGIN_DIR . 'includes/shortcodes/class-wpum-shortcode-content-roles.php';
+				require_once WPUM_PLUGIN_DIR . 'includes/shortcodes/class-wpum-shortcode-recently-registered.php';
+				require_once WPUM_PLUGIN_DIR . 'includes/shortcodes/class-wpum-shortcode-profile-card.php';
+				require_once WPUM_PLUGIN_DIR . 'includes/shortcodes/class-wpum-shortcode-directory.php';
 			}
 
 			require_once WPUM_PLUGIN_DIR . 'includes/install.php';
 
 			if ( defined( 'DOING_AJAX' ) || ( isset( $_GET['wpum_email_customizer'] ) && 'true' === filter_input( INPUT_GET, 'wpum_email_customizer' ) ) ) { // phpcs:ignore
-				require_once WPUM_PLUGIN_DIR . 'includes/wpum-emails/class-wpum-emails-customizer-scripts.php';
-				require_once WPUM_PLUGIN_DIR . 'includes/wpum-emails/class-wpum-emails-customizer.php';
+				require_once WPUM_PLUGIN_DIR . 'includes/emails/class-wpum-emails-customizer-scripts.php';
+				require_once WPUM_PLUGIN_DIR . 'includes/emails/class-wpum-emails-customizer.php';
 			}
 
-			require_once WPUM_PLUGIN_DIR . 'includes/wpum-updater/class-wpum-license.php';
-			require_once WPUM_PLUGIN_DIR . 'includes/wpum-updater/free-plugins.php';
+			require_once WPUM_PLUGIN_DIR . 'includes/updates/class-wpum-license.php';
+			require_once WPUM_PLUGIN_DIR . 'includes/updates/free-plugins.php';
 
 			WPUM_Blocks::get_instance();
 		}
@@ -392,7 +392,7 @@ if ( ! class_exists( 'WP_User_Manager' ) ) :
 			$this->elements               = new WPUM_HTML_Elements();
 			$this->search_meta            = new WPUM_DB_Search_Fields();
 
-			require_once WPUM_PLUGIN_DIR . 'includes/wpum-shortcodes/shortcodes.php';
+			require_once WPUM_PLUGIN_DIR . 'includes/shortcodes/shortcodes.php';
 
 			/**
 			 * @todo document after_wpum_init

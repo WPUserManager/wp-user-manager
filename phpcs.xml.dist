@@ -1,7 +1,7 @@
 <?xml version="1.0" ?>
 <ruleset name="WP_User_Manager">
 	<file>.</file>
-	<exclude-pattern>includes/wpum-updater/WPUM_EDD_SL_Plugin_Updater</exclude-pattern>
+	<exclude-pattern>includes/updates/WPUM_EDD_SL_Plugin_Updater</exclude-pattern>
 	<exclude-pattern>vendor</exclude-pattern>
 	<exclude-pattern>release</exclude-pattern>
 	<exclude-pattern>languages</exclude-pattern>

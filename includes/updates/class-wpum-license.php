@@ -120,7 +120,7 @@ class WPUM_License {
 	private function includes() {
 
 		if ( ! class_exists( 'WPUM_EDD_SL_Plugin_Updater' ) ) {
-			require_once WPUM_PLUGIN_DIR . 'includes/wpum-updater/WPUM_EDD_SL_Plugin_Updater.php';
+			require_once WPUM_PLUGIN_DIR . 'includes/updates/WPUM_EDD_SL_Plugin_Updater.php';
 		}
 
 	}

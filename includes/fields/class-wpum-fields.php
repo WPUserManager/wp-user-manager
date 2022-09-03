@@ -73,8 +73,8 @@ class WPUM_Fields {
 		) );
 
 		foreach ( $fields as $field ) {
-			if ( file_exists( WPUM_PLUGIN_DIR . 'includes/wpum-fields/types/class-wpum-field-' . $field . '.php' ) ) {
-				require_once WPUM_PLUGIN_DIR . 'includes/wpum-fields/types/class-wpum-field-' . $field . '.php';
+			if ( file_exists( WPUM_PLUGIN_DIR . 'includes/fields/types/class-wpum-field-' . $field . '.php' ) ) {
+				require_once WPUM_PLUGIN_DIR . 'includes/fields/types/class-wpum-field-' . $field . '.php';
 			}
 
 			$class = 'WPUM_Field_' . ucfirst( $field );
