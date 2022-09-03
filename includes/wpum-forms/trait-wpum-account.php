@@ -11,9 +11,9 @@ trait WPUM_Form_Account {
 	 */
 	protected function update_account_values( $user, $values, $partial_form = false ) {
 		// Collect all the data to update the user.
-		$user_data = [
+		$user_data = array(
 			'ID' => $user->ID,
-		];
+		);
 
 		// Update first name and last name.
 		if ( isset( $values['account']['user_firstname'] ) ) {

@@ -5,10 +5,12 @@
  * @package     wp-user-manager
  * @copyright   Copyright (c) 2018, Alessandro Tesoro
  * @license     https://opensource.org/licenses/GPL-3.0 GNU Public License
-*/
+ */
 
 // Exit if accessed directly
-if ( ! defined( 'ABSPATH' ) ) exit;
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 
 class WPUM_Registration_Forms_Editor {
 
@@ -28,14 +30,14 @@ class WPUM_Registration_Forms_Editor {
 	 * @return void
 	 */
 	public function init_hooks() {
-		add_action( 'admin_menu', [ $this, 'setup_menu_page' ], 9 );
-		add_action( 'admin_enqueue_scripts', [ $this, 'load_scripts' ] );
-		add_action( 'wp_ajax_wpum_get_registration_forms', [ $this, 'get_forms' ] );
-		add_action( 'wp_ajax_wpum_get_registration_form', [ $this, 'get_form' ] );
-		add_action( 'wp_ajax_wpum_update_registration_form', [ $this, 'update_form' ] );
-		add_action( 'wp_ajax_wpum_save_registration_form', [ $this, 'save_form' ] );
-		add_action( 'wp_ajax_wpum_save_registration_form_settings', [ $this, 'save_form_settings' ] );
-		add_action( 'wp_ajax_wpum_get_registration_form_field', [ $this, 'get_form_field_data' ] );
+		add_action( 'admin_menu', array( $this, 'setup_menu_page' ), 9 );
+		add_action( 'admin_enqueue_scripts', array( $this, 'load_scripts' ) );
+		add_action( 'wp_ajax_wpum_get_registration_forms', array( $this, 'get_forms' ) );
+		add_action( 'wp_ajax_wpum_get_registration_form', array( $this, 'get_form' ) );
+		add_action( 'wp_ajax_wpum_update_registration_form', array( $this, 'update_form' ) );
+		add_action( 'wp_ajax_wpum_save_registration_form', array( $this, 'save_form' ) );
+		add_action( 'wp_ajax_wpum_save_registration_form_settings', array( $this, 'save_form_settings' ) );
+		add_action( 'wp_ajax_wpum_get_registration_form_field', array( $this, 'get_form_field_data' ) );
 
 		add_filter( 'wpum_form_settings_sanitize_text', array( $this, 'sanitize_text_field' ) );
 		add_filter( 'wpum_form_settings_sanitize_textarea', array( $this, 'sanitize_textarea_field' ) );
@@ -43,13 +45,13 @@ class WPUM_Registration_Forms_Editor {
 		add_filter( 'wpum_form_settings_sanitize_select', array( $this, 'sanitize_text_field' ) );
 		add_filter( 'wpum_form_settings_sanitize_checkbox', array( $this, 'sanitize_checkbox_field' ) );
 		add_filter( 'wpum_form_settings_sanitize_multiselect', array( $this, 'sanitize_multiple_field' ) );
-		add_filter( 'wpum_form_settings_sanitize_multicheckbox', array( $this, 'sanitize_multiple_field' )  );
+		add_filter( 'wpum_form_settings_sanitize_multicheckbox', array( $this, 'sanitize_multiple_field' ) );
 		add_filter( 'wpum_form_settings_sanitize_file', array( $this, 'sanitize_file_field' ) );
 
 		// Object Caching hooks
-		add_action( 'wpum_registration_form_insert', [ $this, 'delete_registration_forms_cache'] );
-		add_action( 'wpum_before_registration_form_delete', [ $this, 'delete_registration_forms_cache'] );
-		add_action( 'wpum_registration_form_duplicated', [ $this, 'delete_registration_forms_cache'] );
+		add_action( 'wpum_registration_form_insert', array( $this, 'delete_registration_forms_cache' ) );
+		add_action( 'wpum_before_registration_form_delete', array( $this, 'delete_registration_forms_cache' ) );
+		add_action( 'wpum_registration_form_duplicated', array( $this, 'delete_registration_forms_cache' ) );
 	}
 
 	/**
@@ -63,7 +65,7 @@ class WPUM_Registration_Forms_Editor {
 			esc_html__( 'Registration Forms', 'wp-user-manager' ),
 			$this->capability,
 			'wpum-registration-forms',
-			[ $this, 'display_registration_forms_editor' ]
+			array( $this, 'display_registration_forms_editor' )
 		);
 	}
 
@@ -85,28 +87,28 @@ class WPUM_Registration_Forms_Editor {
 
 		$screen = get_current_screen();
 
-		if( $screen->base == 'users_page_wpum-registration-forms' ) {
+		if ( $screen->base == 'users_page_wpum-registration-forms' ) {
 
 			$is_vue_dev = defined( 'WPUM_VUE_DEV' ) && WPUM_VUE_DEV ? true : false;
 
-			if( $is_vue_dev ) {
+			if ( $is_vue_dev ) {
 				$vue_dev_port = defined( 'WPUM_VUE_DEV_PORT' ) ? WPUM_VUE_DEV_PORT : '8080';
 				wp_register_script( 'wpum-registration-forms-editor', 'http://localhost:' . $vue_dev_port . '/registration-forms-editor.js', array(), WPUM_VERSION, true );
 			} else {
-				wp_register_script( 'wpum-registration-forms-editor',  WPUM_PLUGIN_URL . 'dist/static/js/registration-forms-editor.js' , array(), WPUM_VERSION, true );
+				wp_register_script( 'wpum-registration-forms-editor', WPUM_PLUGIN_URL . 'dist/static/js/registration-forms-editor.js', array(), WPUM_VERSION, true );
 			}
 
-			if( ! $is_vue_dev ) {
+			if ( ! $is_vue_dev ) {
 				wp_enqueue_script( 'wpum-vue-manifest' );
 				wp_enqueue_script( 'wpum-vue-vendor' );
-				wp_enqueue_style( 'wpum-registration-forms-editor-css', WPUM_PLUGIN_URL . 'dist/static/css/registration-forms-editor.css' , array(), WPUM_VERSION );
+				wp_enqueue_style( 'wpum-registration-forms-editor-css', WPUM_PLUGIN_URL . 'dist/static/css/registration-forms-editor.css', array(), WPUM_VERSION );
 			}
 
 			wp_enqueue_script( 'wpum-registration-forms-editor' );
 			wp_enqueue_style( 'wpum-registration-forms-editor', WPUM_PLUGIN_URL . 'assets/css/admin/fields-editor.css', array(), WPUM_VERSION );
 			wp_enqueue_style( 'wpum-registration-forms-editor-ok', WPUM_PLUGIN_URL . 'vendor/wp-user-manager/wp-optionskit/dist/static/css/app.css', array(), WPUM_VERSION );
 
-			$js_variables = [
+			$js_variables = array(
 				'is_addon_installed'    => apply_filters( 'wpum_registration_forms_has_registration_forms_addon', false ),
 				'labels'                => $this->get_labels(),
 				'ajax'                  => admin_url( 'admin-ajax.php' ),
@@ -118,7 +120,7 @@ class WPUM_Registration_Forms_Editor {
 				'saveFormSettingsNonce' => wp_create_nonce( 'wpum_save_registration_form_settings' ),
 				'nonce'                 => wp_create_nonce( 'wpum_update_registration_form' ),
 				'delete_form_nonce'     => wp_create_nonce( 'wpum_delete_registration_form' ),
-			];
+			);
 
 			wp_localize_script( 'wpum-registration-forms-editor', 'wpumRegistrationFormsEditor', $js_variables );
 		}
@@ -131,45 +133,45 @@ class WPUM_Registration_Forms_Editor {
 	 * @return array
 	 */
 	private function get_labels() {
-		$labels = [
-			'confirm_delete'           => esc_html__( 'Confirm Form Deletion?', 'wp-user-manager' ),
-			'modal_form_delete'        => esc_html__( 'You are about to delete the registration form:', 'wp-user-manager' ),
-			'modal_delete'             => esc_html__( 'This action cannot be reversed. Are you sure you want to continue?', 'wp-user-manager' ),
-			'page_title'               => esc_html__( 'Registration Forms', 'wp-user-manager' ),
-			'table_name'               => esc_html__( 'Form Name', 'wp-user-manager' ),
-			'table_fields'             => esc_html__( 'Fields', 'wp-user-manager' ),
-			'table_default'            => esc_html__( 'Default', 'wp-user-manager' ),
-			'table_role'               => esc_html__( 'Registration Role', 'wp-user-manager' ),
-			'table_signup_total'       => esc_html__( 'Total Signups', 'wp-user-manager' ),
-			'table_shortcode'          => esc_html__( 'Shortcode', 'wp-user-manager' ),
-			'table_actions'            => esc_html__( 'Actions', 'wp-user-manager' ),
-			'table_not_found'          => esc_html__( 'No registration forms have been found.', 'wp-user-manager' ),
-			'table_add_form'           => esc_html__( 'Add New Form', 'wp-user-manager' ),
-			'table_edit_form'          => esc_html__( 'Edit Form Name', 'wp-user-manager' ),
-			'table_default_tooltip'    => esc_html__( 'The default registration form cannot be deleted.', 'wp-user-manager' ),
-			'table_delete_form'        => esc_html__( 'Delete Form', 'wp-user-manager' ),
-			'table_customize'          => esc_html__( 'Customize Form', 'wp-user-manager' ),
-			'page_back'                => esc_html__( 'Return to the registration forms list', 'wp-user-manager' ),
-			'editor_available_title'   => esc_html__( 'Available Fields', 'wp-user-manager' ),
-			'editor_current_title'     => esc_html__( 'Form Fields', 'wp-user-manager' ),
-			'editor_available_desc'    => esc_html__( 'To add a field to this form, drag it into the container on the left. To remove a field, place it back here.', 'wp-user-manager' ),
-			'table_field_name'         => esc_html__( 'Field name', 'wp-user-manager' ),
-			'editor_used_fields'       => esc_html__( 'Add fields here to use them in this registration form. Drag fields up and down to change their order within the form.', 'wp-user-manager' ),
-			'editor_drag'              => esc_html__( 'This form does not have any fields yet. Drag and drop fields here.', 'wp-user-manager' ),
-			'success'                  => esc_html__( 'Changes successfully saved.', 'wp-user-manager' ),
-			'error'                    => esc_html__( 'Something went wrong no changes saved.', 'wp-user-manager' ),
-			'settings'                 => esc_html__( 'Settings', 'wp-user-manager' ),
-			'role_label'               => esc_html__( 'Registration role', 'wp-user-manager' ),
-			'save'                     => esc_html__( 'Save Changes', 'wp-user-manager' ),
-			'role_desc'                => esc_html__( 'Select the user role that will be assigned to users upon successfull registration.', 'wp-user-manager' ),
-			'tooltip_form_name'        => esc_html__( 'Customize the name of the registration form.', 'wp-user-manager' ),
-			'create_form'              => esc_html__( 'Create Form', 'wp-user-manager' ),
-			'premium_addon'            => sprintf( __( 'Create <a href="%1$s" target="_blank">unlimited registration forms</a>. The <a href="%1$s" target="_blank">Registration Forms</a> addon is required if you wish to add more forms.', 'wp-user-manager' ), 'https://wpusermanager.com/addons/registration-forms?utm_source=WP%20User%20Manager&utm_medium=insideplugin&utm_campaign=WP%20User%20Manager&utm_content=registration-forms-editor' ),
-			'premium_addonstep'       => sprintf( __( 'Create <a href="%1$s" target="_blank">multi-step registration forms</a>. The <a href="%1$s" target="_blank">Registration Forms</a> addon is required if you wish to add steps to your forms.', 'wp-user-manager' ), 'https://wpusermanager.com/addons/registration-forms?utm_source=WP%20User%20Manager&utm_medium=insideplugin&utm_campaign=WP%20User%20Manager&utm_content=registration-forms-editor' ),
-			'premium_addonhtml'       => sprintf( __( 'Add <a href="%1$s" target="_blank">custom HTML to your registration forms</a>. The <a href="%1$s" target="_blank">Registration Forms</a> addon is required if you wish to add HTML to your forms.', 'wp-user-manager' ), 'https://wpusermanager.com/addons/registration-forms?utm_source=WP%20User%20Manager&utm_medium=insideplugin&utm_campaign=WP%20User%20Manager&utm_content=registration-forms-editor' ),
-			'purchase'                 => esc_html__( 'Purchase', 'wp-user-manager' ),
-			'success_message'          => esc_html__( 'Changes successfully saved.', 'wp-user-manager' ),
-		];
+		$labels = array(
+			'confirm_delete'         => esc_html__( 'Confirm Form Deletion?', 'wp-user-manager' ),
+			'modal_form_delete'      => esc_html__( 'You are about to delete the registration form:', 'wp-user-manager' ),
+			'modal_delete'           => esc_html__( 'This action cannot be reversed. Are you sure you want to continue?', 'wp-user-manager' ),
+			'page_title'             => esc_html__( 'Registration Forms', 'wp-user-manager' ),
+			'table_name'             => esc_html__( 'Form Name', 'wp-user-manager' ),
+			'table_fields'           => esc_html__( 'Fields', 'wp-user-manager' ),
+			'table_default'          => esc_html__( 'Default', 'wp-user-manager' ),
+			'table_role'             => esc_html__( 'Registration Role', 'wp-user-manager' ),
+			'table_signup_total'     => esc_html__( 'Total Signups', 'wp-user-manager' ),
+			'table_shortcode'        => esc_html__( 'Shortcode', 'wp-user-manager' ),
+			'table_actions'          => esc_html__( 'Actions', 'wp-user-manager' ),
+			'table_not_found'        => esc_html__( 'No registration forms have been found.', 'wp-user-manager' ),
+			'table_add_form'         => esc_html__( 'Add New Form', 'wp-user-manager' ),
+			'table_edit_form'        => esc_html__( 'Edit Form Name', 'wp-user-manager' ),
+			'table_default_tooltip'  => esc_html__( 'The default registration form cannot be deleted.', 'wp-user-manager' ),
+			'table_delete_form'      => esc_html__( 'Delete Form', 'wp-user-manager' ),
+			'table_customize'        => esc_html__( 'Customize Form', 'wp-user-manager' ),
+			'page_back'              => esc_html__( 'Return to the registration forms list', 'wp-user-manager' ),
+			'editor_available_title' => esc_html__( 'Available Fields', 'wp-user-manager' ),
+			'editor_current_title'   => esc_html__( 'Form Fields', 'wp-user-manager' ),
+			'editor_available_desc'  => esc_html__( 'To add a field to this form, drag it into the container on the left. To remove a field, place it back here.', 'wp-user-manager' ),
+			'table_field_name'       => esc_html__( 'Field name', 'wp-user-manager' ),
+			'editor_used_fields'     => esc_html__( 'Add fields here to use them in this registration form. Drag fields up and down to change their order within the form.', 'wp-user-manager' ),
+			'editor_drag'            => esc_html__( 'This form does not have any fields yet. Drag and drop fields here.', 'wp-user-manager' ),
+			'success'                => esc_html__( 'Changes successfully saved.', 'wp-user-manager' ),
+			'error'                  => esc_html__( 'Something went wrong no changes saved.', 'wp-user-manager' ),
+			'settings'               => esc_html__( 'Settings', 'wp-user-manager' ),
+			'role_label'             => esc_html__( 'Registration role', 'wp-user-manager' ),
+			'save'                   => esc_html__( 'Save Changes', 'wp-user-manager' ),
+			'role_desc'              => esc_html__( 'Select the user role that will be assigned to users upon successfull registration.', 'wp-user-manager' ),
+			'tooltip_form_name'      => esc_html__( 'Customize the name of the registration form.', 'wp-user-manager' ),
+			'create_form'            => esc_html__( 'Create Form', 'wp-user-manager' ),
+			'premium_addon'          => sprintf( __( 'Create <a href="%1$s" target="_blank">unlimited registration forms</a>. The <a href="%1$s" target="_blank">Registration Forms</a> addon is required if you wish to add more forms.', 'wp-user-manager' ), 'https://wpusermanager.com/addons/registration-forms?utm_source=WP%20User%20Manager&utm_medium=insideplugin&utm_campaign=WP%20User%20Manager&utm_content=registration-forms-editor' ),
+			'premium_addonstep'      => sprintf( __( 'Create <a href="%1$s" target="_blank">multi-step registration forms</a>. The <a href="%1$s" target="_blank">Registration Forms</a> addon is required if you wish to add steps to your forms.', 'wp-user-manager' ), 'https://wpusermanager.com/addons/registration-forms?utm_source=WP%20User%20Manager&utm_medium=insideplugin&utm_campaign=WP%20User%20Manager&utm_content=registration-forms-editor' ),
+			'premium_addonhtml'      => sprintf( __( 'Add <a href="%1$s" target="_blank">custom HTML to your registration forms</a>. The <a href="%1$s" target="_blank">Registration Forms</a> addon is required if you wish to add HTML to your forms.', 'wp-user-manager' ), 'https://wpusermanager.com/addons/registration-forms?utm_source=WP%20User%20Manager&utm_medium=insideplugin&utm_campaign=WP%20User%20Manager&utm_content=registration-forms-editor' ),
+			'purchase'               => esc_html__( 'Purchase', 'wp-user-manager' ),
+			'success_message'        => esc_html__( 'Changes successfully saved.', 'wp-user-manager' ),
+		);
 
 		return $labels;
 	}
@@ -183,29 +185,28 @@ class WPUM_Registration_Forms_Editor {
 
 		check_ajax_referer( 'wpum_get_registration_forms', 'nonce' );
 
-		if( current_user_can( $this->capability ) && is_admin() ) {
+		if ( current_user_can( $this->capability ) && is_admin() ) {
 
 			$registration_forms = WPUM()->registration_forms->get_forms();
-			$forms              = [];
+			$forms              = array();
 
 			foreach ( $registration_forms as $form ) {
-				$form_data = [
-					'id'            => $form->get_ID(),
-					'name'          => $form->get_name(),
-					'default'       => $form->is_default(),
-					'role'          => $form->get_role(),
-					'count'         => $form->get_fields_count(),
-				];
+				$form_data = array(
+					'id'      => $form->get_ID(),
+					'name'    => $form->get_name(),
+					'default' => $form->is_default(),
+					'role'    => $form->get_role(),
+					'count'   => $form->get_fields_count(),
+				);
 
 				$forms[] = apply_filters( 'wpum_get_registration_form_data_for_table', $form_data );
 			}
 
-			if( is_array( $forms ) && ! empty( $forms ) ) {
+			if ( is_array( $forms ) && ! empty( $forms ) ) {
 				wp_send_json_success( $forms );
 			} else {
 				$this->send_json_error();
 			}
-
 		} else {
 			$this->send_json_error();
 		}
@@ -229,9 +230,9 @@ class WPUM_Registration_Forms_Editor {
 
 		if ( $form_id && $form_name ) {
 
-			$data = apply_filters( 'wpum_registration_form_update', [
+			$data = apply_filters( 'wpum_registration_form_update', array(
 				'name' => $form_name,
-			], $form_id );
+			), $form_id );
 
 			$updated_form = WPUM()->registration_forms->update( $form_id, $data );
 
@@ -241,10 +242,10 @@ class WPUM_Registration_Forms_Editor {
 			wp_die( esc_html__( 'Something went wrong: could not update the registration form details.', 'wp-user-manager' ), 403 );
 		}
 
-		wp_send_json_success( [
-				'id'   => $form_id,
-				'name' => $form_name,
-			] );
+		wp_send_json_success( array(
+			'id'   => $form_id,
+			'name' => $form_name,
+		) );
 	}
 
 	/**
@@ -256,11 +257,11 @@ class WPUM_Registration_Forms_Editor {
 
 		check_ajax_referer( 'wpum_get_registration_form', 'nonce' );
 
-		if( current_user_can( $this->capability ) && is_admin() ) {
+		if ( current_user_can( $this->capability ) && is_admin() ) {
 
 			$form_id = isset( $_GET['form_id'] ) ? absint( $_GET['form_id'] ) : false;
 
-			if( $form_id ) {
+			if ( $form_id ) {
 
 				$form = WPUM()->registration_forms->get( $form_id );
 				$form = new WPUM_Registration_Form( $form->id );
@@ -273,20 +274,19 @@ class WPUM_Registration_Forms_Editor {
 					$settings[ $key ]['all_labels'] = $all_labels;
 				}
 
-				wp_send_json_success( [
+				wp_send_json_success( array(
 					'name'             => $form->get_name(),
 					'available_fields' => $this->get_available_fields( $form_id ),
 					'stored_fields'    => $this->get_stored_fields( $form_id ),
 					'settings'         => $settings,
 					'settings_model'   => $settings_model,
-				] );
+				) );
 
 			} else {
 
 				$this->send_json_error();
 
 			}
-
 		} else {
 
 			$this->send_json_error();
@@ -303,32 +303,32 @@ class WPUM_Registration_Forms_Editor {
 	 */
 	private function get_stored_fields( $form_id ) {
 
-		if( ! $form_id ) {
+		if ( ! $form_id ) {
 			return;
 		}
 
-		$fields = [];
+		$fields = array();
 
 		$form = new WPUM_Registration_Form( $form_id );
 
-		if( $form->exists() ) {
+		if ( $form->exists() ) {
 
 			$stored_fields = $form->get_fields();
 
-			if( is_array( $stored_fields ) && ! empty( $stored_fields ) ) {
+			if ( is_array( $stored_fields ) && ! empty( $stored_fields ) ) {
 				foreach ( $stored_fields as $field ) {
-					$field_data = [];
+					$field_data   = array();
 					$stored_field = new WPUM_Field( $field );
 
-					if( $stored_field->exists() ) {
+					if ( $stored_field->exists() ) {
 						$icon = isset( $stored_field->field_type->icon ) ? $stored_field->field_type->icon : 'dashicons-editor-justify';
 
-						$field_data = [
+						$field_data = array(
 							'id'   => $stored_field->get_ID(),
 							'name' => $stored_field->get_name(),
 							'icon' => $icon,
-							'type' => $stored_field->get_type()
-						];
+							'type' => $stored_field->get_type(),
+						);
 					}
 
 					$field_data = apply_filters( 'wpum_registration_form_get_stored_field', $field_data, $field, $form );
@@ -338,7 +338,6 @@ class WPUM_Registration_Forms_Editor {
 					}
 				}
 			}
-
 		}
 
 		return $fields;
@@ -352,17 +351,17 @@ class WPUM_Registration_Forms_Editor {
 	 */
 	private function get_available_fields( $form_id ) {
 
-		$fields = [];
+		$fields = array();
 
-		$available_fields = WPUM()->fields->get_fields( [
+		$available_fields = WPUM()->fields->get_fields( array(
 			'orderby' => 'fields_order',
-			'order'   => 'ASC'
-		] );
+			'order'   => 'ASC',
+		) );
 
-		$non_allowed_fields = [
+		$non_allowed_fields = array(
 			'user_nickname',
-			'user_displayname'
-		];
+			'user_displayname',
+		);
 
 		if ( ! wpum_get_option( 'custom_avatars' ) ) {
 			$non_allowed_fields[] = 'user_avatar';
@@ -381,22 +380,22 @@ class WPUM_Registration_Forms_Editor {
 
 		foreach ( $available_fields as $field ) {
 			$primary_id = $field->get_primary_id();
-			if( ! empty( $primary_id ) && in_array( $primary_id, $non_allowed_fields ) ) {
+			if ( ! empty( $primary_id ) && in_array( $primary_id, $non_allowed_fields ) ) {
 				continue;
 			}
 
-			if( in_array( $field->get_ID(), $stored_fields ) ) {
+			if ( in_array( $field->get_ID(), $stored_fields ) ) {
 				continue;
 			}
 
 			$icon = isset( $field->field_type->icon ) ? $field->field_type->icon : 'dashicons-editor-justify';
 
-			$fields[] = [
+			$fields[] = array(
 				'id'   => $field->get_ID(),
 				'name' => $field->get_name(),
 				'icon' => $icon,
-				'type' => $field->get_type()
-			];
+				'type' => $field->get_type(),
+			);
 		}
 
 		return apply_filters( 'wpum_registration_form_available_fields', $fields, $form_id );
@@ -411,14 +410,14 @@ class WPUM_Registration_Forms_Editor {
 
 		check_ajax_referer( 'wpum_save_registration_form', 'nonce' );
 
-		if( current_user_can( $this->capability ) && is_admin() ) {
+		if ( current_user_can( $this->capability ) && is_admin() ) {
 
 			$form_id = isset( $_POST['form_id'] ) ? absint( $_POST['form_id'] ) : false;
 			$fields  = isset( $_POST['fields'] ) && is_array( $_POST['fields'] ) && ! empty( $_POST['fields'] ) ? $_POST['fields'] : false;
 
-			if( $form_id ) {
+			if ( $form_id ) {
 				$registration_form = new WPUM_Registration_Form( $form_id );
-				$fields_to_save    = [];
+				$fields_to_save    = array();
 
 				if ( $registration_form->exists() ) {
 					foreach ( $fields as $field ) {
@@ -426,15 +425,13 @@ class WPUM_Registration_Forms_Editor {
 					}
 				}
 
-				if( ! empty( $fields_to_save ) ) {
+				if ( ! empty( $fields_to_save ) ) {
 					$registration_form->update_meta( 'fields', $fields_to_save );
 
 					$this->delete_registration_forms_cache();
 					wp_send_json_success();
 				}
-
 			}
-
 		} else {
 
 			$this->send_json_error();
@@ -452,14 +449,14 @@ class WPUM_Registration_Forms_Editor {
 
 		check_ajax_referer( 'wpum_save_registration_form_settings', 'nonce' );
 
-		if( ! current_user_can( $this->capability ) || ! is_admin() ) {
+		if ( ! current_user_can( $this->capability ) || ! is_admin() ) {
 			$this->send_json_error();
 		}
 
-		$form_id = filter_input( INPUT_POST, 'form_id', FILTER_VALIDATE_INT );
+		$form_id        = filter_input( INPUT_POST, 'form_id', FILTER_VALIDATE_INT );
 		$settings_model = isset( $_POST['settings_model'] ) ? $_POST['settings_model'] : array();
 
-		if( empty( $form_id ) ) {
+		if ( empty( $form_id ) ) {
 			$this->send_json_error();
 		}
 
@@ -470,9 +467,9 @@ class WPUM_Registration_Forms_Editor {
 		}
 
 		$registered_settings = $form->get_settings_options();
-		$settings = array();
-		foreach( $registered_settings as $registered_setting ) {
-			$settings[ $registered_setting['id']] = $registered_setting;
+		$settings            = array();
+		foreach ( $registered_settings as $registered_setting ) {
+			$settings[ $registered_setting['id'] ] = $registered_setting;
 		}
 		$stored_settings_model = $form->get_settings_model();
 
@@ -509,40 +506,40 @@ class WPUM_Registration_Forms_Editor {
 	}
 
 
-	public function get_form_field_data(){
+	public function get_form_field_data() {
 
 		check_ajax_referer( 'wpum_get_registration_form', 'nonce' );
 
-		$parent_id = !empty( $_GET['parent_id'] ) ? intval( $_GET['parent_id'] ) : 0;
+		$parent_id = ! empty( $_GET['parent_id'] ) ? intval( $_GET['parent_id'] ) : 0;
 
-		if( !$parent_id ){
+		if ( ! $parent_id ) {
 			$this->send_json_error();
 		}
 
 		$field = new WPUM_Field( $parent_id );
 
-		if( !$field ){
+		if ( ! $field ) {
 			$this->send_json_error();
 		}
 
 		$fields = WPUM()->fields->get_fields(
-			[
+			array(
 				'orderby'  => 'field_order',
 				'order'    => 'ASC',
 				'parent'   => $field->get_ID(),
-				'group_id' => $field->get_group_id()
-			]
+				'group_id' => $field->get_group_id(),
+			)
 		);
 
-		$response = [];
+		$response = array();
 
-		foreach( $fields as $field ){
-			$response[] = [
+		foreach ( $fields as $field ) {
+			$response[] = array(
 				'id'   => $field->get_ID(),
 				'name' => $field->get_name(),
 				'type' => $field->get_type(),
-				'icon' => $field->field_type->icon ? $field->field_type->icon : 'dashicons-editor-justify'
-			];
+				'icon' => $field->field_type->icon ? $field->field_type->icon : 'dashicons-editor-justify',
+			);
 		}
 
 		wp_send_json_success( array( 'fields' => $response ) );
@@ -604,7 +601,7 @@ class WPUM_Registration_Forms_Editor {
 	 *
 	 * @return string
 	 */
-	public function sanitize_file_field( $input  ) {
+	public function sanitize_file_field( $input ) {
 		return esc_url( $input );
 	}
 
@@ -646,4 +643,4 @@ class WPUM_Registration_Forms_Editor {
 
 }
 
-$wpum_registration_forms_editor = new WPUM_Registration_Forms_Editor;
+$wpum_registration_forms_editor = new WPUM_Registration_Forms_Editor();

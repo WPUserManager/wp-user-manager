@@ -5,10 +5,12 @@
  * @package     wp-user-manager
  * @copyright   Copyright (c) 2018, Alessandro Tesoro
  * @license     https://opensource.org/licenses/GPL-3.0 GNU Public License
-*/
+ */
 
 // Exit if accessed directly
-if ( ! defined( 'ABSPATH' ) ) exit;
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 
 class WPUM_Form_Login extends WPUM_Form {
 
@@ -52,19 +54,19 @@ class WPUM_Form_Login extends WPUM_Form {
 	public function __construct() {
 		add_action( 'wp', array( $this, 'process' ) );
 
-		$this->steps  = (array) apply_filters( 'login_steps', array(
+		$this->steps = (array) apply_filters( 'login_steps', array(
 			'submit' => array(
 				'name'     => __( 'Login Details', 'wp-user-manager' ),
 				'view'     => array( $this, 'submit' ),
 				'handler'  => array( $this, 'submit_handler' ),
-				'priority' => 10
+				'priority' => 10,
 			),
-			'done' => array(
+			'done'   => array(
 				'name'     => __( 'Done', 'wp-user-manager' ),
 				'view'     => false,
 				'handler'  => array( $this, 'done' ),
-				'priority' => 30
-			)
+				'priority' => 30,
+			),
 		) );
 
 		uasort( $this->steps, array( $this, 'sort_by_priority' ) );
@@ -92,22 +94,22 @@ class WPUM_Form_Login extends WPUM_Form {
 					'type'        => 'text',
 					'required'    => true,
 					'placeholder' => '',
-					'priority'    => 1
+					'priority'    => 1,
 				),
 				'password' => array(
 					'label'       => __( 'Password', 'wp-user-manager' ),
 					'type'        => 'password',
 					'required'    => true,
 					'placeholder' => '',
-					'priority'    => 2
+					'priority'    => 2,
 				),
 				'remember' => array(
-					'label'       => __( 'Remember me', 'wp-user-manager' ),
-					'type'        => 'checkbox',
-					'required'    => false,
-					'priority'    => 3
+					'label'    => __( 'Remember me', 'wp-user-manager' ),
+					'type'     => 'checkbox',
+					'required' => false,
+					'priority' => 3,
 				),
-			)
+			),
 		) );
 
 	}
@@ -121,12 +123,12 @@ class WPUM_Form_Login extends WPUM_Form {
 
 		$this->init_fields();
 
-		$data = [
+		$data = array(
 			'form'   => $this->form_name,
 			'action' => $this->get_action(),
 			'fields' => $this->get_fields( 'login' ),
-			'step'   => $this->get_step()
-		];
+			'step'   => $this->get_step(),
+		);
 
 		WPUM()->templates
 			->set_template_data( $data )
@@ -159,11 +161,11 @@ class WPUM_Form_Login extends WPUM_Form {
 
 			$authenticate = wp_authenticate( $username, $password );
 
-			if( is_wp_error( $authenticate ) ) {
+			if ( is_wp_error( $authenticate ) ) {
 
 				throw new Exception( $authenticate->get_error_message() );
 
-			} elseif( $authenticate instanceof WP_User ) {
+			} elseif ( $authenticate instanceof WP_User ) {
 
 				$this->user_id = $authenticate->data->ID;
 
@@ -191,11 +193,11 @@ class WPUM_Form_Login extends WPUM_Form {
 			$username = $values['login']['username'];
 			$password = $values['login']['password'];
 
-			$creds = [
+			$creds = array(
 				'user_login'    => $username,
 				'user_password' => $password,
-				'remember'      => $values['login']['remember'] ? true : false
-			];
+				'remember'      => $values['login']['remember'] ? true : false,
+			);
 
 			$redirect = get_permalink( wpum_get_core_page_id( 'login' ) );
 
@@ -204,7 +206,7 @@ class WPUM_Form_Login extends WPUM_Form {
 				$redirect = $login_redirect;
 			}
 
-			if( isset( $_GET['redirect_to'] ) && ! empty( $_GET['redirect_to'] ) ) {
+			if ( isset( $_GET['redirect_to'] ) && ! empty( $_GET['redirect_to'] ) ) {
 				$redirect = $_GET['redirect_to'];
 			}
 
@@ -218,7 +220,7 @@ class WPUM_Form_Login extends WPUM_Form {
 
 			$redirect = apply_filters( 'wpum_redirect_after_login', $redirect, $user );
 
-			if( is_wp_error( $user ) ) {
+			if ( is_wp_error( $user ) ) {
 				throw new Exception( $user->get_error_message() );
 			} else {
 				wp_safe_redirect( $redirect );

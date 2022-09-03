@@ -8,7 +8,9 @@
  * @since       1.0.0
  */
 
-if ( ! defined( 'ABSPATH' ) ) exit;
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 
 /**
  * Installs the default fields group into the WordPress database.
@@ -18,11 +20,11 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 function wpum_install_default_field_group() {
 	if ( ! get_option( 'wpum_version_upgraded_from' ) ) {
 		$default_group = new WPUM_Field_Group();
-		$default_group->add( [
+		$default_group->add( array(
 			'id'         => 1,
 			'name'       => esc_html__( 'Primary fields', 'wp-user-manager' ),
 			'is_primary' => 1,
-		] );
+		) );
 	}
 }
 
@@ -32,129 +34,129 @@ function wpum_install_default_field_group() {
  * @return array
  */
 function wpum_install_fields() {
-	$saved_fields = [];
-	if( ! get_option( 'wpum_version_upgraded_from' ) ) {
+	$saved_fields = array();
+	if ( ! get_option( 'wpum_version_upgraded_from' ) ) {
 
 		$group_id = 1;
 
-		$fields = [
+		$fields = array(
 			array(
-				'id'         => 1,
-				'group_id'   => $group_id,
-				'type'       => 'username',
-				'name'       => 'Username',
-				'metas'      => [
+				'id'       => 1,
+				'group_id' => $group_id,
+				'type'     => 'username',
+				'name'     => 'Username',
+				'metas'    => array(
 					'required'      => true,
 					'visibility'    => 'public',
-					'user_meta_key' => 'username'
-				]
+					'user_meta_key' => 'username',
+				),
 			),
 			array(
-				'id'         => 2,
-				'group_id'   => $group_id,
-				'type'       => 'user_email',
-				'name'       => 'Email',
-				'metas'      => [
-					'required'      => true,
-					'visibility'    => 'public',
-					'editing'       => 'public',
-					'user_meta_key' => 'user_email'
-				]
-			),
-			array(
-				'id'         => 3,
-				'group_id'   => $group_id,
-				'type'       => 'user_password',
-				'name'       => 'Password',
-				'metas'      => [
-					'required'      => true,
-					'user_meta_key' => 'user_password'
-				]
-			),
-			array(
-				'id'         => 4,
-				'group_id'   => $group_id,
-				'type'       => 'user_firstname',
-				'name'       => 'First name',
-				'metas'      => [
-					'visibility'    => 'public',
-					'editing'       => 'public',
-					'user_meta_key' => 'firstname'
-				]
-			),
-			array(
-				'id'         => 5,
-				'group_id'   => $group_id,
-				'type'       => 'user_lastname',
-				'name'       => 'Last name',
-				'metas'      => [
-					'visibility'    => 'public',
-					'editing'       => 'public',
-					'user_meta_key' => 'lastname'
-				]
-			),
-			array(
-				'id'         => 6,
-				'group_id'   => $group_id,
-				'type'       => 'user_nickname',
-				'name'       => 'Nickname',
-				'metas'      => [
+				'id'       => 2,
+				'group_id' => $group_id,
+				'type'     => 'user_email',
+				'name'     => 'Email',
+				'metas'    => array(
 					'required'      => true,
 					'visibility'    => 'public',
 					'editing'       => 'public',
-					'user_meta_key' => 'nickname'
-				]
+					'user_meta_key' => 'user_email',
+				),
 			),
 			array(
-				'id'         => 7,
-				'group_id'   => $group_id,
-				'type'       => 'user_displayname',
-				'name'       => 'Display name',
-				'metas'      => [
+				'id'       => 3,
+				'group_id' => $group_id,
+				'type'     => 'user_password',
+				'name'     => 'Password',
+				'metas'    => array(
+					'required'      => true,
+					'user_meta_key' => 'user_password',
+				),
+			),
+			array(
+				'id'       => 4,
+				'group_id' => $group_id,
+				'type'     => 'user_firstname',
+				'name'     => 'First name',
+				'metas'    => array(
+					'visibility'    => 'public',
+					'editing'       => 'public',
+					'user_meta_key' => 'firstname',
+				),
+			),
+			array(
+				'id'       => 5,
+				'group_id' => $group_id,
+				'type'     => 'user_lastname',
+				'name'     => 'Last name',
+				'metas'    => array(
+					'visibility'    => 'public',
+					'editing'       => 'public',
+					'user_meta_key' => 'lastname',
+				),
+			),
+			array(
+				'id'       => 6,
+				'group_id' => $group_id,
+				'type'     => 'user_nickname',
+				'name'     => 'Nickname',
+				'metas'    => array(
 					'required'      => true,
 					'visibility'    => 'public',
 					'editing'       => 'public',
-					'user_meta_key' => 'display_name'
-				]
+					'user_meta_key' => 'nickname',
+				),
 			),
 			array(
-				'id'         => 8,
-				'group_id'   => $group_id,
-				'type'       => 'user_website',
-				'name'       => 'Website',
-				'metas'      => [
+				'id'       => 7,
+				'group_id' => $group_id,
+				'type'     => 'user_displayname',
+				'name'     => 'Display name',
+				'metas'    => array(
+					'required'      => true,
 					'visibility'    => 'public',
 					'editing'       => 'public',
-					'user_meta_key' => 'user_url'
-				]
+					'user_meta_key' => 'display_name',
+				),
 			),
 			array(
-				'id'         => 9,
-				'group_id'   => $group_id,
-				'type'       => 'user_description',
-				'name'       => 'Description',
-				'metas'      => [
+				'id'       => 8,
+				'group_id' => $group_id,
+				'type'     => 'user_website',
+				'name'     => 'Website',
+				'metas'    => array(
 					'visibility'    => 'public',
 					'editing'       => 'public',
-					'user_meta_key' => 'description'
-				]
+					'user_meta_key' => 'user_url',
+				),
 			),
 			array(
-				'id'         => 10,
-				'group_id'   => $group_id,
-				'type'       => 'user_avatar',
-				'name'       => 'Profile picture',
-				'metas'      => [
+				'id'       => 9,
+				'group_id' => $group_id,
+				'type'     => 'user_description',
+				'name'     => 'Description',
+				'metas'    => array(
 					'visibility'    => 'public',
 					'editing'       => 'public',
-					'user_meta_key' => 'current_user_avatar'
-				]
-			)
-		];
+					'user_meta_key' => 'description',
+				),
+			),
+			array(
+				'id'       => 10,
+				'group_id' => $group_id,
+				'type'     => 'user_avatar',
+				'name'     => 'Profile picture',
+				'metas'    => array(
+					'visibility'    => 'public',
+					'editing'       => 'public',
+					'user_meta_key' => 'current_user_avatar',
+				),
+			),
+		);
 
 		$order = 0;
 
-		foreach( $fields as $field ) {
+		foreach ( $fields as $field ) {
 
 			$order++;
 			$field['field_order'] = $order;
@@ -162,7 +164,7 @@ function wpum_install_fields() {
 			$save_field = new WPUM_Field();
 			$save_field->add( $field );
 
-			foreach( $field['metas'] as $meta_key => $meta_value ) {
+			foreach ( $field['metas'] as $meta_key => $meta_value ) {
 				$save_field->add_meta( $meta_key, $meta_value );
 			}
 
@@ -183,9 +185,9 @@ function wpum_install_cover_image_field() {
 	$group_id = 1;
 
 	$field = array(
-		'group_id'   => $group_id,
-		'type'       => 'user_cover',
-		'name'       => 'Profile cover image',
+		'group_id' => $group_id,
+		'type'     => 'user_cover',
+		'name'     => 'Profile cover image',
 	);
 
 	$save_field = new WPUM_Field();
@@ -203,7 +205,7 @@ function wpum_install_cover_image_field() {
  */
 function wpum_get_primary_field_types() {
 
-	$types = [
+	$types = array(
 		'username',
 		'user_email',
 		'user_password',
@@ -214,8 +216,8 @@ function wpum_get_primary_field_types() {
 		'user_website',
 		'user_description',
 		'user_avatar',
-		'user_cover'
-	];
+		'user_cover',
+	);
 
 	return apply_filters( 'wpum_get_primary_field_types', $types );
 
@@ -228,7 +230,7 @@ function wpum_get_primary_field_types() {
  */
 function wpum_get_edit_field_dialog_tabs() {
 
-	$tabs = [
+	$tabs = array(
 		array(
 			'id'   => 'fields',
 			'name' => esc_html__( 'Fields', 'wp-user-manager' ),
@@ -253,7 +255,7 @@ function wpum_get_edit_field_dialog_tabs() {
 			'id'   => 'appearance',
 			'name' => esc_html__( 'Appearance', 'wp-user-manager' ),
 		),
-	];
+	);
 
 	return apply_filters( 'wpum_get_fields_editor_edit_tabs', $tabs );
 
@@ -272,10 +274,10 @@ function wpum_get_registered_field_types() {
  * Use this function to start a loop of profile fields.
  *
  * @global $wpum_profile_fields
- * @param  array  $args arguments to create the loop.
+ * @param  array $args arguments to create the loop.
  * @return boolean       whether there's any group found.
  */
-function wpum_has_profile_fields( $args = [] ) {
+function wpum_has_profile_fields( $args = array() ) {
 
 	global $wpum_profile_fields;
 
@@ -323,7 +325,7 @@ function wpum_get_field_group_id() {
  * @return void
  */
 function wpum_the_field_group_id() {
-	echo wpum_get_field_group_id();
+	echo esc_attr( wpum_get_field_group_id() );
 }
 
 /**
@@ -343,7 +345,7 @@ function wpum_get_field_group_name() {
  * @return void
  */
 function wpum_the_field_group_name() {
-	echo wpum_get_field_group_name();
+	echo wp_kses_post( wpum_get_field_group_name() );
 }
 
 /**
@@ -363,17 +365,18 @@ function wpum_get_field_group_slug() {
  * @return void
  */
 function wpum_the_field_group_slug() {
-	echo wpum_get_field_group_slug();
+	echo esc_attr( wpum_get_field_group_slug() );
 }
 
 /**
  * Retrieve the description of the group within the loop.
  *
- * @global $wpum_fields_group
  * @return string
+ * @global $wpum_fields_group
  */
 function wpum_get_field_group_description() {
 	global $wpum_fields_group;
+
 	return apply_filters( 'wpum_get_field_group_description', $wpum_fields_group->get_description(), $wpum_fields_group->get_id() );
 }
 
@@ -383,7 +386,7 @@ function wpum_get_field_group_description() {
  * @return void
  */
 function wpum_the_field_group_description() {
-	echo wpum_get_field_group_description();
+	echo wp_kses_post( wpum_get_field_group_description() );
 }
 
 /**
@@ -412,7 +415,6 @@ function wpum_profile_fields() {
  * Setup global variable for field within the loop.
  *
  * @global $wpum_profile_fields
- * @return void
  */
 function wpum_the_profile_field() {
 	global $wpum_profile_fields;
@@ -458,7 +460,7 @@ function wpum_get_field_name() {
  * @return void
  */
 function wpum_the_field_name() {
-	echo wpum_get_field_name();
+	echo wp_kses_post( wpum_get_field_name() );
 }
 
 /**
@@ -479,7 +481,7 @@ function wpum_get_field_description() {
  * @return void
  */
 function wpum_the_field_description() {
-	echo wpum_get_field_description();
+	echo wp_kses_post( wpum_get_field_description() );
 }
 
 /**
@@ -543,7 +545,7 @@ function wpum_get_field_css_class( $class = false ) {
  * @return void
  */
 function wpum_the_field_css_class( $class = false ) {
-	echo join( ' ', wpum_get_field_css_class( $class ) );
+	echo esc_attr( join( ' ', wpum_get_field_css_class( $class ) ) );
 }
 
 /**
@@ -574,14 +576,15 @@ function wpum_get_the_field_value() {
  * @return void
  */
 function wpum_the_field_value() {
-	echo wpum_get_the_field_value();
+	echo wpum_get_the_field_value(); // phpcs:ignore
 }
 
 /**
  * Wrapper function for size_format - checks the max size of the avatar and cover field.
  *
- * @param array   $field
- * @param string  $size  in bytes
+ * @param string $field_name
+ * @param string $custom_size in bytes
+ *
  * @return string
  */
 function wpum_max_upload_size( $field_name = '', $custom_size = false ) {
@@ -590,9 +593,9 @@ function wpum_max_upload_size( $field_name = '', $custom_size = false ) {
 	$output = size_format( wp_max_upload_size() );
 
 	// Check if the field is the avatar upload field and max size is defined,
-	if ( $field_name == 'user_avatar' && defined( 'WPUM_MAX_AVATAR_SIZE' ) ) {
+	if ( 'user_avatar' === $field_name && defined( 'WPUM_MAX_AVATAR_SIZE' ) ) {
 		$output = size_format( WPUM_MAX_AVATAR_SIZE );
-	} else if( $field_name == 'user_cover' && defined( 'WPUM_MAX_COVER_SIZE' ) ) {
+	} elseif ( 'user_cover' === $field_name && defined( 'WPUM_MAX_COVER_SIZE' ) ) {
 		$output = size_format( WPUM_MAX_COVER_SIZE );
 	}
 
@@ -608,7 +611,7 @@ function wpum_max_upload_size( $field_name = '', $custom_size = false ) {
  *
  * @return array
  */
-function wpum_get_registered_parent_field_types(){
+function wpum_get_registered_parent_field_types() {
 
-	return apply_filters( 'wpum_registered_parent_field_types', [] );
+	return apply_filters( 'wpum_registered_parent_field_types', array() );
 }

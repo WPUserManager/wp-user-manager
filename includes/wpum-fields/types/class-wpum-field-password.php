@@ -5,16 +5,21 @@
  * @package     wp-user-manager
  * @copyright   Copyright (c) 2018, Alessandro Tesoro
  * @license     https://opensource.org/licenses/GPL-3.0 GNU Public License
-*/
+ */
 
 // Exit if accessed directly
-if ( ! defined( 'ABSPATH' ) ) exit;
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 
 /**
  * Register a text field type.
  */
 class WPUM_Field_Password extends WPUM_Field_Type {
 
+	/**
+	 * Construct
+	 */
 	public function __construct() {
 		$this->name  = esc_html__( 'Password', 'wp-user-manager' );
 		$this->type  = 'password';
@@ -22,6 +27,9 @@ class WPUM_Field_Password extends WPUM_Field_Type {
 		$this->order = 3;
 	}
 
+	/**
+	 * @return array
+	 */
 	public function get_data_keys() {
 		$keys = parent::get_data_keys();
 
@@ -32,8 +40,8 @@ class WPUM_Field_Password extends WPUM_Field_Type {
 	 * @return array
 	 */
 	public function get_editor_settings() {
-		return [
-			'validation' => [
+		return array(
+			'validation' => array(
 				'maxlength' => array(
 					'type'      => 'input',
 					'inputType' => 'number',
@@ -41,8 +49,8 @@ class WPUM_Field_Password extends WPUM_Field_Type {
 					'model'     => 'maxlength',
 					'hint'      => esc_html__( 'Leave blank for no limit.', 'wp-user-manager' ),
 				),
-			],
-		];
+			),
+		);
 	}
 
 }

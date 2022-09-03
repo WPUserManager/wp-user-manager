@@ -5,10 +5,12 @@
  * @package     wp-user-manager
  * @copyright   Copyright (c) 2018, Alessandro Tesoro
  * @license     https://opensource.org/licenses/GPL-3.0 GNU Public License
-*/
+ */
 
 // Exit if accessed directly
-if ( ! defined( 'ABSPATH' ) ) exit;
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 
 /**
  * WPUM_DB_Fields Class
@@ -92,8 +94,8 @@ class WPUM_DB_Fields extends WPUM_DB {
 	 * Update a field.
 	 *
 	 * @access public
-	 * @param int   $row_id field ID.
-	 * @param array $data
+	 * @param int                $row_id field ID.
+	 * @param array              $data
 	 * @param mixed string|array $where Where clause to filter update.
 	 *
 	 * @return  bool
@@ -158,16 +160,31 @@ class WPUM_DB_Fields extends WPUM_DB {
 		return $last_changed;
 	}
 
+	/**
+	 * @param array $args
+	 *
+	 * @return string
+	 */
 	protected function get_cache_key( $args ) {
-		return md5( 'wpum_fields_' . serialize( $args ) );
+		return md5( 'wpum_fields_' . serialize( $args ) ); // phpcs:ignore
 	}
 
+	/**
+	 * @param array $args
+	 *
+	 * @return string
+	 */
 	public function get_cache_key_from_args( $args ) {
 		$args = $this->get_args( $args );
 
 		return $this->get_cache_key( $args );
 	}
 
+	/**
+	 * @param array $args
+	 *
+	 * @return array|object
+	 */
 	protected function get_args( $args = array() ) {
 		global $wpdb;
 
@@ -178,7 +195,7 @@ class WPUM_DB_Fields extends WPUM_DB {
 			'group_id' => false,
 			'orderby'  => 'id',
 			'order'    => 'DESC',
-			'user_id'  => false
+			'user_id'  => false,
 		);
 
 		$args = wp_parse_args( $args, $defaults );
@@ -220,14 +237,14 @@ class WPUM_DB_Fields extends WPUM_DB {
 		$args['orderby'] = esc_sql( $args['orderby'] );
 		$args['order']   = esc_sql( $args['order'] );
 
-		$join_query = "";
+		$join_query = '';
 
-		if( !empty( $args['parent'] )  ){
-			$meta_table = $wpdb->prefix.'wpum_fieldmeta';
-			$join_query = $wpdb->prepare("JOIN $meta_table meta ON meta.wpum_field_id = id AND meta.meta_key = %s", "parent_id");
+		if ( ! empty( $args['parent'] ) ) {
+			$meta_table = $wpdb->prefix . 'wpum_fieldmeta';
+			$join_query = $wpdb->prepare( "JOIN $meta_table meta ON meta.wpum_field_id = id AND meta.meta_key = %s", 'parent_id' );
 			$join_query = apply_filters( 'wpum_fields_join_query', $join_query, $this );
 
-			$where 		= str_replace( '`group_id`', sprintf( 'meta.meta_value = %d AND `group_id`', intval( $args['parent'] ) ), $where );
+			$where = str_replace( '`group_id`', sprintf( 'meta.meta_value = %d AND `group_id`', intval( $args['parent'] ) ), $where );
 		}
 
 		if ( false === $fields ) {
@@ -245,11 +262,11 @@ class WPUM_DB_Fields extends WPUM_DB {
 				$new_fields = array();
 				foreach ( $fields as $key => $field ) {
 
-					$field          = new WPUM_Field( $field );
+					$field = new WPUM_Field( $field );
 					$field->set_user_meta( $args['user_id'] );
 
-					if( empty( $args['parent'] ) && $field->get_parent_ID() > 0 ){
-						unset( $fields[$key] );
+					if ( empty( $args['parent'] ) && $field->get_parent_ID() > 0 ) {
+						unset( $fields[ $key ] );
 						continue;
 					}
 					$new_fields[] = $field;

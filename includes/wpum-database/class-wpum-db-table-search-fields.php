@@ -5,10 +5,12 @@
  * @package     wp-user-manager
  * @copyright   Copyright (c) 2018, Alessandro Tesoro
  * @license     https://opensource.org/licenses/GPL-3.0 GNU Public License
-*/
+ */
 
 // Exit if accessed directly
-if ( ! defined( 'ABSPATH' ) ) exit;
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 
 /**
  * Setup the global "wpum_search_fields" database table
@@ -38,7 +40,7 @@ final class WPUM_DB_Table_Search_Fields extends WPUM_DB_Table {
 	 * @return void
 	 */
 	protected function set_schema() {
-		$this->schema     = "id bigint(20) unsigned NOT NULL auto_increment,
+		$this->schema = "id bigint(20) unsigned NOT NULL auto_increment,
 			meta_key varchar(255) NOT NULL default '',
 			PRIMARY KEY (id)";
 	}

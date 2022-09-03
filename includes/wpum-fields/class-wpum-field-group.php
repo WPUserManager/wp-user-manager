@@ -5,11 +5,16 @@
  * @package     wp-user-manager
  * @copyright   Copyright (c) 2018, Alessandro Tesoro
  * @license     https://opensource.org/licenses/GPL-3.0 GNU Public License
-*/
+ */
 
 // Exit if accessed directly
-if ( ! defined( 'ABSPATH' ) ) exit;
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 
+/**
+ * WPUM_Field_Group
+ */
 class WPUM_Field_Group {
 
 	/**
@@ -67,23 +72,25 @@ class WPUM_Field_Group {
 
 	/**
 	 * The Database Abstraction
+	 *
+	 * @var WPUM_DB_Fields_Groups
 	 */
 	protected $db;
 
 	/**
 	 * Constructor.
 	 *
-	 * @param mixed|boolean $_id
+	 * @param mixed $_id_or_group
 	 */
 	public function __construct( $_id_or_group = false ) {
 
 		$this->db = new WPUM_DB_Fields_Groups();
 
-		if( empty( $_id_or_group ) ) {
+		if ( empty( $_id_or_group ) ) {
 			return false;
 		}
 
-		if( is_a( $_id_or_group, 'WPUM_Field_Group' ) ) {
+		if ( is_a( $_id_or_group, 'WPUM_Field_Group' ) ) {
 			$group = $_id_or_group;
 		} else {
 			$_id_or_group = intval( $_id_or_group );
@@ -102,12 +109,14 @@ class WPUM_Field_Group {
 	 * Magic __get function to dispatch a call to retrieve a private property.
 	 *
 	 * @param string $key
-	 * @return void
+	 *
+	 * @return mixed
 	 */
 	public function __get( $key ) {
-		if( method_exists( $this, 'get_' . $key ) ) {
+		if ( method_exists( $this, 'get_' . $key ) ) {
 			return call_user_func( array( $this, 'get_' . $key ) );
 		} else {
+			// translators: property name
 			return new WP_Error( 'wpum-field-group-invalid-property', sprintf( __( 'Can\'t get property %s', 'wp-user-manager' ), $key ) );
 		}
 	}
@@ -116,7 +125,7 @@ class WPUM_Field_Group {
 	 * Set properties of the class.
 	 *
 	 * @param string $key
-	 * @param mixed $value
+	 * @param mixed  $value
 	 */
 	public function __set( $key, $value ) {
 		$this->$key = $value;
@@ -126,11 +135,12 @@ class WPUM_Field_Group {
 	 * Setup the field group.
 	 *
 	 * @param mixed $group
-	 * @return void
+	 *
+	 * @return bool
 	 */
 	private function setup_field_group( $group = null ) {
 
-		if ( null == $group ) {
+		if ( null === $group ) {
 			return false;
 		}
 
@@ -225,7 +235,7 @@ class WPUM_Field_Group {
 	/**
 	 * Check if a group exists.
 	 *
-	 * @return void
+	 * @return bool
 	 */
 	public function exists() {
 		if ( ! $this->id > 0 ) {
@@ -239,7 +249,8 @@ class WPUM_Field_Group {
 	 * Add a new field group or update an existing one.
 	 *
 	 * @param array $args
-	 * @return void
+	 *
+	 * @return bool|int
 	 */
 	public function add( $args ) {
 
@@ -262,11 +273,11 @@ class WPUM_Field_Group {
 				$this->$key = $value;
 			}
 
-			if ( $id = $this->db->insert( $args ) ) {
+			$id = $this->db->insert( $args );
+			if ( $id ) {
 				$this->id = $id;
 				$this->setup_field_group( $id );
 			}
-
 		}
 
 		do_action( 'wpum_post_insert_field_group', $args, $this->id );
@@ -279,7 +290,8 @@ class WPUM_Field_Group {
 	 * Update an existing field group.
 	 *
 	 * @param array $args
-	 * @return void
+	 *
+	 * @return bool
 	 */
 	public function update( $args ) {
 
@@ -311,7 +323,8 @@ class WPUM_Field_Group {
 	 * Sanitize columns before adding a group to the database.
 	 *
 	 * @param array $data
-	 * @return void
+	 *
+	 * @return array
 	 */
 	private function sanitize_columns( $data ) {
 
@@ -325,26 +338,25 @@ class WPUM_Field_Group {
 				continue;
 			}
 
-			switch( $type ) {
+			switch ( $type ) {
 				case '%s':
-					if( is_array( $data[$key] ) ) {
-						$data[$key] = json_encode( $data[$key] );
+					if ( is_array( $data[ $key ] ) ) {
+						$data[ $key ] = wp_json_encode( $data[ $key ] );
 					} else {
-						$data[$key] = sanitize_text_field( $data[$key] );
+						$data[ $key ] = sanitize_text_field( $data[ $key ] );
 					}
-				break;
+					break;
 				case '%d':
-					if ( ! is_numeric( $data[$key] ) || (int) $data[$key] !== absint( $data[$key] ) ) {
-						$data[$key] = $default_values[$key];
+					if ( ! is_numeric( $data[ $key ] ) || absint( $data[ $key ] ) !== (int) $data[ $key ] ) {
+						$data[ $key ] = $default_values[ $key ];
 					} else {
-						$data[$key] = absint( $data[$key] );
+						$data[ $key ] = absint( $data[ $key ] );
 					}
-				break;
+					break;
 				default:
-					$data[$key] = sanitize_text_field( $data[$key] );
-				break;
+					$data[ $key ] = sanitize_text_field( $data[ $key ] );
+					break;
 			}
-
 		}
 
 		return $data;
@@ -355,13 +367,14 @@ class WPUM_Field_Group {
 	 * Count fields within a group.
 	 *
 	 * @param int $group_id
-	 * @return void
+	 *
+	 * @return bool|int
 	 */
 	public function count_fields( $group_id = false ) {
 
 		global $wpdb;
 
-		if( ! $group_id ) {
+		if ( ! $group_id ) {
 			return false;
 		}
 
@@ -369,14 +382,13 @@ class WPUM_Field_Group {
 
 		$sql = "
 			SELECT COUNT(*) FROM {$table_name}
-			WHERE group_id = $group_id
+			WHERE group_id = %d
 		";
 
-		$results = (array) $wpdb->get_results( $sql, ARRAY_A );
-		$count   = array_values($results[0])[0];
+		$results = (array) $wpdb->get_results( $wpdb->prepare( $sql, $group_id ), ARRAY_A ); // phpcs:ignore
+		$count   = array_values( $results[0] )[0];
 
 		return $count;
-
 	}
 
 }

@@ -5,7 +5,7 @@
  * @package     wp-user-manager
  * @copyright   Copyright (c) 2018, Alessandro Tesoro
  * @license     https://opensource.org/licenses/GPL-3.0 GNU Public License
-*/
+ */
 
 // Exit if accessed directly
 if ( ! defined( 'ABSPATH' ) ) {
@@ -67,7 +67,7 @@ class WPUM_Form_Password extends WPUM_Form {
 		$this->user = wp_get_current_user();
 
 		add_action( 'wp', array( $this, 'process' ) );
-		add_filter( 'submit_wpum_form_validate_fields', [ $this, 'validate_password' ], 10, 4 );
+		add_filter( 'submit_wpum_form_validate_fields', array( $this, 'validate_password' ), 10, 4 );
 
 		$this->steps = (array) apply_filters(
 			'password_change_steps', array(
@@ -139,13 +139,13 @@ class WPUM_Form_Password extends WPUM_Form {
 
 		$this->init_fields();
 
-		$data = [
+		$data = array(
 			'form'      => $this->form_name,
 			'action'    => $this->get_action(),
 			'fields'    => $this->get_fields( 'password' ),
 			'step'      => $this->get_step(),
 			'step_name' => $this->steps[ $this->get_step_key( $this->get_step() ) ]['name'],
-		];
+		);
 
 		WPUM()->templates
 			->set_template_data( $data )
@@ -157,9 +157,9 @@ class WPUM_Form_Password extends WPUM_Form {
 	 * Make sure the password is a strong one and matches the confirmation.
 	 *
 	 * @param boolean $pass
-	 * @param array $fields
-	 * @param array $values
-	 * @param string $form
+	 * @param array   $fields
+	 * @param array   $values
+	 * @param string  $form
 	 * @return mixed
 	 */
 	public function validate_password( $pass, $fields, $values, $form ) {
@@ -225,10 +225,10 @@ class WPUM_Form_Password extends WPUM_Form {
 			}
 
 			$updated_user_id = wp_update_user(
-				[
+				array(
 					'ID'        => $this->user->ID,
 					'user_pass' => $values['password']['password'],
-				]
+				)
 			);
 
 			/**
@@ -253,10 +253,10 @@ class WPUM_Form_Password extends WPUM_Form {
 				}
 				$redirect = rtrim( $redirect, '/' ) . '/' . 'password';
 				$redirect = add_query_arg(
-					[
+					array(
 						'password-updated' => 'success',
 						'tab'              => $active_tab,
-					], $redirect
+					), $redirect
 				);
 
 				wp_safe_redirect( $redirect );

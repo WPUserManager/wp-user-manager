@@ -5,11 +5,16 @@
  * @package     wp-user-manager
  * @copyright   Copyright (c) 2018, Alessandro Tesoro
  * @license     https://opensource.org/licenses/GPL-3.0 GNU Public License
-*/
+ */
 
 // Exit if accessed directly
-if ( ! defined( 'ABSPATH' ) ) exit;
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 
+/**
+ * Fields Query
+ */
 class WPUM_Fields_Query {
 
 	/**
@@ -91,20 +96,20 @@ class WPUM_Fields_Query {
 
 		$defaults = array(
 			'user_id'       => wpum_get_queried_user_id(),
-			'number_groups' => 20
+			'number_groups' => 20,
 		);
 
 		// Parse incoming $args into an array and merge it with $defaults
 		$args = wp_parse_args( $args, $defaults );
 
 		// Retrieve groups.
-		$groups = WPUM()->fields_groups->get_groups( [
+		$groups = WPUM()->fields_groups->get_groups( array(
 			'orderby' => 'group_order',
 			'order'   => 'ASC',
 			'number'  => $args['number_groups'],
 			'fields'  => true,
-			'user_id' => $args['user_id']
-		] );
+			'user_id' => $args['user_id'],
+		) );
 
 		$this->groups      = $groups;
 		$this->group_count = count( $this->groups );
@@ -119,7 +124,7 @@ class WPUM_Fields_Query {
 	 * @return boolean
 	 */
 	public function has_groups() {
-		if( ! empty( $this->group_count ) ) {
+		if ( ! empty( $this->group_count ) ) {
 			return true;
 		}
 		return false;
@@ -138,9 +143,9 @@ class WPUM_Fields_Query {
 		$this->field_count = 0;
 		$this->group       = $this->group;
 
-		if( ! empty( $this->group->get_fields() ) ) {
+		if ( ! empty( $this->group->get_fields() ) ) {
 			$this->group->fields = apply_filters( 'wpum_group_fields', $this->group->get_fields(), $this->group->get_ID() );
-			$this->field_count = count( $this->group->get_fields() );
+			$this->field_count   = count( $this->group->get_fields() );
 		}
 
 		return $this->group;
@@ -155,7 +160,7 @@ class WPUM_Fields_Query {
 	public function rewind_groups() {
 		$this->current_group = -1;
 
-		if( $this->group_count > 0 ) {
+		if ( $this->group_count > 0 ) {
 			$this->group = $this->groups[0];
 		}
 
@@ -167,9 +172,9 @@ class WPUM_Fields_Query {
 	 * @return bool
 	 */
 	public function profile_groups() {
-		if( $this->current_group + 1 < $this->group_count ) {
+		if ( $this->current_group + 1 < $this->group_count ) {
 			return true;
-		} elseif ( $this->current_group + 1 == $this->group_count ) {
+		} elseif ( $this->current_group + 1 === $this->group_count ) {
 			do_action( 'wpum_field_groups_loop_end' );
 			$this->rewind_groups();
 		}
@@ -187,7 +192,7 @@ class WPUM_Fields_Query {
 		global $wpum_fields_group;
 		$this->in_the_loop = true;
 		$wpum_fields_group = $this->next_group();
-		if( 0 === $this->current_group ) {
+		if ( 0 === $this->current_group ) {
 			do_action( 'wpum_field_groups_loop_start' );
 		}
 	}
@@ -232,7 +237,7 @@ class WPUM_Fields_Query {
 	 */
 	public function rewind_fields() {
 		$this->current_field = -1;
-		if( $this->field_count > 0 ) {
+		if ( $this->field_count > 0 ) {
 			$fields      = $this->group->get_fields();
 			$this->field = $fields[0];
 		}
@@ -247,7 +252,7 @@ class WPUM_Fields_Query {
 	public function profile_fields() {
 		if ( $this->current_field + 1 < $this->field_count ) {
 			return true;
-		} elseif ( $this->current_field + 1 == $this->field_count ) {
+		} elseif ( $this->current_field + 1 === $this->field_count ) {
 			$this->rewind_fields();
 		}
 		return false;
@@ -273,7 +278,7 @@ class WPUM_Fields_Query {
 		if ( ! empty( $value ) || ( '0' === $value ) ) {
 			$this->field_has_data = true;
 			// Now verify if the field is visible or not.
-			if( $wpum_field->get_visibility() !== 'public' ) {
+			if ( $wpum_field->get_visibility() !== 'public' ) {
 				$this->field_has_data = false;
 			}
 		} else {

@@ -5,10 +5,12 @@
  * @package     wp-user-manager
  * @copyright   Copyright (c) 2018, Alessandro Tesoro
  * @license     https://opensource.org/licenses/GPL-3.0 GNU Public License
-*/
+ */
 
 // Exit if accessed directly
-if ( ! defined( 'ABSPATH' ) ) exit;
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 
 /**
  * Add login shortcode window to the editor.
@@ -30,7 +32,7 @@ class WPUM_Shortcode_Password extends WPUM_Shortcode_Generator {
 	 * @return array
 	 */
 	public function define_fields() {
-		return [
+		return array(
 			array(
 				'type'    => 'listbox',
 				'name'    => 'login_link',
@@ -43,9 +45,9 @@ class WPUM_Shortcode_Password extends WPUM_Shortcode_Generator {
 				'label'   => esc_html__( 'Show registration link:', 'wp-user-manager' ),
 				'options' => $this->get_yes_no(),
 			),
-		];
+		);
 	}
 
 }
 
-new WPUM_Shortcode_Password;
+new WPUM_Shortcode_Password();

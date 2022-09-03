@@ -8,7 +8,9 @@
  * @since       1.0.0
  */
 
-if ( ! defined( 'ABSPATH' ) ) exit;
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 
 use Carbon_Fields\Container;
 use Carbon_Fields\Field;
@@ -31,10 +33,10 @@ class WPUM_Updater_Settings {
 	 * @return void
 	 */
 	public function hooks() {
-		add_action( 'admin_enqueue_scripts', [ $this, 'license_scripts' ] );
-		add_action( 'carbon_fields_register_fields', [ $this, 'license_settings_panel' ] );
-		add_action( 'admin_notices', [ $this, 'notices' ] );
-		add_action( 'admin_footer', [ $this, 'remove_query_args' ] );
+		add_action( 'admin_enqueue_scripts', array( $this, 'license_scripts' ) );
+		add_action( 'carbon_fields_register_fields', array( $this, 'license_settings_panel' ) );
+		add_action( 'admin_notices', array( $this, 'notices' ) );
+		add_action( 'admin_footer', array( $this, 'remove_query_args' ) );
 	}
 
 	/**
@@ -46,7 +48,7 @@ class WPUM_Updater_Settings {
 
 		$settings = $this->get_registered_fields();
 
-		if( ! empty( $settings ) ) {
+		if ( ! empty( $settings ) ) {
 			Container::make( 'theme_options', esc_html__( 'WP User Manager addon licenses', 'wp-user-manager' ) )
 			->set_page_parent( 'options-general.php' )
 			->set_page_menu_title( esc_html__( 'WPUM Licenses', 'wp-user-manager' ) )
@@ -63,9 +65,9 @@ class WPUM_Updater_Settings {
 	 */
 	private function get_registered_fields() {
 
-		$settings = apply_filters( 'wpum_licenses_register_addon_settings', [] );
+		$settings = apply_filters( 'wpum_licenses_register_addon_settings', array() );
 
-		if( ! empty( $settings ) ) {
+		if ( ! empty( $settings ) ) {
 			$settings[] = Field::make( 'hidden', 'wpum_license_submission' );
 		}
 
@@ -80,7 +82,7 @@ class WPUM_Updater_Settings {
 	 */
 	public function license_scripts() {
 		$screen = get_current_screen();
-		if( $screen->base == 'settings_page_wpum-licenses' ) {
+		if ( 'settings_page_wpum-licenses' === $screen->base ) {
 			wp_enqueue_style( 'wpum-license-styles', WPUM_PLUGIN_URL . 'assets/css/admin/licensing.css', false, WPUM_VERSION );
 		}
 	}
@@ -91,8 +93,8 @@ class WPUM_Updater_Settings {
 	 * @return void
 	 */
 	public function notices() {
-
-		if( is_admin() && current_user_can( 'manage_options' ) && isset( $_GET[ 'license' ] ) && $_GET['license'] == 'deactivated' ) {
+		$license = filter_input( INPUT_GET, 'license', FILTER_SANITIZE_STRING );
+		if ( is_admin() && current_user_can( 'manage_options' ) && 'deactivated' === $license ) {
 
 			?>
 			<div class="notice notice-success is-dismissible">
@@ -113,7 +115,7 @@ class WPUM_Updater_Settings {
 	public function remove_query_args() {
 
 		$screen = get_current_screen();
-		if( $screen->base !== 'settings_page_wpum-licenses' ) {
+		if ( 'settings_page_wpum-licenses' !== $screen->base ) {
 			return;
 		}
 
@@ -157,4 +159,4 @@ class WPUM_Updater_Settings {
 
 }
 
-new WPUM_Updater_Settings;
+new WPUM_Updater_Settings();

@@ -5,21 +5,26 @@
  * @package     wp-user-manager
  * @copyright   Copyright (c) 2018, Alessandro Tesoro
  * @license     https://opensource.org/licenses/GPL-3.0 GNU Public License
-*/
+ */
 
 // Exit if accessed directly
-if ( ! defined( 'ABSPATH' ) ) exit;
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 
 /**
  * Register a text field type.
  */
 class WPUM_Field_Url extends WPUM_Field_Type {
 
+	/**
+	 * Construct
+	 */
 	public function __construct() {
-		$this->name  = esc_html__( 'URL', 'wp-user-manager' );
-		$this->type  = 'url';
-		$this->icon  = 'dashicons-admin-links';
-		$this->order = 3;
+		$this->name          = esc_html__( 'URL', 'wp-user-manager' );
+		$this->type          = 'url';
+		$this->icon          = 'dashicons-admin-links';
+		$this->order         = 3;
 		$this->allow_default = true;
 	}
 
@@ -27,13 +32,16 @@ class WPUM_Field_Url extends WPUM_Field_Type {
 	 * Format the output onto the profiles for the url field.
 	 *
 	 * @param object $field
-	 * @param mixed $value
+	 * @param mixed  $value
 	 * @return string
 	 */
-	function get_formatted_output( $field, $value ) {
-		return '<a href="'. esc_url( $value ) .'" target="_blank" rel="noopener noreferrer">'. esc_html( $value ) .'</a>';
+	public function get_formatted_output( $field, $value ) {
+		return '<a href="' . esc_url( $value ) . '" target="_blank" rel="noopener noreferrer">' . esc_html( $value ) . '</a>';
 	}
 
+	/**
+	 * @return array
+	 */
 	public function get_data_keys() {
 		$keys = parent::get_data_keys();
 
@@ -44,8 +52,8 @@ class WPUM_Field_Url extends WPUM_Field_Type {
 	 * @return array
 	 */
 	public function get_editor_settings() {
-		return [
-			'validation' => [
+		return array(
+			'validation' => array(
 				'maxlength' => array(
 					'type'      => 'input',
 					'inputType' => 'number',
@@ -53,7 +61,7 @@ class WPUM_Field_Url extends WPUM_Field_Type {
 					'model'     => 'maxlength',
 					'hint'      => esc_html__( 'Leave blank for no limit.', 'wp-user-manager' ),
 				),
-			],
-		];
+			),
+		);
 	}
 }

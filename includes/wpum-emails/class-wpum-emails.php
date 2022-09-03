@@ -5,10 +5,12 @@
  * @package     wp-user-manager
  * @copyright   Copyright (c) 2018, Alessandro Tesoro
  * @license     https://opensource.org/licenses/GPL-3.0 GNU Public License
-*/
+ */
 
 // Exit if accessed directly
-if ( ! defined( 'ABSPATH' ) ) exit;
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 
 /**
  * The class that handles sending templated emails.
@@ -110,7 +112,7 @@ class WPUM_Emails {
 	 * Set properties of the class.
 	 *
 	 * @param string $key
-	 * @param mixed $value
+	 * @param mixed  $value
 	 */
 	public function __set( $key, $value ) {
 		$this->$key = $value;
@@ -174,9 +176,9 @@ class WPUM_Emails {
 	 * @return array
 	 */
 	public function get_templates() {
-		$templates    = array(
+		$templates = array(
 			'default' => esc_html__( 'Default Template', 'wp-user-manager' ),
-			'none'	  => __( 'No template, plain text only', 'wp-user-manager' )
+			'none'    => __( 'No template, plain text only', 'wp-user-manager' ),
 		);
 		return apply_filters( 'wpum_email_templates', $templates );
 	}
@@ -196,7 +198,7 @@ class WPUM_Emails {
 	/**
 	 * Retrieve the heading title set for the email.
 	 *
-	 * @return void
+	 * @return string
 	 */
 	public function get_heading() {
 		return apply_filters( 'wpum_email_heading', $this->heading );
@@ -218,9 +220,9 @@ class WPUM_Emails {
 
 		ob_start();
 
-		$data = [
-			'heading'  => $this->heading,
-		];
+		$data = array(
+			'heading' => $this->heading,
+		);
 
 		WPUM()->templates
 			->set_template_data( $data )
@@ -240,7 +242,7 @@ class WPUM_Emails {
 
 		do_action( 'wpum_email_footer', $this );
 
-		$body	 = ob_get_clean();
+		$body    = ob_get_clean();
 		$message = str_replace( '{email}', $message, $body );
 
 		return apply_filters( 'wpum_email_message', $message, $this );
@@ -253,12 +255,13 @@ class WPUM_Emails {
 	 * @param string $subject
 	 * @param string $message
 	 * @param string $attachments
-	 * @return void
+	 *
+	 * @return bool
 	 */
 	public function send( $to, $subject, $message, $attachments = '' ) {
-
 		if ( ! did_action( 'init' ) && ! did_action( 'admin_init' ) ) {
-			_doing_it_wrong( __FUNCTION__, __( 'You cannot send emails with WPUM_Emails until init/admin_init has been reached', 'wp-user-manager' ), null );
+			_doing_it_wrong( __FUNCTION__, esc_html( __( 'You cannot send emails with WPUM_Emails until init/admin_init has been reached', 'wp-user-manager' ) ), null );
+
 			return false;
 		}
 
@@ -305,7 +308,8 @@ class WPUM_Emails {
 	 * Convert content of the message.
 	 *
 	 * @param string $message
-	 * @return void
+	 *
+	 * @return string
 	 */
 	public function text_to_html( $message ) {
 		if ( 'text/html' === $this->content_type || true === $this->html ) {
@@ -318,6 +322,7 @@ class WPUM_Emails {
 	 * Parse email tags with the appropriate callback.
 	 *
 	 * @param string $content
+	 *
 	 * @return string
 	 */
 	private function parse_tags( $content ) {
@@ -325,7 +330,7 @@ class WPUM_Emails {
 		if ( empty( $this->tags ) || ! is_array( $this->tags ) ) {
 			return $content;
 		}
-		$new_content = preg_replace_callback( "/{([A-z0-9\-\_]+)}/s", array( $this, 'do_tag' ), $content );
+		$new_content = preg_replace_callback( '/{([A-z0-9\-\_]+)}/s', array( $this, 'do_tag' ), $content );
 		return $new_content;
 	}
 
@@ -336,7 +341,7 @@ class WPUM_Emails {
 	 */
 	private function setup_email_tags() {
 		$tags = $this->get_tags();
-		foreach( $tags as $tag ) {
+		foreach ( $tags as $tag ) {
 			if ( isset( $tag['function'] ) && is_callable( $tag['function'] ) ) {
 				$this->tags[ $tag['tag'] ] = $tag;
 			}
@@ -355,55 +360,55 @@ class WPUM_Emails {
 				'name'        => esc_html__( 'Website name', 'wp-user-manager' ),
 				'description' => esc_html__( 'Display the name of the website.', 'wp-user-manager' ),
 				'tag'         => 'sitename',
-				'function'    => 'wpum_email_tag_sitename'
+				'function'    => 'wpum_email_tag_sitename',
 			),
 			array(
 				'name'        => esc_html__( 'Website URL', 'wp-user-manager' ),
 				'description' => esc_html__( 'The website url.', 'wp-user-manager' ),
 				'tag'         => 'website',
-				'function'    => 'wpum_email_tag_website'
+				'function'    => 'wpum_email_tag_website',
 			),
 			array(
 				'name'        => esc_html__( 'Username', 'wp-user-manager' ),
 				'description' => esc_html__( 'Display the user\'s username.', 'wp-user-manager' ),
 				'tag'         => 'username',
-				'function'    => 'wpum_email_tag_username'
+				'function'    => 'wpum_email_tag_username',
 			),
 			array(
 				'name'        => esc_html__( 'User email', 'wp-user-manager' ),
 				'description' => esc_html__( 'Display the user\'s email.', 'wp-user-manager' ),
 				'tag'         => 'email',
-				'function'    => 'wpum_email_tag_email'
+				'function'    => 'wpum_email_tag_email',
 			),
 			array(
 				'name'        => esc_html__( 'User first name', 'wp-user-manager' ),
 				'description' => esc_html__( 'Display the user\'s first name.', 'wp-user-manager' ),
 				'tag'         => 'firstname',
-				'function'    => 'wpum_email_tag_firstname'
+				'function'    => 'wpum_email_tag_firstname',
 			),
 			array(
 				'name'        => esc_html__( 'User last name', 'wp-user-manager' ),
 				'description' => esc_html__( 'Display the user\'s last name.', 'wp-user-manager' ),
 				'tag'         => 'lastname',
-				'function'    => 'wpum_email_tag_lastname'
+				'function'    => 'wpum_email_tag_lastname',
 			),
 			array(
 				'name'        => esc_html__( 'Plain text password', 'wp-user-manager' ),
 				'description' => esc_html__( 'Display the password randomly generated at signup.', 'wp-user-manager' ),
 				'tag'         => 'password',
-				'function'    => 'wpum_email_tag_password'
+				'function'    => 'wpum_email_tag_password',
 			),
 			array(
 				'name'        => esc_html__( 'Login page url', 'wp-user-manager' ),
 				'description' => esc_html__( 'Display the login page url.', 'wp-user-manager' ),
 				'tag'         => 'login_page_url',
-				'function'    => 'wpum_email_tag_login_page_url'
+				'function'    => 'wpum_email_tag_login_page_url',
 			),
 			array(
 				'name'        => esc_html__( 'Password recovery url', 'wp-user-manager' ),
 				'description' => esc_html__( 'Display the password recovery url.', 'wp-user-manager' ),
 				'tag'         => 'recovery_url',
-				'function'    => 'wpum_email_tag_password_recovery_url'
+				'function'    => 'wpum_email_tag_password_recovery_url',
 			),
 		);
 
@@ -412,10 +417,11 @@ class WPUM_Emails {
 	}
 
 	/**
-	 * Parse a specific tag with it's own callback.
+	 * Parse a specific tag with its own callback.
 	 *
 	 * @param string $m
-	 * @return void
+	 *
+	 * @return string
 	 */
 	private function do_tag( $m ) {
 		// Get tag.
@@ -431,7 +437,8 @@ class WPUM_Emails {
 	 * Check if a tag exists.
 	 *
 	 * @param string $tag
-	 * @return void
+	 *
+	 * @return bool
 	 */
 	public function email_tag_exists( $tag ) {
 		return array_key_exists( $tag, $this->tags );

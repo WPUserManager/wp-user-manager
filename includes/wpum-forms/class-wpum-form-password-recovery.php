@@ -5,11 +5,16 @@
  * @package     wp-user-manager
  * @copyright   Copyright (c) 2018, Alessandro Tesoro
  * @license     https://opensource.org/licenses/GPL-3.0 GNU Public License
-*/
+ */
 
 // Exit if accessed directly
-if ( ! defined( 'ABSPATH' ) ) exit;
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 
+/**
+ * WPUM_Form_Password_Recovery
+ */
 class WPUM_Form_Password_Recovery extends WPUM_Form {
 
 	/**
@@ -25,7 +30,7 @@ class WPUM_Form_Password_Recovery extends WPUM_Form {
 	 * @access protected
 	 * @var WPUM_Form_Login The single instance of the class
 	 */
-	protected static $_instance = null;
+	protected static $instance = null;
 
 	/**
 	 * Returns static instance of class.
@@ -33,12 +38,15 @@ class WPUM_Form_Password_Recovery extends WPUM_Form {
 	 * @return self
 	 */
 	public static function instance() {
-		if ( is_null( self::$_instance ) ) {
-			self::$_instance = new self();
+		if ( is_null( self::$instance ) ) {
+			self::$instance = new self();
 		}
-		return self::$_instance;
+		return self::$instance;
 	}
 
+	/**
+	 * @return string
+	 */
 	public static function get_cookie() {
 		return 'wpum-resetpass-' . COOKIEHASH;
 	}
@@ -50,39 +58,39 @@ class WPUM_Form_Password_Recovery extends WPUM_Form {
 
 		add_action( 'wp', array( $this, 'process' ) );
 
-		add_filter( 'submit_wpum_form_validate_fields', [ $this, 'validate_username_or_email' ], 10, 4 );
-		add_filter( 'submit_wpum_form_validate_fields', [ $this, 'validate_passwords' ], 10, 4 );
+		add_filter( 'submit_wpum_form_validate_fields', array( $this, 'validate_username_or_email' ), 10, 4 );
+		add_filter( 'submit_wpum_form_validate_fields', array( $this, 'validate_passwords' ), 10, 4 );
 
-		$this->steps  = (array) apply_filters( 'password_reset_steps', array(
+		$this->steps = (array) apply_filters( 'password_reset_steps', array(
 			'submit' => array(
 				'name'     => esc_html__( 'Password recovery details request', 'wp-user-manager' ),
 				'view'     => array( $this, 'submit' ),
 				'handler'  => array( $this, 'submit_handler' ),
-				'priority' => 10
+				'priority' => 10,
 			),
-			'sent' => array(
+			'sent'   => array(
 				'name'     => esc_html__( 'Instructions sent', 'wp-user-manager' ),
 				'view'     => array( $this, 'instructions_sent' ),
 				'handler'  => false,
-				'priority' => 11
+				'priority' => 11,
 			),
-			'reset' => array(
+			'reset'  => array(
 				'name'     => esc_html__( 'Reset password', 'wp-user-manager' ),
 				'view'     => array( $this, 'reset' ),
 				'handler'  => array( $this, 'reset_handler' ),
-				'priority' => 12
+				'priority' => 12,
 			),
-			'done' => array(
+			'done'   => array(
 				'name'     => esc_html__( 'Done', 'wp-user-manager' ),
 				'view'     => array( $this, 'done' ),
 				'handler'  => false,
-				'priority' => 13
-			)
+				'priority' => 13,
+			),
 		) );
 
 		uasort( $this->steps, array( $this, 'sort_by_priority' ) );
 
-		if ( isset( $_POST['step'] ) ) {
+		if ( isset( $_POST['step'] ) ) { // phpcs:ignore
 			$this->step = is_numeric( $_POST['step'] ) ? max( absint( $_POST['step'] ), 0 ) : array_search( $_POST['step'], array_keys( $this->steps ) );
 		} elseif ( ! empty( $_GET['step'] ) ) {
 			$this->step = is_numeric( $_GET['step'] ) ? max( absint( $_GET['step'] ), 0 ) : array_search( $_GET['step'], array_keys( $this->steps ) );
@@ -100,46 +108,46 @@ class WPUM_Form_Password_Recovery extends WPUM_Form {
 
 		$authentication_method = wpum_get_option( 'login_method' );
 		$username_label        = __( 'Username or Email Address' );
-		if ( $authentication_method == 'username' ) {
+		if ( 'username' === $authentication_method ) {
 			$username_label = __( 'Username', 'wp-user-manager' );
 		}
-		if ( $authentication_method == 'email' ) {
+		if ( 'email' === $authentication_method ) {
 			$username_label = __( 'Email', 'wp-user-manager' );
 		}
 
 		$this->fields = apply_filters( 'password_recover_form_fields', array(
-			'user' => array(
+			'user'     => array(
 				'username_email' => array(
 					'label'       => $username_label,
 					'type'        => 'text',
 					'required'    => true,
 					'placeholder' => '',
-					'priority'    => 1
+					'priority'    => 1,
 				),
 			),
 			'password' => array(
-				'password' => array(
+				'password'   => array(
 					'label'       => __( 'New password', 'wp-user-manager' ),
 					'type'        => 'password',
 					'required'    => true,
 					'placeholder' => '',
-					'priority'    => 1
+					'priority'    => 1,
 				),
 				'password_2' => array(
 					'label'       => __( 'Re-enter new password', 'wp-user-manager' ),
 					'type'        => 'password',
 					'required'    => true,
 					'placeholder' => '',
-					'priority'    => 2
+					'priority'    => 2,
 				),
 			),
 		) );
 
 		// If we're on the first step. We disable the password fields temporarily.
 		// If we're on the reset step, we disable the user fields.
-		if( $this->step === 0 ) {
+		if ( 0 === $this->step ) {
 			unset( $this->fields['password'] );
-		} elseif( $this->step === 2 ) {
+		} elseif ( 2 === $this->step ) {
 			unset( $this->fields['user'] );
 		}
 
@@ -153,21 +161,22 @@ class WPUM_Form_Password_Recovery extends WPUM_Form {
 	 * Validate the requested username or email.
 	 *
 	 * @param boolean $pass
-	 * @param array $fields
-	 * @param array $values
-	 * @param string $form
-	 * @return void
+	 * @param array   $fields
+	 * @param array   $values
+	 * @param string  $form
+	 *
+	 * @return bool|WP_Error
 	 */
 	public function validate_username_or_email( $pass, $fields, $values, $form ) {
 
-		if( $form == 'password-recovery' && isset( $values['user']['username_email'] ) ) {
+		if ( $form == 'password-recovery' && isset( $values['user']['username_email'] ) ) {
 			$username = sanitize_text_field( $values['user']['username_email'] );
-			if( is_email( $username ) && !email_exists( $username ) || !is_email( $username ) && !username_exists( $username ) )
+			if ( is_email( $username ) && ! email_exists( $username ) || ! is_email( $username ) && ! username_exists( $username ) ) {
 				return new WP_Error( 'username-validation-error', esc_html__( 'A user with this username or email does not exist. Please check your entry and try again.', 'wp-user-manager' ) );
+			}
 		}
 
 		return $pass;
-
 	}
 
 	/**
@@ -179,13 +188,13 @@ class WPUM_Form_Password_Recovery extends WPUM_Form {
 
 		$this->init_fields();
 
-		$data = [
+		$data = array(
 			'form'    => $this->form_name,
 			'action'  => $this->get_action(),
 			'fields'  => $this->get_fields( 'user' ),
 			'step'    => $this->get_step(),
-			'message' => apply_filters( 'wpum_lost_password_message', esc_html__( 'Lost your password? Please enter your username or email address. You will receive a link to create a new password via email.', 'wp-user-manager' ) )
-		];
+			'message' => apply_filters( 'wpum_lost_password_message', esc_html__( 'Lost your password? Please enter your username or email address. You will receive a link to create a new password via email.', 'wp-user-manager' ) ),
+		);
 
 		WPUM()->templates
 			->set_template_data( $data )
@@ -209,7 +218,7 @@ class WPUM_Form_Password_Recovery extends WPUM_Form {
 
 			$values = $this->get_posted_fields();
 
-			if( ! wp_verify_nonce( $_POST['password_recovery_nonce'], 'verify_password_recovery_form' ) ) {
+			if ( ! wp_verify_nonce( $_POST['password_recovery_nonce'], 'verify_password_recovery_form' ) ) {
 				return;
 			}
 
@@ -225,37 +234,35 @@ class WPUM_Form_Password_Recovery extends WPUM_Form {
 			$user     = false;
 
 			// Retrieve the user from the DB.
-			if( is_email( $username ) ) {
+			if ( is_email( $username ) ) {
 				$user = get_user_by( 'email', $username );
 			} else {
 				$user = get_user_by( 'login', $username );
 			}
 
-			if( $user instanceof WP_User ) {
+			if ( $user instanceof WP_User ) {
 
 				// Generate a new password reset key for the selected user.
 				$password_reset_key = get_password_reset_key( $user );
 
 				// Now send an email to the user.
-				if( $password_reset_key ) {
+				if ( $password_reset_key ) {
 
 					$password_reset_email = wpum_get_email( 'password_recovery_request', $user->data->ID );
 
-					$emails = new WPUM_Emails;
+					$emails = new WPUM_Emails();
 					$emails->__set( 'user_id', $user->data->ID );
 					$emails->__set( 'user_login', $user->data->user_login );
 					$emails->__set( 'heading', $password_reset_email['title'] );
 					$emails->__set( 'password_reset_key', $password_reset_key );
 
-					if( is_array( $password_reset_email ) ) {
+					if ( is_array( $password_reset_email ) ) {
 						$email   = $user->data->user_email;
 						$subject = $password_reset_email['subject'];
 						$message = $password_reset_email['content'];
 						$emails->send( $email, $subject, $message );
 					}
-
 				}
-
 			} else {
 				throw new Exception( esc_html__( 'Something went wrong.', 'wp-user-manager' ) );
 			}
@@ -280,16 +287,16 @@ class WPUM_Form_Password_Recovery extends WPUM_Form {
 
 		$username = $values['user']['username_email'];
 
-		if( is_email( $username ) ) {
+		if ( is_email( $username ) ) {
 			$user = get_user_by( 'email', $username );
 		} else {
 			$user = get_user_by( 'login', $username );
 		}
 
-		$data = [
+		$data = array(
 			'email' => $user->data->user_email,
 			'from'  => wpum_get_option( 'from_email' ),
-		];
+		);
 
 		WPUM()->templates
 			->set_template_data( $data )
@@ -307,15 +314,15 @@ class WPUM_Form_Password_Recovery extends WPUM_Form {
 		$this->init_fields();
 
 		$cookie_key = self::get_cookie();
-		if ( isset( $_COOKIE[ $cookie_key ] ) && 0 < strpos( $_COOKIE[ $cookie_key  ], ':' ) ) {
-			list( $rp_login, $verification_key ) = explode( ':', wp_unslash( $_COOKIE[ $cookie_key  ] ), 2 );
+		if ( isset( $_COOKIE[ $cookie_key ] ) && 0 < strpos( $_COOKIE[ $cookie_key ], ':' ) ) {
+			list( $rp_login, $verification_key ) = explode( ':', wp_unslash( $_COOKIE[ $cookie_key ] ), 2 );
 
 			$verify_key = check_password_reset_key( $verification_key, $rp_login );
 
 			if ( is_wp_error( $verify_key ) ) {
-				$data = [
+				$data = array(
 					'message' => esc_html__( 'The reset key is wrong or expired. Please check that you used the right reset link or request a new one.', 'wp-user-manager' ),
-				];
+				);
 
 				list( $rp_path ) = explode( '?', wp_unslash( $_SERVER['REQUEST_URI'] ) );
 
@@ -324,25 +331,24 @@ class WPUM_Form_Password_Recovery extends WPUM_Form {
 				WPUM()->templates->set_template_data( $data )->get_template_part( 'messages/general', 'error' );
 			} else {
 
-				$data = [
+				$data = array(
 					'form'    => $this->form_name,
 					'action'  => $this->get_action(),
 					'fields'  => $this->get_fields( 'password' ),
 					'step'    => $this->get_step(),
-					'message' => apply_filters( 'wpum_new_password_message', esc_html__( 'Enter a new password below.', 'wp-user-manager' ) )
-				];
+					'message' => apply_filters( 'wpum_new_password_message', esc_html__( 'Enter a new password below.', 'wp-user-manager' ) ),
+				);
 
 				WPUM()->templates
 					->set_template_data( $data )
 					->get_template_part( 'forms/form', 'password-recovery' );
 
 			}
-
 		} else {
 
-			$data = [
-				'message'  => esc_html__( 'The link you followed may be broken. Please check that you used the right reset link or request a new one.', 'wp-user-manager' ),
-			];
+			$data = array(
+				'message' => esc_html__( 'The link you followed may be broken. Please check that you used the right reset link or request a new one.', 'wp-user-manager' ),
+			);
 
 			WPUM()->templates
 				->set_template_data( $data )
@@ -364,7 +370,7 @@ class WPUM_Form_Password_Recovery extends WPUM_Form {
 	 */
 	public function validate_passwords( $pass, $fields, $values, $form ) {
 
-		if( $form == 'password-recovery' && isset( $values['password']['password'] ) && isset( $values['password']['password_2'] ) ) {
+		if ( 'password-recovery' === $form && isset( $values['password']['password'] ) && isset( $values['password']['password_2'] ) ) {
 
 			$password_1 = $values['password']['password'];
 			$password_2 = $values['password']['password_2'];
@@ -377,7 +383,6 @@ class WPUM_Form_Password_Recovery extends WPUM_Form {
 			if ( is_wp_error( $strong_password_check ) ) {
 				return $strong_password_check;
 			}
-
 		}
 
 		return $pass;
@@ -396,7 +401,7 @@ class WPUM_Form_Password_Recovery extends WPUM_Form {
 
 			$values = $this->get_posted_fields();
 
-			if( ! wp_verify_nonce( $_POST['password_recovery_nonce'], 'verify_password_recovery_form' ) ) {
+			if ( ! wp_verify_nonce( $_POST['password_recovery_nonce'], 'verify_password_recovery_form' ) ) {
 				return;
 			}
 
@@ -412,7 +417,7 @@ class WPUM_Form_Password_Recovery extends WPUM_Form {
 			$password_2 = $values['password']['password_2'];
 
 			$cookie_key = self::get_cookie();
-			if ( isset( $_COOKIE[ $cookie_key ] ) && 0 < strpos( $_COOKIE[ $cookie_key  ], ':' ) ) {
+			if ( isset( $_COOKIE[ $cookie_key ] ) && 0 < strpos( $_COOKIE[ $cookie_key ], ':' ) ) {
 				list( $rp_login, $verification_key ) = explode( ':', wp_unslash( $_COOKIE[ $cookie_key ] ), 2 );
 
 				$verify_key = check_password_reset_key( $verification_key, $rp_login );
@@ -459,9 +464,9 @@ class WPUM_Form_Password_Recovery extends WPUM_Form {
 	 */
 	public function done() {
 
-		$data = [
-			'message' => esc_html__( 'Password successfully reset.', 'wp-user-manager' ) . ' ' . '<a href="' . get_permalink( wpum_get_core_page_id( 'login' ) ) . '">' . esc_html__( 'Login now &raquo;', 'wp-user-manager' ) . '</a>'
-		];
+		$data = array(
+			'message' => esc_html__( 'Password successfully reset.', 'wp-user-manager' ) . ' ' . '<a href="' . get_permalink( wpum_get_core_page_id( 'login' ) ) . '">' . esc_html__( 'Login now &raquo;', 'wp-user-manager' ) . '</a>',
+		);
 
 		WPUM()->templates
 			->set_template_data( $data )

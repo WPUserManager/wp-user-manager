@@ -5,16 +5,21 @@
  * @package     wp-user-manager
  * @copyright   Copyright (c) 2018, Alessandro Tesoro
  * @license     https://opensource.org/licenses/GPL-3.0 GNU Public License
-*/
+ */
 
 // Exit if accessed directly
-if ( ! defined( 'ABSPATH' ) ) exit;
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 
 /**
  * Register a text field type.
  */
 class WPUM_Field_File extends WPUM_Field_Type {
 
+	/**
+	 * Construct
+	 */
 	public function __construct() {
 		$this->group = 'advanced';
 		$this->name  = esc_html__( 'File', 'wp-user-manager' );
@@ -23,6 +28,9 @@ class WPUM_Field_File extends WPUM_Field_Type {
 		$this->order = 3;
 	}
 
+	/**
+	 * @return array
+	 */
 	public function get_data_keys() {
 		$keys = parent::get_data_keys();
 
@@ -33,9 +41,9 @@ class WPUM_Field_File extends WPUM_Field_Type {
 	 * @return array
 	 */
 	public function get_editor_settings() {
-		return [
-			'validation' => [
-				'max_file_size' => array(
+		return array(
+			'validation' => array(
+				'max_file_size'      => array(
 					'type'      => 'input',
 					'inputType' => 'text',
 					'label'     => esc_html__( 'Maximum file size', 'wp-user-manager' ),
@@ -49,8 +57,8 @@ class WPUM_Field_File extends WPUM_Field_Type {
 					'model'     => 'allowed_mime_types',
 					'hint'      => esc_html__( 'Comma Separated List of allowed file types, (i.e. jpg, jpeg, gif, png, pdf)', 'wp-user-manager' ),
 				),
-			],
-		];
+			),
+		);
 	}
 
 	/**
@@ -85,11 +93,11 @@ class WPUM_Field_File extends WPUM_Field_Type {
 			$allowed_mime_types = wpum_get_allowed_mime_types();
 			if ( ! empty( $field['allowed_mime_types'] ) ) {
 				$extensions         = explode( ',', $field['allowed_mime_types'] );
-				$allowed_mime_types = [];
+				$allowed_mime_types = array();
 				foreach ( $extensions as $extension ) {
 					$extension = strtolower( trim( str_replace( '.', '', $extension ) ) );
 					foreach ( get_allowed_mime_types() as $allowed_ext => $allowed_mime_type ) {
-						if ( in_array( $extension, explode( '|', $allowed_ext ) ) ) {
+						if ( in_array( $extension, explode( '|', $allowed_ext ), true ) ) {
 							$allowed_mime_types[ $allowed_ext ] = $allowed_mime_type;
 							break;
 						}
@@ -100,11 +108,12 @@ class WPUM_Field_File extends WPUM_Field_Type {
 			$files_to_upload = wpum_prepare_uploaded_files( $_FILES[ $field_key ] );
 			foreach ( $files_to_upload as $file_to_upload ) {
 				// Determine max file size for the avatar field.
+				// translators: %s field label
 				$too_big_message = sprintf( esc_html__( 'The uploaded %s file is too big.', 'wp-user-manager' ), $field['label'] );
-				if ( defined( 'WPUM_MAX_AVATAR_SIZE' ) && $field_key == 'user_avatar' && $file_to_upload['size'] > WPUM_MAX_AVATAR_SIZE ) {
+				if ( defined( 'WPUM_MAX_AVATAR_SIZE' ) && 'user_avatar' === $field_key && $file_to_upload['size'] > WPUM_MAX_AVATAR_SIZE ) {
 					throw new Exception( $too_big_message );
 				}
-				if ( defined( 'WPUM_MAX_COVER_SIZE' ) && $field_key == 'user_cover' && $file_to_upload['size'] > WPUM_MAX_COVER_SIZE ) {
+				if ( defined( 'WPUM_MAX_COVER_SIZE' ) && 'user_cover' === $field_key && $file_to_upload['size'] > WPUM_MAX_COVER_SIZE ) {
 					throw new Exception( $too_big_message );
 				}
 
@@ -121,10 +130,10 @@ class WPUM_Field_File extends WPUM_Field_Type {
 				if ( is_wp_error( $uploaded_file ) ) {
 					throw new Exception( $uploaded_file->get_error_message() );
 				} else {
-					$file_urls[] = [
+					$file_urls[] = array(
 						'url'  => $uploaded_file->url,
-						'path' => $uploaded_file->file
-					];
+						'path' => $uploaded_file->file,
+					);
 				}
 			}
 			if ( ! empty( $field['multiple'] ) ) {
@@ -143,7 +152,7 @@ class WPUM_Field_File extends WPUM_Field_Type {
 	 * @param string $value
 	 * @return string
 	 */
-	function get_formatted_output( $field, $value ) {
+	public function get_formatted_output( $field, $value ) {
 		$value = maybe_unserialize( $value );
 
 		if ( is_numeric( $value ) ) {
@@ -158,9 +167,9 @@ class WPUM_Field_File extends WPUM_Field_Type {
 		$file_type = wp_ext2type( $extension );
 		if ( 'image' === $file_type ) {
 			$value = '<span class="wpum-uploaded-file-name"><img src="' . $image_src . '"></span>';
-		} else if ( 'video' === $file_type && $field->get_type() === 'video' ) {
+		} elseif ( 'video' === $file_type && $field->get_type() === 'video' ) {
 			$value = '<span class="wpum-uploaded-file-name">' . wp_video_shortcode( array( 'src' => $image_src ) ) . '</span>';
-		} else if ( 'audio' === $file_type && $field->get_type() === 'audio' ) {
+		} elseif ( 'audio' === $file_type && $field->get_type() === 'audio' ) {
 			$value = '<span class="wpum-uploaded-file-name">' . wp_audio_shortcode( array( 'src' => $image_src ) ) . '</span>';
 		} else {
 			$value = '<span class="wpum-uploaded-file-name"><a href="' . $image_src . '" target="_blank" rel="noopener noreferrer">' . esc_html( $image_src ) . '</a></span>';

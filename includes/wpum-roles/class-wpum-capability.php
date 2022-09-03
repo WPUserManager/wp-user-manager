@@ -5,12 +5,24 @@
  * @license     https://opensource.org/licenses/GPL-3.0 GNU Public License
  */
 
+/**
+ * WPUM_Capability
+ */
 class WPUM_Capability {
 
+	/**
+	 * @var string
+	 */
 	public $name = '';
 
+	/**
+	 * @var string
+	 */
 	public $label = '';
 
+	/**
+	 * @var string
+	 */
 	public $group = '';
 
 	/**
@@ -20,6 +32,10 @@ class WPUM_Capability {
 		return $this->name;
 	}
 
+	/**
+	 * @param string $name
+	 * @param array  $args
+	 */
 	public function __construct( $name, $args = array() ) {
 		foreach ( array_keys( get_object_vars( $this ) ) as $key ) {
 

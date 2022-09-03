@@ -5,24 +5,32 @@
  * @package     wp-user-manager
  * @copyright   Copyright (c) 2018, Alessandro Tesoro
  * @license     https://opensource.org/licenses/GPL-3.0 GNU Public License
-*/
+ */
 
 // Exit if accessed directly
-if ( ! defined( 'ABSPATH' ) ) exit;
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 
 /**
  * Register a text field type.
  */
 class WPUM_Field_Number extends WPUM_Field_Type {
 
+	/***
+	 * Construct
+	 */
 	public function __construct() {
-		$this->name  = esc_html__( 'Number', 'wp-user-manager' );
-		$this->type  = 'number';
-		$this->icon  = 'dashicons-leftright';
-		$this->order = 3;
+		$this->name          = esc_html__( 'Number', 'wp-user-manager' );
+		$this->type          = 'number';
+		$this->icon          = 'dashicons-leftright';
+		$this->order         = 3;
 		$this->allow_default = true;
 	}
 
+	/**
+	 * @return array
+	 */
 	public function get_data_keys() {
 		$keys = parent::get_data_keys();
 
@@ -33,8 +41,8 @@ class WPUM_Field_Number extends WPUM_Field_Type {
 	 * @return array
 	 */
 	public function get_editor_settings() {
-		return [
-			'validation' => [
+		return array(
+			'validation' => array(
 				'min_value' => array(
 					'type'      => 'input',
 					'inputType' => 'number',
@@ -60,15 +68,15 @@ class WPUM_Field_Number extends WPUM_Field_Type {
 					'model'     => 'maxlength',
 					'hint'      => esc_html__( 'Leave blank for no limit.', 'wp-user-manager' ),
 				),
-				'pattern' => array(
+				'pattern'   => array(
 					'type'      => 'input',
 					'inputType' => 'text',
 					'label'     => esc_html__( 'Pattern', 'wp-user-manager' ),
 					'model'     => 'pattern',
-					'hint'      => esc_html__( 'A regular expression to validate number formats.', 'wp-user-manager' ) . ' <a target="_blank" href="http://html5pattern.com/">' . esc_html__( 'Example patterns' ) . '</a>'
+					'hint'      => esc_html__( 'A regular expression to validate number formats.', 'wp-user-manager' ) . ' <a target="_blank" href="http://html5pattern.com/">' . esc_html__( 'Example patterns' ) . '</a>',
 				),
-			],
-		];
+			),
+		);
 	}
 
 }

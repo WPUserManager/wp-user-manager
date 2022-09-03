@@ -5,10 +5,12 @@
  * @package     wp-user-manager
  * @copyright   Copyright (c) 2018, Alessandro Tesoro
  * @license     https://opensource.org/licenses/GPL-3.0 GNU Public License
-*/
+ */
 
 // Exit if accessed directly
-if ( ! defined( 'ABSPATH' ) ) exit;
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 
 /**
  * WPUM_DB_Search_Fields Class
@@ -41,8 +43,8 @@ class WPUM_DB_Search_Fields extends WPUM_DB {
 	 */
 	public function get_columns() {
 		return array(
-			'id'          => '%d',
-			'meta_key'    => '%s',
+			'id'       => '%d',
+			'meta_key' => '%s',
 		);
 	}
 
@@ -54,7 +56,7 @@ class WPUM_DB_Search_Fields extends WPUM_DB {
 	 */
 	public function get_column_defaults() {
 		return array(
-			'id'        => 0,
+			'id'       => 0,
 			'meta_key' => '',
 		);
 	}
@@ -62,8 +64,8 @@ class WPUM_DB_Search_Fields extends WPUM_DB {
 	/**
 	 * Insert a new field.
 	 *
-	 * @access public
-	 * @param array $data
+	 * @param array  $data
+	 * @param string $type
 	 *
 	 * @return int ID of the inserted field.
 	 */
@@ -81,8 +83,8 @@ class WPUM_DB_Search_Fields extends WPUM_DB {
 	 * Update a field.
 	 *
 	 * @access public
-	 * @param int   $row_id field ID.
-	 * @param array $data
+	 * @param int                $row_id field ID.
+	 * @param array              $data
 	 * @param mixed string|array $where Where clause to filter update.
 	 *
 	 * @return  bool

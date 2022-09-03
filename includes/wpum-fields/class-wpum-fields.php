@@ -5,18 +5,26 @@
  * @package     wp-user-manager
  * @copyright   Copyright (c) 2018, Alessandro Tesoro
  * @license     https://opensource.org/licenses/GPL-3.0 GNU Public License
-*/
+ */
 
 // Exit if accessed directly
-if ( ! defined( 'ABSPATH' ) ) exit;
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 
 /**
  * Registration of the Fields loader class.
  */
 class WPUM_Fields {
 
+	/**
+	 * @var array
+	 */
 	protected $fields;
 
+	/**
+	 * @var array
+	 */
 	protected $field_type_names;
 
 	/**
@@ -30,8 +38,6 @@ class WPUM_Fields {
 
 		// Now load all registered field types.
 		$this->load();
-
-
 	}
 
 	/**
@@ -41,7 +47,7 @@ class WPUM_Fields {
 	 */
 	public function load() {
 
-		$fields = apply_filters( 'wpum_load_fields', [
+		$fields = apply_filters( 'wpum_load_fields', array(
 			'text',
 			'email',
 			'password',
@@ -64,7 +70,7 @@ class WPUM_Fields {
 			'taxonomy',
 			'user',
 			'userrole',
-		] );
+		) );
 
 		foreach ( $fields as $field ) {
 			if ( file_exists( WPUM_PLUGIN_DIR . 'includes/wpum-fields/types/class-wpum-field-' . $field . '.php' ) ) {
@@ -73,7 +79,7 @@ class WPUM_Fields {
 
 			$class = 'WPUM_Field_' . ucfirst( $field );
 			if ( class_exists( $class ) ) {
-				( new $class )->register();
+				( new $class() )->register();
 			}
 		}
 
@@ -84,24 +90,24 @@ class WPUM_Fields {
 	 *
 	 * @return array
 	 */
-	function get_registered_field_types() {
+	public function get_registered_field_types() {
 		if ( $this->fields ) {
 			return $this->fields;
 		}
 
 		$fields = array(
-			'default' => [
+			'default'  => array(
 				'group_name' => esc_html__( 'Default Fields', 'wp-user-manager' ),
-				'fields'     => []
-			],
-			'standard' => [
+				'fields'     => array(),
+			),
+			'standard' => array(
 				'group_name' => esc_html__( 'Standard Fields', 'wp-user-manager' ),
-				'fields'     => []
-			],
-			'advanced' => [
+				'fields'     => array(),
+			),
+			'advanced' => array(
 				'group_name' => esc_html__( 'Advanced Fields', 'wp-user-manager' ),
-				'fields'     => []
-			],
+				'fields'     => array(),
+			),
 		);
 
 		$this->fields = apply_filters( 'wpum_registered_field_types', $fields );
@@ -109,6 +115,9 @@ class WPUM_Fields {
 		return $this->fields;
 	}
 
+	/**
+	 * @param array $fields
+	 */
 	public function set_registered_field_types( $fields ) {
 		$this->fields = $fields;
 	}
@@ -118,16 +127,16 @@ class WPUM_Fields {
 	 *
 	 * @return array
 	 */
-	function get_registered_field_types_names() {
+	public function get_registered_field_types_names() {
 		if ( $this->field_type_names ) {
 			return $this->field_type_names;
 		}
 
-		$registered_types = [];
+		$registered_types = array();
 
-		foreach( $this->get_registered_field_types() as $status => $types ) {
-			if( ! empty( $types['fields'] ) ) {
-				foreach( $types['fields'] as $field_type ) {
+		foreach ( $this->get_registered_field_types() as $status => $types ) {
+			if ( ! empty( $types['fields'] ) ) {
+				foreach ( $types['fields'] as $field_type ) {
 					$registered_types[ $field_type['type'] ] = $field_type['name'];
 				}
 			}

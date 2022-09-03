@@ -5,10 +5,12 @@
  * @package     wp-user-manager
  * @copyright   Copyright (c) 2018, Alessandro Tesoro
  * @license     https://opensource.org/licenses/GPL-3.0 GNU Public License
-*/
+ */
 
 // Exit if accessed directly
-if ( ! defined( 'ABSPATH' ) ) exit;
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 
 /**
  * WPUM_DB_Registration_Form_Meta Class
@@ -48,7 +50,7 @@ class WPUM_DB_Registration_Form_Meta extends WPUM_DB {
 	 * Retrieve meta field for a registration form.
 	 *
 	 * @param integer $form_id
-	 * @param string $meta_key
+	 * @param string  $meta_key
 	 * @param boolean $single If true, return only the first value of the specified meta_key.
 	 *                        This parameter has no effect if meta_key is not specified.
 	 * @return mixed

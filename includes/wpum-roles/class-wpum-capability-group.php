@@ -5,20 +5,44 @@
  * @license     https://opensource.org/licenses/GPL-3.0 GNU Public License
  */
 
+/**
+ * WPUM_Capability_Group
+ */
 final class WPUM_Capability_Group {
 
+	/**
+	 * @var string
+	 */
 	public $name = '';
 
+	/**
+	 * @var string
+	 */
 	public $label = '';
 
+	/**
+	 * @var string
+	 */
 	public $icon = 'dashicons-admin-generic';
 
+	/**
+	 * @var array
+	 */
 	public $caps = array();
 
+	/**
+	 * @var int
+	 */
 	public $priority = 10;
 
+	/**
+	 * @var bool
+	 */
 	public $diff_added = false;
 
+	/**
+	 * @return string
+	 */
 	public function __toString() {
 		return $this->name;
 	}

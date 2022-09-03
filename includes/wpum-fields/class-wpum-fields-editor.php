@@ -5,7 +5,7 @@
  * @package     wp-user-manager
  * @copyright   Copyright (c) 2018, Alessandro Tesoro
  * @license     https://opensource.org/licenses/GPL-3.0 GNU Public License
-*/
+ */
 
 // Exit if accessed directly
 if ( ! defined( 'ABSPATH' ) ) {
@@ -22,8 +22,11 @@ class WPUM_Fields_Editor {
 	 *
 	 * @var array
 	 */
-	public $deregistered_settings = [];
+	public $deregistered_settings = array();
 
+	/**
+	 * @var mixed|void
+	 */
 	protected $capability;
 
 	/**
@@ -40,20 +43,20 @@ class WPUM_Fields_Editor {
 	 * @return void
 	 */
 	private function init_hooks() {
-		add_action( 'admin_menu', [ $this, 'setup_menu_page' ], 9 );
-		add_action( 'admin_enqueue_scripts', [ $this, 'load_scripts' ] );
-		add_action( 'wp_ajax_wpum_update_fields_groups_order', [ $this, 'update_groups_order' ] );
-		add_action( 'wp_ajax_wpum_update_fields_group', [ $this, 'update_group' ] );
-		add_action( 'wp_ajax_wpum_get_fields_from_group', [ $this, 'get_fields' ] );
-		add_action( 'wp_ajax_wpum_update_fields_order', [ $this, 'update_fields_order' ] );
-		add_action( 'wp_ajax_wpum_get_field_settings', [ $this, 'get_field_settings' ] );
-		add_action( 'wp_ajax_wpum_update_field', [ $this, 'update_field' ] );
+		add_action( 'admin_menu', array( $this, 'setup_menu_page' ), 9 );
+		add_action( 'admin_enqueue_scripts', array( $this, 'load_scripts' ) );
+		add_action( 'wp_ajax_wpum_update_fields_groups_order', array( $this, 'update_groups_order' ) );
+		add_action( 'wp_ajax_wpum_update_fields_group', array( $this, 'update_group' ) );
+		add_action( 'wp_ajax_wpum_get_fields_from_group', array( $this, 'get_fields' ) );
+		add_action( 'wp_ajax_wpum_update_fields_order', array( $this, 'update_fields_order' ) );
+		add_action( 'wp_ajax_wpum_get_field_settings', array( $this, 'get_field_settings' ) );
+		add_action( 'wp_ajax_wpum_update_field', array( $this, 'update_field' ) );
 		// Object Caching hooks
-		add_action( 'wpum_field_group_insert', [ $this, 'trigger_delete_groups_cache'] );
-		add_action( 'wpum_field_group_delete', [ $this, 'trigger_delete_groups_cache'] );
-		add_action( 'wpum_field_group_delete', [ $this, 'trigger_delete_groups_cache_by_id'] );
-		add_action( 'wpum_field_insert', [ $this, 'trigger_delete_group_fields_cache'], 10, 2 );
-		add_action( 'wpum_before_field_delete', [ $this, 'trigger_delete_group_fields_cache_by_id'] );
+		add_action( 'wpum_field_group_insert', array( $this, 'trigger_delete_groups_cache' ) );
+		add_action( 'wpum_field_group_delete', array( $this, 'trigger_delete_groups_cache' ) );
+		add_action( 'wpum_field_group_delete', array( $this, 'trigger_delete_groups_cache_by_id' ) );
+		add_action( 'wpum_field_insert', array( $this, 'trigger_delete_group_fields_cache' ), 10, 2 );
+		add_action( 'wpum_before_field_delete', array( $this, 'trigger_delete_group_fields_cache_by_id' ) );
 	}
 
 	/**
@@ -67,7 +70,7 @@ class WPUM_Fields_Editor {
 			esc_html__( 'Custom Fields', 'wp-user-manager' ),
 			$this->capability,
 			'wpum-custom-fields',
-			[ $this, 'display_fields_editor' ]
+			array( $this, 'display_fields_editor' )
 		);
 	}
 
@@ -80,13 +83,13 @@ class WPUM_Fields_Editor {
 
 		$screen = get_current_screen();
 
-		if ( $screen->base == 'users_page_wpum-custom-fields' ) {
+		if ( 'users_page_wpum-custom-fields' === $screen->base ) {
 
 			$is_vue_dev = defined( 'WPUM_VUE_DEV' ) && WPUM_VUE_DEV ? true : false;
 
 			if ( $is_vue_dev ) {
 				$vue_dev_port = defined( 'WPUM_VUE_DEV_PORT' ) ? WPUM_VUE_DEV_PORT : '8080';
-				wp_register_script( 'wpum-fields-editor', 'http://localhost:'. $vue_dev_port . '/fields-editor.js', array(), WPUM_VERSION, true );
+				wp_register_script( 'wpum-fields-editor', 'http://localhost:' . $vue_dev_port . '/fields-editor.js', array(), WPUM_VERSION, true );
 			} else {
 				wp_register_script( 'wpum-fields-editor', WPUM_PLUGIN_URL . 'dist/static/js/fields-editor.js', array(), WPUM_VERSION, true );
 			}
@@ -100,7 +103,7 @@ class WPUM_Fields_Editor {
 			wp_enqueue_script( 'wpum-fields-editor' );
 			wp_enqueue_style( 'wpum-fields-editor', WPUM_PLUGIN_URL . 'assets/css/admin/fields-editor.css', array(), WPUM_VERSION );
 
-			$js_variables = [
+			$js_variables = array(
 				'is_addon_installed'        => apply_filters( 'wpum_fields_editor_has_custom_fields_addon', false ),
 				'page_title'                => esc_html__( 'Fields Editor', 'wp-user-manager' ),
 				'success_message'           => esc_html__( 'Changes successfully saved.', 'wp-user-manager' ),
@@ -116,7 +119,7 @@ class WPUM_Fields_Editor {
 				'cf_addon_url'              => 'https://wpusermanager.com/addons/custom-fields?utm_source=WP%20User%20Manager&utm_medium=insideplugin&utm_campaign=WP%20User%20Manager&utm_content=custom-fields-editor',
 				'fields_types'              => wpum_get_registered_field_types(),
 				'edit_dialog_tabs'          => wpum_get_edit_field_dialog_tabs(),
-			];
+			);
 
 			wp_localize_script( 'wpum-fields-editor', 'wpumFieldsEditor', $js_variables );
 
@@ -140,7 +143,7 @@ class WPUM_Fields_Editor {
 	 */
 	private function get_labels() {
 
-		return [
+		return array(
 			'table_name'                => esc_html__( 'Group name', 'wp-user-manager' ),
 			'table_desc'                => esc_html__( 'Group description', 'wp-user-manager' ),
 			'table_default'             => esc_html__( 'Default', 'wp-user-manager' ),
@@ -160,6 +163,7 @@ class WPUM_Fields_Editor {
 			'tooltip_group_description' => esc_html__( 'Customize the description of the group. This may be used into your theme.', 'wp-user-manager' ),
 			'purchase'                  => esc_html__( 'Purchase', 'wp-user-manager' ),
 			'create_group'              => esc_html__( 'Create Fields Group', 'wp-user-manager' ),
+			// translators: %1$s custom fields addon URL
 			'premium_addon'             => sprintf( __( 'Create <a href="%1$s" target="_blank">unlimited custom fields and groups</a> for user profiles and registration forms with a drag & drop interface. The <a href="%1$s" target="_blank">custom fields</a> addon is required if you wish to extend your community.', 'wp-user-manager' ), 'https://wpusermanager.com/addons/custom-fields?utm_source=WP%20User%20Manager&utm_medium=insideplugin&utm_campaign=WP%20User%20Manager&utm_content=custom-fields-editor' ),
 			'fields_page_title'         => esc_html__( 'Editing:', 'wp-user-manager' ),
 			'fields_go_back'            => esc_html__( 'Back to the groups list', 'wp-user-manager' ),
@@ -195,10 +199,10 @@ class WPUM_Fields_Editor {
 			'field_add_option'          => esc_html__( 'Add option', 'wp-user-manager' ),
 			'field_option_label'        => esc_html__( 'Option label', 'wp-user-manager' ),
 			'field_option_value'        => esc_html__( 'Option value', 'wp-user-manager' ),
-			'repeater_fields_add_new'	=> esc_html__( 'Add new sub field', 'wp-user-manager' ),
-			'repeater_fields_create'	=> esc_html__( 'Add sub field', 'wp-user-manager' ),
+			'repeater_fields_add_new'   => esc_html__( 'Add new sub field', 'wp-user-manager' ),
+			'repeater_fields_create'    => esc_html__( 'Add sub field', 'wp-user-manager' ),
 			'confirm_message'           => esc_html__( 'Are you sure you want to leave? You have unsaved field settings.', 'wp-user-manager' ),
-		];
+		);
 
 	}
 
@@ -209,23 +213,23 @@ class WPUM_Fields_Editor {
 	 */
 	private function get_groups() {
 
-		$registered_groups = [];
+		$registered_groups = array();
 		$groups            = WPUM()->fields_groups->get_groups(
-			[
+			array(
 				'orderby' => 'group_order',
 				'order'   => 'ASC',
-			]
+			)
 		);
 
 		if ( ! empty( $groups ) && is_array( $groups ) ) {
 			foreach ( $groups as $group ) {
-				$registered_groups[] = [
+				$registered_groups[] = array(
 					'id'          => $group->get_ID(),
 					'name'        => $group->get_name(),
 					'description' => $group->get_description(),
 					'default'     => $group->get_ID() === 1 ? true : false,
 					'fields'      => $group->get_count(),
-				];
+				);
 			}
 		}
 
@@ -246,13 +250,13 @@ class WPUM_Fields_Editor {
 			wp_die( esc_html__( 'Something went wrong: could not update the groups order.', 'wp-user-manager' ), 403 );
 		}
 
-		$groups = isset( $_POST['groups'] ) && is_array( $_POST['groups'] ) && ! empty( $_POST['groups'] ) ? $_POST['groups'] : false;
+		$groups = isset( $_POST['groups'] ) && is_array( $_POST['groups'] ) && ! empty( $_POST['groups'] ) ? $_POST['groups'] : false; // phpcs:ignore
 
 		if ( $groups ) {
 			foreach ( $groups as $order => $group ) {
 				$group_id = (int) $group['id'];
 				if ( $group_id ) {
-					$updated_group = WPUM()->fields_groups->update( $group_id, [ 'group_order' => $order ] );
+					$updated_group = WPUM()->fields_groups->update( $group_id, array( 'group_order' => $order ) );
 				}
 			}
 		} else {
@@ -276,17 +280,17 @@ class WPUM_Fields_Editor {
 			wp_die( esc_html__( 'Something went wrong: could not update the group details.', 'wp-user-manager' ), 403 );
 		}
 
-		$group_id          = isset( $_POST['group_id'] ) && ! empty( $_POST['group_id'] ) ? (int) $_POST['group_id'] : false;
-		$group_name        = isset( $_POST['group_name'] ) && ! empty( $_POST['group_name'] ) ? sanitize_text_field( $_POST['group_name'] ) : false;
-		$group_description = isset( $_POST['group_description'] ) && ! empty( $_POST['group_description'] ) ? wp_kses_post( $_POST['group_description'] ) : '';
+		$group_id          = isset( $_POST['group_id'] ) && ! empty( $_POST['group_id'] ) ? filter_input( INPUT_POST, 'group_id', FILTER_VALIDATE_INT ) : false;
+		$group_name        = isset( $_POST['group_name'] ) && ! empty( $_POST['group_name'] ) ? sanitize_text_field( wp_unslash( $_POST['group_name'] ) ) : false;
+		$group_description = isset( $_POST['group_description'] ) && ! empty( $_POST['group_description'] ) ? wp_kses_post( wp_unslash( $_POST['group_description'] ) ) : '';
 
 		if ( $group_id && $group_name ) {
 
 			$updated_group = WPUM()->fields_groups->update(
-				$group_id, apply_filters('wpum_field_group_update', [
+				$group_id, apply_filters('wpum_field_group_update', array(
 					'name'        => $group_name,
 					'description' => $group_description,
-				], $group_id )
+				), $group_id )
 			);
 
 		} else {
@@ -296,33 +300,40 @@ class WPUM_Fields_Editor {
 		$this->delete_groups_cache();
 
 		wp_send_json_success(
-			[
+			array(
 				'id'          => $group_id,
 				'name'        => $group_name,
 				'description' => $group_description,
-			]
+			)
 		);
 
 	}
 
+	/**
+	 * Delete groups cache
+	 */
 	protected function delete_groups_cache() {
-		$args = [
+		$args = array(
 			'orderby' => 'group_order',
 			'order'   => 'ASC',
-		];
+		);
 
 		$cache_key = WPUM()->fields_groups->get_cache_key_from_args( $args );
 
 		wp_cache_delete( $cache_key, WPUM()->fields_groups->cache_group );
 	}
 
+	/**
+	 * @param int $group_id
+	 * @param int $parent
+	 */
 	protected function delete_group_fields_cache( $group_id, $parent = 0 ) {
-		$args = [
+		$args = array(
 			'group_id' => (int) $group_id,
 			'orderby'  => 'field_order',
 			'order'    => 'ASC',
 			'parent'   => $parent,
-		];
+		);
 
 		$cache_key = WPUM()->fields->get_cache_key_from_args( $args );
 
@@ -342,7 +353,7 @@ class WPUM_Fields_Editor {
 			wp_die( esc_html__( 'Something went wrong while retrieving the list of fields.', 'wp-user-manager' ), 403 );
 		}
 
-		$fields = [];
+		$fields = array();
 
 		$group_id = isset( $_GET['group_id'] ) && ! empty( $_GET['group_id'] ) ? (int) $_GET['group_id'] : false;
 		$parent   = isset( $_GET['parent_id'] ) ? intval( $_GET['parent_id'] ) : 0;
@@ -350,17 +361,17 @@ class WPUM_Fields_Editor {
 		if ( $group_id ) {
 
 			$group_fields = WPUM()->fields->get_fields(
-				[
+				array(
 					'group_id' => $group_id,
 					'orderby'  => 'field_order',
 					'order'    => 'ASC',
-					'parent'   => $parent
-				]
+					'parent'   => $parent,
+				)
 			);
 
 			foreach ( $group_fields as $field ) {
 
-				$fields[] = [
+				$fields[] = array(
 					'id'            => $field->get_ID(),
 					'group_id'      => $field->get_group_id(),
 					'field_order'   => $field->get_field_order(),
@@ -373,8 +384,8 @@ class WPUM_Fields_Editor {
 					'default'       => $field->is_primary(),
 					'default_id'    => $field->get_primary_id(),
 					'required'      => $field->is_required(),
-					'parent_id'		=> $field->get_parent_ID()
-				];
+					'parent_id'     => $field->get_parent_ID(),
+				);
 
 			}
 		} else {
@@ -382,10 +393,10 @@ class WPUM_Fields_Editor {
 		}
 
 		wp_send_json_success(
-			[
+			array(
 				'fields'   => $fields,
 				'group_id' => $group_id,
-			]
+			)
 		);
 
 	}
@@ -403,14 +414,15 @@ class WPUM_Fields_Editor {
 			wp_die( esc_html__( 'Something went wrong: could not update the fields order.', 'wp-user-manager' ), 403 );
 		}
 
-		$fields = isset( $_POST['fields'] ) && is_array( $_POST['fields'] ) && ! empty( $_POST['fields'] ) ? $_POST['fields'] : false;
+		$fields   = isset( $_POST['fields'] ) && is_array( $_POST['fields'] ) && ! empty( $_POST['fields'] ) ? $_POST['fields'] : false; // phpcs:ignore
+
 		$group_id = false;
 		if ( $fields ) {
 			foreach ( $fields as $order => $field ) {
-				$group_id =  $field['group_id'];
+				$group_id = $field['group_id'];
 				$field_id = (int) $field['id'];
 				if ( $field_id ) {
-					$updated_field = WPUM()->fields->update( $field_id, [ 'field_order' => $order ] );
+					$updated_field = WPUM()->fields->update( $field_id, array( 'field_order' => $order ) );
 				}
 			}
 		} else {
@@ -439,9 +451,10 @@ class WPUM_Fields_Editor {
 			wp_send_json_error( null, 403 );
 		}
 
-		$field_type        = $this->field_type_exists( $_POST['field_type'] );
-		$fields_type_group = sanitize_text_field( $_POST['group'] );
-		$wpum_field_id     = absint( sanitize_text_field( $_POST['field_id'] ) );
+		$field_type        = filter_input( INPUT_POST, 'field_type' );
+		$field_type        = $this->field_type_exists( $field_type );
+		$fields_type_group = filter_input( INPUT_POST, 'group' );
+		$wpum_field_id     = filter_input( INPUT_POST, 'field_id', FILTER_VALIDATE_INT );
 
 		if ( is_array( $field_type ) && ! empty( $field_type ) && $wpum_field_id ) {
 
@@ -451,7 +464,7 @@ class WPUM_Fields_Editor {
 
 			$settings = $field_type[ $first_key ]['settings'];
 			$settings = apply_filters( 'wpum_fields_editor_field_settings', $settings[ $fields_type_group ], $field_type[ $first_key ], $fields_type_group );
-			$model    = [];
+			$model    = array();
 
 			// Generate the model array for vuejs.
 			foreach ( $settings as $setting ) {
@@ -466,11 +479,11 @@ class WPUM_Fields_Editor {
 
 			// Now send data to vuejs.
 			wp_send_json_success(
-				[
+				array(
 					'settings'        => $settings,
 					'model'           => (object) $model,
-					'dropdownOptions' => ! empty( $dropdown_options ) && is_array( $dropdown_options ) ? (array) $dropdown_options : [],
-				]
+					'dropdownOptions' => ! empty( $dropdown_options ) && is_array( $dropdown_options ) ? (array) $dropdown_options : array(),
+				)
 			);
 
 		} else {
@@ -482,14 +495,14 @@ class WPUM_Fields_Editor {
 	/**
 	 * Deregister settings for fields that do not require all of them.
 	 *
-	 * @param array $settings
-	 * @param WPUM_Field      $wpum_field
+	 * @param array      $settings
+	 * @param WPUM_Field $wpum_field
 	 *
 	 * @return array
 	 */
 	private function deregister_settings( $settings, $wpum_field ) {
 
-		$this->deregistered_settings = [];
+		$this->deregistered_settings = array();
 
 		if ( ! empty( $wpum_field->get_primary_id() ) ) {
 			// All primary fields do not need the meta key setting.
@@ -519,6 +532,7 @@ class WPUM_Fields_Editor {
 	 * Deregister models for fields that are no longer required.
 	 *
 	 * @param array $model
+	 * @param mixed $primary_field_id
 	 *
 	 * @return array
 	 */
@@ -573,7 +587,8 @@ class WPUM_Fields_Editor {
 	 * @param string $wpum_field_id
 	 * @param string $setting_id
 	 * @param string $type
-	 * @return void
+	 *
+	 * @return string
 	 */
 	private function get_setting_value( $wpum_field_id, $setting_id, $type ) {
 
@@ -583,37 +598,36 @@ class WPUM_Fields_Editor {
 
 			$field = new WPUM_Field( $wpum_field_id );
 
-			if ( $setting_id == 'field_title' ) {
+			if ( 'field_title' === $setting_id ) {
 				$value = $field->get_name();
-			} elseif ( $setting_id == 'field_description' ) {
+			} elseif ( 'field_description' === $setting_id ) {
 				$value = $field->get_description();
-			} elseif ( $setting_id == 'user_meta_key' ) {
+			} elseif ( 'user_meta_key' === $setting_id ) {
 
-				if ( $field->get_type() == 'file' && strpos( $field->get_meta( $setting_id ), 'wpum_file_field_' ) === 0 ) {
+				if ( 'file' === $field->get_type() && strpos( $field->get_meta( $setting_id ), 'wpum_file_field_' ) === 0 ) {
 
-					$value = $field->get_meta( $setting_id );
+					$value  = $field->get_meta( $setting_id );
 					$prefix = 'wpum_file_field_';
-					$str = $value;
+					$str    = $value;
 
-					if ( substr( $str, 0, strlen( $prefix ) ) == $prefix ) {
+					if ( substr( $str, 0, strlen( $prefix ) ) === $prefix ) {
 						$str = substr( $str, strlen( $prefix ) );
 					}
 
 					$value = $str;
 				} elseif ( $field->get_type() !== 'file' && strpos( $field->get_meta( $setting_id ), 'wpum_' ) === 0 ) {
-					$value = $field->get_meta( $setting_id );
+					$value  = $field->get_meta( $setting_id );
 					$prefix = 'wpum_';
-					$str = $value;
-					if ( substr( $str, 0, strlen( $prefix ) ) == $prefix ) {
+					$str    = $value;
+					if ( substr( $str, 0, strlen( $prefix ) ) === $prefix ) {
 						$str = substr( $str, strlen( $prefix ) );
 					}
 					$value = $str;
 				} else {
 					$value = $field->get_meta( $setting_id );
 				}
-
 			} else {
-				if ( $type == 'checkbox' ) {
+				if ( 'checkbox' === $type ) {
 					$value = (bool) $field->get_meta( $setting_id );
 				} else {
 					$default_method = 'default_' . $setting_id;
@@ -631,20 +645,33 @@ class WPUM_Fields_Editor {
 		return $value;
 	}
 
+	/**
+	 * Delete groups cache
+	 */
 	public function trigger_delete_groups_cache() {
 		$this->delete_groups_cache();
 	}
 
+	/**
+	 * @param int $group_id
+	 */
 	public function trigger_delete_groups_cache_by_id( $group_id ) {
 		$this->delete_groups_cache();
 		$this->delete_group_fields_cache( $group_id );
 	}
 
+	/**
+	 * @param array $data
+	 * @param int   $field_id
+	 */
 	public function trigger_delete_group_fields_cache( $data, $field_id ) {
 		$field = new WPUM_Field( $field_id );
 		$this->delete_group_fields_cache( $field->get_group_id() );
 	}
 
+	/**
+	 * @param int $field_id
+	 */
 	public function trigger_delete_group_fields_cache_by_id( $field_id ) {
 		$field = new WPUM_Field( $field_id );
 		$this->delete_group_fields_cache( $field->get_group_id() );
@@ -664,26 +691,26 @@ class WPUM_Fields_Editor {
 			wp_send_json_error( null, 403 );
 		}
 
-		$field_id         = isset( $_POST['field_id'] ) ? absint( $_POST['field_id'] ) : false;
-		$data             = isset( $_POST['data'] ) ? $_POST['data'] : false;
-		$setting_fields   = isset( $_POST['settings'] ) ? $_POST['settings'] : false;
-		$dropdown_options = isset( $_POST['dropdownOptions'] ) ? $_POST['dropdownOptions'] : false;
+		$field_id         = filter_input( INPUT_POST, 'field_id' );
+		$data             = filter_input( INPUT_POST, 'data' );
+		$setting_fields   = filter_input( INPUT_POST, 'settings' );
+		$dropdown_options = filter_input( INPUT_POST, 'dropdownOptions' );
 		$field_to_update  = new WPUM_Field( $field_id );
 
 		if ( $field_to_update->exists() ) {
 			foreach ( $data as $setting_id => $setting_data ) {
 
 				// Update the name and description.
-				if ( $setting_id == 'field_title' ) {
-					$field_to_update->update( [ 'name' => sanitize_text_field( $setting_data ) ] );
-				} elseif ( $setting_id == 'field_description' ) {
-					$field_to_update->update( [ 'description' => wp_kses_post( $setting_data ) ] );
+				if ( 'field_title' === $setting_id ) {
+					$field_to_update->update( array( 'name' => sanitize_text_field( $setting_data ) ) );
+				} elseif ( 'field_description' === $setting_id ) {
+					$field_to_update->update( array( 'description' => wp_kses_post( $setting_data ) ) );
 					// Now update the meta data.
-				} elseif ( $setting_id == 'user_meta_key' && ! $field_to_update->is_primary() ) {
-					if ( strpos( $setting_data, 'wpum_') !== 0 ) {
+				} elseif ( 'user_meta_key' === $setting_id && ! $field_to_update->is_primary() ) {
+					if ( strpos( $setting_data, 'wpum_' ) !== 0 ) {
 						$setting_data = 'wpum_' . $setting_data;
 						$setting_data = $field_to_update->wpum_sanitize_key( $setting_data );
-						if ( $field_to_update->get_type() == 'file' ) {
+						if ( 'file' === $field_to_update->get_type() ) {
 							$append_key   = str_replace( 'wpum_file_field_', '', $setting_data );
 							$append_key   = str_replace( 'wpum_', '', $append_key );
 							$setting_data = 'wpum_file_field_' . $append_key;
@@ -714,7 +741,7 @@ class WPUM_Fields_Editor {
 								$setting_data = wp_kses_post( $setting_data );
 								break;
 							case 'checkbox':
-								$setting_data = $setting_data === 'true' ? true : false;
+								$setting_data = 'true' === $setting_data;
 								break;
 							case 'multiselect':
 								$setting_data = $setting_data;
@@ -736,12 +763,12 @@ class WPUM_Fields_Editor {
 			}
 
 			if ( is_array( $dropdown_options ) && ! empty( $dropdown_options ) ) {
-				$options = [];
+				$options = array();
 				foreach ( $dropdown_options as $key => $value ) {
-					$options[ $key ] = [
+					$options[ $key ] = array(
 						'value' => sanitize_text_field( $value['value'] ),
 						'label' => sanitize_text_field( $value['label'] ),
-					];
+					);
 				}
 				$field_to_update->update_meta( 'dropdown_options', $options );
 			}
@@ -757,4 +784,4 @@ class WPUM_Fields_Editor {
 
 }
 
-new WPUM_Fields_Editor;
+new WPUM_Fields_Editor();

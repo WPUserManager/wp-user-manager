@@ -5,7 +5,7 @@
  * @package     wp-user-manager
  * @copyright   Copyright (c) 2018, Alessandro Tesoro
  * @license     https://opensource.org/licenses/GPL-3.0 GNU Public License
-*/
+ */
 
 // Exit if accessed directly
 if ( ! defined( 'ABSPATH' ) ) {
@@ -13,16 +13,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * The class thand handles the upgrade.
+ * The class that handles the upgrade.
  */
 class WPUM_Plugin_Updates {
-
-	/**
-	 * Start things.
-	 */
-	public function __construct() {
-		$this->init();
-	}
 
 	/**
 	 * Hook into WP.
@@ -30,11 +23,9 @@ class WPUM_Plugin_Updates {
 	 * @return void
 	 */
 	public function init() {
-		require_once WPUM_PLUGIN_DIR . 'includes/wpum-upgrades/upgrade-functions.php';
-
-		add_action( 'admin_init', [ $this, 'v2_upgrade_notice' ] );
-		add_action( 'admin_init', [ $this, 'upgrade' ] );
-		add_action( 'admin_init', [ $this, 'maybe_perform_minor_upgrades' ] );
+		add_action( 'admin_init', array( $this, 'v2_upgrade_notice' ) );
+		add_action( 'admin_init', array( $this, 'upgrade' ) );
+		add_action( 'admin_init', array( $this, 'maybe_perform_minor_upgrades' ) );
 	}
 
 	/**
@@ -100,7 +91,7 @@ class WPUM_Plugin_Updates {
 
 		// Get all registration form options
 		foreach ( $settings as $key => $options ) {
-			if ( ! in_array( $key, $sections ) ) {
+			if ( ! in_array( $key, $sections, true ) ) {
 				continue;
 			}
 
@@ -126,6 +117,9 @@ class WPUM_Plugin_Updates {
 		wpum_update_option( 'roles_editor', true );
 	}
 
+	/**
+	 * Upgrade 2.8
+	 */
 	protected function upgrade_v2_8() {
 		$existing_emails = get_option( 'wpum_email', array() );
 		$emails          = wpum_install_emails();
@@ -147,10 +141,11 @@ class WPUM_Plugin_Updates {
 			return;
 		}
 
-		$update_url = add_query_arg( [ 'wpum-plugin-updates' => 'v202' ], admin_url() );
+		$update_url = add_query_arg( array( 'wpum-plugin-updates' => 'v202' ), admin_url() );
 		$message    = '<p><strong>WP User Manager</strong> needs to update your database to the latest version. The following process will make updates to your site\'s database. <strong><u>Please create a complete backup before proceeding.</u></strong></p>';
-		$message   .= '<p><a href="' . $update_url . '" class="button-primary">' . esc_html__( 'Upgrade database', 'wp-user-manager' ) . '</a></p>';
-		WPUM()->notices->register_notice( 'wpumv2_upgrade_required_notice', 'warning', $message, [ 'dismissible' => false ] );
+
+		$message .= '<p><a href="' . $update_url . '" class="button-primary">' . esc_html__( 'Upgrade database', 'wp-user-manager' ) . '</a></p>';
+		WPUM()->notices->register_notice( 'wpumv2_upgrade_required_notice', 'warning', $message, array( 'dismissible' => false ) );
 
 	}
 
@@ -172,12 +167,12 @@ class WPUM_Plugin_Updates {
 		// Create an array for each of the page options.
 		if ( ! is_array( $login_page ) && ! is_array( $password_recovery_page ) && ! is_array( $registration_page ) && ! is_array( $account_page ) && ! is_array( $profile_page ) && ! is_array( $terms_page ) ) {
 
-			$login_page             = [ $login_page ];
-			$password_recovery_page = [ $password_recovery_page ];
-			$registration_page      = [ $registration_page ];
-			$account_page           = [ $account_page ];
-			$profile_page           = [ $profile_page ];
-			$terms_page             = [ $terms_page ];
+			$login_page             = array( $login_page );
+			$password_recovery_page = array( $password_recovery_page );
+			$registration_page      = array( $registration_page );
+			$account_page           = array( $account_page );
+			$profile_page           = array( $profile_page );
+			$terms_page             = array( $terms_page );
 
 			// Now update the page options into the db with the newly generated array.
 			wpum_update_option( 'login_page', $login_page );
@@ -195,17 +190,17 @@ class WPUM_Plugin_Updates {
 		$after_registration = wpum_get_option( 'registration_redirect' );
 
 		if ( ! is_array( $after_login ) && ! empty( $after_login ) ) {
-			$after_login = [ $after_login ];
+			$after_login = array( $after_login );
 			wpum_update_option( 'login_redirect', $after_login );
 		}
 
 		if ( ! is_array( $after_logout ) && ! empty( $after_logout ) ) {
-			$after_logout = [ $after_logout ];
+			$after_logout = array( $after_logout );
 			wpum_update_option( 'logout_redirect', $after_logout );
 		}
 
 		if ( ! is_array( $after_registration ) && ! empty( $after_registration ) ) {
-			$after_registration = [ $after_registration ];
+			$after_registration = array( $after_registration );
 			wpum_update_option( 'registration_redirect', $after_registration );
 		}
 
@@ -215,17 +210,17 @@ class WPUM_Plugin_Updates {
 		$backend_profile_redirect   = wpum_get_option( 'backend_profile_redirect' );
 
 		if ( ! is_array( $wp_login_signup_redirect ) && ! empty( $wp_login_signup_redirect ) ) {
-			$wp_login_signup_redirect = [ $wp_login_signup_redirect ];
+			$wp_login_signup_redirect = array( $wp_login_signup_redirect );
 			wpum_update_option( 'wp_login_signup_redirect', $wp_login_signup_redirect );
 		}
 
 		if ( ! is_array( $wp_login_password_redirect ) && ! empty( $wp_login_password_redirect ) ) {
-			$wp_login_password_redirect = [ $wp_login_password_redirect ];
+			$wp_login_password_redirect = array( $wp_login_password_redirect );
 			wpum_update_option( 'wp_login_password_redirect', $wp_login_password_redirect );
 		}
 
 		if ( ! is_array( $backend_profile_redirect ) && ! empty( $backend_profile_redirect ) ) {
-			$backend_profile_redirect = [ $backend_profile_redirect ];
+			$backend_profile_redirect = array( $backend_profile_redirect );
 			wpum_update_option( 'backend_profile_redirect', $backend_profile_redirect );
 		}
 
@@ -237,28 +232,23 @@ class WPUM_Plugin_Updates {
 	 * @return void
 	 */
 	private function check_primary_group() {
-
-		//$primary_group = WPUM()->fields_groups->get_groups( [ 'primary' => true ] );
-
-		//$group_exists = is_array( $primary_group ) && isset( $primary_group[0] ) && $primary_group[0] instanceof WPUM_Field_Group ? true : false;
-
 		global $wpdb;
 
-		$groups = $wpdb->get_results( 'SELECT * FROM ' . $wpdb->prefix . 'wpum_fieldsgroups' );
+		$groups = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}wpum_fieldsgroups" ); // phpcs:ignore
 
 		if ( ! isset( $groups[0] ) ) {
 			$default_group = new WPUM_Field_Group();
 			$default_group->add(
-				[
-					'id'   => 1,
-					'name' => esc_html__( 'Primary fields', 'wp-user-manager' ),
+				array(
+					'id'         => 1,
+					'name'       => esc_html__( 'Primary fields', 'wp-user-manager' ),
 					'is_primary' => true,
-				]
+				)
 			);
 		}
 
 		$default_group = new WPUM_Field_Group( 1 );
-		$default_group->update( [ 'is_primary' => true ] );
+		$default_group->update( array( 'is_primary' => true ) );
 
 	}
 
@@ -272,24 +262,24 @@ class WPUM_Plugin_Updates {
 		global $wpdb;
 
 		$table  = 'wpum_field_groups';
-		$exists = $wpdb->get_var( $wpdb->prepare( "SHOW TABLES LIKE '%s'", $table ) ) === $table;
+		$exists = $wpdb->get_var( $wpdb->prepare( "SHOW TABLES LIKE '%s'", $table ) ) === $table; // phpcs:ignore
 
 		if ( $exists ) {
-			$old_fields_groups = $wpdb->get_results( 'SELECT * FROM ' . $wpdb->prefix . 'wpum_field_groups' );
+			$old_fields_groups = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}wpum_field_groups" ); // phpcs:ignore
 			if ( ! empty( $old_fields_groups ) && is_array( $old_fields_groups ) ) {
 				foreach ( $old_fields_groups as $field_group ) {
 					$new_group = new WPUM_Field_Group();
 					$new_group->add(
-						[
+						array(
 							'id'          => $field_group->id,
 							'name'        => esc_html( $field_group->name ),
 							'description' => $field_group->description,
 							'is_primary'  => $field_group->is_primary ? true : false,
 							'group_order' => $field_group->group_order,
-						]
+						)
 					);
 				}
-				$wpdb->query( 'DROP TABLE IF EXISTS ' . $wpdb->prefix . 'wpum_field_groups' );
+				$wpdb->query( "DROP TABLE IF EXISTS {$wpdb->prefix}wpum_field_groups" ); // phpcs:ignore
 			}
 		}
 
@@ -306,7 +296,7 @@ class WPUM_Plugin_Updates {
 
 		foreach ( $fields as $field ) {
 
-			if ( $field->get_primary_id() == 'user_cover' ) {
+			if ( 'user_cover' === $field->get_primary_id() ) {
 				continue;
 			}
 
@@ -318,34 +308,34 @@ class WPUM_Plugin_Updates {
 
 			if ( $existing_meta ) {
 
-				if ( $existing_meta == 'user_email' ) {
-					$field->update( [ 'type' => 'user_email' ] );
-				} elseif ( $existing_meta == 'password' ) {
-					$field->update( [ 'type' => 'user_password' ] );
-				} elseif ( $existing_meta == 'first_name' ) {
-					$field->update( [ 'type' => 'user_firstname' ] );
-				} elseif ( $existing_meta == 'last_name' ) {
-					$field->update( [ 'type' => 'user_lastname' ] );
-				} elseif ( $existing_meta == 'nickname' ) {
-					$field->update( [ 'type' => 'user_nickname' ] );
-				} elseif ( $existing_meta == 'display_name' ) {
-					$field->update( [ 'type' => 'user_displayname' ] );
-				} elseif ( $existing_meta == 'user_url' ) {
-					$field->update( [ 'type' => 'user_website' ] );
-				} elseif ( $existing_meta == 'description' ) {
-					$field->update( [ 'type' => 'user_description' ] );
-				} elseif ( $existing_meta == 'user_avatar' ) {
-					$field->update( [ 'type' => 'user_avatar' ] );
+				if ( 'user_email' === $existing_meta ) {
+					$field->update( array( 'type' => 'user_email' ) );
+				} elseif ( 'password' === $existing_meta ) {
+					$field->update( array( 'type' => 'user_password' ) );
+				} elseif ( 'first_name' === $existing_meta ) {
+					$field->update( array( 'type' => 'user_firstname' ) );
+				} elseif ( 'last_name' === $existing_meta ) {
+					$field->update( array( 'type' => 'user_lastname' ) );
+				} elseif ( 'nickname' === $existing_meta ) {
+					$field->update( array( 'type' => 'user_nickname' ) );
+				} elseif ( 'display_name' === $existing_meta ) {
+					$field->update( array( 'type' => 'user_displayname' ) );
+				} elseif ( 'user_url' === $existing_meta ) {
+					$field->update( array( 'type' => 'user_website' ) );
+				} elseif ( 'description' === $existing_meta ) {
+					$field->update( array( 'type' => 'user_description' ) );
+				} elseif ( 'user_avatar' === $existing_meta ) {
+					$field->update( array( 'type' => 'user_avatar' ) );
 				}
 			}
 
 			// Update the type of the field to match the new one.
 			$existing_type = WPUM()->fields->get_column( 'type', $field_id );
 
-			if ( $existing_type == 'select' ) {
-				$field->update( [ 'type' => 'dropdown' ] );
-			} elseif ( $existing_type == 'checkboxes' ) {
-				$field->update( [ 'type' => 'multicheckbox' ] );
+			if ( 'select' === $existing_type ) {
+				$field->update( array( 'type' => 'dropdown' ) );
+			} elseif ( 'checkboxes' === $existing_type ) {
+				$field->update( array( 'type' => 'multicheckbox' ) );
 			}
 
 			// Get previous required status and update the meta
@@ -360,13 +350,13 @@ class WPUM_Plugin_Updates {
 
 			// Get the assigned user meta key.
 			$meta = WPUM()->fields->get_column( 'meta', $field_id );
-			if ( $meta == 'first_name' ) {
+			if ( 'first_name' === $meta ) {
 				$field->add_meta( 'user_meta_key', 'firstname' );
-			} elseif ( $meta == 'last_name' ) {
+			} elseif ( 'last_name' === $meta ) {
 				$field->add_meta( 'user_meta_key', 'lastname' );
-			} elseif ( $meta == 'password' ) {
+			} elseif ( 'password' === $meta ) {
 				$field->add_meta( 'user_meta_key', 'user_password' );
-			} elseif ( $meta == 'user_avatar' ) {
+			} elseif ( 'user_avatar' === $meta ) {
 				$field->add_meta( 'user_meta_key', 'current_user_avatar' );
 			} else {
 				$field->add_meta( 'user_meta_key', $meta );
@@ -382,15 +372,15 @@ class WPUM_Plugin_Updates {
 						unset( $options['can_edit'] );
 					}
 					foreach ( $options as $option_id => $option ) {
-						if ( $option_id == 'selectable' ) {
+						if ( 'selectable' === $option_id ) {
 							$dropdown_options = maybe_unserialize( $option );
-							$new_opts         = [];
+							$new_opts         = array();
 							if ( is_array( $dropdown_options ) && ! empty( $dropdown_options ) ) {
 								foreach ( $dropdown_options as $dropdown_option ) {
-									$new_opts[] = [
+									$new_opts[] = array(
 										'value' => $dropdown_option['option-value'],
 										'label' => $dropdown_option['option-title'],
-									];
+									);
 								}
 							}
 							$field->add_meta( 'dropdown_options', maybe_unserialize( $new_opts ) );
@@ -402,12 +392,12 @@ class WPUM_Plugin_Updates {
 			}
 
 			// Mark username field as non editable.
-			if ( $field->get_primary_id() == 'username' ) {
+			if ( 'username' === $field->get_primary_id() ) {
 				$field->update_meta( 'editing', 'hidden' );
 			}
 
 			// Mark other fields as editable if needed.
-			if ( $field->get_primary_id() !== 'username' ) {
+			if ( 'username' !== $field->get_primary_id() ) {
 
 				$editing_option_exists = WPUM()->fields->get_column( 'options', $field_id );
 				$editing_option_exists = is_array( $editing_option_exists ) && ! empty( $editing_option_exists ) && array_key_exists( 'can_edit', maybe_unserialize( $editing_option_exists ) ) ? $editing_option_exists['can_edit'] : false;
@@ -429,20 +419,20 @@ class WPUM_Plugin_Updates {
 	 */
 	private function install_cover_field() {
 
-		$primary_group  = WPUM()->fields_groups->get_groups( ['primary' => true ] );
+		$primary_group  = WPUM()->fields_groups->get_groups( array( 'primary' => true ) );
 		$primary_group  = $primary_group[0];
 		$account_fields = WPUM()->fields->get_fields(
-			[
+			array(
 				'group_id' => $primary_group->get_ID(),
 				'orderby'  => 'field_order',
 				'order'    => 'ASC',
-			]
+			)
 		);
 
 		$cover_exists = false;
 
 		foreach ( $account_fields as $field ) {
-			if ( $field->get_primary_id() == 'user_cover' ) {
+			if ( 'user_cover' === $field->get_primary_id() ) {
 				$cover_exists = true;
 			}
 		}
@@ -472,11 +462,11 @@ class WPUM_Plugin_Updates {
 				$existing_email_subject      = $existing_registration_email['subject'];
 				$existing_email_message      = $existing_registration_email['message'];
 
-				$new_emails['registration_confirmation'] = [
+				$new_emails['registration_confirmation'] = array(
 					'title'   => $existing_email_subject,
 					'subject' => $existing_email_subject,
 					'content' => $existing_email_message,
-				];
+				);
 
 			}
 
@@ -486,11 +476,11 @@ class WPUM_Plugin_Updates {
 				$existing_email_subject           = $existing_password_recovery_email['subject'];
 				$existing_email_message           = $existing_password_recovery_email['message'];
 
-				$new_emails['password_recovery_request'] = [
+				$new_emails['password_recovery_request'] = array(
 					'title'   => $existing_email_subject,
 					'subject' => $existing_email_subject,
 					'content' => $existing_email_message,
-				];
+				);
 
 			}
 		}
@@ -510,7 +500,7 @@ class WPUM_Plugin_Updates {
 
 		global $wpdb;
 
-		$search_fields = $wpdb->get_results( 'SELECT * FROM ' . $wpdb->prefix . 'wpum_search_fields' );
+		$search_fields = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}wpum_search_fields" ); // phpcs:ignore
 
 		if ( is_array( $search_fields ) && empty( $search_fields ) ) {
 			wpum_setup_default_custom_search_fields();
@@ -527,14 +517,14 @@ class WPUM_Plugin_Updates {
 
 		global $wpdb;
 
-		$reg_forms = $wpdb->get_results( 'SELECT * FROM ' . $wpdb->prefix . 'wpum_registration_forms' );
+		$reg_forms = $wpdb->get_results( "SELECT * FROM {$wpdb->prefix}wpum_registration_forms" ); // phpcs:ignore
 
 		if ( is_array( $reg_forms ) && empty( $reg_forms ) ) {
 
 			$default_form_id = WPUM()->registration_forms->insert(
-				[
+				array(
 					'name' => esc_html__( 'Default registration form', 'wp-user-manager' ),
-				]
+				)
 			);
 
 			$fields = WPUM()->fields->get_fields();
@@ -562,7 +552,7 @@ class WPUM_Plugin_Updates {
 	 *
 	 * @return void
 	 */
-	function migrate_directories() {
+	public function migrate_directories() {
 
 		$directories = new WP_Query(
 			array(
@@ -623,8 +613,9 @@ class WPUM_Plugin_Updates {
 	 * @return void
 	 */
 	public function upgrade() {
+		$update_version = filter_input( INPUT_GET, 'wpum-plugin-updates', FILTER_SANITIZE_STRING );
 
-		if ( isset( $_GET['wpum-plugin-updates'] ) && $_GET['wpum-plugin-updates'] == 'v202' && current_user_can( 'manage_options' ) && ! get_option( 'v202_upgrade' ) ) {
+		if ( 'v202' === $update_version && current_user_can( 'manage_options' ) && ! get_option( 'v202_upgrade' ) ) {
 
 			delete_option( 'wpum_completed_upgrades' );
 			delete_option( 'wpumv2_upgrade_completed' );
@@ -659,14 +650,12 @@ class WPUM_Plugin_Updates {
 
 			update_option( 'v202_upgrade', true );
 
-			$message = __( 'Database upgrade completed. <a href="' . admin_url() . '">Go back to your admin panel.</a>', 'wp-user-manager' );
+			// translators: %s wp-admin URL
+			$message = sprintf( __( 'Database upgrade completed. <a href="%s">Go back to your admin panel.</a>', 'wp-user-manager' ), admin_url() );
 
-			wp_die( $message, 'WPUM DB Update' );
-
+			wp_die( wp_kses_post( $message ), 'WPUM DB Update' );
 		}
 
 	}
 
 }
-
-new WPUM_Plugin_Updates;

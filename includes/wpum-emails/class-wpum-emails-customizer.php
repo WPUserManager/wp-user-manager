@@ -5,10 +5,12 @@
  * @package     wp-user-manager
  * @copyright   Copyright (c) 2018, Alessandro Tesoro
  * @license     https://opensource.org/licenses/GPL-3.0 GNU Public License
-*/
+ */
 
 // Exit if accessed directly
-if ( ! defined( 'ABSPATH' ) ) exit;
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 
 /**
  * The class that handles all the customizer settings.
@@ -52,11 +54,12 @@ class WPUM_Emails_Customizer {
 	 * @return void
 	 */
 	private function init() {
-		if( defined( 'DOING_AJAX' ) || ( isset( $_GET['wpum_email_customizer'] ) && 'true' == $_GET['wpum_email_customizer'] ) ) {
-			add_action( 'customize_register', [ $this, 'customize_register' ], 11 );
-			add_filter( 'customize_section_active', [ $this, 'remove_sections' ], 10, 2 );
-			add_filter( 'customize_panel_active', [ $this, 'remove_panels' ], 10, 2 );
-			add_action( 'parse_request', [ $this, 'customizer_setup_preview' ] );
+
+		if ( defined( 'DOING_AJAX' ) || 'true' === filter_input( INPUT_GET, 'wpum_email_customizer' ) ) {
+			add_action( 'customize_register', array( $this, 'customize_register' ), 11 );
+			add_filter( 'customize_section_active', array( $this, 'remove_sections' ), 10, 2 );
+			add_filter( 'customize_panel_active', array( $this, 'remove_panels' ), 10, 2 );
+			add_action( 'parse_request', array( $this, 'customizer_setup_preview' ) );
 		}
 	}
 
@@ -73,23 +76,27 @@ class WPUM_Emails_Customizer {
 	 * Remove all other registered sections except ours.
 	 *
 	 * @param boolean $active
-	 * @param object $section
-	 * @return void
+	 * @param object  $section
+	 * @return bool|void
 	 */
 	public function remove_sections( $active, $section ) {
+		$wpum_email_customizer = filter_input( INPUT_GET, 'wpum_email_customizer', FILTER_SANITIZE_STRING );
+
 		// Bail if not our customizer.
-		if( ! isset( $_GET['wpum_email_customizer'] ) ) {
+		if ( empty( $wpum_email_customizer ) ) {
 			return true;
 		}
+
 		// Deactivate all other sections except the ones registered for emails.
-		if( isset( $_GET['wpum_email_customizer'] ) && $_GET['wpum_email_customizer'] == 'true' ) {
-			$sections = [];
-			foreach( wpum_get_registered_emails() as $email_id => $registered_email ) {
+		if ( 'true' === $wpum_email_customizer ) {
+			$sections = array();
+			foreach ( wpum_get_registered_emails() as $email_id => $registered_email ) {
 				$sections[] = $email_id . '_settings';
 			}
-			if( in_array( $section->id, $sections ) ) {
+			if ( in_array( $section->id, $sections, true ) ) {
 				return true;
 			}
+
 			return false;
 		}
 	}
@@ -97,21 +104,25 @@ class WPUM_Emails_Customizer {
 	/**
 	 * Hide all other panels except the ones registered for our customizer.
 	 *
-	 * @param boolean $active
+	 * @param bool   $active
 	 * @param object $panel
-	 * @return void
+	 *
+	 * @return bool
 	 */
 	public function remove_panels( $active, $panel ) {
-		if( ! isset( $_GET['wpum_email_customizer'] ) ) {
+		$wpum_email_customizer = filter_input( INPUT_GET, 'wpum_email_customizer', FILTER_SANITIZE_STRING );
+
+		if ( empty( $wpum_email_customizer ) ) {
 			return true;
 		}
+
 		// Deactivate all other panels except the ones registered for emails.
-		if( isset( $_GET['wpum_email_customizer'] ) && $_GET['wpum_email_customizer'] == 'true' ) {
-			$panels = [];
-			foreach( wpum_get_registered_emails() as $email_id => $registered_email ) {
+		if ( 'true' === $wpum_email_customizer ) {
+			$panels = array();
+			foreach ( wpum_get_registered_emails() as $email_id => $registered_email ) {
 				$panels[] = $email_id;
 			}
-			if( in_array( $panel->id, $panels ) && $_GET['email'] == $panel->id ) {
+			if ( in_array( $panel->id, $panels, true ) && filter_input( INPUT_GET, 'email', FILTER_SANITIZE_STRING ) === $panel->id ) {
 				return true;
 			}
 			return false;
@@ -128,38 +139,38 @@ class WPUM_Emails_Customizer {
 
 		$this->includes();
 
-		foreach( wpum_get_registered_emails() as $email_id => $registered_email ) {
+		foreach ( wpum_get_registered_emails() as $email_id => $registered_email ) {
 
-			if( isset( $_GET['email'] ) && $_GET['email'] !== $email_id ) {
+			if ( isset( $_GET['email'] ) && $_GET['email'] !== $email_id ) { // phpcs:ignore
 				continue;
 			}
 
-			if( isset( $registered_email['name'] ) && isset( $registered_email['description'] ) ) {
+			if ( isset( $registered_email['name'] ) && isset( $registered_email['description'] ) ) {
 
 				$email_id = esc_attr( $email_id );
 
-				$wp_customize->add_panel( $email_id, [
+				$wp_customize->add_panel( $email_id, array(
 					'title'       => esc_html( $registered_email['name'] ),
 					'description' => sprintf(
-						esc_html__( 'The WP User Manager email editor allows you to customize the emails sent to your users by WPUM. You\'re currently editing the %s. %s %s Edit shortcuts are shown for some editable elements of the email.', 'wp-user-manager' ),
+						// translators: %1$s email name %2$s html break %3$s email description
+						esc_html__( 'The WP User Manager email editor allows you to customize the emails sent to your users by WPUM. You\'re currently editing the %1$s. %2$s %3$s Edit shortcuts are shown for some editable elements of the email.', 'wp-user-manager' ),
 						'<strong>' . strtolower( $registered_email['name'] ) . '</strong>',
 						'<br/><br/>',
 						$registered_email['description'] . '<br/><br/>'
 					),
 					'capability'  => apply_filters( 'wpum_admin_pages_capability', 'manage_options' ),
-				] );
+				) );
 
-				$wp_customize->add_section( $email_id . '_settings' , [
+				$wp_customize->add_section( $email_id . '_settings', array(
 					'title'       => esc_html__( 'Email content settings', 'wp-user-manager' ),
 					'description' => '<a href="#" class="button" id="wpum-display-tags-btn"><span class="dashicons dashicons-editor-code"></span>' . esc_html__( 'View available email merge tags', 'wp-user-manager' ) . '</a><div class="wpum-email-tags-list"><strong>' . esc_html__( 'Available email merge tags:', 'wp-user-manager' ) . '</strong><br/>' . wpum_get_emails_tags_list() . '<hr/></div>',
 					'capability'  => apply_filters( 'wpum_admin_pages_capability', 'manage_options' ),
 					'panel'       => $email_id,
-				] );
+				) );
 
 				$this->register_settings( $wp_customize, $email_id );
 
 			}
-
 		}
 
 	}
@@ -170,11 +181,12 @@ class WPUM_Emails_Customizer {
 	 *
 	 * @param object $wp_customize
 	 * @param string $email_id
+	 *
 	 * @return void
 	 */
 	private function register_settings( $wp_customize, $email_id = false ) {
 
-		if( ! $wp_customize || ! $email_id ) {
+		if ( ! $wp_customize || ! $email_id ) {
 			return;
 		}
 
@@ -227,15 +239,16 @@ class WPUM_Emails_Customizer {
 	/**
 	 * Retrieve a defaul value for the registered settings of each email.
 	 *
-	 * @param string $email_id
+	 * @param string        $email_id
 	 * @param mixed|boolean $field
-	 * @return void
+	 *
+	 * @return false|mixed
 	 */
 	private function get_default( $email_id, $field = false ) {
 
 		$default = false;
 
-		$defaults = apply_filters( 'wpum_email_customizer_settings_defaults', [
+		$defaults = apply_filters( 'wpum_email_customizer_settings_defaults', array(
 			'registration_confirmation_title'   => esc_html__( 'Welcome to {sitename}!', 'wp-user-manager' ),
 			'registration_confirmation_subject' => esc_html__( 'Welcome to {sitename}!', 'wp-user-manager' ),
 			'registration_confirmation_content' => "<p>Hello {username}, and welcome to {sitename}. We’re thrilled to have you on board.</p>
@@ -248,10 +261,10 @@ class WPUM_Emails_Customizer {
 <p>You are receiving this message because you or somebody else has attempted to reset your password on {sitename}.</p>
 <p>If this was a mistake, just ignore this email and nothing will happen.</p>
 <p>To reset your password, visit the following address:</p>
-<p>{recovery_url}</p>'
-		] );
+<p>{recovery_url}</p>',
+		) );
 
-		if( $email_id && $field ) {
+		if ( $email_id && $field ) {
 			$key     = esc_html( "{$email_id}_{$field}" );
 			$default = isset( $defaults[ $key ] ) ? $defaults[ $key ] : false;
 		}
@@ -266,17 +279,18 @@ class WPUM_Emails_Customizer {
 	 * @return void
 	 */
 	public function customizer_setup_preview() {
+		$email = filter_input( INPUT_GET, 'email', FILTER_SANITIZE_STRING );
 
-		if( is_customize_preview() && isset( $_GET['email'] ) ) {
+		if ( is_customize_preview() && $email ) {
 
-			$email_id = sanitize_text_field( $_GET['email'] );
+			$email_id = sanitize_text_field( $email );
 
 			WPUM()->templates
-				->set_template_data( [
+				->set_template_data( array(
 					'email_id' => sanitize_text_field( $email_id ),
 					'heading'  => wpum_get_email_field( $email_id, 'title' ),
-					'preview'  => true
-				] )
+					'preview'  => true,
+				) )
 				->get_template_part( 'email-customizer-preview' );
 			exit;
 		}
@@ -285,4 +299,4 @@ class WPUM_Emails_Customizer {
 
 }
 
-new WPUM_Emails_Customizer;
+new WPUM_Emails_Customizer();

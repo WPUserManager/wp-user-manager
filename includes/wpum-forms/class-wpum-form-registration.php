@@ -73,13 +73,13 @@ class WPUM_Form_Registration extends WPUM_Form {
 	public function __construct() {
 		add_action( 'wp', array( $this, 'process' ) );
 
-		add_filter( 'submit_wpum_form_validate_fields', [ $this, 'validate_emails' ], 10, 4 );
-		add_filter( 'submit_wpum_form_validate_fields', [ $this, 'validate_password' ], 10, 4 );
-		add_filter( 'submit_wpum_form_validate_fields', [ $this, 'validate_username' ], 10, 4 );
-		add_filter( 'submit_wpum_form_validate_fields', [ $this, 'validate_honeypot' ], 10, 4 );
-		add_filter( 'submit_wpum_form_validate_fields', [ $this, 'validate_role' ], 10, 4 );
-		add_filter( 'submit_wpum_form_validate_fields', [ $this, 'validate_repeater' ], 10, 4 );
-		add_action( 'wpum_registration_form_field', [ $this, 'render_registration_form_fields' ], 10, 3 );
+		add_filter( 'submit_wpum_form_validate_fields', array( $this, 'validate_emails' ), 10, 4 );
+		add_filter( 'submit_wpum_form_validate_fields', array( $this, 'validate_password' ), 10, 4 );
+		add_filter( 'submit_wpum_form_validate_fields', array( $this, 'validate_username' ), 10, 4 );
+		add_filter( 'submit_wpum_form_validate_fields', array( $this, 'validate_honeypot' ), 10, 4 );
+		add_filter( 'submit_wpum_form_validate_fields', array( $this, 'validate_role' ), 10, 4 );
+		add_filter( 'submit_wpum_form_validate_fields', array( $this, 'validate_repeater' ), 10, 4 );
+		add_action( 'wpum_registration_form_field', array( $this, 'render_registration_form_fields' ), 10, 3 );
 
 		$this->steps = (array) apply_filters(
 			'registration_steps',
@@ -112,9 +112,9 @@ class WPUM_Form_Registration extends WPUM_Form {
 	/**
 	 * Make sure any emails are valid.
 	 *
-	 * @param bool $pass
-	 * @param array $fields
-	 * @param array $values
+	 * @param bool   $pass
+	 * @param array  $fields
+	 * @param array  $values
 	 * @param string $form
 	 *
 	 * @return bool|WP_Error
@@ -140,9 +140,9 @@ class WPUM_Form_Registration extends WPUM_Form {
 	/**
 	 * Make sure the password is a strong one.
 	 *
-	 * @param bool $pass
-	 * @param array $fields
-	 * @param array $values
+	 * @param bool   $pass
+	 * @param array  $fields
+	 * @param array  $values
 	 * @param string $form
 	 *
 	 * @return bool|WP_Error
@@ -253,18 +253,18 @@ class WPUM_Form_Registration extends WPUM_Form {
 			$wpum_field = new WPUM_Field( $field['id'] );
 			$min_rows   = $wpum_field->get_meta( 'min_rows' ) ? $wpum_field->get_meta( 'min_rows' ) : 0;
 			$max_rows   = $wpum_field->get_meta( 'max_rows' ) ? $wpum_field->get_meta( 'max_rows' ) : 0;
-			$values     = isset( $field['value'] ) && is_array( $field['value'] ) ? $field['value'] : [];
+			$values     = isset( $field['value'] ) && is_array( $field['value'] ) ? $field['value'] : array();
 
 			if ( count( $values ) < $min_rows ) {
-				return new WP_Error( 'repeater-validation-error', esc_html( apply_filters( 'wpum_repeater_validation_min_rows_error_message', sprintf( __( '%s requires at least %d rows', 'wp-user-manager' ), $field['label'], intval( $min_rows ) ), $field, $min_rows ) ) );
+				return new WP_Error( 'repeater-validation-error', esc_html( apply_filters( 'wpum_repeater_validation_min_rows_error_message', sprintf( __( '%1$s requires at least %2$d rows', 'wp-user-manager' ), $field['label'], intval( $min_rows ) ), $field, $min_rows ) ) );
 			}
 
 			if ( $max_rows > 0 && count( $values ) > $max_rows ) {
-				return new WP_Error( 'repeater-validation-error', esc_html( apply_filters( 'wpum_repeater_validation_max_rows_error_message', sprintf( __( '%s accepts maximum %d rows', 'wp-user-manager' ), $field['label'], intval( $max_rows ) ), $field, $max_rows ) ) );
+				return new WP_Error( 'repeater-validation-error', esc_html( apply_filters( 'wpum_repeater_validation_max_rows_error_message', sprintf( __( '%1$s accepts maximum %2$d rows', 'wp-user-manager' ), $field['label'], intval( $max_rows ) ), $field, $max_rows ) ) );
 			}
 
 			if ( $field['required'] ) {
-				$first_row = isset( $values[0] ) && is_array( $values[0] ) ? $values[0] : [];
+				$first_row = isset( $values[0] ) && is_array( $values[0] ) ? $values[0] : array();
 
 				if ( ! count( $first_row ) || count( array_filter( $first_row ) ) !== count( $first_row ) ) {
 					return new WP_Error( 'repeater-validation-error', esc_html( apply_filters( 'wpum_repeater_validation_required_error_message', sprintf( __( 'Please fill out %s data', 'wp-user-manager' ), $field['label'] ), $field ) ) );
@@ -284,7 +284,7 @@ class WPUM_Form_Registration extends WPUM_Form {
 			return;
 		}
 
-		$this->fields = [ 'register' => $this->get_registration_fields() ];
+		$this->fields = array( 'register' => $this->get_registration_fields() );
 
 	}
 
@@ -298,7 +298,7 @@ class WPUM_Form_Registration extends WPUM_Form {
 			return $this->registration_form;
 		}
 
-		$form = WPUM()->registration_forms->get_forms();
+		$form                    = WPUM()->registration_forms->get_forms();
 		$this->registration_form = $form[0];
 
 		$this->form_id = $this->registration_form->get_ID();
@@ -316,7 +316,7 @@ class WPUM_Form_Registration extends WPUM_Form {
 			return $this->registration_form_fields;
 		}
 
-		$fields            = [];
+		$fields            = array();
 		$registration_form = $this->get_registration_form();
 
 		if ( $registration_form->exists() ) {
@@ -331,7 +331,7 @@ class WPUM_Form_Registration extends WPUM_Form {
 
 					if ( $field->exists() ) {
 						$data = array(
-							'id'		  => $field->get_ID(),
+							'id'          => $field->get_ID(),
 							'label'       => $field->get_name(),
 							'type'        => $field->get_type(),
 							'required'    => $field->get_meta( 'required' ),
@@ -343,7 +343,7 @@ class WPUM_Form_Registration extends WPUM_Form {
 							'template'    => $field->get_parent_type(),
 						);
 
-						$data = array_merge( $data, $field->get_field_data() );
+						$data      = array_merge( $data, $field->get_field_data() );
 						$field_key = $this->get_parsed_id( $field->get_name(), $field->get_primary_id(), $field );
 
 						$fields[ $field_key ] = $data;
@@ -352,12 +352,12 @@ class WPUM_Form_Registration extends WPUM_Form {
 			}
 
 			// Add honeypot validation field.
-			$fields['robo'] = [
+			$fields['robo'] = array(
 				'label'    => esc_html__( 'If you\'re human leave this blank:', 'wp-user-manager' ),
 				'type'     => 'text',
 				'required' => false,
 				'priority' => 0,
-			];
+			);
 
 			if ( $registration_form->get_setting( 'allow_role_select' ) ) {
 				$selected_roles = $registration_form->get_setting( 'register_roles', array() );
@@ -375,7 +375,7 @@ class WPUM_Form_Registration extends WPUM_Form {
 
 			// Add a terms field is enabled.
 			if ( $registration_form->get_setting( 'enable_terms' ) ) {
-				$terms_page      = $registration_form->get_setting( 'terms_page', array() );
+				$terms_page = $registration_form->get_setting( 'terms_page', array() );
 				if ( isset( $terms_page[0] ) ) {
 					$fields['terms'] = array(
 						'label'       => false,
@@ -441,12 +441,12 @@ class WPUM_Form_Registration extends WPUM_Form {
 	}
 
 	protected function get_submit_data() {
-		return [
-			'form'    => $this->form_name,
-			'action'  => $this->get_action(),
-			'fields'  => $this->get_fields( 'register' ),
-			'step'    => $this->get_step(),
-		];
+		return array(
+			'form'   => $this->form_name,
+			'action' => $this->get_action(),
+			'fields' => $this->get_fields( 'register' ),
+			'step'   => $this->get_step(),
+		);
 	}
 
 	/**
@@ -477,7 +477,7 @@ class WPUM_Form_Registration extends WPUM_Form {
 			$admin_url = admin_url( 'users.php?page=wpum-registration-forms#/' );
 
 			WPUM()->templates
-				->set_template_data( [ 'message' => __( 'The registration form cannot be used because either a username or email field is required to process registrations. Please edit the form and add at least the email field.', 'wp-user-manager' ) . ' ' . '<a href="' . esc_url_raw( $admin_url ) . '">' . $admin_url . '</a>' ] )
+				->set_template_data( array( 'message' => __( 'The registration form cannot be used because either a username or email field is required to process registrations. Please edit the form and add at least the email field.', 'wp-user-manager' ) . ' ' . '<a href="' . esc_url_raw( $admin_url ) . '">' . $admin_url . '</a>' ) )
 				->get_template_part( 'messages/general', 'error' );
 
 		}
@@ -539,13 +539,13 @@ class WPUM_Form_Registration extends WPUM_Form {
 
 			$form = $this->get_registration_form();
 
-			$new_user_data = [
+			$new_user_data = array(
 				'ID'          => $new_user_id,
 				'user_url'    => isset( $values['register']['user_website'] ) ? $values['register']['user_website'] : false,
 				'first_name'  => isset( $values['register']['user_firstname'] ) ? $values['register']['user_firstname'] : false,
 				'last_name'   => isset( $values['register']['user_lastname'] ) ? $values['register']['user_lastname'] : false,
 				'description' => isset( $values['register']['user_description'] ) ? $values['register']['user_description'] : false,
-			];
+			);
 
 			$new_user_id = wp_update_user( apply_filters( 'wpum_registration_user_data', $new_user_data, $new_user_id, $form ) );
 
@@ -621,7 +621,7 @@ class WPUM_Form_Registration extends WPUM_Form {
 			exit;
 		} else {
 			$registration_page = get_permalink( wpum_get_core_page_id( 'register' ) );
-			$registration_page = add_query_arg( [ 'registration' => 'success' ], $registration_page );
+			$registration_page = add_query_arg( array( 'registration' => 'success' ), $registration_page );
 
 			wp_safe_redirect( $registration_page );
 			exit;
@@ -637,8 +637,8 @@ class WPUM_Form_Registration extends WPUM_Form {
 	 */
 	public function render_registration_form_fields( $field, $key, $fields ) {
 		$registered_groups = array_column( wpum_get_registered_field_types(), 'fields' );
-		$registered_fields = $registered_groups ? call_user_func_array( 'array_merge', $registered_groups ) : [];
-		$registered_types  = $registered_fields ? array_column( $registered_fields, 'type' ) : [];
+		$registered_fields = $registered_groups ? call_user_func_array( 'array_merge', $registered_groups ) : array();
+		$registered_types  = $registered_fields ? array_column( $registered_fields, 'type' ) : array();
 
 		if ( in_array( $field['type'], $registered_types ) ) {
 
@@ -649,13 +649,17 @@ class WPUM_Form_Registration extends WPUM_Form {
 				$template     = isset( $field['template'] ) ? $field['template'] : $field['type'];
 
 				WPUM()->templates->set_template_data( $field )
-				                 ->get_template_part( 'form-fields/' . $template, 'field' );
+								 ->get_template_part( 'form-fields/' . $template, 'field' );
 
 				return;
 			}
 
-			WPUM()->templates->set_template_data( [ 'field' => $field, 'key' => $key, 'form_id' => $this->form_id ] )
-			                 ->get_template_part( 'forms/form-registration-fields', 'field' );
+			WPUM()->templates->set_template_data( array(
+				'field'   => $field,
+				'key'     => $key,
+				'form_id' => $this->form_id,
+			) )
+							 ->get_template_part( 'forms/form-registration-fields', 'field' );
 		}
 	}
 

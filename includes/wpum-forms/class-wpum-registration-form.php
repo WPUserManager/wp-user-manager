@@ -5,10 +5,12 @@
  * @package     wp-user-manager
  * @copyright   Copyright (c) 2018, Alessandro Tesoro
  * @license     https://opensource.org/licenses/GPL-3.0 GNU Public License
-*/
+ */
 
 // Exit if accessed directly
-if ( ! defined( 'ABSPATH' ) ) exit;
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 
 /**
  * The class that stores the DB field object.
@@ -36,7 +38,7 @@ class WPUM_Registration_Form {
 	 *
 	 * @var array
 	 */
-	protected $fields = [];
+	protected $fields = array();
 
 	/**
 	 * Whether or not this form is the default form.
@@ -71,11 +73,11 @@ class WPUM_Registration_Form {
 
 		$this->db = new WPUM_DB_Registration_Forms();
 
-		if( empty( $_id_or_form ) ) {
+		if ( empty( $_id_or_form ) ) {
 			return false;
 		}
 
-		if( is_a( $_id_or_form, 'WPUM_DB_Registration_Forms' ) ) {
+		if ( is_a( $_id_or_form, 'WPUM_DB_Registration_Forms' ) ) {
 			$form = $_id_or_form;
 		} else {
 			$_id_or_form = intval( $_id_or_form );
@@ -98,7 +100,7 @@ class WPUM_Registration_Form {
 	 * @return mixed|WP_Error
 	 */
 	public function __get( $key ) {
-		if( method_exists( $this, 'get_' . $key ) ) {
+		if ( method_exists( $this, 'get_' . $key ) ) {
 			return call_user_func( array( $this, 'get_' . $key ) );
 		} else {
 			return new WP_Error( 'wpum-registration-form-invalid-property', sprintf( __( 'Can\'t get property %s', 'wp-user-manager' ), $key ) );
@@ -134,10 +136,10 @@ class WPUM_Registration_Form {
 		}
 
 		if ( ! empty( $this->id ) ) {
-			$default = $this->get_meta( 'default' );
+			$default          = $this->get_meta( 'default' );
 			$this->is_default = empty( $default ) ? false : $default;
 			$this->role       = $this->get_assigned_role();
-			$fields = $this->get_meta( 'fields' );
+			$fields           = $this->get_meta( 'fields' );
 			$this->fields     = empty( $fields ) ? array() : $fields;
 			return true;
 		}
@@ -237,7 +239,7 @@ class WPUM_Registration_Form {
 		reset( $found_role );
 		$first_key = key( $found_role );
 
-		if( array_key_exists( $first_key, $available_roles ) ) {
+		if ( array_key_exists( $first_key, $available_roles ) ) {
 			$role = $available_roles[ $first_key ]['label'];
 		}
 
@@ -295,26 +297,25 @@ class WPUM_Registration_Form {
 				continue;
 			}
 
-			switch( $type ) {
+			switch ( $type ) {
 				case '%s':
-					if( is_array( $data[$key] ) ) {
-						$data[$key] = json_encode( $data[$key] );
+					if ( is_array( $data[ $key ] ) ) {
+						$data[ $key ] = json_encode( $data[ $key ] );
 					} else {
-						$data[$key] = sanitize_text_field( $data[$key] );
+						$data[ $key ] = sanitize_text_field( $data[ $key ] );
 					}
-				break;
+					break;
 				case '%d':
-					if ( ! is_numeric( $data[$key] ) || (int) $data[$key] !== absint( $data[$key] ) ) {
-						$data[$key] = $default_values[$key];
+					if ( ! is_numeric( $data[ $key ] ) || (int) $data[ $key ] !== absint( $data[ $key ] ) ) {
+						$data[ $key ] = $default_values[ $key ];
 					} else {
-						$data[$key] = absint( $data[$key] );
+						$data[ $key ] = absint( $data[ $key ] );
 					}
-				break;
+					break;
 				default:
-					$data[$key] = sanitize_text_field( $data[$key] );
-				break;
+					$data[ $key ] = sanitize_text_field( $data[ $key ] );
+					break;
 			}
-
 		}
 
 		return $data;
@@ -415,7 +416,10 @@ class WPUM_Registration_Form {
 				'name'    => 'Registration Role',
 				'type'    => 'multiselect',
 				'options' => $roles,
-				'toggle'  => array( 'key' => 'allow_role_select', 'value' => false ),
+				'toggle'  => array(
+					'key'   => 'allow_role_select',
+					'value' => false,
+				),
 			),
 		);
 

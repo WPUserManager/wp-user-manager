@@ -1,22 +1,42 @@
 <?php
 /**
+ * WPUM_Collection
+ *
  * @package     wp-user-manager
  * @copyright   Copyright (c) 2020, WP User Manager
  * @license     https://opensource.org/licenses/GPL-3.0 GNU Public License
  */
 
+/**
+ * WPUM_Collection
+ */
 class WPUM_Collection {
 
+	/**
+	 * @var array
+	 */
 	private static $instances = array();
 
+	/**
+	 * @var array
+	 */
 	protected $items = array();
 
+	/**
+	 * Construct
+	 */
 	public function __construct() {
 	}
 
+	/**
+	 * Clone
+	 */
 	public function __clone() {
 	}
 
+	/**
+	 * Wakeup
+	 */
 	public function __wakeup() {
 	}
 

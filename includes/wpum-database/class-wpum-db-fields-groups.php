@@ -5,10 +5,12 @@
  * @package     wp-user-manager
  * @copyright   Copyright (c) 2018, Alessandro Tesoro
  * @license     https://opensource.org/licenses/GPL-3.0 GNU Public License
-*/
+ */
 
 // Exit if accessed directly
-if ( ! defined( 'ABSPATH' ) ) exit;
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 
 /**
  * WPUM_DB_Fields_Groups Class
@@ -70,12 +72,14 @@ class WPUM_DB_Fields_Groups extends WPUM_DB {
 	 * Insert a new field group.
 	 *
 	 * @access public
-	 * @param array $data {
+	 *
+	 * @param array  $data {
 	 *      Data for the group.
 	 *
 	 *      @type string $name              Group name.
 	 *      @type string $description       Group description.
 	 * }
+	 * @param string $type
 	 *
 	 * @return int ID of the inserted group.
 	 */
@@ -93,9 +97,9 @@ class WPUM_DB_Fields_Groups extends WPUM_DB {
 	 * Update a group.
 	 *
 	 * @access public
-	 * @param int   $row_id group ID.
-	 * @param array $data {
-	 *      Data for the group.
+	 * @param int                $row_id group ID.
+	 * @param array              $data {
+	 *                   Data for the group.
 	 *
 	 *      @type string $name              Group name.
 	 *      @type string $description       Group description.
@@ -164,16 +168,31 @@ class WPUM_DB_Fields_Groups extends WPUM_DB {
 		return $last_changed;
 	}
 
+	/**
+	 * @param array $args
+	 *
+	 * @return string
+	 */
 	protected function get_cache_key( $args ) {
-		return md5( 'wpum_fields_groups_' . serialize( $args ) );
+		return md5( 'wpum_fields_groups_' . serialize( $args ) ); // phpcs:ignore
 	}
 
+	/**
+	 * @param array $args
+	 *
+	 * @return string
+	 */
 	public function get_cache_key_from_args( $args ) {
 		$args = $this->get_args( $args );
 
 		return $this->get_cache_key( $args );
 	}
 
+	/**
+	 * @param array $args
+	 *
+	 * @return array|object
+	 */
 	protected function get_args( $args = array() ) {
 		global $wpdb;
 
@@ -197,7 +216,6 @@ class WPUM_DB_Fields_Groups extends WPUM_DB {
 		if ( isset( $args['search'] ) && ! empty( $args['search'] ) ) {
 			$args['search'] = $wpdb->esc_like( $args['search'] );
 		}
-
 
 		$args['orderby'] = ! array_key_exists( $args['orderby'], $this->get_columns() ) ? 'id' : $args['orderby'];
 
@@ -230,10 +248,10 @@ class WPUM_DB_Fields_Groups extends WPUM_DB {
 		$args['order']   = esc_sql( $args['order'] );
 
 		if ( false === $groups ) {
-			$groups = $wpdb->get_col( $wpdb->prepare(
+			$groups = $wpdb->get_col( $wpdb->prepare( // phpcs:ignore
 				"
 					SELECT id
-					FROM $this->table_name
+					FROM {$this->table_name}
 					$where
 					ORDER BY {$args['orderby']} {$args['order']}
 					LIMIT %d,%d;
@@ -243,16 +261,16 @@ class WPUM_DB_Fields_Groups extends WPUM_DB {
 
 				foreach ( $groups as $key => $group ) {
 
-					$the_group  = new WPUM_Field_Group( $group );
+					$the_group = new WPUM_Field_Group( $group );
 
-					if( isset( $args['fields'] ) && $args['fields'] === true ) {
+					if ( isset( $args['fields'] ) && true === $args['fields'] ) {
 						$fields = WPUM()->fields->get_fields(
-							[
+							array(
 								'group_id' => $group,
 								'order'    => 'ASC',
 								'orderby'  => 'field_order',
-								'user_id'  => $args['user_id']
-							]
+								'user_id'  => $args['user_id'],
+							)
 						);
 						$the_group->__set( 'fields', $fields );
 					}
@@ -272,14 +290,15 @@ class WPUM_DB_Fields_Groups extends WPUM_DB {
 	 * Parse the `WHERE` clause for the SQL query.
 	 *
 	 * @param array $args
-	 * @return void
+	 *
+	 * @return string
 	 */
 	private function parse_where( $args ) {
 
 		$where = '';
 
 		if ( ! empty( $args['primary'] ) && $args['primary'] === true ) {
-			$where .= " AND `is_primary` = 1 ";
+			$where .= ' AND `is_primary` = 1 ';
 		}
 
 		if ( ! empty( $where ) ) {
@@ -287,14 +306,14 @@ class WPUM_DB_Fields_Groups extends WPUM_DB {
 		}
 
 		return $where;
-
 	}
 
 	/**
 	 * Count available fields groups into the database.
 	 *
 	 * @param array $args
-	 * @return void
+	 *
+	 * @return int
 	 */
 	public function count( $args = array() ) {
 		global $wpdb;

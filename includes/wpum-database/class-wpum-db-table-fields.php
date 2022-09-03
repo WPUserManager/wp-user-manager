@@ -5,10 +5,12 @@
  * @package     wp-user-manager
  * @copyright   Copyright (c) 2018, Alessandro Tesoro
  * @license     https://opensource.org/licenses/GPL-3.0 GNU Public License
-*/
+ */
 
 // Exit if accessed directly
-if ( ! defined( 'ABSPATH' ) ) exit;
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 
 /**
  * Setup the global "wpum_fields" database table
@@ -32,11 +34,11 @@ final class WPUM_DB_Table_Fields extends WPUM_DB_Table {
 	protected $version = 201801170001;
 
 		/**
-	 * Setup the database schema
-	 *
-	 * @access protected
-	 * @return void
-	 */
+		 * Setup the database schema
+		 *
+		 * @access protected
+		 * @return void
+		 */
 	protected function set_schema() {
 		$max_index_length = 191;
 		$this->schema     = "id bigint(20) unsigned NOT NULL auto_increment,

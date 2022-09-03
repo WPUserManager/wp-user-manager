@@ -5,11 +5,16 @@
  * @package     wp-user-manager
  * @copyright   Copyright (c) 2018, Alessandro Tesoro
  * @license     https://opensource.org/licenses/GPL-3.0 GNU Public License
-*/
+ */
 
 // Exit if accessed directly
-if ( ! defined( 'ABSPATH' ) ) exit;
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 
+/**
+ * WPUM_Shortcode_Recently_Registered
+ */
 class WPUM_Shortcode_Recently_Registered extends WPUM_Shortcode_Generator {
 
 	/**
@@ -27,12 +32,12 @@ class WPUM_Shortcode_Recently_Registered extends WPUM_Shortcode_Generator {
 	 * @return array
 	 */
 	public function define_fields() {
-		return [
+		return array(
 			array(
 				'type'    => 'textbox',
 				'name'    => 'amount',
 				'label'   => esc_html__( 'Amount', 'wp-user-manager' ),
-				'tooltip' => esc_html__( 'How many users to display', 'wp-user-manager' )
+				'tooltip' => esc_html__( 'How many users to display', 'wp-user-manager' ),
 			),
 			array(
 				'type'    => 'listbox',
@@ -40,9 +45,9 @@ class WPUM_Shortcode_Recently_Registered extends WPUM_Shortcode_Generator {
 				'label'   => esc_html__( 'Link to profile', 'wp-user-manager' ),
 				'options' => $this->get_yes_no(),
 			),
-		];
+		);
 	}
 
 }
 
-new WPUM_Shortcode_Recently_Registered;
+new WPUM_Shortcode_Recently_Registered();

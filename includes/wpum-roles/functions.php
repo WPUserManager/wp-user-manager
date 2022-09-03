@@ -181,6 +181,11 @@ function wpum_get_role_count() {
 	return count( $GLOBALS['wp_roles']->role_names );
 }
 
+/**
+ * @param string $role
+ *
+ * @return string
+ */
 function wpum_sanitize_role( $role ) {
 	$_role = strtolower( $role );
 	$_role = preg_replace( '/[^a-z0-9_\-\s]/', '', $_role );
@@ -210,14 +215,18 @@ function wpum_translate_role_hook( $label, $role ) {
 }
 
 /**
+ * @param string $role
+ *
  * @return bool
  */
 function wpum_role_has_users( $role ) {
-	return in_array( $role, wpum_get_active_roles() );
+	return in_array( $role, wpum_get_active_roles(), true );
 }
 
 /**
  * Conditional tag to check if a role has any capabilities.
+ *
+ * @param string $role
  *
  * @return bool
  */
@@ -248,7 +257,7 @@ function wpum_get_role_user_count( $role = '' ) {
 /**
  * Returns the number of granted capabilities that a role has.
  *
- * @param string
+ * @param string $role
  *
  * @return int
  */
@@ -259,11 +268,9 @@ function wpum_get_role_granted_cap_count( $role ) {
 /**
  * Returns the number of denied capabilities that a role has.
  *
- * @param string
+ * @param string $role
  *
  * @return int
- * @since  1.0.0
- * @access public
  */
 function wpum_get_role_denied_cap_count( $role ) {
 	return wpum_get_role( $role )->denied_cap_count;
@@ -277,7 +284,7 @@ function wpum_get_role_denied_cap_count( $role ) {
  * @return bool
  */
 function wpum_is_role_editable( $role ) {
-	return in_array( $role, wpum_get_editable_roles() );
+	return in_array( $role, wpum_get_editable_roles(), true );
 }
 
 /**
@@ -288,7 +295,7 @@ function wpum_is_role_editable( $role ) {
  * @return bool
  */
 function wpum_is_wordpress_role( $role ) {
-	return in_array( $role, array( 'administrator', 'editor', 'author', 'contributor', 'subscriber' ) );
+	return in_array( $role, array( 'administrator', 'editor', 'author', 'contributor', 'subscriber' ), true );
 }
 
 /**
@@ -313,16 +320,46 @@ function wpum_register_default_caps() {
 	$caps = array();
 
 	// General caps.
-	$caps['edit_dashboard']    = array( 'label' => __( 'Edit Dashboard', 'wp-user-manager' ), 'group' => 'general' );
-	$caps['edit_files']        = array( 'label' => __( 'Edit Files', 'wp-user-manager' ), 'group' => 'general' );
-	$caps['export']            = array( 'label' => __( 'Export', 'wp-user-manager' ), 'group' => 'general' );
-	$caps['import']            = array( 'label' => __( 'Import', 'wp-user-manager' ), 'group' => 'general' );
-	$caps['manage_links']      = array( 'label' => __( 'Manage Links', 'wp-user-manager' ), 'group' => 'general' );
-	$caps['manage_options']    = array( 'label' => __( 'Manage Options', 'wp-user-manager' ), 'group' => 'general' );
-	$caps['moderate_comments'] = array( 'label' => __( 'Moderate Comments', 'wp-user-manager' ), 'group' => 'general' );
-	$caps['read']              = array( 'label' => __( 'Read', 'wp-user-manager' ), 'group' => 'general' );
-	$caps['unfiltered_html']   = array( 'label' => __( 'Unfiltered HTML', 'wp-user-manager' ), 'group' => 'general' );
-	$caps['update_core']       = array( 'label' => __( 'Update Core', 'wp-user-manager' ), 'group' => 'general' );
+	$caps['edit_dashboard']    = array(
+		'label' => __( 'Edit Dashboard', 'wp-user-manager' ),
+		'group' => 'general',
+	);
+	$caps['edit_files']        = array(
+		'label' => __( 'Edit Files', 'wp-user-manager' ),
+		'group' => 'general',
+	);
+	$caps['export']            = array(
+		'label' => __( 'Export', 'wp-user-manager' ),
+		'group' => 'general',
+	);
+	$caps['import']            = array(
+		'label' => __( 'Import', 'wp-user-manager' ),
+		'group' => 'general',
+	);
+	$caps['manage_links']      = array(
+		'label' => __( 'Manage Links', 'wp-user-manager' ),
+		'group' => 'general',
+	);
+	$caps['manage_options']    = array(
+		'label' => __( 'Manage Options', 'wp-user-manager' ),
+		'group' => 'general',
+	);
+	$caps['moderate_comments'] = array(
+		'label' => __( 'Moderate Comments', 'wp-user-manager' ),
+		'group' => 'general',
+	);
+	$caps['read']              = array(
+		'label' => __( 'Read', 'wp-user-manager' ),
+		'group' => 'general',
+	);
+	$caps['unfiltered_html']   = array(
+		'label' => __( 'Unfiltered HTML', 'wp-user-manager' ),
+		'group' => 'general',
+	);
+	$caps['update_core']       = array(
+		'label' => __( 'Update Core', 'wp-user-manager' ),
+		'group' => 'general',
+	);
 
 	// Post caps.
 	$caps['delete_others_posts']    = array(
@@ -345,7 +382,10 @@ function wpum_register_default_caps() {
 		'label' => __( "Edit Others' Posts", 'wp-user-manager' ),
 		'group' => 'type-post',
 	);
-	$caps['edit_posts']             = array( 'label' => __( 'Edit Posts', 'wp-user-manager' ), 'group' => 'type-post' );
+	$caps['edit_posts']             = array(
+		'label' => __( 'Edit Posts', 'wp-user-manager' ),
+		'group' => 'type-post',
+	);
 	$caps['edit_private_posts']     = array(
 		'label' => __( 'Edit Private Posts', 'wp-user-manager' ),
 		'group' => 'type-post',
@@ -384,7 +424,10 @@ function wpum_register_default_caps() {
 		'label' => __( "Edit Others' Pages", 'wp-user-manager' ),
 		'group' => 'type-page',
 	);
-	$caps['edit_pages']             = array( 'label' => __( 'Edit Pages', 'wp-user-manager' ), 'group' => 'type-page' );
+	$caps['edit_pages']             = array(
+		'label' => __( 'Edit Pages', 'wp-user-manager' ),
+		'group' => 'type-page',
+	);
 	$caps['edit_private_pages']     = array(
 		'label' => __( 'Edit Private Pages', 'wp-user-manager' ),
 		'group' => 'type-page',
@@ -403,7 +446,10 @@ function wpum_register_default_caps() {
 	);
 
 	// Attachment caps.
-	$caps['upload_files'] = array( 'label' => __( 'Upload Files', 'wp-user-manager' ), 'group' => 'type-attachment' );
+	$caps['upload_files'] = array(
+		'label' => __( 'Upload Files', 'wp-user-manager' ),
+		'group' => 'type-attachment',
+	);
 
 	// Taxonomy caps.
 	$caps['manage_categories'] = array(
@@ -412,34 +458,100 @@ function wpum_register_default_caps() {
 	);
 
 	// Theme caps.
-	$caps['delete_themes']      = array( 'label' => __( 'Delete Themes', 'wp-user-manager' ), 'group' => 'theme' );
-	$caps['edit_theme_options'] = array( 'label' => __( 'Edit Theme Options', 'wp-user-manager' ), 'group' => 'theme' );
-	$caps['edit_themes']        = array( 'label' => __( 'Edit Themes', 'wp-user-manager' ), 'group' => 'theme' );
-	$caps['install_themes']     = array( 'label' => __( 'Install Themes', 'wp-user-manager' ), 'group' => 'theme' );
-	$caps['switch_themes']      = array( 'label' => __( 'Switch Themes', 'wp-user-manager' ), 'group' => 'theme' );
-	$caps['update_themes']      = array( 'label' => __( 'Update Themes', 'wp-user-manager' ), 'group' => 'theme' );
+	$caps['delete_themes']      = array(
+		'label' => __( 'Delete Themes', 'wp-user-manager' ),
+		'group' => 'theme',
+	);
+	$caps['edit_theme_options'] = array(
+		'label' => __( 'Edit Theme Options', 'wp-user-manager' ),
+		'group' => 'theme',
+	);
+	$caps['edit_themes']        = array(
+		'label' => __( 'Edit Themes', 'wp-user-manager' ),
+		'group' => 'theme',
+	);
+	$caps['install_themes']     = array(
+		'label' => __( 'Install Themes', 'wp-user-manager' ),
+		'group' => 'theme',
+	);
+	$caps['switch_themes']      = array(
+		'label' => __( 'Switch Themes', 'wp-user-manager' ),
+		'group' => 'theme',
+	);
+	$caps['update_themes']      = array(
+		'label' => __( 'Update Themes', 'wp-user-manager' ),
+		'group' => 'theme',
+	);
 
 	// Plugin caps.
-	$caps['activate_plugins'] = array( 'label' => __( 'Activate Plugins', 'wp-user-manager' ), 'group' => 'plugin' );
-	$caps['delete_plugins']   = array( 'label' => __( 'Delete Plugins', 'wp-user-manager' ), 'group' => 'plugin' );
-	$caps['edit_plugins']     = array( 'label' => __( 'Edit Plugins', 'wp-user-manager' ), 'group' => 'plugin' );
-	$caps['install_plugins']  = array( 'label' => __( 'Install Plugins', 'wp-user-manager' ), 'group' => 'plugin' );
-	$caps['update_plugins']   = array( 'label' => __( 'Update Plugins', 'wp-user-manager' ), 'group' => 'plugin' );
+	$caps['activate_plugins'] = array(
+		'label' => __( 'Activate Plugins', 'wp-user-manager' ),
+		'group' => 'plugin',
+	);
+	$caps['delete_plugins']   = array(
+		'label' => __( 'Delete Plugins', 'wp-user-manager' ),
+		'group' => 'plugin',
+	);
+	$caps['edit_plugins']     = array(
+		'label' => __( 'Edit Plugins', 'wp-user-manager' ),
+		'group' => 'plugin',
+	);
+	$caps['install_plugins']  = array(
+		'label' => __( 'Install Plugins', 'wp-user-manager' ),
+		'group' => 'plugin',
+	);
+	$caps['update_plugins']   = array(
+		'label' => __( 'Update Plugins', 'wp-user-manager' ),
+		'group' => 'plugin',
+	);
 
 	// User caps.
-	$caps['create_roles']  = array( 'label' => __( 'Create Roles', 'wp-user-manager' ), 'group' => 'user' );
-	$caps['create_users']  = array( 'label' => __( 'Create Users', 'wp-user-manager' ), 'group' => 'user' );
-	$caps['delete_roles']  = array( 'label' => __( 'Delete Roles', 'wp-user-manager' ), 'group' => 'user' );
-	$caps['delete_users']  = array( 'label' => __( 'Delete Users', 'wp-user-manager' ), 'group' => 'user' );
-	$caps['edit_roles']    = array( 'label' => __( 'Edit Roles', 'wp-user-manager' ), 'group' => 'user' );
-	$caps['edit_users']    = array( 'label' => __( 'Edit Users', 'wp-user-manager' ), 'group' => 'user' );
-	$caps['list_roles']    = array( 'label' => __( 'List Roles', 'wp-user-manager' ), 'group' => 'user' );
-	$caps['list_users']    = array( 'label' => __( 'List Users', 'wp-user-manager' ), 'group' => 'user' );
-	$caps['promote_users'] = array( 'label' => __( 'Promote Users', 'wp-user-manager' ), 'group' => 'user' );
-	$caps['remove_users']  = array( 'label' => __( 'Remove Users', 'wp-user-manager' ), 'group' => 'user' );
+	$caps['create_roles']  = array(
+		'label' => __( 'Create Roles', 'wp-user-manager' ),
+		'group' => 'user',
+	);
+	$caps['create_users']  = array(
+		'label' => __( 'Create Users', 'wp-user-manager' ),
+		'group' => 'user',
+	);
+	$caps['delete_roles']  = array(
+		'label' => __( 'Delete Roles', 'wp-user-manager' ),
+		'group' => 'user',
+	);
+	$caps['delete_users']  = array(
+		'label' => __( 'Delete Users', 'wp-user-manager' ),
+		'group' => 'user',
+	);
+	$caps['edit_roles']    = array(
+		'label' => __( 'Edit Roles', 'wp-user-manager' ),
+		'group' => 'user',
+	);
+	$caps['edit_users']    = array(
+		'label' => __( 'Edit Users', 'wp-user-manager' ),
+		'group' => 'user',
+	);
+	$caps['list_roles']    = array(
+		'label' => __( 'List Roles', 'wp-user-manager' ),
+		'group' => 'user',
+	);
+	$caps['list_users']    = array(
+		'label' => __( 'List Users', 'wp-user-manager' ),
+		'group' => 'user',
+	);
+	$caps['promote_users'] = array(
+		'label' => __( 'Promote Users', 'wp-user-manager' ),
+		'group' => 'user',
+	);
+	$caps['remove_users']  = array(
+		'label' => __( 'Remove Users', 'wp-user-manager' ),
+		'group' => 'user',
+	);
 
 	// Custom caps.
-	$caps['restrict_content'] = array( 'label' => __( 'Restrict Content', 'wp-user-manager' ), 'group' => 'custom' );
+	$caps['restrict_content'] = array(
+		'label' => __( 'Restrict Content', 'wp-user-manager' ),
+		'group' => 'custom',
+	);
 
 	// Register each of the capabilities.
 	foreach ( $caps as $name => $args ) {
@@ -480,7 +592,7 @@ function wpum_register_default_caps() {
 
 	foreach ( $tax_caps as $tax_cap => $args ) {
 
-		if ( in_array( $tax_cap, $role_caps ) ) {
+		if ( in_array( $tax_cap, $role_caps, true ) ) {
 			wpum_register_cap( $tax_cap, $args );
 		}
 	}
@@ -567,11 +679,11 @@ function wpum_sanitize_cap( $cap ) {
 function wpum_is_cap_editable( $cap ) {
 	$uneditable = array_keys( wpum_get_uneditable_roles() );
 
-	return ! in_array( $cap, wpum_get_wp_capabilities() ) && ! array_intersect( $uneditable, wpum_get_cap_roles( $cap ) );
+	return ! in_array( $cap, wpum_get_wp_capabilities(), true ) && ! array_intersect( $uneditable, wpum_get_cap_roles( $cap ) );
 }
 
 /**
- * @return     array
+ * @return array
  */
 function wpum_get_wp_capabilities() {
 
@@ -712,7 +824,7 @@ function wpum_check_for_cap( $cap = '' ) {
 	}
 
 	// Check if the cap is assigned to any role.
-	return in_array( $cap, wpum_get_role_capabilities() );
+	return in_array( $cap, wpum_get_role_capabilities(), true );
 }
 
 /**
@@ -840,6 +952,9 @@ function wpum_new_role_default_caps() {
 	return apply_filters( 'wpum_new_role_default_caps', array( 'read' => true ) );
 }
 
+/**
+ * Register cap groups
+ */
 function wpum_register_cap_groups() {
 	do_action( 'wpum_register_cap_groups' );
 }
@@ -859,7 +974,7 @@ function wpum_register_default_cap_groups() {
 	foreach ( get_post_types( array(), 'objects' ) as $type ) {
 
 		// Skip revisions and nave menu items.
-		if ( in_array( $type->name, array( 'revision', 'nav_menu_item', 'custom_css', 'customize_changeset' ) ) ) {
+		if ( in_array( $type->name, array( 'revision', 'nav_menu_item', 'custom_css', 'customize_changeset' ), true ) ) {
 			continue;
 		}
 
@@ -877,11 +992,11 @@ function wpum_register_default_cap_groups() {
 		// Get the post type icon.
 		if ( is_string( $type->menu_icon ) && preg_match( '/dashicons-/i', $type->menu_icon ) ) {
 			$icon = $type->menu_icon;
-		} else if ( 'attachment' === $type->name ) {
+		} elseif ( 'attachment' === $type->name ) {
 			$icon = 'dashicons-admin-media';
-		} else if ( 'download' === $type->name ) {
+		} elseif ( 'download' === $type->name ) {
 			$icon = 'dashicons-download';
-		} else if ( 'product' === $type->name ) {
+		} elseif ( 'product' === $type->name ) {
 			$icon = 'dashicons-cart';
 		}
 
@@ -996,6 +1111,8 @@ function wpum_get_cap_group( $name ) {
 /**
  * Returns the caps for a specific post type capability group.
  *
+ * @param string $post_type
+ *
  * @return array
  */
 function wpum_get_post_type_group_caps( $post_type = 'post' ) {
@@ -1011,7 +1128,7 @@ function wpum_get_post_type_group_caps( $post_type = 'post' ) {
 	$caps = array_values( $caps );
 
 	// If this is not a core post/page post type.
-	if ( ! in_array( $post_type, array( 'post', 'page' ) ) ) {
+	if ( ! in_array( $post_type, array( 'post', 'page' ), true ) ) {
 
 		// Get the post and page caps.
 		$post_caps = array_values( (array) get_post_type_object( 'post' )->cap );

@@ -41,7 +41,8 @@ function wpum_get_emails_tags_list() {
  * Parse the {website} tag into the email to display the site url.
  *
  * @param string $user_id
- * @return void
+ *
+ * @return string
  */
 function wpum_email_tag_website( $user_id ) {
 	return home_url();
@@ -51,7 +52,8 @@ function wpum_email_tag_website( $user_id ) {
  * Parse the {sitename} tag into the email to display the site name.
  *
  * @param string $user_id
- * @return void
+ *
+ * @return string
  */
 function wpum_email_tag_sitename( $user_id ) {
 	return esc_html( get_bloginfo( 'name' ) );
@@ -61,7 +63,8 @@ function wpum_email_tag_sitename( $user_id ) {
  * Parse the {username} tag into the email to display the user's username.
  *
  * @param string $user_id
- * @return void
+ *
+ * @return string
  */
 function wpum_email_tag_username( $user_id ) {
 
@@ -79,7 +82,8 @@ function wpum_email_tag_username( $user_id ) {
  * Parse the {email} tag into the email to display the user's email.
  *
  * @param string $user_id
- * @return void
+ *
+ * @return string
  */
 function wpum_email_tag_email( $user_id ) {
 
@@ -97,7 +101,8 @@ function wpum_email_tag_email( $user_id ) {
  * Parse the {firstname} tag into the email to display the user's first name.
  *
  * @param string $user_id
- * @return void
+ *
+ * @return string
  */
 function wpum_email_tag_firstname( $user_id ) {
 
@@ -110,10 +115,10 @@ function wpum_email_tag_firstname( $user_id ) {
  * Parse the {lastname} tag into the email to display the user's last name.
  *
  * @param string $user_id
- * @return void
+ *
+ * @return string
  */
 function wpum_email_tag_lastname( $user_id ) {
-
 	$firstname = get_user_meta( $user_id, 'last_name', true );
 
 	return $firstname;
@@ -154,11 +159,11 @@ function wpum_email_tag_password( $user_id = false, $password_reset_key = false,
 /**
  * Parse the {recovery_url} tag into the email to display personalized password recovery url.
  *
- * @param        $user_id
+ * @param int    $user_id
  * @param string $password_reset_key
- * @param        $plain_text_password
- * @param        $tag
- * @param        $email
+ * @param string $plain_text_password
+ * @param string $tag
+ * @param string $email
  *
  * @return string
  */
@@ -166,11 +171,11 @@ function wpum_email_tag_password_recovery_url( $user_id, $password_reset_key, $p
 
 	$reset_page = wpum_get_core_page_id( 'password' );
 	$reset_page = get_permalink( $reset_page );
-	$reset_page = add_query_arg( [
+	$reset_page = add_query_arg( array(
 		'login'  => rawurlencode( $email->user_login ),
 		'key'    => $password_reset_key,
 		'action' => 'wpum-reset',
-	], $reset_page );
+	), $reset_page );
 
 	$link_color = apply_filters( 'wpum_email_tag_password_recovery_url_color', '#000' );
 
@@ -190,30 +195,30 @@ function wpum_email_tag_password_recovery_url( $user_id, $password_reset_key, $p
  */
 function wpum_get_registered_emails() {
 
-	$emails = [
-		'registration_confirmation' => [
+	$emails = array(
+		'registration_confirmation'       => array(
 			'status'      => 'active',
 			'name'        => esc_html__( 'Registration confirmation', 'wp-user-manager' ),
 			'description' => esc_html__( 'This is the email that is sent to the user upon successful registration.', 'wp-user-manager' ),
 			'recipient'   => esc_html__( 'User\'s email.', 'wp-user-manager' ),
 			'enabled'     => true,
-		],
-		'registration_admin_notification' => [
+		),
+		'registration_admin_notification' => array(
 			'status'      => 'active',
 			'name'        => esc_html__( 'New user notification', 'wp-user-manager' ),
 			'description' => esc_html__( 'This is the email sent to the site admin when a new user registers.', 'wp-user-manager' ),
 			'recipient'   => esc_html__( 'Site admin\'s email.', 'wp-user-manager' ),
 			'enabled'     => true,
-		],
-		'password_recovery_request' => [
+		),
+		'password_recovery_request'       => array(
 			'status'      => 'active',
 			'name'        => esc_html__( 'Password recovery request', 'wp-user-manager' ),
 			'description' => esc_html__( 'This is the email that is sent to the visitor upon password reset request.', 'wp-user-manager' ),
 			'recipient'   => esc_html__( 'Email address of the requested user.', 'wp-user-manager' ),
 			'enabled'     => true,
 			'disabled'    => true,
-		],
-	];
+		),
+	);
 
 	return apply_filters( 'wpum_registered_emails', $emails );
 
@@ -224,7 +229,8 @@ function wpum_get_registered_emails() {
  *
  * @param string|boolean $email_id
  * @param string|boolean $field_id
- * @return void
+ *
+ * @return string
  */
 function wpum_get_email_field( $email_id = false, $field_id = false ) {
 
@@ -295,11 +301,18 @@ function wpum_get_emails() {
  * Disable the email notification sent to the admin when a user changes the password.
  */
 if ( wpum_get_option( 'disable_admin_password_recovery_email' ) && ! function_exists( 'wp_password_change_notification' ) ) {
+	/**
+	 * @param \WP_User $user
+	 */
 	function wp_password_change_notification( $user ) {
-		return;
 	}
 }
 
+/**
+ * @param array $emails
+ *
+ * @return array
+ */
 function wpum_registered_emails_customizer( $emails ) {
 	$settings = wpum_get_emails();
 

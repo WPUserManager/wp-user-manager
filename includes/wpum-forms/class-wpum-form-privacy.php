@@ -5,7 +5,7 @@
  * @package     wp-user-manager
  * @copyright   Copyright (c) 2018, Alessandro Tesoro
  * @license     https://opensource.org/licenses/GPL-3.0 GNU Public License
-*/
+ */
 
 // Exit if accessed directly
 if ( ! defined( 'ABSPATH' ) ) {
@@ -99,7 +99,7 @@ class WPUM_Form_Privacy extends WPUM_Form {
 
 		$password_fields = array(
 			'privacy' => array(
-				'hide_profile_guests' => array(
+				'hide_profile_guests'  => array(
 					'label'    => esc_html__( 'Hide my profile from guests', 'wp-user-manager' ),
 					'type'     => 'checkbox',
 					'required' => false,
@@ -128,13 +128,13 @@ class WPUM_Form_Privacy extends WPUM_Form {
 
 		$this->init_fields();
 
-		$data = [
+		$data = array(
 			'form'      => $this->form_name,
 			'action'    => $this->get_action(),
 			'fields'    => $this->get_fields( 'privacy' ),
 			'step'      => $this->get_step(),
 			'step_name' => $this->steps[ $this->get_step_key( $this->get_step() ) ]['name'],
-		];
+		);
 
 		WPUM()->templates
 			->set_template_data( $data )
@@ -182,9 +182,9 @@ class WPUM_Form_Privacy extends WPUM_Form {
 				$user_id = $user->ID;
 
 				foreach ( $values['privacy'] as $key => $value ) {
-						if ( $value == '1' ) {
-							$value = true;
-						}
+					if ( $value == '1' ) {
+						$value = true;
+					}
 
 						carbon_set_user_meta( $user_id, $key, $value );
 				}
@@ -193,9 +193,9 @@ class WPUM_Form_Privacy extends WPUM_Form {
 				$tab      = get_query_var( 'tab' );
 				$redirect = rtrim( $redirect, '/' ) . '/' . $tab;
 				$redirect = add_query_arg(
-					[
+					array(
 						'updated' => 'success',
-					],
+					),
 					$redirect
 				);
 

@@ -5,10 +5,12 @@
  * @package     wp-user-manager
  * @copyright   Copyright (c) 2018, Alessandro Tesoro
  * @license     https://opensource.org/licenses/GPL-3.0 GNU Public License
-*/
+ */
 
 // Exit if accessed directly
-if ( ! defined( 'ABSPATH' ) ) exit;
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 
 /**
  * Display the button within the WordPress tinymce editor.
@@ -32,15 +34,16 @@ final class WPUM_Shortcode_Button {
 			add_action( 'admin_enqueue_scripts', array( $this, 'admin_localize_scripts' ), 13 );
 			add_action( 'media_buttons', array( $this, 'shortcode_button' ) );
 		}
-		add_action( "wp_ajax_wpum_shortcode", array( $this, 'shortcode_ajax' ) );
-		add_action( "wp_ajax_nopriv_wpum_shortcode", array( $this, 'shortcode_ajax' ) );
+		add_action( 'wp_ajax_wpum_shortcode', array( $this, 'shortcode_ajax' ) );
+		add_action( 'wp_ajax_nopriv_wpum_shortcode', array( $this, 'shortcode_ajax' ) );
 	}
 
 	/**
 	 * Inject a new tinymce plugin.
 	 *
 	 * @param array $plugin_array
-	 * @return void
+	 *
+	 * @return array
 	 */
 	public function mce_external_plugins( $plugin_array ) {
 		if ( ! current_user_can( 'edit_posts' ) && ! current_user_can( 'edit_pages' ) ) {
@@ -56,7 +59,7 @@ final class WPUM_Shortcode_Button {
 	 * @return void
 	 */
 	public function admin_enqueue_assets() {
-		wp_enqueue_style( 'wpum-shortcodes', WPUM_PLUGIN_URL . 'assets/css/admin/shortcodes.css' );
+		wp_enqueue_style( 'wpum-shortcodes', WPUM_PLUGIN_URL . 'assets/css/admin/shortcodes.css', array(), WPUM_VERSION );
 		wp_enqueue_script( 'wpum_shortcode', WPUM_PLUGIN_URL . 'assets/js/admin/admin-shortcodes.min.js', array( 'jquery' ), WPUM_VERSION, true );
 	}
 
@@ -79,8 +82,6 @@ final class WPUM_Shortcode_Button {
 
 	/**
 	 * Load the shortcode button into the editor.
-	 *
-	 * @return void
 	 */
 	public function shortcode_button() {
 		$screen = get_current_screen();
@@ -88,7 +89,7 @@ final class WPUM_Shortcode_Button {
 		// If we load wp editor by ajax then $screen will be empty which generate notice if we treat $screen as WP_Screen object.
 		// For example we are loading wp editor by ajax in repeater field.
 		if ( ! ( $screen instanceof WP_Screen ) ) {
-			return false;
+			return;
 		}
 		$shortcode_button_pages = apply_filters( 'wpum_shortcode_button_pages', array(
 			'post.php',
@@ -100,9 +101,9 @@ final class WPUM_Shortcode_Button {
 		) );
 
 		// Only run in admin post/page creation and edit screens
-		if ( in_array( $screen->parent_file, $shortcode_button_pages )
-		     && apply_filters( 'wpum_shortcode_button_condition', true )
-		     && ! empty( self::$shortcodes )
+		if ( in_array( $screen->parent_file, $shortcode_button_pages, true )
+			 && apply_filters( 'wpum_shortcode_button_condition', true )
+			 && ! empty( self::$shortcodes )
 		) {
 			$shortcodes = array();
 			foreach ( self::$shortcodes as $shortcode => $values ) {
@@ -119,7 +120,7 @@ final class WPUM_Shortcode_Button {
 				// Check current WP version.
 				$img = ( version_compare( get_bloginfo( 'version' ), '3.5', '<' ) )
 					? '<img src="' . WPUM_PLUGIN_URL . 'assets/images/wpum-media.png" />'
-					: '<span class="wp-media-buttons-icon" id="wpum-media-button" style="background-image: url( '. WPUM_PLUGIN_URL .'assets/images/logo.svg ); background-repeat: no-repeat; background-position-x: 3px; background-position-y: -1px;"></span>';
+					: '<span class="wp-media-buttons-icon" id="wpum-media-button" style="background-image: url( ' . WPUM_PLUGIN_URL . 'assets/images/logo.svg ); background-repeat: no-repeat; background-position-x: 3px; background-position-y: -1px;"></span>';
 				reset( $shortcodes );
 				if ( 1 === count( $shortcodes ) ) {
 					$shortcode = key( $shortcodes );
@@ -153,7 +154,7 @@ final class WPUM_Shortcode_Button {
 	 * @return void
 	 */
 	public function shortcode_ajax() {
-		$shortcode = isset( $_POST['shortcode'] ) ? $_POST['shortcode'] : false;
+		$shortcode = filter_input( INPUT_POST, 'shortcode' );
 		$response  = false;
 		if ( $shortcode && array_key_exists( $shortcode, self::$shortcodes ) ) {
 			$data = self::$shortcodes[ $shortcode ];
@@ -168,12 +169,11 @@ final class WPUM_Shortcode_Button {
 				'title'     => $data['title'],
 			);
 		} else {
-			// TODO: handle error
-			error_log( print_r( 'AJAX error!', 1 ) );
+			wp_send_json_error();
 		}
 		wp_send_json( $response );
 	}
 
 }
 
-new WPUM_Shortcode_Button;
+new WPUM_Shortcode_Button();

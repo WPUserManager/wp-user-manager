@@ -5,10 +5,12 @@
  * @package     wp-user-manager
  * @copyright   Copyright (c) 2018, Alessandro Tesoro
  * @license     https://opensource.org/licenses/GPL-3.0 GNU Public License
-*/
+ */
 
 // Exit if accessed directly
-if ( ! defined( 'ABSPATH' ) ) exit;
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 
 /**
  * The class that stores the DB field object.
@@ -121,6 +123,8 @@ class WPUM_Field {
 
 	/**
 	 * The Database Abstraction
+	 *
+	 * @var WPUM_DB_Fields
 	 */
 	protected $db;
 
@@ -132,17 +136,17 @@ class WPUM_Field {
 	/**
 	 * Constructor.
 	 *
-	 * @param mixed|boolean $_id
+	 * @param mixed $_id_or_field
 	 */
 	public function __construct( $_id_or_field = false ) {
 
 		$this->db = new WPUM_DB_Fields();
 
-		if( empty( $_id_or_field ) ) {
+		if ( empty( $_id_or_field ) ) {
 			return false;
 		}
 
-		if( is_a( $_id_or_field, 'WPUM_Field' ) ) {
+		if ( is_a( $_id_or_field, 'WPUM_Field' ) ) {
 			$field = $_id_or_field;
 		} else {
 			$_id_or_field = intval( $_id_or_field );
@@ -161,12 +165,14 @@ class WPUM_Field {
 	 * Magic __get function to dispatch a call to retrieve a private property.
 	 *
 	 * @param string $key
-	 * @return void
+	 *
+	 * @return mixed
 	 */
 	public function __get( $key ) {
-		if( method_exists( $this, 'get_' . $key ) ) {
+		if ( method_exists( $this, 'get_' . $key ) ) {
 			return call_user_func( array( $this, 'get_' . $key ) );
 		} else {
+			// translators: property name
 			return new WP_Error( 'wpum-field-invalid-property', sprintf( __( 'Can\'t get property %s', 'wp-user-manager' ), $key ) );
 		}
 	}
@@ -175,11 +181,12 @@ class WPUM_Field {
 	 * Setup the field.
 	 *
 	 * @param mixed $field
-	 * @return void
+	 *
+	 * @return bool
 	 */
 	private function setup_field( $field = null ) {
 
-		if ( null == $field ) {
+		if ( null === $field ) {
 			return false;
 		}
 
@@ -206,11 +213,11 @@ class WPUM_Field {
 			$this->required      = $this->get_meta( 'required' );
 			$this->visibility    = $this->get_meta( 'visibility' );
 			$this->editable      = $this->get_meta( 'editing' );
-			$this->parent_id 	 = max( 0, (int)$this->get_meta( 'parent_id' ) );
+			$this->parent_id     = max( 0, (int) $this->get_meta( 'parent_id' ) );
 
 			$class = 'WPUM_Field_' . ucfirst( $this->get_type() );
-			if( class_exists( $class ) ){
-				$this->field_type = new $class;
+			if ( class_exists( $class ) ) {
+				$this->field_type = new $class();
 				return true;
 			}
 		}
@@ -222,7 +229,7 @@ class WPUM_Field {
 	/**
 	 * Retrieve the field id.
 	 *
-	 * @return void
+	 * @return int
 	 */
 	public function get_ID() {
 		return $this->id;
@@ -231,7 +238,7 @@ class WPUM_Field {
 	/**
 	 * Retrieve the field parent id.
 	 *
-	 * @return void
+	 * @return int
 	 */
 	public function get_parent_ID() {
 		return $this->parent_id;
@@ -258,7 +265,7 @@ class WPUM_Field {
 	/**
 	 * Retrieve the field name.
 	 *
-	 * @return void
+	 * @return string
 	 */
 	public function get_name() {
 		return apply_filters( 'wpum_field_name', $this->name );
@@ -267,7 +274,7 @@ class WPUM_Field {
 	/**
 	 * Retrieve the field type.
 	 *
-	 * @return void
+	 * @return string
 	 */
 	public function get_type() {
 		return $this->type;
@@ -276,7 +283,7 @@ class WPUM_Field {
 	/**
 	 * Retrieve the field description.
 	 *
-	 * @return void
+	 * @return string
 	 */
 	public function get_description() {
 		return apply_filters( 'wpum_field_description', $this->description );
@@ -329,7 +336,8 @@ class WPUM_Field {
 	 * Retrieve the name of the field type from it's class.
 	 *
 	 * @param string $type
-	 * @return void
+	 *
+	 * @return string
 	 */
 	private function get_field_type_name( $type ) {
 
@@ -378,7 +386,6 @@ class WPUM_Field {
 					$type_name = $registered_types['text'];
 					break;
 			}
-
 		}
 
 		return $type_name;
@@ -393,6 +400,9 @@ class WPUM_Field {
 		return $this->type_nicename;
 	}
 
+	/**
+	 * @return string
+	 */
 	public function get_parent_type() {
 		return $this->field_type->template();
 	}
@@ -404,14 +414,15 @@ class WPUM_Field {
 	 * to define all the settings within the editor.
 	 *
 	 * @param string $type
-	 * @return void
+	 *
+	 * @return bool
 	 */
 	private function set_as_primary_field( $type ) {
 
 		$primary = false;
 
-		if( in_array( $type, wpum_get_primary_field_types() ) ) {
-			$primary = true;
+		if ( in_array( $type, wpum_get_primary_field_types(), true ) ) {
+			$primary          = true;
 			$this->primary_id = $type;
 
 			switch ( $type ) {
@@ -441,7 +452,6 @@ class WPUM_Field {
 					$this->type = 'file';
 					break;
 			}
-
 		}
 
 		return $primary;
@@ -474,7 +484,8 @@ class WPUM_Field {
 	 * Add a new field to the database.
 	 *
 	 * @param array $args
-	 * @return void
+	 *
+	 * @return bool|int
 	 */
 	public function add( $args ) {
 
@@ -497,11 +508,11 @@ class WPUM_Field {
 				$this->$key = $value;
 			}
 
-			if ( $id = $this->db->insert( $args ) ) {
+			$id = $this->db->insert( $args );
+			if ( $id ) {
 				$this->id = $id;
 				$this->setup_field( $id );
 			}
-
 		}
 
 		do_action( 'wpum_post_insert_field', $args, $this->id );
@@ -514,7 +525,8 @@ class WPUM_Field {
 	 * Update an existing field.
 	 *
 	 * @param array $args
-	 * @return void
+	 *
+	 * @return bool
 	 */
 	public function update( $args ) {
 
@@ -546,7 +558,8 @@ class WPUM_Field {
 	 * Sanitize columns before adding a field to the database.
 	 *
 	 * @param array $data
-	 * @return void
+	 *
+	 * @return array
 	 */
 	private function sanitize_columns( $data ) {
 
@@ -560,26 +573,25 @@ class WPUM_Field {
 				continue;
 			}
 
-			switch( $type ) {
+			switch ( $type ) {
 				case '%s':
-					if( is_array( $data[$key] ) ) {
-						$data[$key] = json_encode( $data[$key] );
+					if ( is_array( $data[ $key ] ) ) {
+						$data[ $key ] = wp_json_encode( $data[ $key ] );
 					} else {
-						$data[$key] = sanitize_text_field( $data[$key] );
+						$data[ $key ] = sanitize_text_field( $data[ $key ] );
 					}
-				break;
+					break;
 				case '%d':
-					if ( ! is_numeric( $data[$key] ) || (int) $data[$key] !== absint( $data[$key] ) ) {
-						$data[$key] = $default_values[$key];
+					if ( ! is_numeric( $data[ $key ] ) || absint( $data[ $key ] ) !== (int) $data[ $key ] ) {
+						$data[ $key ] = $default_values[ $key ];
 					} else {
-						$data[$key] = absint( $data[$key] );
+						$data[ $key ] = absint( $data[ $key ] );
 					}
-				break;
+					break;
 				default:
-					$data[$key] = sanitize_text_field( $data[$key] );
-				break;
+					$data[ $key ] = sanitize_text_field( $data[ $key ] );
+					break;
 			}
-
 		}
 
 		return $data;
@@ -590,18 +602,18 @@ class WPUM_Field {
 	 * Retrieve the value of a custom field stored in the DB.
 	 *
 	 * @param int $user_id
+	 *
 	 * @return void
 	 */
 	public function set_user_meta( $user_id ) {
-
-		if( ! $user_id ) {
-			return false;
+		if ( ! $user_id ) {
+			return;
 		}
 
 		$user  = get_user_by( 'id', $user_id );
 		$value = '';
 
-		if( $this->get_primary_id() ) {
+		if ( $this->get_primary_id() ) {
 			switch ( $this->get_primary_id() ) {
 				case 'user_firstname':
 					$value = $user->first_name;
@@ -631,7 +643,7 @@ class WPUM_Field {
 			$value = get_user_meta( $user_id, $this->get_meta( 'user_meta_key' ), true );
 		}
 
-		if( ! empty( $value ) ) {
+		if ( ! empty( $value ) ) {
 			$value       = $this->format_value( $value );
 			$this->value = $value;
 		}
@@ -641,12 +653,13 @@ class WPUM_Field {
 	/**
 	 * Format the value of the field for the output on profiles.
 	 *
-	 * @param mixed $value.
+	 * @param mixed $value
+	 *
 	 * @return mixed
 	 */
 	private function format_value( $value ) {
-		if( ! $value ) {
-			return;
+		if ( ! $value ) {
+			return $value;
 		}
 
 		$func_name = apply_filters( 'wpum_field_ouput_callback_function', false, $this, $value );
@@ -731,12 +744,15 @@ class WPUM_Field {
 		return WPUM()->field_meta->delete_meta( $this->id, $meta_key, $meta_value, $prev_value );
 	}
 
+	/**
+	 * @return array
+	 */
 	public function get_field_data() {
-		$data = [];
+		$data = array();
 
 		foreach ( $this->field_type->get_data_keys() as $key ) {
 			$default_method = 'default_' . $key;
-			$value = $this->get_meta( $key );
+			$value          = $this->get_meta( $key );
 			if ( method_exists( $this->field_type, $default_method ) ) {
 				if ( ! $this->meta_exists( $key ) ) {
 					$value = $this->field_type->{$default_method}();
@@ -766,7 +782,12 @@ class WPUM_Field {
 		return str_replace( ' ', '_', strtolower( $this->get_name() ) );
 	}
 
-	public function wpum_sanitize_key( $key ){
-		return preg_replace( "/[^A-Za-z0-9_]/", '', $key );
+	/**
+	 * @param string $key
+	 *
+	 * @return string
+	 */
+	public function wpum_sanitize_key( $key ) {
+		return preg_replace( '/[^A-Za-z0-9_]/', '', $key );
 	}
 }

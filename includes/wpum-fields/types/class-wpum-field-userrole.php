@@ -8,21 +8,29 @@
  */
 
 // Exit if accessed directly
-if ( ! defined( 'ABSPATH' ) ) exit;
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 
 /**
  * Register a dropdown field type.
  */
 class WPUM_Field_Userrole extends WPUM_Field_Type {
 
+	/**
+	 * Construct
+	 */
 	public function __construct() {
-		$this->name  = esc_html__( 'User Role', 'wp-user-manager' );
-		$this->type  = 'userrole';
-		$this->icon  = 'dashicons-admin-generic';
-		$this->group = 'advanced';
+		$this->name              = esc_html__( 'User Role', 'wp-user-manager' );
+		$this->type              = 'userrole';
+		$this->icon              = 'dashicons-admin-generic';
+		$this->group             = 'advanced';
 		$this->min_addon_version = '2.5';
 	}
 
+	/**
+	 * @return array
+	 */
 	public function get_data_keys() {
 		$keys = parent::get_data_keys();
 
@@ -33,14 +41,14 @@ class WPUM_Field_Userrole extends WPUM_Field_Type {
 	 * @return array
 	 */
 	public function get_editor_settings() {
-		$settings = [
-			'general' => [
+		$settings = array(
+			'general' => array(
 				'options'    => array(
 					'type'     => 'multiselect',
 					'label'    => __( 'User Roles', 'wp-user-manager' ),
 					'hint'     => esc_html__( 'List of roles the users can select from', 'wp-user-manager' ),
 					'model'    => 'options',
-					'labels'   => [],
+					'labels'   => array(),
 					'required' => true,
 					'options'  => wpum_get_roles(),
 					'multiple' => true,
@@ -52,8 +60,8 @@ class WPUM_Field_Userrole extends WPUM_Field_Type {
 					'model'     => 'type_label',
 					'default'   => 'Role',
 				),
-			],
-		];
+			),
+		);
 
 		if ( wpum_get_option( 'allow_multiple_user_roles' ) ) {
 			$settings['general']['allow_multiple'] = array(
@@ -72,10 +80,10 @@ class WPUM_Field_Userrole extends WPUM_Field_Type {
 	 * Format the output onto the profiles for the taxonomy field.
 	 *
 	 * @param object $field
-	 * @param mixed $value
+	 * @param mixed  $value
 	 * @return string
 	 */
-	function get_formatted_output( $field, $value ) {
+	public function get_formatted_output( $field, $value ) {
 		if ( ! is_array( $value ) ) {
 			$value = array( $value );
 		}
@@ -83,7 +91,7 @@ class WPUM_Field_Userrole extends WPUM_Field_Type {
 		global $wp_roles;
 		$available_roles = $wp_roles->get_names();
 
-		$selected_roles = [];
+		$selected_roles = array();
 		foreach ( $value as $role ) {
 			$selected_roles[] = $available_roles[ $role ];
 		}

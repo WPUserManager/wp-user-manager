@@ -1,28 +1,60 @@
 <?php
 /**
+ * WPUM_Role
+ *
  * @package     wp-user-manager
  * @copyright   Copyright (c) 2020, WP User Manager
  * @license     https://opensource.org/licenses/GPL-3.0 GNU Public License
  */
 
+/**
+ * WPUM_Role
+ */
 class WPUM_Role {
 
+	/**
+	 * @var string
+	 */
 	public $name = '';
 
+	/**
+	 * @var string
+	 */
 	public $label = '';
 
+	/**
+	 * @var string
+	 */
 	public $group = '';
 
+	/**
+	 * @var bool
+	 */
 	public $has_caps = false;
 
+	/**
+	 * @var int
+	 */
 	public $granted_cap_count = 0;
 
+	/**
+	 * @var int
+	 */
 	public $denied_cap_count = 0;
 
+	/**
+	 * @var array
+	 */
 	public $caps = array();
 
+	/**
+	 * @var array
+	 */
 	public $granted_caps = array();
 
+	/**
+	 * @var array
+	 */
 	public $denied_caps = array();
 
 	/**
@@ -39,8 +71,8 @@ class WPUM_Role {
 	/**
 	 * Creates a new role object.
 	 *
-	 * @param  string  $role
-	 * @param  array   $args
+	 * @param string $name
+	 * @param array  $args
 	 */
 	public function __construct( $name, $args = array() ) {
 		foreach ( array_keys( get_object_vars( $this ) ) as $key ) {
@@ -60,8 +92,8 @@ class WPUM_Role {
 			}, $this->caps );
 
 			// Get granted and denied caps.
-			$this->granted_caps = array_keys( $this->caps, true );
-			$this->denied_caps  = array_keys( $this->caps, false );
+			$this->granted_caps = array_keys( $this->caps );
+			$this->denied_caps  = array_keys( $this->caps );
 
 			// Remove user levels from granted/denied caps.
 			$this->granted_caps = wpum_remove_old_levels( $this->granted_caps );
@@ -86,7 +118,7 @@ class WPUM_Role {
 	 *
 	 * @since  2.0.2
 	 * @access public
-	 * @param  string  $property
+	 * @param  string $property
 	 * @return mixed
 	 */
 	public function get( $property ) {

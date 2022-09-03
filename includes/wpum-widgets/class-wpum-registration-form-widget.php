@@ -9,7 +9,9 @@
  */
 
 // Exit if accessed directly
-if ( ! defined( 'ABSPATH' ) ) exit;
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 
 /**
  * WPUM_Registration_Form_Widget Class
@@ -39,22 +41,22 @@ class WPUM_Registration_Form_Widget extends WPH_Widget {
 				'type'   => 'text',
 				'class'  => 'widefat',
 				'std'    => __( 'Register', 'wp-user-manager' ),
-				'filter' => 'strip_tags|esc_attr'
+				'filter' => 'strip_tags|esc_attr',
 			),
 			array(
-				'name'     => __( 'Display login link', 'wp-user-manager' ),
-				'id'       => 'login_link',
-				'type'     =>'checkbox',
-				'std'      => 1,
-				'filter'   => 'strip_tags|esc_attr',
+				'name'   => __( 'Display login link', 'wp-user-manager' ),
+				'id'     => 'login_link',
+				'type'   => 'checkbox',
+				'std'    => 1,
+				'filter' => 'strip_tags|esc_attr',
 			),
 			array(
-				'name'     => __( 'Display password recovery link', 'wp-user-manager' ),
-				'id'       => 'psw_link',
-				'type'     =>'checkbox',
-				'std'      => 1,
-				'filter'   => 'strip_tags|esc_attr',
-			)
+				'name'   => __( 'Display password recovery link', 'wp-user-manager' ),
+				'id'     => 'psw_link',
+				'type'   => 'checkbox',
+				'std'    => 1,
+				'filter' => 'strip_tags|esc_attr',
+			),
 		);
 
 		// create widget
@@ -66,8 +68,9 @@ class WPUM_Registration_Form_Widget extends WPH_Widget {
 	 * Display widget content.
 	 *
 	 * @access private
-	 * @since 1.0.0
-	 * @return void
+	 *
+	 * @param array $args
+	 * @param array $instance
 	 */
 	public function widget( $args, $instance ) {
 
@@ -78,10 +81,10 @@ class WPUM_Registration_Form_Widget extends WPH_Widget {
 		echo $instance['title'];
 		echo $args['after_title'];
 
-		$psw_link   = $instance['psw_link'] ? 'yes':   false;
-		$login_link = $instance['login_link'] ? 'yes': false;
+		$psw_link   = $instance['psw_link'] ? 'yes' : false;
+		$login_link = $instance['login_link'] ? 'yes' : false;
 
-		echo do_shortcode( '[wpum_register psw_link="'.$psw_link.'" login_link="'.$login_link.'"]' );
+		echo do_shortcode( '[wpum_register psw_link="' . $psw_link . '" login_link="' . $login_link . '"]' );
 
 		echo $args['after_widget'];
 

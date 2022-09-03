@@ -9,7 +9,9 @@
  */
 
 // Exit if accessed directly
-if ( ! defined( 'ABSPATH' ) ) exit;
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 
 /**
  * WPUM_Password_Recovery Class
@@ -39,8 +41,8 @@ class WPUM_Password_Recovery extends WPH_Widget {
 				'type'   => 'text',
 				'class'  => 'widefat',
 				'std'    => __( 'Reset password', 'wp-user-manager' ),
-				'filter' => 'strip_tags|esc_attr'
-			)
+				'filter' => 'strip_tags|esc_attr',
+			),
 		);
 
 		// create widget
@@ -52,8 +54,9 @@ class WPUM_Password_Recovery extends WPH_Widget {
 	 * Display widget content.
 	 *
 	 * @access private
-	 * @since 1.0.0
-	 * @return void
+	 *
+	 * @param array $args
+	 * @param array $instance
 	 */
 	public function widget( $args, $instance ) {
 

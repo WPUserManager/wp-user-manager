@@ -5,7 +5,7 @@
  * @package     wp-user-manager
  * @copyright   Copyright (c) 2018, Alessandro Tesoro
  * @license     https://opensource.org/licenses/GPL-3.0 GNU Public License
-*/
+ */
 
 // Exit if accessed directly
 if ( ! defined( 'ABSPATH' ) ) {
@@ -17,6 +17,9 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 class WPUM_Field_Datepicker extends WPUM_Field_Type {
 
+	/**
+	 * Construct
+	 */
 	public function __construct() {
 		$this->group = 'advanced';
 		$this->name  = esc_html__( 'Datepicker', 'wp-user-manager' );
@@ -25,6 +28,12 @@ class WPUM_Field_Datepicker extends WPUM_Field_Type {
 		$this->order = 3;
 	}
 
+	/**
+	 * @param object $field
+	 * @param mixed  $value
+	 *
+	 * @return string
+	 */
 	public function get_formatted_output( $field, $value ) {
 		return date_i18n( get_option( 'date_format' ), strtotime( $value ) );
 	}

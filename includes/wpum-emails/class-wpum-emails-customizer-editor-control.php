@@ -5,10 +5,12 @@
  * @package     wp-user-manager
  * @copyright   Copyright (c) 2018, Alessandro Tesoro
  * @license     https://opensource.org/licenses/GPL-3.0 GNU Public License
-*/
+ */
 
 // Exit if accessed directly
-if ( ! defined( 'ABSPATH' ) ) exit;
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 
 /**
  * The class that handles the editor control inside the customizer.
@@ -23,8 +25,11 @@ class WPUM_Emails_Customizer_Editor_Control extends WP_Customize_Control {
 	 */
 	public $type = 'email_editor';
 
+	/**
+	 * Enqueue scripts
+	 */
 	public function enqueue() {
-		wp_enqueue_style( 'wpum-editor-control-style', WPUM_PLUGIN_URL . 'assets/css/admin/email-editor-control.css' , false, WPUM_VERSION );
+		wp_enqueue_style( 'wpum-editor-control-style', WPUM_PLUGIN_URL . 'assets/css/admin/email-editor-control.css', false, WPUM_VERSION );
 	}
 
 	/**

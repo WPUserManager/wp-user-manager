@@ -5,16 +5,21 @@
  * @package     wp-user-manager
  * @copyright   Copyright (c) 2018, Alessandro Tesoro
  * @license     https://opensource.org/licenses/GPL-3.0 GNU Public License
-*/
+ */
 
 // Exit if accessed directly
-if ( ! defined( 'ABSPATH' ) ) exit;
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 
 /**
  * Register a text field type.
  */
 class WPUM_Field_Email extends WPUM_Field_Type {
 
+	/**
+	 * Contruct
+	 */
 	public function __construct() {
 		$this->name  = esc_html__( 'Email', 'wp-user-manager' );
 		$this->type  = 'email';
@@ -26,13 +31,16 @@ class WPUM_Field_Email extends WPUM_Field_Type {
 	 * Format the output onto the profiles for the email field.
 	 *
 	 * @param object $field
-	 * @param mixed $value
+	 * @param mixed  $value
 	 * @return string
 	 */
-	function get_formatted_output( $field, $value ) {
+	public function get_formatted_output( $field, $value ) {
 		return esc_html( antispambot( $value ) );
 	}
 
+	/**
+	 * @return array
+	 */
 	public function get_data_keys() {
 		$keys = parent::get_data_keys();
 
@@ -43,8 +51,8 @@ class WPUM_Field_Email extends WPUM_Field_Type {
 	 * @return array
 	 */
 	public function get_editor_settings() {
-		return [
-			'validation' => [
+		return array(
+			'validation' => array(
 				'maxlength' => array(
 					'type'      => 'input',
 					'inputType' => 'number',
@@ -52,7 +60,7 @@ class WPUM_Field_Email extends WPUM_Field_Type {
 					'model'     => 'maxlength',
 					'hint'      => esc_html__( 'Leave blank for no limit.', 'wp-user-manager' ),
 				),
-			],
-		];
+			),
+		);
 	}
 }

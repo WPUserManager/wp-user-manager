@@ -132,13 +132,6 @@ if ( ! class_exists( 'WP_User_Manager' ) ) :
 		public $elements;
 
 		/**
-		 * Async process object holder.
-		 *
-		 * @var object
-		 */
-		public $async_process;
-
-		/**
 		 * @var WPUM_Fields
 		 */
 		public $field_types;
@@ -220,7 +213,6 @@ if ( ! class_exists( 'WP_User_Manager' ) ) :
 			require_once WPUM_PLUGIN_DIR . 'includes/actions.php';
 			require_once WPUM_PLUGIN_DIR . 'includes/filters.php';
 			require_once WPUM_PLUGIN_DIR . 'includes/assets.php';
-			require_once WPUM_PLUGIN_DIR . 'includes/wpum-admin/class-wpum-async-process.php';
 			require_once WPUM_PLUGIN_DIR . 'includes/abstracts/class-wpum-wp-db-table.php';
 			require_once WPUM_PLUGIN_DIR . 'includes/abstracts/class-wpum-db.php';
 			require_once WPUM_PLUGIN_DIR . 'includes/abstracts/class-wpum-shortcode-generator.php';
@@ -258,15 +250,14 @@ if ( ! class_exists( 'WP_User_Manager' ) ) :
 
 			require_once WPUM_PLUGIN_DIR . 'includes/wpum-forms/class-wpum-forms.php';
 			require_once WPUM_PLUGIN_DIR . 'includes/wpum-widgets/class-wpum-login-form-widget.php';
-			require_once WPUM_PLUGIN_DIR . 'includes/wpum-widgets/class-wpum-password-recovery-form-widget.php';
-			require_once WPUM_PLUGIN_DIR . 'includes/wpum-widgets/class-wpum-recent-users.php';
+			require_once WPUM_PLUGIN_DIR . 'includes/wpum-widgets/class-wpum-password-recovery.php';
+			require_once WPUM_PLUGIN_DIR . 'includes/wpum-widgets/class-wpum-recently-registered-users.php';
 			require_once WPUM_PLUGIN_DIR . 'includes/wpum-widgets/class-wpum-registration-form-widget.php';
 			require_once WPUM_PLUGIN_DIR . 'includes/wpum-admin/class-wpum-menus.php';
 			require_once WPUM_PLUGIN_DIR . 'includes/wpum-directories/class-wpum-directories-editor.php';
 			require_once WPUM_PLUGIN_DIR . 'includes/wpum-directories/wpum-directories-functions.php';
 			require_once WPUM_PLUGIN_DIR . 'includes/widgets.php';
 
-			// require_once WPUM_PLUGIN_DIR . 'includes/wpum-upgrades/class-wpum-updates.php';
 			require_once WPUM_PLUGIN_DIR . 'includes/wpum-upgrades/class-wpum-plugin-updates.php';
 
 			if ( is_admin() || ( defined( 'WP_CLI' ) && WP_CLI ) ) {
@@ -351,6 +342,8 @@ if ( ! class_exists( 'WP_User_Manager' ) ) :
 			add_action( 'plugins_loaded', array( $this, 'load_textdomain' ), 0 );
 			add_action( 'plugins_loaded', array( $this, 'init' ), 0 );
 
+			( new WPUM_Plugin_Updates() )->init();
+
 			$this->field_types = new WPUM_Fields();
 			$this->field_types->init();
 
@@ -398,7 +391,6 @@ if ( ! class_exists( 'WP_User_Manager' ) ) :
 			$this->registration_form_meta = new WPUM_DB_Registration_Form_Meta();
 			$this->elements               = new WPUM_HTML_Elements();
 			$this->search_meta            = new WPUM_DB_Search_Fields();
-			$this->async_process          = new WPUM_Async_Process();
 
 			require_once WPUM_PLUGIN_DIR . 'includes/wpum-shortcodes/shortcodes.php';
 

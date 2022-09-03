@@ -68,7 +68,7 @@ class WPUM_Form_Profile extends WPUM_Form {
 
 		$this->user = wp_get_current_user();
 
-		add_filter( 'submit_wpum_form_validate_fields', [ $this, 'validate_nickname' ], 10, 4 );
+		add_filter( 'submit_wpum_form_validate_fields', array( $this, 'validate_nickname' ), 10, 4 );
 
 		add_action( 'wp', array( $this, 'process' ) );
 
@@ -149,14 +149,14 @@ class WPUM_Form_Profile extends WPUM_Form {
 	 */
 	private function get_account_fields() {
 
-		$fields = [];
+		$fields = array();
 
 		$account_fields = WPUM()->fields->get_fields(
-			[
+			array(
 				'group_id' => 1,
 				'orderby'  => 'field_order',
 				'order'    => 'ASC',
-			]
+			)
 		);
 
 		$priority = 0;
@@ -191,7 +191,7 @@ class WPUM_Form_Profile extends WPUM_Form {
 					'value'         => $this->get_user_field_value( $this->user, $field ),
 					'priority'      => $priority,
 					'template'      => $field->get_parent_type(),
-					'roles'         => $field->get_meta( 'roles' )
+					'roles'         => $field->get_meta( 'roles' ),
 				);
 
 				$data = array_merge( $data, $field->get_field_data() );
@@ -223,13 +223,13 @@ class WPUM_Form_Profile extends WPUM_Form {
 
 		$this->init_fields();
 
-		$data = [
+		$data = array(
 			'form'      => $this->form_name,
 			'action'    => $this->get_action(),
 			'fields'    => $this->get_fields( 'account' ),
 			'step'      => $this->get_step(),
 			'step_name' => $this->steps[ $this->get_step_key( $this->get_step() ) ]['name'],
-		];
+		);
 
 		WPUM()->templates
 			->set_template_data( $data )
@@ -271,9 +271,9 @@ class WPUM_Form_Profile extends WPUM_Form {
 			// Successful, the success message now.
 			$redirect = get_permalink();
 			$redirect = add_query_arg(
-				[
+				array(
 					'updated' => 'success',
-				],
+				),
 				$redirect
 			);
 

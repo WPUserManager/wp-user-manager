@@ -9,7 +9,9 @@
  */
 
 // Exit if accessed directly
-if ( ! defined( 'ABSPATH' ) ) exit;
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 
 /**
  * WPUM_Recently_Registered_Users Class
@@ -39,7 +41,7 @@ class WPUM_Recently_Registered_Users extends WPH_Widget {
 				'type'   => 'text',
 				'class'  => 'widefat',
 				'std'    => __( 'Recent Users', 'wp-user-manager' ),
-				'filter' => 'strip_tags|esc_attr'
+				'filter' => 'strip_tags|esc_attr',
 			),
 			array(
 				'name'     => __( 'Amount', 'wp-user-manager' ),
@@ -55,7 +57,7 @@ class WPUM_Recently_Registered_Users extends WPH_Widget {
 				'name'   => __( 'Link to user profile', 'wp-user-manager' ),
 				'desc'   => __( 'Enable to link to the user profile.', 'wp-user-manager' ),
 				'id'     => 'profile',
-				'type'   =>'checkbox',
+				'type'   => 'checkbox',
 				'std'    => 1,
 				'filter' => 'strip_tags|esc_attr',
 			),
@@ -70,8 +72,9 @@ class WPUM_Recently_Registered_Users extends WPH_Widget {
 	 * Display widget content.
 	 *
 	 * @access private
-	 * @since 1.0.0
-	 * @return void
+	 *
+	 * @param array $args
+	 * @param array $instance
 	 */
 	public function widget( $args, $instance ) {
 
@@ -82,15 +85,15 @@ class WPUM_Recently_Registered_Users extends WPH_Widget {
 		echo $instance['title'];
 		echo $args['after_title'];
 
-		if( $instance['profile'] == 1 ) {
+		if ( 1 === (int) $instance['profile'] ) {
 			$instance['profile'] = 'yes';
 		}
 
 		WPUM()->templates
-			->set_template_data( [
+			->set_template_data( array(
 				'amount'          => $instance['amount'],
-				'link_to_profile' => $instance['profile']
-			] )
+				'link_to_profile' => $instance['profile'],
+			) )
 			->get_template_part( 'recently-registered' );
 
 		echo $args['after_widget'];

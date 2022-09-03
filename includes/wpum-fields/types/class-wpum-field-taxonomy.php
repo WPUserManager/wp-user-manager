@@ -5,25 +5,33 @@
  * @package     wp-user-manager
  * @copyright   Copyright (c) 2018, Alessandro Tesoro
  * @license     https://opensource.org/licenses/GPL-3.0 GNU Public License
-*/
+ */
 
 // Exit if accessed directly
-if ( ! defined( 'ABSPATH' ) ) exit;
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 
 /**
  * Register a dropdown field type.
  */
 class WPUM_Field_Taxonomy extends WPUM_Field_Type {
 
+	/**
+	 * Construct
+	 */
 	public function __construct() {
-		$this->name  = esc_html__( 'Taxonomy', 'wp-user-manager' );
-		$this->type  = 'taxonomy';
-		$this->icon  = 'dashicons-tag';
-		$this->group = 'advanced';
-		$this->allow_default = true;
+		$this->name              = esc_html__( 'Taxonomy', 'wp-user-manager' );
+		$this->type              = 'taxonomy';
+		$this->icon              = 'dashicons-tag';
+		$this->group             = 'advanced';
+		$this->allow_default     = true;
 		$this->min_addon_version = '2.2.1';
 	}
 
+	/**
+	 * @return array
+	 */
 	public function get_data_keys() {
 		$keys = parent::get_data_keys();
 
@@ -34,22 +42,22 @@ class WPUM_Field_Taxonomy extends WPUM_Field_Type {
 	 * @return array
 	 */
 	public function get_editor_settings() {
-		return [
-			'general' => [
+		return array(
+			'general' => array(
 				'taxonomy'   => array(
-					'type'   => 'select',
-					'label'  => esc_html__( 'Taxonomy', 'wp-user-manager' ),
-					'model'  => 'taxonomy',
-					'required'  => true,
-					'values' => [],
+					'type'     => 'select',
+					'label'    => esc_html__( 'Taxonomy', 'wp-user-manager' ),
+					'model'    => 'taxonomy',
+					'required' => true,
+					'values'   => array(),
 				),
 				'field_type' => array(
-					'type'   => 'select',
-					'label'  => esc_html__( 'Field Type', 'wp-user-manager' ),
-					'model'  => 'field_type',
-					'default' => 'select',
-					'required'  => true,
-					'values' => array(
+					'type'     => 'select',
+					'label'    => esc_html__( 'Field Type', 'wp-user-manager' ),
+					'model'    => 'field_type',
+					'default'  => 'select',
+					'required' => true,
+					'values'   => array(
 						array(
 							'id'   => '',
 							'name' => 'Select Field Type',
@@ -68,23 +76,23 @@ class WPUM_Field_Taxonomy extends WPUM_Field_Type {
 						),
 					),
 				),
-			],
-		];
+			),
+		);
 	}
 
 	/**
 	 * Format the output onto the profiles for the taxonomy field.
 	 *
 	 * @param object $field
-	 * @param mixed $value
+	 * @param mixed  $value
 	 * @return string
 	 */
-	function get_formatted_output( $field, $value ) {
+	public function get_formatted_output( $field, $value ) {
 		$user_id = wpum_get_queried_user_id();
 
 		$terms = wp_get_object_terms( $user_id, $field->get_meta( 'taxonomy' ) );
 
-		$values = [];
+		$values = array();
 
 		foreach ( $terms as $term ) {
 			$values[] = $term->name;

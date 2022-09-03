@@ -92,8 +92,9 @@ class WPUM_Login_Form_Widget extends WPH_Widget {
 	 * Display widget content.
 	 *
 	 * @access private
-	 * @since 1.0.0
-	 * @return void
+	 *
+	 * @param array $args
+	 * @param array $instance
 	 */
 	public function widget( $args, $instance ) {
 

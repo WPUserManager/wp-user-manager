@@ -5,10 +5,12 @@
  * @package     wp-user-manager
  * @copyright   Copyright (c) 2018, Alessandro Tesoro
  * @license     https://opensource.org/licenses/GPL-3.0 GNU Public License
-*/
+ */
 
 // Exit if accessed directly
-if ( ! defined( 'ABSPATH' ) ) exit;
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 
 /**
  * WPUM_DB_Registration_Forms Class
@@ -55,8 +57,8 @@ class WPUM_DB_Registration_Forms extends WPUM_DB {
 	 */
 	public function get_column_defaults() {
 		return array(
-			'id'          => 0,
-			'name'        => '',
+			'id'   => 0,
+			'name' => '',
 		);
 	}
 
@@ -64,7 +66,9 @@ class WPUM_DB_Registration_Forms extends WPUM_DB {
 	 * Insert a new registration form.
 	 *
 	 * @access public
-	 * @param array $data
+	 *
+	 * @param array  $data
+	 * @param string $type
 	 *
 	 * @return int ID of the inserted form.
 	 */
@@ -82,8 +86,8 @@ class WPUM_DB_Registration_Forms extends WPUM_DB {
 	 * Update a registration form.
 	 *
 	 * @access public
-	 * @param int   $row_id form ID.
-	 * @param array $data
+	 * @param int                $row_id form ID.
+	 * @param array              $data
 	 * @param mixed string|array $where Where clause to filter update.
 	 *
 	 * @return  bool
@@ -148,16 +152,31 @@ class WPUM_DB_Registration_Forms extends WPUM_DB {
 		return $last_changed;
 	}
 
+	/**
+	 * @param array $args
+	 *
+	 * @return string
+	 */
 	protected function get_cache_key( $args ) {
-		return md5( 'wpum_registration_forms_' . serialize( $args ) );
+		return md5( 'wpum_registration_forms_' . serialize( $args ) ); // phpcs:ignore
 	}
 
-	public function get_cache_key_from_args( $args = [] ) {
+	/**
+	 * @param array $args
+	 *
+	 * @return string
+	 */
+	public function get_cache_key_from_args( $args = array() ) {
 		$args = $this->get_args( $args );
 
 		return $this->get_cache_key( $args );
 	}
 
+	/**
+	 * @param array $args
+	 *
+	 * @return array|object
+	 */
 	protected function get_args( $args = array() ) {
 		global $wpdb;
 
@@ -235,10 +254,10 @@ class WPUM_DB_Registration_Forms extends WPUM_DB {
 	 * Parse the `WHERE` clause for the SQL query.
 	 *
 	 * @param array $args
-	 * @return void
+	 *
+	 * @return string
 	 */
 	private function parse_where( $args ) {
-
 		$where = '';
 
 		if ( ! empty( $where ) ) {
@@ -246,7 +265,6 @@ class WPUM_DB_Registration_Forms extends WPUM_DB {
 		}
 
 		return $where;
-
 	}
 
 }
