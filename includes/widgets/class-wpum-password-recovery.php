@@ -59,22 +59,17 @@ class WPUM_Password_Recovery extends WPH_Widget {
 	 * @param array $instance
 	 */
 	public function widget( $args, $instance ) {
+		echo wp_kses_post( $args['before_widget'] );
+		echo wp_kses_post( $args['before_title'] );
+		echo esc_html( $instance['title'] );
+		echo wp_kses_post( $args['after_title'] );
 
 		ob_start();
-
-		echo $args['before_widget'];
-		echo $args['before_title'];
-		echo $instance['title'];
-		echo $args['after_title'];
-
-		echo $args['after_widget'];
-
 		echo do_shortcode( '[wpum_password_recovery]' );
-
 		$output = ob_get_clean();
 
-		echo $output;
-
+		echo wp_kses_post( $output );
+		echo wp_kses_post( $args['after_widget'] );
 	}
 
 }

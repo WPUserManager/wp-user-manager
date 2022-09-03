@@ -73,25 +73,22 @@ class WPUM_Registration_Form_Widget extends WPH_Widget {
 	 * @param array $instance
 	 */
 	public function widget( $args, $instance ) {
+		echo wp_kses_post( $args['before_widget'] );
+		echo wp_kses_post( $args['before_title'] );
+		echo esc_html( $instance['title'] );
+		echo wp_kses_post( $args['after_title'] );
 
 		ob_start();
-
-		echo $args['before_widget'];
-		echo $args['before_title'];
-		echo $instance['title'];
-		echo $args['after_title'];
-
 		$psw_link   = $instance['psw_link'] ? 'yes' : false;
 		$login_link = $instance['login_link'] ? 'yes' : false;
 
 		echo do_shortcode( '[wpum_register psw_link="' . $psw_link . '" login_link="' . $login_link . '"]' );
 
-		echo $args['after_widget'];
-
 		$output = ob_get_clean();
 
-		echo $output;
+		echo wp_kses_post( $output );
 
+		echo wp_kses_post( $args['after_widget'] );
 	}
 
 }

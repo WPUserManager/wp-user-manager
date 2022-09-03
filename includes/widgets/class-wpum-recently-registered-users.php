@@ -30,7 +30,7 @@ class WPUM_Recently_Registered_Users extends WPH_Widget {
 
 		// Configure widget array
 		$args = array(
-			'label'       => __( '[WPUM] Recent Users', 'wp-user-manager' ),
+			'label'       => __( '[WPUM] Recently Registered Users', 'wp-user-manager' ),
 			'description' => __( 'Display a list of recently registered users.', 'wp-user-manager' ),
 		);
 
@@ -78,16 +78,16 @@ class WPUM_Recently_Registered_Users extends WPH_Widget {
 	 */
 	public function widget( $args, $instance ) {
 
-		ob_start();
-
-		echo $args['before_widget'];
-		echo $args['before_title'];
-		echo $instance['title'];
-		echo $args['after_title'];
+		echo wp_kses_post( $args['before_widget'] );
+		echo wp_kses_post( $args['before_title'] );
+		echo esc_html( $instance['title'] );
+		echo wp_kses_post( $args['after_title'] );
 
 		if ( 1 === (int) $instance['profile'] ) {
 			$instance['profile'] = 'yes';
 		}
+
+		ob_start();
 
 		WPUM()->templates
 			->set_template_data( array(
@@ -96,11 +96,11 @@ class WPUM_Recently_Registered_Users extends WPH_Widget {
 			) )
 			->get_template_part( 'recently-registered' );
 
-		echo $args['after_widget'];
-
 		$output = ob_get_clean();
 
-		echo $output;
+		echo wp_kses_post( $output );
+
+		echo wp_kses_post( $args['after_widget'] );
 
 	}
 

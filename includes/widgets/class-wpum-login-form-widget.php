@@ -97,19 +97,18 @@ class WPUM_Login_Form_Widget extends WPH_Widget {
 	 * @param array $instance
 	 */
 	public function widget( $args, $instance ) {
-
-		ob_start();
-
-		echo $args['before_widget'];
-		echo $args['before_title'];
+		echo wp_kses_post( $args['before_widget'] );
+		echo wp_kses_post( $args['before_title'] );
 
 		if ( is_user_logged_in() ) {
-			echo $instance['logged_in_title'];
+			echo esc_html( $instance['logged_in_title'] );
 		} else {
-			echo $instance['title'];
+			echo esc_html( $instance['title'] );
 		}
 
-		echo $args['after_title'];
+		echo wp_kses_post( $args['after_title'] );
+
+		ob_start();
 
 		// Default form settings
 		$settings = array();
@@ -123,12 +122,11 @@ class WPUM_Login_Form_Widget extends WPH_Widget {
 			echo do_shortcode( '[wpum_login_form psw_link="' . ( ( $instance['psw_link'] ) ? 'yes' : 'no' ) . '" register_link="' . ( ( $instance['register_link'] ) ? 'yes' : 'no' ) . '"]' );
 		}
 
-		echo $args['after_widget'];
-
 		$output = ob_get_clean();
 
-		echo $output;
+		echo wp_kses_post( $output );
 
+		echo wp_kses_post( $args['after_widget'] );
 	}
 
 }
