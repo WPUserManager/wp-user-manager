@@ -692,9 +692,9 @@ class WPUM_Fields_Editor {
 		}
 
 		$field_id         = filter_input( INPUT_POST, 'field_id' );
-		$data             = filter_input( INPUT_POST, 'data' );
-		$setting_fields   = filter_input( INPUT_POST, 'settings' );
-		$dropdown_options = filter_input( INPUT_POST, 'dropdownOptions' );
+		$data             = filter_input( INPUT_POST, 'data', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY );
+		$setting_fields   = filter_input( INPUT_POST, 'settings', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY );
+		$dropdown_options = filter_input( INPUT_POST, 'dropdownOptions', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY );
 		$field_to_update  = new WPUM_Field( $field_id );
 
 		if ( $field_to_update->exists() ) {
