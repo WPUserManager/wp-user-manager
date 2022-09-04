@@ -361,3 +361,18 @@ add_filter( 'template_include', function ( $template ) {
 
 	return $template;
 }, 100 );
+
+/**
+ * Add unique key validator for user_meta_key field.
+ */
+
+function wpum_fields_editor_field_settings( $settings, $field_type, $fields_type_group ) {
+	foreach( $settings as $key => $setting ) {
+		if ( $setting['model'] === 'user_meta_key') {
+			$settings[ $key ]['validator'][] = 'unique_user_meta_key';
+		}
+	}
+
+	return $settings;
+}
+add_filter( 'wpum_fields_editor_field_settings', 'wpum_fields_editor_field_settings', 10, 3 );

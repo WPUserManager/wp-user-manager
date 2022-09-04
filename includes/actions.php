@@ -714,3 +714,35 @@ add_action( 'wp', function () {
 		$post = get_post( $profile_id );
 	}
 }, 9 );
+
+function validate_user_meta_key() {
+	global $wpdb;
+
+	$field_id      = intval( $_POST['field_id'] );
+	$user_meta_key = sanitize_text_field( $_POST['user_meta_key'] );
+	
+	$meta_query = new WP_Meta_Query();
+	$query_args = array(
+		'meta_key'     => 'user_meta_key',
+		'meta_value'   => $user_meta_key,
+		'meta_type'    => 'wpum_field',
+		'meta_compare' => '='
+	);
+
+	$meta_query->parse_query_vars( $query_args );
+	$meta_sql = $meta_query->get_sql(
+		'wpum_field',
+		$wpdb->prefix.'wpum_fields',
+		'id'
+	);
+
+	$meta_count = $wpdb->get_var( "SELECT COUNT(meta_id) FROM {$wpdb->prefix}wpum_fields " . $meta_sql['join'] . $meta_sql['where'] . " WHERE wpum_field_id <> {$field_id} " );
+
+	$response['error'] = [];
+	if ( intval( $meta_count ) > 0 ) {
+		$response['error'][] = 'The user meta key must be unique for each field';
+	}
+
+	wp_send_json_success( $response );
+}
+add_action( 'wp_ajax_validate_user_meta_key', 'validate_user_meta_key' );
