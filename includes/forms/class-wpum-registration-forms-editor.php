@@ -425,7 +425,8 @@ class WPUM_Registration_Forms_Editor {
 		if ( current_user_can( $this->capability ) && is_admin() ) {
 
 			$form_id = filter_input( INPUT_POST, 'form_id', FILTER_VALIDATE_INT );
-			$fields  = isset( $_POST['fields'] ) && is_array( $_POST['fields'] ) && ! empty( $_POST['fields'] ) ? $_POST['fields'] : false; // phpcs:ignore
+			$fields  = filter_input( INPUT_POST, 'fields', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY );
+			$fields  = $fields ? $fields : array();
 
 			if ( $form_id ) {
 				$registration_form = new WPUM_Registration_Form( $form_id );

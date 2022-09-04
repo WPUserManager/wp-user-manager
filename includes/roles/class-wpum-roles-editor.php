@@ -270,8 +270,10 @@ class WPUM_Roles_Editor {
 
 				$wp_role = get_role( sanitize_text_field( $role_id ) );
 
-				$submitted_granted_caps = isset( $_POST['granted_caps'] ) ? $_POST['granted_caps'] : array(); // phpcs:ignore
-				$submitted_denied_caps  = isset( $_POST['denied_caps'] ) ? $_POST['denied_caps'] : array();  // phpcs:ignore
+				$granted_caps           = filter_input( INPUT_POST, 'granted_caps', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY );
+				$denied_caps            = filter_input( INPUT_POST, 'denied_caps', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY );
+				$submitted_granted_caps = $granted_caps ? $granted_caps : array();
+				$submitted_denied_caps  = $denied_caps ? $denied_caps : array();
 
 				$caps_to_add    = array_diff( $submitted_granted_caps, $role->granted_caps );
 				$caps_to_remove = array_diff( $role->granted_caps, $submitted_granted_caps );

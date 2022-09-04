@@ -366,10 +366,10 @@ function wpum_complete_setup() {
 function wpum_prevent_wp_login() {
 	global $pagenow;
 
-	$action        = ( isset( $_GET['action'] ) ) ? $_GET['action'] : ''; // phpcs:ignore
-	$wpum_override = isset( $_GET['wpum_override'] ) ? $_GET['wpum_override'] : ''; // phpcs:ignore
+	$action        = filter_input( INPUT_GET, 'action', FILTER_SANITIZE_STRING );
+	$wpum_override = filter_input( INPUT_GET, 'wpum_override' );
 
-	if ( $pagenow && 'wp-login.php' === $pagenow && ! $wpum_override && ( ! $action || ( $action && ! in_array( $action, array( 'logout', 'lostpassword', 'rp', 'resetpass', 'postpass' ), true ) ) ) ) {
+	if ( $pagenow && 'wp-login.php' === $pagenow && ! $wpum_override && ( ! $action || ( ! in_array( $action, array( 'logout', 'lostpassword', 'rp', 'resetpass', 'postpass' ), true ) ) ) ) {
 		$page = wp_login_url();
 		wp_safe_redirect( $page );
 		exit();
@@ -381,7 +381,7 @@ if ( wpum_get_option( 'lock_wplogin' ) ) {
 }
 
 /**
- * Prevent acccess to site unless logged in
+ * Prevent access to site unless logged in
  *
  * @return void
  */

@@ -414,7 +414,7 @@ class WPUM_Fields_Editor {
 			wp_die( esc_html__( 'Something went wrong: could not update the fields order.', 'wp-user-manager' ), 403 );
 		}
 
-		$fields   = isset( $_POST['fields'] ) && is_array( $_POST['fields'] ) && ! empty( $_POST['fields'] ) ? $_POST['fields'] : false; // phpcs:ignore
+		$fields = filter_input( INPUT_POST, 'fields', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY );
 
 		$group_id = false;
 		if ( $fields ) {

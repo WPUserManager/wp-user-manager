@@ -117,7 +117,9 @@ abstract class WPUM_Field_Type {
 	 */
 	public function register() {
 		// The form ID is to be accessed in the builder.
-		$this->form_id = isset( $_GET['form_id'] ) ? absint( filter_input( INPUT_GET, 'form_id', FILTER_VALIDATE_INT ) ) : false; // phpcs:ignore
+		$form_id = filter_input( INPUT_GET, 'form_id', FILTER_VALIDATE_INT );
+
+		$this->form_id = $form_id ? $form_id : false;
 
 		// Add fields tab.
 		add_filter( 'wpum_registered_field_types', array( $this, 'register_field_type' ), 15 );
@@ -374,7 +376,9 @@ abstract class WPUM_Field_Type {
 			$field['sanitizer'] = null;
 		}
 
-		return isset( $_POST[ $key ] ) ? $this->sanitize_posted_field( filter_input( INPUT_POST, $key ), $field['sanitizer'] ) : ''; // phpcs:ignore
+		$field_value = filter_input( INPUT_POST, $key );
+
+		return $field_value ? $this->sanitize_posted_field( $field_value, $field['sanitizer'] ) : '';
 	}
 
 	/**
