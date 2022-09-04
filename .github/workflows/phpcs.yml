@@ -1,10 +1,11 @@
 name: PHP_CodeSniffer
 
-on: pull_request
-  paths:
-    - "**.php"
-    - "phpcs.xml"
-    - ".github/workflows/phpcs.yml"
+on:
+  pull_request:
+    paths:
+      - "**.php"
+      - "phpcs.xml"
+      - ".github/workflows/phpcs.yml"
 
 jobs:
   phpcs:
