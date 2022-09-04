@@ -37,7 +37,9 @@ class WPUM_Field_Textarea extends WPUM_Field_Type {
 	 * @return string
 	 */
 	public function get_posted_field( $key, $field ) {
-		return isset( $_POST[ $key ] ) ? wp_kses_post( trim( wp_unslash( $_POST[ $key ] ) ) ) : ''; // phpcs:ignore
+		$field = filter_input( INPUT_POST, $key );
+
+		return $field ? wp_kses_post( trim( wp_unslash( $field ) ) ) : '';
 	}
 
 	/**

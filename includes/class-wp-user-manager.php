@@ -297,7 +297,8 @@ if ( ! class_exists( 'WP_User_Manager' ) ) :
 
 			require_once WPUM_PLUGIN_DIR . 'includes/install.php';
 
-			if ( defined( 'DOING_AJAX' ) || ( isset( $_GET['wpum_email_customizer'] ) && 'true' === filter_input( INPUT_GET, 'wpum_email_customizer' ) ) ) { // phpcs:ignore
+			$email_customizer = filter_input( INPUT_GET, 'wpum_email_customizer', FILTER_SANITIZE_STRING );
+			if ( defined( 'DOING_AJAX' ) || 'true' === $email_customizer ) {
 				require_once WPUM_PLUGIN_DIR . 'includes/emails/class-wpum-emails-customizer-scripts.php';
 				require_once WPUM_PLUGIN_DIR . 'includes/emails/class-wpum-emails-customizer.php';
 			}

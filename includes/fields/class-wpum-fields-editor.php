@@ -250,7 +250,7 @@ class WPUM_Fields_Editor {
 			wp_die( esc_html__( 'Something went wrong: could not update the groups order.', 'wp-user-manager' ), 403 );
 		}
 
-		$groups = isset( $_POST['groups'] ) && is_array( $_POST['groups'] ) && ! empty( $_POST['groups'] ) ? $_POST['groups'] : false; // phpcs:ignore
+		$groups = filter_input( INPUT_POST, 'groups', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY );
 
 		if ( $groups ) {
 			foreach ( $groups as $order => $group ) {

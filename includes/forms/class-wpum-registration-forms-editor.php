@@ -467,7 +467,8 @@ class WPUM_Registration_Forms_Editor {
 		}
 
 		$form_id        = filter_input( INPUT_POST, 'form_id', FILTER_VALIDATE_INT );
-		$settings_model = isset( $_POST['settings_model'] ) ? $_POST['settings_model'] : array(); // phpcs:ignore
+		$settings_model = filter_input( INPUT_POST, 'settings_model', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY );
+		$settings_model = ! empty( $settings_model ) ? $settings_model : array();
 
 		if ( empty( $form_id ) ) {
 			$this->send_json_error();

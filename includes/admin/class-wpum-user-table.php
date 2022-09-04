@@ -136,7 +136,12 @@ class WPUM_User_Table {
 
 		$count = 0;
 
-		foreach ( (array) wp_unslash( $_REQUEST['users'] ) as $user_id ) { // phpcs:ignore
+		$users = filter_input( INPUT_GET, 'users', FILTER_VALIDATE_INT, FILTER_REQUIRE_ARRAY );
+		if ( empty( $users ) ) {
+			$users = array();
+		}
+
+		foreach ( $users as $user_id ) {
 
 			$user_id = absint( $user_id );
 			if ( is_multisite() && ! is_user_member_of_blog( $user_id ) ) {
@@ -199,8 +204,12 @@ class WPUM_User_Table {
 		$update       = 'wpum-role-removed';
 
 		$count = 0;
+		$users = filter_input( INPUT_GET, 'users', FILTER_VALIDATE_INT, FILTER_REQUIRE_ARRAY );
+		if ( empty( $users ) ) {
+			$users = array();
+		}
 
-		foreach ( (array) wp_unslash( $_REQUEST['users'] ) as $user_id ) { // phpcs:ignore
+		foreach ( $users as $user_id ) {
 
 			$user_id = absint( $user_id );
 
