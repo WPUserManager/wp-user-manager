@@ -1,16 +1,36 @@
+name: PHP_CodeSniffer
+
 on: pull_request
 
-name: Inspections
 jobs:
-  runPHPCSInspection:
-    name: Run PHPCS inspection
+  phpcs:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
         with:
-          ref: ${{ github.event.pull_request.head.sha }}
-      - name: Run PHPCS inspection
-        uses: rtCamp/action-phpcs-code-review@v2
-        env:
-          GH_BOT_TOKEN: ${{ secrets.GH_BOT_TOKEN }}
-          PHPCS_STANDARD_FILE_NAME: "phpcs.xml.dist"
+          php-version: '7.3'
+          coverage: none
+          tools: composer, cs2pr
+
+      - name: Get Composer cache directory
+        id: composer-cache
+        run: echo "::set-output name=dir::$(composer config cache-files-dir)"
+
+      - name: Setup cache
+        uses: pat-s/always-upload-cache@v1.1.4
+        with:
+          path: ${{ steps.composer-cache.outputs.dir }}
+          # Use the hash of composer.json as the key for your cache if you do not commit composer.lock.
+          # key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.json') }}
+          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+          restore-keys: ${{ runner.os }}-composer-
+
+      - name: Install dependencies
+        run: composer install --prefer-dist --no-suggest --no-progress
+
+      - name: Detect coding standard violations
+        run: vendor/bin/phpcs -q --report=checkstyle | cs2pr --graceful-warnings
