@@ -36,4 +36,4 @@ jobs:
         run: vendor/bin/phpcs --config-set installed_paths vendor/wp-coding-standards/wpcs
 
       - name: Detect coding standard violations
-        run: vendor/bin/phpcs -q | cs2pr --graceful-warnings
+        run: vendor/bin/phpcs -q --report=checkstyle | cs2pr --graceful-warnings
