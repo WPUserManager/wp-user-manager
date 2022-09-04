@@ -241,22 +241,14 @@ class WPUM_DB_Fields extends WPUM_DB {
 
 		if ( ! empty( $args['parent'] ) ) {
 			$meta_table = $wpdb->prefix . 'wpum_fieldmeta';
-			$join_query = $wpdb->prepare( "JOIN $meta_table meta ON meta.wpum_field_id = id AND meta.meta_key = %s", 'parent_id' );
+			$join_query = $wpdb->prepare( "JOIN $meta_table meta ON meta.wpum_field_id = id AND meta.meta_key = %s", 'parent_id' ); // phpcs:ignore
 			$join_query = apply_filters( 'wpum_fields_join_query', $join_query, $this );
 
 			$where = str_replace( '`group_id`', sprintf( 'meta.meta_value = %d AND `group_id`', intval( $args['parent'] ) ), $where );
 		}
 
 		if ( false === $fields ) {
-			$fields = $wpdb->get_col( $wpdb->prepare(
-				"
-					SELECT id
-					FROM $this->table_name
-					$join_query
-					$where
-					ORDER BY {$args['orderby']} {$args['order']}
-					LIMIT %d,%d;
-				", absint( $args['offset'] ), absint( $args['number'] ) ), 0 );
+			$fields = $wpdb->get_col( $wpdb->prepare( "SELECT id FROM $this->table_name $join_query $where ORDER BY {$args['orderby']} {$args['order']} LIMIT %d,%d;", absint( $args['offset'] ), absint( $args['number'] ) ), 0 ); // phpcs:ignore
 
 			if ( ! empty( $fields ) ) {
 				$new_fields = array();

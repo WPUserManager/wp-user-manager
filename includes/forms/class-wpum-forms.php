@@ -22,7 +22,7 @@ class WPUM_Forms {
 	 *
 	 * @var WPUM_Forms
 	 */
-	private static $_instance = null;
+	private static $instance = null;
 
 	/**
 	 * Allows for accessing single instance of class. Class should only be constructed once per call.
@@ -31,10 +31,10 @@ class WPUM_Forms {
 	 * @return WPUM_Forms Main instance.
 	 */
 	public static function instance() {
-		if ( is_null( self::$_instance ) ) {
-			self::$_instance = new self();
+		if ( is_null( self::$instance ) ) {
+			self::$instance = new self();
 		}
-		return self::$_instance;
+		return self::$instance;
 	}
 
 	/**
@@ -48,8 +48,9 @@ class WPUM_Forms {
 	 * If a form was posted, load its class so that it can be processed before display.
 	 */
 	public function load_posted_form() {
-		if ( ! empty( $_POST['wpum_form'] ) ) {
-			$this->load_form_class( sanitize_title( $_POST['wpum_form'] ) );
+		$form = filter_input( INPUT_POST, 'wpum_form' );
+		if ( ! empty( $form ) ) {
+			$this->load_form_class( sanitize_title( $form ) );
 		}
 	}
 
@@ -89,7 +90,8 @@ class WPUM_Forms {
 	 * @return string|null
 	 */
 	public function get_form( $form_name, $atts = array() ) {
-		if ( $form = $this->load_form_class( $form_name ) ) {
+		$form = $this->load_form_class( $form_name );
+		if ( $form ) {
 			ob_start();
 			if ( isset( $atts['group_id'] ) ) {
 				$form->__set( 'fields_group_id', $atts['group_id'] );

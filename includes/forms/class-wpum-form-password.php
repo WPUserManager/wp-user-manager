@@ -12,6 +12,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+/**
+ * WPUM_Form_Password
+ */
 class WPUM_Form_Password extends WPUM_Form {
 
 	/**
@@ -31,10 +34,9 @@ class WPUM_Form_Password extends WPUM_Form {
 	/**
 	 * Stores static instance of class.
 	 *
-	 * @access protected
-	 * @var WPUM_Form_Login The single instance of the class
+	 * @var WPUM_Form_Password The single instance of the class
 	 */
-	protected static $_instance = null;
+	protected static $instance = null;
 
 	/**
 	 * Returns static instance of class.
@@ -42,10 +44,10 @@ class WPUM_Form_Password extends WPUM_Form {
 	 * @return self
 	 */
 	public static function instance() {
-		if ( is_null( self::$_instance ) ) {
-			self::$_instance = new self();
+		if ( is_null( self::$instance ) ) {
+			self::$instance = new self();
 		}
-		return self::$_instance;
+		return self::$instance;
 	}
 
 	/**
@@ -80,13 +82,7 @@ class WPUM_Form_Password extends WPUM_Form {
 			)
 		);
 
-		uasort( $this->steps, array( $this, 'sort_by_priority' ) );
-
-		if ( isset( $_POST['step'] ) ) {
-			$this->step = is_numeric( $_POST['step'] ) ? max( absint( $_POST['step'] ), 0 ) : array_search( $_POST['step'], array_keys( $this->steps ) );
-		} elseif ( ! empty( $_GET['step'] ) ) {
-			$this->step = is_numeric( $_GET['step'] ) ? max( absint( $_GET['step'] ), 0 ) : array_search( $_GET['step'], array_keys( $this->steps ) );
-		}
+		$this->sort_set_steps();
 
 	}
 
@@ -164,7 +160,7 @@ class WPUM_Form_Password extends WPUM_Form {
 	 */
 	public function validate_password( $pass, $fields, $values, $form ) {
 
-		if ( $form == $this->form_name && isset( $values['password']['password'] ) ) {
+		if ( $form === $this->form_name && isset( $values['password']['password'] ) ) {
 
 			$password_current = $values['password']['current_password'];
 			$password_1       = $values['password']['password'];
@@ -195,6 +191,7 @@ class WPUM_Form_Password extends WPUM_Form {
 	 * Handle submission of the form.
 	 *
 	 * @return void
+	 * @throws Exception
 	 */
 	public function submit_handler() {
 
@@ -204,7 +201,8 @@ class WPUM_Form_Password extends WPUM_Form {
 
 			$values = $this->get_posted_fields();
 
-			if ( ! wp_verify_nonce( $_POST['password_change_nonce'], 'verify_password_change_form' ) ) {
+			$nonce = filter_input( INPUT_POST, 'password_change_nonce' );
+			if ( empty( $nonce ) || ! wp_verify_nonce( $nonce, 'verify_password_change_form' ) ) {
 				return;
 			}
 
@@ -220,7 +218,8 @@ class WPUM_Form_Password extends WPUM_Form {
 				return;
 			}
 
-			if ( is_wp_error( ( $return = $this->validate_fields( $values ) ) ) ) {
+			$return = $this->validate_fields( $values );
+			if ( is_wp_error( $return ) ) {
 				throw new Exception( $return->get_error_message() );
 			}
 
@@ -245,13 +244,15 @@ class WPUM_Form_Password extends WPUM_Form {
 
 				$active_tab = get_query_var( 'tab' );
 				if ( empty( $active_tab ) ) {
-					$active_tab = isset( $_GET['tab'] ) ? $_GET['tab'] : 'password';
+					$tab = filter_input( INPUT_GET, 'tab', FILTER_SANITIZE_STRING );
+
+					$active_tab = $tab ? $tab : 'password';
 				}
 				$redirect = get_permalink();
 				if ( ! $redirect ) {
 					$redirect = get_permalink( wpum_get_core_page_id( 'account' ) );
 				}
-				$redirect = rtrim( $redirect, '/' ) . '/' . 'password';
+				$redirect = rtrim( $redirect, '/' ) . '/password';
 				$redirect = add_query_arg(
 					array(
 						'password-updated' => 'success',

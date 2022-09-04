@@ -12,6 +12,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+/**
+ * WPUM_Form_Profile
+ */
 class WPUM_Form_Profile extends WPUM_Form {
 
 	use WPUM_Form_Account;
@@ -36,7 +39,7 @@ class WPUM_Form_Profile extends WPUM_Form {
 	 * @access protected
 	 * @var WPUM_Form_Login The single instance of the class
 	 */
-	protected static $_instance = null;
+	protected static $instance = null;
 
 	/**
 	 * Holds the currently logged in user.
@@ -51,10 +54,10 @@ class WPUM_Form_Profile extends WPUM_Form {
 	 * @return self
 	 */
 	public static function instance() {
-		if ( is_null( self::$_instance ) ) {
-			self::$_instance = new self();
+		if ( is_null( self::$instance ) ) {
+			self::$instance = new self();
 		}
-		return self::$_instance;
+		return self::$instance;
 	}
 
 	/**
@@ -84,13 +87,7 @@ class WPUM_Form_Profile extends WPUM_Form {
 			)
 		);
 
-		uasort( $this->steps, array( $this, 'sort_by_priority' ) );
-
-		if ( isset( $_POST['step'] ) ) {
-			$this->step = is_numeric( $_POST['step'] ) ? max( absint( $_POST['step'] ), 0 ) : array_search( $_POST['step'], array_keys( $this->steps ) );
-		} elseif ( ! empty( $_GET['step'] ) ) {
-			$this->step = is_numeric( $_GET['step'] ) ? max( absint( $_GET['step'] ), 0 ) : array_search( $_GET['step'], array_keys( $this->steps ) );
-		}
+		$this->sort_set_steps();
 
 	}
 
@@ -122,18 +119,18 @@ class WPUM_Form_Profile extends WPUM_Form {
 	 */
 	public function validate_nickname( $pass, $fields, $values, $form ) {
 
-		if ( $form == $this->form_name && isset( $values['account']['user_nickname'] ) ) {
+		if ( $form === $this->form_name && isset( $values['account']['user_nickname'] ) ) {
 
 			global $wpdb;
 
-			$displayname = $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(ID) FROM $wpdb->users WHERE display_name = %s AND ID <> %d", $values['account']['user_displayname'], $this->user->ID ) );
-			$nickname    = $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(ID) FROM $wpdb->users as users, $wpdb->usermeta as meta WHERE users.ID = meta.user_id AND meta.meta_key = 'nickname' AND meta.meta_value = %s AND users.ID <> %d", $values['account']['user_nickname'], $this->user->ID ) );
+			$displayname = $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(ID) FROM $wpdb->users WHERE display_name = %s AND ID <> %d", $values['account']['user_displayname'], $this->user->ID ) ); // phpcs:ignore
+			$nickname    = $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(ID) FROM $wpdb->users as users, $wpdb->usermeta as meta WHERE users.ID = meta.user_id AND meta.meta_key = 'nickname' AND meta.meta_value = %s AND users.ID <> %d", $values['account']['user_nickname'], $this->user->ID ) );  // phpcs:ignore
 
-			if ( $displayname == '1' ) {
+			if ( '1' === $displayname ) {
 				return new WP_Error( 'displayname-unique-validation-error', esc_html__( 'This display name is already in use by someone else. Display names must be unique.', 'wp-user-manager' ) );
 			}
 
-			if ( $nickname == '1' ) {
+			if ( '1' === $nickname ) {
 				return new WP_Error( 'displayname-unique-validation-error', esc_html__( 'This nickname is already in use by someone else. Nicknames must be unique.', 'wp-user-manager' ) );
 			}
 		}
@@ -167,14 +164,14 @@ class WPUM_Form_Profile extends WPUM_Form {
 
 			$field = new WPUM_Field( $field );
 
-			if ( $field->exists() && $field->get_primary_id() !== 'user_password' ) {
+			if ( $field->exists() && 'user_password' !== $field->get_primary_id() ) {
 
 				if ( ! apply_filters( 'wpum_account_display_field', $field->get_meta( 'editing' ) === 'public', $field ) ) {
 					continue;
 				}
 
 				// Skip the avatar field if disabled.
-				if ( $field->get_primary_id() == 'user_avatar' && ! wpum_get_option( 'custom_avatars' ) ) {
+				if ( 'user_avatar' === $field->get_primary_id() && ! wpum_get_option( 'custom_avatars' ) ) {
 					continue;
 				}
 
@@ -241,6 +238,7 @@ class WPUM_Form_Profile extends WPUM_Form {
 	 * Update the user profile.
 	 *
 	 * @return void
+	 * @throws Exception
 	 */
 	public function account_handler() {
 
@@ -250,7 +248,9 @@ class WPUM_Form_Profile extends WPUM_Form {
 
 			$values = $this->get_posted_fields();
 
-			if ( ! wp_verify_nonce( $_POST['account_update_nonce'], 'verify_account_form' ) ) {
+			$nonce = filter_input( INPUT_POST, 'account_update_nonce' );
+
+			if ( empty( $nonce ) || ! wp_verify_nonce( $nonce, 'verify_account_form' ) ) {
 				return;
 			}
 
@@ -258,7 +258,8 @@ class WPUM_Form_Profile extends WPUM_Form {
 				return;
 			}
 
-			if ( is_wp_error( ( $return = $this->validate_fields( $values ) ) ) ) {
+			$return = $this->validate_fields( $values );
+			if ( is_wp_error( $return ) ) {
 				throw new Exception( $return->get_error_message() );
 			}
 

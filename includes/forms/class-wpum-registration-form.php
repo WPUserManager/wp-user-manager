@@ -61,6 +61,8 @@ class WPUM_Registration_Form {
 
 	/**
 	 * The Database Abstraction
+	 *
+	 * @var WPUM_DB_Registration_Forms
 	 */
 	protected $db;
 
@@ -103,6 +105,7 @@ class WPUM_Registration_Form {
 		if ( method_exists( $this, 'get_' . $key ) ) {
 			return call_user_func( array( $this, 'get_' . $key ) );
 		} else {
+			// translators: %s field property name
 			return new WP_Error( 'wpum-registration-form-invalid-property', sprintf( __( 'Can\'t get property %s', 'wp-user-manager' ), $key ) );
 		}
 	}
@@ -115,7 +118,7 @@ class WPUM_Registration_Form {
 	 */
 	private function setup_form( $form = null ) {
 
-		if ( null == $form ) {
+		if ( null === $form ) {
 			return false;
 		}
 
@@ -214,6 +217,9 @@ class WPUM_Registration_Form {
 		return true;
 	}
 
+	/**
+	 * @return mixed
+	 */
 	public function get_role_key() {
 		$role = $this->get_meta( 'role' );
 
@@ -300,13 +306,13 @@ class WPUM_Registration_Form {
 			switch ( $type ) {
 				case '%s':
 					if ( is_array( $data[ $key ] ) ) {
-						$data[ $key ] = json_encode( $data[ $key ] );
+						$data[ $key ] = wp_json_encode( $data[ $key ] );
 					} else {
 						$data[ $key ] = sanitize_text_field( $data[ $key ] );
 					}
 					break;
 				case '%d':
-					if ( ! is_numeric( $data[ $key ] ) || (int) $data[ $key ] !== absint( $data[ $key ] ) ) {
+					if ( ! is_numeric( $data[ $key ] ) || absint( $data[ $key ] ) !== (int) $data[ $key ] ) {
 						$data[ $key ] = $default_values[ $key ];
 					} else {
 						$data[ $key ] = absint( $data[ $key ] );
@@ -433,7 +439,7 @@ class WPUM_Registration_Form {
 
 		// Get all registration form options
 		foreach ( $all_settings as $key => $options ) {
-			if ( ! in_array( $key, $sections ) ) {
+			if ( ! in_array( $key, $sections, true ) ) {
 				continue;
 			}
 

@@ -229,14 +229,7 @@ class WPUM_DB_Registration_Forms extends WPUM_DB {
 		$args['order']   = esc_sql( $args['order'] );
 
 		if ( false === $forms ) {
-			$forms = $wpdb->get_col( $wpdb->prepare(
-				"
-					SELECT id
-					FROM $this->table_name
-					$where
-					ORDER BY {$args['orderby']} {$args['order']}
-					LIMIT %d,%d;
-				", absint( $args['offset'] ), absint( $args['number'] ) ), 0 );
+			$forms = $wpdb->get_col( $wpdb->prepare( "SELECT id FROM $this->table_name $where ORDER BY {$args['orderby']} {$args['order']} LIMIT %d,%d;", absint( $args['offset'] ), absint( $args['number'] ) ), 0 ); // phpcs:ignore
 
 			if ( ! empty( $forms ) ) {
 				foreach ( $forms as $key => $form ) {

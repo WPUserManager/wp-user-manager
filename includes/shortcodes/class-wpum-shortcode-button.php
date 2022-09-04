@@ -126,11 +126,11 @@ final class WPUM_Shortcode_Button {
 					$shortcode = key( $shortcodes );
 					printf(
 						'<button type="button" class="button wpum-shortcode" data-shortcode="%s">%s</button>',
-						$shortcode,
+						esc_attr( $shortcode ),
 						sprintf( '%s %s %s',
-							$img,
-							__( 'Insert', 'wp-user-manager' ),
-							self::$shortcodes[ $shortcode ]['label']
+							$img, // phpcs:ignore
+							esc_html__( 'Insert', 'wp-user-manager' ),
+							esc_html( self::$shortcodes[ $shortcode ]['label'] )
 						)
 					);
 				} else {
@@ -139,9 +139,9 @@ final class WPUM_Shortcode_Button {
 						'<button class="button wpum-button" type="button">%s %s</button>' .
 						'<div class="wpum-menu mce-menu">%s</div>' .
 						'</div>',
-						$img,
-						__( 'User Shortcodes', 'wp-user-manager' ),
-						implode( '', array_values( $shortcodes ) )
+						$img, // phpcs:ignore
+						esc_html__( 'User Shortcodes', 'wp-user-manager' ),
+						wp_kses_post( implode( '', array_values( $shortcodes ) ) )
 					);
 				}
 			}

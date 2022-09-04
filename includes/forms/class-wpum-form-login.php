@@ -12,6 +12,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+/**
+ * WPUM_Form_Login
+ */
 class WPUM_Form_Login extends WPUM_Form {
 
 	/**
@@ -31,10 +34,9 @@ class WPUM_Form_Login extends WPUM_Form {
 	/**
 	 * Stores static instance of class.
 	 *
-	 * @access protected
 	 * @var WPUM_Form_Login The single instance of the class
 	 */
-	protected static $_instance = null;
+	protected static $instance = null;
 
 	/**
 	 * Returns static instance of class.
@@ -42,10 +44,10 @@ class WPUM_Form_Login extends WPUM_Form {
 	 * @return self
 	 */
 	public static function instance() {
-		if ( is_null( self::$_instance ) ) {
-			self::$_instance = new self();
+		if ( is_null( self::$instance ) ) {
+			self::$instance = new self();
 		}
-		return self::$_instance;
+		return self::$instance;
 	}
 
 	/**
@@ -69,13 +71,7 @@ class WPUM_Form_Login extends WPUM_Form {
 			),
 		) );
 
-		uasort( $this->steps, array( $this, 'sort_by_priority' ) );
-
-		if ( isset( $_POST['step'] ) ) {
-			$this->step = is_numeric( $_POST['step'] ) ? max( absint( $_POST['step'] ), 0 ) : array_search( $_POST['step'], array_keys( $this->steps ) );
-		} elseif ( ! empty( $_GET['step'] ) ) {
-			$this->step = is_numeric( $_GET['step'] ) ? max( absint( $_GET['step'] ), 0 ) : array_search( $_GET['step'], array_keys( $this->steps ) );
-		}
+		$this->sort_set_steps();
 
 	}
 
@@ -140,6 +136,7 @@ class WPUM_Form_Login extends WPUM_Form {
 	 * Handle submission of the form.
 	 *
 	 * @return void
+	 * @throws Exception
 	 */
 	public function submit_handler() {
 		try {
@@ -148,11 +145,12 @@ class WPUM_Form_Login extends WPUM_Form {
 
 			$values = $this->get_posted_fields();
 
-			if ( empty( $_POST['submit_login'] ) ) {
+			if ( empty( $_POST['submit_login'] ) ) { // phpcs:ignore
 				return;
 			}
 
-			if ( is_wp_error( ( $return = $this->validate_fields( $values ) ) ) ) {
+			$return = $this->validate_fields( $values );
+			if ( is_wp_error( $return ) ) {
 				throw new Exception( $return->get_error_message() );
 			}
 
@@ -184,6 +182,7 @@ class WPUM_Form_Login extends WPUM_Form {
 	 * Sign the user in.
 	 *
 	 * @return void
+	 * @throws Exception
 	 */
 	public function done() {
 
@@ -206,8 +205,9 @@ class WPUM_Form_Login extends WPUM_Form {
 				$redirect = $login_redirect;
 			}
 
-			if ( isset( $_GET['redirect_to'] ) && ! empty( $_GET['redirect_to'] ) ) {
-				$redirect = $_GET['redirect_to'];
+			$redirect_to = filter_input( INPUT_GET, 'redirect_to' );
+			if ( $redirect_to ) {
+				$redirect = $redirect_to;
 			}
 
 			do_action( 'wpum_before_login', $username );

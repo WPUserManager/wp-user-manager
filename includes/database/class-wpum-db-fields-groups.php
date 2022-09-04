@@ -248,14 +248,8 @@ class WPUM_DB_Fields_Groups extends WPUM_DB {
 		$args['order']   = esc_sql( $args['order'] );
 
 		if ( false === $groups ) {
-			$groups = $wpdb->get_col( $wpdb->prepare( // phpcs:ignore
-				"
-					SELECT id
-					FROM {$this->table_name}
-					$where
-					ORDER BY {$args['orderby']} {$args['order']}
-					LIMIT %d,%d;
-				", absint( $args['offset'] ), absint( $args['number'] ) ), 0 );
+			$sql = $wpdb->prepare( "SELECT id FROM {$this->table_name} $where ORDER BY {$args['orderby']} {$args['order']} LIMIT %d,%d;", absint( $args['offset'] ), absint( $args['number'] ) ); // phpcs:ignore
+			$groups = $wpdb->get_col( $sql ); // phpcs:ignore
 
 			if ( ! empty( $groups ) ) {
 
@@ -297,7 +291,7 @@ class WPUM_DB_Fields_Groups extends WPUM_DB {
 
 		$where = '';
 
-		if ( ! empty( $args['primary'] ) && $args['primary'] === true ) {
+		if ( ! empty( $args['primary'] ) && true === $args['primary'] ) {
 			$where .= ' AND `is_primary` = 1 ';
 		}
 
@@ -319,8 +313,7 @@ class WPUM_DB_Fields_Groups extends WPUM_DB {
 		global $wpdb;
 
 		$where = $this->parse_where( $args );
-		$sql   = "SELECT COUNT($this->primary_key) FROM " . $this->table_name . "{$where};";
-		$count = $wpdb->get_var( $sql );
+		$count = $wpdb->get_var( "SELECT COUNT({$this->primary_key}) FROM {$this->table_name} {$where};" ); // phpcs:ignore
 
 		return absint( $count );
 	}

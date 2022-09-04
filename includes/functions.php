@@ -952,6 +952,7 @@ function wpum_get_registered_profile_tabs() {
  */
 function wpum_get_profile_tab_url( $user, $tab ) {
 	$url = wpum_get_profile_url( $user );
+
 	$url .= '/' . $tab;
 
 	return apply_filters( 'wpum_get_profile_tab_url', $url, $tab, $user );
@@ -1223,8 +1224,6 @@ function wpum_setup_default_custom_search_fields() {
  * @param array $selected_roles
  *
  * @return array $roles An array of the roles
- * @since 1.0.0
- *
  */
 function wpum_get_allowed_user_roles( $selected_roles = array() ) {
 	global $wp_roles;

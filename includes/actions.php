@@ -260,7 +260,7 @@ function wpum_display_account_page_content() {
 		if ( 'settings' === $active_tab ) {
 			$active_tab = 'profile';
 		}
-		echo WPUM()->forms->get_form( $active_tab );
+		echo WPUM()->forms->get_form( $active_tab ); // phpcs:ignore
 	} else {
 		do_action( 'wpum_account_page_content_' . $active_tab );
 	}
@@ -282,8 +282,8 @@ function wpum_check_display_name( $user_id ) {
 	$nickname     = filter_input( INPUT_POST, 'nickname' );
 
 	// Getting user data and user meta data.
-	$err['display'] = $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(ID) FROM $wpdb->users WHERE display_name = %s AND ID <> %d", $display_name, $user_id ) );
-	$err['nick']    = $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(ID) FROM $wpdb->users as users, $wpdb->usermeta as meta WHERE users.ID = meta.user_id AND meta.meta_key = 'nickname' AND meta.meta_value = %s AND users.ID <> %d", $nickname, $user_id ) );
+	$err['display'] = $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(ID) FROM $wpdb->users WHERE display_name = %s AND ID <> %d", $display_name, $user_id ) ); // phpcs:ignore
+	$err['nick']    = $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(ID) FROM $wpdb->users as users, $wpdb->usermeta as meta WHERE users.ID = meta.user_id AND meta.meta_key = 'nickname' AND meta.meta_value = %s AND users.ID <> %d", $nickname, $user_id ) );  // phpcs:ignore
 
 	foreach ( $err as $key => $e ) {
 		if ( $e >= 1 ) {

@@ -105,7 +105,7 @@ class WPUM_Field_File extends WPUM_Field_Type {
 				}
 			}
 			$file_urls       = array();
-			$files_to_upload = wpum_prepare_uploaded_files( $_FILES[ $field_key ] );
+			$files_to_upload = wpum_prepare_uploaded_files( $_FILES[ $field_key ] ); // phpcs:ignore
 			foreach ( $files_to_upload as $file_to_upload ) {
 				// Determine max file size for the avatar field.
 				// translators: %s field label

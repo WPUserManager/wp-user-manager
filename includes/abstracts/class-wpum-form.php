@@ -260,6 +260,22 @@ abstract class WPUM_Form {
 	}
 
 	/**
+	 * Sort and set steps
+	 */
+	protected function sort_set_steps() {
+		uasort( $this->steps, array( $this, 'sort_by_priority' ) );
+
+		$step_post = filter_input( INPUT_POST, 'step' );
+		$step_get  = filter_input( INPUT_GET, 'step' );
+
+		if ( $step_post ) {
+			$this->step = is_numeric( $step_post ) ? max( absint( $step_post ), 0 ) : array_search( $step_post, array_keys( $this->steps ), true );
+		} elseif ( ! empty( $step_get ) ) {
+			$this->step = is_numeric( $step_get ) ? max( absint( $step_get ), 0 ) : array_search( $step_get, array_keys( $this->steps ), true );
+		}
+	}
+
+	/**
 	 * Gets post data for fields.
 	 *
 	 * @return array of data

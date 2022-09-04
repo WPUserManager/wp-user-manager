@@ -12,6 +12,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+/**
+ * WPUM_Form_Privacy
+ */
 class WPUM_Form_Privacy extends WPUM_Form {
 
 	/**
@@ -34,7 +37,7 @@ class WPUM_Form_Privacy extends WPUM_Form {
 	 * @access protected
 	 * @var WPUM_Form_Privacy The single instance of the class
 	 */
-	protected static $_instance = null;
+	protected static $instance = null;
 
 	/**
 	 * Returns static instance of class.
@@ -42,10 +45,10 @@ class WPUM_Form_Privacy extends WPUM_Form {
 	 * @return self
 	 */
 	public static function instance() {
-		if ( is_null( self::$_instance ) ) {
-			self::$_instance = new self();
+		if ( is_null( self::$instance ) ) {
+			self::$instance = new self();
 		}
-		return self::$_instance;
+		return self::$instance;
 	}
 
 	/**
@@ -79,13 +82,7 @@ class WPUM_Form_Privacy extends WPUM_Form {
 			)
 		);
 
-		uasort( $this->steps, array( $this, 'sort_by_priority' ) );
-
-		if ( isset( $_POST['step'] ) ) {
-			$this->step = is_numeric( $_POST['step'] ) ? max( absint( $_POST['step'] ), 0 ) : array_search( $_POST['step'], array_keys( $this->steps ) );
-		} elseif ( ! empty( $_GET['step'] ) ) {
-			$this->step = is_numeric( $_GET['step'] ) ? max( absint( $_GET['step'] ), 0 ) : array_search( $_GET['step'], array_keys( $this->steps ) );
-		}
+		$this->sort_set_steps();
 
 	}
 
@@ -146,6 +143,7 @@ class WPUM_Form_Privacy extends WPUM_Form {
 	 * Handle submission of the form.
 	 *
 	 * @return void
+	 * @throws Exception
 	 */
 	public function submit_handler() {
 
@@ -155,7 +153,8 @@ class WPUM_Form_Privacy extends WPUM_Form {
 
 			$values = $this->get_posted_fields();
 
-			if ( ! wp_verify_nonce( $_POST['privacy_nonce'], 'verify_privacy_form' ) ) {
+			$nonce = filter_input( INPUT_POST, 'privacy_nonce' );
+			if ( empty( $nonce ) || ! wp_verify_nonce( $nonce, 'verify_privacy_form' ) ) {
 				return;
 			}
 
@@ -171,7 +170,8 @@ class WPUM_Form_Privacy extends WPUM_Form {
 				return;
 			}
 
-			if ( is_wp_error( ( $return = $this->validate_fields( $values ) ) ) ) {
+			$return = $this->validate_fields( $values );
+			if ( is_wp_error( $return ) ) {
 				throw new Exception( $return->get_error_message() );
 			}
 
@@ -182,11 +182,11 @@ class WPUM_Form_Privacy extends WPUM_Form {
 				$user_id = $user->ID;
 
 				foreach ( $values['privacy'] as $key => $value ) {
-					if ( $value == '1' ) {
+					if ( '1' === $value ) {
 						$value = true;
 					}
 
-						carbon_set_user_meta( $user_id, $key, $value );
+					carbon_set_user_meta( $user_id, $key, $value );
 				}
 
 				$redirect = get_permalink();

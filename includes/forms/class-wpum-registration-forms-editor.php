@@ -12,8 +12,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+/**
+ * WPUM_Registration_Forms_Editor
+ */
 class WPUM_Registration_Forms_Editor {
 
+	/**
+	 * @var string
+	 */
 	protected $capability;
 
 	/**
@@ -87,7 +93,7 @@ class WPUM_Registration_Forms_Editor {
 
 		$screen = get_current_screen();
 
-		if ( $screen->base == 'users_page_wpum-registration-forms' ) {
+		if ( 'users_page_wpum-registration-forms' === $screen->base ) {
 
 			$is_vue_dev = defined( 'WPUM_VUE_DEV' ) && WPUM_VUE_DEV ? true : false;
 
@@ -166,8 +172,11 @@ class WPUM_Registration_Forms_Editor {
 			'role_desc'              => esc_html__( 'Select the user role that will be assigned to users upon successfull registration.', 'wp-user-manager' ),
 			'tooltip_form_name'      => esc_html__( 'Customize the name of the registration form.', 'wp-user-manager' ),
 			'create_form'            => esc_html__( 'Create Form', 'wp-user-manager' ),
+			// translators: %1$s Registration forms addon URL
 			'premium_addon'          => sprintf( __( 'Create <a href="%1$s" target="_blank">unlimited registration forms</a>. The <a href="%1$s" target="_blank">Registration Forms</a> addon is required if you wish to add more forms.', 'wp-user-manager' ), 'https://wpusermanager.com/addons/registration-forms?utm_source=WP%20User%20Manager&utm_medium=insideplugin&utm_campaign=WP%20User%20Manager&utm_content=registration-forms-editor' ),
+			// translators: %1$s Registration forms addon URL
 			'premium_addonstep'      => sprintf( __( 'Create <a href="%1$s" target="_blank">multi-step registration forms</a>. The <a href="%1$s" target="_blank">Registration Forms</a> addon is required if you wish to add steps to your forms.', 'wp-user-manager' ), 'https://wpusermanager.com/addons/registration-forms?utm_source=WP%20User%20Manager&utm_medium=insideplugin&utm_campaign=WP%20User%20Manager&utm_content=registration-forms-editor' ),
+			// translators: %1$s Registration forms addon URL
 			'premium_addonhtml'      => sprintf( __( 'Add <a href="%1$s" target="_blank">custom HTML to your registration forms</a>. The <a href="%1$s" target="_blank">Registration Forms</a> addon is required if you wish to add HTML to your forms.', 'wp-user-manager' ), 'https://wpusermanager.com/addons/registration-forms?utm_source=WP%20User%20Manager&utm_medium=insideplugin&utm_campaign=WP%20User%20Manager&utm_content=registration-forms-editor' ),
 			'purchase'               => esc_html__( 'Purchase', 'wp-user-manager' ),
 			'success_message'        => esc_html__( 'Changes successfully saved.', 'wp-user-manager' ),
@@ -225,8 +234,9 @@ class WPUM_Registration_Forms_Editor {
 			wp_die( esc_html__( 'Something went wrong: could not update the registration form details.', 'wp-user-manager' ), 403 );
 		}
 
-		$form_id   = isset( $_POST['form_id'] ) && ! empty( $_POST['form_id'] ) ? (int) $_POST['form_id'] : false;
-		$form_name = isset( $_POST['form_name'] ) && ! empty( $_POST['form_name'] ) ? sanitize_text_field( $_POST['form_name'] ) : false;
+		$form_id   = filter_input( INPUT_POST, 'form_id', FILTER_VALIDATE_INT );
+		$form_name = filter_input( INPUT_POST, 'form_name', FILTER_VALIDATE_INT );
+		$form_name = $form_name ? sanitize_text_field( $form_name ) : false;
 
 		if ( $form_id && $form_name ) {
 
@@ -347,6 +357,8 @@ class WPUM_Registration_Forms_Editor {
 	/**
 	 * Get fields available to be used within a registration form.
 	 *
+	 * @param mixed $form_id
+	 *
 	 * @return array
 	 */
 	private function get_available_fields( $form_id ) {
@@ -380,11 +392,11 @@ class WPUM_Registration_Forms_Editor {
 
 		foreach ( $available_fields as $field ) {
 			$primary_id = $field->get_primary_id();
-			if ( ! empty( $primary_id ) && in_array( $primary_id, $non_allowed_fields ) ) {
+			if ( ! empty( $primary_id ) && in_array( $primary_id, $non_allowed_fields, true ) ) {
 				continue;
 			}
 
-			if ( in_array( $field->get_ID(), $stored_fields ) ) {
+			if ( in_array( (int) $field->get_ID(), array_map( 'intval', $stored_fields ), true ) ) {
 				continue;
 			}
 
@@ -412,8 +424,8 @@ class WPUM_Registration_Forms_Editor {
 
 		if ( current_user_can( $this->capability ) && is_admin() ) {
 
-			$form_id = isset( $_POST['form_id'] ) ? absint( $_POST['form_id'] ) : false;
-			$fields  = isset( $_POST['fields'] ) && is_array( $_POST['fields'] ) && ! empty( $_POST['fields'] ) ? $_POST['fields'] : false;
+			$form_id = filter_input( INPUT_POST, 'form_id', FILTER_VALIDATE_INT );
+			$fields  = isset( $_POST['fields'] ) && is_array( $_POST['fields'] ) && ! empty( $_POST['fields'] ) ? $_POST['fields'] : false; // phpcs:ignore
 
 			if ( $form_id ) {
 				$registration_form = new WPUM_Registration_Form( $form_id );
@@ -454,7 +466,7 @@ class WPUM_Registration_Forms_Editor {
 		}
 
 		$form_id        = filter_input( INPUT_POST, 'form_id', FILTER_VALIDATE_INT );
-		$settings_model = isset( $_POST['settings_model'] ) ? $_POST['settings_model'] : array();
+		$settings_model = isset( $_POST['settings_model'] ) ? $_POST['settings_model'] : array(); // phpcs:ignore
 
 		if ( empty( $form_id ) ) {
 			$this->send_json_error();
@@ -493,7 +505,7 @@ class WPUM_Registration_Forms_Editor {
 				continue;
 			}
 
-			if ( 'role' === $key && is_array( $value ) && ! empty( $value ) && ( $value[0] === 'administrator' || ! get_role( $value[0] ) ) ) {
+			if ( 'role' === $key && is_array( $value ) && ! empty( $value ) && ( 'administrator' === $value[0] || ! get_role( $value[0] ) ) ) {
 				// Illegal role selection;
 				continue;
 			}
@@ -505,7 +517,9 @@ class WPUM_Registration_Forms_Editor {
 		wp_send_json_success();
 	}
 
-
+	/**
+	 * Get form data
+	 */
 	public function get_form_field_data() {
 
 		check_ajax_referer( 'wpum_get_registration_form', 'nonce' );
@@ -615,11 +629,11 @@ class WPUM_Registration_Forms_Editor {
 	public function sanitize_checkbox_field( $input ) {
 		$pass = false;
 
-		if ( $input == 'true' ) {
+		if ( 'true' === $input ) {
 			return true;
 		}
 
-		if ( 1 == $input ) {
+		if ( 1 === (int) $input ) {
 			return true;
 		}
 
@@ -635,6 +649,9 @@ class WPUM_Registration_Forms_Editor {
 		wp_send_json_error( null, 403 );
 	}
 
+	/**
+	 * Delete forms cache
+	 */
 	public function delete_registration_forms_cache() {
 		$cache_key = WPUM()->registration_forms->get_cache_key_from_args();
 
