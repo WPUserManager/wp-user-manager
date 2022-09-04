@@ -32,5 +32,8 @@ jobs:
       - name: Install dependencies
         run: composer install --prefer-dist --no-suggest --no-progress
 
+      - name: Install WP standards
+        run: vendor/bin/phpcs --config-set installed_paths vendor/wp-coding-standards/wpc
+
       - name: Detect coding standard violations
         run: vendor/bin/phpcs -q --report=checkstyle | cs2pr --graceful-warnings
