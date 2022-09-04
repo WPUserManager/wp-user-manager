@@ -225,6 +225,7 @@ module.exports = function( grunt ) {
 					'!package.json',
 					'!.gitignore',
 					'!.gitmodules',
+					'!.github',
 					'!phpcs.xml.dist',
 					'!README.md',
 					'!yarn.lock'
