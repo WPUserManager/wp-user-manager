@@ -17,4 +17,4 @@ jobs:
         run:  nohup $CHROMEWEBDRIVER/chromedriver --url-base=/wd/hub /dev/null 2>&1 &
 
       - name: Run acceptance test cases
-        run:  php vendor/bin/codecept run acceptance
+        run:  cd tests && php ../vendor/bin/codecept run acceptance
