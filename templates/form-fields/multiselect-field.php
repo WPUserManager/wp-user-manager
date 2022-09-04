@@ -14,17 +14,40 @@
  */
 
  // Exit if accessed directly
-if ( ! defined( 'ABSPATH' ) ) exit;
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 
 ?>
-<select multiple="multiple" name="<?php echo esc_attr( isset( $data->name ) ? $data->name : $data->key ); ?>[]" id="<?php echo esc_attr( $data->key ); ?>" class="wpum-multiselect" <?php if ( ! empty( $data->required ) ) echo 'required'; ?> <?php if ( ! empty( $data->read_only ) ) echo 'disabled'; ?> placeholder="<?php echo empty( $data->placeholder ) ? '' : esc_attr( $data->placeholder ); ?>">
+<select multiple="multiple" name="<?php echo esc_attr( isset( $data->name ) ? $data->name : $data->key ); ?>[]" id="<?php echo esc_attr( $data->key ); ?>" class="wpum-multiselect"
+											 <?php
+												if ( ! empty( $data->required ) ) {
+													echo 'required';}
+												?>
+ <?php
+	if ( ! empty( $data->read_only ) ) {
+		echo 'disabled';}
+	?>
+ placeholder="<?php echo empty( $data->placeholder ) ? '' : esc_attr( $data->placeholder ); ?>">
 	<?php foreach ( $data->options as $key => $value ) : ?>
-		<option value="<?php echo esc_attr( $key ); ?>" <?php if ( ! empty( $data->value ) && is_array( $data->value ) ) selected( in_array( $key, $data->value ), true ); ?>><?php echo esc_html( $value ); ?></option>
+		<option value="<?php echo esc_attr( $key ); ?>"
+								  <?php
+									if ( ! empty( $data->value ) && is_array( $data->value ) ) {
+										selected( in_array( $key, $data->value, true ), true );}
+									?>
+		><?php echo esc_html( $value ); ?></option>
 	<?php endforeach; ?>
 </select>
-<?php if ( ! empty( $data->read_only ) ) {
-	foreach ( $data->options as $key => $value ) : ?>
+<?php
+if ( ! empty( $data->read_only ) ) {
+	foreach ( $data->options as $key => $value ) :
+		?>
 		<input type="hidden" name="<?php echo esc_attr( isset( $data->name ) ? $data->name : $data->key ); ?>[]" id="<?php echo esc_attr( $data->key ); ?>" value="<?php echo esc_attr( $key ); ?>" />
-	<?php endforeach;
-} ?>
-<?php if ( ! empty( $data->description ) ) : ?><small class="description"><?php echo $data->description; ?></small><?php endif; ?>
+		<?php
+	endforeach;
+}
+?>
+<?php
+if ( ! empty( $data->description ) ) :
+	?>
+	<small class="description"><?php echo wp_kses_post( $data->description ); ?></small><?php endif; ?>

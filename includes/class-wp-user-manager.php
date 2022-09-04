@@ -127,7 +127,7 @@ if ( ! class_exists( 'WP_User_Manager' ) ) :
 		/**
 		 * Holds the html input fields generator.
 		 *
-		 * @var object
+		 * @var WPUM_HTML_Elements
 		 */
 		public $elements;
 

@@ -14,7 +14,9 @@
  */
 
  // Exit if accessed directly
-if ( ! defined( 'ABSPATH' ) ) exit;
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 
 $field_type = empty( $data->field_type ) ? 'select' : $data->field_type;
 

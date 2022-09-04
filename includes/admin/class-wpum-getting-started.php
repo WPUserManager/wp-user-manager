@@ -245,7 +245,7 @@ class WPUM_Getting_Started {
 				<div class="feature-section  two-col">
 
 					<div class="col">
-						<h3><?php esc_html_e( 'Looking for help ?', 'wp-user-manager' ); ?></h3>
+						<h3><?php esc_html_e( 'Looking for help?', 'wp-user-manager' ); ?></h3>
 						<p>
 							<?php
 							// translators: %1$s contact URL %2$s documenation URL

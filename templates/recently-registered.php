@@ -6,7 +6,9 @@
  */
 
 // Exit if accessed directly
-if ( ! defined( 'ABSPATH' ) ) exit;
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 
 // Get the query
 $users = wpum_get_recent_users( $data->amount );
@@ -21,10 +23,10 @@ $users = wpum_get_recent_users( $data->amount );
 			<?php foreach ( $users as $user ) : ?>
 
 				<li>
-					<?php if ( $data->link_to_profile == 'yes' ) : ?>
-						<a href="<?php echo wpum_get_profile_url( $user ); ?>"><?php echo $user->display_name; ?></a>
+					<?php if ( true === $data->link_to_profile || 'yes' === $data->link_to_profile ) : ?>
+						<a href="<?php echo esc_url( wpum_get_profile_url( $user ) ); ?>"><?php echo esc_html( $user->display_name ); ?></a>
 					<?php else : ?>
-						<?php echo $user->display_name; ?>
+						<?php echo esc_html( $user->display_name ); ?>
 					<?php endif; ?>
 				</li>
 

@@ -14,9 +14,11 @@
  */
 
  // Exit if accessed directly
-if ( ! defined( 'ABSPATH' ) ) exit;
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 
-$data->default = empty( $data->default ) ? current( array_keys( $data->options ) ): $data->default;
+$data->default = empty( $data->default ) ? current( array_keys( $data->options ) ) : $data->default;
 $default       = ! empty( $data->value ) ? $data->value : $data->default;
 
 foreach ( $data->options as $option_key => $value ) : ?>
@@ -25,4 +27,7 @@ foreach ( $data->options as $option_key => $value ) : ?>
 
 <?php endforeach; ?>
 
-<?php if ( ! empty( $data->description ) ) : ?><small class="description"><?php echo $data->description; ?></small><?php endif; ?>
+<?php
+if ( ! empty( $data->description ) ) :
+	?>
+	<small class="description"><?php echo wp_kses_post( $data->description ); ?></small><?php endif; ?>

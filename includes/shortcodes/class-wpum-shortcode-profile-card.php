@@ -42,19 +42,19 @@ class WPUM_Shortcode_Profile_Card extends WPUM_Shortcode_Generator {
 			array(
 				'type'    => 'listbox',
 				'name'    => 'link_to_profile',
-				'label'   => esc_html__( 'Link to profile ?', 'wp-user-manager' ),
+				'label'   => esc_html__( 'Link to profile?', 'wp-user-manager' ),
 				'options' => $this->get_yes_no(),
 			),
 			array(
 				'type'    => 'listbox',
 				'name'    => 'display_buttons',
-				'label'   => esc_html__( 'Display buttons ?', 'wp-user-manager' ),
+				'label'   => esc_html__( 'Display buttons?', 'wp-user-manager' ),
 				'options' => $this->get_yes_no(),
 			),
 			array(
 				'type'    => 'listbox',
 				'name'    => 'display_cover',
-				'label'   => esc_html__( 'Display profile cover ?', 'wp-user-manager' ),
+				'label'   => esc_html__( 'Display profile cover?', 'wp-user-manager' ),
 				'options' => $this->get_yes_no(),
 			),
 		);
