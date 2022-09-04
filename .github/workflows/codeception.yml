@@ -1,0 +1,20 @@
+name: Codeception Acceptance Tests
+
+on: [push]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Install dependencies
+        run:  composer install --prefer-dist --no-progress
+
+      - name: Run chromedriver
+        run:  nohup $CHROMEWEBDRIVER/chromedriver --url-base=/wd/hub /dev/null 2>&1 &
+
+      - name: Run acceptance test cases
+        run:  php vendor/bin/codecept run acceptance
