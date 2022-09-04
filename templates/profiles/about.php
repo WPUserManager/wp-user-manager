@@ -14,7 +14,9 @@
  */
 
 // Exit if accessed directly
-if ( ! defined( 'ABSPATH' ) ) exit;
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 
 ?>
 
@@ -22,21 +24,27 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 
 	<?php if ( wpum_has_profile_fields() ) : ?>
 
-		<?php while ( wpum_profile_field_groups() ) : wpum_the_profile_field_group(); ?>
+		<?php
+		while ( wpum_profile_field_groups() ) :
+			wpum_the_profile_field_group();
+			?>
 
 			<?php if ( wpum_field_group_has_fields() ) : ?>
-				<div class="profile-fields-group profile-fields-group-<?php echo wpum_get_field_group_id(); ?>">
-				<?php if( wpum_get_field_group_name() ) : ?>
+				<div class="profile-fields-group profile-fields-group-<?php echo esc_attr( wpum_get_field_group_id() ); ?>">
+				<?php if ( wpum_get_field_group_name() ) : ?>
 					<h3 class="group-title"><?php echo esc_html( wpum_get_field_group_name() ); ?></h3>
 				<?php endif; ?>
 
-				<?php if( ! empty( wpum_get_field_group_description() ) ) : ?>
+				<?php if ( ! empty( wpum_get_field_group_description() ) ) : ?>
 					<p class="group-description"><?php wpum_the_field_group_description(); ?></p>
 				<?php endif; ?>
 
 				<table class="profile-fields-table">
 					<tbody>
-					<?php while ( wpum_profile_fields() ) : wpum_the_profile_field(); ?>
+					<?php
+					while ( wpum_profile_fields() ) :
+						wpum_the_profile_field();
+						?>
 						<?php if ( wpum_field_has_data() && apply_filters( 'wpum_profile_display_field', true ) ) : ?>
 							<tr class="<?php wpum_the_field_css_class(); ?>">
 								<td class="label"><?php wpum_the_field_name(); ?></td>
