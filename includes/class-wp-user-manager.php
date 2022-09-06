@@ -45,7 +45,7 @@ if ( ! class_exists( 'WP_User_Manager' ) ) :
 		 *
 		 * @var string
 		 */
-		protected $version = '2.8.8';
+		protected $version;
 
 		/**
 		 * WPUM Instance.
@@ -148,12 +148,13 @@ if ( ! class_exists( 'WP_User_Manager' ) ) :
 		 * time. Also prevents needing to define globals all over the place.
 		 *
 		 * @param string $plugin_file
+		 * @param string $plugin_version
 		 *
 		 * @return WP_User_Manager
 		 */
-		public static function instance( $plugin_file ) {
+		public static function instance( $plugin_file, $plugin_version ) {
 			if ( is_null( self::$instance ) ) {
-				self::$instance = new self( $plugin_file );
+				self::$instance = new self( $plugin_file, $plugin_version );
 			}
 
 			return self::$instance;
@@ -163,9 +164,11 @@ if ( ! class_exists( 'WP_User_Manager' ) ) :
 		 * Get things up and running.
 		 *
 		 * @param string $plugin_file
+		 * @param string $plugin_version
 		 */
-		public function __construct( $plugin_file ) {
+		public function __construct( $plugin_file, $plugin_version ) {
 			$this->plugin_file = $plugin_file;
+			$this->version     = $plugin_version;
 
 			$this->autoload();
 
