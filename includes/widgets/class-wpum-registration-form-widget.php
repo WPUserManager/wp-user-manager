@@ -79,10 +79,8 @@ class WPUM_Registration_Form_Widget extends WPH_Widget {
 		echo wp_kses_post( $args['after_title'] );
 
 		ob_start();
-		$psw_link   = $instance['psw_link'] ? 'yes' : false;
-		$login_link = $instance['login_link'] ? 'yes' : false;
 
-		echo do_shortcode( '[wpum_register psw_link="' . $psw_link . '" login_link="' . $login_link . '"]' );
+		echo do_shortcode( '[wpum_register psw_link="' . ( ( $instance['psw_link'] ) ? 'yes' : 'no' ) . '" login_link="' . ( ( $instance['login_link'] ) ? 'yes' : 'no' ) . '"]' );
 
 		$output = ob_get_clean();
 
