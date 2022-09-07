@@ -8,7 +8,7 @@ Tested up to: 6.0
 Requires PHP: 5.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
-Stable Tag: 2.8.6
+Stable Tag: 2.8.9-dev
 
 The most customizable profiles & community builder WordPress plugin with front-end login, registration, profile customization and content restriction.
 
@@ -125,6 +125,16 @@ Please note that using WPUM and the mentioned add-ons does NOT guarantee complia
 13. Login form.
 
 == Changelog ==
+
+= 2.8.8 (16th August 2022) =
+
+- Security: File uploads now checked for matching file extension and file type before attempting to upload
+- Fix: HTML in form error messages now showing correctly
+- Fix: 'Edit account' string on the profile page now localized for translation
+
+= 2.8.7 (8th August 2022) =
+
+- Fix: PHP Notice: Undefined index preventing form submission on some installs
 
 = 2.8.6 (7th August 2022) =
 

@@ -35,7 +35,7 @@
 											<button type="button" class="button delete-btn" @click="deleteOption( index )"><span class="dashicons dashicons-trash"></span></button>
 										</div>
 										<div class="option-label wpum_two_fifth">
-											<input type="text" :placeholder="labels.field_option_value" name="option[value][]" v-model="dropdownOptions[index].value">
+											<input @paste="onPaste($event, index)" type="text" :placeholder="labels.field_option_value" name="option[value][]" v-model="dropdownOptions[index].value">
 										</div>
 										<div class="option-label wpum_two_fifth last">
 											<input type="text" :placeholder="labels.field_option_label" name="option[label][]" v-model="dropdownOptions[index].label">
@@ -338,6 +338,22 @@ export default {
 			}
 
 			this.activeTab = this.tabs && this.tabs[0].id
+		},
+		onPaste(event, index){
+			var _this = this;
+			const items = event.clipboardData.getData("text/plain").split(/\r?\n/);
+			event.preventDefault();
+
+			// First item always goes to the pasted element
+			const item = items[0].split(",");
+			this.dropdownOptions[index].value = item[0];
+			this.dropdownOptions[index].label = item[1];
+
+			items.slice(1).forEach(function(item) {
+				item = item.split(",");
+				_this.dropdownOptions.push( { value: item[0], label: item[1] } );
+			})
+
 		}
 	}
 }

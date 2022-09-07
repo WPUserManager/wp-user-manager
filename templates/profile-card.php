@@ -14,7 +14,9 @@
  */
 
 // Exit if accessed directly
-if ( ! defined( 'ABSPATH' ) ) exit;
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 
 $user = get_user_by( 'id', $data->user_id );
 
@@ -22,8 +24,8 @@ $user = get_user_by( 'id', $data->user_id );
 
 <div id="wpum-profile-card" class="wpum-profile-card">
 
-	<?php if( $data->display_cover == 'yes' ) : ?>
-		<div class="wpum-profile-cover" style="background-image: url(<?php echo get_user_meta( $user->data->ID, 'user_cover', true ) ; ?>);"></div>
+	<?php if ( 'yes' === $data->display_cover ) : ?>
+		<div class="wpum-profile-cover" style="background-image: url(<?php echo esc_url( get_user_meta( $user->data->ID, 'user_cover', true ) ); ?>);"></div>
 	<?php endif; ?>
 
 	<div class="wpum-profile-img">
@@ -36,13 +38,13 @@ $user = get_user_by( 'id', $data->user_id );
 
 		<?php do_action( 'wpum_profile_card_details', $user ); ?>
 
-		<?php if ( $data->display_buttons == 'yes' ) : ?>
+		<?php if ( 'yes' === $data->display_buttons ) : ?>
 			<ul>
-				<?php if ( $data->link_to_profile == 'yes' ) : ?>
-					<li><a href="#" class="wpum-card-button"><?php esc_html_e( 'View Profile', 'wp-user-manager' );?></a></li>
+				<?php if ( 'yes' === $data->link_to_profile ) : ?>
+					<li><a href="#" class="wpum-card-button"><?php esc_html_e( 'View Profile', 'wp-user-manager' ); ?></a></li>
 				<?php endif; ?>
 				<li>
-					<a href="<?php echo wp_logout_url(); ?>" class="wpum-card-button"><?php esc_html_e( 'Logout', 'wp-user-manager' ); ?></a>
+					<a href="<?php echo esc_url( wp_logout_url() ); ?>" class="wpum-card-button"><?php esc_html_e( 'Logout', 'wp-user-manager' ); ?></a>
 				</li>
 				<?php do_action( 'wpum_profile_card_buttons', $user ); ?>
 			</ul>
