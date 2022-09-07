@@ -5,7 +5,7 @@
  * @package     wp-user-manager
  * @copyright   Copyright (c) 2018, Alessandro Tesoro
  * @license     https://opensource.org/licenses/GPL-3.0 GNU Public License
-*/
+ */
 
 class AccountPage extends \Elementor\Widget_Base {
 
@@ -22,20 +22,20 @@ class AccountPage extends \Elementor\Widget_Base {
 	public function get_icon() {
 		return 'eicon-preferences';
 	}
-	
+
 	public function get_categories() {
-		return [ 'wp-user-manager' ];
+		return array( 'wp-user-manager' );
 	}
 
 	public function get_keywords() {
-		return [
+		return array(
 			esc_html__( 'account', 'wp-user-manager' ),
-			esc_html__( 'edit account', 'wp-user-manager' )
-		];
+			esc_html__( 'edit account', 'wp-user-manager' ),
+		);
 	}
 
 	public function render() {
-		$attributes = [];
+		$attributes = array();
 		echo call_user_func( $this->get_name(), $attributes );
 	}
 }

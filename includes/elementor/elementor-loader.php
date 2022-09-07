@@ -1,7 +1,6 @@
 <?php
 /**
  * Hooks the widgets to elementor builder.
- *
  */
 
 class WPUM_Elementor {
@@ -30,17 +29,17 @@ class WPUM_Elementor {
 	}
 
 	public function init() {
-		add_action( 'elementor/elements/categories_registered', [ $this, 'wpum_register_elementor_category' ], 10 );
-		add_action( 'elementor/widgets/register', [ $this, 'wpum_register_elementor_widets' ], 10 );
-		add_filter( 'elementor/widget/render_content', [ $this, 'wpum_restrict_widget_content' ], 10, 2 );
+		add_action( 'elementor/elements/categories_registered', array( $this, 'wpum_register_elementor_category' ), 10 );
+		add_action( 'elementor/widgets/register', array( $this, 'wpum_register_elementor_widets' ), 10 );
+		add_filter( 'elementor/widget/render_content', array( $this, 'wpum_restrict_widget_content' ), 10, 2 );
 	}
 
 	public function wpum_register_elementor_category( $elements ) {
 		$elements->add_category(
 			'wp-user-manager',
-			[
-				'title' => esc_html__( 'WP User Manager', 'wp-user-manager' )
-			]
+			array(
+				'title' => esc_html__( 'WP User Manager', 'wp-user-manager' ),
+			)
 		);
 	}
 
@@ -49,7 +48,7 @@ class WPUM_Elementor {
 			include 'extensions/class-wpum-' . strtolower( $class ) . '.php';
 		});
 
-		( new RestrictionControls )::get_instance();
+		( new RestrictionControls() )::get_instance();
 
 		spl_autoload_register( function ( $class ) {
 			include 'widgets/class-wpum-' . strtolower( $class ) . '.php';
@@ -78,15 +77,15 @@ class WPUM_Elementor {
 	/**
 	 * Filters widget content.
 	 *
-	 * @param string $widget_content      The widget HTML output.
-	 * @param \Elementor\Widget_Base      $widget The widget instance.
+	 * @param string                 $widget_content      The widget HTML output.
+	 * @param \Elementor\Widget_Base $widget The widget instance.
 	 * @return string                     The changed widget content.
 	 */
 	function wpum_restrict_widget_content( $widget_content, $widget ) {
 		if ( ( is_admin() && isset( $_GET['action'] ) && $_GET['action'] === 'elementor' ) ) {
 			return $widget_content;
 		}
-		
+
 		if ( is_admin() && wp_doing_ajax() ) {
 			return $widget_content;
 		}
@@ -101,7 +100,7 @@ class WPUM_Elementor {
 		if ( ! empty( $settings['wpum_restrict_show_message'] ) ) {
 			$show_message = true;
 		}
-		
+
 		if ( $settings['wpum_restrict_type'] === 'wpum_restrict_type_state' && empty( $settings['wpum_restrict_state'] ) ) {
 			return $widget_content;
 		}
@@ -146,9 +145,9 @@ class WPUM_Elementor {
 
 		ob_start();
 		$login_page = get_permalink( wpum_get_core_page_id( 'login' ) );
-		$login_page = add_query_arg( [
+		$login_page = add_query_arg( array(
 			'redirect_to' => get_permalink(),
-		], $login_page );
+		), $login_page );
 
 		$message = sprintf( __( 'This content is available to members only. Please <a href="%1$s">login</a> or <a href="%2$s">register</a> to view this area.', 'wp-user-manager' ), $login_page, get_permalink( wpum_get_core_page_id( 'register' ) ) );
 
@@ -161,9 +160,9 @@ class WPUM_Elementor {
 		 */
 		$message = apply_filters( 'wpum_content_restriction_message', $message );
 
-		WPUM()->templates->set_template_data( [
+		WPUM()->templates->set_template_data( array(
 			'message' => $message,
-		] )->get_template_part( 'messages/general', 'warning' );
+		) )->get_template_part( 'messages/general', 'warning' );
 
 		$output = ob_get_clean();
 
@@ -171,4 +170,4 @@ class WPUM_Elementor {
 	}
 }
 
-( new WPUM_Elementor )::get_instance();
+( new WPUM_Elementor() )::get_instance();
