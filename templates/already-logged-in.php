@@ -14,14 +14,19 @@
  */
 
 // Exit if accessed directly
-if ( ! defined( 'ABSPATH' ) ) exit;
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 
-$current_user = wp_get_current_user();
-
+$current_logged_in_user = wp_get_current_user();
 ?>
 
 <div class="wpum-already-logged-in wpum-message info">
-	<p><?php printf( __( 'You are currently logged in as %s.', 'wp-user-manager' ), $current_user->display_name );?>
+	<p>
+		<?php
+		// translators: %s user display name
+		echo esc_html( sprintf( __( 'You are currently logged in as %s.', 'wp-user-manager' ), $current_logged_in_user->display_name ) );
+		?>
 	<a href="<?php echo esc_url( get_permalink( wpum_get_core_page_id( 'profile' ) ) ); ?>"><?php esc_html_e( 'View profile', 'wp-user-manager' ); ?></a> |
 	<a href="<?php echo esc_url( get_permalink( wpum_get_core_page_id( 'account' ) ) ); ?>"><?php esc_html_e( 'Account settings', 'wp-user-manager' ); ?></a> |
 	<a href="<?php echo esc_url( wp_logout_url() ); ?>"><?php esc_html_e( 'Log out', 'wp-user-manager' ); ?> &raquo;</a></p>

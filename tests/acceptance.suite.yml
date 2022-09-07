@@ -9,8 +9,8 @@ actor: AcceptanceTester
 modules:
     enabled:
         - WPDb
-        - WPBrowser
-        #- WPWebDriver
+        #- WPBrowser
+        - WPWebDriver
         - \Helper\Acceptance
         - Mailtrap
     config:
@@ -42,7 +42,7 @@ modules:
           restart: true
           capabilities:
             chromeOptions:
-              #args: [ "--headless", "--disable-gpu" ]
+              args: [ "--headless", "--disable-gpu" ]
         Mailtrap:
           client_id: '%MAILTRAP_CLIENT_ID%'
           inbox_id: '%MAILTRAP_INBOX_ID%'

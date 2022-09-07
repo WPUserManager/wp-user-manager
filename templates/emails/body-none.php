@@ -6,14 +6,17 @@
  */
 
 // Exit if accessed directly
-if ( ! defined( 'ABSPATH' ) ) exit;
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 
 $output = '{email}';
 
-if( isset( $data->preview ) && $data->preview === true ) {
+if ( isset( $data->preview ) && true === $data->preview ) {
 	$output = '<div class="preview-content">' . wpum_get_email_field( $data->email_id, 'content' ) . '</div>';
 }
 
 // {email} is replaced by the content entered in the customizer.
 ?>
-<?php echo $output; ?>
+<?php
+echo $output; // phpcs:ignore

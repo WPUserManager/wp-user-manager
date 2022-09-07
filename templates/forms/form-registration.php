@@ -14,7 +14,9 @@
  */
 
 // Exit if accessed directly
-if ( ! defined( 'ABSPATH' ) ) exit;
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 
 ?>
 
@@ -38,7 +40,7 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 
 		<?php endforeach; ?>
 
-		<input type="hidden" name="wpum_form" value="<?php echo $data->form; ?>" />
+		<input type="hidden" name="wpum_form" value="<?php echo esc_attr( $data->form ); ?>" />
 		<input type="hidden" name="step" value="<?php echo esc_attr( $data->step ); ?>" />
 		<?php wp_nonce_field( 'verify_registration_form', 'registration_nonce' ); ?>
 
@@ -47,7 +49,8 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 		<?php
 		$label = isset( $data->submit_label ) ? $data->submit_label : esc_html__( 'Register', 'wp-user-manager' );
 		?>
-		<input type="submit" name="submit_registration" class="button" value="<?php echo apply_filters( 'wpum_registration_form_submit_label', $label ); ?>" />
+		<input type="submit" name="submit_registration" class="button"
+			   value="<?php echo esc_html( apply_filters( 'wpum_registration_form_submit_label', $label ) ); ?>"/>
 
 	</form>
 
