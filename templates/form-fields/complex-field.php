@@ -14,20 +14,22 @@
  */
 
  // Exit if accessed directly
-if ( ! defined( 'ABSPATH' ) ) exit;
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 
 
 $parent = new WPUM_Field( $data->id );
 
-if( !$parent ){
+if ( ! $parent ) {
 	return;
 }
 
-$fields 	= WPUM()->fields->get_fields([
+$fields = WPUM()->fields->get_fields(array(
 	'group_id' => $parent->get_group_id(),
 	'parent'   => $parent->get_ID(),
-	'order'	   => 'ASC'
-]);
+	'order'    => 'ASC',
+));
 
 $parent_key = $parent->get_key();
 
@@ -39,11 +41,11 @@ echo sprintf(
 );
 
 $button_label = $parent->get_meta( 'button_label' );
-$max_rows 	  = $parent->get_meta( 'max_rows' );
+$max_rows     = $parent->get_meta( 'max_rows' );
 
-if( count( $fields ) ){
+if ( count( $fields ) ) {
 
-	$field_keys = array_map( function( $field ){
+	$field_keys = array_map( function( $field ) {
 			return $field->get_key();
 	}, $fields );
 
@@ -66,18 +68,18 @@ if( count( $fields ) ){
 	$clone_row_index = count( $values ) - 1;
 
 	do {
-		$clone_row = $index == $clone_row_index;
+		$clone_row = (int) $index === (int) $clone_row_index;
 		echo '<div class="fieldset-wpum_field_group' . ( $clone_row ? ' fieldset-wpum_field_group-clone' : '' ) . '">';
 
 		echo sprintf(
 			'<a href="#" class="remove-repeater-row" title="%s">x</a>',
-				esc_html__( 'Remove', 'wp-user-manager' )
+			esc_html__( 'Remove', 'wp-user-manager' )
 		);
 
-		foreach( $fields as $field ){
+		foreach ( $fields as $field ) {
 
-			$options 		= [];
-			$options_needed = ! $field->is_primary() && in_array( $field->get_type(), [ 'dropdown', 'multiselect', 'radio', 'multicheckbox' ] );
+			$options        = array();
+			$options_needed = ! $field->is_primary() && in_array( $field->get_type(), array( 'dropdown', 'multiselect', 'radio', 'multicheckbox' ), true );
 			if ( $options_needed ) {
 
 				$stored_options = $field->get_meta( 'dropdown_options' );
@@ -93,30 +95,32 @@ if( count( $fields ) ){
 			$value = isset( $values[ $index ][ $key ] ) ? $values[ $index ][ $key ] : '';
 
 			if ( $index > 0 && ! $clone_row ) {
-				//$key .= '_' . $index;
 				if ( isset( $values[ $index ][ $key ] ) ) {
 					$value = $values[ $index ][ $key ];
 				}
 			}
 
 			$field = array(
-				'id'		  => $field->get_ID(),
-				'label'       => $field->get_name(),
-				'type'        => $field->get_type(),
-				'required'    => $field->get_meta( 'required' ),
-				'placeholder' => $field->get_meta( 'placeholder' ),
-				'description' => $field->get_description(),
-				'priority'    => $field->get_key(),
-				'primary_id'  => $field->get_primary_id(),
-				'options'     => $options,
-				'template'    => $field->get_parent_type(),
-				'name'		  => "{$parent_key}[{$index}][{$key}]",
-				'value'		  => $value,
+				'id'            => $field->get_ID(),
+				'label'         => $field->get_name(),
+				'type'          => $field->get_type(),
+				'required'      => $field->get_meta( 'required' ),
+				'placeholder'   => $field->get_meta( 'placeholder' ),
+				'description'   => $field->get_description(),
+				'priority'      => $field->get_key(),
+				'primary_id'    => $field->get_primary_id(),
+				'options'       => $options,
+				'template'      => $field->get_parent_type(),
+				'name'          => "{$parent_key}[{$index}][{$key}]",
+				'value'         => $value,
 				'max_file_size' => $field->get_meta( 'max_file_size' ),
 			);
 
 			WPUM()->templates
-				->set_template_data( [ 'field' => $field, 'key' => $key ] )
+				->set_template_data( array(
+					'field' => $field,
+					'key'   => $key,
+				) )
 				->get_template_part( 'forms/form-registration-fields', 'field' );
 		}
 
@@ -124,15 +128,16 @@ if( count( $fields ) ){
 
 		$index++;
 
-	} while ( isset( $values[$index] ) );
+	} while ( isset( $values[ $index ] ) );
 }
+
+$max_rows     = ! empty( $max_rows ) ? intval( $max_rows ) : 0;
+$button_label = ! empty( $button_label ) ? $button_label : __( 'Add row', 'wp-user-manager' );
 
 echo sprintf(
 	'<button type="button" class="add-repeater-row" data-max-row="%d">%s</button>',
-	!empty( $max_rows ) ? intval( $max_rows ) : 0,
-	!empty( $button_label ) ? $button_label : esc_html__( 'Add row', 'wp-user-manager' )
+	esc_attr( $max_rows ),
+	esc_html( $button_label )
 );
 
 echo '</fieldset>';
-
-?>

@@ -13,7 +13,6 @@
     "GPL-3.0-or-later"
   ],
   "require": {
-    "a5hleyrich/wp-background-processing": "^1.0",
     "brain/cortex": "dev-refactoring-fastroute",
     "gamajo/template-loader": "^1.3",
     "htmlburger/carbon-fields": "^2.1",
@@ -40,8 +39,10 @@
     "codeception/module-phpbrowser": "^1.0",
     "codeception/module-webdriver": "^1.0",
     "codeception/util-universalframework": "^1.0",
+    "hoa/console": "^3.17",
     "lucatume/wp-browser": "^3.0",
     "voku/simple_html_dom": "^4.8",
-    "whatdafox/codeception-mailtrap": "^1.4"
+    "whatdafox/codeception-mailtrap": "^1.4",
+    "wp-coding-standards/wpcs": "^2.3"
   }
 }

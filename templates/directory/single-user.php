@@ -14,7 +14,9 @@
  */
 
 // Exit if accessed directly
-if ( ! defined( 'ABSPATH' ) ) exit;
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 
 $user = $data->data;
 
@@ -31,7 +33,7 @@ $user = $data->data;
 				<a href="<?php echo esc_url( wpum_get_profile_url( $user ) ); ?>"><?php echo esc_html( $user->display_name ); ?></a>
 			</p>
 			<p class="wpum-description">
-				<?php echo wp_trim_words( wp_kses_post( get_user_meta( $user->ID, 'description', true ) ), $num_words = 20, '...' ); ?>
+				<?php echo wp_kses_post( wp_trim_words( get_user_meta( $user->ID, 'description', true ), $num_words = 20, '...' ) ); ?>
 			</p>
 		</div>
 		<div class="wpum-col-xs-4 wpum-meta">

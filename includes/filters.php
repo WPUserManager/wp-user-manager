@@ -20,11 +20,13 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 function wpum_admin_rate_us( $footer_text ) {
 	$screen = get_current_screen();
-	if ( $screen->base !== 'users_page_wpum-settings' ) {
+	if ( 'users_page_wpum-settings' !== $screen->base ) {
 		return;
 	}
-	$rate_text = sprintf(
-		__( 'Please support the future of <a href="%1$s" target="_blank">WP User Manager</a> by <a href="%2$s" target="_blank">rating us</a> on <a href="%2$s" target="_blank">WordPress.org</a>', 'wp-user-manager' ),
+
+	/* translators: %1$s: WP User Manager site URL %2$s: review URL */
+	$rate_text = __( 'Please support the future of <a href="%1$s" target="_blank">WP User Manager</a> by <a href="%2$s" target="_blank">rating us</a> on <a href="%2$s" target="_blank">WordPress.org</a>', 'wp-user-manager' );
+	$rate_text = sprintf( $rate_text,
 		'https://wpusermanager.com/?utm_source=WP%20User%20Manager&utm_medium=insideplugin&utm_campaign=WP%20User%20Manager&utm_content=settings-footer',
 		'http://wordpress.org/support/view/plugin-reviews/wp-user-manager?filter=5#new-post'
 	);
@@ -35,7 +37,8 @@ add_filter( 'admin_footer_text', 'wpum_admin_rate_us' );
 /**
  * Add new links to the plugin's action links list.
  *
- * @since 1.0.0
+ * @param array $links
+ *
  * @return array
  */
 function wpum_add_settings_link( $links ) {
@@ -53,7 +56,8 @@ add_filter( 'plugin_action_links_' . WPUM_SLUG, 'wpum_add_settings_link' );
  * Modify the url retrieved with wp_registration_url().
  *
  * @param string $url
- * @return void
+ *
+ * @return string
  */
 function wpum_set_registration_url( $url ) {
 	$registration_page = wpum_get_core_page_id( 'register' );
@@ -70,7 +74,8 @@ add_filter( 'register_url', 'wpum_set_registration_url' );
  *
  * @param string $url
  * @param string $redirect
- * @return void
+ *
+ * @return string
  */
 function wpum_set_lostpassword_url( $url, $redirect ) {
 
@@ -96,10 +101,10 @@ function wpum_set_logout_url( $logout_url, $redirect ) {
 	$logout_redirect = wpum_get_logout_redirect();
 
 	if ( $logout_redirect && ! $redirect ) {
-		$args = [
+		$args = array(
 			'action'      => 'logout',
 			'redirect_to' => $logout_redirect,
-		];
+		);
 
 		$logout_url = add_query_arg( $args, site_url( 'wp-login.php', 'login' ) );
 		$logout_url = wp_nonce_url( $logout_url, 'log-out' );
@@ -115,7 +120,8 @@ add_filter( 'logout_url', 'wpum_set_logout_url', 20, 2 );
  * @param string  $login_url
  * @param string  $redirect
  * @param boolean $force_reauth
- * @return void
+ *
+ * @return string
  */
 function wpum_login_url( $login_url, $redirect, $force_reauth ) {
 
@@ -123,7 +129,7 @@ function wpum_login_url( $login_url, $redirect, $force_reauth ) {
 	$wpum_login_page = get_permalink( $wpum_login_page );
 
 	if ( $redirect ) {
-		$wpum_login_page = add_query_arg( [ 'redirect_to' => apply_filters( 'wpum_login_redirect_to_url', $redirect ) ], $wpum_login_page );
+		$wpum_login_page = add_query_arg( array( 'redirect_to' => apply_filters( 'wpum_login_redirect_to_url', $redirect ) ), $wpum_login_page );
 	}
 
 	return $wpum_login_page;
@@ -139,7 +145,8 @@ if ( wpum_get_option( 'lock_wplogin' ) || wpum_get_option( 'lock_complete_site' 
  * @param object $wp_user
  * @param string $username
  * @param string $password
- * @return void
+ *
+ * @return object|WP_Error|WP_User|null
  */
 function wpum_authentication( $wp_user, $username, $password ) {
 
@@ -150,28 +157,26 @@ function wpum_authentication( $wp_user, $username, $password ) {
 
 	$authentication_method = wpum_get_option( 'login_method' );
 
-	if ( $authentication_method == 'username' ) {
+	if ( 'username' === $authentication_method ) {
 
 		$user = get_user_by( 'login', $username );
 
-		if ( isset( $user, $user->user_login, $user->user_status ) && 0 == (int) $user->user_status ) {
+		if ( isset( $user, $user->user_login, $user->user_status ) && 0 === (int) $user->user_status ) {
 			$username = $user->user_login;
 			return wp_authenticate_username_password( null, $username, $password );
 		}
-	} elseif ( $authentication_method == 'email' ) {
+	} elseif ( 'email' === $authentication_method ) {
 
 		if ( ! empty( $username ) && is_email( $username ) ) {
 
 			$user = get_user_by( 'email', $username );
 
-			if ( isset( $user, $user->user_login, $user->user_status ) && 0 == (int) $user->user_status ) {
+			if ( isset( $user, $user->user_login, $user->user_status ) && 0 === (int) $user->user_status ) {
 				$username = $user->user_login;
 				return wp_authenticate_username_password( null, $username, $password );
 			}
 		} else {
-
 			return new WP_Error( 'email_only', __( 'Invalid email address or incorrect password.', 'wp-user-manager' ) );
-
 		}
 	}
 
@@ -185,7 +190,8 @@ add_filter( 'authenticate', 'wpum_authentication', 20, 3 );
  *
  * @param array  $post_states
  * @param object $post
- * @return void
+ *
+ * @return array
  */
 function wpum_highlight_pages( $post_states, $post ) {
 
@@ -252,7 +258,7 @@ function wpum_registration_form_valid_fields( $fields ) {
 		$field          = new WPUM_Field( $field_id );
 		$is_valid_field = $field->exists() && class_exists( 'WPUM_Field_' . ucfirst( $field->get_type() ) );
 
-		if ( ! apply_filters( 'wpum_registration_form_valid_field', $is_valid_field, $field_id )  ) {
+		if ( ! apply_filters( 'wpum_registration_form_valid_field', $is_valid_field, $field_id ) ) {
 			unset( $fields[ $index ] );
 			continue;
 		}
@@ -263,6 +269,11 @@ function wpum_registration_form_valid_fields( $fields ) {
 
 add_filter( 'wpum_registration_form_fields', 'wpum_registration_form_valid_fields' );
 
+/**
+ * @param array $user_data
+ *
+ * @return array
+ */
 function wpum_set_displayname_on_registration( $user_data ) {
 	$display_name_format = wpum_get_option( 'default_display_name', array( 'display_username' ) );
 	$display_name_format = $display_name_format[0];
@@ -276,12 +287,12 @@ function wpum_set_displayname_on_registration( $user_data ) {
 
 	if ( 'display_firstname' === $display_name_format ) {
 		$user_data['display_name'] = $first;
-	} else if ( 'display_lastname' === $display_name_format ) {
+	} elseif ( 'display_lastname' === $display_name_format ) {
 		$user_data['display_name'] = $last;
-	} else if ( 'display_firstlast' === $display_name_format ) {
+	} elseif ( 'display_firstlast' === $display_name_format ) {
 		$display                   = $first . ' ' . $last;
 		$user_data['display_name'] = trim( $display );
-	} else if ( 'display_lastfirst' === $display_name_format ) {
+	} elseif ( 'display_lastfirst' === $display_name_format ) {
 		$display                   = $last . ' ' . $first;
 		$user_data['display_name'] = trim( $display );
 	}
@@ -301,7 +312,7 @@ add_filter( 'wpum_profile_display_field', 'wpum_maybe_display_field' );
 /**
  * Verify if the field has correct user role permission.
  *
- * @param bool $display
+ * @param bool       $display
  * @param WPUM_Field $field
  *
  * @return bool
@@ -330,6 +341,11 @@ function wpum_maybe_display_field( $display, $field = null ) {
 	return count( array_intersect( wp_get_current_user()->roles, $field_roles ) ) > 0;
 }
 
+/**
+ * @param string $field_name
+ *
+ * @return string
+ */
 function wpum_remove_slashes_from_field_data( $field_name ) {
 	return wpum_strip_slashes( $field_name );
 }
@@ -352,7 +368,7 @@ add_filter( 'template_include', function ( $template ) {
 		return $template;
 	}
 
-	if ( $wp->query_vars['page_id'] === wpum_get_core_page_id( 'account' ) || $wp->query_vars['page_id'] === wpum_get_core_page_id( 'profile' ) ) {
+	if ( wpum_get_core_page_id( 'account' ) === $wp->query_vars['page_id'] || wpum_get_core_page_id( 'profile' ) === $wp->query_vars['page_id'] ) {
 		$new_template_slug = get_page_template_slug( $wp->query_vars['page_id'] );
 		if ( $new_template_slug && basename( $template ) !== $new_template_slug ) {
 			$template = dirname( $template ) . '/' . $new_template_slug;

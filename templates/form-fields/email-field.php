@@ -14,7 +14,9 @@
  */
 
  // Exit if accessed directly
-if ( ! defined( 'ABSPATH' ) ) exit;
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 
 ?>
 
@@ -22,12 +24,24 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 	type="email"
 	class="input-email"
 	name="<?php echo esc_attr( isset( $data->name ) ? $data->name : $data->key ); ?>"
-	<?php if ( isset( $data->autocomplete ) && false === $data->autocomplete ) { echo ' autocomplete="off"'; } ?>
+	<?php
+	if ( isset( $data->autocomplete ) && false === $data->autocomplete ) {
+		echo ' autocomplete="off"'; }
+	?>
 	id="<?php echo esc_attr( $data->key ); ?>"
 	placeholder="<?php echo empty( $data->placeholder ) ? '' : esc_attr( $data->placeholder ); ?>"
 	value="<?php echo isset( $data->value ) ? esc_attr( $data->value ) : ''; ?>"
-	maxlength="<?php echo ! empty( $data->maxlength ) ? $data->maxlength : ''; ?>"
-	<?php if ( ! empty( $data->required ) ) echo 'required'; ?>
-	<?php if ( ! empty( $data->read_only ) ) echo 'readonly'; ?>
+	maxlength="<?php echo ! empty( $data->maxlength ) ? esc_attr( $data->maxlength ) : ''; ?>"
+	<?php
+	if ( ! empty( $data->required ) ) {
+		echo 'required';}
+	?>
+	<?php
+	if ( ! empty( $data->read_only ) ) {
+		echo 'readonly';}
+	?>
 />
-<?php if ( ! empty( $data->description ) ) : ?><small class="description"><?php echo $data->description; ?></small><?php endif; ?>
+<?php
+if ( ! empty( $data->description ) ) :
+	?>
+	<small class="description"><?php echo wp_kses_post( $data->description ); ?></small><?php endif; ?>

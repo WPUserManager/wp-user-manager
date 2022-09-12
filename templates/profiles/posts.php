@@ -14,7 +14,9 @@
  */
 
 // Exit if accessed directly
-if ( ! defined( 'ABSPATH' ) ) exit;
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 
 $the_query = wpum_get_posts_for_profile( $data->user->ID );
 
@@ -24,16 +26,19 @@ $the_query = wpum_get_posts_for_profile( $data->user->ID );
 
 	<?php if ( $the_query->have_posts() ) : ?>
 
-		<?php while ( $the_query->have_posts() ) : $the_query->the_post(); ?>
+		<?php
+		while ( $the_query->have_posts() ) :
+			$the_query->the_post();
+			?>
 
-			<div class="wpum-post" id="wpum-post-<?php echo the_id();?>">
+			<div class="wpum-post" id="wpum-post-<?php echo esc_attr( the_id() ); ?>">
 				<?php if ( apply_filters( 'wpum_profile_posts_display_thumbnail', false ) && has_post_thumbnail() ) : ?>
 					<div class="wpum-post-thumbnail">
 					<a href="<?php the_permalink(); ?>" class="wpum-post-title">
 						<?php echo get_the_post_thumbnail(); ?></a>
 					</div>
 				<?php endif; ?>
-				<a href="<?php the_permalink();?>" class="wpum-post-title"><?php the_title();?></a>
+				<a href="<?php the_permalink(); ?>" class="wpum-post-title"><?php the_title(); ?></a>
 				<?php do_action( 'wpum_profile_posts_after_title' ); ?>
 				<ul class="wpum-post-meta">
 					<li>
@@ -52,7 +57,7 @@ $the_query = wpum_get_posts_for_profile( $data->user->ID );
 
 		<div id="profile-pagination">
 			<?php
-				echo paginate_links( array(
+				echo wp_kses_post( paginate_links( array(
 					'base'         => str_replace( 999999999, '%#%', esc_url( get_pagenum_link( 999999999 ) ) ),
 					'total'        => $the_query->max_num_pages,
 					'current'      => max( 1, get_query_var( 'paged' ) ),
@@ -66,7 +71,7 @@ $the_query = wpum_get_posts_for_profile( $data->user->ID );
 					'next_text'    => sprintf( '%1$s <i></i>', esc_html__( 'Older Posts', 'wp-user-manager' ) ),
 					'add_args'     => false,
 					'add_fragment' => '',
-				) );
+				) ) );
 			?>
 		</div>
 
@@ -76,9 +81,10 @@ $the_query = wpum_get_posts_for_profile( $data->user->ID );
 
 		<?php
 			WPUM()->templates
-				->set_template_data( [
-					'message' => sprintf( esc_html__( '%s has not submitted any posts yet.', 'wp-user-manager' ), $data->user->display_name )
-				] )
+				->set_template_data( array(
+					// translators: %s user display name
+					'message' => sprintf( esc_html__( '%s has not submitted any posts yet.', 'wp-user-manager' ), $data->user->display_name ),
+				) )
 				->get_template_part( 'messages/general', 'warning' );
 		?>
 

@@ -14,20 +14,24 @@
  */
 
 // Exit if accessed directly
-if ( ! defined( 'ABSPATH' ) ) exit;
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 
 ?>
 <div class="wpum-template wpum-form wpum-profile-privacy-form">
 
 	<h2><?php echo esc_html( $data->step_name ); ?></h2>
 
-	<?php if( isset( $_GET['updated'] ) && $_GET['updated'] == 'success' ) : ?>
-		<?php
-			WPUM()->templates
-				->set_template_data( [ 'message' => esc_html__( 'Profile privacy settings successfully updated.', 'wp-user-manager' ) ] )
-				->get_template_part( 'messages/general', 'success' );
-		?>
-	<?php endif; ?>
+	<?php
+	$updated = filter_input( INPUT_GET, 'updated', FILTER_SANITIZE_STRING );
+
+	if ( 'success' === $updated ) :
+		WPUM()->templates
+			->set_template_data( array( 'message' => esc_html__( 'Profile privacy settings successfully updated.', 'wp-user-manager' ) ) )
+			->get_template_part( 'messages/general', 'success' );
+	endif;
+	?>
 
 	<?php do_action( 'wpum_before_privacy_form' ); ?>
 
@@ -36,20 +40,20 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 		<?php foreach ( $data->fields as $key => $field ) : ?>
 			<fieldset class="fieldset-<?php echo esc_attr( $key ); ?>">
 
-				<?php if( $field['type'] == 'checkbox' ) : ?>
+				<?php if ( 'checkbox' === $field['type'] ) : ?>
 
 					<label for="<?php echo esc_attr( $key ); ?>">
 						<span class="field <?php echo $field['required'] ? 'required-field' : ''; ?>">
 							<?php
 								// Add the key to field.
-								$field[ 'key' ] = $key;
+								$field['key'] = $key;
 								WPUM()->templates
 									->set_template_data( $field )
 									->get_template_part( 'form-fields/' . $field['type'], 'field' );
 							?>
 						</span>
 						<?php echo esc_html( $field['label'] ); ?>
-						<?php if( isset( $field['required'] ) && $field['required'] ) : ?>
+						<?php if ( isset( $field['required'] ) && $field['required'] ) : ?>
 							<span class="wpum-required">*</span>
 						<?php endif; ?>
 					</label>
@@ -58,14 +62,14 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 
 					<label for="<?php echo esc_attr( $key ); ?>">
 						<?php echo esc_html( $field['label'] ); ?>
-						<?php if( isset( $field['required'] ) && $field['required'] ) : ?>
+						<?php if ( isset( $field['required'] ) && $field['required'] ) : ?>
 							<span class="wpum-required">*</span>
 						<?php endif; ?>
 					</label>
 					<div class="field <?php echo $field['required'] ? 'required-field' : ''; ?>">
 						<?php
 							// Add the key to field.
-							$field[ 'key' ] = $key;
+							$field['key'] = $key;
 							WPUM()->templates
 								->set_template_data( $field )
 								->get_template_part( 'form-fields/' . $field['type'], 'field' );
@@ -77,7 +81,7 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 			</fieldset>
 		<?php endforeach; ?>
 
-		<input type="hidden" name="wpum_form" value="<?php echo $data->form; ?>" />
+		<input type="hidden" name="wpum_form" value="<?php echo esc_attr( $data->form ); ?>" />
 		<input type="hidden" name="step" value="<?php echo esc_attr( $data->step ); ?>" />
 		<?php wp_nonce_field( 'verify_privacy_form', 'privacy_nonce' ); ?>
 		<input type="submit" name="submit_privacy" class="button" value="<?php esc_html_e( 'Save', 'wp-user-manager' ); ?>" />
