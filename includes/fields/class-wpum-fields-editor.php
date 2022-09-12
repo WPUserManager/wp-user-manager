@@ -196,6 +196,8 @@ class WPUM_Fields_Editor {
 			'registration_info'         => esc_html__( 'To display this field during signup, select one or more registration forms below.', 'wp-user-manager' ),
 			'registration_label'        => esc_html__( 'Available registration forms', 'wp-user-manager' ),
 			'field_options'             => esc_html__( 'Field options', 'wp-user-manager' ),
+			// translators: %s docs URL for pasting custom field options
+			'field_options_hint'        => wp_kses_post( sprintf( __( 'Add a value and label for each option. Comma separated lists of values,labels can be pasted. <a href="%s" target="_blank">Learn more</a>', 'wp-user-manager' ), 'https://wpusermanager.com/article/310-populating-a-fields-options-with-a-large-set-of-options/' ) ),
 			'field_add_option'          => esc_html__( 'Add option', 'wp-user-manager' ),
 			'field_option_label'        => esc_html__( 'Option label', 'wp-user-manager' ),
 			'field_option_value'        => esc_html__( 'Option value', 'wp-user-manager' ),
