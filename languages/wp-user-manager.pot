@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: WP User Manager 2.8.9\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/wp-user-manager\n"
-"POT-Creation-Date: 2022-09-12 09:42:36+00:00\n"
+"POT-Creation-Date: 2022-09-12 09:47:36+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -290,7 +290,8 @@ msgstr ""
 msgid "This nickname is already in use by someone else. Nicknames must be unique."
 msgstr ""
 
-#: includes/actions.php:332 templates/profile-card.php:44
+#: includes/actions.php:332 includes/functions.php:726
+#: templates/profile-card.php:44
 msgid "View Profile"
 msgstr ""
 
@@ -2652,11 +2653,6 @@ msgstr ""
 msgid "Uploaded files need to be one of the following file types: %s"
 msgstr ""
 
-#: includes/functions.php:726 templates/already-logged-in.php:30
-#: templates/directory/single-user.php:40
-msgid "View profile"
-msgstr ""
-
 #: includes/functions.php:730 includes/shortcodes/shortcodes.php:153
 #: templates/profile-card.php:47 templates/user-overview.php:43
 #: vendor/wp-user-manager/wpum-blocks/includes/classes/Blocks/LogoutLink.php:50
@@ -3527,6 +3523,10 @@ msgstr ""
 #: templates/already-logged-in.php:28
 #. translators: %s user display name
 msgid "You are currently logged in as %s."
+msgstr ""
+
+#: templates/already-logged-in.php:30 templates/directory/single-user.php:40
+msgid "View profile"
 msgstr ""
 
 #: templates/already-logged-in.php:31
