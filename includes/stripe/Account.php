@@ -3,7 +3,6 @@
 
 namespace WPUserManager\WPUMStripe;
 
-
 use Stripe\Invoice as StripeInvoice;
 use Stripe\Stripe;
 use WPUserManager\WPUMStripe\Controllers\Invoices;
@@ -55,8 +54,8 @@ class Account {
 	}
 
 	public function init() {
-		add_filter( 'wpum_get_account_page_tabs', array( $this, 'register_account_tab' )  );
-		add_action( 'wpum_account_page_content_billing', array( $this, 'account_tab_content') );
+		add_filter( 'wpum_get_account_page_tabs', array( $this, 'register_account_tab' ) );
+		add_action( 'wpum_account_page_content_billing', array( $this, 'account_tab_content' ) );
 		add_action( 'template_redirect', array( $this, 'unsubscribed_redirect' ) );
 
 		add_action( 'wp_ajax_wpum_stripe_manage_billing', array( $this, 'handle_manage_billing' ) );
@@ -70,7 +69,7 @@ class Account {
 
 	function unsubscribed_redirect() {
 		// TODO check we want to restrict content
-		if ( ! is_user_logged_in() || current_user_can('administrator')  ) {
+		if ( ! is_user_logged_in() || current_user_can( 'administrator' ) ) {
 			return;
 		}
 
@@ -111,10 +110,10 @@ class Account {
 			return $tabs;
 		}
 
-		$tabs['billing'] = [
+		$tabs['billing'] = array(
 			'name'     => esc_html__( 'Billing', 'wp-user-manager' ),
 			'priority' => - 1,
-		];
+		);
 
 		return $tabs;
 	}
@@ -182,7 +181,7 @@ class Account {
 			echo '</div>';
 		}
 
-		$invoices = ( new Invoices )->where('user_id', $user->ID );
+		$invoices = ( new Invoices() )->where( 'user_id', $user->ID );
 		echo '<div class="wpum-form" style="margin-top: 2rem;">';
 		echo '<h3>Invoices</h3>';
 		if ( empty( $invoices ) ) {
@@ -192,7 +191,8 @@ class Account {
 		?>
 		<table class="table mb-0">
 			<tbody>
-			<?php foreach ( $invoices as $invoice ) :
+			<?php
+			foreach ( $invoices as $invoice ) :
 				if ( $invoice->total <= 0 ) {
 					continue;
 				}
@@ -202,7 +202,7 @@ class Account {
 						<?php echo mysql2date( __( 'F j, Y' ), $invoice->created_at ); ?>
 					</td>
 					<td class="">
-						<?php echo \WPUserManager\WPUMStripe\Stripe::currencySymbol( $invoice->currency );?><?php echo number_format( $invoice->total ); ?>
+						<?php echo \WPUserManager\WPUMStripe\Stripe::currencySymbol( $invoice->currency ); ?><?php echo number_format( $invoice->total ); ?>
 					</td>
 					<td class="text-right">
 						<a href="<?php echo home_url( '/account/billing/?invoice_id=' . $invoice->id ); ?>">
@@ -228,12 +228,12 @@ class Account {
 			return;
 		}
 
-		if ( ! is_user_logged_in() )  {
+		if ( ! is_user_logged_in() ) {
 			return;
 		}
 
 		global $post;
-		if ( ! $post || $post->ID != wpum_get_core_page_id('account')) {
+		if ( ! $post || $post->ID != wpum_get_core_page_id( 'account' ) ) {
 			return;
 		}
 
@@ -243,7 +243,7 @@ class Account {
 			return;
 		}
 
-		Stripe::setApiKey($this->secret_key);
+		Stripe::setApiKey( $this->secret_key );
 
 		try {
 			$stripe_invoice = StripeInvoice::retrieve( $invoice->invoice_id );
@@ -251,10 +251,10 @@ class Account {
 			return;
 		}
 
-		return (new Invoice(
+		return ( new Invoice(
 			$stripe_invoice,
 			$invoice
-		))->download();
+		) )->download();
 	}
 
 	public function handle_manage_billing() {

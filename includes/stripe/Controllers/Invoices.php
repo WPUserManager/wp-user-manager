@@ -71,8 +71,8 @@ class Invoices extends \WPUM_DB {
 	 * @return int ID of the inserted coupon.
 	 */
 	public function insert( $data, $type = '' ) {
-		$data['created_at'] = current_time('mysql');
-		$result = parent::insert( $data, $type );
+		$data['created_at'] = current_time( 'mysql' );
+		$result             = parent::insert( $data, $type );
 
 		if ( $result ) {
 			$this->set_last_changed();
@@ -86,15 +86,15 @@ class Invoices extends \WPUM_DB {
 	 *
 	 * @access public
 	 *
-	 * @param int   $row_id coupon ID.
-	 * @param array $data
+	 * @param int                $row_id coupon ID.
+	 * @param array              $data
 	 * @param mixed string|array $where Where clause to filter update.
 	 *
 	 * @return  bool
 	 */
 	public function update( $row_id, $data = array(), $where = '' ) {
-		$data['updated_at'] = current_time('mysql');
-		$result = parent::update( $row_id, $data, $where );
+		$data['updated_at'] = current_time( 'mysql' );
+		$result             = parent::update( $row_id, $data, $where );
 
 		if ( $result ) {
 			$this->set_last_changed();
@@ -155,7 +155,7 @@ class Invoices extends \WPUM_DB {
 		return $last_changed;
 	}
 
-	public function find( $id ){
+	public function find( $id ) {
 		$invoice = $this->where( 'id', $id );
 
 		if ( isset( $invoice[0] ) ) {
@@ -188,17 +188,17 @@ class Invoices extends \WPUM_DB {
 
 		if ( ! empty( $args['invoice_id'] ) ) {
 			$invoice_id = $args['invoice_id'];
-			$where       .= " AND invoice_id = '$invoice_id' ";
+			$where     .= " AND invoice_id = '$invoice_id' ";
 		}
 
 		if ( ! empty( $args['user_id'] ) ) {
 			$customer_id = $args['user_id'];
-			$where       .= " AND user_id = '$customer_id' ";
+			$where      .= " AND user_id = '$customer_id' ";
 		}
 
 		if ( ! empty( $args['id'] ) ) {
-			$id = $args['id'];
-			$where       .= " AND id = '$id' ";
+			$id     = $args['id'];
+			$where .= " AND id = '$id' ";
 		}
 
 		if ( ! empty( $where ) ) {

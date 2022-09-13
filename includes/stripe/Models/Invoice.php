@@ -2,9 +2,8 @@
 
 namespace WPUserManager\WPUMStripe\Models;
 
+class Invoice {
 
-class Invoice
-{
 
 	public $id;
 	public $user_id;

@@ -1,5 +1,11 @@
 <?php
-
+/**
+ * Handles the Stripe billing
+ *
+ * @package     wp-user-manager
+ * @copyright   Copyright (c) 2022, WP User Manager
+ * @license     https://opensource.org/licenses/GPL-3.0 GNU Public License
+ */
 
 namespace WPUserManager\WPUMStripe;
 
@@ -8,6 +14,9 @@ use Stripe\Stripe;
 use WPUserManager\WPUMStripe\Controllers\Products;
 use WPUserManager\WPUMStripe\Models\User;
 
+/**
+ * Billing
+ */
 class Billing {
 
 	/**
@@ -26,14 +35,17 @@ class Billing {
 	protected $billing_url;
 
 	/**
-	 * @param Products$products
-	 * @param string $connect_url
+	 * @param Products $products
+	 * @param string   $connect_url
 	 */
 	public function __construct( $products, $connect_url ) {
-		$this->products = $products;
+		$this->products    = $products;
 		$this->connect_url = $connect_url;
 	}
 
+	/**
+	 * @return string
+	 */
 	public function getBillingURL() {
 		if ( empty( $this->billing_url ) ) {
 			$this->billing_url = \WPUserManager\WPUMStripe\Stripe::getBillingURL();
@@ -45,7 +57,7 @@ class Billing {
 	/**
 	 * Create a Stripe Checkout session.
 	 *
-	 * @param bool            $test_mode
+	 * @param bool        $test_mode
 	 * @param User        $user
 	 * @param string      $plan
 	 * @param null|string $returnUrl
@@ -62,13 +74,13 @@ class Billing {
 			return false;
 		}
 
-		$data = [
+		$data = array(
 			'stripe_account_id' => $stripe_account_id,
 			'test_mode'         => (int) $test_mode,
 			'plan'              => $plan,
 			'success_url'       => $returnUrl,
 			'cancel_url'        => $this->getBillingURL(),
-		];
+		);
 
 		if ( $user->subscription && $user->subscription->customer_id ) {
 			$data['customer'] = $user->subscription->customer_id;
@@ -91,7 +103,7 @@ class Billing {
 
 		$data = json_decode( $response['body'], true );
 
-		if ( isset( $data['id'])) {
+		if ( isset( $data['id'] ) ) {
 			return $data['id'];
 		}
 
@@ -115,9 +127,9 @@ class Billing {
 			$returnUrl = $this->getBillingURL();
 		}
 
-		return PortalSession::create( [
+		return PortalSession::create( array(
 			'customer'   => $customer_id,
 			'return_url' => $returnUrl,
-		] );
+		) );
 	}
 }

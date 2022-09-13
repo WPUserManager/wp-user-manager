@@ -60,11 +60,11 @@ class Connect {
 	}
 
 	protected function get_state() {
-		$state = [
+		$state = array(
 			'live_mode' => (int) ! $this->is_test_mode(),
 			'site_id'   => str_pad( wp_rand( wp_rand(), PHP_INT_MAX ), 10, wp_rand(), STR_PAD_BOTH ),
 			'site_url'  => $this->get_site_url(),
-		];
+		);
 
 		return base64_encode( serialize( $state ) );
 	}
@@ -73,7 +73,6 @@ class Connect {
 		$stripe_connect_url = add_query_arg( array(
 			'state' => $this->get_state(),
 		), $this->get_base_url() );
-
 
 		return apply_filters( 'wpum_stripe_connect_url', $stripe_connect_url );
 	}

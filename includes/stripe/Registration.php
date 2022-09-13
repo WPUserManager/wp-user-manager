@@ -1,12 +1,20 @@
 <?php
-
+/**
+ * Handles the Stripe registration
+ *
+ * @package     wp-user-manager
+ * @copyright   Copyright (c) 2022, WP User Manager
+ * @license     https://opensource.org/licenses/GPL-3.0 GNU Public License
+ */
 
 namespace WPUserManager\WPUMStripe;
-
 
 use WPUserManager\WPUMStripe\Controllers\Products;
 use WPUserManager\WPUMStripe\Models\User;
 
+/**
+ * Registration
+ */
 class Registration {
 
 	/**
@@ -37,11 +45,11 @@ class Registration {
 	/**
 	 * Registration constructor.
 	 *
-	 * @param $public_key
-	 * @param $secret_key
-	 * @param $test_mode
-	 * @param $billing
-	 * @param $products
+	 * @param string $public_key
+	 * @param string $secret_key
+	 * @param string $test_mode
+	 * @param array  $billing
+	 * @param array  $products
 	 */
 	public function __construct( $public_key, $secret_key, $test_mode, $billing, $products ) {
 		$this->public_key = $public_key;
@@ -51,6 +59,9 @@ class Registration {
 		$this->products   = $products;
 	}
 
+	/**
+	 * Start it up
+	 */
 	public function init() {
 		add_action( 'wpum_registered_settings', array( $this, 'register_settings' ) );
 
@@ -68,7 +79,7 @@ class Registration {
 	 *
 	 * @return array
 	 */
-	function register_settings( $settings ) {
+	public function register_settings( $settings ) {
 		$settings['registration'][] = array(
 			'id'       => 'stripe_plan_id',
 			'name'     => __( 'Stripe Product', 'wp-user-manager' ),
@@ -81,6 +92,12 @@ class Registration {
 		return $settings;
 	}
 
+	/**
+	 * @param array                   $fields
+	 * @param \WPUM_Registration_Form $registration_form
+	 *
+	 * @return array
+	 */
 	public function inject_registration_fields( $fields, $registration_form ) {
 		$price_ids = $registration_form->get_setting( 'stripe_plan_id' );
 
@@ -90,15 +107,15 @@ class Registration {
 
 		$plans = $this->products->get_plans();
 
-		$options = [];
+		$options = array();
 		foreach ( $plans as $plan ) {
-			if ( in_array( $plan['value'], $price_ids ) ) {
+			if ( in_array( $plan['value'], $price_ids, true ) ) {
 				$options[ $plan['value'] ] = $plan['label'];
 			}
 		}
 
 		$fields['wpum_stripe_plan'] = array(
-			'label'       => apply_filters( 'wpum_stripe_registration_label', __( '', 'wp-user-manager' ), $registration_form ),
+			'label'       => apply_filters( 'wpum_stripe_registration_label', '', $registration_form ),
 			'type'        => 'radio',
 			'required'    => false,
 			'options'     => $options,
@@ -109,6 +126,11 @@ class Registration {
 		return $fields;
 	}
 
+	/**
+	 * @param \WPUM_Form $form
+	 *
+	 * @return string
+	 */
 	public function get_registration_redirect( $form ) {
 		$form          = $form->get_registration_form();
 		$redirect_page = $form->get_setting( 'registration_redirect' );
@@ -126,13 +148,13 @@ class Registration {
 			} else {
 				$redirect_page = get_permalink( wpum_get_core_page_id( 'register' ) );
 			}
-			$redirect_page = add_query_arg( [ 'registration' => 'success' ], $redirect_page );
+			$redirect_page = add_query_arg( array( 'registration' => 'success' ), $redirect_page );
 		}
 
 		return $redirect_page;
 	}
 
-	public function save_plan( $new_user_id, $values, $form  ) {
+	public function save_plan( $new_user_id, $values, $form ) {
 		if ( isset( $_POST['wpum_stripe_plan'] ) ) {
 			$product = $this->products->get_by_plan( $_POST['wpum_stripe_plan'] );
 
@@ -183,6 +205,6 @@ class Registration {
 			wp_send_json_error( '<div class="wpum-message error">' . $error . '</div>' );
 		}
 
-		wp_send_json_success( array('id' => $checkout_id ) );
+		wp_send_json_success( array( 'id' => $checkout_id ) );
 	}
 }

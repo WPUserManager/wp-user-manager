@@ -17,7 +17,7 @@ class Products {
 	 */
 	public function __construct( $secret_key ) {
 		$this->secret_key = $secret_key;
-		$this->products = $this->all();
+		$this->products   = $this->all();
 	}
 
 	protected function getProducts() {
@@ -25,15 +25,15 @@ class Products {
 
 		$all_products = \Stripe\Product::all();
 
-		$products = [];
-		foreach ($all_products as $product ) {
+		$products = array();
+		foreach ( $all_products as $product ) {
 			$all_prices = \Stripe\Price::all( array( 'product' => $product->id ) );
 
 			$save_product = $product->toArray();
 			$prices       = array();
 			foreach ( $all_prices->data as $price ) {
-				$price_data = $price->toArray();
-				$prices[$price_data['id']] = $price_data;
+				$price_data                  = $price->toArray();
+				$prices[ $price_data['id'] ] = $price_data;
 			}
 
 			$save_product['prices'] = $prices;

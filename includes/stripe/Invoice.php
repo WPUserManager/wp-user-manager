@@ -59,7 +59,7 @@ class Invoice {
 	public function customerAddress() {
 		$address = $this->stripeCustomer()->address;
 
-		$fields         = [ 'line1', 'line2', 'city', 'state', 'country', 'postal_code' ];
+		$fields         = array( 'line1', 'line2', 'city', 'state', 'country', 'postal_code' );
 		$address_string = '';
 		foreach ( $fields as $field ) {
 			if ( empty( $address->{$field} ) ) {
@@ -216,9 +216,10 @@ class Invoice {
 		$date = mysql2date( __( 'Y-m-d' ), $this->localInvoice->created_at );
 
 		ob_start();
-		WPUM()->templates->set_template_data( apply_filters( 'wpum_stripe_invoice_data', array( 'invoice'   => $this,
-		                                                                                          'site_name' => get_bloginfo( 'name' ),
-		                                                                                          'address'   => '',
+		WPUM()->templates->set_template_data( apply_filters( 'wpum_stripe_invoice_data', array(
+			'invoice'   => $this,
+			'site_name' => get_bloginfo( 'name' ),
+			'address'   => '',
 		) ) )->get_template_part( 'stripe/invoice' );
 		$html = ob_get_clean();
 		$pdf->loadHtml( $html );

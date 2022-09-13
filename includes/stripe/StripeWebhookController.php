@@ -28,8 +28,8 @@ class StripeWebhookController {
 			Stripe::setApiKey( $secret_key );
 		}
 
-		$this->subscriptions = new Subscriptions();
-		$this->invoices = new Invoices();
+		$this->subscriptions  = new Subscriptions();
+		$this->invoices       = new Invoices();
 		$this->webhook_secret = $webhook_secret;
 	}
 
@@ -56,7 +56,7 @@ class StripeWebhookController {
 	}
 
 	protected function studly( $value ) {
-		$value = ucwords( str_replace( [ '-', '_' ], ' ', $value ) );
+		$value = ucwords( str_replace( array( '-', '_' ), ' ', $value ) );
 
 		return str_replace( ' ', '', $value );
 	}
@@ -139,17 +139,17 @@ class StripeWebhookController {
 
 	/**
 	 * @param       $user_id
-	 * @param array $payload
-	 * @param bool  $checkout
+	 * @param array   $payload
+	 * @param bool    $checkout
 	 *
 	 * @return \WP_REST_Response
 	 */
 	protected function createSubscription( $user_id, $payload, $checkout = true ) {
 		if ( $checkout ) {
-			$session = Session::retrieve( [
+			$session = Session::retrieve( array(
 				'id'     => $payload['data']['object']['id'],
-				'expand' => [ 'line_items' ],
-			] );
+				'expand' => array( 'line_items' ),
+			) );
 
 			$stripePlan = $session->line_items->data[0]->price;
 
@@ -159,21 +159,20 @@ class StripeWebhookController {
 			$subscription_id = $payload['data']['object']['id'];
 		}
 
-		//$plan = Subscription::getPlan( $stripePlan['id'] );
+		// $plan = Subscription::getPlan( $stripePlan['id'] );
 		// TODO
-		//$trialPeriodDays = isset( $plan['trial'] ) ? $plan['trial'] : 0;
+		// $trialPeriodDays = isset( $plan['trial'] ) ? $plan['trial'] : 0;
 		$trialPeriodDays = 0;
-		$trialEndsAt = null;
-		//$trialEndsAt = $trialPeriodDays > 0 ? now()->addDays( $trialPeriodDays ) : null;
+		$trialEndsAt     = null;
+		// $trialEndsAt = $trialPeriodDays > 0 ? now()->addDays( $trialPeriodDays ) : null;
 
-		$this->subscriptions->insert( [
+		$this->subscriptions->insert( array(
 			'user_id'         => $user_id,
 			'customer_id'     => $payload['data']['object']['customer'],
 			'plan_id'         => $stripePlan['id'],
 			'subscription_id' => $subscription_id,
 			'trial_ends_at'   => $trialEndsAt,
-		] );
-
+		) );
 
 		do_action( 'wpum_stripe_webhook_subscription_created', $user_id );
 
@@ -191,20 +190,20 @@ class StripeWebhookController {
 		$subscription = $this->subscriptions->where( 'subscription_id', $payload['data']['object']['id'] );
 
 		if ( ! $subscription ) {
-			throw new \Exception('Subscription not found');
+			throw new \Exception( 'Subscription not found' );
 		}
 
 		$trialEnd = $payload['data']['object']['trial_end'];
 
 		// TODO
-		//$trialEndsAt = $trialEnd ? Carbon::createFromTimestamp( $trialEnd )->toDateTimeString() : null;
+		// $trialEndsAt = $trialEnd ? Carbon::createFromTimestamp( $trialEnd )->toDateTimeString() : null;
 		$trialEndsAt = null;
 
-		$this->subscriptions->update( $subscription->id, [
+		$this->subscriptions->update( $subscription->id, array(
 			'plan_id'       => $payload['data']['object']['plan']['id'],
 			'trial_ends_at' => $trialEndsAt,
 			'ends_at'       => $payload['data']['object']['cancel_at_period_end'] ? Carbon::createFromTimestamp( $payload['data']['object']['current_period_end'] )->toDateTimeString() : null,
-		] );
+		) );
 
 		do_action( 'wpum_stripe_webhook_subscription_updated', $subscription );
 
@@ -224,9 +223,9 @@ class StripeWebhookController {
 			throw new \Exception( 'Subscription not found' );
 		}
 
-		$this->subscriptions->update( $subscription->id, [
-			'ends_at' => current_time('mysql'),
-		] );
+		$this->subscriptions->update( $subscription->id, array(
+			'ends_at' => current_time( 'mysql' ),
+		) );
 
 		do_action( 'wpum_stripe_webhook_subscription_deleted', $subscription );
 
@@ -249,24 +248,24 @@ class StripeWebhookController {
 
 		$invoice = $this->invoices->where( 'invoice_id', $payload['data']['object']['id'] );
 
-		$total = $payload['data']['object']['total'] / 100;
-		$currency = $payload['data']['object']['currency'];
+		$total      = $payload['data']['object']['total'] / 100;
+		$currency   = $payload['data']['object']['currency'];
 		$created_at = Carbon::createFromTimestamp( $payload['data']['object']['created'] )->toDateTimeString();
 
 		if ( $invoice ) {
-			$this->invoices->update( $invoice->id, [
+			$this->invoices->update( $invoice->id, array(
 				'total'      => $total,
 				'currency'   => $currency,
 				'created_at' => $created_at,
-			] );
+			) );
 		} else {
-			$this->invoices->insert( [
+			$this->invoices->insert( array(
 				'user_id'    => $subscription->user_id,
 				'invoice_id' => $payload['data']['object']['id'],
 				'total'      => $total,
 				'currency'   => $currency,
 				'created_at' => $created_at,
-			] );
+			) );
 		}
 
 		do_action( 'wpum_stripe_webhook_invoice_created', $subscription );

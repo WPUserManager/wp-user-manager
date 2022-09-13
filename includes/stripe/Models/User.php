@@ -3,7 +3,6 @@
 
 namespace WPUserManager\WPUMStripe\Models;
 
-
 use WPUserManager\WPUMStripe\Controllers\Subscriptions;
 
 class User extends \WP_User {
@@ -40,9 +39,8 @@ class User extends \WP_User {
 	 *
 	 * @return bool
 	 */
-	public function isAdmin()
-	{
-		return $this->has_cap( 'administrator' );
+	public function isAdmin() {
+		 return $this->has_cap( 'administrator' );
 	}
 
 	/**
@@ -50,8 +48,7 @@ class User extends \WP_User {
 	 *
 	 * @return bool
 	 */
-	public function isSubscribed()
-	{
+	public function isSubscribed() {
 		return $this->isAdmin() || ( $this->subscription && $this->subscription->active() );
 	}
 

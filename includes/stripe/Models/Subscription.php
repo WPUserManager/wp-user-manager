@@ -3,7 +3,6 @@
 
 namespace WPUserManager\WPUMStripe\Models;
 
-
 class Subscription {
 
 	public $id;
@@ -30,9 +29,8 @@ class Subscription {
 	 *
 	 * @return bool
 	 */
-	public function active()
-	{
-		return is_null($this->ends_at) || $this->onGracePeriod();
+	public function active() {
+		return is_null( $this->ends_at ) || $this->onGracePeriod();
 	}
 
 	/**
@@ -40,9 +38,8 @@ class Subscription {
 	 *
 	 * @return bool
 	 */
-	public function onTrial()
-	{
-		return $this->trial_ends_at && $this->trial_ends_at > current_time('mysql');
+	public function onTrial() {
+		 return $this->trial_ends_at && $this->trial_ends_at > current_time( 'mysql' );
 	}
 
 	/**
@@ -50,36 +47,32 @@ class Subscription {
 	 *
 	 * @return bool
 	 */
-	public function onGracePeriod()
-	{
-		return $this->cancelled() && $this->ends_at > current_time('mysql');
+	public function onGracePeriod() {
+		return $this->cancelled() && $this->ends_at > current_time( 'mysql' );
 	}
 
 	/**
 	 * @return bool
 	 */
-	public function cancelled()
-	{
-		return ! is_null($this->ends_at);
+	public function cancelled() {
+		return ! is_null( $this->ends_at );
 	}
 
 	/**
 	 * @return bool
 	 */
-	public function expired()
-	{
-		return $this->cancelled() && !$this->onGracePeriod();
+	public function expired() {
+		 return $this->cancelled() && ! $this->onGracePeriod();
 	}
 
 	/**
 	 * @return string
 	 */
-	public function status()
-	{
-		if ($this->onGracePeriod()) {
+	public function status() {
+		if ( $this->onGracePeriod() ) {
 			return 'cancelled';
 		}
-		if ($this->expired()) {
+		if ( $this->expired() ) {
 			return 'expired';
 		}
 

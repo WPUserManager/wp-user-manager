@@ -22,11 +22,11 @@ class Product {
 	 */
 	public function __construct( $id = null, $data = array(), $price_data = array() ) {
 		if ( $id ) {
-			$this->id        = $id;
-			$this->name      = $data['name'];
-			$this->type      = $price_data['type'];
-			$this->amount    = $price_data['unit_amount'];
-			$this->paid      = false;
+			$this->id          = $id;
+			$this->name        = $data['name'];
+			$this->type        = $price_data['type'];
+			$this->amount      = $price_data['unit_amount'];
+			$this->paid        = false;
 			$this->when_signed = time();
 		}
 	}
@@ -39,7 +39,7 @@ class Product {
 	 * @param $data
 	 */
 	public function hydrate( $data ) {
-		foreach( $data as $key => $value ) {
+		foreach ( $data as $key => $value ) {
 			$this->{$key} = $value;
 		}
 	}
@@ -52,7 +52,7 @@ class Product {
 	}
 
 	public function setPaid() {
-		$this->paid = true;
+		$this->paid      = true;
 		$this->when_paid = time();
 	}
 }

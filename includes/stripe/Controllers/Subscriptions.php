@@ -73,8 +73,8 @@ class Subscriptions extends \WPUM_DB {
 	 * @return int ID of the inserted coupon.
 	 */
 	public function insert( $data, $type = '' ) {
-		$data['created_at'] = current_time('mysql');
-		$result = parent::insert( $data, $type );
+		$data['created_at'] = current_time( 'mysql' );
+		$result             = parent::insert( $data, $type );
 
 		if ( $result ) {
 			$this->set_last_changed();
@@ -88,15 +88,15 @@ class Subscriptions extends \WPUM_DB {
 	 *
 	 * @access public
 	 *
-	 * @param int   $row_id coupon ID.
-	 * @param array $data
+	 * @param int                $row_id coupon ID.
+	 * @param array              $data
 	 * @param mixed string|array $where Where clause to filter update.
 	 *
 	 * @return  bool
 	 */
 	public function update( $row_id, $data = array(), $where = '' ) {
-		$data['updated_at'] = current_time('mysql');
-		$result = parent::update( $row_id, $data, $where );
+		$data['updated_at'] = current_time( 'mysql' );
+		$result             = parent::update( $row_id, $data, $where );
 
 		if ( $result ) {
 			$this->set_last_changed();
@@ -181,22 +181,22 @@ class Subscriptions extends \WPUM_DB {
 
 		if ( ! empty( $args['customer_id'] ) ) {
 			$customer_id = $args['customer_id'];
-			$where       .= " AND customer_id = '$customer_id' ";
+			$where      .= " AND customer_id = '$customer_id' ";
 		}
 
 		if ( ! empty( $args['user_id'] ) ) {
 			$customer_id = $args['user_id'];
-			$where       .= " AND user_id = '$customer_id' ";
+			$where      .= " AND user_id = '$customer_id' ";
 		}
 
 		if ( ! empty( $args['subscription_id'] ) ) {
 			$subscription_id = $args['subscription_id'];
-			$where           .= " AND subscription_id = '$subscription_id'";
+			$where          .= " AND subscription_id = '$subscription_id'";
 		}
 
 		if ( ! empty( $args['plan_id'] ) ) {
 			$plan_id = $args['plan_id'];
-			$where   .= " AND plan_id = '$plan_id' ";
+			$where  .= " AND plan_id = '$plan_id' ";
 		}
 
 		if ( ! empty( $where ) ) {

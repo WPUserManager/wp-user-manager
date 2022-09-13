@@ -10,7 +10,7 @@ class WebhookEndpoint {
 	protected $webhookController;
 
 	protected static $namespace = 'wpum/v1';
-	protected static $route = '/stripe';
+	protected static $route     = '/stripe';
 
 	/**
 	 * Registration constructor.
