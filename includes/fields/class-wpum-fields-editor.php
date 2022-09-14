@@ -701,6 +701,9 @@ class WPUM_Fields_Editor {
 
 		if ( $field_to_update->exists() ) {
 			foreach ( $data as $setting_id => $setting_data ) {
+				if ( in_array( $setting_id, apply_filters( 'wpum_update_field_excluded_settings', array( 'conditions' ) ), true ) ) {
+					continue;
+				}
 
 				// Update the name and description.
 				if ( 'field_title' === $setting_id ) {
