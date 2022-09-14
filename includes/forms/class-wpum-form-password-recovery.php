@@ -433,6 +433,10 @@ class WPUM_Form_Password_Recovery extends WPUM_Form {
 				}
 			}
 
+			if ( empty( $verify_key->ID ) ) {
+				return;
+			}
+
 			$user_id = $verify_key->ID;
 
 			wp_set_password( $password_1, $user_id );
