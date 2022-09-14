@@ -476,7 +476,7 @@ class WPUM_Form_Password_Recovery extends WPUM_Form {
 
 		$data = array(
 			// translators: %s login URL
-			'message' => esc_html( sprintf( __( 'Password successfully reset. <a href="%s">Login now &raquo;</a>', 'wp-user-manager' ), get_permalink( wpum_get_core_page_id( 'login' ) ) ) ),
+			'message' => wp_kses_post( sprintf( __( 'Password successfully reset. <a href="%s">Login now &raquo;</a>', 'wp-user-manager' ), get_permalink( wpum_get_core_page_id( 'login' ) ) ) ),
 		);
 
 		WPUM()->templates
