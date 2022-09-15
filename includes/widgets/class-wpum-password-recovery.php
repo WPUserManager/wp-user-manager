@@ -68,7 +68,8 @@ class WPUM_Password_Recovery extends WPH_Widget {
 		echo do_shortcode( '[wpum_password_recovery]' );
 		$output = ob_get_clean();
 
-		echo wp_kses_post( $output );
+		echo $output;  // phpcs:ignore
+
 		echo wp_kses_post( $args['after_widget'] );
 	}
 
