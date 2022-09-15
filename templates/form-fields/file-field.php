@@ -55,17 +55,14 @@ if ( ! empty( $data->ajax ) && wpum_user_can_upload_file_via_ajax() ) {
   endif;
 	?>
 </div>
-<input type="file" class="<?php echo esc_attr( implode( ' ', $classes ) ); ?>" data-file_types="<?php echo esc_attr( implode( '|', $allowed_mime_types ) ); ?>"
-									 <?php
-										if ( ! empty( $data->multiple ) ) {
-											echo 'multiple';}
-										?>
- name="<?php echo esc_attr( isset( $data->name ) ? $data->name : $data->key ); ?>
-					<?php
-					if ( ! empty( $data->multiple ) ) {
-						echo '[]';}
-					?>
-" id="<?php echo esc_attr( $data->key ); ?>" placeholder="<?php echo empty( $data->placeholder ) ? '' : esc_attr( $data->placeholder ); ?>" />
+
+<?php
+$name = isset( $data->name ) ? $data->name : $data->key;
+if ( ! empty( $data->multiple ) ) {
+	$name .= '[]';
+}
+?>
+<input type="file" placeholder="<?php echo empty( $data->placeholder ) ? '' : esc_attr( $data->placeholder ); ?>" id="<?php echo esc_attr( $data->key ); ?>" name="<?php echo esc_attr( $name ); ?>" class="<?php echo esc_attr( implode( ' ', $classes ) ); ?>" data-file_types="<?php echo esc_attr( implode( '|', $allowed_mime_types ) ); ?>" <?php echo ! empty( $data->multiple ) ? 'multiple' : ''; ?> />
 <small class="description">
 <?php
 if ( ! empty( $data->description ) ) :

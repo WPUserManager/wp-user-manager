@@ -8,7 +8,7 @@ Tested up to: 6.0
 Requires PHP: 5.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
-Stable Tag: 2.8.10
+Stable Tag: 2.8.11
 
 The most customizable profiles & community builder WordPress plugin with front-end login, registration, profile customization and content restriction.
 
@@ -125,6 +125,13 @@ Please note that using WPUM and the mentioned add-ons does NOT guarantee complia
 13. Login form.
 
 == Changelog ==
+
+= 2.8.11 (15th September 2022) =
+
+- Improvement: Links on the Already Logged In template can be filtered using the 'wpum_already_logged_in_links' filter
+- Fix: Password reset success message now renders HTML correctly
+- Fix: File field now correctly saving uploads
+- Fix: Sub pages for the account and profile page now loading when using an Elementor template
 
 = 2.8.10 (14th September 2022) =
 
