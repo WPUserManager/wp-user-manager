@@ -227,6 +227,8 @@ if ( ! class_exists( 'WP_User_Manager' ) ) :
 			require_once WPUM_PLUGIN_DIR . 'includes/database/class-wpum-db-table-registration-forms.php';
 			require_once WPUM_PLUGIN_DIR . 'includes/database/class-wpum-db-table-registration-forms-meta.php';
 			require_once WPUM_PLUGIN_DIR . 'includes/database/class-wpum-db-table-search-fields.php';
+			require_once WPUM_PLUGIN_DIR . 'includes/database/class-wpum-db-table-stripe-invoices.php';
+			require_once WPUM_PLUGIN_DIR . 'includes/database/class-wpum-db-table-stripe-subscriptions.php';
 			require_once WPUM_PLUGIN_DIR . 'includes/database/class-wpum-db-fields-groups.php';
 			require_once WPUM_PLUGIN_DIR . 'includes/database/class-wpum-db-fields.php';
 			require_once WPUM_PLUGIN_DIR . 'includes/database/class-wpum-db-field-meta.php';
@@ -310,6 +312,8 @@ if ( ! class_exists( 'WP_User_Manager' ) ) :
 			require_once WPUM_PLUGIN_DIR . 'includes/updates/free-plugins.php';
 
 			WPUM_Blocks::get_instance();
+
+			( new \WPUserManager\WPUMStripe\Stripe() )->init();
 		}
 
 		/**
