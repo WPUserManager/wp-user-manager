@@ -175,7 +175,7 @@ class Registration {
 			$_POST[ $key ] = $value;
 		}
 
-		$form = WPUM()->forms->load_posted_form();
+		$form = WPUM()->forms->load_posted_form( $data['wpum_form'] );
 
 		if ( ! $form ) {
 			wp_send_json_error( '<div class="wpum-message error">Missing form</div>' );

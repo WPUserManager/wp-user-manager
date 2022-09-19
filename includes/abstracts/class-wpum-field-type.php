@@ -376,9 +376,7 @@ abstract class WPUM_Field_Type {
 			$field['sanitizer'] = null;
 		}
 
-		$field_value = filter_input( INPUT_POST, $key );
-
-		return $field_value ? $this->sanitize_posted_field( $field_value, $field['sanitizer'] ) : '';
+		return isset( $_POST[ $key ] ) ? $this->sanitize_posted_field( $_POST[ $key ], $field['sanitizer'] ) : ''; // phpcs:ignore
 	}
 
 	/**

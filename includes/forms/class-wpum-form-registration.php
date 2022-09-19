@@ -505,7 +505,7 @@ class WPUM_Form_Registration extends WPUM_Form {
 
 			$values = $this->get_posted_fields();
 
-			$nonce = filter_input( INPUT_POST, 'registration_nonce' );
+			$nonce = isset( $_POST['registration_nonce'] ) ? sanitize_text_field( $_POST['registration_nonce'] ) : false; // phpcs:ignore
 
 			if ( empty( $nonce ) || ! wp_verify_nonce( $nonce, 'verify_registration_form' ) ) {
 				return false;
