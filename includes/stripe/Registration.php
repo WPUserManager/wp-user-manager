@@ -144,7 +144,7 @@ class Registration {
 
 		if ( ! $redirect_page ) {
 			if ( isset( $_SERVER['HTTP_REFERER'] ) ) {
-				$redirect_page = $_SERVER['HTTP_REFERER'];
+				$redirect_page = $_SERVER['HTTP_REFERER']; // phpcs:ignore
 			} else {
 				$redirect_page = get_permalink( wpum_get_core_page_id( 'register' ) );
 			}
@@ -154,9 +154,14 @@ class Registration {
 		return $redirect_page;
 	}
 
+	/**
+	 * @param int        $new_user_id
+	 * @param array      $values
+	 * @param \WPUM_Form $form
+	 */
 	public function save_plan( $new_user_id, $values, $form ) {
-		if ( isset( $_POST['wpum_stripe_plan'] ) ) {
-			$product = $this->products->get_by_plan( $_POST['wpum_stripe_plan'] );
+		if ( isset( $_POST['wpum_stripe_plan'] ) ) { // phpcs:ignore
+			$product = $this->products->get_by_plan( sanitize_text_field( $_POST['wpum_stripe_plan'] ) ); // phpcs:ignore
 
 			update_user_meta( $new_user_id, 'wpum_stripe_plan', $product->to_array() );
 		}
@@ -164,12 +169,15 @@ class Registration {
 		update_user_meta( $new_user_id, 'wpum_form_id', $form->get_ID() );
 	}
 
+	/**
+	 * Handle the registration via AJAX
+	 */
 	public function handle_register() {
-		if ( empty( $_POST['data'] ) ) {
-			wp_send_json_error( '<div class="wpum-message error">Missing data</div>' );
+		if ( empty( $_POST['data'] ) ) { // phpcs:ignore
+			$this->json_error( __( 'Missing data', 'wp-user-manager' ) );
 		}
 
-		parse_str( $_POST['data'], $data );
+		parse_str( $_POST['data'], $data ); // phpcs:ignore
 
 		foreach ( $data as $key => $value ) {
 			$_POST[ $key ] = $value;
@@ -178,7 +186,7 @@ class Registration {
 		$form = WPUM()->forms->load_posted_form( $data['wpum_form'] );
 
 		if ( ! $form ) {
-			wp_send_json_error( '<div class="wpum-message error">Missing form</div>' );
+			$this->json_error( __( 'Missing form', 'wp-user-manager' ) );
 		}
 
 		$user_id = $form->submit_handler();
@@ -192,11 +200,14 @@ class Registration {
 		}
 
 		if ( empty( $user_id ) ) {
-			$error = __( 'There has been an issue when registering, please contact the site owner', 'wp-user-manager' );
-			wp_send_json_error( '<div class="wpum-message error">' . $error . '</div>' );
+			$this->json_error();
 		}
 
-		$plan_id = $_POST['wpum_stripe_plan'];
+		if ( ! empty( $_POST['wpum_stripe_plan'] ) ) { // phpcs:ignore
+			$this->json_error();
+		}
+
+		$plan_id = sanitize_text_field( $_POST['wpum_stripe_plan'] ); // phpcs:ignore
 
 		// TODO make sure this works for non-default registration form URLs
 		$redirect = $this->get_registration_redirect( $form );
@@ -206,10 +217,20 @@ class Registration {
 		$checkout_id = $this->billing->createStripeCheckoutSession( $this->test_mode, $user, $plan_id, $redirect );
 
 		if ( ! $checkout_id ) {
-			$error = __( 'There has been an issue when registering, please contact the site owner', 'wp-user-manager' );
-			wp_send_json_error( '<div class="wpum-message error">' . $error . '</div>' );
+			$this->json_error();
 		}
 
 		wp_send_json_success( array( 'id' => $checkout_id ) );
+	}
+
+	/**
+	 * @param null $error
+	 */
+	protected function json_error( $error = null ) {
+		if ( empty( $error ) ) {
+			$error = __( 'There has been an issue when registering, please contact the site owner', 'wp-user-manager' );
+		}
+
+		wp_send_json_error( '<div class="wpum-message error">' . $error . '</div>' );
 	}
 }
