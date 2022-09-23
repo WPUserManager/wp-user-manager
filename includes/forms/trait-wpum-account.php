@@ -152,15 +152,15 @@ trait WPUM_Form_Account {
 					$value = $this->get_selected_displayname( $user );
 					break;
 				case 'user_avatar':
-					$value = carbon_get_user_meta( $user->ID, 'current_user_avatar' );
+					$value = \WPUM\carbon_get_user_meta( $user->ID, 'current_user_avatar' );
 					break;
 				case 'user_cover':
-					$value = carbon_get_user_meta( $user->ID, 'user_cover' );
+					$value = \WPUM\carbon_get_user_meta( $user->ID, 'user_cover' );
 					break;
 			}
 		} elseif ( strpos( $field->get_meta( 'user_meta_key' ), 'wpum_' ) === 0 ) {
 
-			$value = carbon_get_user_meta( $user->ID, $field->get_meta( 'user_meta_key' ) );
+			$value = \WPUM\carbon_get_user_meta( $user->ID, $field->get_meta( 'user_meta_key' ) );
 
 		} else {
 

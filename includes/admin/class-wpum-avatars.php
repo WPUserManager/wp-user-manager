@@ -138,7 +138,7 @@ class WPUM_Avatars {
 			return $url;
 		}
 
-		$custom_avatar = carbon_get_user_meta( $this->get_user_id( $id_or_email ), 'current_user_avatar' );
+		$custom_avatar = \WPUM\carbon_get_user_meta( $this->get_user_id( $id_or_email ), 'current_user_avatar' );
 
 		if ( $custom_avatar && 'false' !== $custom_avatar ) {
 			$url = $custom_avatar;

@@ -309,7 +309,7 @@ class WPUM_Directories_Editor {
 	public function post_type_columns_content( $column, $post_id ) {
 		switch ( $column ) {
 			case 'roles':
-				$roles = carbon_get_post_meta( $post_id, 'directory_assigned_roles' );
+				$roles = \WPUM\carbon_get_post_meta( $post_id, 'directory_assigned_roles' );
 				if ( $roles ) {
 					echo esc_html( implode( ', ', array_map( 'ucfirst', $roles ) ) );
 				} else {
@@ -317,14 +317,14 @@ class WPUM_Directories_Editor {
 				}
 				break;
 			case 'search_form':
-				if ( carbon_get_post_meta( $post_id, 'directory_search_form' ) ) {
+				if ( \WPUM\carbon_get_post_meta( $post_id, 'directory_search_form' ) ) {
 					echo '<span class="dashicons dashicons-yes"></span>';
 				} else {
 					echo '<span class="dashicons dashicons-no"></span>';
 				}
 				break;
 			case 'profiles_per_page':
-				echo esc_html( carbon_get_post_meta( $post_id, 'directory_profiles_per_page' ) );
+				echo esc_html( \WPUM\carbon_get_post_meta( $post_id, 'directory_profiles_per_page' ) );
 				break;
 			case 'shortcode':
 				echo esc_html( '[wpum_user_directory id="' . $post_id . '"]' );
