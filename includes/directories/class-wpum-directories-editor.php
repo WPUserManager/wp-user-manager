@@ -12,8 +12,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-use Carbon_Fields\Container;
-use Carbon_Fields\Field;
+use WPUM\Carbon_Fields\Container;
+use WPUM\Carbon_Fields\Field;
 
 /**
  * The class that handles the user directories.

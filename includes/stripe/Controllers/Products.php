@@ -2,7 +2,7 @@
 
 namespace WPUserManager\WPUMStripe\Controllers;
 
-use Stripe\Stripe;
+use WPUM\Stripe\Stripe;
 use WPUserManager\WPUMStripe\Billing;
 use WPUserManager\WPUMStripe\Models\Product;
 
@@ -23,11 +23,11 @@ class Products {
 	protected function getProducts() {
 		Stripe::setApiKey( $this->secret_key );
 
-		$all_products = \Stripe\Product::all();
+		$all_products = \WPUM\Stripe\Product::all();
 
 		$products = array();
 		foreach ( $all_products as $product ) {
-			$all_prices = \Stripe\Price::all( array( 'product' => $product->id ) );
+			$all_prices = \WPUM\Stripe\Price::all( array( 'product' => $product->id ) );
 
 			$save_product = $product->toArray();
 			$prices       = array();

@@ -9,8 +9,8 @@
 
 namespace WPUserManager\WPUMStripe;
 
-use Stripe\BillingPortal\Session as PortalSession;
-use Stripe\Stripe;
+use WPUM\Stripe\BillingPortal\Session as PortalSession;
+use WPUM\Stripe\Stripe;
 use WPUserManager\WPUMStripe\Controllers\Products;
 use WPUserManager\WPUMStripe\Models\User;
 

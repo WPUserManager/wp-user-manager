@@ -7,8 +7,8 @@
  * @license     https://opensource.org/licenses/GPL-3.0 GNU Public License
  */
 
-use Carbon_Fields\Container;
-use Carbon_Fields\Field;
+use WPUM\Carbon_Fields\Container;
+use WPUM\Carbon_Fields\Field;
 
 // Exit if accessed directly
 if ( ! defined( 'ABSPATH' ) ) {
@@ -123,7 +123,7 @@ class WPUM_Menus {
 			return false;
 		}
 
-		return carbon_get_nav_menu_item_meta( $item->ID, 'convert_to_logout' );
+		return \WPUM\carbon_get_nav_menu_item_meta( $item->ID, 'convert_to_logout' );
 	}
 
 	/**
@@ -159,8 +159,8 @@ class WPUM_Menus {
 
 		foreach ( $items as $key => $item ) {
 
-			$status    = carbon_get_nav_menu_item_meta( $item->ID, 'link_visibility' );
-			$roles     = carbon_get_nav_menu_item_meta( $item->ID, 'link_roles' );
+			$status    = \WPUM\carbon_get_nav_menu_item_meta( $item->ID, 'link_visibility' );
+			$roles     = \WPUM\carbon_get_nav_menu_item_meta( $item->ID, 'link_roles' );
 			$is_logout = $this->is_nav_item_logout( $item );
 			$visible   = true;
 

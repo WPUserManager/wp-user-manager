@@ -7,8 +7,8 @@
  * @license     https://opensource.org/licenses/GPL-3.0 GNU Public License
  */
 
-use Carbon_Fields\Container;
-use Carbon_Fields\Field;
+use WPUM\Carbon_Fields\Container;
+use WPUM\Carbon_Fields\Field;
 
 // Exit if accessed directly
 if ( ! defined( 'ABSPATH' ) ) {

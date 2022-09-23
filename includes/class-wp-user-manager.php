@@ -189,7 +189,32 @@ if ( ! class_exists( 'WP_User_Manager' ) ) :
 		 * @return void
 		 */
 		private function autoload() {
-			require dirname( $this->plugin_file ) . '/vendor/autoload.php';
+			if ( file_exists( dirname( $this->plugin_file ) . '/vendor-dist/scoper-autoload.php' ) ) {
+				require_once dirname( $this->plugin_file ) . '/vendor-dist/scoper-autoload.php';
+			} else if ( file_exists( dirname( $this->plugin_file ) . '/vendor/autoload.php' ) ) {
+				require_once dirname( $this->plugin_file ) . '/vendor/autoload.php';
+				\spl_autoload_register( array( $this, 'ensure_class_alias' ), true, true );
+			}
+		}
+
+		/**
+		 * Makes sure a class alias is created when a base class exists.
+		 *
+		 * @param string $class Class to create alias for.
+		 *
+		 * @return void
+		 */
+		public function ensure_class_alias( $class ) {
+			// If the namespace beings with the dependency class prefix, make an alias for regular class.
+			if ( strpos( $class, 'WPUM' ) !== 0 ) {
+				return;
+			}
+			$base = substr( $class, ( strlen( 'WPUM' ) + 1 ) );
+			if ( ! class_exists( $base ) ) {
+				return;
+			}
+
+			class_alias( $base, $class );
 		}
 
 		/**
@@ -311,7 +336,7 @@ if ( ! class_exists( 'WP_User_Manager' ) ) :
 			require_once WPUM_PLUGIN_DIR . 'includes/updates/class-wpum-license.php';
 			require_once WPUM_PLUGIN_DIR . 'includes/updates/free-plugins.php';
 
-			WPUM_Blocks::get_instance();
+			\WPUM\WPUM_Blocks::get_instance();
 
 			( new \WPUserManager\WPUMStripe\Stripe() )->init();
 		}
@@ -381,14 +406,14 @@ if ( ! class_exists( 'WP_User_Manager' ) ) :
 			do_action( 'before_wpum_init' );
 
 			// Boot the custom routing library.
-			Brain\Cortex::boot();
+			\WPUM\Brain\Cortex::boot();
 
 			// Start carbon fields and remove the sidebar manager scripts.
-			\Carbon_Fields\Carbon_Fields::boot();
-			$sidebar_manager = \Carbon_Fields\Carbon_Fields::resolve( 'sidebar_manager' );
+			\WPUM\Carbon_Fields\Carbon_Fields::boot();
+			$sidebar_manager = \WPUM\Carbon_Fields\Carbon_Fields::resolve( 'sidebar_manager' );
 			remove_action( 'admin_enqueue_scripts', array( $sidebar_manager, 'enqueue_scripts' ) );
 
-			$this->notices                = TDP\WP_Notice::instance();
+			$this->notices                = \WPUM\TDP\WP_Notice::instance();
 			$this->forms                  = WPUM_Forms::instance();
 			$this->templates              = new WPUM_Template_Loader();
 			$this->emails                 = new WPUM_Emails();
@@ -478,7 +503,7 @@ if ( ! class_exists( 'WP_User_Manager' ) ) :
 		 * @return boolean
 		 */
 		private function plugin_can_run() {
-			$requirements_check = new WP_Requirements_Check(
+			$requirements_check = new \WPUM\WP_Requirements_Check(
 				array(
 					'title' => 'WP User Manager',
 					'php'   => '5.5',

@@ -35,8 +35,8 @@ module.exports = function( grunt ) {
 			}
 		},
 		shell: {
-			composerDependencies: {
-				command: 'composer install --no-dev'
+			prefixComposerDependencies: {
+				command: 'sh bin/prefix-dependencies.sh <%= pkg.version %>'
 			}
 		},
 		jshint: {
@@ -241,7 +241,10 @@ module.exports = function( grunt ) {
 					'!.github',
 					'!phpcs.xml.dist',
 					'!README.md',
-					'!yarn.lock'
+					'!yarn.lock',
+					'!scoper.inc.php',
+					'!composer.json',
+					'!composer.lock'
 				],
 				dest: 'release/<%= pkg.version %>/'
 			}
@@ -326,7 +329,7 @@ module.exports = function( grunt ) {
 	grunt.registerTask( 'do_git', [  'gitcommit', 'gittag', 'gitpush' ] );
 	grunt.registerTask( 'release', [ 'pre_vcs', 'do_svn', 'do_git'  ] );
 
-	grunt.registerTask( 'build', ['clean:main', 'copy', 'composer:install:no-dev', 'clean:build', 'compress'] );
+	grunt.registerTask( 'build', ['clean:main', 'copy', 'shell:prefixComposerDependencies', 'clean:build', 'compress'] );
 
 	grunt.util.linefeed = '\n';
 };

@@ -2,10 +2,10 @@
 
 namespace WPUserManager\WPUMStripe;
 
-use Carbon\Carbon;
-use Stripe\Checkout\Session;
-use Stripe\Webhook;
-use Stripe\Stripe;
+use WPUM\Carbon\Carbon;
+use WPUM\Stripe\Checkout\Session;
+use WPUM\Stripe\Webhook;
+use WPUM\Stripe\Stripe;
 use WPUserManager\WPUMStripe\Controllers\Invoices;
 use WPUserManager\WPUMStripe\Controllers\Subscriptions;
 use WPUserManager\WPUMStripe\Models\Product;

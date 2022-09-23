@@ -31,7 +31,7 @@ class WPUM_Options_Panel {
 		// Setup labels for the options panel.
 		add_filter( 'wpum_labels', array( $this, 'register_labels' ) );
 
-		$this->panel = new TDP\OptionsKit( 'wpum' );
+		$this->panel = new \WPUM\TDP\OptionsKit( 'wpum' );
 		$this->panel->set_page_title( 'WP User Manager Settings' );
 
 		// Add a logo to the options panel.

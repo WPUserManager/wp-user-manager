@@ -8,8 +8,8 @@
  * @since       1.0.0
  */
 
-use Carbon_Fields\Container;
-use Carbon_Fields\Field;
+use WPUM\Carbon_Fields\Container;
+use WPUM\Carbon_Fields\Field;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;

@@ -3,8 +3,8 @@
 
 namespace WPUserManager\WPUMStripe;
 
-use Stripe\Invoice as StripeInvoice;
-use Stripe\Stripe;
+use WPUM\Stripe\Invoice as StripeInvoice;
+use WPUM\Stripe\Stripe;
 use WPUserManager\WPUMStripe\Controllers\Invoices;
 use WPUserManager\WPUMStripe\Controllers\Products;
 use WPUserManager\WPUMStripe\Models\User;

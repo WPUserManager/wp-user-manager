@@ -18,7 +18,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * @since 1.0.0
  */
-class WPUM_Password_Recovery extends WPH_Widget {
+class WPUM_Password_Recovery extends \WPUM\WPH_Widget {
 
 	/**
 	 * __construct function.

@@ -2,9 +2,9 @@
 
 namespace WPUserManager\WPUMStripe;
 
-use Dompdf\Dompdf;
-use NumberFormatter;
-use Stripe\Customer;
+use WPUM\Dompdf\Dompdf;
+use WPUM\NumberFormatter;
+use WPUM\Stripe\Customer;
 use WPUserManager\WPUMStripe\Models\User;
 
 class Invoice {
