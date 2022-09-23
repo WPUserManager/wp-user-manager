@@ -131,17 +131,20 @@ return [
 			    $contents = str_replace( 'new WPUserManagerBlocks\Loader()', 'new \\' . $prefix . '\\WPUserManagerBlocks\Loader()', $contents );
 		    }
 
+		    if ( false !== strrpos( $filePath, 'wp-user-manager/wpum-blocks/includes/classes/Loader.php' ) ) {
+			    $contents = str_replace( $prefix . '\\\\register_block_type', '\\\\register_block_type', $contents );
+			    $contents = str_replace( $prefix . '\\\\WPUM_Groups', '\\\\WPUM_Groups', $contents );
+			    $contents = str_replace( $prefix . '\\\\WPUM_Frontend_Posting', '\\\\WPUM_Frontend_Posting', $contents );
+		    }
+
 			if ( false !== strrpos( $filePath, 'brain/cortex' ) ) {
 			    $contents = str_replace( '\\' . $prefix . '\\WP', '\\WP', $contents );
 		    }
 
 		    if ( false !== strrpos( $filePath, 'wp-user-manager/wp-optionskit/includes/class-wpok-rest-server.php' ) ) {
 			    $contents = str_replace( 'extends \\' . $prefix . '\\WP_Rest_Controller', 'extends \\WP_Rest_Controller', $contents );
-		    }
-
-			if ( false !== strrpos( $filePath, 'wp-user-manager/wp-optionskit/includes/class-wpok-rest-server.php' ) ) {
-			    $contents = str_replace( 'WPOK_Rest_Server', 'extends \\WP_Rest_Controller', $contents );
-				$contents = str_replace( '\\' . $prefix . '\\WP_Error', '\\WP_Error', $contents );
+			    $contents = str_replace( '\\' . $prefix . '\\WP_Error', '\\WP_Error', $contents );
+			    $contents = str_replace( '\\' . $prefix . '\\WP_REST_Server', '\\WP_REST_Server', $contents );
 		    }
 
 		    return $contents;
