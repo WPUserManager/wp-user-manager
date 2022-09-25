@@ -180,6 +180,8 @@ if ( ! class_exists( 'WP_User_Manager' ) ) :
 			$this->autoload_options();
 			$this->includes();
 
+			$this->addons_can_run();
+
 			$this->init_hooks();
 		}
 
@@ -263,7 +265,6 @@ if ( ! class_exists( 'WP_User_Manager' ) ) :
 		 * @return void
 		 */
 		private function includes() {
-
 			require_once WPUM_PLUGIN_DIR . 'includes/functions.php';
 			require_once WPUM_PLUGIN_DIR . 'includes/forms/trait-wpum-account.php';
 			require_once WPUM_PLUGIN_DIR . 'includes/permalinks.php';
@@ -274,6 +275,7 @@ if ( ! class_exists( 'WP_User_Manager' ) ) :
 			require_once WPUM_PLUGIN_DIR . 'includes/abstracts/class-wpum-db.php';
 			require_once WPUM_PLUGIN_DIR . 'includes/abstracts/class-wpum-shortcode-generator.php';
 			require_once WPUM_PLUGIN_DIR . 'includes/admin/class-wpum-user-meta-custom-datastore.php';
+			require_once WPUM_PLUGIN_DIR . 'includes/admin/class-wpum-addon-check.php';
 			require_once WPUM_PLUGIN_DIR . 'includes/database/class-wpum-db-table.php';
 			require_once WPUM_PLUGIN_DIR . 'includes/database/class-wpum-db-table-fields.php';
 			require_once WPUM_PLUGIN_DIR . 'includes/database/class-wpum-db-table-field-meta.php';
@@ -542,6 +544,30 @@ if ( ! class_exists( 'WP_User_Manager' ) ) :
 			);
 
 			return $requirements_check->passes();
+		}
+
+		/**
+		 * Ensure the minimum required versions of addons are installed.
+		 * Prevents fatals when addons are out of date with core.
+		 */
+		protected function addons_can_run() {
+			$addons = array(
+				array(
+					'title'       => 'WPUM Groups',
+					'min_version' => '1.2.3',
+					'file'        => 'wpum-groups/wpum-groups.php',
+				),
+				array(
+					'title'       => 'WPUM Social Login',
+					'min_version' => '2.0.9',
+					'file'        => 'wpum-social-login/wpum-social-login.php',
+				)
+			);
+
+			foreach ( $addons as $addon ) {
+				$addon['file'] = WP_PLUGIN_DIR . '/' . $addon['file'];
+				( new WPUM_Addon_Check( $addon ) )->passes();
+			}
 		}
 
 	}
