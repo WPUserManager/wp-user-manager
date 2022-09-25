@@ -140,7 +140,7 @@ class WPUM_Addon_Check {
 		$update_url = wp_nonce_url( admin_url() . 'update.php?action=upgrade-plugin&plugin=' . urlencode( $basename ), 'upgrade-plugin_' . $basename );
 		?>
 		<div class="error">
-			<p><?php printf( '<strong>WP User Manager</strong> &mdash; %s addon has been deactivated as it cannot run on WP User Manager %s. Please <a href="%s">update</a> the addon.', esc_html( $this->title ), WPUM_VERSION, $update_url ); ?></p>
+			<p><?php printf( '<strong>WP User Manager</strong> &mdash; %s addon has been deactivated as it cannot run on WP User Manager %s. Please <a href="%s">update</a> the addon to version %s or higher.', esc_html( $this->title ), WPUM_VERSION, $update_url, $this->min_version ); ?></p>
 		</div>
 		<?php
 	}
