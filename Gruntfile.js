@@ -188,7 +188,17 @@ module.exports = function( grunt ) {
 		},
 		clean: {
 			main: ['release'],
-			build: ['release/<%= pkg.version %>/build', 'release/<%= pkg.version %>/vendor/nikic/fast-route/test', 'release/<%= pkg.version %>/vendor/typisttech/imposter', 'release/<%= pkg.version %>/vendor/typisttech/imposter-plugin']
+			build: [
+				'release/<%= pkg.version %>/build',
+				'release/<%= pkg.version %>/vendor-dist/nikic/fast-route/test',
+				'release/<%= pkg.version %>/vendor-dist/typisttech/imposter',
+				'release/<%= pkg.version %>/vendor-dist/typisttech/imposter-plugin',
+				'release/<%= pkg.version %>/vendor-dist/dompdf/dompdf/lib/fonts',
+				'release/<%= pkg.version %>/vendor-dist/nesbot/carbon/src/Carbon/Lang',
+				'release/<%= pkg.version %>/vendor-dist/symfony/intl/Resources/data/',
+				'release/<%= pkg.version %>/vendor-dist/htmlburger/carbon-fields/assets/dist/carbon.vendor.js',
+				'release/<%= pkg.version %>/vendor-dist/htmlburger/carbon-fields/assets/dist/carbon.core.js',
+			]
 		},
 		gittag: {
            addtag: {
