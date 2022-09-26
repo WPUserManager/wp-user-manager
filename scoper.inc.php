@@ -49,7 +49,15 @@ return [
     //
     // For more see: https://github.com/humbug/php-scoper/blob/master/docs/configuration.md#patchers
     'exclude-files' => [
-        //'src/a-whitelisted-file.php',
+		'vendor/htmlburger/carbon-fields/templates/Container/comment_meta.php',
+		'vendor/htmlburger/carbon-fields/templates/Container/nav_menu_item.php',
+	    'vendor/htmlburger/carbon-fields/templates/Container/network.php',
+	    'vendor/htmlburger/carbon-fields/templates/Container/post_meta.php',
+	    'vendor/htmlburger/carbon-fields/templates/Container/term_meta.php',
+	    'vendor/htmlburger/carbon-fields/templates/Container/theme_options.php',
+	    'vendor/htmlburger/carbon-fields/templates/Container/user_meta.php',
+	    'vendor/htmlburger/carbon-fields/templates/Container/widget.php',
+	    'vendor/htmlburger/carbon-fields/templates/Exception/incorrect-syntax.php',
     ],
 
     // When scoping PHP files, there will be scenarios where some of the code being scoped indirectly references the
