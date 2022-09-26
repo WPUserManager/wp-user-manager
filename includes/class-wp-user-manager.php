@@ -225,6 +225,11 @@ if ( ! class_exists( 'WP_User_Manager' ) ) :
 				return;
 			}
 
+			if ( ! apply_filters( 'wpum_alias_class_to_scoped_class', true, $class ) ) {
+				// Ability to filter on class name and check where the call is coming from, and not alias
+				return;
+			}
+
 			class_alias( $scoped, $class );
 		}
 
