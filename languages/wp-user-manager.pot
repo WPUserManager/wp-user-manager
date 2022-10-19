@@ -2,9 +2,9 @@
 # This file is distributed under the GPLv3+.
 msgid ""
 msgstr ""
-"Project-Id-Version: WP User Manager 2.8.12\n"
+"Project-Id-Version: WP User Manager 2.8.13\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/wp-user-manager\n"
-"POT-Creation-Date: 2022-09-16 20:49:12+00:00\n"
+"POT-Creation-Date: 2022-10-19 08:41:54+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -1391,7 +1391,7 @@ msgid "Description"
 msgstr ""
 
 #: includes/directories/class-wpum-directories-editor.php:293
-#: includes/fields/types/class-wpum-field-userrole.php:48
+#: includes/fields/types/class-wpum-field-userrole.php:63
 msgid "User Roles"
 msgstr ""
 
@@ -2220,11 +2220,11 @@ msgid "Enter the maximum rows for the field."
 msgstr ""
 
 #: includes/fields/types/class-wpum-field-taxonomy.php:24
-#: includes/fields/types/class-wpum-field-taxonomy.php:49
+#: includes/fields/types/class-wpum-field-taxonomy.php:64
 msgid "Taxonomy"
 msgstr ""
 
-#: includes/fields/types/class-wpum-field-taxonomy.php:56
+#: includes/fields/types/class-wpum-field-taxonomy.php:71
 msgid "Field Type"
 msgstr ""
 
@@ -2257,7 +2257,7 @@ msgid "Filter by role"
 msgstr ""
 
 #: includes/fields/types/class-wpum-field-user.php:70
-#: includes/fields/types/class-wpum-field-userrole.php:69
+#: includes/fields/types/class-wpum-field-userrole.php:84
 msgid "Allow multiple selection"
 msgstr ""
 
@@ -2266,7 +2266,7 @@ msgid "Show users with hidden profiles"
 msgstr ""
 
 #: includes/fields/types/class-wpum-field-user.php:83
-#: includes/fields/types/class-wpum-field-userrole.php:59
+#: includes/fields/types/class-wpum-field-userrole.php:74
 msgid "Type label"
 msgstr ""
 
@@ -2274,11 +2274,11 @@ msgstr ""
 msgid "User Role"
 msgstr ""
 
-#: includes/fields/types/class-wpum-field-userrole.php:49
+#: includes/fields/types/class-wpum-field-userrole.php:64
 msgid "List of roles the users can select from"
 msgstr ""
 
-#: includes/fields/types/class-wpum-field-userrole.php:70
+#: includes/fields/types/class-wpum-field-userrole.php:85
 msgid "Allow users to select multiple roles for themselves"
 msgstr ""
 
