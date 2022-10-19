@@ -89,6 +89,21 @@ class WPUM_Field_User extends WPUM_Field_Type {
 	}
 
 	/**
+	 * Gets the value of a posted multiselect field.
+	 *
+	 * @param  string $key
+	 * @param  array  $field
+	 * @return array
+	 */
+	public function get_posted_field( $key, $field ) {
+		if ( isset( $_POST[ $key ] ) && is_array( $_POST[ $key ] ) ) { // phpcs:ignore
+			return isset( $_POST[ $key ] ) ? array_map( 'intval', $_POST[ $key ] ) : array(); // phpcs:ignore
+		}
+
+		return filter_input( INPUT_POST, $key, FILTER_VALIDATE_INT );
+	}
+
+	/**
 	 * Format the output onto the profiles for the taxonomy field.
 	 *
 	 * @param object $field
