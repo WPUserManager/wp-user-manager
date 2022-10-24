@@ -484,12 +484,10 @@ class WPUM_Registration_Forms_Editor {
 		}
 
 		$registered_settings = $form->get_settings_options();
-		//print_r($registered_settings);
 		$settings            = array();
 		foreach ( $registered_settings as $registered_setting ) {
 			$settings[ $registered_setting['id'] ] = $registered_setting;
 		}
-		//print_r( $settings );
 		$stored_settings_model = $form->get_settings_model();
 
 		$deleted_settings = array_diff_key( $stored_settings_model, $settings_model );
@@ -664,7 +662,12 @@ class WPUM_Registration_Forms_Editor {
 
 		wp_cache_delete( $cache_key, WPUM()->registration_forms->cache_group );
 	}
-	
+
+	/**
+	 * Get all available edit form sections
+	 * 
+	 * @return array
+	 */
 	public function form_edit_sections() {
 		$default = array(
 			'settings' => __( 'Settings', 'wp-user-manager' )

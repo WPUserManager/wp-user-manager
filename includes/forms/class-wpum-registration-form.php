@@ -443,6 +443,11 @@ class WPUM_Registration_Form {
 		return $model;
 	}
 
+	/**
+	 * Get all the settings group by sections.
+	 *
+	 * @return array
+	 */
 	public function get_settings_options_by_section() {
 		$roles = wpum_get_roles( true );
 
