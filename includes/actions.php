@@ -439,6 +439,12 @@ function wpum_prevent_entire_site() {
 		}
 	}
 
+	foreach ( apply_filters( 'wpum_prevent_entire_site_access_allowed_urls', array() ) as $allowed_url ) {
+		if ( $url === $allowed_url ) {
+			return;
+		}
+	}
+
 	if ( ! apply_filters( 'wpum_prevent_entire_site_access', true ) ) {
 		return;
 	}
