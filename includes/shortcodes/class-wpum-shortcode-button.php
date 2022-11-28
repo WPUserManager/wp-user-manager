@@ -29,10 +29,13 @@ final class WPUM_Shortcode_Button {
 	 */
 	public function __construct() {
 		if ( is_admin() ) {
-			add_filter( 'mce_external_plugins', array( $this, 'mce_external_plugins' ), 15 );
-			add_action( 'admin_enqueue_scripts', array( $this, 'admin_enqueue_assets' ) );
-			add_action( 'admin_enqueue_scripts', array( $this, 'admin_localize_scripts' ), 13 );
-			add_action( 'media_buttons', array( $this, 'shortcode_button' ) );
+			global $pagenow;
+			if ( ! empty( $pagenow ) && ( 'post-new.php' === $pagenow || 'post.php' === $pagenow ) ) {
+				add_filter( 'mce_external_plugins', array( $this, 'mce_external_plugins' ), 15 );
+				add_action( 'admin_enqueue_scripts', array( $this, 'admin_enqueue_assets' ) );
+				add_action( 'admin_enqueue_scripts', array( $this, 'admin_localize_scripts' ), 13 );
+				add_action( 'media_buttons', array( $this, 'shortcode_button' ) );
+			}
 		}
 		add_action( 'wp_ajax_wpum_shortcode', array( $this, 'shortcode_ajax' ) );
 		add_action( 'wp_ajax_nopriv_wpum_shortcode', array( $this, 'shortcode_ajax' ) );
