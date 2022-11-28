@@ -9,13 +9,16 @@
  * @since       1.0.0
  */
 
-if ( ! defined( 'ABSPATH' ) ) exit;
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 
 /**
  * Runs on plugin install by setting up the post types, custom taxonomies, flushing rewrite rules to initiate the new
  * slugs and also creates the plugin and populates the settings fields for those plugin pages.
  *
  * @param boolean $network_wide
+ *
  * @return void
  */
 function wp_user_manager_install( $network_wide = false ) {
@@ -23,7 +26,7 @@ function wp_user_manager_install( $network_wide = false ) {
 	global $wpdb;
 
 	if ( is_multisite() && $network_wide ) {
-		foreach ( $wpdb->get_col( "SELECT blog_id FROM $wpdb->blogs LIMIT 100" ) as $blog_id ) {
+		foreach ( $wpdb->get_col( "SELECT blog_id FROM $wpdb->blogs LIMIT 100" ) as $blog_id ) { // phpcs:ignore
 			switch_to_blog( $blog_id );
 			wpum_run_install();
 			restore_current_blog();
@@ -37,14 +40,14 @@ function wp_user_manager_install( $network_wide = false ) {
 /**
  * Generates core pages and updates settings panel with the newly created pages.
  *
- * @since 1.0.0
  * @return void
+ * @since 1.0.0
  */
 function wpum_generate_pages() {
 	$is_block_editor = function_exists( 'use_block_editor_for_post_type' ) && use_block_editor_for_post_type( 'page' );
 	// Generate login page
 
-	if ( ! wpum_get_option( 'login_page' ) || FALSE === get_post_status( wpum_get_option( 'login_page' )[0] ) ) {
+	if ( ! wpum_get_option( 'login_page' ) || false === get_post_status( wpum_get_option( 'login_page' )[0] ) ) {
 		$login_content = $is_block_editor ? '<!-- wp:wpum/login-form /-->' : '[wpum_login_form psw_link="yes" register_link="yes"]';
 
 		$login = wp_insert_post(
@@ -54,13 +57,13 @@ function wpum_generate_pages() {
 				'post_status'    => 'publish',
 				'post_author'    => 1,
 				'post_type'      => 'page',
-				'comment_status' => 'closed'
+				'comment_status' => 'closed',
 			)
 		);
-		wpum_update_option( 'login_page', [ $login ] );
+		wpum_update_option( 'login_page', array( $login ) );
 	}
 	// Generate password recovery page
-	if ( ! wpum_get_option( 'password_recovery_page' ) || FALSE === get_post_status( wpum_get_option( 'password_recovery_page' )[0] ) ) {
+	if ( ! wpum_get_option( 'password_recovery_page' ) || false === get_post_status( wpum_get_option( 'password_recovery_page' )[0] ) ) {
 		$psw_content = $is_block_editor ? '<!-- wp:wpum/password-recovery-form /-->' : '[wpum_password_recovery login_link="yes" register_link="yes"]';
 
 		$psw = wp_insert_post(
@@ -70,13 +73,13 @@ function wpum_generate_pages() {
 				'post_status'    => 'publish',
 				'post_author'    => 1,
 				'post_type'      => 'page',
-				'comment_status' => 'closed'
+				'comment_status' => 'closed',
 			)
 		);
-		wpum_update_option( 'password_recovery_page', [ $psw ] );
+		wpum_update_option( 'password_recovery_page', array( $psw ) );
 	}
 	// Generate password recovery page
-	if ( ! wpum_get_option( 'registration_page' ) || FALSE === get_post_status( wpum_get_option( 'registration_page' )[0] ) ) {
+	if ( ! wpum_get_option( 'registration_page' ) || false === get_post_status( wpum_get_option( 'registration_page' )[0] ) ) {
 		$reg_content = $is_block_editor ? '<!-- wp:wpum/registration-form /-->' : '[wpum_register login_link="yes" psw_link="yes"]';
 
 		$register = wp_insert_post(
@@ -86,13 +89,13 @@ function wpum_generate_pages() {
 				'post_status'    => 'publish',
 				'post_author'    => 1,
 				'post_type'      => 'page',
-				'comment_status' => 'closed'
+				'comment_status' => 'closed',
 			)
 		);
-		wpum_update_option( 'registration_page', [ $register ] );
+		wpum_update_option( 'registration_page', array( $register ) );
 	}
 	// Generate account page
-	if ( ! wpum_get_option( 'account_page' ) || FALSE === get_post_status( wpum_get_option( 'account_page' )[0] ) ) {
+	if ( ! wpum_get_option( 'account_page' ) || false === get_post_status( wpum_get_option( 'account_page' )[0] ) ) {
 		$account_content = $is_block_editor ? '<!-- wp:wpum/account-page /-->' : '[wpum_account]';
 
 		$account = wp_insert_post(
@@ -102,13 +105,13 @@ function wpum_generate_pages() {
 				'post_status'    => 'publish',
 				'post_author'    => 1,
 				'post_type'      => 'page',
-				'comment_status' => 'closed'
+				'comment_status' => 'closed',
 			)
 		);
-		wpum_update_option( 'account_page', [ $account ] );
+		wpum_update_option( 'account_page', array( $account ) );
 	}
 	// Generate password recovery page
-	if ( ! wpum_get_option( 'profile_page' ) || FALSE === get_post_status( wpum_get_option( 'profile_page' )[0] ) ) {
+	if ( ! wpum_get_option( 'profile_page' ) || false === get_post_status( wpum_get_option( 'profile_page' )[0] ) ) {
 		$profile_content = $is_block_editor ? '<!-- wp:wpum/profile-page /-->' : '[wpum_profile]';
 
 		$profile = wp_insert_post(
@@ -118,10 +121,10 @@ function wpum_generate_pages() {
 				'post_status'    => 'publish',
 				'post_author'    => 1,
 				'post_type'      => 'page',
-				'comment_status' => 'closed'
+				'comment_status' => 'closed',
 			)
 		);
-		wpum_update_option( 'profile_page', [ $profile ] );
+		wpum_update_option( 'profile_page', array( $profile ) );
 	}
 }
 
@@ -135,19 +138,19 @@ function wpum_generate_pages() {
 function wpum_install_registration_form( $fields = array() ) {
 
 	$default_form_id = WPUM()->registration_forms->insert(
-		[
-			'name' => esc_html__( 'Default registration form', 'wp-user-manager' )
-		]
+		array(
+			'name' => esc_html__( 'Default registration form', 'wp-user-manager' ),
+		)
 	);
 
 	$default_form = new WPUM_Registration_Form( $default_form_id );
 	$default_form->add_meta( 'default', true );
 	$default_form->add_meta( 'role', get_option( 'default_role' ) );
 
-	$default_fields = [];
+	$default_fields = array();
 
 	foreach ( $fields as $field ) {
-		if ( in_array( $field->get_type(), array( 'user_email', 'user_password' ) ) ) {
+		if ( in_array( $field->get_type(), array( 'user_email', 'user_password' ), true ) ) {
 			$default_fields[] = $field->get_ID();
 		}
 	}
@@ -162,34 +165,34 @@ function wpum_install_registration_form( $fields = array() ) {
  * @return array
  */
 function wpum_install_emails() {
-	$emails = [
-		'registration_confirmation' => [
+	$emails = array(
+		'registration_confirmation'       => array(
 			'title'   => 'Welcome to {sitename}',
 			'footer'  => '<a href="{siteurl}">{sitename}</a>',
 			'content' => '<p>Hello {username}, and welcome to {sitename}. We’re thrilled to have you on board. </p>
 <p>For reference, here\'s your login information:</p>
 <p>Username: {username}<br />Login page: {login_page_url}<br />Password: {password}</p>
 <p>Thanks,<br />{sitename}</p>',
-			'subject' => 'Welcome to {sitename}'
-		],
-		'registration_admin_notification' => [
+			'subject' => 'Welcome to {sitename}',
+		),
+		'registration_admin_notification' => array(
 			'title'   => 'New User Registration',
 			'content' => '<p>New user registration on your site {sitename}:<br></p>
 <p>Username: {username}</p>
 <p>E-mail: {email}</p>',
 			'subject' => '[{sitename}] New User Registration',
-		],
-		'password_recovery_request' => [
+		),
+		'password_recovery_request'       => array(
 			'subject' => 'Reset your {sitename} password',
-			'title' => 'Reset your {sitename} password',
+			'title'   => 'Reset your {sitename} password',
 			'content' => '<p>Hello {username},</p>
 <p>You are receiving this message because you or somebody else has attempted to reset your password on {sitename}.</p>
 <p>If this was a mistake, just ignore this email and nothing will happen.</p>
 <p>To reset your password, visit the following address:</p>
 <p>{recovery_url}</p>',
-			'footer' => '<a href="{siteurl}">{sitename}</a>'
-		]
-	];
+			'footer'  => '<a href="{siteurl}">{sitename}</a>',
+		),
+	);
 
 	$emails = array_merge( $emails, get_option( 'wpum_email', array() ) );
 
@@ -209,7 +212,7 @@ function wpum_run_install() {
 	update_option( 'users_can_register', true );
 
 	// Store plugin installation date.
-	add_option( 'wpum_activation_date', strtotime( "now" ) );
+	add_option( 'wpum_activation_date', strtotime( 'now' ) );
 
 	// Add Upgraded From Option.
 	$current_version = get_option( 'wpum_version' );
@@ -267,12 +270,14 @@ function wpum_run_install() {
 
 /**
  * Install default data when new site is added.
- * @param  object $site
+ *
+ * @param object $site
+ *
  * @return void
  */
-function wpum_multisite_new_site( $site ){
+function wpum_multisite_new_site( $site ) {
 	if ( ! function_exists( 'is_plugin_active_for_network' ) ) {
-		require_once( ABSPATH . '/wp-admin/includes/plugin.php' );
+		require_once ABSPATH . '/wp-admin/includes/plugin.php';
 	}
 	if ( is_plugin_active_for_network( 'wp-user-manager/wp-user-manager.php' ) ) {
 		switch_to_blog( $site->blog_id );
@@ -280,4 +285,5 @@ function wpum_multisite_new_site( $site ){
 		restore_current_blog();
 	}
 }
+
 add_action( 'wp_initialize_site', 'wpum_multisite_new_site' );

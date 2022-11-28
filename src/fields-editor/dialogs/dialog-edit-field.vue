@@ -26,6 +26,7 @@
 				<div class="vue-form-generator" v-if="activeTab == 'general' && !loadingFields && needsOptions( field_type ) && ! primary_id">
 					<div class="form-group field-input">
 						<label for="placeholder">{{labels.field_options}}</label>
+						<div class="hint"><p v-html="labels.field_options_hint"></p></div>
 						<div class="field-wrap">
 							<div class="wrapper">
 								<draggable v-model="dropdownOptions" :options="{draggable:'.dragme', handle:'.option-sort', animation:150}">

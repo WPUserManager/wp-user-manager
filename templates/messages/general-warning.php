@@ -14,9 +14,11 @@
  */
 
 // Exit if accessed directly
-if ( ! defined( 'ABSPATH' ) ) exit;
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 
 ?>
 <div class="wpum-message warning">
-	<p><?php echo $data->message; ?></p>
+	<p><?php echo wp_kses_post( $data->message ); ?></p>
 </div>

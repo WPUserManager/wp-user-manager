@@ -14,40 +14,49 @@
  */
 
 // Exit if accessed directly
-if ( ! defined( 'ABSPATH' ) ) exit;
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 
-$comments = wpum_get_comments_for_profile( $data->user->ID );
+$user_comments = wpum_get_comments_for_profile( $data->user->ID );
 
 ?>
 
 <div id="profile-comments">
 
 	<?php
-		if( ! empty( $comments ) ) :
-			foreach ( $comments as $comment ) :
+	if ( ! empty( $user_comments ) ) :
+		foreach ( $user_comments as $user_comment ) :
 			?>
 
-			<div class="wpum-single-comment" id="wpum-comment-<?php echo $comment->comment_ID;?>">
+			<div class="wpum-single-comment" id="wpum-comment-<?php echo esc_attr( $user_comment->comment_ID ); ?>">
 
 			<?php
-				$comment_content = wp_trim_words( $comment->comment_content, $num_words = 13, $more = null );
-				$the_post        = get_the_title( $comment->comment_post_ID );
-				$the_permalink   = get_post_permalink( $comment->comment_post_ID );
-				$the_date        = get_comment_date( get_option( 'date_format' ), $comment->comment_ID );
+			$user_comment_content = wp_trim_words( $user_comment->comment_content, 13 );
+			$the_post             = get_the_title( $user_comment->comment_post_ID );
+			$the_permalink        = get_post_permalink( $user_comment->comment_post_ID );
+			$the_date             = get_comment_date( get_option( 'date_format' ), $user_comment->comment_ID );
 			?>
 
-			<p><?php printf( _x( '"%s" on <a href="%s">%s</a>, %s.', 'This text displays the comments left by the user on his profile page.', 'wp-user-manager' ), $comment_content, $the_permalink, $the_post, $the_date ); ?></p>
+			<p>
+				<?php
+				// translators: %1$s user comment count %2$s post permalink %3$s post %4$s post date
+				echo wp_kses_post( sprintf( _x( '"%1$s" on <a href="%2$s">%3$s</a>, %4$s.', 'This text displays the comments left by the user on his profile page.', 'wp-user-manager' ), $user_comment_content, $the_permalink, $the_post, $the_date ) );
+				?>
+			</p>
 
 			</div>
 
-			<?php endforeach;
+			<?php
+			endforeach;
 
 		else :
 
 			WPUM()->templates
-				->set_template_data( [
-					'message' => sprintf( esc_html__( '%s has not made any comment yet.', 'wp-user-manager' ), $data->user->display_name )
-				] )
+				->set_template_data( array(
+					// translators: %s user display name
+					'message' => sprintf( esc_html__( '%s has not made any comment yet.', 'wp-user-manager' ), $data->user->display_name ),
+				) )
 				->get_template_part( 'messages/general', 'warning' );
 
 			endif;

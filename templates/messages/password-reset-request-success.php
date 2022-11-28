@@ -14,14 +14,26 @@
  */
 
 // Exit if accessed directly
-if ( ! defined( 'ABSPATH' ) ) exit;
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 
 // Retrieve the curren
 $masked_email = wpum_mask_email_address( $data->email );
 ?>
 
 <div class="wpum-password-reset-request-success wpum-message success">
-	<p><?php printf( esc_html__( 'We\'ve sent an email to %s with password reset instructions.', 'wp-user-manager' ), '<strong>' . $masked_email . '</strong>' ); ?></p>
+	<p>
+		<?php
+		// translators: %s masked email address
+		printf( esc_html__( 'We\'ve sent an email to %s with password reset instructions.', 'wp-user-manager' ), '<strong>' . esc_html( $masked_email ) . '</strong>' );
+		?>
+	</p>
 </div>
 
-<p><?php printf( esc_html__( 'If the email doesn\'t show up soon, check your spam folder. We sent it from %s.', 'wp-user-manager' ), '<strong>' . antispambot( $data->from ) . '</strong>' ); ?></p>
+<p>
+	<?php
+	// translators: %s from email address
+	printf( esc_html__( 'If the email doesn\'t show up soon, check your spam folder. We sent it from %s.', 'wp-user-manager' ), '<strong>' . esc_html( antispambot( $data->from ) ) . '</strong>' );
+	?>
+</p>

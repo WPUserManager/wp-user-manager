@@ -14,7 +14,9 @@
  */
 
  // Exit if accessed directly
-if ( ! defined( 'ABSPATH' ) ) exit;
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 
 ?>
 
@@ -22,15 +24,39 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 	type="number"
 	class="input-number"
 	name="<?php echo esc_attr( isset( $data->name ) ? $data->name : $data->key ); ?>"
-	<?php if ( isset( $data->autocomplete ) && false === $data->autocomplete ) { echo ' autocomplete="off"'; } ?>
+	<?php
+	if ( isset( $data->autocomplete ) && false === $data->autocomplete ) {
+		echo ' autocomplete="off"'; }
+	?>
 	id="<?php echo esc_attr( $data->key ); ?>"
 	placeholder="<?php echo empty( $data->placeholder ) ? '' : esc_attr( $data->placeholder ); ?>"
 	value="<?php echo isset( $data->value ) ? esc_attr( $data->value ) : ''; ?>"
-	<?php if ( ! empty( $data->required ) ) echo 'required'; ?>
-	<?php if ( ! empty( $data->read_only ) ) echo 'readonly'; ?>
-	<?php if ( ! empty( $data->min_value ) ) echo ' min="' . $data->min_value . '"' ; ?>
-	<?php if ( ! empty( $data->max_value ) ) echo ' max="' . $data->max_value . '"' ; ?>
-	<?php if ( ! empty( $data->step_size ) ) echo ' step="' . $data->step_size . '"' ; ?>
-	<?php if ( ! empty( $data->pattern ) ) echo ' pattern="' . $data->pattern . '"' ; ?>
+	<?php
+	if ( ! empty( $data->required ) ) {
+		echo 'required';}
+	?>
+	<?php
+	if ( ! empty( $data->read_only ) ) {
+		echo 'readonly';}
+	?>
+	<?php
+	if ( ! empty( $data->min_value ) ) {
+		echo ' min="' . esc_attr( $data->min_value ) . '"';}
+	?>
+	<?php
+	if ( ! empty( $data->max_value ) ) {
+		echo ' max="' . esc_attr( $data->max_value ) . '"';}
+	?>
+	<?php
+	if ( ! empty( $data->step_size ) ) {
+		echo ' step="' . esc_attr( $data->step_size ) . '"';}
+	?>
+	<?php
+	if ( ! empty( $data->pattern ) ) {
+		echo ' pattern="' . esc_html( $data->pattern ) . '"';}
+	?>
 />
-<?php if ( ! empty( $data->description ) ) : ?><small class="description"><?php echo $data->description; ?></small><?php endif; ?>
+<?php
+if ( ! empty( $data->description ) ) :
+	?>
+	<small class="description"><?php echo wp_kses_post( $data->description ); ?></small><?php endif; ?>

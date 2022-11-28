@@ -1,22 +1,26 @@
-/*! WP User Manager - v2.8.5
+/*! WP User Manager - v2.8.11
  * https://wpusermanager.com
  * Copyright (c) 2022; * Licensed GPLv2+ */
 jQuery( function( $ ) {
 	function initFields() {
 		$( '.wpum-multiselect:not(.wpum-clone-field)' ).each( function() {
-			var args = {
-				theme: 'default'
-			};
-			var placeholder = $( this ).attr( 'placeholder' );
-			if ( placeholder ) {
-				args[ 'placeholder' ] = placeholder;
-			}
-			$( this ).select2( args );
+			initSelect2( $( this ) );
 		} );
 
 		$( '.wpum-datepicker:not([readonly]):not(.wpum-clone-field)' ).flatpickr( {
 			dateFormat: wpumFrontend.dateFormat
 		} );
+	}
+
+	function initSelect2( field ) {
+		var args = {
+			theme: 'default'
+		};
+		var placeholder = field.attr( 'placeholder' );
+		if ( placeholder ) {
+			args[ 'placeholder' ] = placeholder;
+		}
+		field.select2( args );
 	}
 
 	var repeater = {
@@ -185,6 +189,10 @@ jQuery( function( $ ) {
 				var rules = $(this).data('condition');
 				var validRule = self.validateRules(rules);
 				$(this).toggle( validRule );
+
+				if ( $( this ).find( 'select' ).hasClass( 'wpum-multiselect' ) ) {
+					initSelect2( $( this ).find( 'select' ) );
+				}
 				if ( $(this).find('.field').hasClass('required-field') ) {
 					$( this ).find( "input" ).prop( "required", validRule );
 					$( this ).find( "select" ).prop( "required", validRule );

@@ -14,15 +14,41 @@
  */
 
 // Exit if accessed directly
-if ( ! defined( 'ABSPATH' ) ) exit;
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 
-$current_user = wp_get_current_user();
+$current_logged_in_user = wp_get_current_user();
 
+$links = apply_filters( 'wpum_already_logged_in_links', array(
+	'profile' => array(
+		'url'  => get_permalink( wpum_get_core_page_id( 'profile' ) ),
+		'text' => __( 'View profile', 'wp-user-manager' ),
+	),
+	'account' => array(
+		'url'  => get_permalink( wpum_get_core_page_id( 'account' ) ),
+		'text' => __( 'Account settings', 'wp-user-manager' ),
+	),
+	'logout'  => array(
+		'url'  => wp_logout_url(),
+		'text' => __( 'Log out &raquo;', 'wp-user-manager' ),
+	),
+) );
+
+$count   = count( $links );
+$counter = 0;
 ?>
 
 <div class="wpum-already-logged-in wpum-message info">
-	<p><?php printf( __( 'You are currently logged in as %s.', 'wp-user-manager' ), $current_user->display_name );?>
-	<a href="<?php echo esc_url( get_permalink( wpum_get_core_page_id( 'profile' ) ) ); ?>"><?php esc_html_e( 'View profile', 'wp-user-manager' ); ?></a> |
-	<a href="<?php echo esc_url( get_permalink( wpum_get_core_page_id( 'account' ) ) ); ?>"><?php esc_html_e( 'Account settings', 'wp-user-manager' ); ?></a> |
-	<a href="<?php echo esc_url( wp_logout_url() ); ?>"><?php esc_html_e( 'Log out', 'wp-user-manager' ); ?> &raquo;</a></p>
+	<p>
+		<?php
+		// translators: %s user display name
+		echo esc_html( sprintf( __( 'You are currently logged in as %s.', 'wp-user-manager' ), $current_logged_in_user->display_name ) );
+		?>
+		<?php
+		foreach ( $links as $template_link ) :
+			$counter ++;
+			?>
+			<a href="<?php echo esc_url( $template_link['url'] ); ?>"><?php echo esc_html( $template_link['text'] ); ?></a> <?php echo $counter < $count ? '|' : ''; ?>
+		<?php endforeach; ?>
 </div>
