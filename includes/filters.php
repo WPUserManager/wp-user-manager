@@ -352,3 +352,22 @@ function wpum_remove_slashes_from_field_data( $field_name ) {
 
 add_filter( 'wpum_field_name', 'wpum_remove_slashes_from_field_data' );
 add_filter( 'wpum_field_description', 'wpum_remove_slashes_from_field_data' );
+
+/**
+ * Add unique key validator for user_meta_key field.
+ *
+ * @param array $settings
+ *
+ * @return array
+ */
+function wpum_fields_editor_field_settings( $settings ) {
+	foreach ( $settings as $key => $setting ) {
+		if ( 'user_meta_key' === $setting['model'] ) {
+			$settings[ $key ]['validator'][] = 'unique_user_meta_key';
+		}
+	}
+
+	return $settings;
+}
+
+add_filter( 'wpum_fields_editor_field_settings', 'wpum_fields_editor_field_settings' );
