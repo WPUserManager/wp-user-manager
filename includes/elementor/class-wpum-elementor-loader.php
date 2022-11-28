@@ -39,6 +39,17 @@ class WPUM_Elementor_Loader {
 		add_action( 'elementor/elements/categories_registered', array( $this, 'wpum_register_elementor_category' ) );
 		add_action( 'elementor/widgets/register', array( $this, 'wpum_register_elementor_widets' ) );
 		add_filter( 'elementor/widget/render_content', array( $this, 'wpum_restrict_widget_content' ), 10, 2 );
+
+		add_filter( 'wpum_shortcode_logged_in_override', function ( $override ) {
+			$post      = filter_input( INPUT_GET, 'post', FILTER_SANITIZE_STRING );
+			$elementor = filter_input( INPUT_GET, 'elementor', FILTER_SANITIZE_STRING );
+
+			if ( ! empty( $post ) && ! empty( $elementor ) ) {
+				return true;
+			}
+
+			return $override;
+		} );
 	}
 
 	/**
