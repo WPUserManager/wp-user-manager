@@ -156,7 +156,7 @@ export default {
 		let res                        = VueFormGenerator.validators.resources;
 			res.fieldIsRequired        = this.labels.field_error_required
 			res.invalidTextContainSpec = this.labels.field_error_special
-		
+
 		this.UserMetaKeyValidator();
 	},
 	methods: {
