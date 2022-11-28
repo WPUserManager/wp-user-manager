@@ -195,7 +195,7 @@ add_filter( 'authenticate', 'wpum_authentication', 20, 3 );
  */
 function wpum_highlight_pages( $post_states, $post ) {
 
-	$mark    = '<img style="width:13px;" src="' . WPUM_PLUGIN_URL . '/assets/images/logo.svg" title="WP User Manager Page">';
+	$mark    = '<img style="width:13px;" src="' . WPUM_PLUGIN_URL . 'assets/images/logo.svg" title="WP User Manager Page">';
 	$post_id = $post->ID;
 
 	switch ( $post_id ) {
