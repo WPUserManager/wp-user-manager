@@ -830,30 +830,24 @@ add_action( 'wp', function () {
 	}
 }, 9 );
 
+/**
+ * AJAX handler to validate meta key for fields are unique
+ */
 function validate_user_meta_key() {
 	global $wpdb;
 
-	$field_id      = intval( $_POST['field_id'] );
-	$user_meta_key = sanitize_text_field( $_POST['user_meta_key'] );
-	
-	$meta_query = new WP_Meta_Query();
-	$query_args = array(
-		'meta_key'     => 'user_meta_key',
-		'meta_value'   => $user_meta_key,
-		'meta_type'    => 'wpum_field',
-		'meta_compare' => '='
-	);
+	$field_id = filter_input( INPUT_POST, 'field_id', FILTER_VALIDATE_INT );
 
-	$meta_query->parse_query_vars( $query_args );
-	$meta_sql = $meta_query->get_sql(
-		'wpum_field',
-		$wpdb->prefix.'wpum_fields',
-		'id'
-	);
+	if ( empty( $field_id ) ) {
+		return;
+	}
 
-	$meta_count = $wpdb->get_var( "SELECT COUNT(meta_id) FROM {$wpdb->prefix}wpum_fields " . $meta_sql['join'] . $meta_sql['where'] . " WHERE wpum_field_id <> {$field_id} " );
+	$user_meta_key = sanitize_text_field( filter_input( INPUT_POST, 'user_meta_key' ) );
+	$user_meta_key = 'wpum_' . $user_meta_key;
 
-	$response['error'] = [];
+	$meta_count = $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(meta_id) FROM {$wpdb->prefix}wpum_fieldmeta WHERE meta_key = 'user_meta_key' AND meta_value = %s AND wpum_field_id != %d", $user_meta_key, $field_id ) ); // phpcs:ignore
+
+	$response['error'] = array();
 	if ( intval( $meta_count ) > 0 ) {
 		$response['error'][] = 'The user meta key must be unique for each field';
 	}
