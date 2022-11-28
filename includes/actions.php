@@ -439,6 +439,12 @@ function wpum_prevent_entire_site() {
 		}
 	}
 
+	foreach ( apply_filters( 'wpum_prevent_entire_site_access_allowed_urls', array() ) as $allowed_url ) {
+		if ( $url === $allowed_url ) {
+			return;
+		}
+	}
+
 	if ( ! apply_filters( 'wpum_prevent_entire_site_access', true ) ) {
 		return;
 	}
@@ -823,3 +829,29 @@ add_action( 'wp', function () {
 		$post = get_post( $profile_id ); // phpcs:ignore
 	}
 }, 9 );
+
+/**
+ * AJAX handler to validate meta key for fields are unique
+ */
+function validate_user_meta_key() {
+	global $wpdb;
+
+	$field_id = filter_input( INPUT_POST, 'field_id', FILTER_VALIDATE_INT );
+
+	if ( empty( $field_id ) ) {
+		return;
+	}
+
+	$user_meta_key = sanitize_text_field( filter_input( INPUT_POST, 'user_meta_key' ) );
+	$user_meta_key = 'wpum_' . $user_meta_key;
+
+	$meta_count = $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(meta_id) FROM {$wpdb->prefix}wpum_fieldmeta WHERE meta_key = 'user_meta_key' AND meta_value = %s AND wpum_field_id != %d", $user_meta_key, $field_id ) ); // phpcs:ignore
+
+	$response['error'] = array();
+	if ( intval( $meta_count ) > 0 ) {
+		$response['error'][] = 'The user meta key must be unique for each field';
+	}
+
+	wp_send_json_success( $response );
+}
+add_action( 'wp_ajax_validate_user_meta_key', 'validate_user_meta_key' );

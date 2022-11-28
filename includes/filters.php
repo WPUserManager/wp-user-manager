@@ -195,7 +195,7 @@ add_filter( 'authenticate', 'wpum_authentication', 20, 3 );
  */
 function wpum_highlight_pages( $post_states, $post ) {
 
-	$mark    = '<img style="width:13px;" src="' . WPUM_PLUGIN_URL . '/assets/images/logo.svg" title="WP User Manager Page">';
+	$mark    = '<img style="width:13px;" src="' . WPUM_PLUGIN_URL . 'assets/images/logo.svg" title="WP User Manager Page">';
 	$post_id = $post->ID;
 
 	switch ( $post_id ) {
@@ -354,26 +354,20 @@ add_filter( 'wpum_field_name', 'wpum_remove_slashes_from_field_data' );
 add_filter( 'wpum_field_description', 'wpum_remove_slashes_from_field_data' );
 
 /**
- * In WP 6.0+, virtual pages for our Account and Profile subpages (eg. account/posts or profile/comments)
- * no longer inherit the page template of the parent page. This fixes that.
+ * Add unique key validator for user_meta_key field.
+ *
+ * @param array $settings
+ *
+ * @return array
  */
-add_filter( 'template_include', function ( $template ) {
-	global $wp;
-
-	if ( ! isset( $wp->query_vars ) ) {
-		return $template;
-	}
-
-	if ( ! isset( $wp->query_vars['page_id'] ) ) {
-		return $template;
-	}
-
-	if ( wpum_get_core_page_id( 'account' ) === $wp->query_vars['page_id'] || wpum_get_core_page_id( 'profile' ) === $wp->query_vars['page_id'] ) {
-		$new_template_slug = get_page_template_slug( $wp->query_vars['page_id'] );
-		if ( $new_template_slug && basename( $template ) !== $new_template_slug ) {
-			$template = dirname( $template ) . '/' . $new_template_slug;
+function wpum_fields_editor_field_settings( $settings ) {
+	foreach ( $settings as $key => $setting ) {
+		if ( 'user_meta_key' === $setting['model'] ) {
+			$settings[ $key ]['validator'][] = 'unique_user_meta_key';
 		}
 	}
 
-	return $template;
-}, 100 );
+	return $settings;
+}
+
+add_filter( 'wpum_fields_editor_field_settings', 'wpum_fields_editor_field_settings' );

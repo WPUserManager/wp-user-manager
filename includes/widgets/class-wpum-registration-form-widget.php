@@ -84,7 +84,7 @@ class WPUM_Registration_Form_Widget extends WPH_Widget {
 
 		$output = ob_get_clean();
 
-		echo wp_kses_post( $output );
+		echo $output;  // phpcs:ignore
 
 		echo wp_kses_post( $args['after_widget'] );
 	}

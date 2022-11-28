@@ -38,6 +38,21 @@ class WPUM_Field_Userrole extends WPUM_Field_Type {
 	}
 
 	/**
+	 * Gets the value of a posted multiselect field.
+	 *
+	 * @param  string $key
+	 * @param  array  $field
+	 * @return array
+	 */
+	public function get_posted_field( $key, $field ) {
+		if ( isset( $_POST[ $key ] ) && is_array( $_POST[ $key ] ) ) { // phpcs:ignore
+			return isset( $_POST[ $key ] ) ? array_map( 'sanitize_text_field', $_POST[ $key ] ) : array(); // phpcs:ignore
+		}
+
+		return filter_input( INPUT_POST, $key, FILTER_SANITIZE_STRING );
+	}
+
+	/**
 	 * @return array
 	 */
 	public function get_editor_settings() {

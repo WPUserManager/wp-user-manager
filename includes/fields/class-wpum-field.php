@@ -684,7 +684,7 @@ class WPUM_Field {
 	public function get_meta( $meta_key = '', $single = true ) {
 		$meta = WPUM()->field_meta->get_meta( $this->id, $meta_key, $single );
 		if ( 'user_meta_key' === $meta_key ) {
-			$this->wpum_sanitize_key( $meta );
+			$meta = $this->wpum_sanitize_key( $meta );
 		}
 
 		return $meta;
@@ -788,6 +788,6 @@ class WPUM_Field {
 	 * @return string
 	 */
 	public function wpum_sanitize_key( $key ) {
-		return preg_replace( '/[^A-Za-z0-9_]/', '', $key );
+		return strtolower( preg_replace( '/[^A-Za-z0-9_-]/', '', $key ) );
 	}
 }

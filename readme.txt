@@ -4,11 +4,11 @@ Plugin URI: https://wpusermanager.com
 Contributors: wpusermanager, polevaultweb, alessandro.tesoro
 Tags: members, membership, community, user profile, user registration
 Requires at least: 4.9
-Tested up to: 6.0
+Tested up to: 6.1
 Requires PHP: 5.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
-Stable Tag: 2.8.9-dev
+Stable Tag: 2.8.13
 
 The most customizable profiles & community builder WordPress plugin with front-end login, registration, profile customization and content restriction.
 
@@ -125,6 +125,34 @@ Please note that using WPUM and the mentioned add-ons does NOT guarantee complia
 13. Login form.
 
 == Changelog ==
+
+= 2.8.13 (19th October 2022) =
+
+- Fix: User, User Role, and User Taxonomy fields now saving multiple values correctly
+
+= 2.8.12 (16th September 2022) =
+
+- Fix: Forms in widgets now render correctly
+- Fix: Multi select fields now rendered correctly when hidden with conditional logic
+
+= 2.8.11 (15th September 2022) =
+
+- Improvement: Links on the Already Logged In template can be filtered using the 'wpum_already_logged_in_links' filter
+- Fix: Password reset success message now renders HTML correctly
+- Fix: File field now correctly saving uploads
+- Fix: Sub pages for the account and profile page now loading when using an Elementor template
+
+= 2.8.10 (14th September 2022) =
+
+- Fix: Conditional logic settings now correctly saving when editing a field
+- Fix: Custom field unique meta keys now converted to lowercase to stop fatal errors
+
+= 2.8.9 (12th September 2022) =
+
+- Improvement: Options for dropdown, multiselect, checkbox and radio buttons fields can be pasted in
+- Improvement: Plugin coding standards improved
+- Fix: Account and profile subpages now correctly styled like the parent page when using page builder plugins
+- Fix: PHP notices now not thrown when using conditional logic with empty multiselect fields
 
 = 2.8.8 (16th August 2022) =
 
