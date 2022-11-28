@@ -53,4 +53,15 @@ class WPUM_Field_Multicheckbox extends WPUM_Field_Type {
 		return implode( ', ', $values );
 
 	}
+
+	/**
+	 * Gets the value of a posted multicheckbox field.
+	 *
+	 * @param  string $key
+	 * @param  array  $field
+	 * @return array
+	 */
+	public function get_posted_field( $key, $field ) {
+		return isset( $_POST[ $key ] ) ? array_map( 'sanitize_text_field', $_POST[ $key ] ) : array(); // phpcs:ignore
+	}
 }
