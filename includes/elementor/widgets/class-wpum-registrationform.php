@@ -3,30 +3,35 @@
  * Handles the display of registraton form to elementor builder.
  *
  * @package     wp-user-manager
- * @copyright   Copyright (c) 2018, Alessandro Tesoro
+ * @copyright   Copyright (c) 2022 WP User Manager
  * @license     https://opensource.org/licenses/GPL-3.0 GNU Public License
  */
 
-class RegistrationForm extends \Elementor\Widget_Base {
+/**
+ * Registration form widget
+ */
+class WPUM_RegistrationForm extends WPUM_Elementor_Widget {
 
+	/**
+	 * @var string
+	 */
 	protected $shortcode_function = 'wpum_registration_form';
 
-	public function get_name() {
-		return 'registration-form';
-	}
+	/**
+	 * @var string
+	 */
+	protected $icon = 'eicon-plus-square-o';
 
+	/**
+	 * @return string
+	 */
 	public function get_title() {
 		return esc_html__( 'Registration form', 'wp-user-manager' );
 	}
 
-	public function get_icon() {
-		return 'eicon-plus-square-o';
-	}
-
-	public function get_categories() {
-		return array( 'wp-user-manager' );
-	}
-
+	/**
+	 * @return array
+	 */
 	public function get_keywords() {
 		return array(
 			esc_html__( 'register', 'wp-user-manager' ),
@@ -37,6 +42,9 @@ class RegistrationForm extends \Elementor\Widget_Base {
 		);
 	}
 
+	/**
+	 * Register
+	 */
 	protected function register_controls() {
 		$this->start_controls_section(
 			'wpum_content_section',
@@ -70,19 +78,24 @@ class RegistrationForm extends \Elementor\Widget_Base {
 			)
 		);
 
-		$this->add_control(
-			'form_id',
-			array(
-				'label'   => esc_html__( 'Select Registration Form', 'wp-user-manager' ),
-				'type'    => \Elementor\Controls_Manager::SELECT,
-				'default' => 1,
-				'options' => $this->get_registration_forms(),
-			)
-		);
+		if ( class_exists( 'WPUM_Registration_Forms' ) ) {
+			$this->add_control(
+				'form_id',
+				array(
+					'label'   => esc_html__( 'Select Registration Form', 'wp-user-manager' ),
+					'type'    => \Elementor\Controls_Manager::SELECT,
+					'default' => 1,
+					'options' => $this->get_registration_forms(),
+				)
+			);
+		}
 
 		$this->end_controls_section();
 	}
 
+	/**
+	 * @return array
+	 */
 	protected function get_registration_forms() {
 		$forms              = WPUM()->registration_forms->get_forms();
 		$registration_forms = array();
@@ -94,9 +107,11 @@ class RegistrationForm extends \Elementor\Widget_Base {
 		return $registration_forms;
 	}
 
+	/**
+	 * Render
+	 */
 	public function render() {
-		$attributes = $this->get_settings_for_display();
-		echo call_user_func( $this->shortcode_function, $attributes );
+		parent::render();
 
 		// Enqueue JS scripts
 		wpum_enqueue_scripts();

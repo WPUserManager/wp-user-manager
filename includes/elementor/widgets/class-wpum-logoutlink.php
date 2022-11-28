@@ -3,37 +3,43 @@
  * Handles the display of logout link to elementor builder.
  *
  * @package     wp-user-manager
- * @copyright   Copyright (c) 2018, Alessandro Tesoro
+ * @copyright   Copyright (c) 2022 WP User Manager
  * @license     https://opensource.org/licenses/GPL-3.0 GNU Public License
  */
 
-class LogoutLink extends \Elementor\Widget_Base {
+/**
+ * Logout Elementor widget
+ */
+class WPUM_LogoutLink extends WPUM_Elementor_Widget {
 
+	/**
+	 * @var string
+	 */
 	protected $shortcode_function = 'wpum_logout_link';
 
-	public function get_name() {
-		return 'logout-link';
-	}
+	/**
+	 * @var string
+	 */
+	protected $icon = 'eicon-editor-unlink';
 
+	/**
+	 * @var array
+	 */
+	protected $keywords = array(
+		'logout',
+		'logout link',
+	);
+
+	/**
+	 * @return string
+	 */
 	public function get_title() {
 		return esc_html__( 'Logout Link', 'wp-user-manager' );
 	}
 
-	public function get_icon() {
-		return 'eicon-editor-unlink';
-	}
-
-	public function get_categories() {
-		return array( 'wp-user-manager' );
-	}
-
-	public function get_keywords() {
-		return array(
-			esc_html__( 'logout', 'wp-user-manager' ),
-			esc_html__( 'logout link', 'wp-user-manager' ),
-		);
-	}
-
+	/**
+	 * Register controls
+	 */
 	protected function register_controls() {
 		$this->start_controls_section(
 			'wpum_content_section',
@@ -61,10 +67,5 @@ class LogoutLink extends \Elementor\Widget_Base {
 		);
 
 		$this->end_controls_section();
-	}
-
-	public function render() {
-		$attributes = $this->get_settings_for_display();
-		echo call_user_func( $this->shortcode_function, $attributes );
 	}
 }

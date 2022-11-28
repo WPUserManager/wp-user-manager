@@ -3,30 +3,42 @@
  * Handles the display of recently registered users to elementor builder.
  *
  * @package     wp-user-manager
- * @copyright   Copyright (c) 2018, Alessandro Tesoro
+ * @copyright   Copyright (c) 2022 WP User Manager
  * @license     https://opensource.org/licenses/GPL-3.0 GNU Public License
  */
 
-class RecentlyRegisteredUsers extends \Elementor\Widget_Base {
+/**
+ * Recently registered widget
+ */
+class WPUM_RecentlyRegisteredUsers extends WPUM_Elementor_Widget {
 
+	/**
+	 * @var string
+	 */
 	protected $shortcode_function = 'wpum_recently_registered';
 
+	/**
+	 * @var string
+	 */
+	protected $icon = 'eicon-person';
+
+	/**
+	 * @return string
+	 */
 	public function get_name() {
 		return 'recently-registered-users';
 	}
 
+	/**
+	 * @return string
+	 */
 	public function get_title() {
 		return esc_html__( 'Recently Registered', 'wp-user-manager' );
 	}
 
-	public function get_icon() {
-		return 'eicon-person';
-	}
-
-	public function get_categories() {
-		return array( 'wp-user-manager' );
-	}
-
+	/**
+	 * @return array
+	 */
 	public function get_keywords() {
 		return array(
 			esc_html__( 'users', 'wp-user-manager' ),
@@ -37,6 +49,9 @@ class RecentlyRegisteredUsers extends \Elementor\Widget_Base {
 		);
 	}
 
+	/**
+	 * Register
+	 */
 	protected function register_controls() {
 		$this->start_controls_section(
 			'wpum_content_section',
@@ -67,10 +82,5 @@ class RecentlyRegisteredUsers extends \Elementor\Widget_Base {
 		);
 
 		$this->end_controls_section();
-	}
-
-	public function render() {
-		$attributes = $this->get_settings_for_display();
-		echo call_user_func( $this->shortcode_function, $attributes );
 	}
 }

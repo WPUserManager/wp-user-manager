@@ -3,30 +3,42 @@
  * Handles the display of password recovery form to elementor builder.
  *
  * @package     wp-user-manager
- * @copyright   Copyright (c) 2018, Alessandro Tesoro
+ * @copyright   Copyright (c) 2022 WP User Manager
  * @license     https://opensource.org/licenses/GPL-3.0 GNU Public License
  */
 
-class RecoveryForm extends \Elementor\Widget_Base {
+/**
+ * Recovery password form widget
+ */
+class WPUM_RecoveryForm extends WPUM_Elementor_Widget {
 
+	/**
+	 * @var string
+	 */
 	protected $shortcode_function = 'wpum_password_recovery';
 
+	/**
+	 * @var string
+	 */
+	protected $icon = 'eicon-lock';
+
+	/**
+	 * @return string
+	 */
 	public function get_name() {
 		return 'password-recovery-form';
 	}
 
+	/**
+	 * @return string
+	 */
 	public function get_title() {
 		return esc_html__( 'Password recovery form', 'wp-user-manager' );
 	}
 
-	public function get_icon() {
-		return 'eicon-lock';
-	}
-
-	public function get_categories() {
-		return array( 'wp-user-manager' );
-	}
-
+	/**
+	 * @return array
+	 */
 	public function get_keywords() {
 		return array(
 			esc_html__( 'password', 'wp-user-manager' ),
@@ -37,6 +49,9 @@ class RecoveryForm extends \Elementor\Widget_Base {
 		);
 	}
 
+	/**
+	 * Register
+	 */
 	protected function register_controls() {
 		$this->start_controls_section(
 			'wpum_content_section',
@@ -71,10 +86,5 @@ class RecoveryForm extends \Elementor\Widget_Base {
 		);
 
 		$this->end_controls_section();
-	}
-
-	public function render() {
-		$attributes = $this->get_settings_for_display();
-		echo call_user_func( $this->shortcode_function, $attributes );
 	}
 }

@@ -3,30 +3,42 @@
  * Handles the display of user directory to elementor builder.
  *
  * @package     wp-user-manager
- * @copyright   Copyright (c) 2018, Alessandro Tesoro
+ * @copyright   Copyright (c) 2022 WP User Manager
  * @license     https://opensource.org/licenses/GPL-3.0 GNU Public License
  */
 
-class UserDirectory extends \Elementor\Widget_Base {
+/**
+ * User directory widget
+ */
+class WPUM_UserDirectory extends WPUM_Elementor_Widget {
 
+	/**
+	 * @var string
+	 */
 	protected $shortcode_function = 'wpum_directory';
 
+	/**
+	 * @var string
+	 */
+	protected $icon = 'eicon-editor-list-ol';
+
+	/**
+	 * @var string
+	 */
 	public function get_name() {
 		return 'user-directory';
 	}
 
+	/**
+	 * @var string
+	 */
 	public function get_title() {
 		return esc_html__( 'User Directory', 'wp-user-manager' );
 	}
 
-	public function get_icon() {
-		return 'eicon-editor-list-ol';
-	}
-
-	public function get_categories() {
-		return array( 'wp-user-manager' );
-	}
-
+	/**
+	 * @var array
+	 */
 	public function get_keywords() {
 		return array(
 			esc_html__( 'users', 'wp-user-manager' ),
@@ -38,8 +50,10 @@ class UserDirectory extends \Elementor\Widget_Base {
 		);
 	}
 
+	/**
+	 * Register
+	 */
 	protected function register_controls() {
-
 		$this->start_controls_section(
 			'wpum_content_section',
 			array(
@@ -61,8 +75,11 @@ class UserDirectory extends \Elementor\Widget_Base {
 		$this->end_controls_section();
 	}
 
+	/**
+	 * @return array
+	 */
 	public function get_directories() {
-		$directories = array( '' => 'Select Directory' );
+		$directories = array( '' => __( 'Select User Directory', 'wp-user-manager' ) );
 
 		$posts = get_posts(
 			array(
@@ -77,10 +94,5 @@ class UserDirectory extends \Elementor\Widget_Base {
 		}
 
 		return apply_filters( 'wpum_get_directories', $directories );
-	}
-
-	public function render() {
-		$attributes = $this->get_settings_for_display();
-		echo call_user_func( $this->shortcode_function, $attributes );
 	}
 }

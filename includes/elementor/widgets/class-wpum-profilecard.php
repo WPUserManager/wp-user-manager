@@ -3,30 +3,35 @@
  * Handles the display of profile card to elementor builder.
  *
  * @package     wp-user-manager
- * @copyright   Copyright (c) 2018, Alessandro Tesoro
+ * @copyright   Copyright (c) 2022 WP User Manager
  * @license     https://opensource.org/licenses/GPL-3.0 GNU Public License
  */
 
-class ProfileCard extends \Elementor\Widget_Base {
+/**
+ * Profile car widget
+ */
+class WPUM_ProfileCard extends WPUM_Elementor_Widget {
 
+	/**
+	 * @var string
+	 */
 	protected $shortcode_function = 'wpum_profile_card';
 
-	public function get_name() {
-		return 'profile-card';
-	}
+	/**
+	 * @var string
+	 */
+	protected $icon = 'eicon-call-to-action';
 
+	/**
+	 * @return string
+	 */
 	public function get_title() {
 		return esc_html__( 'Profile card', 'wp-user-manager' );
 	}
 
-	public function get_icon() {
-		return 'eicon-call-to-action';
-	}
-
-	public function get_categories() {
-		return array( 'wp-user-manager' );
-	}
-
+	/**
+	 * @return array
+	 */
 	public function get_keywords() {
 		return array(
 			esc_html__( 'profile', 'wp-user-manager' ),
@@ -37,6 +42,9 @@ class ProfileCard extends \Elementor\Widget_Base {
 		);
 	}
 
+	/**
+	 * Register
+	 */
 	protected function register_controls() {
 		$this->start_controls_section(
 			'wpum_content_section',
@@ -95,6 +103,11 @@ class ProfileCard extends \Elementor\Widget_Base {
 		$this->end_controls_section();
 	}
 
+	/**
+	 * Get Users
+	 *
+	 * @return array
+	 */
 	public function get_users() {
 		$users = array();
 
@@ -105,10 +118,5 @@ class ProfileCard extends \Elementor\Widget_Base {
 		$users = apply_filters( 'wpum_users_profile_card', $users );
 
 		return $users;
-	}
-
-	public function render() {
-		$attributes = $this->get_settings_for_display();
-		echo call_user_func( $this->shortcode_function, $attributes );
 	}
 }

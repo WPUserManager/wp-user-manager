@@ -3,30 +3,42 @@
  * Handles the display of front-end posting form to elementor builder.
  *
  * @package     wp-user-manager
- * @copyright   Copyright (c) 2018, Alessandro Tesoro
+ * @copyright   Copyright (c) 2022 WP User Manager
  * @license     https://opensource.org/licenses/GPL-3.0 GNU Public License
  */
 
-class PostForm extends \Elementor\Widget_Base {
+/**
+ * Post form widget
+ */
+class WPUM_PostForm extends WPUM_Elementor_Widget {
 
+	/**
+	 * @var string
+	 */
 	protected $shortcode_function = 'wpumfr_post_form';
 
+	/**
+	 * @var string
+	 */
+	protected $icon = 'eicon-post-content';
+
+	/**
+	 * @return string
+	 */
 	public function get_name() {
 		return 'post-form';
 	}
 
+	/**
+	 * @return string
+	 */
 	public function get_title() {
 		return esc_html__( 'Post Form', 'wp-user-manager' );
 	}
 
-	public function get_icon() {
-		return 'eicon-post-content';
-	}
-
-	public function get_categories() {
-		return array( 'wp-user-manager' );
-	}
-
+	/**
+	 * @return array
+	 */
 	public function get_keywords() {
 		return array(
 			esc_html__( 'post form', 'wp-user-manager' ),
@@ -35,8 +47,10 @@ class PostForm extends \Elementor\Widget_Base {
 		);
 	}
 
+	/**
+	 * Register
+	 */
 	protected function register_controls() {
-
 		$post_forms = $this->get_post_forms();
 		$default    = 0;
 
@@ -65,7 +79,10 @@ class PostForm extends \Elementor\Widget_Base {
 		$this->end_controls_section();
 	}
 
-	private function get_post_forms() {
+	/**
+	 * @return array
+	 */
+	protected function get_post_forms() {
 		$post_forms = WPUMFR()->post_forms->get_forms();
 		$forms      = array();
 
@@ -80,10 +97,5 @@ class PostForm extends \Elementor\Widget_Base {
 		}
 
 		return $forms;
-	}
-
-	public function render() {
-		$attributes = $this->get_settings_for_display();
-		echo call_user_func( $this->shortcode_function, $attributes );
 	}
 }

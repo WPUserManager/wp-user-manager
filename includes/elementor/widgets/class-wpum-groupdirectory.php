@@ -3,30 +3,35 @@
  * Handles the display of group directory form to elementor builder.
  *
  * @package     wp-user-manager
- * @copyright   Copyright (c) 2018, Alessandro Tesoro
+ * @copyright   Copyright (c) 2022 WP User Manager
  * @license     https://opensource.org/licenses/GPL-3.0 GNU Public License
  */
 
-class GroupDirectory extends \Elementor\Widget_Base {
+/**
+ * Group Directory widget
+ */
+class WPUM_GroupDirectory extends WPUM_Elementor_Widget {
 
+	/**
+	 * @var string
+	 */
 	protected $shortcode_function = 'wpum_group_directory';
 
-	public function get_name() {
-		return 'group-directory';
-	}
+	/**
+	 * @var string
+	 */
+	protected $icon = 'eicon-posts-group';
 
+	/**
+	 * @var string
+	 */
 	public function get_title() {
 		return esc_html__( 'Group Directory', 'wp-user-manager' );
 	}
 
-	public function get_icon() {
-		return 'eicon-posts-group';
-	}
-
-	public function get_categories() {
-		return array( 'wp-user-manager' );
-	}
-
+	/**
+	 * @var array
+	 */
 	public function get_keywords() {
 		return array(
 			esc_html__( 'login', 'wp-user-manager' ),
@@ -34,6 +39,9 @@ class GroupDirectory extends \Elementor\Widget_Base {
 		);
 	}
 
+	/**
+	 * Register
+	 */
 	protected function register_controls() {
 		$this->start_controls_section(
 			'wpum_content_section',
@@ -89,10 +97,5 @@ class GroupDirectory extends \Elementor\Widget_Base {
 		);
 
 		$this->end_controls_section();
-	}
-
-	public function render() {
-		$attributes = $this->get_settings_for_display();
-		echo call_user_func( $this->shortcode_function, $attributes );
 	}
 }

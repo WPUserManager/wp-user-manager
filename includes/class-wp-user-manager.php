@@ -260,7 +260,7 @@ if ( ! class_exists( 'WP_User_Manager' ) ) :
 			require_once WPUM_PLUGIN_DIR . 'includes/directories/class-wpum-directories-editor.php';
 			require_once WPUM_PLUGIN_DIR . 'includes/directories/wpum-directories-functions.php';
 			require_once WPUM_PLUGIN_DIR . 'includes/widgets.php';
-			require_once WPUM_PLUGIN_DIR . 'includes/elementor/elementor-loader.php';
+			require_once WPUM_PLUGIN_DIR . 'includes/elementor/class-wpum-elementor-loader.php';
 
 			require_once WPUM_PLUGIN_DIR . 'includes/admin/class-wpum-plugin-updates.php';
 
@@ -348,6 +348,8 @@ if ( ! class_exists( 'WP_User_Manager' ) ) :
 			add_action( 'plugins_loaded', array( $this, 'init' ), 0 );
 
 			( new WPUM_Plugin_Updates() )->init();
+
+			( new WPUM_Elementor_Loader() )::get_instance();
 
 			$this->field_types = new WPUM_Fields();
 			$this->field_types->init();

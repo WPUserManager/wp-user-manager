@@ -3,18 +3,26 @@
  * Register elementor restriction controls.
  *
  * @package     wp-user-manager
- * @copyright   Copyright (c) 2018, Alessandro Tesoro
+ * @copyright   Copyright (c) 2022 WP User Manager
  * @license     https://opensource.org/licenses/GPL-3.0 GNU Public License
  */
 
-class RestrictionControls {
+use Elementor\Controls_Stack;
+
+/**
+ * Registrastion Controls extension
+ */
+class WPUM_RestrictionControls {
 
 	/**
 	 * @var WPUM_Elementor_Control
 	 */
 	protected static $instance;
 
-	protected static $restricted_elementor_widgets = array();
+	/**
+	 * @var array
+	 */
+	protected $restricted_elementor_widgets = array();
 
 	/**
 	 * Get instance.
@@ -32,6 +40,9 @@ class RestrictionControls {
 		return self::$instance;
 	}
 
+	/**
+	 * Init
+	 */
 	public function init() {
 		$this->restricted_elementor_widgets = apply_filters( 'restricted_elementor_widgets', array(
 			'post-form',
@@ -44,12 +55,18 @@ class RestrictionControls {
 		add_action( 'elementor/element/after_section_end', array( $this, 'wpum_restriction_controls' ), 10, 2 );
 	}
 
+	/**
+	 * Register controls
+	 *
+	 * @param Controls_Stack $section
+	 * @param string         $section_id
+	 */
 	public function wpum_restriction_controls( $section, $section_id ) {
 		if ( 'wpum_content_section' !== $section_id ) {
 			return;
 		}
 
-		if ( ! in_array( $section->get_name(), $this->restricted_elementor_widgets ) ) {
+		if ( ! in_array( $section->get_name(), $this->restricted_elementor_widgets, true ) ) {
 			return;
 		}
 
@@ -137,6 +154,9 @@ class RestrictionControls {
 		$section->end_controls_section();
 	}
 
+	/**
+	 * @return array
+	 */
 	public function get_users() {
 		$users = array();
 
@@ -147,12 +167,16 @@ class RestrictionControls {
 		return $users;
 	}
 
+	/**
+	 * @return array
+	 */
 	public function get_user_roles() {
 		$roles = array();
 
 		foreach ( wpum_get_roles( true, true ) as $role ) {
 			$roles[ $role['value'] ] = $role['label'];
 		}
+
 		return $roles;
 	}
 }

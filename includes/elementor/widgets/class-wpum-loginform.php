@@ -3,30 +3,35 @@
  * Handles the display of login form to elementor builder.
  *
  * @package     wp-user-manager
- * @copyright   Copyright (c) 2018, Alessandro Tesoro
+ * @copyright   Copyright (c) 2022 WP User Manager
  * @license     https://opensource.org/licenses/GPL-3.0 GNU Public License
  */
 
-class LoginForm extends \Elementor\Widget_Base {
+/**
+ * Login form widget
+ */
+class WPUM_LoginForm extends WPUM_Elementor_Widget {
 
+	/**
+	 * @var string
+	 */
 	protected $shortcode_function = 'wpum_login_form';
 
-	public function get_name() {
-		return 'login-form';
-	}
+	/**
+	 * @var string
+	 */
+	protected $icon = 'eicon-user-circle-o';
 
+	/**
+	 * @return array
+	 */
 	public function get_title() {
 		return esc_html__( 'Login Form', 'wp-user-manager' );
 	}
 
-	public function get_icon() {
-		return 'eicon-user-circle-o';
-	}
-
-	public function get_categories() {
-		return array( 'wp-user-manager' );
-	}
-
+	/**
+	 * @return array
+	 */
 	public function get_keywords() {
 		return array(
 			esc_html__( 'login', 'wp-user-manager' ),
@@ -34,6 +39,9 @@ class LoginForm extends \Elementor\Widget_Base {
 		);
 	}
 
+	/**
+	 * Register
+	 */
 	protected function register_controls() {
 		$this->start_controls_section(
 			'wpum_content_section',
@@ -68,10 +76,5 @@ class LoginForm extends \Elementor\Widget_Base {
 		);
 
 		$this->end_controls_section();
-	}
-
-	public function render() {
-		$attributes = $this->get_settings_for_display();
-		echo call_user_func( $this->shortcode_function, $attributes );
 	}
 }
