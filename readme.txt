@@ -8,7 +8,7 @@ Tested up to: 6.1
 Requires PHP: 5.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
-Stable Tag: 2.8.13
+Stable Tag: 2.8.14
 
 The most customizable profiles & community builder WordPress plugin with front-end login, registration, profile customization and content restriction.
 
@@ -125,6 +125,17 @@ Please note that using WPUM and the mentioned add-ons does NOT guarantee complia
 13. Login form.
 
 == Changelog ==
+
+= 2.8.14 (6th December 2022) =
+
+- Improvement: Saving a custom field with same unique key is now not allowed
+- Improvement: 'wpum_prevent_entire_site_access_allowed_urls' filter for allowing URLs when site access is prevented
+- Fix: Multiple checkboxes field now saving correctly
+- Fix: Existing file fields data in a repeater field are now preserved correctly on save
+- Fix: Menu item user role restriction now works as expected
+- Fix: Switching back to a user with the User Switching plugin now works as expected
+- Fix: Plugin admin scripts now not loading on every admin page
+- Fix: Hypens now allowed in unique meta key for custom fields
 
 = 2.8.13 (19th October 2022) =
 
