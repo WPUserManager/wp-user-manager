@@ -226,7 +226,7 @@ class WPUM_Field_Repeater extends WPUM_Field_Type {
 			$files = $this->upload_file( $key, $field );
 		}
 
-		$current_repeater = parent::get_posted_field( 'current_' . $key, $field );
+		$current_repeater = isset( $_POST[ 'current_' . $key ] ) ? $this->sanitize_posted_field( $_POST[ 'current_' . $key ], $field['sanitizer'] ) : array(); // phpcs:ignore
 
 		foreach ( $_FILES[ $key ]['name'] as $index => $post ) { // phpcs:ignore
 			$post_keys = array_keys( $post );
