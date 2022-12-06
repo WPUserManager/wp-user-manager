@@ -195,7 +195,7 @@ add_filter( 'authenticate', 'wpum_authentication', 20, 3 );
  */
 function wpum_highlight_pages( $post_states, $post ) {
 
-	$mark    = '<img style="width:13px;" src="' . WPUM_PLUGIN_URL . '/assets/images/logo.svg" title="WP User Manager Page">';
+	$mark    = '<img style="width:13px;" src="' . WPUM_PLUGIN_URL . 'assets/images/logo.svg" title="WP User Manager Page">';
 	$post_id = $post->ID;
 
 	switch ( $post_id ) {
@@ -352,3 +352,42 @@ function wpum_remove_slashes_from_field_data( $field_name ) {
 
 add_filter( 'wpum_field_name', 'wpum_remove_slashes_from_field_data' );
 add_filter( 'wpum_field_description', 'wpum_remove_slashes_from_field_data' );
+
+/**
+ * Add unique key validator for user_meta_key field.
+ *
+ * @param array $settings
+ *
+ * @return array
+ */
+function wpum_fields_editor_field_settings( $settings ) {
+	foreach ( $settings as $key => $setting ) {
+		if ( 'user_meta_key' === $setting['model'] ) {
+			$settings[ $key ]['validator'][] = 'unique_user_meta_key';
+		}
+	}
+
+	return $settings;
+}
+
+add_filter( 'wpum_fields_editor_field_settings', 'wpum_fields_editor_field_settings' );
+
+/**
+ * Fix User Switching plugin not switching back correctly
+ */
+add_action( 'wp_die_handler', function ( $handler ) {
+	if ( ! isset( $_SERVER['QUERY_STRING'] ) ) {
+		return $handler;
+	}
+
+	parse_str( $_SERVER['QUERY_STRING'], $query ); // phpcs:ignore
+
+	if ( 'switch_to_olduser' === $query['action'] ) {
+		$request_uri = isset( $_SERVER['REQUEST_URI'] ) ? wp_unslash( filter_input( INPUT_SERVER, 'REQUEST_URI' ) ) : '';
+
+		wp_safe_redirect( get_bloginfo( 'wpurl' ) . $request_uri );
+		exit;
+	}
+
+	return $handler;
+} );
