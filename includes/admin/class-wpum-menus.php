@@ -167,14 +167,15 @@ class WPUM_Menus {
 			switch ( $status ) {
 				case 'in':
 					$visible = is_user_logged_in() ? true : false;
-					if ( is_array( $roles ) && ! empty( $roles ) && is_user_logged_in() ) {
+					if ( is_array( $roles ) && ! empty( $roles ) && $visible ) {
 						$user         = wp_get_current_user();
-						$roles        = (array) $user->roles;
-						$roles        = array_values( $roles );
-						$current_role = $roles[0];
 
 						if ( ! array_intersect( (array) $user->roles, $roles ) ) {
 							$visible = false;
+						}
+
+						if ( current_user_can( 'administrator' ) && apply_filters( 'wpum_menu_restriction_allow_admins', true ) ) {
+							$visible = true;
 						}
 					}
 					break;
