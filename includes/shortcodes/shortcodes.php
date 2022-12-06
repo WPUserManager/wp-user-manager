@@ -36,7 +36,7 @@ function wpum_login_form( $atts, $content = null ) {
 
 	ob_start();
 
-	if ( is_user_logged_in() && apply_filters( 'wpum_shortcode_logged_in_override', false, 'wpum_login_form' ) ) {
+	if ( is_user_logged_in() && ! apply_filters( 'wpum_shortcode_logged_in_override', false, 'wpum_login_form' ) ) {
 		WPUM()->templates
 			->get_template_part( 'already-logged-in' );
 	} else {
@@ -76,7 +76,7 @@ function wpum_password_recovery( $atts, $content = null ) {
 
 	ob_start();
 
-	if ( is_user_logged_in() && apply_filters( 'wpum_shortcode_logged_in_override', false, 'wpum_password_recovery' ) ) {
+	if ( is_user_logged_in() && ! apply_filters( 'wpum_shortcode_logged_in_override', false, 'wpum_password_recovery' ) ) {
 		WPUM()->templates
 			->get_template_part( 'already-logged-in' );
 	} else {
@@ -108,7 +108,7 @@ function wpum_login_link( $atts, $content = null ) {
 		$atts
 	);
 
-	if ( is_user_logged_in() && apply_filters( 'wpum_shortcode_logged_in_override', false, 'wpum_login_link' ) ) {
+	if ( is_user_logged_in() && ! apply_filters( 'wpum_shortcode_logged_in_override', false, 'wpum_login_link' ) ) {
 		$output = '';
 	} else {
 
@@ -190,7 +190,7 @@ function wpum_registration_form( $atts, $content = null ) {
 
 		$finalstep = apply_filters( 'wpum_check_next_step', true );
 
-		if ( is_user_logged_in() && $finalstep && ! $is_success && apply_filters( 'wpum_shortcode_logged_in_override', false, 'wpum_registration_form' ) ) {
+		if ( is_user_logged_in() && $finalstep && ! $is_success && ! apply_filters( 'wpum_shortcode_logged_in_override', false, 'wpum_registration_form' ) ) {
 
 			WPUM()->templates
 				->get_template_part( 'already-logged-in' );
