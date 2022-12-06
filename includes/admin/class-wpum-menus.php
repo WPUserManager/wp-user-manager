@@ -168,7 +168,7 @@ class WPUM_Menus {
 				case 'in':
 					$visible = is_user_logged_in() ? true : false;
 					if ( is_array( $roles ) && ! empty( $roles ) && $visible ) {
-						$user         = wp_get_current_user();
+						$user = wp_get_current_user();
 
 						if ( ! array_intersect( (array) $user->roles, $roles ) ) {
 							$visible = false;
