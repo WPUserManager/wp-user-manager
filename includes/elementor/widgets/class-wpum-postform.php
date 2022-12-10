@@ -59,14 +59,14 @@ class WPUM_PostForm extends WPUM_Elementor_Widget {
 
 		return array(
 			array(
-				'id'          => 'form_id',
-				'attributes'  => array(
+				'id'         => 'form_id',
+				'attributes' => array(
 					'label'   => esc_html__( 'Select Form', 'wp-user-manager' ),
 					'type'    => \Elementor\Controls_Manager::SELECT,
 					'default' => $default,
 					'options' => $post_forms,
-				)
-			)
+				),
+			),
 		);
 	}
 

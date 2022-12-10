@@ -56,7 +56,7 @@ class WPUM_LoginForm extends WPUM_Elementor_Widget {
 				)
 			),
 			array(
-				'id' => 'register_link',
+				'id'         => 'register_link',
 				'attributes' => array(
 					'label'        => esc_html__( 'Show registration link', 'wp-user-manager' ),
 					'type'         => \Elementor\Controls_Manager::SWITCHER,
@@ -65,7 +65,7 @@ class WPUM_LoginForm extends WPUM_Elementor_Widget {
 					'return_value' => 'yes',
 					'default'      => 'yes',
 				)
-			)
+			),
 		);
 	}
 }

@@ -43,7 +43,7 @@ class WPUM_GroupDirectory extends WPUM_Elementor_Widget {
 	public function widget_controls() {
 		return array(
 			array(
-				'id' => 'per_page',
+				'id'         => 'per_page',
 				'attributes' => array(
 					'label'   => esc_html__( 'Groups per page', 'wp-user-manager' ),
 					'type'    => \Elementor\Controls_Manager::TEXT,
@@ -51,7 +51,7 @@ class WPUM_GroupDirectory extends WPUM_Elementor_Widget {
 				)
 			),
 			array(
-				'id' => 'has_search_form',
+				'id'         => 'has_search_form',
 				'attributes' => array(
 					'label'        => esc_html__( 'Show search form', 'wp-user-manager' ),
 					'type'         => \Elementor\Controls_Manager::SWITCHER,
@@ -60,7 +60,7 @@ class WPUM_GroupDirectory extends WPUM_Elementor_Widget {
 					'return_value' => 'yes',
 					'default'      => 'yes',
 				)
-			)
+			),
 		);
 	}
 }

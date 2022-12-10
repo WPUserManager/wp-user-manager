@@ -54,7 +54,7 @@ class WPUM_RegistrationForm extends WPUM_Elementor_Widget {
 					'label_off'    => esc_html__( 'No', 'wp-user-manager' ),
 					'return_value' => 'yes',
 					'default'      => 'yes',
-				)
+				),
 			),
 			array(
 				'id'               => 'psw_link',
@@ -65,8 +65,8 @@ class WPUM_RegistrationForm extends WPUM_Elementor_Widget {
 					'label_off'    => esc_html__( 'No', 'wp-user-manager' ),
 					'return_value' => 'yes',
 					'default'      => 'yes',
-				)
-			)
+				),
+			),
 		);
 
 		if ( class_exists( 'WPUM_Registration_Forms' ) ) {
@@ -77,7 +77,7 @@ class WPUM_RegistrationForm extends WPUM_Elementor_Widget {
 					'type'    => \Elementor\Controls_Manager::SELECT,
 					'default' => 1,
 					'options' => $this->get_registration_forms(),
-				)
+				),
 			);
 		}
 

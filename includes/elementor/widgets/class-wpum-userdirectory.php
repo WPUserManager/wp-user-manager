@@ -54,14 +54,14 @@ class WPUM_UserDirectory extends WPUM_Elementor_Widget {
 	public function widget_controls() {
 		return array(
 			array(
-				'id'          => 'id',
-				'attributes'  => array(
+				'id'         => 'id',
+				'attributes' => array(
 					'label'   => esc_html__( 'Select Directory', 'wp-user-manager' ),
 					'type'    => \Elementor\Controls_Manager::SELECT,
 					'default' => '',
 					'options' => $this->get_directories(),
-				)
-			)
+				),
+			),
 		);
 	}
 
@@ -76,7 +76,7 @@ class WPUM_UserDirectory extends WPUM_Elementor_Widget {
 				'status'    => 'publish',
 				'order'     => 'ASC',
 				'post_type' => 'wpum_directory',
-			)
+			),
 		);
 
 		foreach ( $posts as $post ) {

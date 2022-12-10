@@ -62,7 +62,7 @@ class WPUM_Elementor_Loader {
 			'wp-user-manager',
 			array(
 				'title' => esc_html__( 'WP User Manager', 'wp-user-manager' ),
-			)
+			),
 		);
 	}
 

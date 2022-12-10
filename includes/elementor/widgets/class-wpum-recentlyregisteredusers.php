@@ -52,24 +52,24 @@ class WPUM_RecentlyRegisteredUsers extends WPUM_Elementor_Widget {
 	public function widget_controls() {
 		return array(
 			array(
-				'id'          => 'amount',
-				'attributes'  => array(
+				'id'         => 'amount',
+				'attributes' => array(
 					'label'   => esc_html__( 'How many users to display', 'wp-user-manager' ),
 					'type'    => \Elementor\Controls_Manager::TEXT,
 					'default' => 10
-				)
+				),
 			),
 			array(
-				'id'               => 'link_to_profile',
-				'attributes'       => array(
+				'id'         => 'link_to_profile',
+				'attributes' => array(
 					'label'        => esc_html__( 'Show profile link', 'wp-user-manager' ),
 					'type'         => \Elementor\Controls_Manager::SWITCHER,
 					'label_on'     => esc_html__( 'Yes', 'wp-user-manager' ),
 					'label_off'    => esc_html__( 'No', 'wp-user-manager' ),
 					'return_value' => 'yes',
 					'default'      => 'yes',
-				)
-			)
+				),
+			),
 		);
 	}
 }

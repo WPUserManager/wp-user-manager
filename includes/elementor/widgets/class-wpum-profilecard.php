@@ -46,47 +46,47 @@ class WPUM_ProfileCard extends WPUM_Elementor_Widget {
 	public function widget_controls() {
 		return array(
 			array(
-				'id'          => 'user_id',
-				'attributes'  => array(
+				'id'         => 'user_id',
+				'attributes' => array(
 					'label'   => esc_html__( 'Select User', 'wp-user-manager' ),
 					'type'    => \Elementor\Controls_Manager::SELECT,
 					'default' => get_current_user_id(),
 					'options' => $this->get_users(),
-				)
+				),
 			),
 			array(
-				'id'               => 'link_to_profile',
-				'attributes'       => array(
+				'id'         => 'link_to_profile',
+				'attributes' => array(
 					'label'        => esc_html__( 'Profile link', 'wp-user-manager' ),
 					'type'         => \Elementor\Controls_Manager::SWITCHER,
 					'label_on'     => esc_html__( 'Yes', 'wp-user-manager' ),
 					'label_off'    => esc_html__( 'No', 'wp-user-manager' ),
 					'return_value' => 'yes',
 					'default'      => 'yes',
-				)
+				),
 			),
 			array(
-				'id'               => 'display_buttons',
-				'attributes'       => array(
+				'id'         => 'display_buttons',
+				'attributes' => array(
 					'label'        => esc_html__( 'Show buttons', 'wp-user-manager' ),
 					'type'         => \Elementor\Controls_Manager::SWITCHER,
 					'label_on'     => esc_html__( 'Yes', 'wp-user-manager' ),
 					'label_off'    => esc_html__( 'No', 'wp-user-manager' ),
 					'return_value' => 'yes',
 					'default'      => 'yes',
-				)
+				),
 			),
 			array(
-				'id'               => 'display_cover',
-				'attributes'       => array(
+				'id'         => 'display_cover',
+				'attributes' => array(
 					'label'        => esc_html__( 'Display profile cover', 'wp-user-manager' ),
 					'type'         => \Elementor\Controls_Manager::SWITCHER,
 					'label_on'     => esc_html__( 'Yes', 'wp-user-manager' ),
 					'label_off'    => esc_html__( 'No', 'wp-user-manager' ),
 					'return_value' => 'yes',
 					'default'      => 'yes',
-				)
-			)
+				),
+			),
 		);
 	}
 

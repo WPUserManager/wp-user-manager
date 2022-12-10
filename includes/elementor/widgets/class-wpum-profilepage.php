@@ -50,27 +50,27 @@ class WPUM_ProfilePage extends WPUM_Elementor_Widget {
 	public function widget_controls() {
 		return array(
 			array(
-				'id'               => 'login_link',
-				'attributes'       => array(
+				'id'         => 'login_link',
+				'attributes' => array(
 					'label'        => esc_html__( 'Show login link', 'wp-user-manager' ),
 					'type'         => \Elementor\Controls_Manager::SWITCHER,
 					'label_on'     => esc_html__( 'Yes', 'wp-user-manager' ),
 					'label_off'    => esc_html__( 'No', 'wp-user-manager' ),
 					'return_value' => 'yes',
 					'default'      => 'yes',
-				)
+				),
 			),
 			array(
-				'id'               => 'psw_link',
-				'attributes'       => array(
+				'id'         => 'psw_link',
+				'attributes' => array(
 					'label'        => esc_html__( 'Show password recovery link', 'wp-user-manager' ),
 					'type'         => \Elementor\Controls_Manager::SWITCHER,
 					'label_on'     => esc_html__( 'Yes', 'wp-user-manager' ),
 					'label_off'    => esc_html__( 'No', 'wp-user-manager' ),
 					'return_value' => 'yes',
 					'default'      => 'yes',
-				)
-			)
+				),
+			),
 		);
 	}
 }

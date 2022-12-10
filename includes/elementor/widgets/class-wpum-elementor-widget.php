@@ -80,7 +80,7 @@ abstract class WPUM_Elementor_Widget extends \Elementor\Widget_Base {
 		foreach( $this->widget_controls() as $control ) {
 			$this->add_control(
 				$control['id'],
-				$control['attributes']
+				$control['attributes'],
 			);
 		}
 

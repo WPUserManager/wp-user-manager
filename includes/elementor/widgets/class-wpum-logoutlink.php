@@ -45,18 +45,18 @@ class WPUM_LogoutLink extends WPUM_Elementor_Widget {
 			array(
 				'id'         => 'redirect',
 				'attributes' => array(
-					'label'  => esc_html__( 'URL to redirect to after logout', 'wp-user-manager' ),
-					'type'   => \Elementor\Controls_Manager::TEXT,
+					'label' => esc_html__( 'URL to redirect to after logout', 'wp-user-manager' ),
+					'type'  => \Elementor\Controls_Manager::TEXT,
 				)
 			),
 			array(
-				'id'          => 'label',
-				'attributes'  => array(
+				'id'         => 'label',
+				'attributes' => array(
 					'label'   => esc_html__( 'Link label', 'wp-user-manager' ),
 					'type'    => \Elementor\Controls_Manager::TEXT,
 					'default' => 'Logout',
 				)
-			)
+			),
 		);
 	}
 }
