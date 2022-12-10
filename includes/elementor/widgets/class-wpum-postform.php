@@ -15,12 +15,22 @@ class WPUM_PostForm extends WPUM_Elementor_Widget {
 	/**
 	 * @var string
 	 */
-	protected $shortcode_function = 'wpumfr_post_form';
+	protected $shortcode = 'wpum_post_form';
 
 	/**
 	 * @var string
 	 */
 	protected $icon = 'eicon-post-content';
+
+
+	/**
+	 * @var array
+	 */
+	protected $keywords = array(
+		'post form',
+		'post',
+		'form',
+	);
 
 	/**
 	 * @return string
@@ -37,20 +47,9 @@ class WPUM_PostForm extends WPUM_Elementor_Widget {
 	}
 
 	/**
-	 * @return array
+	 * WPUM Widget Controls
 	 */
-	public function get_keywords() {
-		return array(
-			esc_html__( 'post form', 'wp-user-manager' ),
-			esc_html__( 'post', 'wp-user-manager' ),
-			esc_html__( 'form', 'wp-user-manager' ),
-		);
-	}
-
-	/**
-	 * Register
-	 */
-	protected function register_controls() {
+	public function widget_controls() {
 		$post_forms = $this->get_post_forms();
 		$default    = 0;
 
@@ -58,25 +57,17 @@ class WPUM_PostForm extends WPUM_Elementor_Widget {
 			$default = array_key_first( $post_forms );
 		}
 
-		$this->start_controls_section(
-			'wpum_content_section',
+		return array(
 			array(
-				'label' => esc_html__( 'Settings', 'wp-user-manager' ),
-				'tab'   => \Elementor\Controls_Manager::TAB_CONTENT,
+				'id'          => 'form_id',
+				'attributes'  => array(
+					'label'   => esc_html__( 'Select Form', 'wp-user-manager' ),
+					'type'    => \Elementor\Controls_Manager::SELECT,
+					'default' => $default,
+					'options' => $post_forms,
+				)
 			)
 		);
-
-		$this->add_control(
-			'form_id',
-			array(
-				'label'   => esc_html__( 'Select Form', 'wp-user-manager' ),
-				'type'    => \Elementor\Controls_Manager::SELECT,
-				'default' => $default,
-				'options' => $post_forms,
-			)
-		);
-
-		$this->end_controls_section();
 	}
 
 	/**

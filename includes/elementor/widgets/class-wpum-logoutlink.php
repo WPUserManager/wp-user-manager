@@ -15,7 +15,7 @@ class WPUM_LogoutLink extends WPUM_Elementor_Widget {
 	/**
 	 * @var string
 	 */
-	protected $shortcode_function = 'wpum_logout_link';
+	protected $shortcode = 'wpum_logout';
 
 	/**
 	 * @var string
@@ -38,34 +38,25 @@ class WPUM_LogoutLink extends WPUM_Elementor_Widget {
 	}
 
 	/**
-	 * Register controls
+	 * WPUM Widget Controls
 	 */
-	protected function register_controls() {
-		$this->start_controls_section(
-			'wpum_content_section',
+	public function widget_controls() {
+		return array(
 			array(
-				'label' => esc_html__( 'Settings', 'wp-user-manager' ),
-				'tab'   => \Elementor\Controls_Manager::TAB_CONTENT,
+				'id'         => 'redirect',
+				'attributes' => array(
+					'label'  => esc_html__( 'URL to redirect to after logout', 'wp-user-manager' ),
+					'type'   => \Elementor\Controls_Manager::TEXT,
+				)
+			),
+			array(
+				'id'          => 'label',
+				'attributes'  => array(
+					'label'   => esc_html__( 'Link label', 'wp-user-manager' ),
+					'type'    => \Elementor\Controls_Manager::TEXT,
+					'default' => 'Logout',
+				)
 			)
 		);
-
-		$this->add_control(
-			'redirect',
-			array(
-				'label' => esc_html__( 'URL to redirect to after logout', 'wp-user-manager' ),
-				'type'  => \Elementor\Controls_Manager::TEXT,
-			)
-		);
-
-		$this->add_control(
-			'label',
-			array(
-				'label'   => esc_html__( 'Link label', 'wp-user-manager' ),
-				'type'    => \Elementor\Controls_Manager::TEXT,
-				'default' => 'Logout',
-			)
-		);
-
-		$this->end_controls_section();
 	}
 }

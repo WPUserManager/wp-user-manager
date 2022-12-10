@@ -15,12 +15,23 @@ class WPUM_ProfileCard extends WPUM_Elementor_Widget {
 	/**
 	 * @var string
 	 */
-	protected $shortcode_function = 'wpum_profile_card';
+	protected $shortcode = 'wpum_profile_card';
 
 	/**
 	 * @var string
 	 */
 	protected $icon = 'eicon-call-to-action';
+
+	/**
+	 * @var array
+	 */
+	protected $keywords = array(
+		'profile',
+		'user',
+		'card',
+		'profile card',
+		'user profile',
+	);
 
 	/**
 	 * @return string
@@ -30,77 +41,53 @@ class WPUM_ProfileCard extends WPUM_Elementor_Widget {
 	}
 
 	/**
-	 * @return array
+	 * WPUM Widget Controls
 	 */
-	public function get_keywords() {
+	public function widget_controls() {
 		return array(
-			esc_html__( 'profile', 'wp-user-manager' ),
-			esc_html__( 'user', 'wp-user-manager' ),
-			esc_html__( 'card', 'wp-user-manager' ),
-			esc_html__( 'profile card', 'wp-user-manager' ),
-			esc_html__( 'user profile', 'wp-user-manager' ),
-		);
-	}
-
-	/**
-	 * Register
-	 */
-	protected function register_controls() {
-		$this->start_controls_section(
-			'wpum_content_section',
 			array(
-				'label' => esc_html__( 'Settings', 'wp-user-manager' ),
-				'tab'   => \Elementor\Controls_Manager::TAB_CONTENT,
+				'id'          => 'user_id',
+				'attributes'  => array(
+					'label'   => esc_html__( 'Select User', 'wp-user-manager' ),
+					'type'    => \Elementor\Controls_Manager::SELECT,
+					'default' => get_current_user_id(),
+					'options' => $this->get_users(),
+				)
+			),
+			array(
+				'id'               => 'link_to_profile',
+				'attributes'       => array(
+					'label'        => esc_html__( 'Profile link', 'wp-user-manager' ),
+					'type'         => \Elementor\Controls_Manager::SWITCHER,
+					'label_on'     => esc_html__( 'Yes', 'wp-user-manager' ),
+					'label_off'    => esc_html__( 'No', 'wp-user-manager' ),
+					'return_value' => 'yes',
+					'default'      => 'yes',
+				)
+			),
+			array(
+				'id'               => 'display_buttons',
+				'attributes'       => array(
+					'label'        => esc_html__( 'Show buttons', 'wp-user-manager' ),
+					'type'         => \Elementor\Controls_Manager::SWITCHER,
+					'label_on'     => esc_html__( 'Yes', 'wp-user-manager' ),
+					'label_off'    => esc_html__( 'No', 'wp-user-manager' ),
+					'return_value' => 'yes',
+					'default'      => 'yes',
+				)
+			),
+			array(
+				'id'               => 'display_cover',
+				'attributes'       => array(
+					'label'        => esc_html__( 'Display profile cover', 'wp-user-manager' ),
+					'type'         => \Elementor\Controls_Manager::SWITCHER,
+					'label_on'     => esc_html__( 'Yes', 'wp-user-manager' ),
+					'label_off'    => esc_html__( 'No', 'wp-user-manager' ),
+					'return_value' => 'yes',
+					'default'      => 'yes',
+				)
 			)
 		);
-
-		$this->add_control(
-			'user_id',
-			array(
-				'label'   => esc_html__( 'Select User', 'wp-user-manager' ),
-				'type'    => \Elementor\Controls_Manager::SELECT,
-				'default' => get_current_user_id(),
-				'options' => $this->get_users(),
-			)
-		);
-
-		$this->add_control(
-			'link_to_profile',
-			array(
-				'label'        => esc_html__( 'Profile link', 'wp-user-manager' ),
-				'type'         => \Elementor\Controls_Manager::SWITCHER,
-				'label_on'     => esc_html__( 'Yes', 'wp-user-manager' ),
-				'label_off'    => esc_html__( 'No', 'wp-user-manager' ),
-				'return_value' => 'yes',
-				'default'      => 'yes',
-			)
-		);
-
-		$this->add_control(
-			'display_buttons',
-			array(
-				'label'        => esc_html__( 'Show buttons', 'wp-user-manager' ),
-				'type'         => \Elementor\Controls_Manager::SWITCHER,
-				'label_on'     => esc_html__( 'Yes', 'wp-user-manager' ),
-				'label_off'    => esc_html__( 'No', 'wp-user-manager' ),
-				'return_value' => 'yes',
-				'default'      => 'yes',
-			)
-		);
-
-		$this->add_control(
-			'display_cover',
-			array(
-				'label'        => esc_html__( 'Display profile cover', 'wp-user-manager' ),
-				'type'         => \Elementor\Controls_Manager::SWITCHER,
-				'label_on'     => esc_html__( 'Yes', 'wp-user-manager' ),
-				'label_off'    => esc_html__( 'No', 'wp-user-manager' ),
-				'return_value' => 'yes',
-				'default'      => 'yes',
-			)
-		);
-
-		$this->end_controls_section();
 	}
 
 	/**

@@ -59,13 +59,66 @@ abstract class WPUM_Elementor_Widget extends \Elementor\Widget_Base {
 	}
 
 	/**
-	 * Render
+	 * WPUM widget controls
 	 */
-	public function render() {
-		$attributes = $this->get_settings_for_display();
-		$output     = call_user_func( $this->shortcode_function, $attributes );
-		$output     = preg_replace( "/<form action=([\"'])(.*?)\"/", '<form action="javascript:void(0);"', $output );
+	public function widget_controls() {
+		return array();
+	}
 
-		echo $output;  // phpcs:ignore
+	/**
+	 * Register WPUM Controls
+	 */
+	protected function register_controls() {
+		$this->start_controls_section(
+			'wpum_content_section',
+			array(
+				'label' => esc_html__( 'Settings', 'wp-user-manager' ),
+				'tab'   => \Elementor\Controls_Manager::TAB_CONTENT,
+			)
+		);
+
+		foreach( $this->widget_controls() as $control ) {
+			$this->add_control(
+				$control['id'],
+				$control['attributes']
+			);
+		}
+
+		$this->end_controls_section();
+	}
+
+	public function generate_shortcode_string() {
+		$settings     = $this->get_settings_for_display();
+		$control_keys = array_column( $this->widget_controls(), 'id' );
+		$atttributes  = '';
+
+		foreach( $control_keys as $control_key ) {
+			$atttributes .= $control_key . '=' . $settings[ $control_key ] . ' ';
+		}
+
+		return "[$this->shortcode $atttributes]";
+	}
+
+	/**
+	 * Render shortcode output on the frontend.
+	 *
+	 * Written in PHP and used to generate the final HTML.
+	 *
+	 */
+	protected function render() {
+		$shortcode = do_shortcode( shortcode_unautop( $this->generate_shortcode_string() ) );
+		$output    = preg_replace( "/<form action=([\"'])(.*?)\"/", '<form action="javascript:void(0);"', $shortcode );
+		echo $output; // phpcs:ignore
+	}
+
+	/**
+	 * Render shortcode widget as plain content.
+	 *
+	 * Override the default behavior by printing the shortcode instead of rendering it.
+	 *
+	 */
+	public function render_plain_content() {
+		$shortcode = $this->generate_shortcode_string();
+		echo $shortcode; // phpcs:ignore
 	}
 }

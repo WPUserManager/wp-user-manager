@@ -15,7 +15,7 @@ class WPUM_LoginForm extends WPUM_Elementor_Widget {
 	/**
 	 * @var string
 	 */
-	protected $shortcode_function = 'wpum_login_form';
+	protected $shortcode = 'wpum_login_form';
 
 	/**
 	 * @var string
@@ -40,41 +40,32 @@ class WPUM_LoginForm extends WPUM_Elementor_Widget {
 	}
 
 	/**
-	 * Register
+	 * WPUM Widget Controls
 	 */
-	protected function register_controls() {
-		$this->start_controls_section(
-			'wpum_content_section',
+	public function widget_controls() {
+		return array(
 			array(
-				'label' => esc_html__( 'Settings', 'wp-user-manager' ),
-				'tab'   => \Elementor\Controls_Manager::TAB_CONTENT,
+				'id'         => 'login_link',
+				'attributes' => array(
+					'label'        => esc_html__( 'Show password recovery link', 'wp-user-manager' ),
+					'type'         => \Elementor\Controls_Manager::SWITCHER,
+					'label_on'     => esc_html__( 'Yes', 'wp-user-manager' ),
+					'label_off'    => esc_html__( 'No', 'wp-user-manager' ),
+					'return_value' => 'yes',
+					'default'      => 'yes',
+				)
+			),
+			array(
+				'id' => 'register_link',
+				'attributes' => array(
+					'label'        => esc_html__( 'Show registration link', 'wp-user-manager' ),
+					'type'         => \Elementor\Controls_Manager::SWITCHER,
+					'label_on'     => esc_html__( 'Yes', 'wp-user-manager' ),
+					'label_off'    => esc_html__( 'No', 'wp-user-manager' ),
+					'return_value' => 'yes',
+					'default'      => 'yes',
+				)
 			)
 		);
-
-		$this->add_control(
-			'login_link',
-			array(
-				'label'        => esc_html__( 'Show password recovery link', 'wp-user-manager' ),
-				'type'         => \Elementor\Controls_Manager::SWITCHER,
-				'label_on'     => esc_html__( 'Yes', 'wp-user-manager' ),
-				'label_off'    => esc_html__( 'No', 'wp-user-manager' ),
-				'return_value' => 'yes',
-				'default'      => 'yes',
-			)
-		);
-
-		$this->add_control(
-			'register_link',
-			array(
-				'label'        => esc_html__( 'Show registration link', 'wp-user-manager' ),
-				'type'         => \Elementor\Controls_Manager::SWITCHER,
-				'label_on'     => esc_html__( 'Yes', 'wp-user-manager' ),
-				'label_off'    => esc_html__( 'No', 'wp-user-manager' ),
-				'return_value' => 'yes',
-				'default'      => 'yes',
-			)
-		);
-
-		$this->end_controls_section();
 	}
 }

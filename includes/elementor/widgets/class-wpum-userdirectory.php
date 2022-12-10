@@ -15,12 +15,24 @@ class WPUM_UserDirectory extends WPUM_Elementor_Widget {
 	/**
 	 * @var string
 	 */
-	protected $shortcode_function = 'wpum_directory';
+	protected $shortcode = 'wpum_user_directory';
 
 	/**
 	 * @var string
 	 */
 	protected $icon = 'eicon-editor-list-ol';
+
+	/**
+	 * @var array
+	 */
+	protected $keywords = array(
+		'users',
+		'user',
+		'directory',
+		'user directory',
+		'user group',
+		'group',
+	);
 
 	/**
 	 * @var string
@@ -37,42 +49,20 @@ class WPUM_UserDirectory extends WPUM_Elementor_Widget {
 	}
 
 	/**
-	 * @var array
+	 * WPUM Widget Controls
 	 */
-	public function get_keywords() {
+	public function widget_controls() {
 		return array(
-			esc_html__( 'users', 'wp-user-manager' ),
-			esc_html__( 'user', 'wp-user-manager' ),
-			esc_html__( 'directory', 'wp-user-manager' ),
-			esc_html__( 'user directory', 'wp-user-manager' ),
-			esc_html__( 'user group', 'wp-user-manager' ),
-			esc_html__( 'group', 'wp-user-manager' ),
-		);
-	}
-
-	/**
-	 * Register
-	 */
-	protected function register_controls() {
-		$this->start_controls_section(
-			'wpum_content_section',
 			array(
-				'label' => esc_html__( 'Settings', 'wp-user-manager' ),
-				'tab'   => \Elementor\Controls_Manager::TAB_CONTENT,
+				'id'          => 'id',
+				'attributes'  => array(
+					'label'   => esc_html__( 'Select Directory', 'wp-user-manager' ),
+					'type'    => \Elementor\Controls_Manager::SELECT,
+					'default' => '',
+					'options' => $this->get_directories(),
+				)
 			)
 		);
-
-		$this->add_control(
-			'id',
-			array(
-				'label'   => esc_html__( 'Select Directory', 'wp-user-manager' ),
-				'type'    => \Elementor\Controls_Manager::SELECT,
-				'default' => '',
-				'options' => $this->get_directories(),
-			)
-		);
-
-		$this->end_controls_section();
 	}
 
 	/**

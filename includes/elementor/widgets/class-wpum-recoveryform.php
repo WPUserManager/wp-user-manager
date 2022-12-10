@@ -15,12 +15,23 @@ class WPUM_RecoveryForm extends WPUM_Elementor_Widget {
 	/**
 	 * @var string
 	 */
-	protected $shortcode_function = 'wpum_password_recovery';
+	protected $shortcode = 'wpum_password_recovery';
 
 	/**
 	 * @var string
 	 */
 	protected $icon = 'eicon-lock';
+
+	/**
+	 * @var array
+	 */
+	protected $keywords = array(
+		'password',
+		'recovery',
+		'password recovery',
+		'forgot password',
+		'forgot',
+	);
 
 	/**
 	 * @return string
@@ -37,54 +48,32 @@ class WPUM_RecoveryForm extends WPUM_Elementor_Widget {
 	}
 
 	/**
-	 * @return array
+	 * WPUM Widget Controls
 	 */
-	public function get_keywords() {
+	public function widget_controls() {
 		return array(
-			esc_html__( 'password', 'wp-user-manager' ),
-			esc_html__( 'recovery', 'wp-user-manager' ),
-			esc_html__( 'password recovery', 'wp-user-manager' ),
-			esc_html__( 'forgot password', 'wp-user-manager' ),
-			esc_html__( 'forgot', 'wp-user-manager' ),
-		);
-	}
-
-	/**
-	 * Register
-	 */
-	protected function register_controls() {
-		$this->start_controls_section(
-			'wpum_content_section',
 			array(
-				'label' => esc_html__( 'Settings', 'wp-user-manager' ),
-				'tab'   => \Elementor\Controls_Manager::TAB_CONTENT,
+				'id'               => 'login_link',
+				'attributes'       => array(
+					'label'        => esc_html__( 'Show login link', 'wp-user-manager' ),
+					'type'         => \Elementor\Controls_Manager::SWITCHER,
+					'label_on'     => esc_html__( 'Yes', 'wp-user-manager' ),
+					'label_off'    => esc_html__( 'No', 'wp-user-manager' ),
+					'return_value' => 'yes',
+					'default'      => 'yes',
+				)
+			),
+			array(
+				'id'               => 'register_link',
+				'attributes'       => array(
+					'label'        => esc_html__( 'Show registration link', 'wp-user-manager' ),
+					'type'         => \Elementor\Controls_Manager::SWITCHER,
+					'label_on'     => esc_html__( 'Yes', 'wp-user-manager' ),
+					'label_off'    => esc_html__( 'No', 'wp-user-manager' ),
+					'return_value' => 'yes',
+					'default'      => 'yes',
+				)
 			)
 		);
-
-		$this->add_control(
-			'login_link',
-			array(
-				'label'        => esc_html__( 'Show login link', 'wp-user-manager' ),
-				'type'         => \Elementor\Controls_Manager::SWITCHER,
-				'label_on'     => esc_html__( 'Yes', 'wp-user-manager' ),
-				'label_off'    => esc_html__( 'No', 'wp-user-manager' ),
-				'return_value' => 'yes',
-				'default'      => 'yes',
-			)
-		);
-
-		$this->add_control(
-			'register_link',
-			array(
-				'label'        => esc_html__( 'Show registration link', 'wp-user-manager' ),
-				'type'         => \Elementor\Controls_Manager::SWITCHER,
-				'label_on'     => esc_html__( 'Yes', 'wp-user-manager' ),
-				'label_off'    => esc_html__( 'No', 'wp-user-manager' ),
-				'return_value' => 'yes',
-				'default'      => 'yes',
-			)
-		);
-
-		$this->end_controls_section();
 	}
 }

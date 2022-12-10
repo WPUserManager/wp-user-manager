@@ -15,12 +15,22 @@ class WPUM_RecentlyRegisteredUsers extends WPUM_Elementor_Widget {
 	/**
 	 * @var string
 	 */
-	protected $shortcode_function = 'wpum_recently_registered';
+	protected $shortcode = 'wpum_recently_registered';
 
 	/**
 	 * @var string
 	 */
 	protected $icon = 'eicon-person';
+
+	/**
+	 * @var array
+	 */
+	protected $keywords = array(
+		'user',
+		'users',
+		'registered',
+		'recently registered'
+	);
 
 	/**
 	 * @return string
@@ -37,50 +47,29 @@ class WPUM_RecentlyRegisteredUsers extends WPUM_Elementor_Widget {
 	}
 
 	/**
-	 * @return array
+	 * WPUM Widget Controls
 	 */
-	public function get_keywords() {
+	public function widget_controls() {
 		return array(
-			esc_html__( 'users', 'wp-user-manager' ),
-			esc_html__( 'user', 'wp-user-manager' ),
-			esc_html__( 'registered', 'wp-user-manager' ),
-			esc_html__( 'recently registered', 'wp-user-manager' ),
-			esc_html__( 'recently registered users', 'wp-user-manager' ),
-		);
-	}
-
-	/**
-	 * Register
-	 */
-	protected function register_controls() {
-		$this->start_controls_section(
-			'wpum_content_section',
 			array(
-				'label' => esc_html__( 'Settings', 'wp-user-manager' ),
-				'tab'   => \Elementor\Controls_Manager::TAB_CONTENT,
+				'id'          => 'amount',
+				'attributes'  => array(
+					'label'   => esc_html__( 'How many users to display', 'wp-user-manager' ),
+					'type'    => \Elementor\Controls_Manager::TEXT,
+					'default' => 10
+				)
+			),
+			array(
+				'id'               => 'link_to_profile',
+				'attributes'       => array(
+					'label'        => esc_html__( 'Show profile link', 'wp-user-manager' ),
+					'type'         => \Elementor\Controls_Manager::SWITCHER,
+					'label_on'     => esc_html__( 'Yes', 'wp-user-manager' ),
+					'label_off'    => esc_html__( 'No', 'wp-user-manager' ),
+					'return_value' => 'yes',
+					'default'      => 'yes',
+				)
 			)
 		);
-
-		$this->add_control(
-			'amount',
-			array(
-				'label' => esc_html__( 'How many users to display', 'wp-user-manager' ),
-				'type'  => \Elementor\Controls_Manager::TEXT,
-			)
-		);
-
-		$this->add_control(
-			'link_to_profile',
-			array(
-				'label'        => esc_html__( 'Show profile link', 'wp-user-manager' ),
-				'type'         => \Elementor\Controls_Manager::SWITCHER,
-				'label_on'     => esc_html__( 'Yes', 'wp-user-manager' ),
-				'label_off'    => esc_html__( 'No', 'wp-user-manager' ),
-				'return_value' => 'yes',
-				'default'      => 'yes',
-			)
-		);
-
-		$this->end_controls_section();
 	}
 }

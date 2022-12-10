@@ -15,7 +15,7 @@ class WPUM_AccountPage extends WPUM_Elementor_Widget {
 	/**
 	 * @var string
 	 */
-	protected $shortcode_function = 'wpum_account_page';
+	protected $shortcode = 'wpum_account';
 
 	/**
 	 * @var string
@@ -23,19 +23,17 @@ class WPUM_AccountPage extends WPUM_Elementor_Widget {
 	protected $icon = 'eicon-preferences';
 
 	/**
+	 * @var array
+	 */
+	protected $keywords = array(
+		'account',
+		'edit account',
+	);
+
+	/**
 	 * @return string
 	 */
 	public function get_title() {
 		return esc_html__( 'Account Page', 'wp-user-manager' );
-	}
-
-	/**
-	 * @return array
-	 */
-	public function get_keywords() {
-		return array(
-			esc_html__( 'account', 'wp-user-manager' ),
-			esc_html__( 'edit account', 'wp-user-manager' ),
-		);
 	}
 }
