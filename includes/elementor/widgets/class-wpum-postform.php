@@ -66,7 +66,7 @@ class WPUM_PostForm extends WPUM_Elementor_Widget {
 					'default' => $default,
 					'options' => $post_forms,
 				),
-			),
+			)
 		);
 	}
 

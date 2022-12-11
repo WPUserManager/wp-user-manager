@@ -53,7 +53,7 @@ class WPUM_LoginForm extends WPUM_Elementor_Widget {
 					'label_off'    => esc_html__( 'No', 'wp-user-manager' ),
 					'return_value' => 'yes',
 					'default'      => 'yes',
-				)
+				),
 			),
 			array(
 				'id'         => 'register_link',
@@ -64,7 +64,7 @@ class WPUM_LoginForm extends WPUM_Elementor_Widget {
 					'label_off'    => esc_html__( 'No', 'wp-user-manager' ),
 					'return_value' => 'yes',
 					'default'      => 'yes',
-				)
+				),
 			),
 		);
 	}

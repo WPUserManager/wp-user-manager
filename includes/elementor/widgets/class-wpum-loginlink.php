@@ -36,7 +36,7 @@ class WPUM_LoginLink extends WPUM_Elementor_Widget {
 	public function get_title() {
 		return esc_html__( 'Login Link', 'wp-user-manager' );
 	}
-	
+
 	/**
 	 * WPUM Widget Controls
 	 */
@@ -47,7 +47,7 @@ class WPUM_LoginLink extends WPUM_Elementor_Widget {
 				'attributes' => array(
 					'label' => esc_html__( 'URL to redirect to after login', 'wp-user-manager' ),
 					'type'  => \Elementor\Controls_Manager::TEXT,
-				)
+				),
 			),
 			array(
 				'id'         => 'label',
@@ -55,7 +55,7 @@ class WPUM_LoginLink extends WPUM_Elementor_Widget {
 					'label'   => esc_html__( 'Link label', 'wp-user-manager' ),
 					'type'    => \Elementor\Controls_Manager::TEXT,
 					'default' => 'Login',
-				)
+				),
 			),
 		);
 	}

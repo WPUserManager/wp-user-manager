@@ -10,7 +10,6 @@
 /**
  * Abstract Elementor
  */
-
 abstract class WPUM_Elementor_Widget extends \Elementor\Widget_Base {
 
 	/**
@@ -74,10 +73,10 @@ abstract class WPUM_Elementor_Widget extends \Elementor\Widget_Base {
 			array(
 				'label' => esc_html__( 'Settings', 'wp-user-manager' ),
 				'tab'   => \Elementor\Controls_Manager::TAB_CONTENT,
-			)
+			),
 		);
 
-		foreach( $this->widget_controls() as $control ) {
+		foreach ( $this->widget_controls() as $control ) {
 			$this->add_control(
 				$control['id'],
 				$control['attributes'],
@@ -87,12 +86,15 @@ abstract class WPUM_Elementor_Widget extends \Elementor\Widget_Base {
 		$this->end_controls_section();
 	}
 
+	/**
+	 * Generate shortcode string.
+	 */
 	public function generate_shortcode_string() {
 		$settings     = $this->get_settings_for_display();
 		$control_keys = array_column( $this->widget_controls(), 'id' );
 		$atttributes  = '';
 
-		foreach( $control_keys as $control_key ) {
+		foreach ( $control_keys as $control_key ) {
 			$atttributes .= $control_key . '=' . $settings[ $control_key ] . ' ';
 		}
 
@@ -103,7 +105,6 @@ abstract class WPUM_Elementor_Widget extends \Elementor\Widget_Base {
 	 * Render shortcode output on the frontend.
 	 *
 	 * Written in PHP and used to generate the final HTML.
-	 *
 	 */
 	protected function render() {
 		$shortcode = do_shortcode( shortcode_unautop( $this->generate_shortcode_string() ) );
@@ -114,8 +115,7 @@ abstract class WPUM_Elementor_Widget extends \Elementor\Widget_Base {
 	/**
 	 * Render shortcode widget as plain content.
 	 *
-	 * Override the default behavior by printing the shortcode instead of rendering it.
-	 *
+	 * Override the default behavior by printing the shortcode instead of ren-dering it.
 	 */
 	public function render_plain_content() {
 		$shortcode = $this->generate_shortcode_string();

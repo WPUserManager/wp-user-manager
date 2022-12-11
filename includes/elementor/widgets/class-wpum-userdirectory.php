@@ -61,7 +61,7 @@ class WPUM_UserDirectory extends WPUM_Elementor_Widget {
 					'default' => '',
 					'options' => $this->get_directories(),
 				),
-			),
+			)
 		);
 	}
 
@@ -76,7 +76,7 @@ class WPUM_UserDirectory extends WPUM_Elementor_Widget {
 				'status'    => 'publish',
 				'order'     => 'ASC',
 				'post_type' => 'wpum_directory',
-			),
+			)
 		);
 
 		foreach ( $posts as $post ) {

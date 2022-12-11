@@ -90,7 +90,7 @@ class WPUM_RestrictionControls {
 					'wpum_restrict_type_role'  => 'Show widget by user role',
 					'wpum_restrict_type_user'  => 'Show widget for certain users',
 				),
-			)
+			),
 		);
 
 		$section->add_control(
@@ -108,7 +108,7 @@ class WPUM_RestrictionControls {
 				'condition'   => array(
 					'wpum_restrict_type' => 'wpum_restrict_type_state',
 				),
-			)
+			),
 		);
 
 		$section->add_control(
@@ -122,7 +122,7 @@ class WPUM_RestrictionControls {
 				'condition'   => array(
 					'wpum_restrict_type' => 'wpum_restrict_type_role',
 				),
-			)
+			),
 		);
 
 		$section->add_control(
@@ -136,7 +136,7 @@ class WPUM_RestrictionControls {
 				'condition'   => array(
 					'wpum_restrict_type' => 'wpum_restrict_type_user',
 				),
-			)
+			),
 		);
 
 		$section->add_control(
@@ -148,7 +148,7 @@ class WPUM_RestrictionControls {
 				'label_off'    => esc_html__( 'No', 'wp-user-manager' ),
 				'return_value' => 'yes',
 				'default'      => 'no',
-			)
+			),
 		);
 
 		$section->end_controls_section();

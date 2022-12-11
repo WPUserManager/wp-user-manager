@@ -46,8 +46,8 @@ class WPUM_RegistrationForm extends WPUM_Elementor_Widget {
 	public function widget_controls() {
 		$controls = array(
 			array(
-				'id'               => 'login_link',
-				'attributes'       => array(
+				'id'         => 'login_link',
+				'attributes' => array(
 					'label'        => esc_html__( 'Show login link', 'wp-user-manager' ),
 					'type'         => \Elementor\Controls_Manager::SWITCHER,
 					'label_on'     => esc_html__( 'Yes', 'wp-user-manager' ),
@@ -57,8 +57,8 @@ class WPUM_RegistrationForm extends WPUM_Elementor_Widget {
 				),
 			),
 			array(
-				'id'               => 'psw_link',
-				'attributes'       => array(
+				'id'         => 'psw_link',
+				'attributes' => array(
 					'label'        => esc_html__( 'Show password recovery link', 'wp-user-manager' ),
 					'type'         => \Elementor\Controls_Manager::SWITCHER,
 					'label_on'     => esc_html__( 'Yes', 'wp-user-manager' ),
@@ -71,8 +71,8 @@ class WPUM_RegistrationForm extends WPUM_Elementor_Widget {
 
 		if ( class_exists( 'WPUM_Registration_Forms' ) ) {
 			$controls[] = array(
-				'id'          => 'form_id',
-				'attributes'  => array(
+				'id'         => 'form_id',
+				'attributes' => array(
 					'label'   => esc_html__( 'Select Registration Form', 'wp-user-manager' ),
 					'type'    => \Elementor\Controls_Manager::SELECT,
 					'default' => 1,
