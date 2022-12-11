@@ -56,7 +56,7 @@ class WPUM_RecentlyRegisteredUsers extends WPUM_Elementor_Widget {
 				'attributes' => array(
 					'label'   => esc_html__( 'How many users to display', 'wp-user-manager' ),
 					'type'    => \Elementor\Controls_Manager::TEXT,
-					'default' => 10
+					'default' => 10,
 				),
 			),
 			array(
