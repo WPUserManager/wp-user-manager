@@ -75,7 +75,7 @@ class WPUM_RestrictionControls {
 			array(
 				'label' => __( 'WP User Manager - Restriction', 'wp-user-manager' ),
 				'tab'   => \Elementor\Controls_Manager::TAB_CONTENT,
-			)
+			),
 		);
 
 		$section->add_control(

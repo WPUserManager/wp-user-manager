@@ -29,7 +29,7 @@ class WPUM_RecentlyRegisteredUsers extends WPUM_Elementor_Widget {
 		'user',
 		'users',
 		'registered',
-		'recently registered'
+		'recently registered',
 	);
 
 	/**

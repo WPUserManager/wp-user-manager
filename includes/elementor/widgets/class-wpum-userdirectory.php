@@ -61,7 +61,7 @@ class WPUM_UserDirectory extends WPUM_Elementor_Widget {
 					'default' => '',
 					'options' => $this->get_directories(),
 				),
-			)
+			),
 		);
 	}
 

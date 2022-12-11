@@ -48,7 +48,7 @@ class WPUM_GroupDirectory extends WPUM_Elementor_Widget {
 					'label'   => esc_html__( 'Groups per page', 'wp-user-manager' ),
 					'type'    => \Elementor\Controls_Manager::TEXT,
 					'default' => '10',
-				)
+				),
 			),
 			array(
 				'id'         => 'has_search_form',
@@ -59,7 +59,7 @@ class WPUM_GroupDirectory extends WPUM_Elementor_Widget {
 					'label_off'    => esc_html__( 'No', 'wp-user-manager' ),
 					'return_value' => 'yes',
 					'default'      => 'yes',
-				)
+				),
 			),
 		);
 	}
