@@ -16,7 +16,7 @@ abstract class WPUM_Elementor_Widget extends \Elementor\Widget_Base {
 	/**
 	 * @var string
 	 */
-	protected $shortcode_function;
+	protected $shortcode;
 
 	/**
 	 * @var string
@@ -32,7 +32,7 @@ abstract class WPUM_Elementor_Widget extends \Elementor\Widget_Base {
 	 * @return string
 	 */
 	public function get_name() {
-		$name = str_replace( 'wpum_', '', $this->shortcode_function );
+		$name = str_replace( 'wpum_', '', $this->shortcode );
 
 		return str_replace( '_', '-', $name );
 	}
