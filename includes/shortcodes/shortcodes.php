@@ -679,7 +679,6 @@ function wpum_profile_card( $atts, $content = null ) {
 	$display_buttons = $display_buttons ? 'yes' : '';
 	$display_cover   = $display_cover ? 'yes' : '';
 
-
 	ob_start();
 
 	if ( empty( $user_id ) ) {
