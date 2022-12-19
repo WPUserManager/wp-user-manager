@@ -382,7 +382,7 @@ add_action( 'wp_die_handler', function ( $handler ) {
 
 	parse_str( $_SERVER['QUERY_STRING'], $query ); // phpcs:ignore
 
-	if ( 'switch_to_olduser' === $query['action'] ) {
+	if ( isset( $query['action'] ) && 'switch_to_olduser' === $query['action'] ) {
 		$request_uri = isset( $_SERVER['REQUEST_URI'] ) ? wp_unslash( filter_input( INPUT_SERVER, 'REQUEST_URI' ) ) : '';
 
 		wp_safe_redirect( get_bloginfo( 'wpurl' ) . $request_uri );
