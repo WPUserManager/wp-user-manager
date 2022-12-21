@@ -8,7 +8,7 @@ Tested up to: 6.1
 Requires PHP: 5.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
-Stable Tag: 2.8.14
+Stable Tag: 2.8.15
 
 The most customizable profiles & community builder WordPress plugin with front-end login, registration, profile customization and content restriction.
 
@@ -126,6 +126,12 @@ Please note that using WPUM and the mentioned add-ons does NOT guarantee complia
 13. Login form.
 
 == Changelog ==
+
+= 2.8.15 (21st December 2022) =
+
+- New: Compatibility with [hCaptcha](https://wpusermanager.com/addons/hcaptcha/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager) addon
+- Fix: Warning: Undefined array key “action” now not showing
+- Fix: Undefined offset: 0 when excluding roles from showing the admin bar
 
 = 2.8.14 (6th December 2022) =
 

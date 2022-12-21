@@ -2,6 +2,12 @@
 
 == Changelog ==
 
+= 2.8.15 (21st December 2022) =
+
+- New: Compatibility with [hCaptcha](https://wpusermanager.com/addons/hcaptcha/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager) addon
+- Fix: Warning: Undefined array key “action” now not showing
+- Fix: Undefined offset: 0 when excluding roles from showing the admin bar
+
 = 2.8.14 (6th December 2022) =
 
 - Improvement: Saving a custom field with same unique key is now not allowed
