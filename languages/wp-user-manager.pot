@@ -2,9 +2,9 @@
 # This file is distributed under the GPLv3+.
 msgid ""
 msgstr ""
-"Project-Id-Version: WP User Manager 2.8.14\n"
+"Project-Id-Version: WP User Manager 2.8.15\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/wp-user-manager\n"
-"POT-Creation-Date: 2022-12-06 12:05:02+00:00\n"
+"POT-Creation-Date: 2022-12-21 15:12:50+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -280,41 +280,41 @@ msgstr ""
 msgid "Settings"
 msgstr ""
 
-#: includes/actions.php:307 includes/forms/class-wpum-form-profile.php:130
+#: includes/actions.php:326 includes/forms/class-wpum-form-profile.php:130
 msgid ""
 "This display name is already in use by someone else. Display names must be "
 "unique."
 msgstr ""
 
-#: includes/actions.php:320 includes/forms/class-wpum-form-profile.php:134
+#: includes/actions.php:339 includes/forms/class-wpum-form-profile.php:134
 msgid "This nickname is already in use by someone else. Nicknames must be unique."
 msgstr ""
 
-#: includes/actions.php:332 templates/profile-card.php:44
+#: includes/actions.php:351 templates/profile-card.php:44
 msgid "View Profile"
 msgstr ""
 
-#: includes/actions.php:495
+#: includes/actions.php:514
 msgid "Hide profile from guests"
 msgstr ""
 
-#: includes/actions.php:496
+#: includes/actions.php:515
 msgid "Hide this profile from guests. Overrides the global profile options."
 msgstr ""
 
-#: includes/actions.php:497
+#: includes/actions.php:516
 msgid "Hide profile from members"
 msgstr ""
 
-#: includes/actions.php:498
+#: includes/actions.php:517
 msgid "Hide this profile from members. Overrides the global profile options."
 msgstr ""
 
-#: includes/actions.php:506
+#: includes/actions.php:525
 msgid "Select one or more roles for this user."
 msgstr ""
 
-#: includes/actions.php:509 includes/forms/class-wpum-form-privacy.php:77
+#: includes/actions.php:528 includes/forms/class-wpum-form-privacy.php:77
 #: includes/functions.php:741
 msgid "Profile Privacy"
 msgstr ""
