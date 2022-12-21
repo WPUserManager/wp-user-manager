@@ -112,11 +112,30 @@ add_action( 'admin_bar_menu', 'wpum_admin_bar_menu', 100 );
  */
 function wpum_remove_admin_bar() {
 	$excluded_roles = wpum_get_option( 'adminbar_roles' );
-	$user           = wp_get_current_user();
 
-	if ( ! empty( $excluded_roles ) && is_user_logged_in() && in_array( $user->roles[0], $excluded_roles, true ) && ! is_admin() ) {
-		if ( current_user_can( $user->roles[0] ) ) {
+	if ( empty( $excluded_roles ) ) {
+		return;
+	}
+
+	if ( ! is_user_logged_in() ) {
+		return;
+	}
+
+	if ( is_admin() ) {
+		return;
+	}
+
+	$user = wp_get_current_user();
+
+	if ( empty( $user->roles ) || ! is_array( $user->roles ) ) {
+		return;
+	}
+
+	foreach ( $user->roles as $user_role ) {
+		if ( in_array( $user_role, $excluded_roles, true ) ) {
 			show_admin_bar( false );
+
+			return;
 		}
 	}
 }
