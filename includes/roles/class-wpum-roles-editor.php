@@ -266,9 +266,9 @@ class WPUM_Roles_Editor {
 
 			if ( $role_id && isset( $all_roles[ $role_id ] ) ) {
 
-				$role           = wpum_get_role( $role_id );
-				$curent_caps    = array_keys( $role->caps );
-				$wp_role        = get_role( sanitize_text_field( $role_id ) );
+				$role        = wpum_get_role( $role_id );
+				$curent_caps = array_keys( $role->caps );
+				$wp_role     = get_role( sanitize_text_field( $role_id ) );
 
 				$granted_caps           = filter_input( INPUT_POST, 'granted_caps', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY );
 				$denied_caps            = filter_input( INPUT_POST, 'denied_caps', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY );
@@ -282,7 +282,7 @@ class WPUM_Roles_Editor {
 					$cap = sanitize_text_field( $cap );
 					$wp_role->remove_cap( $cap );
 				}
-				
+
 				foreach ( $submitted_granted_caps as $cap ) {
 					$cap = sanitize_text_field( $cap );
 					if ( ! in_array( $cap, $curent_caps, true ) ) {
