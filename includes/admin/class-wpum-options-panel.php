@@ -117,9 +117,7 @@ class WPUM_Options_Panel {
 				'login' => __( 'Login Settings', 'wp-user-manager' ),
 				'misc'  => __( 'Misc Settings', 'wp-user-manager' ),
 			),
-			'registration' => array(
-				'terms' => __( 'Terms & Conditions', 'wp-user-manager' ),
-			),
+			'registration' => array(),
 			'emails'       => array(
 				'admin_notifications' => __( 'Administration Notifications', 'wp-user-manager' ),
 			),
@@ -303,8 +301,6 @@ class WPUM_Options_Panel {
 					'desc' => __( 'Enable this option to automatically authenticate users after registration.', 'wp-user-manager' ),
 					'type' => 'checkbox',
 				),
-			),
-			'terms'               => array(
 				array(
 					'id'   => 'enable_terms',
 					'name' => __( 'Enable Terms & Conditions', 'wp-user-manager' ),

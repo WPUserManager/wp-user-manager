@@ -485,7 +485,7 @@ class WPUM_Registration_Form {
 		}
 
 		// Assign all unassigned fields to default settings tab
-		$settings_options['settings'] = apply_filters( 'wpum_registration_form_settings_options', $default_settings );
+		$settings_options['settings'] = apply_filters( 'wpum_registration_form_settings_options', array_merge( $default_settings, $settings_options['settings'] ) );
 
 		// Filter where edit form section and the child fields can be added directly
 		$settings_options = apply_filters( 'wpum_registration_edit_form_settings_sections', $settings_options );
