@@ -788,6 +788,6 @@ class WPUM_Field {
 	 * @return string
 	 */
 	public function wpum_sanitize_key( $key ) {
-		return strtolower( preg_replace( '/[^A-Za-z0-9_]/', '', $key ) );
+		return strtolower( preg_replace( '/[^A-Za-z0-9_-]/', '', $key ) );
 	}
 }

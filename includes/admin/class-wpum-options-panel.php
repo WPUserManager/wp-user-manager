@@ -125,6 +125,7 @@ class WPUM_Options_Panel {
 			),
 			'profiles'     => array(
 				'profiles_content' => __( 'Profiles Content', 'wp-user-manager' ),
+				'profiles_permissions' => __( 'Permissions', 'wp-user-manager' ),
 				'account'          => __( 'Account', 'wp-user-manager' ),
 			),
 			'redirects'    => array(
@@ -374,24 +375,6 @@ class WPUM_Options_Panel {
 					'type' => 'checkbox',
 				),
 				array(
-					'id'   => 'guests_can_view_profiles',
-					'name' => __( 'Allow Guests to View Profiles', 'wp-user-manager' ),
-					'desc' => __( 'Enable this option to allow guests to view users profiles.', 'wp-user-manager' ),
-					'type' => 'checkbox',
-				),
-				array(
-					'id'   => 'members_can_view_profiles',
-					'name' => __( 'Allow Members to View Profiles', 'wp-user-manager' ),
-					'desc' => __( 'Enable this option to allow members to view users profiles. If disabled, users can only see their own profile.', 'wp-user-manager' ),
-					'type' => 'checkbox',
-				),
-				array(
-					'id'   => 'members_can_set_privacy',
-					'name' => __( 'Allow Members to set their profile privacy', 'wp-user-manager' ),
-					'desc' => __( 'Adds a Privacy account tab where members can override the global settings above.', 'wp-user-manager' ),
-					'type' => 'checkbox',
-				),
-				array(
 					'id'   => 'custom_avatars',
 					'name' => __( 'Custom Avatars', 'wp-user-manager' ),
 					'desc' => __( 'Enable this option to allow users to upload custom avatars for their profiles.', 'wp-user-manager' ),
@@ -437,6 +420,26 @@ class WPUM_Options_Panel {
 					'id'   => 'current_password',
 					'name' => __( 'Require Current Password', 'wp-user-manager' ),
 					'desc' => __( 'Ask user for current password when resetting password on the account page', 'wp-user-manager' ),
+					'type' => 'checkbox',
+				),
+			),
+			'profiles_permissions'    => array(
+				array(
+					'id'   => 'guests_can_view_profiles',
+					'name' => __( 'Allow Guests to View Profiles', 'wp-user-manager' ),
+					'desc' => __( 'Enable this option to allow guests to view users profiles.', 'wp-user-manager' ),
+					'type' => 'checkbox',
+				),
+				array(
+					'id'   => 'members_can_view_profiles',
+					'name' => __( 'Allow Members to View Profiles', 'wp-user-manager' ),
+					'desc' => __( 'Enable this option to allow members to view users profiles. If disabled, users can only see their own profile.', 'wp-user-manager' ),
+					'type' => 'checkbox',
+				),
+				array(
+					'id'   => 'members_can_set_privacy',
+					'name' => __( 'Allow Members to set their profile privacy', 'wp-user-manager' ),
+					'desc' => __( 'Adds a Privacy account tab where members can override the global settings above.', 'wp-user-manager' ),
 					'type' => 'checkbox',
 				),
 			),

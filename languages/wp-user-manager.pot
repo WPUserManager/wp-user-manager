@@ -2,9 +2,9 @@
 # This file is distributed under the GPLv3+.
 msgid ""
 msgstr ""
-"Project-Id-Version: WP User Manager 2.8.12\n"
+"Project-Id-Version: WP User Manager 2.8.15\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/wp-user-manager\n"
-"POT-Creation-Date: 2022-09-16 20:49:12+00:00\n"
+"POT-Creation-Date: 2022-12-21 15:16:56+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -280,41 +280,41 @@ msgstr ""
 msgid "Settings"
 msgstr ""
 
-#: includes/actions.php:307 includes/forms/class-wpum-form-profile.php:130
+#: includes/actions.php:326 includes/forms/class-wpum-form-profile.php:130
 msgid ""
 "This display name is already in use by someone else. Display names must be "
 "unique."
 msgstr ""
 
-#: includes/actions.php:320 includes/forms/class-wpum-form-profile.php:134
+#: includes/actions.php:339 includes/forms/class-wpum-form-profile.php:134
 msgid "This nickname is already in use by someone else. Nicknames must be unique."
 msgstr ""
 
-#: includes/actions.php:332 templates/profile-card.php:44
+#: includes/actions.php:351 templates/profile-card.php:44
 msgid "View Profile"
 msgstr ""
 
-#: includes/actions.php:489
+#: includes/actions.php:514
 msgid "Hide profile from guests"
 msgstr ""
 
-#: includes/actions.php:490
+#: includes/actions.php:515
 msgid "Hide this profile from guests. Overrides the global profile options."
 msgstr ""
 
-#: includes/actions.php:491
+#: includes/actions.php:516
 msgid "Hide profile from members"
 msgstr ""
 
-#: includes/actions.php:492
+#: includes/actions.php:517
 msgid "Hide this profile from members. Overrides the global profile options."
 msgstr ""
 
-#: includes/actions.php:500
+#: includes/actions.php:525
 msgid "Select one or more roles for this user."
 msgstr ""
 
-#: includes/actions.php:503 includes/forms/class-wpum-form-privacy.php:77
+#: includes/actions.php:528 includes/forms/class-wpum-form-privacy.php:77
 #: includes/functions.php:741
 msgid "Profile Privacy"
 msgstr ""
@@ -1125,24 +1125,6 @@ msgstr ""
 msgid "Read more"
 msgstr ""
 
-#: includes/assets.php:41
-msgid "Please reload this page and try again"
-msgstr ""
-
-#: includes/assets.php:43
-msgid "Run Updates"
-msgstr ""
-
-#: includes/assets.php:44
-msgid ""
-"The following process will make updates to your site's database. Please "
-"create a database backup before proceeding with updates."
-msgstr ""
-
-#: includes/assets.php:45
-msgid "Something went wrong kindly try again!"
-msgstr ""
-
 #: includes/class-wp-user-manager.php:420
 #: includes/class-wp-user-manager.php:432
 msgid "Cheatin&#8217; huh?"
@@ -1390,7 +1372,7 @@ msgid "Description"
 msgstr ""
 
 #: includes/directories/class-wpum-directories-editor.php:293
-#: includes/fields/types/class-wpum-field-userrole.php:48
+#: includes/fields/types/class-wpum-field-userrole.php:63
 msgid "User Roles"
 msgstr ""
 
@@ -2219,11 +2201,11 @@ msgid "Enter the maximum rows for the field."
 msgstr ""
 
 #: includes/fields/types/class-wpum-field-taxonomy.php:24
-#: includes/fields/types/class-wpum-field-taxonomy.php:49
+#: includes/fields/types/class-wpum-field-taxonomy.php:64
 msgid "Taxonomy"
 msgstr ""
 
-#: includes/fields/types/class-wpum-field-taxonomy.php:56
+#: includes/fields/types/class-wpum-field-taxonomy.php:71
 msgid "Field Type"
 msgstr ""
 
@@ -2256,7 +2238,7 @@ msgid "Filter by role"
 msgstr ""
 
 #: includes/fields/types/class-wpum-field-user.php:70
-#: includes/fields/types/class-wpum-field-userrole.php:69
+#: includes/fields/types/class-wpum-field-userrole.php:84
 msgid "Allow multiple selection"
 msgstr ""
 
@@ -2265,7 +2247,7 @@ msgid "Show users with hidden profiles"
 msgstr ""
 
 #: includes/fields/types/class-wpum-field-user.php:83
-#: includes/fields/types/class-wpum-field-userrole.php:59
+#: includes/fields/types/class-wpum-field-userrole.php:74
 msgid "Type label"
 msgstr ""
 
@@ -2273,11 +2255,11 @@ msgstr ""
 msgid "User Role"
 msgstr ""
 
-#: includes/fields/types/class-wpum-field-userrole.php:49
+#: includes/fields/types/class-wpum-field-userrole.php:64
 msgid "List of roles the users can select from"
 msgstr ""
 
-#: includes/fields/types/class-wpum-field-userrole.php:70
+#: includes/fields/types/class-wpum-field-userrole.php:85
 msgid "Allow users to select multiple roles for themselves"
 msgstr ""
 
@@ -3068,15 +3050,15 @@ msgstr ""
 msgid "Custom"
 msgstr ""
 
-#: includes/shortcodes/class-wpum-shortcode-button.php:132
+#: includes/shortcodes/class-wpum-shortcode-button.php:135
 msgid "Insert"
 msgstr ""
 
-#: includes/shortcodes/class-wpum-shortcode-button.php:143
+#: includes/shortcodes/class-wpum-shortcode-button.php:146
 msgid "User Shortcodes"
 msgstr ""
 
-#: includes/shortcodes/class-wpum-shortcode-button.php:162
+#: includes/shortcodes/class-wpum-shortcode-button.php:165
 msgid "Okay"
 msgstr ""
 
