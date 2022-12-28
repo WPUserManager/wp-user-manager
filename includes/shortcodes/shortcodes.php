@@ -345,7 +345,6 @@ function wpum_profile( $atts, $content = null ) {
 				)
 				->get_template_part( 'profile' );
 		}
-
 	}
 
 	$output = ob_get_clean();

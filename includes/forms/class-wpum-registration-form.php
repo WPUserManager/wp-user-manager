@@ -414,6 +414,41 @@ class WPUM_Registration_Form {
 			return $this->settings_options;
 		}
 
+		$all_settings     = $this->get_settings_options_by_section();
+		$settings_options = array();
+
+		// Get all registration form options
+		foreach ( $all_settings as $key => $options ) {
+			$settings_options = array_merge( $settings_options, $options );
+		}
+
+		$this->settings_options = $settings_options;
+
+		return $this->settings_options;
+	}
+
+	/**
+	 * Get all the settings values.
+	 *
+	 * @return array
+	 */
+	public function get_settings_model() {
+		$setting_ids = wp_list_pluck( $this->get_settings_options(), 'id' );
+		$model       = array();
+
+		foreach ( $setting_ids as $setting_key ) {
+			$model[ $setting_key ] = $this->get_meta( $setting_key );
+		}
+
+		return $model;
+	}
+
+	/**
+	 * Get all the settings group by sections.
+	 *
+	 * @return array
+	 */
+	public function get_settings_options_by_section() {
 		$roles = wpum_get_roles( true );
 
 		$default_settings = array(
@@ -443,28 +478,18 @@ class WPUM_Registration_Form {
 				continue;
 			}
 
-			$settings_options = array_merge( $settings_options, $options );
+			// Assign all registration section fields to default settings tab
+			$key = 'registration' === $key ? 'settings' : $key;
+
+			$settings_options[ $key ] = array_merge( $settings_options, $options );
 		}
 
-		$this->settings_options = apply_filters( 'wpum_registration_form_settings_options', array_merge( $default_settings, $settings_options ) );
+		// Assign all unassigned fields to default settings tab
+		$settings_options['settings'] = apply_filters( 'wpum_registration_form_settings_options', array_merge( $default_settings, $settings_options['settings'] ) );
 
-		return $this->settings_options;
+		// Filter where edit form section and the child fields can be added directly
+		$settings_options = apply_filters( 'wpum_registration_edit_form_settings_sections', $settings_options );
+
+		return $settings_options;
 	}
-
-	/**
-	 * Get all the settings values.
-	 *
-	 * @return array
-	 */
-	public function get_settings_model() {
-		$setting_ids = wp_list_pluck( $this->get_settings_options(), 'id' );
-		$model       = array();
-
-		foreach ( $setting_ids as $setting_key ) {
-			$model[ $setting_key ] = $this->get_meta( $setting_key );
-		}
-
-		return $model;
-	}
-
 }
