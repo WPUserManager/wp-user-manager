@@ -414,7 +414,7 @@ class WPUM_Registration_Form {
 			return $this->settings_options;
 		}
 
-		$all_settings = $this->get_settings_options_by_section();
+		$all_settings     = $this->get_settings_options_by_section();
 		$settings_options = array();
 
 		// Get all registration form options
@@ -479,10 +479,11 @@ class WPUM_Registration_Form {
 			}
 
 			// Assign all registration section fields to default settings tab
-			$key = ( $key === 'registration' ) ? 'settings' : $key;
+			$key = 'registration' === $key ? 'settings' : $key;
+
 			$settings_options[ $key ] = array_merge( $settings_options, $options );
 		}
-		
+
 		// Assign all unassigned fields to default settings tab
 		$settings_options['settings'] = apply_filters( 'wpum_registration_form_settings_options', $default_settings );
 

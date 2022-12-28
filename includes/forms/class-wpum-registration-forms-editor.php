@@ -281,7 +281,7 @@ class WPUM_Registration_Forms_Editor {
 				$settings       = $form->get_settings_options_by_section();
 				$settings_model = $form->get_settings_model();
 				foreach ( $settings as $key => $setting ) {
-					foreach( $setting as $field_key => $field ) {
+					foreach ( $setting as $field_key => $field ) {
 						$settings[ $key ][ $field_key ]['current']    = isset( $settings_model[ $field['id'] ] ) ? $settings_model[ $field['id'] ] : '';
 						$settings[ $key ][ $field_key ]['all_labels'] = $all_labels;
 					}
@@ -665,17 +665,17 @@ class WPUM_Registration_Forms_Editor {
 
 	/**
 	 * Get all available edit form sections
-	 * 
+	 *
 	 * @return array
 	 */
 	public function form_edit_sections() {
 		$default = array(
-			'settings' => __( 'Settings', 'wp-user-manager' )
+			'settings' => __( 'Settings', 'wp-user-manager' ),
 		);
 
-		$subsections  = apply_filters( 'wpum_registered_settings_sections', array() );
-		$subsections  = isset( $subsections['registration'] ) ? $subsections['registration'] : array();
-	
+		$subsections = apply_filters( 'wpum_registered_settings_sections', array() );
+		$subsections = isset( $subsections['registration'] ) ? $subsections['registration'] : array();
+
 		$section_options = apply_filters( 'wpum_registration_edit_form_sections', array() );
 
 		return array_merge( $default, $subsections, $section_options );
