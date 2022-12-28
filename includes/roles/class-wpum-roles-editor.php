@@ -266,45 +266,35 @@ class WPUM_Roles_Editor {
 
 			if ( $role_id && isset( $all_roles[ $role_id ] ) ) {
 
-				$role = wpum_get_role( $role_id );
-
-				$wp_role = get_role( sanitize_text_field( $role_id ) );
+				$role           = wpum_get_role( $role_id );
+				$curent_caps    = array_keys( $role->caps );
+				$wp_role        = get_role( sanitize_text_field( $role_id ) );
 
 				$granted_caps           = filter_input( INPUT_POST, 'granted_caps', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY );
 				$denied_caps            = filter_input( INPUT_POST, 'denied_caps', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY );
 				$submitted_granted_caps = $granted_caps ? $granted_caps : array();
 				$submitted_denied_caps  = $denied_caps ? $denied_caps : array();
 
-				$caps_to_add    = array_diff( $submitted_granted_caps, $role->granted_caps );
-				$caps_to_remove = array_diff( $role->granted_caps, $submitted_granted_caps );
-
-				$caps_to_deny   = array_diff( $submitted_denied_caps, $role->denied_caps );
-				$caps_to_undeny = array_diff( $role->denied_caps, $submitted_denied_caps );
-
-				$custom_caps = array();
+				$caps_to_remove = array_diff( $curent_caps, $submitted_granted_caps, $submitted_denied_caps );
+				$custom_caps    = array();
 
 				foreach ( $caps_to_remove as $cap ) {
 					$cap = sanitize_text_field( $cap );
 					$wp_role->remove_cap( $cap );
 				}
-
-				foreach ( $caps_to_undeny as $cap ) {
+				
+				foreach ( $submitted_granted_caps as $cap ) {
 					$cap = sanitize_text_field( $cap );
-					$wp_role->remove_cap( $cap );
-				}
-
-				foreach ( $caps_to_add as $cap ) {
-					$cap = sanitize_text_field( $cap );
-					if ( ! in_array( $cap, $role->caps, true ) ) {
+					if ( ! in_array( $cap, $curent_caps, true ) ) {
 						$custom_caps[] = $cap;
 					}
 
 					$wp_role->add_cap( $cap );
 				}
 
-				foreach ( $caps_to_deny as $cap ) {
+				foreach ( $submitted_denied_caps as $cap ) {
 					$cap = sanitize_text_field( $cap );
-					if ( ! in_array( $cap, $role->caps, true ) ) {
+					if ( ! in_array( $cap, $curent_caps, true ) ) {
 						$custom_caps[] = $cap;
 					}
 					$wp_role->add_cap( $cap, false );
