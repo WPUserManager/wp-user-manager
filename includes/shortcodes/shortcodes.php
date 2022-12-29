@@ -683,6 +683,11 @@ function wpum_profile_card( $atts, $content = null ) {
 		)
 	);
 
+	// Block returns boolean value, convert it to string
+	$link_to_profile = $link_to_profile ? 'yes' : '';
+	$display_buttons = $display_buttons ? 'yes' : '';
+	$display_cover   = $display_cover ? 'yes' : '';
+
 	ob_start();
 
 	if ( empty( $user_id ) ) {
