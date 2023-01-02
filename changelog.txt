@@ -2,6 +2,16 @@
 
 == Changelog ==
 
+= 2.8.16 (2nd January 2023) =
+
+- New: Compatibility with [Likes](https://wpusermanager.com/addons/likes/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager) addon
+- New: Blocks for Social Login Buttons and Private Content
+- Improvement: Profile permission settings now in a different tab in the admin
+- Fix: User role editor now saving grant and deny capabilities correctly
+- Fix: Profile Card block settings now working correctly
+- Fix: Undefined offset: 0 in wp-user-manager/includes/actions.php on line 117
+- Fix: Error log messages now not showing if a profile is accessed for a user that does not exist
+
 = 2.8.15 (21st December 2022) =
 
 - New: Compatibility with [hCaptcha](https://wpusermanager.com/addons/hcaptcha/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager) addon

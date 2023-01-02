@@ -8,7 +8,7 @@ Tested up to: 6.1
 Requires PHP: 5.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
-Stable Tag: 2.8.15
+Stable Tag: 2.8.16
 
 The most customizable profiles & community builder WordPress plugin with front-end login, registration, profile customization and content restriction.
 
@@ -63,6 +63,7 @@ For more advanced functionality check out the [pricing page](https://wpusermanag
 - [Mailchimp](https://wpusermanager.com/addons/mailchimp/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager): Sync users with Mailchimp upon registration & more
 - [Google reCAPTCHA](https://wpusermanager.com/addons/recaptcha?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager): Stop spam registrations on your website for free
 - [Content Restriction Plus](https://wpusermanager.com/addons/content-restriction/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager): One-click restriction to posts, pages and custom post types
+- [Likes](https://wpusermanager.com/addons/likes/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager): Allow your users to like posts, pages and other content
 - [hCaptcha](https://wpusermanager.com/addons/hcaptcha/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager): Stop more bots. Start protecting user privacy with hCaptcha
 - [WPML](https://wpusermanager.com/addons/wpml/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager): Translate your custom fields, field groups, registration forms, and emails using [WPML](https://wpml.org/)
 - [Personal Data](https://wpusermanager.com/addons/personal-data?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager): Allows the user to request an export of personal data and request erasure of personal data from the account page for GDPR compliance
@@ -126,6 +127,16 @@ Please note that using WPUM and the mentioned add-ons does NOT guarantee complia
 13. Login form.
 
 == Changelog ==
+
+= 2.8.16 (2nd January 2023) =
+
+- New: Compatibility with [Likes](https://wpusermanager.com/addons/likes/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager) addon
+- New: Blocks for Social Login Buttons and Private Content
+- Improvement: Profile permission settings now in a different tab in the admin
+- Fix: User role editor now saving grant and deny capabilities correctly
+- Fix: Profile Card block settings now working correctly
+- Fix: Undefined offset: 0 in wp-user-manager/includes/actions.php on line 117
+- Fix: Error log messages now not showing if a profile is accessed for a user that does not exist
 
 = 2.8.15 (21st December 2022) =
 
