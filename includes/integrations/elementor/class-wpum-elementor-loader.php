@@ -72,7 +72,7 @@ class WPUM_Elementor_Loader {
 	public function wpum_register_elementor_widets( $widgets ) {
 		spl_autoload_register( function ( $class ) {
 			$file = 'extensions/class-' . str_replace( '_', '-', strtolower( $class ) ) . '.php';
-			if ( file_exists( WPUM_PLUGIN_DIR . 'includes/elementor/' . $file ) ) {
+			if ( file_exists( WPUM_PLUGIN_DIR . 'includes/integrations/elementor/' . $file ) ) {
 				include $file;
 			}
 		} );
@@ -81,7 +81,7 @@ class WPUM_Elementor_Loader {
 
 		spl_autoload_register( function ( $class ) {
 			$file = 'widgets/class-' . str_replace( '_', '-', strtolower( $class ) ) . '.php';
-			if ( file_exists( WPUM_PLUGIN_DIR . 'includes/elementor/' . $file ) ) {
+			if ( file_exists( WPUM_PLUGIN_DIR . 'includes/integrations/elementor/' . $file ) ) {
 				include $file;
 			}
 		} );
