@@ -260,7 +260,7 @@ if ( ! class_exists( 'WP_User_Manager' ) ) :
 			require_once WPUM_PLUGIN_DIR . 'includes/directories/class-wpum-directories-editor.php';
 			require_once WPUM_PLUGIN_DIR . 'includes/directories/wpum-directories-functions.php';
 			require_once WPUM_PLUGIN_DIR . 'includes/widgets.php';
-			require_once WPUM_PLUGIN_DIR . 'includes/elementor/class-wpum-elementor-loader.php';
+			require_once WPUM_PLUGIN_DIR . 'includes/integrations/elementor/class-wpum-elementor-loader.php';
 
 			require_once WPUM_PLUGIN_DIR . 'includes/admin/class-wpum-plugin-updates.php';
 
