@@ -371,3 +371,23 @@ function wpum_fields_editor_field_settings( $settings ) {
 }
 
 add_filter( 'wpum_fields_editor_field_settings', 'wpum_fields_editor_field_settings' );
+
+/**
+ * Fix User Switching plugin not switching back correctly
+ */
+add_action( 'wp_die_handler', function ( $handler ) {
+	if ( ! isset( $_SERVER['QUERY_STRING'] ) ) {
+		return $handler;
+	}
+
+	parse_str( $_SERVER['QUERY_STRING'], $query ); // phpcs:ignore
+
+	if ( isset( $query['action'] ) && 'switch_to_olduser' === $query['action'] ) {
+		$request_uri = isset( $_SERVER['REQUEST_URI'] ) ? wp_unslash( filter_input( INPUT_SERVER, 'REQUEST_URI' ) ) : '';
+
+		wp_safe_redirect( get_bloginfo( 'wpurl' ) . $request_uri );
+		exit;
+	}
+
+	return $handler;
+} );
