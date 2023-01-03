@@ -688,6 +688,10 @@ function wpum_profile_card( $atts, $content = null ) {
 		$user_id = get_current_user_id();
 	}
 
+	if ( empty( $user_id ) ) {
+		return '';
+	}
+
 	WPUM()->templates
 		->set_template_data(
 			array(
