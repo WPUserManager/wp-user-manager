@@ -112,27 +112,24 @@ class WPUM_Options_Panel {
 	 * @return array
 	 */
 	public function register_settings_subsections( $sections ) {
-		$sections = array(
+		return array(
 			'general'      => array(
 				'login' => __( 'Login Settings', 'wp-user-manager' ),
 				'misc'  => __( 'Misc Settings', 'wp-user-manager' ),
 			),
-			'registration' => array(
-				'terms' => __( 'Terms & Conditions', 'wp-user-manager' ),
-			),
+			'registration' => array(),
 			'emails'       => array(
 				'admin_notifications' => __( 'Administration Notifications', 'wp-user-manager' ),
 			),
 			'profiles'     => array(
-				'profiles_content' => __( 'Profiles Content', 'wp-user-manager' ),
-				'account'          => __( 'Account', 'wp-user-manager' ),
+				'profiles_content'     => __( 'Profiles Content', 'wp-user-manager' ),
+				'profiles_permissions' => __( 'Permissions', 'wp-user-manager' ),
+				'account'              => __( 'Account', 'wp-user-manager' ),
 			),
 			'redirects'    => array(
 				'backend_redirects' => __( 'Backend Redirects', 'wp-user-manager' ),
 			),
 		);
-
-		return $sections;
 	}
 
 	/**
@@ -170,7 +167,7 @@ class WPUM_Options_Panel {
 	public function register_settings( $settings ) {
 		$plugin_settings = array(
 			// General tab settings.
-			'general'             => array(
+			'general'              => array(
 				array(
 					'id'      => 'login_page',
 					'name'    => __( 'Login Page', 'wp-user-manager' ),
@@ -207,7 +204,7 @@ class WPUM_Options_Panel {
 					'options' => wpum_get_pages(),
 				),
 			),
-			'login'               => array(
+			'login'                => array(
 				array(
 					'id'   => 'lock_wplogin',
 					'name' => __( 'Lock Access to wp-login.php', 'wp-user-manager' ),
@@ -238,7 +235,7 @@ class WPUM_Options_Panel {
 					),
 				),
 			),
-			'misc'                => array(
+			'misc'                 => array(
 				array(
 					'id'       => 'adminbar_roles',
 					'name'     => __( 'Admin Bar', 'wp-user-manager' ),
@@ -276,7 +273,7 @@ class WPUM_Options_Panel {
 					'type' => 'checkbox',
 				),
 			),
-			'registration'        => array(
+			'registration'         => array(
 				array(
 					'id'   => 'allow_role_select',
 					'name' => __( 'Allow Role Section', 'wp-user-manager' ),
@@ -302,8 +299,6 @@ class WPUM_Options_Panel {
 					'desc' => __( 'Enable this option to automatically authenticate users after registration.', 'wp-user-manager' ),
 					'type' => 'checkbox',
 				),
-			),
-			'terms'               => array(
 				array(
 					'id'   => 'enable_terms',
 					'name' => __( 'Enable Terms & Conditions', 'wp-user-manager' ),
@@ -322,7 +317,7 @@ class WPUM_Options_Panel {
 					),
 				),
 			),
-			'emails'              => array(
+			'emails'               => array(
 				array(
 					'id'   => 'from_name',
 					'name' => __( 'From Name', 'wp-user-manager' ),
@@ -352,7 +347,7 @@ class WPUM_Options_Panel {
 					'type' => 'file',
 				),
 			),
-			'admin_notifications' => array(
+			'admin_notifications'  => array(
 				array(
 					'id'   => 'disable_admin_register_email',
 					'name' => __( 'Disable Admin Registration Email', 'wp-user-manager' ),
@@ -366,29 +361,11 @@ class WPUM_Options_Panel {
 					'type' => 'checkbox',
 				),
 			),
-			'profiles'            => array(
+			'profiles'             => array(
 				array(
 					'id'   => 'disable_profiles',
 					'name' => __( 'Disable User Profiles', 'wp-user-manager' ),
 					'desc' => __( 'Enable this option to disable frontend user profiles.', 'wp-user-manager' ),
-					'type' => 'checkbox',
-				),
-				array(
-					'id'   => 'guests_can_view_profiles',
-					'name' => __( 'Allow Guests to View Profiles', 'wp-user-manager' ),
-					'desc' => __( 'Enable this option to allow guests to view users profiles.', 'wp-user-manager' ),
-					'type' => 'checkbox',
-				),
-				array(
-					'id'   => 'members_can_view_profiles',
-					'name' => __( 'Allow Members to View Profiles', 'wp-user-manager' ),
-					'desc' => __( 'Enable this option to allow members to view users profiles. If disabled, users can only see their own profile.', 'wp-user-manager' ),
-					'type' => 'checkbox',
-				),
-				array(
-					'id'   => 'members_can_set_privacy',
-					'name' => __( 'Allow Members to set their profile privacy', 'wp-user-manager' ),
-					'desc' => __( 'Adds a Privacy account tab where members can override the global settings above.', 'wp-user-manager' ),
 					'type' => 'checkbox',
 				),
 				array(
@@ -418,7 +395,7 @@ class WPUM_Options_Panel {
 					'std'     => 'display_username',
 				),
 			),
-			'profiles_content'    => array(
+			'profiles_content'     => array(
 				array(
 					'id'   => 'profile_posts',
 					'name' => __( 'Display Posts', 'wp-user-manager' ),
@@ -432,7 +409,7 @@ class WPUM_Options_Panel {
 					'type' => 'checkbox',
 				),
 			),
-			'account'             => array(
+			'account'              => array(
 				array(
 					'id'   => 'current_password',
 					'name' => __( 'Require Current Password', 'wp-user-manager' ),
@@ -440,7 +417,27 @@ class WPUM_Options_Panel {
 					'type' => 'checkbox',
 				),
 			),
-			'redirects'           => array(
+			'profiles_permissions' => array(
+				array(
+					'id'   => 'guests_can_view_profiles',
+					'name' => __( 'Allow Guests to View Profiles', 'wp-user-manager' ),
+					'desc' => __( 'Enable this option to allow guests to view users profiles.', 'wp-user-manager' ),
+					'type' => 'checkbox',
+				),
+				array(
+					'id'   => 'members_can_view_profiles',
+					'name' => __( 'Allow Members to View Profiles', 'wp-user-manager' ),
+					'desc' => __( 'Enable this option to allow members to view users profiles. If disabled, users can only see their own profile.', 'wp-user-manager' ),
+					'type' => 'checkbox',
+				),
+				array(
+					'id'   => 'members_can_set_privacy',
+					'name' => __( 'Allow Members to set their profile privacy', 'wp-user-manager' ),
+					'desc' => __( 'Adds a Privacy account tab where members can override the global settings above.', 'wp-user-manager' ),
+					'type' => 'checkbox',
+				),
+			),
+			'redirects'            => array(
 				array(
 					'id'      => 'login_redirect',
 					'name'    => __( 'After Login', 'wp-user-manager' ),
@@ -463,7 +460,7 @@ class WPUM_Options_Panel {
 					'options' => wpum_get_redirect_pages(),
 				),
 			),
-			'backend_redirects'   => array(
+			'backend_redirects'    => array(
 				array(
 					'id'      => 'wp_login_signup_redirect',
 					'name'    => __( 'Backend Register', 'wp-user-manager' ),

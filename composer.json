@@ -23,7 +23,7 @@
     "wearerequired/wp-requirements-check": "^1.0",
     "wp-user-manager/wp-notices": "dev-master",
     "wp-user-manager/wp-optionskit": "^1.0",
-    "wp-user-manager/wpum-blocks": "1.13",
+    "wp-user-manager/wpum-blocks": "1.14",
     "wpbp/widgets-helper": "dev-master"
   },
   "minimum-stability": "dev",

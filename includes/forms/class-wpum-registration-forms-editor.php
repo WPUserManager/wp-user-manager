@@ -126,6 +126,7 @@ class WPUM_Registration_Forms_Editor {
 				'saveFormSettingsNonce' => wp_create_nonce( 'wpum_save_registration_form_settings' ),
 				'nonce'                 => wp_create_nonce( 'wpum_update_registration_form' ),
 				'delete_form_nonce'     => wp_create_nonce( 'wpum_delete_registration_form' ),
+				'edit_form_sections'    => $this->form_edit_sections(),
 			);
 
 			wp_localize_script( 'wpum-registration-forms-editor', 'wpumRegistrationFormsEditor', $js_variables );
@@ -277,11 +278,13 @@ class WPUM_Registration_Forms_Editor {
 				$form = new WPUM_Registration_Form( $form->id );
 
 				$all_labels     = ( new WPUM_Options_Panel() )->register_labels( array() );
-				$settings       = $form->get_settings_options();
+				$settings       = $form->get_settings_options_by_section();
 				$settings_model = $form->get_settings_model();
 				foreach ( $settings as $key => $setting ) {
-					$settings[ $key ]['current']    = isset( $settings_model[ $setting['id'] ] ) ? $settings_model[ $setting['id'] ] : '';
-					$settings[ $key ]['all_labels'] = $all_labels;
+					foreach ( $setting as $field_key => $field ) {
+						$settings[ $key ][ $field_key ]['current']    = isset( $settings_model[ $field['id'] ] ) ? $settings_model[ $field['id'] ] : '';
+						$settings[ $key ][ $field_key ]['all_labels'] = $all_labels;
+					}
 				}
 
 				wp_send_json_success( array(
@@ -660,6 +663,23 @@ class WPUM_Registration_Forms_Editor {
 		wp_cache_delete( $cache_key, WPUM()->registration_forms->cache_group );
 	}
 
+	/**
+	 * Get all available edit form sections
+	 *
+	 * @return array
+	 */
+	public function form_edit_sections() {
+		$default = array(
+			'settings' => __( 'Settings', 'wp-user-manager' ),
+		);
+
+		$subsections = apply_filters( 'wpum_registered_settings_sections', array() );
+		$subsections = isset( $subsections['registration'] ) ? $subsections['registration'] : array();
+
+		$section_options = apply_filters( 'wpum_registration_edit_form_sections', array() );
+
+		return array_merge( $default, $subsections, $section_options );
+	}
 }
 
 $wpum_registration_forms_editor = new WPUM_Registration_Forms_Editor();

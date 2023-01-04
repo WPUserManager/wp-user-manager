@@ -327,15 +327,24 @@ function wpum_profile( $atts, $content = null ) {
 
 	} else {
 
-		WPUM()->templates
-			->set_template_data(
-				array(
-					'user'            => get_user_by( 'id', wpum_get_queried_user_id() ),
-					'current_user_id' => get_current_user_id(),
+		if ( ! $queried_user_id ) {
+			WPUM()->templates
+				->set_template_data(
+					array(
+						'message' => $warning_message,
+					)
 				)
-			)
-			->get_template_part( 'profile' );
-
+				->get_template_part( 'messages/general', 'warning' );
+		} else {
+			WPUM()->templates
+				->set_template_data(
+					array(
+						'user'            => get_user_by( 'id', $queried_user_id ),
+						'current_user_id' => get_current_user_id(),
+					)
+				)
+				->get_template_part( 'profile' );
+		}
 	}
 
 	$output = ob_get_clean();
@@ -673,6 +682,11 @@ function wpum_profile_card( $atts, $content = null ) {
 			$atts
 		)
 	);
+
+	// Block returns boolean value, convert it to string
+	$link_to_profile = $link_to_profile ? 'yes' : '';
+	$display_buttons = $display_buttons ? 'yes' : '';
+	$display_cover   = $display_cover ? 'yes' : '';
 
 	ob_start();
 
