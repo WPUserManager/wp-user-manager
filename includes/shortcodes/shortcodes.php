@@ -842,7 +842,7 @@ function wpum_directory( $atts, $content = null ) {
 	$directory_search = filter_input( INPUT_GET, 'directory-search' );
 
 	if ( $directory_search ) {
-		$search_string  = sanitize_text_field( esc_attr( trim( wp_unslash( $directory_search ) ) ) );
+		$search_string  = sanitize_text_field( trim( wp_unslash( $directory_search ) ) );
 		$args['search'] = '*' . esc_attr( $search_string ) . '*';
 
 		$search_field_keys = carbon_get_post_meta( $directory_id, 'directory_search_fields' );
@@ -854,7 +854,7 @@ function wpum_directory( $atts, $content = null ) {
 			foreach ( $search_meta_keys as $search_meta_key ) {
 				$meta_query_keys[] = array(
 					'key'     => $search_meta_key,
-					'value'   => esc_attr( $search_string ),
+					'value'   => $search_string,
 					'compare' => 'LIKE',
 				);
 			}
