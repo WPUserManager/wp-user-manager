@@ -2,9 +2,9 @@
 # This file is distributed under the GPLv3+.
 msgid ""
 msgstr ""
-"Project-Id-Version: WP User Manager 2.8.16\n"
+"Project-Id-Version: WP User Manager 2.8.17\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/wp-user-manager\n"
-"POT-Creation-Date: 2023-01-02 23:26:54+00:00\n"
+"POT-Creation-Date: 2023-01-18 23:15:18+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -930,115 +930,125 @@ msgid ""
 "user can change their display name later in their account."
 msgstr ""
 
-#: includes/admin/class-wpum-options-panel.php:401
-msgid "Display Posts"
+#: includes/admin/class-wpum-options-panel.php:399
+msgid "Obfuscate Display Name Emails"
 msgstr ""
 
-#: includes/admin/class-wpum-options-panel.php:402
-msgid "Enable this option to display users submitted post on their profile page."
+#: includes/admin/class-wpum-options-panel.php:400
+msgid ""
+"When usernames are email addresses, and username is the used as the display "
+"name, partially obfuscate email addresses for privacy."
 msgstr ""
 
 #: includes/admin/class-wpum-options-panel.php:407
-msgid "Display Comments"
+msgid "Display Posts"
 msgstr ""
 
 #: includes/admin/class-wpum-options-panel.php:408
+msgid "Enable this option to display users submitted post on their profile page."
+msgstr ""
+
+#: includes/admin/class-wpum-options-panel.php:413
+msgid "Display Comments"
+msgstr ""
+
+#: includes/admin/class-wpum-options-panel.php:414
 msgid ""
 "Enable this option to display users submitted comments on their profile "
 "page."
 msgstr ""
 
-#: includes/admin/class-wpum-options-panel.php:415
+#: includes/admin/class-wpum-options-panel.php:421
 msgid "Require Current Password"
 msgstr ""
 
-#: includes/admin/class-wpum-options-panel.php:416
+#: includes/admin/class-wpum-options-panel.php:422
 msgid "Ask user for current password when resetting password on the account page"
 msgstr ""
 
-#: includes/admin/class-wpum-options-panel.php:423
+#: includes/admin/class-wpum-options-panel.php:429
 msgid "Allow Guests to View Profiles"
 msgstr ""
 
-#: includes/admin/class-wpum-options-panel.php:424
+#: includes/admin/class-wpum-options-panel.php:430
 msgid "Enable this option to allow guests to view users profiles."
 msgstr ""
 
-#: includes/admin/class-wpum-options-panel.php:429
+#: includes/admin/class-wpum-options-panel.php:435
 msgid "Allow Members to View Profiles"
 msgstr ""
 
-#: includes/admin/class-wpum-options-panel.php:430
+#: includes/admin/class-wpum-options-panel.php:436
 msgid ""
 "Enable this option to allow members to view users profiles. If disabled, "
 "users can only see their own profile."
 msgstr ""
 
-#: includes/admin/class-wpum-options-panel.php:435
+#: includes/admin/class-wpum-options-panel.php:441
 msgid "Allow Members to set their profile privacy"
 msgstr ""
 
-#: includes/admin/class-wpum-options-panel.php:436
+#: includes/admin/class-wpum-options-panel.php:442
 msgid ""
 "Adds a Privacy account tab where members can override the global settings "
 "above."
 msgstr ""
 
-#: includes/admin/class-wpum-options-panel.php:443
+#: includes/admin/class-wpum-options-panel.php:449
 msgid "After Login"
 msgstr ""
 
-#: includes/admin/class-wpum-options-panel.php:444
+#: includes/admin/class-wpum-options-panel.php:450
 msgid ""
 "Select the page where you want to redirect users after they login. If empty "
 "it will reload the login page."
 msgstr ""
 
-#: includes/admin/class-wpum-options-panel.php:450
+#: includes/admin/class-wpum-options-panel.php:456
 msgid "After Logout"
 msgstr ""
 
-#: includes/admin/class-wpum-options-panel.php:451
+#: includes/admin/class-wpum-options-panel.php:457
 msgid ""
 "Select the page where you want to redirect users after they logout. If "
 "empty will return to wp-login.php"
 msgstr ""
 
-#: includes/admin/class-wpum-options-panel.php:457
+#: includes/admin/class-wpum-options-panel.php:463
 msgid "After Registration"
 msgstr ""
 
-#: includes/admin/class-wpum-options-panel.php:458
+#: includes/admin/class-wpum-options-panel.php:464
 msgid ""
 "Select the page where you want to redirect users after they successfully "
 "register. If empty a message will be displayed instead."
 msgstr ""
 
-#: includes/admin/class-wpum-options-panel.php:466
+#: includes/admin/class-wpum-options-panel.php:472
 msgid "Backend Register"
 msgstr ""
 
-#: includes/admin/class-wpum-options-panel.php:467
+#: includes/admin/class-wpum-options-panel.php:473
 msgid ""
 "Select a page if you wish to redirect users who try to signup through "
 "wp-login.php"
 msgstr ""
 
-#: includes/admin/class-wpum-options-panel.php:473
+#: includes/admin/class-wpum-options-panel.php:479
 msgid "Backend lost password"
 msgstr ""
 
-#: includes/admin/class-wpum-options-panel.php:474
+#: includes/admin/class-wpum-options-panel.php:480
 msgid ""
 "Select a page if you wish to redirect users who try to recover a lost "
 "password through wp-login.php"
 msgstr ""
 
-#: includes/admin/class-wpum-options-panel.php:480
+#: includes/admin/class-wpum-options-panel.php:486
 msgid "Backend Profile"
 msgstr ""
 
-#: includes/admin/class-wpum-options-panel.php:481
+#: includes/admin/class-wpum-options-panel.php:487
 msgid ""
 "Select the page where you want to redirect users who try to access their "
 "profile on the backend."
