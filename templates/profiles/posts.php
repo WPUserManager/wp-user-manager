@@ -83,7 +83,7 @@ $the_query = wpum_get_posts_for_profile( $data->user->ID );
 			WPUM()->templates
 				->set_template_data( array(
 					// translators: %s user display name
-					'message' => sprintf( esc_html__( '%s has not submitted any posts yet.', 'wp-user-manager' ), $data->user->display_name ),
+					'message' => sprintf( esc_html__( '%s has not submitted any posts yet.', 'wp-user-manager' ), apply_filters( 'wpum_user_display_name', $data->user->display_name, $data->user ) ),
 				) )
 				->get_template_part( 'messages/general', 'warning' );
 		?>

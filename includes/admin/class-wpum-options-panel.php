@@ -394,6 +394,12 @@ class WPUM_Options_Panel {
 					'options' => wpum_get_display_name_options(),
 					'std'     => 'display_username',
 				),
+				array(
+					'id'   => 'obfuscate_display_name_emails',
+					'name' => __( 'Obfuscate Display Name Emails', 'wp-user-manager' ),
+					'desc' => __( 'When usernames are email addresses, and username is the used as the display name, partially obfuscate email addresses for privacy.', 'wp-user-manager' ),
+					'type' => 'checkbox',
+				),
 			),
 			'profiles_content'     => array(
 				array(

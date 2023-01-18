@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 <div id="header-profile-details">
 	<div id="header-name-container">
 		<h2>
-			<?php echo esc_html( $data->user->display_name ); ?>
+			<?php echo esc_html( apply_filters( 'wpum_user_display_name', $data->user->display_name, $data->user ) ); ?>
 			<?php
 			if ( $data->current_user_id === $data->user->ID ) :
 				$edit_account_text = apply_filters( 'wpum_profile_edit_account_text', __( 'Edit account', 'wp-user-manager' ), $data->user->ID );

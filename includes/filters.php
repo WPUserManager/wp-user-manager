@@ -129,7 +129,7 @@ function wpum_login_url( $login_url, $redirect, $force_reauth ) {
 	$wpum_login_page = get_permalink( $wpum_login_page );
 
 	if ( $redirect ) {
-		$wpum_login_page = add_query_arg( array( 'redirect_to' => apply_filters( 'wpum_login_redirect_to_url', $redirect ) ), $wpum_login_page );
+		$wpum_login_page = add_query_arg( array( 'redirect_to' => apply_filters( 'wpum_login_redirect_to_url', rawurlencode( $redirect ) ) ), $wpum_login_page );
 	}
 
 	return $wpum_login_page;
@@ -151,7 +151,7 @@ if ( wpum_get_option( 'lock_wplogin' ) || wpum_get_option( 'lock_complete_site' 
 function wpum_authentication( $wp_user, $username, $password ) {
 
 	// Skip authentication method for admin users
-	if ( ! is_wp_error( $wp_user ) && user_can( $wp_user, 'administrator' ) ) {
+	if ( ! is_wp_error( $wp_user ) && ( apply_filters( 'wpum_authentication_method_admin_override', true ) && user_can( $wp_user, 'administrator' ) ) ) {
 		return $wp_user;
 	}
 
@@ -391,3 +391,19 @@ add_action( 'wp_die_handler', function ( $handler ) {
 
 	return $handler;
 } );
+
+if ( wpum_get_option( 'obfuscate_display_name_emails' ) ) {
+	add_filter( 'wpum_user_display_name', function ( $display_name, $user ) {
+		if ( ! is_email( $display_name ) ) {
+			return $display_name;
+		}
+
+		$current_user_id = get_current_user_id();
+		if ( $current_user_id && $current_user_id === $user->ID ) {
+			return $display_name;
+		}
+
+		return wpum_obfuscate_email( $display_name );
+	}, 10, 2 );
+}
+

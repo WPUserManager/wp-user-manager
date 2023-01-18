@@ -201,16 +201,28 @@ class WPUM_Fields_Query {
 	 * Verify whether the current group within the loop has fields.
 	 *
 	 * @access public
-	 * @return boolean
+	 *
+	 * @param bool $ignore_hidden
+	 *
+	 * @return bool
 	 */
-	public function has_fields() {
-		$has_data = false;
+	public function has_fields( $ignore_hidden = false ) {
+		$has_data      = false;
+		$hidden_fields = 0;
 
 		for ( $i = 0, $count = count( $this->group->fields ); $i < $count; ++$i ) {
 			$field = $this->group->fields[ $i ];
 			if ( ! empty( $field->get_value() ) || ( '0' === $field->get_value() ) ) {
 				$has_data = true;
 			}
+
+			if ( 'public' !== $field->get_visibility() ) {
+				$hidden_fields++;
+			}
+		}
+
+		if ( $ignore_hidden && $hidden_fields === $count ) {
+			return false;
 		}
 
 		return $has_data;

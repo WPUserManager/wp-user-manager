@@ -24,9 +24,9 @@ $users = wpum_get_recent_users( $data->amount );
 
 				<li>
 					<?php if ( true === $data->link_to_profile || 'yes' === $data->link_to_profile ) : ?>
-						<a href="<?php echo esc_url( wpum_get_profile_url( $user ) ); ?>"><?php echo esc_html( $user->display_name ); ?></a>
+						<a href="<?php echo esc_url( wpum_get_profile_url( $user ) ); ?>"><?php echo esc_html( apply_filters( 'wpum_user_display_name', $user->display_name, $user ) ); ?></a>
 					<?php else : ?>
-						<?php echo esc_html( $user->display_name ); ?>
+						<?php echo esc_html( apply_filters( 'wpum_user_display_name', $user->display_name, $user ) ); ?>
 					<?php endif; ?>
 				</li>
 
