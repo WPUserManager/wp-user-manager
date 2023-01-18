@@ -129,7 +129,7 @@ function wpum_login_url( $login_url, $redirect, $force_reauth ) {
 	$wpum_login_page = get_permalink( $wpum_login_page );
 
 	if ( $redirect ) {
-		$wpum_login_page = add_query_arg( array( 'redirect_to' => apply_filters( 'wpum_login_redirect_to_url', urlencode( $redirect ) ) ), $wpum_login_page );
+		$wpum_login_page = add_query_arg( array( 'redirect_to' => apply_filters( 'wpum_login_redirect_to_url', rawurlencode( $redirect ) ) ), $wpum_login_page );
 	}
 
 	return $wpum_login_page;
