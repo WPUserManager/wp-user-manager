@@ -34,7 +34,7 @@ $user = get_user_by( 'id', $data->user_id );
 
 	<div class="wpum-card-details">
 
-		<h4 class="wpum-card-name"><?php echo esc_html( $user->data->display_name ); ?></h4>
+		<h4 class="wpum-card-name"><?php echo esc_html( apply_filters( 'wpum_user_display_name', $user->data->display_name, $user ) ); ?></h4>
 
 		<?php do_action( 'wpum_profile_card_details', $user ); ?>
 

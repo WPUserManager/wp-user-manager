@@ -391,3 +391,19 @@ add_action( 'wp_die_handler', function ( $handler ) {
 
 	return $handler;
 } );
+
+if ( wpum_get_option( 'obfuscate_display_name_emails' ) ) {
+	add_filter( 'wpum_user_display_name', function ( $display_name, $user ) {
+		if ( ! is_email( $display_name ) ) {
+			return $display_name;
+		}
+
+		$current_user_id = get_current_user_id();
+		if ( $current_user_id && $current_user_id === $user->ID ) {
+			return $display_name;
+		}
+
+		return wpum_obfuscate_email( $display_name );
+	}, 10, 2 );
+}
+
