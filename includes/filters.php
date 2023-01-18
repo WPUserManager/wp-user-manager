@@ -151,7 +151,7 @@ if ( wpum_get_option( 'lock_wplogin' ) || wpum_get_option( 'lock_complete_site' 
 function wpum_authentication( $wp_user, $username, $password ) {
 
 	// Skip authentication method for admin users
-	if ( ! is_wp_error( $wp_user ) && user_can( $wp_user, 'administrator' ) ) {
+	if ( ! is_wp_error( $wp_user ) && ( apply_filters( 'wpum_authentication_method_admin_override', true ) && user_can( $wp_user, 'administrator' ) ) ) {
 		return $wp_user;
 	}
 
