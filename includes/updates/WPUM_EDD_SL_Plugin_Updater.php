@@ -17,6 +17,7 @@ class WPUM_EDD_SL_Plugin_Updater {
 	private $slug        = '';
 	private $version     = '';
 	private $wp_override = false;
+	private $beta        = false;
 	private $cache_key   = '';
 
 	private $health_check_timeout = 5;
@@ -41,7 +42,7 @@ class WPUM_EDD_SL_Plugin_Updater {
 		$this->slug        = basename( $_plugin_file, '.php' );
 		$this->version     = $_api_data['version'];
 		$this->wp_override = isset( $_api_data['wp_override'] ) ? (bool) $_api_data['wp_override'] : false;
-		$this->beta        = ! empty( $this->api_data['beta'] ) ? true : false;
+		$this->beta        = ! empty( $this->api_data['beta'] );
 		$this->cache_key   = 'edd_sl_' . md5( serialize( $this->slug . $this->api_data['license'] . $this->beta ) );
 
 		$edd_plugin_data[ $this->slug ] = $this->api_data;
