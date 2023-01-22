@@ -187,6 +187,7 @@ class WPUM_Getting_Started {
 										<input type="text" name="hp" id="hp"/>
 									</div>
 									<input type="hidden" name="list" value="CHYcl0dMX7hLOVpoAg2nBw"/>
+									<input type="hidden" name="PluginOptin" value="1"/>
 									<input type="hidden" name="subform" value="yes"/>
 									<div class="clear">
 										<input type="submit" value="Subscribe" name="subscribe" class="button button-primary">
