@@ -65,7 +65,7 @@ class WPUM_Options_Panel {
 		$this->panel->add_action_button(
 			array(
 				'title' => __( 'Read documentation', 'wp-user-manager' ),
-				'url'   => 'https://docs.wpusermanager.com/?utm_source=WP%20User%20Manager&utm_medium=insideplugin&utm_campaign=WP%20User%20Manager&utm_content=settings-header',
+				'url'   => 'https://wpusermanager.com/docs/?utm_source=WP%20User%20Manager&utm_medium=insideplugin&utm_campaign=WP%20User%20Manager&utm_content=settings-header',
 			)
 		);
 	}

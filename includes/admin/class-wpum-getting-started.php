@@ -232,9 +232,9 @@ class WPUM_Getting_Started {
 							<p class="welcome-icon welcome-learn-more">
 								<?php
 								// translators: WPUM URL
-								echo wp_kses_post( sprintf( __( 'Looking for help? <a href="%s" target="_blank">WP User Manager documentation</a> has got you covered.', 'wp-user-manager' ), 'https://docs.wpusermanager.com/?utm_source=WP%20User%20Manager&utm_medium=insideplugin&utm_campaign=WP%20User%20Manager&utm_content=welcome-panel' ) );
+								echo wp_kses_post( sprintf( __( 'Looking for help? <a href="%s" target="_blank">WP User Manager documentation</a> has got you covered.', 'wp-user-manager' ), 'https://wpusermanager.com/docs/?utm_source=WP%20User%20Manager&utm_medium=insideplugin&utm_campaign=WP%20User%20Manager&utm_content=welcome-panel' ) );
 								?>
-								<br/><br/><a href="https://docs.wpusermanager.com/?utm_source=WP%20User%20Manager&utm_medium=insideplugin&utm_campaign=WP%20User%20Manager&utm_content=welcome-panel" class="button" target="_blank"><?php esc_html_e( 'Read documentation', 'wp-user-manager' ); ?></a></p>
+								<br/><br/><a href="https://wpusermanager.com/docs/?utm_source=WP%20User%20Manager&utm_medium=insideplugin&utm_campaign=WP%20User%20Manager&utm_content=welcome-panel" class="button" target="_blank"><?php esc_html_e( 'Read documentation', 'wp-user-manager' ); ?></a></p>
 						</div>
 					</div>
 				</div>
@@ -249,7 +249,7 @@ class WPUM_Getting_Started {
 						<p>
 							<?php
 							// translators: %1$s contact URL %2$s documenation URL
-							echo wp_kses_post( sprintf( __( 'We do all we can to provide every user with the best support possible. If you encounter a problem or have a question, please <a href="%1$s" target="_blank">contact us.</a> Make sure you <a href="%2$s">read the documentation</a> first.', 'wp-user-manager' ), 'https://wpusermanager.com/contacts?utm_source=WP%20User%20Manager&utm_medium=insideplugin&utm_campaign=WP%20User%20Manager&utm_content=welcome-panel', 'https://docs.wpusermanager.com/?utm_source=WP%20User%20Manager&utm_medium=insideplugin&utm_campaign=WP%20User%20Manager&utm_content=welcome-panel' ) );
+							echo wp_kses_post( sprintf( __( 'We do all we can to provide every user with the best support possible. If you encounter a problem or have a question, please <a href="%1$s" target="_blank">contact us.</a> Make sure you <a href="%2$s">read the documentation</a> first.', 'wp-user-manager' ), 'https://wpusermanager.com/contacts?utm_source=WP%20User%20Manager&utm_medium=insideplugin&utm_campaign=WP%20User%20Manager&utm_content=welcome-panel', 'https://wpusermanager.com/docs/?utm_source=WP%20User%20Manager&utm_medium=insideplugin&utm_campaign=WP%20User%20Manager&utm_content=welcome-panel' ) );
 							?>
 						</p>
 					</div>
