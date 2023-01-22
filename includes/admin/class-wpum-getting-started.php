@@ -161,35 +161,28 @@ class WPUM_Getting_Started {
 				// translators: %s WP User Manager version
 				echo esc_html( sprintf( __( 'Thank you for installing the latest version! WP User Manager %s is ready to provide improved control over your WordPress users.', 'wp-user-manager' ), WPUM_VERSION ) );
 				?>
-				<form action="https://wpusermanager.us4.list-manage.com/subscribe/post?u=7a902e9d55ec4f3370526c634&amp;id=3b3da3fd3b" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank">
+				<form target="_blank" class="wpum-newsletter-subscribe" action="https://s.wpusermanager.com/subscribe" method="post" accept-charset="utf-8">
 					<p class="wpum-pre-newsletter-form"><?php esc_html_e( 'Be sure to sign up for the WPUM newsletter below to stay informed of important updates and news.', 'wp-user-manager' ); ?></p>
 					<table class="form-table wpum-newsletter-form">
 						<tbody>
-							<tr valign="middle">
+							<tr>
 								<td>
-										<input type="email" value="" placeholder="<?php esc_html_e( 'Email address*', 'wp-user-manager' ); ?>" name="EMAIL" class="required email" required id="mce-EMAIL">
+									<input type="email" required value="" placeholder="<?php esc_html_e( 'Email address*', 'wp-user-manager' ); ?>" name="email" class="required email">
 								</td>
 								<td>
 									<div class="mc-field-group">
-										<input type="text" value="" name="FNAME" class="" id="mce-FNAME" placeholder="<?php esc_html_e( 'First name', 'wp-user-manager' ); ?>">
+										<input type="text" value="" name="name" placeholder="<?php esc_html_e( 'First name', 'wp-user-manager' ); ?>">
 									</div>
 								</td>
 								<td>
-									<div class="mc-field-group">
-										<input type="text" value="" name="LNAME" class="" id="mce-LNAME" placeholder="<?php esc_html_e( 'Last name', 'wp-user-manager' ); ?>">
+									<div style="display:none;">
+										<label for="hp">HP</label><br/>
+										<input type="text" name="hp" id="hp"/>
 									</div>
-								</td>
-								<td>
-									<div id="mce-responses" class="clear">
-										<div class="response" id="mce-error-response" style="display:none"></div>
-										<div class="response" id="mce-success-response" style="display:none"></div>
-									</div>
-									<!-- real people should not fill this in and expect good things - do not remove this or risk form bot signups-->
-									<div style="position: absolute; left: -5000px;" aria-hidden="true">
-										<input type="text" name="b_e68e0bb69f2cdf2dfd083856c_054538336e" tabindex="-1" value="">
-									</div>
+									<input type="hidden" name="list" value="CHYcl0dMX7hLOVpoAg2nBw"/>
+									<input type="hidden" name="subform" value="yes"/>
 									<div class="clear">
-										<input type="submit" value="Subscribe" name="subscribe" id="mc-embedded-subscribe" class="button">
+										<input type="submit" value="Subscribe" name="subscribe" class="button button-primary">
 									</div>
 								</td>
 							</tr>
