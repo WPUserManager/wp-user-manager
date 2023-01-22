@@ -69,7 +69,7 @@ abstract class WPUM_Form {
 	 * Cloning is forbidden.
 	 */
 	public function __clone() {
-		_doing_it_wrong( __FUNCTION__, sprintf('Cloning "%s is forbidden.', __CLASS__), '2.1.9' );
+		_doing_it_wrong( __FUNCTION__, sprintf('Cloning %s is forbidden.', __CLASS__), '2.1.9' );
 	}
 
 	/**
