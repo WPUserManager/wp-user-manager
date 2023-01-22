@@ -84,6 +84,15 @@ class WPUM_Getting_Started {
 			top: 0;
 			right: 0;
 		}
+		.welcome-panel {
+			background: #016afe;
+		}
+		.welcome-panel-column {
+			display: inline-block;
+		}
+		.welcome-panel-content {
+			min-height:auto
+		}
 		.wpum-welcome-screenshots {
 			float: right;
 			margin-left: 10px!important;
@@ -91,19 +100,17 @@ class WPUM_Getting_Started {
 		.about-wrap .feature-section {
 			margin-top: 20px;
 		}
-		#mc-embedded-subscribe-form {
-			max-width: 700px;
-		}
-		#mc-embedded-subscribe-form table {
-			margin: 0px 0 0px -10px;
-		}
-		#mc-embedded-subscribe-form p {
-			margin-bottom:0;
-		}
-		#mc-embedded-subscribe-form td {
-			padding-right:0px;
+		.wpum-newsletter-subscribe {
+			background: white;
+			padding: 10px 20px;
+			margin-top: 20px;
+			border-radius: 5px;
+			border-top: solid 5px #016afe;
 		}
 
+		.wpum-newsletter-subscribe input[type="text"], .wpum-newsletter-subscribe input[type="email"] {
+			width: 100%;
+		}
 		/*]]>*/
 		</style>
 		<?php
