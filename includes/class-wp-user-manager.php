@@ -173,7 +173,9 @@ if ( ! class_exists( 'WP_User_Manager' ) ) :
 			$this->autoload();
 
 			// Verify the plugin can run first. If not, disable the plugin automagically.
-			$this->plugin_can_run();
+			if ( ! $this->plugin_can_run() ) {
+				return;
+			}
 
 			$this->setup_constants();
 
