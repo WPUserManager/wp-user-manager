@@ -95,7 +95,7 @@ class WPUM_Registration_Forms_Editor {
 
 		if ( 'users_page_wpum-registration-forms' === $screen->base ) {
 
-			$is_vue_dev = defined( 'WPUM_VUE_DEV' ) && WPUM_VUE_DEV ? true : false;
+			$is_vue_dev = defined( 'WPUM_VUE_DEV' ) && WPUM_VUE_DEV;
 
 			if ( $is_vue_dev ) {
 				$vue_dev_port = defined( 'WPUM_VUE_DEV_PORT' ) ? WPUM_VUE_DEV_PORT : '8080';
@@ -236,7 +236,7 @@ class WPUM_Registration_Forms_Editor {
 		}
 
 		$form_id   = filter_input( INPUT_POST, 'form_id', FILTER_VALIDATE_INT );
-		$form_name = filter_input( INPUT_POST, 'form_name', FILTER_VALIDATE_INT );
+		$form_name = filter_input( INPUT_POST, 'form_name', FILTER_SANITIZE_STRING );
 		$form_name = $form_name ? sanitize_text_field( $form_name ) : false;
 
 		if ( $form_id && $form_name ) {

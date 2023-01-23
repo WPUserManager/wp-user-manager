@@ -2,9 +2,9 @@
 # This file is distributed under the GPLv3+.
 msgid ""
 msgstr ""
-"Project-Id-Version: WP User Manager 2.8.17\n"
+"Project-Id-Version: WP User Manager 2.8.18\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/wp-user-manager\n"
-"POT-Creation-Date: 2023-01-18 23:15:18+00:00\n"
+"POT-Creation-Date: 2023-01-23 15:41:39+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -407,109 +407,104 @@ msgstr ""
 msgid "Getting started with WP User Manager"
 msgstr ""
 
-#: includes/admin/class-wpum-getting-started.php:126
+#: includes/admin/class-wpum-getting-started.php:133
 msgid "Getting Started"
 msgstr ""
 
-#: includes/admin/class-wpum-getting-started.php:145
+#: includes/admin/class-wpum-getting-started.php:152
 #. translators: %s WP User Manager version
 msgid "Welcome to WP User Manager %s"
 msgstr ""
 
-#: includes/admin/class-wpum-getting-started.php:162
+#: includes/admin/class-wpum-getting-started.php:169
 #. translators: %s WP User Manager version
 msgid ""
 "Thank you for installing the latest version! WP User Manager %s is ready to "
 "provide improved control over your WordPress users."
 msgstr ""
 
-#: includes/admin/class-wpum-getting-started.php:165
+#: includes/admin/class-wpum-getting-started.php:172
 msgid ""
 "Be sure to sign up for the WPUM newsletter below to stay informed of "
 "important updates and news."
 msgstr ""
 
-#: includes/admin/class-wpum-getting-started.php:170
+#: includes/admin/class-wpum-getting-started.php:177
 msgid "Email address*"
 msgstr ""
 
-#: includes/admin/class-wpum-getting-started.php:174
+#: includes/admin/class-wpum-getting-started.php:181
 #: includes/directories/class-wpum-directories-editor.php:202
 #: includes/directories/wpum-directories-functions.php:25
 #: includes/fields/class-wpum-field.php:362
 msgid "First name"
 msgstr ""
 
-#: includes/admin/class-wpum-getting-started.php:179
-#: includes/fields/class-wpum-field.php:365
-msgid "Last name"
-msgstr ""
-
-#: includes/admin/class-wpum-getting-started.php:203
+#: includes/admin/class-wpum-getting-started.php:204
 #. translators: %s WP User Manager version
 msgid "Version %s"
 msgstr ""
 
-#: includes/admin/class-wpum-getting-started.php:209
+#: includes/admin/class-wpum-getting-started.php:210
 msgid ""
 "Use the tips below to get started using WP User Manager. You will be up and "
 "running in no time!"
 msgstr ""
 
-#: includes/admin/class-wpum-getting-started.php:215
+#: includes/admin/class-wpum-getting-started.php:216
 msgid "Configure WP User Manager"
 msgstr ""
 
-#: includes/admin/class-wpum-getting-started.php:217
+#: includes/admin/class-wpum-getting-started.php:218
 msgid "Setup login method"
 msgstr ""
 
-#: includes/admin/class-wpum-getting-started.php:218
+#: includes/admin/class-wpum-getting-started.php:219
 msgid "Setup notifications"
 msgstr ""
 
-#: includes/admin/class-wpum-getting-started.php:219
+#: includes/admin/class-wpum-getting-started.php:220
 msgid "Customize email templates"
 msgstr ""
 
-#: includes/admin/class-wpum-getting-started.php:223
+#: includes/admin/class-wpum-getting-started.php:224
 msgid "Customize Profiles"
 msgstr ""
 
-#: includes/admin/class-wpum-getting-started.php:225
+#: includes/admin/class-wpum-getting-started.php:226
 msgid "Customize profiles"
 msgstr ""
 
-#: includes/admin/class-wpum-getting-started.php:226
+#: includes/admin/class-wpum-getting-started.php:227
 #: includes/fields/class-wpum-fields-editor.php:154
 msgid "Customize fields"
 msgstr ""
 
-#: includes/admin/class-wpum-getting-started.php:227
+#: includes/admin/class-wpum-getting-started.php:228
 msgid "Create user directories"
 msgstr ""
 
-#: includes/admin/class-wpum-getting-started.php:231 includes/filters.php:46
+#: includes/admin/class-wpum-getting-started.php:232 includes/filters.php:46
 msgid "Documentation"
 msgstr ""
 
-#: includes/admin/class-wpum-getting-started.php:235
+#: includes/admin/class-wpum-getting-started.php:236
 #. translators: WPUM URL
 msgid ""
 "Looking for help? <a href=\"%s\" target=\"_blank\">WP User Manager "
 "documentation</a> has got you covered."
 msgstr ""
 
-#: includes/admin/class-wpum-getting-started.php:237
+#: includes/admin/class-wpum-getting-started.php:238
 #: includes/admin/class-wpum-options-panel.php:67
 msgid "Read documentation"
 msgstr ""
 
-#: includes/admin/class-wpum-getting-started.php:248
+#: includes/admin/class-wpum-getting-started.php:249
 msgid "Looking for help?"
 msgstr ""
 
-#: includes/admin/class-wpum-getting-started.php:252
+#: includes/admin/class-wpum-getting-started.php:253
 #. translators: %1$s contact URL %2$s documenation URL
 msgid ""
 "We do all we can to provide every user with the best support possible. If "
@@ -518,21 +513,21 @@ msgid ""
 "documentation</a> first."
 msgstr ""
 
-#: includes/admin/class-wpum-getting-started.php:258
+#: includes/admin/class-wpum-getting-started.php:259
 msgid "Extensions for WP User Manager"
 msgstr ""
 
-#: includes/admin/class-wpum-getting-started.php:259
+#: includes/admin/class-wpum-getting-started.php:260
 msgid ""
 "Browse our growing collection of addons built specifically for WPUM to "
 "customize the functionality of your community."
 msgstr ""
 
-#: includes/admin/class-wpum-getting-started.php:260
+#: includes/admin/class-wpum-getting-started.php:261
 msgid "Browse addons"
 msgstr ""
 
-#: includes/admin/class-wpum-getting-started.php:266
+#: includes/admin/class-wpum-getting-started.php:267
 msgid "Go To WP User Manager &rarr; Settings"
 msgstr ""
 
@@ -1141,8 +1136,8 @@ msgstr ""
 msgid "Read more"
 msgstr ""
 
-#: includes/class-wp-user-manager.php:420
-#: includes/class-wp-user-manager.php:432
+#: includes/class-wp-user-manager.php:422
+#: includes/class-wp-user-manager.php:434
 msgid "Cheatin&#8217; huh?"
 msgstr ""
 
@@ -1502,7 +1497,7 @@ msgstr ""
 msgid "Merge tags allow you to dynamically add content to your email"
 msgstr ""
 
-#: includes/emails/class-wpum-emails-customizer.php:156
+#: includes/emails/class-wpum-emails-customizer.php:160
 #. translators: %1$s email name %2$s html break %3$s email description
 msgid ""
 "The WP User Manager email editor allows you to customize the emails sent to "
@@ -1510,49 +1505,49 @@ msgid ""
 "shortcuts are shown for some editable elements of the email."
 msgstr ""
 
-#: includes/emails/class-wpum-emails-customizer.php:165
+#: includes/emails/class-wpum-emails-customizer.php:169
 msgid "Email content settings"
 msgstr ""
 
-#: includes/emails/class-wpum-emails-customizer.php:166
+#: includes/emails/class-wpum-emails-customizer.php:170
 msgid "View available email merge tags"
 msgstr ""
 
-#: includes/emails/class-wpum-emails-customizer.php:166
+#: includes/emails/class-wpum-emails-customizer.php:170
 msgid "Available email merge tags:"
 msgstr ""
 
-#: includes/emails/class-wpum-emails-customizer.php:204
+#: includes/emails/class-wpum-emails-customizer.php:208
 msgid "Email subject"
 msgstr ""
 
-#: includes/emails/class-wpum-emails-customizer.php:205
+#: includes/emails/class-wpum-emails-customizer.php:209
 msgid "Customize the subject line of the email."
 msgstr ""
 
-#: includes/emails/class-wpum-emails-customizer.php:219
+#: includes/emails/class-wpum-emails-customizer.php:223
 msgid "Email heading title"
 msgstr ""
 
-#: includes/emails/class-wpum-emails-customizer.php:220
+#: includes/emails/class-wpum-emails-customizer.php:224
 msgid "Customize the heading title of the email."
 msgstr ""
 
-#: includes/emails/class-wpum-emails-customizer.php:232
+#: includes/emails/class-wpum-emails-customizer.php:236
 msgid "Email content"
 msgstr ""
 
-#: includes/emails/class-wpum-emails-customizer.php:233
+#: includes/emails/class-wpum-emails-customizer.php:237
 msgid "Click the button to open the content customization editor."
 msgstr ""
 
-#: includes/emails/class-wpum-emails-customizer.php:252
-#: includes/emails/class-wpum-emails-customizer.php:253
+#: includes/emails/class-wpum-emails-customizer.php:256
+#: includes/emails/class-wpum-emails-customizer.php:257
 msgid "Welcome to {sitename}!"
 msgstr ""
 
-#: includes/emails/class-wpum-emails-customizer.php:258
-#: includes/emails/class-wpum-emails-customizer.php:259
+#: includes/emails/class-wpum-emails-customizer.php:262
+#: includes/emails/class-wpum-emails-customizer.php:263
 msgid "Reset your {sitename} password"
 msgstr ""
 
@@ -1749,6 +1744,10 @@ msgstr ""
 
 #: includes/fields/class-wpum-field.php:359
 msgid "User password"
+msgstr ""
+
+#: includes/fields/class-wpum-field.php:365
+msgid "Last name"
 msgstr ""
 
 #: includes/fields/class-wpum-field.php:368
@@ -3255,9 +3254,9 @@ msgstr ""
 
 #: includes/shortcodes/shortcodes.php:285
 #: includes/shortcodes/shortcodes.php:396
-#: includes/shortcodes/shortcodes.php:461
-#: includes/shortcodes/shortcodes.php:530
-#: includes/shortcodes/shortcodes.php:601
+#: includes/shortcodes/shortcodes.php:462
+#: includes/shortcodes/shortcodes.php:532
+#: includes/shortcodes/shortcodes.php:604
 #: vendor/wp-user-manager/wpum-blocks/blocks-loader.php:216
 #. translators: %1$s login URL %2$s register URL
 msgid ""
@@ -3269,21 +3268,21 @@ msgstr ""
 msgid "You are not authorized to access this area."
 msgstr ""
 
-#: includes/updates/WPUM_EDD_SL_Plugin_Updater.php:250
+#: includes/updates/WPUM_EDD_SL_Plugin_Updater.php:251
 msgid "There is a new version of %1$s available. %2$sView version %3$s details%4$s."
 msgstr ""
 
-#: includes/updates/WPUM_EDD_SL_Plugin_Updater.php:258
+#: includes/updates/WPUM_EDD_SL_Plugin_Updater.php:259
 msgid ""
 "There is a new version of %1$s available. %2$sView version %3$s details%4$s "
 "or %5$supdate now%6$s."
 msgstr ""
 
-#: includes/updates/WPUM_EDD_SL_Plugin_Updater.php:512
+#: includes/updates/WPUM_EDD_SL_Plugin_Updater.php:513
 msgid "You do not have permission to install plugin updates"
 msgstr ""
 
-#: includes/updates/WPUM_EDD_SL_Plugin_Updater.php:512
+#: includes/updates/WPUM_EDD_SL_Plugin_Updater.php:513
 msgid "Error"
 msgstr ""
 

@@ -1,0 +1,11 @@
+includes:
+    - vendor/szepeviktor/phpstan-wordpress/extension.neon
+parameters:
+    scanFiles:
+        - vendor/htmlburger/carbon-fields/core/functions.php
+    #level: 5
+    level: 0
+    paths:
+        - wp-user-manager.php
+        - uninstall.php
+        - includes/

@@ -228,7 +228,8 @@ module.exports = function( grunt ) {
 					'!.github',
 					'!phpcs.xml.dist',
 					'!README.md',
-					'!yarn.lock'
+					'!yarn.lock',
+					'!phpstan.neon.dist'
 				],
 				dest: 'release/<%= pkg.version %>/'
 			}
