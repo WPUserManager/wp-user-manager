@@ -762,7 +762,7 @@ function wpum_get_full_page_hierarchy( $page_id ) {
 
 	$page = get_post( $page_id );
 
-	if ( empty( $page ) || is_wp_error( $page ) ) {
+	if ( empty( $page ) ) {
 		return array();
 	}
 
@@ -1270,7 +1270,7 @@ function wpum_get_plugins() {
 		$dirname = strtolower( dirname( $plugin_path ) );
 		if ( strstr( $dirname, 'wpum-' ) && strstr( $plugin_data['AuthorURI'], 'wpusermanager.com' ) ) {
 			$plugins[ $plugin_path ]['Type'] = 'add-on';
-			$license_active                  = __wpum_get_active_license_info( WPUM_License::get_short_name( $plugin_data['Name'] ) );
+			$license_active                  = false; // FIXME __wpum_get_active_license_info( WPUM_License::get_short_name( $plugin_data['Name'] ) );
 			if ( ! empty( $license_active ) && 'valid' === $license_active->license ) {
 				$plugins[ $plugin_path ]['License'] = true;
 			} else {
