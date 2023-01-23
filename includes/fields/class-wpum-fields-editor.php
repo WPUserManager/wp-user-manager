@@ -85,7 +85,7 @@ class WPUM_Fields_Editor {
 
 		if ( 'users_page_wpum-custom-fields' === $screen->base ) {
 
-			$is_vue_dev = defined( 'WPUM_VUE_DEV' ) && WPUM_VUE_DEV ? true : false;
+			$is_vue_dev = defined( 'WPUM_VUE_DEV' ) && WPUM_VUE_DEV;
 
 			if ( $is_vue_dev ) {
 				$vue_dev_port = defined( 'WPUM_VUE_DEV_PORT' ) ? WPUM_VUE_DEV_PORT : '8080';
@@ -229,7 +229,7 @@ class WPUM_Fields_Editor {
 					'id'          => $group->get_ID(),
 					'name'        => $group->get_name(),
 					'description' => $group->get_description(),
-					'default'     => $group->get_ID() === 1 ? true : false,
+					'default'     => $group->get_ID() === 1,
 					'fields'      => $group->get_count(),
 				);
 			}
