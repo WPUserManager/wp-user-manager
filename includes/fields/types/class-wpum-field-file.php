@@ -89,7 +89,7 @@ class WPUM_Field_File extends WPUM_Field_Type {
 	 * @return  string|array
 	 */
 	protected function upload_file( $field_key, $field ) {
-		if ( isset( $_FILES[ $field_key ] ) && ! empty( $_FILES[ $field_key ] ) && ! empty( $_FILES[ $field_key ]['name'] ) ) {
+		if ( ! empty( $_FILES[ $field_key ] ) && ! empty( $_FILES[ $field_key ]['name'] ) ) {
 			$allowed_mime_types = wpum_get_allowed_mime_types();
 			if ( ! empty( $field['allowed_mime_types'] ) ) {
 				$extensions         = explode( ',', $field['allowed_mime_types'] );
@@ -142,6 +142,8 @@ class WPUM_Field_File extends WPUM_Field_Type {
 				return current( $file_urls );
 			}
 		}
+
+		return '';
 	}
 
 

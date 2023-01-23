@@ -41,6 +41,7 @@
     "codeception/util-universalframework": "^1.0",
     "hoa/console": "^3.17",
     "lucatume/wp-browser": "^3.0",
+    "szepeviktor/phpstan-wordpress": "^1.1",
     "voku/simple_html_dom": "^4.8",
     "whatdafox/codeception-mailtrap": "^1.4",
     "wp-coding-standards/wpcs": "^2.3"

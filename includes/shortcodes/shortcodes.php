@@ -398,7 +398,8 @@ function wpum_restrict_logged_in( $atts, $content = null ) {
 		/**
 		 * Filter: allow developers to modify the content restriction shortcode message.
 		 *
-		 * @param string $message the original message.
+		 * @param string $message   Original message.
+		 * @param string $shortcode Shortcode name.
 		 * @return string
 		 */
 		$message = apply_filters( 'wpum_content_restriction_message', $message, 'wpum_restrict_logged_in' );
@@ -463,7 +464,8 @@ function wpum_restrict_logged_out( $atts, $content = null ) {
 		/**
 		 * Filter: allow developers to modify the content restriction shortcode message.
 		 *
-		 * @param string $message the original message.
+		 * @param string $message   Original message.
+		 * @param string $shortcode Shortcode name.
 		 * @return string
 		 */
 		$message = apply_filters( 'wpum_content_restriction_message', $message, 'wpum_restrict_logged_out' );
@@ -532,7 +534,8 @@ function wpum_restrict_to_users( $atts, $content = null ) {
 		/**
 		 * Filter: allow developers to modify the content restriction shortcode message.
 		 *
-		 * @param string $message the original message.
+		 * @param string $message   Original message.
+		 * @param string $shortcode Shortcode name.
 		 * @return string
 		 */
 		$message = apply_filters( 'wpum_content_restriction_message', $message, 'wpum_restrict_to_users' );
@@ -603,7 +606,8 @@ function wpum_restrict_to_user_roles( $atts, $content = null ) {
 		/**
 		 * Filter: allow developers to modify the content restriction shortcode message.
 		 *
-		 * @param string $message the original message.
+		 * @param string $message   Original message.
+		 * @param string $shortcode Shortcode name.
 		 * @return string
 		 */
 		$message = apply_filters( 'wpum_content_restriction_message', $message, 'wpum_restrict_to_user_roles' );

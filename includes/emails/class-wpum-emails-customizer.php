@@ -77,7 +77,7 @@ class WPUM_Emails_Customizer {
 	 *
 	 * @param boolean $active
 	 * @param object  $section
-	 * @return bool|void
+	 * @return bool
 	 */
 	public function remove_sections( $active, $section ) {
 		$wpum_email_customizer = filter_input( INPUT_GET, 'wpum_email_customizer', FILTER_SANITIZE_STRING );
@@ -99,6 +99,8 @@ class WPUM_Emails_Customizer {
 
 			return false;
 		}
+
+		return true;
 	}
 
 	/**
@@ -127,6 +129,8 @@ class WPUM_Emails_Customizer {
 			}
 			return false;
 		}
+
+		return true;
 	}
 
 	/**

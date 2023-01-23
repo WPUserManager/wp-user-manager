@@ -762,7 +762,7 @@ function wpum_get_full_page_hierarchy( $page_id ) {
 
 	$page = get_post( $page_id );
 
-	if ( empty( $page ) || is_wp_error( $page ) ) {
+	if ( empty( $page ) ) {
 		return array();
 	}
 
@@ -1240,48 +1240,6 @@ function wpum_get_allowed_user_roles( $selected_roles = array() ) {
 	}
 
 	return $user_roles;
-}
-
-/**
- * Get plugin info including status, type, and license validation.
- *
- * This is an enhanced version of get_plugins() that returns the status
- * (`active` or `inactive`) of all plugins, type of plugin (`add-on` or `other`
- * and license validation for WPUM add-ons (`true` or `false`). Does not include
- * MU plugins.
- *
- * @return array Plugin info plus status, type, and license validation if
- *               available.
- */
-function wpum_get_plugins() {
-	$plugins             = get_plugins();
-	$active_plugin_paths = (array) get_option( 'active_plugins', array() );
-	if ( is_multisite() ) {
-		$network_activated_plugin_paths = array_keys( get_site_option( 'active_sitewide_plugins', array() ) );
-		$active_plugin_paths            = array_merge( $active_plugin_paths, $network_activated_plugin_paths );
-	}
-	foreach ( $plugins as $plugin_path => $plugin_data ) {
-		// Is plugin active?
-		if ( in_array( $plugin_path, $active_plugin_paths, true ) ) {
-			$plugins[ $plugin_path ]['Status'] = 'active';
-		} else {
-			$plugins[ $plugin_path ]['Status'] = 'inactive';
-		}
-		$dirname = strtolower( dirname( $plugin_path ) );
-		if ( strstr( $dirname, 'wpum-' ) && strstr( $plugin_data['AuthorURI'], 'wpusermanager.com' ) ) {
-			$plugins[ $plugin_path ]['Type'] = 'add-on';
-			$license_active                  = __wpum_get_active_license_info( WPUM_License::get_short_name( $plugin_data['Name'] ) );
-			if ( ! empty( $license_active ) && 'valid' === $license_active->license ) {
-				$plugins[ $plugin_path ]['License'] = true;
-			} else {
-				$plugins[ $plugin_path ]['License'] = false;
-			}
-		} else {
-			$plugins[ $plugin_path ]['Type'] = 'other';
-		}
-	}
-
-	return $plugins;
 }
 
 /**
