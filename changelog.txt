@@ -2,6 +2,15 @@
 
 == Changelog ==
 
+= 2.8.18 (23rd January 2023) =
+
+- Fix: Code fixes using PHPStan (props [szepeviktor](https://github.com/szepeviktor))
+- Fix: Renaming a registration form now works correctly
+- Fix: Abort loading plugin early if plugin doesn't meet PHP or WP requirements
+- Fix: Newsletter email form on welcome page updated
+- Fix: Formatting on the welcome page
+- Fix: Updated documentation URLs
+
 = 2.8.17 (18th January 2023) =
 
 - New: Setting to partially obfuscate email addresses used as the user display name
