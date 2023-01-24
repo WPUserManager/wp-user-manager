@@ -189,9 +189,16 @@ class WPUM_Avatars {
 		return true;
 	}
 
+	/**
+	 * @param string $url
+	 * @param mixed  $id_or_email
+	 * @param array  $args
+	 *
+	 * @return array|mixed|string|string[]
+	 */
 	public function set_default_avatar( $url, $id_or_email, $args ) {
 		global $pagenow;
-		if ( is_admin() && ( ! isset( $pagenow ) || 'options-discussion.php' !== $pagenow )  ) {
+		if ( is_admin() && ( ! isset( $pagenow ) || 'options-discussion.php' !== $pagenow ) ) {
 			return $url;
 		}
 
