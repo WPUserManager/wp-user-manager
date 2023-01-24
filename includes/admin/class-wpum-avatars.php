@@ -49,7 +49,7 @@ class WPUM_Avatars {
 			add_filter( 'avatar_defaults', function ( $defaults ) {
 				$defaults = array();
 
-				$defaults['wpum'] = __( 'WP User Manager', 'wp-user-manager' );
+				$defaults['wpum'] = __( 'Set with by WP User Manager.', 'wp-user-manager' ) . sprintf( ' <a href="%s">%s</a>', admin_url( 'users.php?page=wpum-settings#/profiles' ), __( 'Edit' ) );
 
 				return $defaults;
 			} );
