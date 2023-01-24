@@ -60,7 +60,7 @@ class WPUM_Avatars {
 			add_filter( 'pre_update_option_wpum_settings', function ( $value, $old_value ) {
 				if ( isset( $value['default_avatar'] ) && ( empty( $old_value['default_avatar'] ) || $old_value['default_avatar'] !== $value['default_avatar'] ) ) {
 					$url           = $value['default_avatar'];
-					$attachment_id = attachment_url_to_postid( $value['default_avatar'] );
+					$attachment_id = attachment_url_to_postid( $url );
 					if ( $attachment_id ) {
 						$url = wp_get_attachment_image_url( $attachment_id, 'wpum-avatar' );
 					}
