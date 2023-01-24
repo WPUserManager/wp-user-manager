@@ -375,6 +375,12 @@ class WPUM_Options_Panel {
 					'type' => 'checkbox',
 				),
 				array(
+					'id'   => 'default_avatar',
+					'name' => __( 'Default Avatar', 'wp-user-manager' ),
+					'desc' => __( 'Select a default image to be used for users who don\'t have a custom avatar or Gravatar registered with their email address.', 'wp-user-manager' ),
+					'type' => 'file',
+				),
+				array(
 					'id'   => 'disable_profile_cover',
 					'name' => __( 'Disable Profile Cover Image', 'wp-user-manager' ),
 					'desc' => __( 'Enable this option to prevent users from uploading a custom profile cover image.', 'wp-user-manager' ),

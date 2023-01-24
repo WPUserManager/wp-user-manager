@@ -43,6 +43,33 @@ class WPUM_Avatars {
 			add_action( 'carbon_fields_register_fields', array( $this, 'cover_field' ) );
 		}
 
+		if ( false !== wpum_get_option( 'default_avatar' ) ) {
+			add_image_size( 'wpum-avatar', 50, 50, true );
+			add_filter( 'get_avatar_url', array( $this, 'set_default_avatar' ), 10, 3 );
+			add_filter( 'avatar_defaults', function ( $defaults ) {
+				$defaults = array();
+
+				$defaults['wpum'] = __( 'WP User Manager', 'wp-user-manager' );
+
+				return $defaults;
+			} );
+			add_filter( 'pre_option_avatar_default', function ( $default ) {
+				return 'wpum';
+			} );
+
+			add_filter( 'pre_update_option_wpum_settings', function ( $value, $old_value ) {
+				if ( isset( $value['default_avatar'] ) && ( empty( $old_value['default_avatar'] ) || $old_value['default_avatar'] !== $value['default_avatar'] ) ) {
+					$url           = $value['default_avatar'];
+					$attachment_id = attachment_url_to_postid( $value['default_avatar'] );
+					if ( $attachment_id ) {
+						$url = wp_get_attachment_image_url( $attachment_id, 'wpum-avatar' );
+					}
+					$value['default_avatar_url'] = $url;
+				}
+
+				return $value;
+			}, 10, 2 );
+		}
 	}
 
 	/**
@@ -160,6 +187,36 @@ class WPUM_Avatars {
 		}
 
 		return true;
+	}
+
+	public function set_default_avatar( $url, $id_or_email, $args ) {
+		global $pagenow;
+		if ( is_admin() && ( ! isset( $pagenow ) || 'options-discussion.php' !== $pagenow )  ) {
+			return $url;
+		}
+
+		$cache_key = 'wpum_default_avatar_' . $id_or_email;
+
+		$default_url = wpum_get_option( 'default_avatar_url' );
+		if ( empty( $default_url ) ) {
+			$default_url = wpum_get_option( 'default_avatar' );
+		}
+
+		$cached_url = get_transient( $cache_key );
+
+		if ( $cached_url ) {
+			return $default_url;
+		}
+
+		$url      = str_replace( 'd=' . $args['default'], 'd=404', $url );
+		$response = wp_remote_head( $url );
+		if ( 404 === wp_remote_retrieve_response_code( $response ) ) {
+			set_transient( $cache_key, 1, DAY_IN_SECONDS );
+
+			return $url;
+		}
+
+		return $url;
 	}
 
 }
