@@ -44,7 +44,7 @@ class WPUM_Avatars {
 		}
 
 		if ( false !== wpum_get_option( 'default_avatar' ) ) {
-			add_image_size( 'wpum-avatar', 50, 50, true );
+			add_image_size( 'wpum-avatar', 100, 100, true );
 			add_filter( 'get_avatar_url', array( $this, 'set_default_avatar' ), 10, 3 );
 			add_filter( 'avatar_defaults', function ( $defaults ) {
 				$defaults = array();
