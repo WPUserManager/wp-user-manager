@@ -415,12 +415,12 @@ class WPUM_Options_Panel {
 					'type' => 'checkbox',
 				),
 				array(
-					'id'   => 'number_of_comments',
-					'name' => __( 'Number of Comments', 'wp-user-manager' ),
-					'desc' => __( 'The default number of comments displayed in profile page.', 'wp-user-manager' ),
-					'type' => 'text',
-					'std'  => 10,
-					'toggle'  => array(
+					'id'     => 'number_of_comments',
+					'name'   => __( 'Number of Comments', 'wp-user-manager' ),
+					'desc'   => __( 'The default number of comments displayed in profile page.', 'wp-user-manager' ),
+					'type'   => 'text',
+					'std'    => 10,
+					'toggle' => array(
 						'key'   => 'profile_comments',
 						'value' => true,
 					),
