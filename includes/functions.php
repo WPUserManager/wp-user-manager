@@ -1014,18 +1014,18 @@ function wpum_get_comments_for_profile( $user_id ) {
 		return false;
 	}
 
-	$comments  = [];
-	$per_page  = wpum_get_option( 'number_of_comments' );
-	$paged     = ( get_query_var( 'paged' ) ) ? get_query_var( 'paged' ) : 1;
-	$offset    = ( ( $paged - 1 ) * $per_page );
+	$comments = array();
+	$per_page = wpum_get_option( 'number_of_comments' );
+	$paged    = ( get_query_var( 'paged' ) ) ? get_query_var( 'paged' ) : 1;
+	$offset   = ( ( $paged - 1 ) * $per_page );
 
 	$args = apply_filters(
 		'wpum_get_comments_for_profile',
 		array(
-			'user_id'       => $user_id,
-			'status'        => 'approve',
-			'number'        => $per_page,
-			'offset'        => $offset,
+			'user_id' => $user_id,
+			'status'  => 'approve',
+			'number'  => $per_page,
+			'offset'  => $offset,
 		)
 	);
 
@@ -1038,7 +1038,7 @@ function wpum_get_comments_for_profile( $user_id ) {
 	);
 
 	$num_pages = ceil( $comment_count / $per_page );
-	
+
 	$comments['current'] = $paged;
 	$comments['total']   = $num_pages;
 	$comments['items']   = get_comments( $args );
