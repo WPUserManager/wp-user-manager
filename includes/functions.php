@@ -1014,16 +1014,34 @@ function wpum_get_comments_for_profile( $user_id ) {
 		return false;
 	}
 
+	$comments  = [];
+	$per_page  = wpum_get_option( 'number_of_comments' );
+	$paged     = ( get_query_var( 'paged' ) ) ? get_query_var( 'paged' ) : 1;
+	$offset    = ( ( $paged - 1 ) * $per_page );
+
 	$args = apply_filters(
 		'wpum_get_comments_for_profile',
 		array(
-			'user_id' => $user_id,
-			'status'  => 'approve',
-			'number'  => '10',
+			'user_id'       => $user_id,
+			'status'        => 'approve',
+			'number'        => $per_page,
+			'offset'        => $offset,
 		)
 	);
 
-	$comments = get_comments( $args );
+	$comment_count = get_comments(
+		array(
+			'user_id' => $args['user_id'],
+			'status'  => $args['status'],
+			'count'   => true,
+		)
+	);
+
+	$num_pages = ceil( $comment_count / $per_page );
+	
+	$comments['current'] = $paged;
+	$comments['total']   = $num_pages;
+	$comments['items']   = get_comments( $args );
 
 	return $comments;
 

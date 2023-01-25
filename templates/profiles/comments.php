@@ -25,8 +25,8 @@ $user_comments = wpum_get_comments_for_profile( $data->user->ID );
 <div id="profile-comments">
 
 	<?php
-	if ( ! empty( $user_comments ) ) :
-		foreach ( $user_comments as $user_comment ) :
+	if ( ! empty( $user_comments['items'] ) ) :
+		foreach ( $user_comments['items'] as $user_comment ) :
 			?>
 
 			<div class="wpum-single-comment" id="wpum-comment-<?php echo esc_attr( $user_comment->comment_ID ); ?>">
@@ -50,6 +50,22 @@ $user_comments = wpum_get_comments_for_profile( $data->user->ID );
 			<?php
 			endforeach;
 
+			?>
+			<div id="profile-pagination">
+			<?php
+			echo paginate_links( array(
+				'base'      => get_pagenum_link( 1 ) . '%_%',
+				'current'   => $user_comments['current'],
+				'total'     => $user_comments['total'],
+				'prev_text' => __('&laquo; Previous'),
+				'next_text' => __('Next &raquo;'),
+				'end_size'  => 2,
+				'mid-size'  => 3,
+				'format'    => '/page/%#%',
+			) );
+			?>
+			</div>
+			<?php
 		else :
 
 			WPUM()->templates
