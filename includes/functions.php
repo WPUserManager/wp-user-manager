@@ -1015,7 +1015,7 @@ function wpum_get_comments_for_profile( $user_id ) {
 	}
 
 	$comments = array();
-	$per_page = wpum_get_option( 'number_of_comments' );
+	$per_page = wpum_get_option( 'number_of_comments', 10 );
 	$paged    = ( get_query_var( 'paged' ) ) ? get_query_var( 'paged' ) : 1;
 	$offset   = ( ( $paged - 1 ) * $per_page );
 
