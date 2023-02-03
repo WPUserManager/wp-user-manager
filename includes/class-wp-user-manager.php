@@ -311,6 +311,8 @@ if ( ! class_exists( 'WP_User_Manager' ) ) :
 			require_once WPUM_PLUGIN_DIR . 'includes/updates/class-wpum-license.php';
 			require_once WPUM_PLUGIN_DIR . 'includes/updates/free-plugins.php';
 
+			require_once WPUM_PLUGIN_DIR . 'includes/compatibility/oceanwp.php';
+
 			WPUM_Blocks::get_instance();
 		}
 
