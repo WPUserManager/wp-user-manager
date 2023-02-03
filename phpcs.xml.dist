@@ -2,6 +2,7 @@
 <ruleset name="WP_User_Manager">
 	<file>.</file>
 	<exclude-pattern>includes/updates/WPUM_EDD_SL_Plugin_Updater</exclude-pattern>
+	<exclude-pattern>includes/compatibility/oceanwp</exclude-pattern>
 	<exclude-pattern>vendor</exclude-pattern>
 	<exclude-pattern>release</exclude-pattern>
 	<exclude-pattern>languages</exclude-pattern>

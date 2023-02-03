@@ -1014,16 +1014,34 @@ function wpum_get_comments_for_profile( $user_id ) {
 		return false;
 	}
 
+	$comments = array();
+	$per_page = wpum_get_option( 'number_of_comments', 10 );
+	$paged    = ( get_query_var( 'paged' ) ) ? get_query_var( 'paged' ) : 1;
+	$offset   = ( ( $paged - 1 ) * $per_page );
+
 	$args = apply_filters(
 		'wpum_get_comments_for_profile',
 		array(
 			'user_id' => $user_id,
 			'status'  => 'approve',
-			'number'  => '10',
+			'number'  => $per_page,
+			'offset'  => $offset,
 		)
 	);
 
-	$comments = get_comments( $args );
+	$comment_count = get_comments(
+		array(
+			'user_id' => $args['user_id'],
+			'status'  => $args['status'],
+			'count'   => true,
+		)
+	);
+
+	$num_pages = ceil( $comment_count / $per_page );
+
+	$comments['current'] = $paged;
+	$comments['total']   = $num_pages;
+	$comments['items']   = get_comments( $args );
 
 	return $comments;
 
@@ -1364,32 +1382,4 @@ function wpum_strip_slashes( $content ) {
 	$content = preg_replace( '/\\\+/', '\\', $content );
 
 	return $content;
-}
-
-if ( ! function_exists( 'wpum_obfuscate_email' ) ) {
-	/**
-	 * Partially obfuscate an email address
-	 *
-	 * @param string $email
-	 *
-	 * @return string
-	 */
-	function wpum_obfuscate_email( $email ) {
-		$prop     = 2;
-		$domain   = substr( strrchr( $email, '@' ), 1 );
-		$mailname = str_replace( $domain, '', $email );
-		$name_l   = strlen( $mailname );
-		$domain_l = strlen( $domain );
-		$start    = '';
-		$end      = '';
-		for ( $i = 0; $i <= $name_l / $prop - 1; $i ++ ) {
-			$start .= 'x';
-		}
-
-		for ( $i = 0; $i <= $domain_l / $prop - 1; $i ++ ) {
-			$end .= 'x';
-		}
-
-		return substr_replace( $mailname, $start, 2, $name_l / $prop ) . substr_replace( $domain, $end, 2, $domain_l / $prop );
-	}
 }

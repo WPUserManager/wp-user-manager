@@ -403,7 +403,7 @@ if ( wpum_get_option( 'obfuscate_display_name_emails' ) ) {
 			return $display_name;
 		}
 
-		return wpum_obfuscate_email( $display_name );
+		return wpum_mask_email_address( $display_name );
 	}, 10, 2 );
 }
 
