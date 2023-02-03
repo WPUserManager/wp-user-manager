@@ -221,7 +221,7 @@ jQuery( function( $ ) {
 		this.getValue = function(rule){
 			var el = $('[name^="'+rule.field+'"]');
 			if (el.length === 0) { // Check repeater fields
-				var index = window.fieldsetIndex ?? 0;
+				var index = window.fieldsetIndex ? window.fieldsetIndex : 0;
 				el = $('[name^="'+rule.parent+'['+index+']['+rule.field+']"]');
 			}
 
