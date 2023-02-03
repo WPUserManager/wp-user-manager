@@ -2,6 +2,12 @@
 
 == Changelog ==
 
+= 2.8.19 (3rd February 2023) =
+
+- Improvement: Pagination for comments on the profile, with comments per page setting
+- Fix: Email customizer now works with the OceanWP theme
+- Fix: Conditional logic support for Repeater subfields
+
 = 2.8.18 (23rd January 2023) =
 
 - Fix: Code fixes using PHPStan (props [szepeviktor](https://github.com/szepeviktor))
