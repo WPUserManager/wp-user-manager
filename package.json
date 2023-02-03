@@ -57,7 +57,7 @@
     "file-loader": "^1.1.4",
     "friendly-errors-webpack-plugin": "^1.6.1",
     "git-changelog": "^0.1.8",
-    "grunt": "~0.4.5",
+    "grunt": "~1.5.3",
     "grunt-bump": "latest",
     "grunt-composer": "^0.4.5",
     "grunt-contrib-clean": "~0.6.0",
