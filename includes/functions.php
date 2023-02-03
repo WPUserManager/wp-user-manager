@@ -1365,31 +1365,3 @@ function wpum_strip_slashes( $content ) {
 
 	return $content;
 }
-
-if ( ! function_exists( 'wpum_obfuscate_email' ) ) {
-	/**
-	 * Partially obfuscate an email address
-	 *
-	 * @param string $email
-	 *
-	 * @return string
-	 */
-	function wpum_obfuscate_email( $email ) {
-		$prop     = 2;
-		$domain   = substr( strrchr( $email, '@' ), 1 );
-		$mailname = str_replace( $domain, '', $email );
-		$name_l   = strlen( $mailname );
-		$domain_l = strlen( $domain );
-		$start    = '';
-		$end      = '';
-		for ( $i = 0; $i <= $name_l / $prop - 1; $i ++ ) {
-			$start .= 'x';
-		}
-
-		for ( $i = 0; $i <= $domain_l / $prop - 1; $i ++ ) {
-			$end .= 'x';
-		}
-
-		return substr_replace( $mailname, $start, 2, $name_l / $prop ) . substr_replace( $domain, $end, 2, $domain_l / $prop );
-	}
-}
