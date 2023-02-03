@@ -1,4 +1,16 @@
 <?php
+/**
+ * OceanWP compatibility
+ *
+ * @package     wp-user-manager
+ * @copyright   Copyright (c) 2023, WP User Manager
+ * @license     https://opensource.org/licenses/gpl-license GNU Public License
+ * @since       2.8.19
+ */
+
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 
 /**
  * Ensure the email customizer works when using the OceanWP theme
