@@ -47,22 +47,19 @@ $user_comments = wpum_get_comments_for_profile( $data->user->ID );
 
 			</div>
 
-			<?php
-			endforeach;
-
-			?>
+			<?php endforeach; ?>
 			<div id="profile-pagination">
 			<?php
-			echo paginate_links( array(
+			echo wp_kses_post( paginate_links( array(
 				'base'      => get_pagenum_link( 1 ) . '%_%',
 				'current'   => $user_comments['current'],
 				'total'     => $user_comments['total'],
-				'prev_text'    => sprintf( '<i></i> %1$s', esc_html__( 'Newer Comments', 'wp-user-manager' ) ),
-				'next_text'    => sprintf( '%1$s <i></i>', esc_html__( 'Older Comments', 'wp-user-manager' ) ),
+				'prev_text' => sprintf( '<i></i> %1$s', esc_html__( 'Newer Comments', 'wp-user-manager' ) ),
+				'next_text' => sprintf( '%1$s <i></i>', esc_html__( 'Older Comments', 'wp-user-manager' ) ),
 				'end_size'  => 2,
 				'mid-size'  => 3,
 				'format'    => '/page/%#%',
-			) );
+			) ) );
 			?>
 			</div>
 			<?php
