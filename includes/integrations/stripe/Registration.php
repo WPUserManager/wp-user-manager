@@ -63,13 +63,18 @@ class Registration {
 	 * Start it up
 	 */
 	public function init() {
-		add_action( 'wpum_registered_settings', array( $this, 'register_settings' ) );
-
+		add_action( 'wpum_registration_edit_form_settings_sections', array( $this, 'register_settings' ) );
 		add_filter( 'wpum_get_registration_fields', array( $this, 'inject_registration_fields' ), 10, 2 );
-
 		add_action( 'wpum_before_registration_end', array( $this, 'save_plan' ), 10, 3 );
 		add_action( 'wp_ajax_wpum_stripe_register', array( $this, 'handle_register' ) );
 		add_action( 'wp_ajax_nopriv_wpum_stripe_register', array( $this, 'handle_register' ) );
+		add_filter( 'wpum_registered_settings_sections', array( $this, 'register_registration_settings_tab' ) );
+	}
+
+	public function register_registration_settings_tab( $sections ) {
+		$sections['registration']['payment'] = __( 'Payment', 'wp-user-manager' );
+
+		return $sections;
 	}
 
 	/**
@@ -80,16 +85,20 @@ class Registration {
 	 * @return array
 	 */
 	public function register_settings( $settings ) {
-		$settings['registration'][] = array(
-			'id'       => 'stripe_plan_id',
-			'name'     => __( 'Stripe Product', 'wp-user-manager' ),
-			'desc'     => __( 'Take payment at registration for this Stripe product. Selecting multiple products will allow the user to choose at registration.', 'wp-user-manager' ),
-			'type'     => 'multiselect',
-			'multiple' => true,
-			'options'  => $this->products->get_plans(),
+		$new_settings = array(
+			'payment' => array(
+				array(
+					'id'       => 'stripe_plan_id',
+					'name'     => __( 'Stripe Product', 'wp-user-manager' ),
+					'desc'     => __( 'Take payment at registration for this Stripe product. Selecting multiple products will allow the user to choose at registration.', 'wp-user-manager' ),
+					'type'     => 'multiselect',
+					'multiple' => true,
+					'options'  => $this->products->get_plans(),
+				),
+			)
 		);
 
-		return $settings;
+		return array_merge_recursive( $settings, $new_settings );
 	}
 
 	/**

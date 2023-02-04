@@ -18,7 +18,6 @@ class Settings {
 	}
 
 	public function init() {
-		// Add settings to registration form
 		add_action( 'wpum_registered_settings', array( $this, 'register_settings' ) );
 		add_filter( 'wpum_settings_tabs', array( $this, 'register_setting_tab' ) );
 		add_action( 'update_option_wpum_settings', array( $this, 'flush_product_cache' ) );
