@@ -157,6 +157,8 @@ return [
 			    $contents = str_replace( 'extends \\' . $prefix . '\\WP_Rest_Controller', 'extends \\WP_Rest_Controller', $contents );
 			    $contents = str_replace( '\\' . $prefix . '\\WP_Error', '\\WP_Error', $contents );
 			    $contents = str_replace( '\\' . $prefix . '\\WP_REST_Server', '\\WP_REST_Server', $contents );
+			    $contents = str_replace( '\\' . $prefix . '\\WP_REST_Request', '\\WP_REST_Request', $contents );
+			    $contents = str_replace( '\\' . $prefix . '\\WP_REST_Response', '\\WP_REST_Response', $contents );
 		    }
 
 		    return $contents;
