@@ -728,6 +728,18 @@ add_filter( 'wpum_form_skip_field_validation', 'wpum_conditional_fields_maybe_sk
  * @return bool
  */
 function wpum_validate_rule_value_not_equals( $valid, $rule, $values ) {
+	if ( isset( $rule['parent'] ) && isset( $values[ $rule['parent'] ] ) && is_array( $values[ $rule['parent'] ] ) ) {
+		foreach ( $values[ $rule['parent'] ] as $child ) {
+			if ( isset( $child[ $rule['field'] ] ) ) {
+				if ( $child[ $rule['field'] ] !== $rule['value'] ) {
+					return true;
+				}
+			}
+		}
+
+		return false;
+	}
+
 	return $values[ $rule['field'] ] !== $rule['value'];
 }
 
@@ -741,6 +753,18 @@ add_filter( 'wpum_conditional_field_validate_rule_value_not_equals', 'wpum_valid
  * @return bool
  */
 function wpum_validate_rule_value_equals( $valid, $rule, $values ) {
+	if ( isset( $rule['parent'] ) && isset( $values[ $rule['parent'] ] ) && is_array( $values[ $rule['parent'] ] ) ) {
+		foreach ( $values[ $rule['parent'] ] as $child ) {
+			if ( isset( $child[ $rule['field'] ] ) ) {
+				if ( $child[ $rule['field'] ] === $rule['value'] ) {
+					return true;
+				}
+			}
+		}
+
+		return false;
+	}
+
 	return $values[ $rule['field'] ] === $rule['value'];
 }
 
@@ -754,8 +778,20 @@ add_filter( 'wpum_conditional_field_validate_rule_value_equals', 'wpum_validate_
  * @return bool
  */
 function wpum_validate_rule_value_contains( $valid, $rule, $values ) {
-	if ( is_array( $values[ $rule['field'] ] ) ) {
+	if ( isset( $values[ $rule['field'] ] ) && is_array( $values[ $rule['field'] ] ) ) {
 		return in_array( $rule['value'], $values[ $rule['field'] ], true );
+	}
+
+	if ( isset( $rule['parent'] ) && isset( $values[ $rule['parent'] ] ) && is_array( $values[ $rule['parent'] ] ) ) {
+		foreach ( $values[ $rule['parent'] ] as $child ) {
+			if ( isset( $child[ $rule['field'] ] ) ) {
+				if ( strpos( $child[ $rule['field'] ], $rule['value'] ) ) {
+					return true;
+				}
+			}
+		}
+
+		return false;
 	}
 
 	return strpos( $values[ $rule['field'] ], $rule['value'] );
@@ -771,8 +807,20 @@ add_filter( 'wpum_conditional_field_validate_rule_value_contains', 'wpum_validat
  * @return bool
  */
 function wpum_validate_rule_has_value( $valid, $rule, $values ) {
-	if ( is_array( $values[ $rule['field'] ] ) ) {
+	if ( isset( $values[ $rule['field'] ] ) && is_array( $values[ $rule['field'] ] ) ) {
 		return ! empty( $values[ $rule['field'] ] );
+	}
+
+	if ( isset( $rule['parent'] ) && isset( $values[ $rule['parent'] ] ) && is_array( $values[ $rule['parent'] ] ) ) {
+		foreach ( $values[ $rule['parent'] ] as $child ) {
+			if ( isset( $child[ $rule['field'] ] ) ) {
+				if ( '' !== $child[ $rule['field'] ] ) {
+					return true;
+				}
+			}
+		}
+
+		return false;
 	}
 
 	return '' !== $values[ $rule['field'] ];
@@ -788,8 +836,20 @@ add_filter( 'wpum_conditional_field_validate_rule_has_value', 'wpum_validate_rul
  * @return bool
  */
 function wpum_validate_rule_has_no_value( $valid, $rule, $values ) {
-	if ( is_array( $values[ $rule['field'] ] ) ) {
+	if ( isset( $values[ $rule['field'] ] ) && is_array( $values[ $rule['field'] ] ) ) {
 		return empty( $values[ $rule['field'] ] );
+	}
+
+	if ( isset( $rule['parent'] ) && isset( $values[ $rule['parent'] ] ) && is_array( $values[ $rule['parent'] ] ) ) {
+		foreach ( $values[ $rule['parent'] ] as $child ) {
+			if ( isset( $child[ $rule['field'] ] ) ) {
+				if ( '' === $child[ $rule['field'] ] ) {
+					return true;
+				}
+			}
+		}
+
+		return false;
 	}
 
 	return '' === $values[ $rule['field'] ];
@@ -805,6 +865,18 @@ add_filter( 'wpum_conditional_field_validate_rule_has_no_value', 'wpum_validate_
  * @return bool
  */
 function wpum_validate_rule_value_greater( $valid, $rule, $values ) {
+	if ( isset( $rule['parent'] ) && isset( $values[ $rule['parent'] ] ) && is_array( $values[ $rule['parent'] ] ) ) {
+		foreach ( $values[ $rule['parent'] ] as $child ) {
+			if ( isset( $child[ $rule['field'] ] ) ) {
+				if ( $child[ $rule['field'] ] > $rule['value'] ) {
+					return true;
+				}
+			}
+		}
+
+		return false;
+	}
+
 	return $values[ $rule['field'] ] > $rule['value'];
 }
 
@@ -818,6 +890,18 @@ add_filter( 'wpum_conditional_field_validate_rule_value_greater', 'wpum_validate
  * @return bool
  */
 function wpum_validate_rule_value_less( $valid, $rule, $values ) {
+	if ( isset( $rule['parent'] ) && isset( $values[ $rule['parent'] ] ) && is_array( $values[ $rule['parent'] ] ) ) {
+		foreach ( $values[ $rule['parent'] ] as $child ) {
+			if ( isset( $child[ $rule['field'] ] ) ) {
+				if ( $child[ $rule['field'] ] < $rule['value'] ) {
+					return true;
+				}
+			}
+		}
+
+		return false;
+	}
+
 	return $values[ $rule['field'] ] < $rule['value'];
 }
 
