@@ -37,6 +37,9 @@ module.exports = function( grunt ) {
 		shell: {
 			prefixComposerDependencies: {
 				command: 'sh bin/prefix-dependencies.sh <%= pkg.version %>'
+			},
+			symlinkScopedVendor: {
+				command: 'rm -rf ./vendor-dist; ln -s ./release/<%= pkg.version %>/vendor-dist ./vendor-dist'
 			}
 		},
 		jshint: {
@@ -339,6 +342,8 @@ module.exports = function( grunt ) {
 	grunt.registerTask( 'release', [ 'pre_vcs', 'do_svn', 'do_git'  ] );
 
 	grunt.registerTask( 'build', ['clean:main', 'copy', 'shell:prefixComposerDependencies', 'clean:build', 'compress'] );
+	grunt.registerTask( 'dev-build', ['clean:main', 'copy', 'shell:prefixComposerDependencies', 'clean:build', 'compress', 'shell:symlinkScopedVendor'] );
+	grunt.registerTask( 'symlink-vendor', [ 'shell:symlinkScopedVendor'] );
 
 	grunt.util.linefeed = '\n';
 };
