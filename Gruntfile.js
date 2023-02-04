@@ -39,7 +39,7 @@ module.exports = function( grunt ) {
 				command: 'sh bin/prefix-dependencies.sh <%= pkg.version %>'
 			},
 			symlinkScopedVendor: {
-				command: 'rm -rf ./vendor-dist; ln -s ./release/<%= pkg.version %>/vendor-dist ./vendor-dist'
+				command: 'rm -rf ./vendor-dist; rsync -avz ./release/<%= pkg.version %>/vendor-dist ./'
 			}
 		},
 		jshint: {
