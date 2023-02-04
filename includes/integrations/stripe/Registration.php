@@ -212,7 +212,7 @@ class Registration {
 			$this->json_error();
 		}
 
-		if ( ! empty( $_POST['wpum_stripe_plan'] ) ) { // phpcs:ignore
+		if ( empty( $_POST['wpum_stripe_plan'] ) ) { // phpcs:ignore
 			$this->json_error();
 		}
 
