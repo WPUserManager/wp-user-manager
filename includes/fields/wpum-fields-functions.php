@@ -392,12 +392,14 @@ function wpum_the_field_group_description() {
 /**
  * Whether the current group within the loop has fields.
  *
- * @global $wpum_profile_fields
+ * @param bool $ignore_hidden
+ *
  * @return array the current group fields within the loop.
+ * @global     $wpum_profile_fields
  */
-function wpum_field_group_has_fields() {
+function wpum_field_group_has_fields( $ignore_hidden = false ) {
 	global $wpum_profile_fields;
-	return $wpum_profile_fields->has_fields();
+	return $wpum_profile_fields->has_fields( $ignore_hidden );
 }
 
 /**

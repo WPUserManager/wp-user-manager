@@ -166,7 +166,7 @@ class WPUM_Menus {
 
 			switch ( $status ) {
 				case 'in':
-					$visible = is_user_logged_in() ? true : false;
+					$visible = is_user_logged_in();
 					if ( is_array( $roles ) && ! empty( $roles ) && $visible ) {
 						$user = wp_get_current_user();
 
@@ -180,7 +180,7 @@ class WPUM_Menus {
 					}
 					break;
 				case 'out':
-					$visible = ! is_user_logged_in() ? true : false;
+					$visible = ! is_user_logged_in();
 					break;
 			}
 			// Now exclude item if not visible.

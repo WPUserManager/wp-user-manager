@@ -128,6 +128,29 @@ Please note that using WPUM and the mentioned add-ons does NOT guarantee complia
 
 == Changelog ==
 
+= 2.8.19 (3rd February 2023) =
+
+- Improvement: Pagination for comments on the profile, with comments per page setting
+- Fix: Email customizer now works with the OceanWP theme
+- Fix: Conditional logic support for Repeater subfields
+
+= 2.8.18 (23rd January 2023) =
+
+- Fix: Code fixes using PHPStan (props [szepeviktor](https://github.com/szepeviktor))
+- Fix: Renaming a registration form now works correctly
+- Fix: Abort loading plugin early if plugin doesn't meet PHP or WP requirements
+- Fix: Newsletter email form on welcome page updated
+- Fix: Formatting on the welcome page
+- Fix: Updated documentation URLs
+
+= 2.8.17 (18th January 2023) =
+
+- New: Setting to partially obfuscate email addresses used as the user display name
+- Improvement: 'wpum_authentication_method_admin_override' filter to enforce admin logins with the correct username/email method
+- Fix: Headers for field groups with only hidden fields now don't render on the profile
+- Fix: Searching in a directory for users with apostrophes in their names now returns result
+- Fix: Redirecting to a URL with query parameters now retains the parameters after login
+
 = 2.8.16 (2nd January 2023) =
 
 - New: Compatibility with [Likes](https://wpusermanager.com/addons/likes/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager) addon

@@ -274,7 +274,7 @@ class WPUM_Plugin_Updates {
 							'id'          => $field_group->id,
 							'name'        => esc_html( $field_group->name ),
 							'description' => $field_group->description,
-							'is_primary'  => $field_group->is_primary ? true : false,
+							'is_primary'  => $field_group->is_primary,
 							'group_order' => $field_group->group_order,
 						)
 					);

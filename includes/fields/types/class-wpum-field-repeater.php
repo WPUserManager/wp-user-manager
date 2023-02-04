@@ -317,5 +317,7 @@ class WPUM_Field_Repeater extends WPUM_Field_Type {
 
 			return $file_urls;
 		}
+
+		return '';
 	}
 }

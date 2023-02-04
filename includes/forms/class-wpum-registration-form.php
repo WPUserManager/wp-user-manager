@@ -269,13 +269,13 @@ class WPUM_Registration_Form {
 
 		if ( count( array_intersect_key( $args, $this->db->get_columns() ) ) > 0 ) {
 			if ( $this->db->update( $this->id, $args ) ) {
-				$field = $this->db->get( $this->id );
-				$this->setup_field( $field );
+				$form = $this->db->get( $this->id );
+				$this->setup_form( $form );
 				$ret = true;
 			}
 		} elseif ( 0 === count( array_intersect_key( $args, $this->db->get_columns() ) ) ) {
-			$field = $this->db->get( $this->id );
-			$this->setup_field( $field );
+			$form = $this->db->get( $this->id );
+			$this->setup_form( $form );
 			$ret = true;
 		}
 

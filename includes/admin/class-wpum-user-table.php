@@ -22,7 +22,7 @@ class WPUM_User_Table {
 	 */
 	public function __construct() {
 		add_filter( 'manage_users_columns', array( $this, 'add_user_id_column' ) );
-		add_action( 'manage_users_custom_column', array( $this, 'show_user_id' ), 10, 3 );
+		add_filter( 'manage_users_custom_column', array( $this, 'show_user_id' ), 10, 3 );
 		add_action( 'admin_head', array( $this, 'hide_change_role_field' ) );
 		add_action( 'load-users.php', array( $this, 'load_users' ) );
 		add_action( 'load-users.php', array( $this, 'handle_users_role_bulk_add' ) );
@@ -146,7 +146,7 @@ class WPUM_User_Table {
 			$user_id = absint( $user_id );
 			if ( is_multisite() && ! is_user_member_of_blog( $user_id ) ) {
 
-				wp_die( sprintf( '<h1>%s</h1> <p>%s</p>', esc_html__( 'One of the selected users is not a member of this site.', 'wp-user-manager' ) ), 403 );
+				wp_die( sprintf( '<p>%s</p>', esc_html__( 'One of the selected users is not a member of this site.', 'wp-user-manager' ) ), 403 );
 			}
 
 			if ( ! current_user_can( 'promote_user', $user_id ) ) {
@@ -215,7 +215,7 @@ class WPUM_User_Table {
 
 			if ( is_multisite() && ! is_user_member_of_blog( $user_id ) ) {
 
-				wp_die( sprintf( '<h1>%s</h1> <p>%s</p>', esc_html__( 'One of the selected users is not a member of this site.', 'wp-user-manager' ) ), 403 );
+				wp_die( sprintf( '<p>%s</p>', esc_html__( 'One of the selected users is not a member of this site.', 'wp-user-manager' ) ), 403 );
 			}
 
 			if ( ! current_user_can( 'promote_user', $user_id ) ) {

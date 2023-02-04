@@ -195,7 +195,7 @@ class WPUM_Form_Login extends WPUM_Form {
 			$creds = array(
 				'user_login'    => $username,
 				'user_password' => $password,
-				'remember'      => $values['login']['remember'] ? true : false,
+				'remember'      => $values['login']['remember'],
 			);
 
 			$redirect = get_permalink( wpum_get_core_page_id( 'login' ) );

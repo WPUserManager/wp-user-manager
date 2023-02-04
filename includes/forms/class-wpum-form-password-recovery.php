@@ -448,7 +448,7 @@ class WPUM_Form_Password_Recovery extends WPUM_Form {
 			/**
 			 * Hook: allow developers to hook after the user recovers his password from the account page.
 			 *
-			 * @param string $user_id the user id number.
+			 * @param int   $user_id the user id number.
 			 * @param array $values all values submitted through the form.
 			 */
 			do_action( 'wpum_after_user_password_recovery', $user_id, $values );

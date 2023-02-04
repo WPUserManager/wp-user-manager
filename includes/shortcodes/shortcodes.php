@@ -398,7 +398,8 @@ function wpum_restrict_logged_in( $atts, $content = null ) {
 		/**
 		 * Filter: allow developers to modify the content restriction shortcode message.
 		 *
-		 * @param string $message the original message.
+		 * @param string $message   Original message.
+		 * @param string $shortcode Shortcode name.
 		 * @return string
 		 */
 		$message = apply_filters( 'wpum_content_restriction_message', $message, 'wpum_restrict_logged_in' );
@@ -463,7 +464,8 @@ function wpum_restrict_logged_out( $atts, $content = null ) {
 		/**
 		 * Filter: allow developers to modify the content restriction shortcode message.
 		 *
-		 * @param string $message the original message.
+		 * @param string $message   Original message.
+		 * @param string $shortcode Shortcode name.
 		 * @return string
 		 */
 		$message = apply_filters( 'wpum_content_restriction_message', $message, 'wpum_restrict_logged_out' );
@@ -532,7 +534,8 @@ function wpum_restrict_to_users( $atts, $content = null ) {
 		/**
 		 * Filter: allow developers to modify the content restriction shortcode message.
 		 *
-		 * @param string $message the original message.
+		 * @param string $message   Original message.
+		 * @param string $shortcode Shortcode name.
 		 * @return string
 		 */
 		$message = apply_filters( 'wpum_content_restriction_message', $message, 'wpum_restrict_to_users' );
@@ -603,7 +606,8 @@ function wpum_restrict_to_user_roles( $atts, $content = null ) {
 		/**
 		 * Filter: allow developers to modify the content restriction shortcode message.
 		 *
-		 * @param string $message the original message.
+		 * @param string $message   Original message.
+		 * @param string $shortcode Shortcode name.
 		 * @return string
 		 */
 		$message = apply_filters( 'wpum_content_restriction_message', $message, 'wpum_restrict_to_user_roles' );
@@ -842,7 +846,7 @@ function wpum_directory( $atts, $content = null ) {
 	$directory_search = filter_input( INPUT_GET, 'directory-search' );
 
 	if ( $directory_search ) {
-		$search_string  = sanitize_text_field( esc_attr( trim( wp_unslash( $directory_search ) ) ) );
+		$search_string  = sanitize_text_field( trim( wp_unslash( $directory_search ) ) );
 		$args['search'] = '*' . esc_attr( $search_string ) . '*';
 
 		$search_field_keys = \WPUM\carbon_get_post_meta( $directory_id, 'directory_search_fields' );
@@ -854,7 +858,7 @@ function wpum_directory( $atts, $content = null ) {
 			foreach ( $search_meta_keys as $search_meta_key ) {
 				$meta_query_keys[] = array(
 					'key'     => $search_meta_key,
-					'value'   => esc_attr( $search_string ),
+					'value'   => $search_string,
 					'compare' => 'LIKE',
 				);
 			}

@@ -173,7 +173,9 @@ if ( ! class_exists( 'WP_User_Manager' ) ) :
 			$this->autoload();
 
 			// Verify the plugin can run first. If not, disable the plugin automagically.
-			$this->plugin_can_run();
+			if ( ! $this->plugin_can_run() ) {
+				return;
+			}
 
 			$this->setup_constants();
 
@@ -371,6 +373,8 @@ if ( ! class_exists( 'WP_User_Manager' ) ) :
 
 			require_once WPUM_PLUGIN_DIR . 'includes/updates/class-wpum-license.php';
 			require_once WPUM_PLUGIN_DIR . 'includes/updates/free-plugins.php';
+
+			require_once WPUM_PLUGIN_DIR . 'includes/compatibility/oceanwp.php';
 
 			\WPUM\WPUM_Blocks::get_instance();
 

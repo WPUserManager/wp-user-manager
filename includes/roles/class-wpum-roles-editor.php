@@ -81,7 +81,7 @@ class WPUM_Roles_Editor {
 
 		if ( 'users_page_wpum-roles' === $screen->base ) {
 
-			$is_vue_dev = defined( 'WPUM_VUE_DEV' ) && WPUM_VUE_DEV ? true : false;
+			$is_vue_dev = defined( 'WPUM_VUE_DEV' ) && WPUM_VUE_DEV;
 
 			if ( $is_vue_dev ) {
 				$vue_dev_port = defined( 'WPUM_VUE_DEV_PORT' ) ? WPUM_VUE_DEV_PORT : '8080';

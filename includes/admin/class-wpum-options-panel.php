@@ -65,7 +65,7 @@ class WPUM_Options_Panel {
 		$this->panel->add_action_button(
 			array(
 				'title' => __( 'Read documentation', 'wp-user-manager' ),
-				'url'   => 'https://docs.wpusermanager.com/?utm_source=WP%20User%20Manager&utm_medium=insideplugin&utm_campaign=WP%20User%20Manager&utm_content=settings-header',
+				'url'   => 'https://wpusermanager.com/docs/?utm_source=WP%20User%20Manager&utm_medium=insideplugin&utm_campaign=WP%20User%20Manager&utm_content=settings-header',
 			)
 		);
 	}
@@ -394,6 +394,12 @@ class WPUM_Options_Panel {
 					'options' => wpum_get_display_name_options(),
 					'std'     => 'display_username',
 				),
+				array(
+					'id'   => 'obfuscate_display_name_emails',
+					'name' => __( 'Obfuscate Display Name Emails', 'wp-user-manager' ),
+					'desc' => __( 'When usernames are email addresses, and username is the used as the display name, partially obfuscate email addresses for privacy.', 'wp-user-manager' ),
+					'type' => 'checkbox',
+				),
 			),
 			'profiles_content'     => array(
 				array(
@@ -407,6 +413,17 @@ class WPUM_Options_Panel {
 					'name' => __( 'Display Comments', 'wp-user-manager' ),
 					'desc' => __( 'Enable this option to display users submitted comments on their profile page.', 'wp-user-manager' ),
 					'type' => 'checkbox',
+				),
+				array(
+					'id'     => 'number_of_comments',
+					'name'   => __( 'Number of Comments', 'wp-user-manager' ),
+					'desc'   => __( 'The default number of comments displayed in profile page.', 'wp-user-manager' ),
+					'type'   => 'text',
+					'std'    => 10,
+					'toggle' => array(
+						'key'   => 'profile_comments',
+						'value' => true,
+					),
 				),
 			),
 			'account'              => array(

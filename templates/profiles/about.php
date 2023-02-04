@@ -29,7 +29,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			wpum_the_profile_field_group();
 			?>
 
-			<?php if ( wpum_field_group_has_fields() ) : ?>
+			<?php if ( wpum_field_group_has_fields( true ) ) : ?>
 				<div class="profile-fields-group profile-fields-group-<?php echo esc_attr( wpum_get_field_group_id() ); ?>">
 				<?php if ( wpum_get_field_group_name() ) : ?>
 					<h3 class="group-title"><?php echo esc_html( wpum_get_field_group_name() ); ?></h3>

@@ -51,6 +51,7 @@ jQuery( function( $ ) {
 			self.form.on( 'click', '.add-repeater-row', function() {
 				var parent = $( this ).parents( 'fieldset' );
 				self.addNewInstance( parent.get( 0 ).classList[ 0 ] );
+				self.form.wpumConditionalFields({});
 			} );
 
 			self.form.on( 'click', '.remove-repeater-row', function(e) {
@@ -107,7 +108,7 @@ jQuery( function( $ ) {
 			self.resetInstance( name );
 
 			repeaterRow.each( function( i ) {
-
+				$( this ).find('fieldset').attr('data-index', i);
 				$( this ).find( ':input' ).each( function() {
 					var name = '';
 					if ( $( this ).attr( 'data-name' ) ) {
@@ -183,6 +184,7 @@ jQuery( function( $ ) {
 
 		this.validateFields = function(){
 			form.find('fieldset[data-condition]').each(function(){
+				window.fieldsetIndex = $(this).data("index");
 				var rules = $(this).data('condition');
 				var validRule = self.validateRules(rules);
 				$(this).toggle( validRule );
@@ -218,6 +220,11 @@ jQuery( function( $ ) {
 
 		this.getValue = function(rule){
 			var el = $('[name^="'+rule.field+'"]');
+			if (el.length === 0) { // Check repeater fields
+				var index = window.fieldsetIndex ? window.fieldsetIndex : 0;
+				el = $('[name^="'+rule.parent+'['+index+']['+rule.field+']"]');
+			}
+
 			if( el.length ){
 				if( el.is('[type="radio"]') ){
 					return el.filter(':checked').val();

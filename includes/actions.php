@@ -665,10 +665,12 @@ function wpum_field_conditional_logic_rules( $data ) {
 		(function() {
 			var ruleset = <?php echo wp_json_encode( $rulesets ); ?>;
 			Object.keys( ruleset ).forEach( function( fieldName ) {
-				var field = document.querySelector( '.fieldset-' + fieldName );
-				if ( field ) {
-					field.style.display = 'none';
-					field.dataset.condition = JSON.stringify( ruleset[ fieldName ] );
+				var fields = document.querySelectorAll( '.fieldset-' + fieldName );
+				if ( fields.length > 0 ) {
+					fields.forEach(function(field){
+						field.style.display = 'none';
+						field.dataset.condition = JSON.stringify( ruleset[ fieldName ] );
+					});
 				}
 			} );
 		})();
@@ -726,7 +728,7 @@ add_filter( 'wpum_form_skip_field_validation', 'wpum_conditional_fields_maybe_sk
  * @return bool
  */
 function wpum_validate_rule_value_not_equals( $valid, $rule, $values ) {
-	return $values[ $rule['field'] ] !== $rule['value'] ? true : false;
+	return $values[ $rule['field'] ] !== $rule['value'];
 }
 
 add_filter( 'wpum_conditional_field_validate_rule_value_not_equals', 'wpum_validate_rule_value_not_equals', 10, 3 );
@@ -739,7 +741,7 @@ add_filter( 'wpum_conditional_field_validate_rule_value_not_equals', 'wpum_valid
  * @return bool
  */
 function wpum_validate_rule_value_equals( $valid, $rule, $values ) {
-	return $values[ $rule['field'] ] === $rule['value'] ? true : false;
+	return $values[ $rule['field'] ] === $rule['value'];
 }
 
 add_filter( 'wpum_conditional_field_validate_rule_value_equals', 'wpum_validate_rule_value_equals', 10, 3 );

@@ -61,7 +61,7 @@ class WPUM_Emails_List {
 
 		if ( 'wpum-emails' === $page ) {
 
-			$is_vue_dev = defined( 'WPUM_VUE_DEV' ) && WPUM_VUE_DEV ? true : false;
+			$is_vue_dev = defined( 'WPUM_VUE_DEV' ) && WPUM_VUE_DEV;
 
 			// Detect if vue deb mode or not and register the appropriate script url.
 			if ( $is_vue_dev ) {
