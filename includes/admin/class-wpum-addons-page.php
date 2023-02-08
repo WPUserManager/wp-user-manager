@@ -121,7 +121,7 @@ class WPUM_Addons_Page {
 	 * @return array
 	 */
 	public function add_addon_tab( $tabs ) {
-		$tabs['wpum_addons'] = '<img src="' . WPUM_PLUGIN_URL . 'assets/images/logo.svg" alt="WP User Manager" style="width: 15px; margin-right: 10px; vertical-align: text-bottom;">' .  __( 'WP User Manager ', 'wp-user-manager' ) . '<span class="wpum-addons">' . __( 'Addons', 'wp-user-manager' ) . '</span><style>.plugin-install-wpum_addons a.current { border-bottom-color: #016afe; }</style>';
+		$tabs['wpum_addons'] = '<img src="' . WPUM_PLUGIN_URL . 'assets/images/logo.svg" alt="WP User Manager" style="width: 15px; margin-right: 10px; vertical-align: text-bottom;">' . __( 'WP User Manager ', 'wp-user-manager' ) . '<span class="wpum-addons">' . __( 'Addons', 'wp-user-manager' ) . '</span><style>.plugin-install-wpum_addons a.current { border-bottom-color: #016afe; }</style>';
 
 		return $tabs;
 	}
