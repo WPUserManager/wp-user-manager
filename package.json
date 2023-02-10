@@ -10,7 +10,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/alessandrotesoro/wp-user-manager.git"
+    "url": "https://github.com/WPUserManager/wp-user-manager.git"
   },
   "scripts": {
     "dev": "webpack-dev-server --inline --progress --config build/webpack.dev.conf.js",
