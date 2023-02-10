@@ -1,6 +1,6 @@
-/*! WP User Manager - v2.7
+/*! WP User Manager - v2.9
  * https://wpusermanager.com
- * Copyright (c) 2022; * Licensed GPLv2+ */
+ * Copyright (c) 2023; * Licensed GPLv2+ */
 (function($) {
 
 	$( document ).ready( function() {
@@ -31,7 +31,7 @@
 						$submit.removeAttr( 'disabled' ).css( 'opacity', '1' ).val( 'Register' );
 						return;
 					}
-console.log( response );
+
 					if ( response.data.id ) {
 						const stripe = Stripe( wpum_stripe.stripe );
 

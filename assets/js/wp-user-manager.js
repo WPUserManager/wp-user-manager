@@ -1,4 +1,4 @@
-/*! WP User Manager - v2.8.18
+/*! WP User Manager - v2.9
  * https://wpusermanager.com
  * Copyright (c) 2023; * Licensed GPLv2+ */
 jQuery( function( $ ) {

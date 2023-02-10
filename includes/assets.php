@@ -31,6 +31,9 @@ function wpum_load_admin_scripts() {
 	if ( in_array( $screen->base, $allowed_screens ) ) {
 		wp_enqueue_script( 'wpum-settings', WPUM_PLUGIN_URL . 'assets/js/admin/settings.min.js', array(), WPUM_VERSION, true );
 		wp_enqueue_style( 'wpum-logo', WPUM_PLUGIN_URL . 'assets/css/admin/wpum-logo.css', array(), WPUM_VERSION );
+		wp_localize_script( 'wpum-settings', 'wpum_settings', array(
+			'ajaxurl' => admin_url( 'admin-ajax.php' ),
+		) );
 	}
 
 }

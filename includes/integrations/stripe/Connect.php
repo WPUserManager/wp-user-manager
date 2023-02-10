@@ -13,7 +13,7 @@ class Connect {
 	}
 
 	public function is_test_mode() {
-		return (bool) wpum_get_option( 'stripe_test_mode' );
+		return 'test' === wpum_get_option( 'stripe_gateway_mode', 'test' );
 	}
 
 	public function get_stripe_key() {
@@ -75,6 +75,23 @@ class Connect {
 		), $this->get_base_url() );
 
 		return apply_filters( 'wpum_stripe_connect_url', $stripe_connect_url );
+	}
+
+	public function disconnect_url() {
+		$stripe_disconnect_url = add_query_arg(
+			array(
+				'page'       => 'wpum-settings',
+				'disconnect' => true,
+				'mode' => $this->is_test_mode() ? 'test' : 'live',
+			),
+			admin_url( 'users.php' )
+		);
+
+		$stripe_disconnect_url = wp_nonce_url( $stripe_disconnect_url, 'wpum-stripe-connect-disconnect' );
+
+		$stripe_disconnect_url .= '#/stripe';
+
+		return $stripe_disconnect_url;
 	}
 
 	public function complete() {
