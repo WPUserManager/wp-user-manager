@@ -321,7 +321,11 @@ class Settings {
 		);
 
 		$secret = $this->connect->get_stripe_secret();
-		$stripe  = new StripeClient( $secret );
+		if ( empty ( $secret ) ) {
+			return wp_send_json_error( $unknown_error );
+		}
+
+		$stripe = new StripeClient( $secret );
 
 		// Attempt to show account information from Stripe Connect account.
 		if ( ! empty( $account_id ) ) {
