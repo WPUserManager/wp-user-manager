@@ -29,10 +29,10 @@ class Invoice {
 	/**
 	 * Invoice constructor.
 	 *
-	 * @param \Stripe\Invoice                          $invoice
+	 * @param \WPUM\Stripe\Invoice                     $invoice
 	 * @param \WPUserManager\WPUMStripe\Models\Invoice $localInvoice
 	 */
-	public function __construct( \Stripe\Invoice $invoice, $localInvoice ) {
+	public function __construct( \WPUM\Stripe\Invoice $invoice, $localInvoice ) {
 		$this->invoice      = $invoice;
 		$this->localInvoice = $localInvoice;
 		$this->customer     = $localInvoice->customer;

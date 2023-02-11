@@ -3,7 +3,7 @@
 namespace WPUserManager\WPUMStripe;
 
 use \WPUM\Carbon\Carbon;
-use Stripe\InvoiceLineItem as StripeInvoiceLineItem;
+use \WPUM\Stripe\InvoiceLineItem as StripeInvoiceLineItem;
 
 class InvoiceLineItem {
 
