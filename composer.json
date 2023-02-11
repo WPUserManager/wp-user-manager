@@ -19,7 +19,6 @@
     "htmlburger/carbon-fields": "^2.1",
     "nesbot/carbon": "^2.66",
     "stripe/stripe-php": "^10.5",
-    "symfony/intl": "^5.4",
     "wearerequired/wp-requirements-check": "^1.0",
     "wp-user-manager/wp-notices": "dev-master",
     "wp-user-manager/wp-optionskit": "^1.0",

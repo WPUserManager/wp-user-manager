@@ -3,7 +3,6 @@
 namespace WPUserManager\WPUMStripe;
 
 use WPUM\Dompdf\Dompdf;
-use WPUM\NumberFormatter;
 use WPUM\Stripe\Customer;
 use WPUserManager\WPUMStripe\Models\User;
 
@@ -236,7 +235,7 @@ class Invoice {
 	 * @return string
 	 */
 	public static function formatCurrency( $amount, $currency ) {
-		$formatter = new NumberFormatter( 'en', NumberFormatter::CURRENCY );
+		$formatter = new \NumberFormatter( 'en', \NumberFormatter::CURRENCY );
 
 		return $formatter->formatCurrency( $amount / 100, strtoupper( $currency ) );
 	}

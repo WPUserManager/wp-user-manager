@@ -200,7 +200,6 @@ module.exports = function( grunt ) {
 				'release/<%= pkg.version %>/vendor-dist/dompdf/dompdf/lib/fonts/*.ufm',
 				'release/<%= pkg.version %>/vendor-dist/dompdf/dompdf/lib/fonts/*.ttf',
 				'release/<%= pkg.version %>/vendor-dist/nesbot/carbon/src/Carbon/Lang',
-				'release/<%= pkg.version %>/vendor-dist/symfony/intl/Resources/data/',
 				'release/<%= pkg.version %>/vendor-dist/htmlburger/carbon-fields/assets/dist/carbon.vendor.js',
 				'release/<%= pkg.version %>/vendor-dist/htmlburger/carbon-fields/assets/dist/carbon.core.js',
 			]
