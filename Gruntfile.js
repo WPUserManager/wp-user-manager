@@ -197,11 +197,13 @@ module.exports = function( grunt ) {
 				'release/<%= pkg.version %>/vendor-dist/dompdf/dompdf/lib/fonts/*.html',
 				'release/<%= pkg.version %>/vendor-dist/dompdf/dompdf/lib/fonts/*.afm',
 				'!release/<%= pkg.version %>/vendor-dist/dompdf/dompdf/lib/fonts/Helvetica.afm',
+				'!release/<%= pkg.version %>/vendor-dist/dompdf/dompdf/lib/fonts/Helvetica-Bold.afm',
 				'release/<%= pkg.version %>/vendor-dist/dompdf/dompdf/lib/fonts/*.ufm',
 				'release/<%= pkg.version %>/vendor-dist/dompdf/dompdf/lib/fonts/*.ttf',
 				'release/<%= pkg.version %>/vendor-dist/nesbot/carbon/src/Carbon/Lang',
 				'release/<%= pkg.version %>/vendor-dist/htmlburger/carbon-fields/assets/dist/carbon.vendor.js',
 				'release/<%= pkg.version %>/vendor-dist/htmlburger/carbon-fields/assets/dist/carbon.core.js',
+				'release/<%= pkg.version %>/vendor-dist/htmlburger/carbon-fields/yarn.lock',
 			]
 		},
 		gittag: {
