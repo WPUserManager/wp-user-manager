@@ -31,5 +31,6 @@ php -d memory_limit=-1 ./php-scoper.phar add-prefix --no-interaction --force
     rm -rf ./release/$VERSION/vendor
     rm -rf ./release/$VERSION/vendor-dist
     mv ./release/scoper/build/vendor ./release/$VERSION/vendor-dist
+    mv ./release/scoper/vendor/dompdf/dompdf/lib/fonts/installed-fonts.dist.json ./release/$VERSION/vendor-dist/dompdf/dompdf/lib/fonts/installed-fonts.dist.json
     rm -rf ./release/scoper
 )

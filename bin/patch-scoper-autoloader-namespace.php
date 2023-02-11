@@ -31,5 +31,6 @@ function prefix_namespace_in_classmap_file( $file, $prefix ) {
 	$contents = file_get_contents( $path );
 	$contents = str_replace( "'Gamajo_Template_Loader", "'" . $prefix . "\\\\Gamajo_Template_Loader", $contents );
 	$contents = str_replace( "'WP_Requirements_Check", "'" . $prefix . "\\\\WP_Requirements_Check", $contents );
+	$contents = str_replace( "'NumberFormatter", "'" . $prefix . "\\\\NumberFormatter", $contents );
 	file_put_contents( $path, $contents );
 }

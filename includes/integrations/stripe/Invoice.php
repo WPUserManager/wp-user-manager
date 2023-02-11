@@ -238,6 +238,6 @@ class Invoice {
 	public static function formatCurrency( $amount, $currency ) {
 		$formatter = new NumberFormatter( 'en', NumberFormatter::CURRENCY );
 
-		return $formatter->formatCurrency( $amount / 100, $currency );
+		return $formatter->formatCurrency( $amount / 100, strtoupper( $currency ) );
 	}
 }

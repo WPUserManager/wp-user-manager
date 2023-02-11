@@ -14,7 +14,7 @@
 		.invoice-box {
 			font-size: 16px;
 			line-height: 24px;
-			font-family: 'Helvetica Neue', 'Helvetica', Helvetica, Arial, sans-serif;
+			font-family: Arial, sans-serif;
 			color: #555;
 		}
 
