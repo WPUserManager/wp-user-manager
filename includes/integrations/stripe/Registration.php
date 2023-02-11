@@ -172,7 +172,8 @@ class Registration {
 		if ( isset( $_POST['wpum_stripe_plan'] ) ) { // phpcs:ignore
 			$product = $this->products->get_by_plan( sanitize_text_field( $_POST['wpum_stripe_plan'] ) ); // phpcs:ignore
 
-			update_user_meta( $new_user_id, 'wpum_stripe_plan', $product->to_array() );
+			$user = new User( $new_user_id );
+			$user->setPlanMeta( $product->to_array() );
 		}
 
 		update_user_meta( $new_user_id, 'wpum_form_id', $form->get_ID() );

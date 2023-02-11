@@ -12,8 +12,12 @@ class Connect {
 		return apply_filters( 'wpum_stripe_connect_base_url', 'https://connect.wpusermanager.com' );
 	}
 
+	public function get_gateway_mode() {
+		return wpum_get_option( 'stripe_gateway_mode', 'test' );
+	}
+
 	public function is_test_mode() {
-		return 'test' === wpum_get_option( 'stripe_gateway_mode', 'test' );
+		return 'test' === $this->get_gateway_mode();
 	}
 
 	public function get_stripe_key() {

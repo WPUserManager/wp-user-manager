@@ -15,14 +15,24 @@ class Invoices extends \WPUM_DB {
 	public $cache_group = 'stripe_invoices';
 
 	/**
-	 * Initialise object variables and register table.
+	 * @var string
 	 */
-	public function __construct() {
+	protected $gateway_mode;
+
+	/**
+	 * Initialise object variables and register table.
+	 *
+	 * @param string $gateway_mode
+	 */
+	public function __construct( $gateway_mode ) {
 		global $wpdb;
 
-		$this->table_name  = $wpdb->prefix . 'wpum_stripe_invoices';
-		$this->primary_key = 'id';
-		$this->version     = '1.0';
+		$this->table_name   = $wpdb->prefix . 'wpum_stripe_invoices';
+		$this->primary_key  = 'id';
+		$this->version      = '1.0';
+		$this->gateway_mode = $gateway_mode;
+
+		parent::__construct();
 	}
 
 	/**
@@ -33,13 +43,14 @@ class Invoices extends \WPUM_DB {
 	 */
 	public function get_columns() {
 		return array(
-			'id'         => '%d',
-			'user_id'    => '%d',
-			'invoice_id' => '%s',
-			'total'      => '%d',
-			'currency'   => '%s',
-			'created_at' => '%s',
-			'updated_at' => '%s',
+			'id'           => '%d',
+			'user_id'      => '%d',
+			'invoice_id'   => '%s',
+			'total'        => '%d',
+			'currency'     => '%s',
+			'gateway_mode' => '%s',
+			'created_at'   => '%s',
+			'updated_at'   => '%s',
 		);
 	}
 
@@ -51,13 +62,14 @@ class Invoices extends \WPUM_DB {
 	 */
 	public function get_column_defaults() {
 		return array(
-			'id'         => 0,
-			'user_id'    => 0,
-			'invoice_id' => '',
-			'total'      => 0,
-			'currency'   => '',
-			'created_at' => '',
-			'updated_at' => '',
+			'id'           => 0,
+			'user_id'      => 0,
+			'invoice_id'   => '',
+			'total'        => 0,
+			'currency'     => '',
+			'gateway_mode' => '',
+			'created_at'   => '',
+			'updated_at'   => '',
 		);
 	}
 
@@ -71,8 +83,9 @@ class Invoices extends \WPUM_DB {
 	 * @return int ID of the inserted coupon.
 	 */
 	public function insert( $data, $type = '' ) {
-		$data['created_at'] = current_time( 'mysql' );
-		$result             = parent::insert( $data, $type );
+		$data['created_at']   = current_time( 'mysql' );
+		$data['gateway_mode'] = $this->gateway_mode;
+		$result               = parent::insert( $data, $type );
 
 		if ( $result ) {
 			$this->set_last_changed();
@@ -201,10 +214,8 @@ class Invoices extends \WPUM_DB {
 			$where .= " AND id = '$id' ";
 		}
 
-		if ( ! empty( $where ) ) {
-			$where = ' WHERE 1=1 ' . $where;
-		}
+		$where .= " AND gateway_mode = '$this->gateway_mode' ";
 
-		return $where;
+		return ' WHERE 1=1 ' . $where;
 	}
 }

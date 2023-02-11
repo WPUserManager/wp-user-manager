@@ -16,7 +16,7 @@ class Stripe {
 		$secret         = $connect->get_stripe_secret();
 		$webhook_secret = $connect->get_stripe_webhook_secret();
 
-		$stripeWebhook   = new StripeWebhookController( $secret, $webhook_secret );
+		$stripeWebhook   = new StripeWebhookController( $secret, $webhook_secret, $connect->get_gateway_mode() );
 		$webhookEndpoint = new WebhookEndpoint( $stripeWebhook );
 
 		if ( ! $key || ! $secret || ! $webhook_secret ) {
@@ -32,7 +32,7 @@ class Stripe {
 
 		( new Assets( $key ) )->init();
 		( new Registration( $key, $secret, $test_mode, $billing, $products ) )->init();
-		( new Account( $key, $secret, $test_mode, $billing, $products ) )->init();
+		( new Account( $key, $secret, $connect->get_gateway_mode(), $billing, $products ) )->init();
 
 		$webhookEndpoint->init();
 	}

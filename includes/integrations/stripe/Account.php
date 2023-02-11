@@ -22,9 +22,9 @@ class Account {
 	protected $secret_key;
 
 	/**
-	 * @var bool
+	 * @var string
 	 */
-	protected $test_mode;
+	protected $gateway_mode;
 
 	/**
 	 * @var Billing
@@ -41,16 +41,16 @@ class Account {
 	 *
 	 * @param $public_key
 	 * @param $secret_key
-	 * @param $test_mode
+	 * @param $gateway_mode
 	 * @param $billing
 	 * @param $products
 	 */
-	public function __construct( $public_key, $secret_key, $test_mode, $billing, $products ) {
-		$this->public_key = $public_key;
-		$this->secret_key = $secret_key;
-		$this->test_mode  = $test_mode;
-		$this->billing    = $billing;
-		$this->products   = $products;
+	public function __construct( $public_key, $secret_key, $gateway_mode, $billing, $products ) {
+		$this->public_key   = $public_key;
+		$this->secret_key   = $secret_key;
+		$this->gateway_mode = $gateway_mode;
+		$this->billing      = $billing;
+		$this->products     = $products;
 	}
 
 	public function init() {
@@ -181,7 +181,7 @@ class Account {
 			echo '</div>';
 		}
 
-		$invoices = ( new Invoices() )->where( 'user_id', $user->ID );
+		$invoices = ( new Invoices( $this->gateway_mode ) )->where( 'user_id', $user->ID );
 		echo '<div class="wpum-form" style="margin-top: 2rem;">';
 		echo '<h3>Invoices</h3>';
 		if ( empty( $invoices ) ) {
@@ -237,7 +237,7 @@ class Account {
 			return;
 		}
 
-		$invoice = ( new Invoices() )->find( $id );
+		$invoice = ( new Invoices( $this->gateway_mode ) )->find( $id );
 
 		if ( $invoice->user_id != get_current_user_id() ) {
 			return;

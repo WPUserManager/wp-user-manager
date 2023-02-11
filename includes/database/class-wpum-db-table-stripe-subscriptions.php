@@ -45,6 +45,7 @@ final class WPUM_DB_Table_Stripe_Subscriptions extends WPUM_DB_Table {
   `subscription_id` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `trial_ends_at` timestamp NULL DEFAULT NULL,
   `ends_at` timestamp NULL DEFAULT NULL,
+  `gateway_mode` varchar(4) COLLATE utf8mb4_unicode_ci NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
 			PRIMARY KEY (id)";

@@ -13,6 +13,8 @@ class User extends \WP_User {
 
 	protected $product_data;
 
+	protected $gateway_mode;
+
 	/**
 	 * User constructor.
 	 *
@@ -23,9 +25,10 @@ class User extends \WP_User {
 	public function __construct( $id = 0, $name = '', $site_id = '' ) {
 		parent::__construct( $id, $name, $site_id );
 
+		$this->gateway_mode = wpum_get_option( 'stripe_gateway_mode', 'test' );
 		$this->email = $this->user_email;
 
-		$sub = ( new Subscriptions() )->where( 'user_id', $this->ID );
+		$sub = ( new Subscriptions( $this->gateway_mode ) )->where( 'user_id', $this->ID );
 
 		if ( $sub ) {
 			$sub = new Subscription( $sub );
@@ -52,12 +55,28 @@ class User extends \WP_User {
 		return $this->isAdmin() || ( $this->subscription && $this->subscription->active() );
 	}
 
+	/**
+	 * @return mixed
+	 */
+	public function getPlanMeta() {
+		return get_user_meta( $this->ID, 'wpum_stripe_plan_' . $this->gateway_mode, true );
+	}
+
+	/**
+	 * @param $data
+	 *
+	 * @return bool|int
+	 */
+	public function setPlanMeta( $data ) {
+		return update_user_meta( $this->ID, 'wpum_stripe_plan_' . $this->gateway_mode, $data );
+	}
+
 	protected function getProductData() {
 		if ( $this->product_data ) {
 			return $this->product_data;
 		}
 
-		$this->product_data = get_user_meta( $this->ID, 'wpum_stripe_plan', true );
+		$this->product_data = $this->getPlanMeta();
 
 		return $this->product_data;
 	}

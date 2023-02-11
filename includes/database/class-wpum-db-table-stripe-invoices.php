@@ -43,6 +43,7 @@ final class WPUM_DB_Table_Stripe_Invoices extends WPUM_DB_Table {
   `invoice_id` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `total` decimal(8,2) NOT NULL,
   `currency` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `gateway_mode` varchar(4) COLLATE utf8mb4_unicode_ci NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
 			PRIMARY KEY (id)";

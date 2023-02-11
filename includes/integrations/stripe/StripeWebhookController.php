@@ -9,6 +9,7 @@ use WPUM\Stripe\Stripe;
 use WPUserManager\WPUMStripe\Controllers\Invoices;
 use WPUserManager\WPUMStripe\Controllers\Subscriptions;
 use WPUserManager\WPUMStripe\Models\Product;
+use WPUserManager\WPUMStripe\Models\User;
 
 class StripeWebhookController {
 
@@ -20,16 +21,17 @@ class StripeWebhookController {
 	/**
 	 * StripeWebhookController constructor.
 	 *
-	 * @param $secret_key
-	 * @param $webhook_secret
+	 * @param string $secret_key
+	 * @param string $webhook_secret
+	 * @param string $gateway_mode
 	 */
-	public function __construct( $secret_key, $webhook_secret ) {
+	public function __construct( $secret_key, $webhook_secret, $gateway_mode ) {
 		if ( ! empty( $secret_key ) ) {
 			Stripe::setApiKey( $secret_key );
 		}
 
-		$this->subscriptions  = new Subscriptions();
-		$this->invoices       = new Invoices();
+		$this->subscriptions  = new Subscriptions( $gateway_mode );
+		$this->invoices       = new Invoices( $gateway_mode );
 		$this->webhook_secret = $webhook_secret;
 	}
 
@@ -99,12 +101,14 @@ class StripeWebhookController {
 
 		// For one time payments, mark as paid
 		if ( ! isset( $payload['data']['object']['subscription'] ) ) {
-			$data    = get_user_meta( $user_id, 'wpum_stripe_plan', true );
+			$user = new User( $user_id );
+			$data = $user->getPlanMeta();
+
 			$product = new Product();
 			$product->hydrate( $data );
 			$product->setPaid();
 
-			update_user_meta( $user_id, 'wpum_stripe_plan', $product->to_array() );
+			$user->setPlanMeta( $product->to_array() );
 
 			return new \WP_REST_Response( 'Webhook handled', 200 );
 		}
@@ -240,7 +244,7 @@ class StripeWebhookController {
 	 * @return \WP_REST_Response
 	 */
 	protected function handleInvoicePaymentSucceeded( $payload ) {
-		error_log( print_r( $payload['data']['object'], true ) );
+		//error_log( print_r( $payload['data']['object'], true ) );
 		$subscription = $this->subscriptions->where( 'customer_id', $payload['data']['object']['customer'] );
 		if ( ! $subscription ) {
 			throw new \Exception( 'Subscription not found' );
