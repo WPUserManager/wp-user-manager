@@ -276,13 +276,13 @@ class Account {
 
 		$user = new User( get_current_user_id() );
 
-		$checkout_id = $this->billing->createStripeCheckoutSession( $this->test_mode, $user, $plan_id );
+		$checkout_id = $this->billing->createStripeCheckoutSession( $this->gateway_mode === 'test', $user, $plan_id );
 
 		if ( ! $checkout_id ) {
 			$error = __( 'There has been an issue when registering, please contact the site owner', 'wp-user-manager' );
 			wp_send_json_error( '<div class="wpum-message error">' . $error . '</div>' );
 		}
 
-		wp_send_json_success( $checkout_id );
+		wp_send_json_success( array( 'id' => $checkout_id ) );
 	}
 }
