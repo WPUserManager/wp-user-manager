@@ -125,23 +125,22 @@ class Account {
 
 		$shouldBeSubscribed = $user->shouldBeSubscribed();
 		if ( $shouldBeSubscribed && ! $user->isSubscribed() ) {
-			echo '<div class="wpum-message error">' . __( 'An active subscription is required.', 'wp-user-manager' ) . '</div>';
+			echo '<div class="wpum-message error">' . apply_filters( 'wpum_stripe_account_subscription_required_error_message', __( 'An active subscription is required.', 'wp-user-manager' ) ) . '</div>';
 		}
 
 		if ( ! $shouldBeSubscribed && ! $user->isPaid() ) {
-			echo '<div class="wpum-message error">' . __( 'Payment is required for access to the site.', 'wp-user-manager' ) . '</div>';
+			echo '<div class="wpum-message error">' . apply_filters( 'wpum_stripe_account_payment_required_error_message', __( 'Payment is required for access to the site.', 'wp-user-manager' ) ) . '</div>';
 		}
 		if ( $user->subscription && $user->subscription->active() && $user->subscription->onTrial() && ! $user->subscription->onGracePeriod() ) {
-			echo '<div class="wpum-message info">' . sprintf( __( 'After your free trial ends on <strong>%s</strong>, this plan will continue automatically.', 'wp-user-manager' ), mysql2date( __( 'F j, Y' ), $user->subscription->trial_ends_at ) ) . '</div>';
+			echo '<div class="wpum-message info">' . apply_filters( 'wpum_stripe_account_free_trial_message', sprintf( __( 'After your free trial ends on <strong>%s</strong>, this plan will continue automatically.', 'wp-user-manager' ), mysql2date( __( 'F j, Y' ), $user->subscription->trial_ends_at ) ), $user->subscription->trial_ends_at ) . '</div>';
 		}
 
 		if ( $user->subscription && $user->subscription->onGracePeriod() ) {
-			echo '<div class="wpum-message warning">' . sprintf( __( 'Your plan will be canceled on <strong>%s</strong>.', 'wp-user-manager' ), mysql2date( __( 'F j, Y' ), $user->subscription->ends_at ) ) . '</div>';
+			echo '<div class="wpum-message warning">' . apply_filters( 'wpum_stripe_account_subscription_cancelled_message', sprintf( __( 'Your plan will be canceled on <strong>%s</strong>.', 'wp-user-manager' ), mysql2date( __( 'F j, Y' ), $user->subscription->ends_at ) ), $user->subscription->ends_at ) . '</div>';
 		}
 
 		if ( ( $shouldBeSubscribed && ( ! $user->subscription || ! $user->subscription->active() ) ) || ( ! $shouldBeSubscribed && ! $user->isPaid() ) ) {
-			?>
-			<h4>Select Plan</h4>
+			echo '<h4>' . apply_filters( 'wpum_stripe_account_billing_plan_header', __( 'Select Plan', 'wp-user-manager' ) ) . '</h4>'; ?>
 
 			<?php foreach ( $this->products->all() as $product ) : ?>
 				<div class="wpum-row wpum-form">
@@ -157,7 +156,7 @@ class Account {
 					<div class="wpum-col-xs-3">
 						<?php foreach ( $product['prices'] as $price_id => $price ) : ?>
 							<button class="wpum-stripe-checkout button" data-plan-id="<?php echo $price_id; ?>">
-								Select Plan
+								<?php echo apply_filters( 'wpum_stripe_account_billing_plan_button_label', __( 'Select Plan', 'wp-user-manager' ) ) . '</h4>'; ?>
 							</button><br>
 						<?php endforeach; ?>
 					</div>
