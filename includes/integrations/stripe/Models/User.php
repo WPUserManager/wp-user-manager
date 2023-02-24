@@ -63,6 +63,18 @@ class User extends \WP_User {
 	}
 
 	/**
+	 * @return false|\WPUM_Registration_Form
+	 */
+	public function getFormRegisteredWith() {
+		$form_id = get_user_meta( $this->ID, 'wpum_form_id', true );
+		if ( ! $form_id ) {
+			return false;
+		}
+
+		return new \WPUM_Registration_Form( $form_id );
+	}
+
+	/**
 	 * @param $data
 	 *
 	 * @return bool|int

@@ -64,6 +64,7 @@ class Account {
 		add_action( 'wp_ajax_nopriv_wpum_checkout', array( $this, 'handle_checkout' ) );
 
 		add_action( 'template_redirect', array( $this, 'handle_download_invoice' ) );
+		add_action( 'wpum_account_page_content', array( $this, 'render_payment_message' ), 9 );
 
 	}
 
@@ -276,7 +277,11 @@ class Account {
 
 		$user = new User( get_current_user_id() );
 
-		$checkout_id = $this->billing->createStripeCheckoutSession( $this->gateway_mode === 'test', $user, $plan_id );
+		$form = $user->getFormRegisteredWith();
+
+		$redirect = $this->get_redirect_after_account_payment( $plan_id, $form );
+
+		$checkout_id = $this->billing->createStripeCheckoutSession( $this->gateway_mode === 'test', $user, $plan_id, $redirect );
 
 		if ( ! $checkout_id ) {
 			$error = __( 'There has been an issue when registering, please contact the site owner', 'wp-user-manager' );
@@ -284,5 +289,48 @@ class Account {
 		}
 
 		wp_send_json_success( array( 'id' => $checkout_id ) );
+	}
+
+	/**
+	 * @param string $plan_id
+	 * @param false  $form
+	 *
+	 * @return false|string
+	 */
+	public function get_redirect_after_account_payment( $plan_id, $form = false ) {
+		$account_url = get_permalink( wpum_get_core_page_id( 'account' ) );
+		$billing_url = $this->billing->getBillingURL();
+
+		$return_url = $account_url;
+		$product    = $this->products->get_by_plan( $plan_id );
+		if ( $product->is_recurring() ) {
+			$return_url = $billing_url;
+		}
+
+		if ( ! $form ) {
+			return add_query_arg( array( 'payment' => 'success' ), $return_url );
+		}
+
+		$redirect_page = $form->get_setting( 'registration_redirect' );
+		if ( $redirect_page ) {
+			$return_url = get_permalink( $redirect_page[0] );
+		}
+
+		return apply_filters( 'wpum_registration_form_redirect', $return_url, $form );
+	}
+
+	public function render_payment_message() {
+		$payment = filter_input( INPUT_GET, 'payment', FILTER_SANITIZE_STRING );
+		if ( 'success' !== $payment ) {
+			return;
+		}
+
+		ob_start();
+
+		WPUM()->templates
+			->set_template_data( array( 'message' => apply_filters( 'wpum_account_payment_success_message', esc_html__( 'Payment successfully completed.', 'wp-user-manager' ) ) ) )
+			->get_template_part( 'messages/general', 'success' );
+
+		echo ob_get_clean();
 	}
 }
