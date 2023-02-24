@@ -40,12 +40,12 @@ final class WPUM_DB_Table_Stripe_Subscriptions extends WPUM_DB_Table {
 
 		$this->schema = "`id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `user_id` bigint(20) unsigned NOT NULL,
-  `customer_id` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `plan_id` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `subscription_id` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `customer_id` varchar(255) NOT NULL,
+  `plan_id` varchar(255) NOT NULL,
+  `subscription_id` varchar(255) NOT NULL,
   `trial_ends_at` timestamp NULL DEFAULT NULL,
   `ends_at` timestamp NULL DEFAULT NULL,
-  `gateway_mode` varchar(4) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `gateway_mode` varchar(4) NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
 			PRIMARY KEY (id)";

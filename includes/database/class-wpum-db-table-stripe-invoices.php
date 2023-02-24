@@ -40,10 +40,10 @@ final class WPUM_DB_Table_Stripe_Invoices extends WPUM_DB_Table {
 
 		$this->schema = "`id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `user_id` bigint(20) unsigned NOT NULL,
-  `invoice_id` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `invoice_id` varchar(255) NOT NULL,
   `total` decimal(8,2) NOT NULL,
-  `currency` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `gateway_mode` varchar(4) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `currency` varchar(20) NOT NULL,
+  `gateway_mode` varchar(4) NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
 			PRIMARY KEY (id)";
