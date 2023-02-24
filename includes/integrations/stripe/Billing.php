@@ -85,7 +85,7 @@ class Billing {
 		if ( $user->subscription && $user->subscription->customer_id ) {
 			$data['customer'] = $user->subscription->customer_id;
 		} else {
-			$data['customer_email'] = $user->email;
+			$data['customer_email'] = urlencode( $user->email );
 		}
 
 		$product = $this->products->get_by_plan( $plan );
