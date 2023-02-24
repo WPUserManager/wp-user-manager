@@ -147,7 +147,7 @@ class Settings {
 		$settings['stripe'][] = array(
 			'id'     => 'test_stripe_publishable_key',
 			'name'   => __( 'Test Key', 'wp-user-manager' ),
-			'type'   => 'text',
+			'type'   => 'hidden',
 			'toggle' => array(
 				'key'   => 'stripe_gateway_mode',
 				'value' => 'test'
@@ -156,7 +156,7 @@ class Settings {
 		$settings['stripe'][] = array(
 			'id'     => 'test_stripe_secret_key',
 			'name'   => __( 'Test Secret', 'wp-user-manager' ),
-			'type'   => 'text',
+			'type'   => 'hidden',
 			'toggle' => array(
 				'key'   => 'stripe_gateway_mode',
 				'value' => 'test'
@@ -165,7 +165,7 @@ class Settings {
 		$settings['stripe'][] = array(
 			'id'     => 'live_stripe_publishable_key',
 			'name'   => __( 'Live Key', 'wp-user-manager' ),
-			'type'   => 'text',
+			'type'   => 'hidden',
 			'toggle' => array(
 				'key'   => 'stripe_gateway_mode',
 				'value' => 'live'
@@ -174,7 +174,7 @@ class Settings {
 		$settings['stripe'][] = array(
 			'id'     => 'live_stripe_secret_key',
 			'name'   => __( 'Live Secret', 'wp-user-manager' ),
-			'type'   => 'text',
+			'type'   => 'hidden',
 			'toggle' => array(
 				'key'   => 'stripe_gateway_mode',
 				'value' => 'live'
