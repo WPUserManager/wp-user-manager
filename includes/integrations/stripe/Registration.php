@@ -65,7 +65,8 @@ class Registration {
 	public function init() {
 		add_action( 'wpum_registration_edit_form_settings_sections', array( $this, 'register_settings' ) );
 		add_filter( 'wpum_get_registration_fields', array( $this, 'inject_registration_fields' ), 10, 2 );
-		add_action( 'wpum_before_registration_end', array( $this, 'save_plan' ), 10, 3 );
+		add_action( 'wpum_before_registration_end', array( $this, 'save_plan_after_registration' ), 10, 3 );
+		add_action( 'wpum_after_existing_registration', array( $this, 'save_plan' ) );
 		add_action( 'wp_ajax_wpum_stripe_register', array( $this, 'handle_register' ) );
 		add_action( 'wp_ajax_nopriv_wpum_stripe_register', array( $this, 'handle_register' ) );
 		add_filter( 'wpum_registered_settings_sections', array( $this, 'register_registration_settings_tab' ) );
@@ -142,13 +143,29 @@ class Registration {
 	 */
 	public function get_registration_redirect( $form ) {
 		$form          = $form->get_registration_form();
+
+		$redirect_default = wpum_get_registration_redirect();
+		if ( (bool) $form->get_setting( 'after_registration_form' ) ) {
+			// Successful, the success message now.
+			$referer = isset( $_POST['_wp_http_referer'] ) ? $_POST['_wp_http_referer'] : '';  // phpcs:ignore
+			$redirect = home_url($referer);
+			$redirect = add_query_arg(
+				[
+					'updated' => 'success',
+				],
+				$redirect
+			);
+
+			$redirect_default = $redirect;
+		}
+
 		$redirect_page = $form->get_setting( 'registration_redirect' );
 		if ( $redirect_page ) {
 			$redirect_page = get_permalink( $redirect_page[0] );
 		}
 
 		if ( ! $redirect_page ) {
-			$redirect_page = apply_filters( 'wpum_registration_form_redirect', wpum_get_registration_redirect(), $form );
+			$redirect_page = apply_filters( 'wpum_registration_form_redirect', $redirect_default, $form );
 		}
 
 		if ( ! $redirect_page ) {
@@ -164,17 +181,24 @@ class Registration {
 	}
 
 	/**
-	 * @param int        $new_user_id
-	 * @param array      $values
-	 * @param \WPUM_Form $form
+	 * @param int $new_user_id
 	 */
-	public function save_plan( $new_user_id, $values, $form ) {
+	public function save_plan( $new_user_id ) {
 		if ( isset( $_POST['wpum_stripe_plan'] ) ) { // phpcs:ignore
 			$product = $this->products->get_by_plan( sanitize_text_field( $_POST['wpum_stripe_plan'] ) ); // phpcs:ignore
 
 			$user = new User( $new_user_id );
 			$user->setPlanMeta( $product->to_array() );
-		}
+		};
+	}
+
+	/**
+	 * @param int        $new_user_id
+	 * @param array      $values
+	 * @param \WPUM_Form $form
+	 */
+	public function save_plan_after_registration( $new_user_id, $values, $form ) {
+		$this->save_plan( $new_user_id );
 
 		update_user_meta( $new_user_id, 'wpum_form_id', $form->get_ID() );
 	}
