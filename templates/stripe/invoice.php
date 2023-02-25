@@ -1,3 +1,11 @@
+<?php
+/**
+ * The Template for the Stripe invoice
+ *
+ * @version 2.9.0
+ */
+
+?>
 <!doctype html>
 <html>
 <head>
