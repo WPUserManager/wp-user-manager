@@ -377,8 +377,6 @@ if ( ! class_exists( 'WP_User_Manager' ) ) :
 			require_once WPUM_PLUGIN_DIR . 'includes/compatibility/oceanwp.php';
 
 			\WPUM\WPUM_Blocks::get_instance();
-
-			( new \WPUserManager\Stripe\Stripe() )->init();
 		}
 
 		/**
@@ -444,6 +442,9 @@ if ( ! class_exists( 'WP_User_Manager' ) ) :
 			 * @todo document before_wpum_init
 			 */
 			do_action( 'before_wpum_init' );
+
+			// Boot Stripe code
+			( new \WPUserManager\Stripe\Stripe() )->init();
 
 			// Boot the custom routing library.
 			\WPUM\Brain\Cortex::boot();
