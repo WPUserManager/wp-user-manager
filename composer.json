@@ -50,6 +50,6 @@
     "wp-coding-standards/wpcs": "^2.3"
   },
   "autoload": {
-    "psr-4": {"WPUserManager\\WPUMStripe\\": "includes/integrations/stripe"}
+    "psr-4": {"WPUserManager\\Stripe\\": "includes/integrations/stripe"}
   }
 }

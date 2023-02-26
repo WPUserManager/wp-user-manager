@@ -378,7 +378,7 @@ if ( ! class_exists( 'WP_User_Manager' ) ) :
 
 			\WPUM\WPUM_Blocks::get_instance();
 
-			( new \WPUserManager\WPUMStripe\Stripe() )->init();
+			( new \WPUserManager\Stripe\Stripe() )->init();
 		}
 
 		/**

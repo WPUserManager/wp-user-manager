@@ -1,6 +1,6 @@
 <?php
 
-namespace WPUserManager\WPUMStripe;
+namespace WPUserManager\Stripe;
 
 class Assets {
 
