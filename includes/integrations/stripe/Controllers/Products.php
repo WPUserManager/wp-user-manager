@@ -1,10 +1,10 @@
 <?php
 
-namespace WPUserManager\WPUMStripe\Controllers;
+namespace WPUserManager\Stripe\Controllers;
 
 use WPUM\Stripe\Stripe;
-use WPUserManager\WPUMStripe\Billing;
-use WPUserManager\WPUMStripe\Models\Product;
+use WPUserManager\Stripe\Billing;
+use WPUserManager\Stripe\Models\Product;
 
 class Products {
 
@@ -81,7 +81,7 @@ class Products {
 		foreach ( $products as $product ) {
 			foreach ( $product['prices'] as $id => $price ) {
 				$list[] = array(
-					'label' => $product['name'] . ' - ' . html_entity_decode( \WPUserManager\WPUMStripe\Stripe::currencySymbol( $price['currency'] ) ) . number_format( $price['unit_amount'] / 100 ),
+					'label' => $product['name'] . ' - ' . html_entity_decode( \WPUserManager\Stripe\Stripe::currencySymbol( $price['currency'] ) ) . number_format( $price['unit_amount'] / 100 ),
 					'value' => $id,
 				);
 			}

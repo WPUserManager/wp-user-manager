@@ -1,10 +1,10 @@
 <?php
 
-namespace WPUserManager\WPUMStripe;
+namespace WPUserManager\Stripe;
 
 use WPUM\Dompdf\Dompdf;
 use WPUM\Stripe\Customer;
-use WPUserManager\WPUMStripe\Models\User;
+use WPUserManager\Stripe\Models\User;
 
 class Invoice {
 
@@ -14,7 +14,7 @@ class Invoice {
 	protected $invoice;
 
 	/**
-	 * @var \WPUserManager\WPUMStripe\Models\Invoice
+	 * @var \WPUserManager\Stripe\Models\Invoice
 	 */
 	public $localInvoice;
 
@@ -29,7 +29,7 @@ class Invoice {
 	 * Invoice constructor.
 	 *
 	 * @param \WPUM\Stripe\Invoice                     $invoice
-	 * @param \WPUserManager\WPUMStripe\Models\Invoice $localInvoice
+	 * @param \WPUserManager\Stripe\Models\Invoice $localInvoice
 	 */
 	public function __construct( \WPUM\Stripe\Invoice $invoice, $localInvoice ) {
 		$this->invoice      = $invoice;

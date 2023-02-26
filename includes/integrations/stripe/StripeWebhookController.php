@@ -1,15 +1,15 @@
 <?php
 
-namespace WPUserManager\WPUMStripe;
+namespace WPUserManager\Stripe;
 
 use WPUM\Carbon\Carbon;
 use WPUM\Stripe\Checkout\Session;
 use WPUM\Stripe\Webhook;
 use WPUM\Stripe\Stripe;
-use WPUserManager\WPUMStripe\Controllers\Invoices;
-use WPUserManager\WPUMStripe\Controllers\Subscriptions;
-use WPUserManager\WPUMStripe\Models\Product;
-use WPUserManager\WPUMStripe\Models\User;
+use WPUserManager\Stripe\Controllers\Invoices;
+use WPUserManager\Stripe\Controllers\Subscriptions;
+use WPUserManager\Stripe\Models\Product;
+use WPUserManager\Stripe\Models\User;
 
 class StripeWebhookController {
 

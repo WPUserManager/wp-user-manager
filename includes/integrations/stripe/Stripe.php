@@ -1,8 +1,8 @@
 <?php
 
-namespace WPUserManager\WPUMStripe;
+namespace WPUserManager\Stripe;
 
-use WPUserManager\WPUMStripe\Controllers\Products;
+use WPUserManager\Stripe\Controllers\Products;
 
 class Stripe {
 

@@ -1,9 +1,9 @@
 <?php
 
 
-namespace WPUserManager\WPUMStripe\Models;
+namespace WPUserManager\Stripe\Models;
 
-use WPUserManager\WPUMStripe\Controllers\Subscriptions;
+use WPUserManager\Stripe\Controllers\Subscriptions;
 
 class User extends \WP_User {
 

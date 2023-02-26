@@ -1,6 +1,6 @@
 <?php
 
-namespace WPUserManager\WPUMStripe\Controllers;
+namespace WPUserManager\Stripe\Controllers;
 
 class Subscriptions extends \WPUM_DB {
 

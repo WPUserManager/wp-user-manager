@@ -1,6 +1,6 @@
 <?php
 
-namespace WPUserManager\WPUMStripe\Models;
+namespace WPUserManager\Stripe\Models;
 
 class Invoice {
 

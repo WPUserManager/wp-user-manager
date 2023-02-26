@@ -1,7 +1,7 @@
 <?php
 
 
-namespace WPUserManager\WPUMStripe;
+namespace WPUserManager\Stripe;
 
 use WPUM\Stripe\StripeClient;
 

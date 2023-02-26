@@ -1,13 +1,13 @@
 <?php
 
 
-namespace WPUserManager\WPUMStripe;
+namespace WPUserManager\Stripe;
 
 use WPUM\Stripe\Invoice as StripeInvoice;
 use WPUM\Stripe\Stripe;
-use WPUserManager\WPUMStripe\Controllers\Invoices;
-use WPUserManager\WPUMStripe\Controllers\Products;
-use WPUserManager\WPUMStripe\Models\User;
+use WPUserManager\Stripe\Controllers\Invoices;
+use WPUserManager\Stripe\Controllers\Products;
+use WPUserManager\Stripe\Models\User;
 
 class Account {
 
@@ -150,7 +150,7 @@ class Account {
 					</div>
 					<div class="wpum-col-xs-3">
 						<?php foreach ( $product['prices'] as $price_id => $price ) : ?>
-							<strong><?php echo \WPUserManager\WPUMStripe\Stripe::currencySymbol( $price['currency'] ) . number_format( $price['unit_amount'] / 100 ); ?></strong><?php echo isset( $price['recurring']['interval'] ) ? '/' . $price['recurring']['interval'] : ''; ?>
+							<strong><?php echo \WPUserManager\Stripe\Stripe::currencySymbol( $price['currency'] ) . number_format( $price['unit_amount'] / 100 ); ?></strong><?php echo isset( $price['recurring']['interval'] ) ? '/' . $price['recurring']['interval'] : ''; ?>
 							<br>
 						<?php endforeach; ?>
 					</div>
@@ -202,7 +202,7 @@ class Account {
 						<?php echo mysql2date( __( 'F j, Y' ), $invoice->created_at ); ?>
 					</td>
 					<td class="">
-						<?php echo \WPUserManager\WPUMStripe\Stripe::currencySymbol( $invoice->currency ); ?><?php echo number_format( $invoice->total ); ?>
+						<?php echo \WPUserManager\Stripe\Stripe::currencySymbol( $invoice->currency ); ?><?php echo number_format( $invoice->total ); ?>
 					</td>
 					<td class="text-right">
 						<a href="<?php echo home_url( '/account/billing/?invoice_id=' . $invoice->id ); ?>">

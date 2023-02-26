@@ -1,8 +1,8 @@
 <?php
 
-namespace WPUserManager\WPUMStripe\Controllers;
+namespace WPUserManager\Stripe\Controllers;
 
-use WPUserManager\WPUMStripe\Models\Invoice;
+use WPUserManager\Stripe\Models\Invoice;
 
 class Invoices extends \WPUM_DB {
 

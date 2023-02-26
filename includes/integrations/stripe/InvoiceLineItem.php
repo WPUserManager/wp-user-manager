@@ -1,6 +1,6 @@
 <?php
 
-namespace WPUserManager\WPUMStripe;
+namespace WPUserManager\Stripe;
 
 use \WPUM\Carbon\Carbon;
 use \WPUM\Stripe\InvoiceLineItem as StripeInvoiceLineItem;

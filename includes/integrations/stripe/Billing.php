@@ -7,12 +7,12 @@
  * @license     https://opensource.org/licenses/GPL-3.0 GNU Public License
  */
 
-namespace WPUserManager\WPUMStripe;
+namespace WPUserManager\Stripe;
 
 use WPUM\Stripe\BillingPortal\Session as PortalSession;
 use WPUM\Stripe\Stripe;
-use WPUserManager\WPUMStripe\Controllers\Products;
-use WPUserManager\WPUMStripe\Models\User;
+use WPUserManager\Stripe\Controllers\Products;
+use WPUserManager\Stripe\Models\User;
 
 /**
  * Billing
@@ -48,7 +48,7 @@ class Billing {
 	 */
 	public function getBillingURL() {
 		if ( empty( $this->billing_url ) ) {
-			$this->billing_url = \WPUserManager\WPUMStripe\Stripe::getBillingURL();
+			$this->billing_url = \WPUserManager\Stripe\Stripe::getBillingURL();
 		}
 
 		return $this->billing_url;
