@@ -54,6 +54,32 @@ class Billing {
 		return $this->billing_url;
 	}
 
+	protected function prepareData( $test_mode, $user, $plan, $returnUrl, $stripe_account_id = null) {
+		$data = array(
+			'test_mode'         => (int) $test_mode,
+			'plan'              => $plan,
+			'success_url'       => $returnUrl,
+			'cancel_url'        => $this->getBillingURL(),
+		);
+
+		if ( $stripe_account_id ) {
+			$data['stripe_account_id'] = $stripe_account_id;
+		}
+
+		if ( $user->subscription && $user->subscription->customer_id ) {
+			$data['customer'] = $user->subscription->customer_id;
+		} else {
+			$data['customer_email'] = urlencode( $user->email );
+		}
+
+		$product = $this->products->get_by_plan( $plan );
+		if ( ! $product->is_recurring() ) {
+			$data['amount'] = $product->amount;
+		}
+
+		return $data;
+	}
+
 	/**
 	 * Create a Stripe Checkout session.
 	 *
@@ -74,24 +100,7 @@ class Billing {
 			return false;
 		}
 
-		$data = array(
-			'stripe_account_id' => $stripe_account_id,
-			'test_mode'         => (int) $test_mode,
-			'plan'              => $plan,
-			'success_url'       => $returnUrl,
-			'cancel_url'        => $this->getBillingURL(),
-		);
-
-		if ( $user->subscription && $user->subscription->customer_id ) {
-			$data['customer'] = $user->subscription->customer_id;
-		} else {
-			$data['customer_email'] = urlencode( $user->email );
-		}
-
-		$product = $this->products->get_by_plan( $plan );
-		if ( ! $product->is_recurring() ) {
-			$data['amount'] = $product->amount;
-		}
+		$data = $this->prepareData( $test_mode, $user, $plan, $returnUrl, $stripe_account_id );
 
 		$wpum_checkout_url = add_query_arg( $data, $this->connect_url . '/checkout' );
 
