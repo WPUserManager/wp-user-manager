@@ -304,7 +304,7 @@ class Settings {
 	}
 
 	public function flush_product_cache() {
-		delete_transient( 'wpum_stripe_products' );
+		delete_transient( 'wpum_' . $this->connect->get_gateway_mode() . '_stripe_products' );
 	}
 
 	public function stripe_connect_account_info_ajax_response() {
@@ -543,6 +543,8 @@ class Settings {
 		foreach ( $options as $option ) {
 			wpum_delete_option( $option );
 		}
+
+		delete_transient( 'wpum_' . $prefix . '_stripe_products' );
 
 		$redirect = remove_query_arg(
 			array(

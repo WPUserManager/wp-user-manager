@@ -136,7 +136,7 @@ class Connect {
 			wpum_update_option( 'live_stripe_secret_key', sanitize_text_field( $data['secret_key'] ) );
 		}
 
-		delete_transient( 'wpum_stripe_products' );
+		delete_transient( 'wpum_' . $this->get_gateway_mode() . '_stripe_products' );
 
 		wpum_update_option( 'stripe_connect_account_id', sanitize_text_field( $data['stripe_user_id'] ) );
 		wp_redirect( $this->get_site_url() . '/#stripe' );
