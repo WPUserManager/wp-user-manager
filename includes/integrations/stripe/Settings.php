@@ -18,6 +18,8 @@ class Settings {
 	 */
 	protected $products;
 
+	const APPLICATION_FEE_PERCENT = 2;
+
 	/**
 	 * @param $connect
 	 */
@@ -426,7 +428,7 @@ class Settings {
 				 */
 				$show_fee_message = apply_filters( 'wpum_stripe_show_stripe_connect_fee_message', true );
 
-				$fee_message = true === $show_fee_message  ? '<br>' . esc_html__( 'Pay as you go pricing: 2% per-transaction fee + Stripe fees.', 'wp-user-manager' ) : '';
+				$fee_message = true === $show_fee_message  ? '<br>' . esc_html( sprintf( 'Pay as you go pricing: %d%% per-transaction fee + Stripe fees.', self::APPLICATION_FEE_PERCENT ), 'wp-user-manager' )  : '';
 
 				// Return a message with name, email, and reconnect/disconnect actions.
 				return wp_send_json_success(
