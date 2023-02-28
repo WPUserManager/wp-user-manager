@@ -23,7 +23,7 @@ class Stripe {
 			return;
 		}
 
-		$products = new Products( $secret );
+		$products = new Products( $secret, $connect->get_gateway_mode() );
 
 		$billingClass = apply_filters( 'wpum_stripe_billing_class', Billing::class );
 		$billing      = new $billingClass( $products, $connect->get_base_url() );

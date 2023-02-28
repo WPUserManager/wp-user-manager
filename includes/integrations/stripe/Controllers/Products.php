@@ -8,16 +8,31 @@ use WPUserManager\Stripe\Models\Product;
 
 class Products {
 
+	/**
+	 * @var string
+	 */
 	protected $secret_key;
+
+	/**
+	 * @var string
+	 */
+	protected $gateway_mode;
+
+	/**
+	 * @var array|mixed
+	 */
 	protected $products;
+
 	/**
 	 * Products constructor.
 	 *
-	 * @param $secret_key
+	 * @param string $secret_key
+	 * @param string $gateway_mode
 	 */
-	public function __construct( $secret_key ) {
-		$this->secret_key = $secret_key;
-		$this->products   = $this->all();
+	public function __construct( $secret_key, $gateway_mode ) {
+		$this->secret_key   = $secret_key;
+		$this->gateway_mode = $gateway_mode;
+		$this->products     = $this->all();
 	}
 
 	protected function getProducts() {
@@ -44,13 +59,13 @@ class Products {
 	}
 
 	public function all( $force = false ) {
-		$transient = get_transient( 'wpum_stripe_products' );
+		$transient = get_transient( 'wpum_' . $this->gateway_mode . '_stripe_products' );
 
 		if ( $transient && ! $force ) {
 			$products = $transient;
 		} else {
 			$products = $this->getProducts();
-			set_transient( 'wpum_stripe_products', $products, DAY_IN_SECONDS );
+			set_transient( 'wpum_' . $this->gateway_mode . '_stripe_products', $products, DAY_IN_SECONDS );
 		}
 
 		return $products;
