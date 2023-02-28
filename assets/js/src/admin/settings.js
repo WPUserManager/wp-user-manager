@@ -5,8 +5,7 @@ jQuery(document).ready(function ($) {
 		$( this ).css( 'margin', '15px 0 0' );
 	} );
 
-
-	if ($('#wpum-stripe-connect-account').length) {
+	function refreshStripeConnect() {
 		$.post( wpum_settings.ajaxurl, {
 				action: 'wpum_stripe_connect_account_info',
 				nonce: $('#wpum-stripe-connect-account').data('nonce'),
@@ -30,5 +29,15 @@ jQuery(document).ready(function ($) {
 				alert( "Error" );
 			} );
 	}
+
+	if ($('#wpum-stripe-connect-account').length) {
+		refreshStripeConnect();
+	}
+
+	$(document).on('click', '#optionskit-navigation ul li a', function () {
+		if ( $(this).attr('href') === '#/stripe') {
+			refreshStripeConnect();
+		}
+	});
 
 });
