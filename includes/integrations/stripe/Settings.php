@@ -239,7 +239,7 @@ class Settings {
 			'type' => 'hidden',
 		);
 
-		if ( $this->products->totalRecurringProducts() > 1 ) {
+		if ( $this->products && $this->products->totalRecurringProducts() > 1 ) {
 			$settings['stripe'][] = array(
 				'id'       => 'test_stripe_products',
 				'name'     => __( 'Eligible Products', 'wp-user-manager' ),
