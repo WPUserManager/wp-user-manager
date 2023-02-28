@@ -4,6 +4,7 @@
 namespace WPUserManager\Stripe;
 
 use WPUM\Stripe\StripeClient;
+use WPUserManager\Stripe\Controllers\Products;
 
 class Settings {
 
@@ -11,6 +12,11 @@ class Settings {
 	 * @var Connect
 	 */
 	protected $connect;
+
+	/**
+	 * @var Products
+	 */
+	protected $products;
 
 	/**
 	 * @param $connect
@@ -25,6 +31,13 @@ class Settings {
 		add_action( 'update_option_wpum_settings', array( $this, 'flush_product_cache' ) );
 		add_action( 'wp_ajax_wpum_stripe_connect_account_info', array( $this, 'stripe_connect_account_info_ajax_response' ) );
 		add_action( 'admin_init', array( $this, 'handle_stripe_connect_disconnect' ) );
+	}
+
+	/**
+	 * @param Products $products
+	 */
+	public function setProducts( $products ) {
+		$this->products = $products;
 	}
 
 	/**
@@ -205,7 +218,6 @@ class Settings {
 			'name'   => __( 'Live Webhook Signing Secret', 'wp-user-manager' ),
 			'type'   => 'text',
 			'desc'   => 'Set up a webhook in Stripe to get the webhook signing secret, using all events for this URL:<br>' . WebhookEndpoint::get_webhook_url(),
-
 			'toggle' => array(
 				array(
 					'key'   => 'stripe_gateway_mode',
@@ -224,6 +236,48 @@ class Settings {
 			'name' => __( 'Stripe ID', 'wp-user-manager' ),
 			'type' => 'hidden',
 		);
+
+		if ( $this->products->totalRecurringProducts() > 1 ) {
+			$settings['stripe'][] = array(
+				'id'       => 'test_stripe_products',
+				'name'     => __( 'Eligible Products', 'wp-user-manager' ),
+				'desc'     => sprintf( 'Select the product prices users can subscribe to on the account page. This should be the same as the products defined in the <a target="_blank" href="%s">Stripe Customer Portal Subscription settings</a>.', 'https://dashboard.stripe.com/test/settings/billing/portal' ),
+				'type'     => 'multiselect',
+				'multiple' => true,
+				'options'  => $this->products->get_plans(),
+				'toggle'   => array(
+					array(
+						'key'   => 'stripe_gateway_mode',
+						'value' => 'test'
+					),
+					array(
+						'key'      => 'test_stripe_secret_key',
+						'value'    => '',
+						'operator' => '==',
+					),
+				),
+			);
+
+			$settings['stripe'][] = array(
+				'id'       => 'live_stripe_products',
+				'name'     => __( 'Eligible Products', 'wp-user-manager' ),
+				'desc'     => sprintf( 'Select the product prices users can subscribe to on the account page. This should be the same as the products defined in the <a target="_blank" href="%s">Stripe Customer Portal Subscription settings</a>.', 'https://dashboard.stripe.com/settings/billing/portal' ),
+				'type'     => 'multiselect',
+				'multiple' => true,
+				'options'  => $this->products->get_plans(),
+				'toggle'   => array(
+					array(
+						'key'   => 'stripe_gateway_mode',
+						'value' => 'live'
+					),
+					array(
+						'key'      => 'live_stripe_secret_key',
+						'value'    => '',
+						'operator' => '==',
+					),
+				),
+			);
+		}
 
 		return $settings;
 	}

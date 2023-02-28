@@ -10,7 +10,8 @@ class Stripe {
 		$connect = new Connect();
 		$connect->init();
 
-		( new Settings( $connect ) )->init();
+		$settings = new Settings( $connect );
+		$settings->init();
 
 		$key            = $connect->get_stripe_key();
 		$secret         = $connect->get_stripe_secret();
@@ -29,6 +30,8 @@ class Stripe {
 		$billing      = new $billingClass( $products, $connect->get_base_url() );
 
 		$test_mode = $connect->is_test_mode();
+
+		$settings->setProducts( $products );
 
 		( new Assets( $key ) )->init();
 		( new Registration( $key, $secret, $test_mode, $billing, $products ) )->init();

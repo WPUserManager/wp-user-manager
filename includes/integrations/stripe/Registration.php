@@ -45,11 +45,11 @@ class Registration {
 	/**
 	 * Registration constructor.
 	 *
-	 * @param string $public_key
-	 * @param string $secret_key
-	 * @param string $test_mode
-	 * @param array  $billing
-	 * @param array  $products
+	 * @param string   $public_key
+	 * @param string   $secret_key
+	 * @param bool     $test_mode
+	 * @param array    $billing
+	 * @param Products $products
 	 */
 	public function __construct( $public_key, $secret_key, $test_mode, $billing, $products ) {
 		$this->public_key = $public_key;

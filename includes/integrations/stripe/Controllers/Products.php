@@ -105,4 +105,16 @@ class Products {
 		return $list;
 	}
 
+	public function totalRecurringProducts() {
+		$total    = 0;
+		$products = $this->all();
+		foreach ( $products as $product ) {
+			if ( 'one_time' !== $product['type'] ) {
+				$total ++;
+			}
+		}
+
+		return $total;
+	}
+
 }
