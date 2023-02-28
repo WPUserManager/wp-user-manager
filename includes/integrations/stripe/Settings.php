@@ -540,6 +540,7 @@ class Settings {
 		$options = array(
 			$prefix . '_stripe_publishable_key',
 			$prefix . '_stripe_secret_key',
+			$prefix . '_stripe_webhook_secret',
 		);
 
 		foreach ( $options as $option ) {
