@@ -2,6 +2,8 @@
 /**
  * The Template for the Stripe invoice
  *
+ * This template can be overridden by copying it to yourtheme/wpum/stripe/invoice.php
+ *
  * @version 2.9.0
  */
 
