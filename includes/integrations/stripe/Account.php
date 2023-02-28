@@ -151,7 +151,7 @@ class Account {
 					continue;
 				}
 				?>
-				<div class="wpum-row wpum-form">
+				<div class="wpum-row wpum-form" style="margin-bottom: 1rem;">
 					<div class="wpum-col-xs-3">
 						<?php echo $product['name']; ?>
 					</div>
