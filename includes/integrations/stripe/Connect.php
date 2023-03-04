@@ -20,16 +20,20 @@ class Connect {
 		return 'test' === $this->get_gateway_mode();
 	}
 
-	public function get_stripe_key() {
-		$prefix = $this->is_test_mode() ? 'test_' : 'live_';
+	public function get_stripe_key( $prefix = null ) {
+		if ( empty( $prefix ) ) {
+			$prefix = $this->is_test_mode() ? 'test' : 'live';
+		}
 
-		return wpum_get_option( $prefix . 'stripe_publishable_key' );
+		return wpum_get_option( $prefix . '_stripe_publishable_key' );
 	}
 
-	public function get_stripe_secret() {
-		$prefix = $this->is_test_mode() ? 'test_' : 'live_';
+	public function get_stripe_secret( $prefix = null ) {
+		if ( empty( $prefix ) ) {
+			$prefix = $this->is_test_mode() ? 'test' : 'live';
+		}
 
-		return wpum_get_option( $prefix . 'stripe_secret_key' );
+		return wpum_get_option( $prefix . '_stripe_secret_key' );
 	}
 
 	public function get_stripe_webhook_secret() {
@@ -63,9 +67,9 @@ class Connect {
 		return apply_filters( 'wpum_stripe_connect_return_url', $return_url );
 	}
 
-	protected function get_state() {
+	protected function get_state( $test_mode = false ) {
 		$state = array(
-			'live_mode' => (int) ! $this->is_test_mode(),
+			'test_mode' => (int) $test_mode,
 			'site_id'   => str_pad( wp_rand( wp_rand(), PHP_INT_MAX ), 10, wp_rand(), STR_PAD_BOTH ),
 			'site_url'  => $this->get_site_url(),
 		);
@@ -73,20 +77,20 @@ class Connect {
 		return base64_encode( serialize( $state ) );
 	}
 
-	public function connect_url() {
+	public function connect_url( $test_mode = false ) {
 		$stripe_connect_url = add_query_arg( array(
-			'state' => $this->get_state(),
+			'state' => $this->get_state( $test_mode ),
 		), $this->get_base_url() );
 
 		return apply_filters( 'wpum_stripe_connect_url', $stripe_connect_url );
 	}
 
-	public function disconnect_url() {
+	public function disconnect_url( $mode ) {
 		$stripe_disconnect_url = add_query_arg(
 			array(
 				'page'       => 'wpum-settings',
 				'disconnect' => true,
-				'mode' => $this->is_test_mode() ? 'test' : 'live',
+				'mode' => $mode,
 			),
 			admin_url( 'users.php' )
 		);
@@ -128,15 +132,19 @@ class Connect {
 
 		$data = json_decode( $response['body'], true );
 
-		if ( $this->is_test_mode() ) {
+		$gateway_mode = 'test';
+		if ( $data['test_mode'] ) {
 			wpum_update_option( 'test_stripe_publishable_key', sanitize_text_field( $data['publishable_key'] ) );
 			wpum_update_option( 'test_stripe_secret_key', sanitize_text_field( $data['secret_key'] ) );
 		} else {
+			$gateway_mode = 'live';
 			wpum_update_option( 'live_stripe_publishable_key', sanitize_text_field( $data['publishable_key'] ) );
 			wpum_update_option( 'live_stripe_secret_key', sanitize_text_field( $data['secret_key'] ) );
 		}
 
-		delete_transient( 'wpum_' . $this->get_gateway_mode() . '_stripe_products' );
+		wpum_update_option( 'stripe_gateway_mode', $gateway_mode );
+
+		delete_transient( 'wpum_' . $gateway_mode . '_stripe_products' );
 
 		wpum_update_option( 'stripe_connect_account_id', sanitize_text_field( $data['stripe_user_id'] ) );
 		wp_redirect( $this->get_site_url() . '/#stripe' );

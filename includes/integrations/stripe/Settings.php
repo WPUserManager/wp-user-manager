@@ -66,7 +66,7 @@ class Settings {
 			'name'   => __( 'Connect to Stripe', 'wp-user-manager' ),
 			'desc'   => __( 'Connect to your Stripe account to get started', 'wp-user-manager' ),
 			'type'   => 'html',
-			'html'   => sprintf( '<a href="%s"><img src="%s" style="max-width: 160px;"></a>', $this->connect->connect_url(), WPUM_PLUGIN_URL . 'assets/images/stripe-connect.png' ),
+			'html'   => sprintf( '<a href="%s"><img src="%s" style="max-width: 160px;"></a>', $this->connect->connect_url( true ), WPUM_PLUGIN_URL . 'assets/images/stripe-connect.png' ),
 			'std'    => 1,
 			'toggle' => array(
 				array(
@@ -114,7 +114,7 @@ class Settings {
 			'name'   => __( 'Connect to Stripe', 'wp-user-manager' ),
 			'desc'   => __( 'Connect to your Stripe account to get started', 'wp-user-manager' ),
 			'type'   => 'html',
-			'html'   => sprintf( '<a href="%s"><img src="%s" style="max-width: 160px;"></a>', $this->connect->connect_url(), WPUM_PLUGIN_URL . 'assets/images/stripe-connect.png' ),
+			'html'   => sprintf( '<a href="%s"><img src="%s" style="max-width: 160px;"></a>', $this->connect->connect_url( false ), WPUM_PLUGIN_URL . 'assets/images/stripe-connect.png' ),
 			'std'    => 1,
 			'toggle' => array(
 				array(
@@ -134,12 +134,10 @@ class Settings {
 
 		$settings['stripe'][] = array(
 			'id'     => 'stripe_disconnect_live',
-			'name'   => __( 'Disconnect from Stripe', 'wp-user-manager' ),
-			'desc'   => __( 'Connect to your Stripe account to get started', 'wp-user-manager' ),
+			'name'   => __( 'Connection Status', 'wp-user-manager' ),
 			'type'   => 'html',
 			'class'  => 'button',
-			'html'   => 'Account details',
-			'std'    => 1,
+			'html'   => $this->render_admin_disconnect( 'live' ),
 			'toggle' => array(
 				array(
 					'key'   => 'stripe_gateway_mode',
@@ -201,7 +199,7 @@ class Settings {
 			'id'     => 'test_stripe_webhook_secret',
 			'name'   => __( 'Test Webhook Signing Secret', 'wp-user-manager' ),
 			'type'   => 'text',
-			'desc'   => 'Set up a webhook in Stripe to get the webhook signing secret, using all events for this URL:<br>' . WebhookEndpoint::get_webhook_url(),
+			'desc'   => 'Set up a webhook in Stripe to get the webhook signing secret, using all events for this URL:<br><code>' . WebhookEndpoint::get_webhook_url() . '</code>',
 			'toggle' => array(
 				array(
 					'key'   => 'stripe_gateway_mode',
@@ -219,7 +217,7 @@ class Settings {
 			'id'     => 'live_stripe_webhook_secret',
 			'name'   => __( 'Live Webhook Signing Secret', 'wp-user-manager' ),
 			'type'   => 'text',
-			'desc'   => 'Set up a webhook in Stripe to get the webhook signing secret, using all events for this URL:<br>' . WebhookEndpoint::get_webhook_url(),
+			'desc'   => 'Set up a webhook in Stripe to get the webhook signing secret, using all events for this URL:<br><code>' . WebhookEndpoint::get_webhook_url() . '</code>',
 			'toggle' => array(
 				array(
 					'key'   => 'stripe_gateway_mode',
@@ -326,10 +324,10 @@ class Settings {
 
 		$account_id = isset( $_POST['account_id'] ) ? sanitize_text_field( $_POST['account_id'] ) : '';
 
-		$mode = $this->connect->is_test_mode()  ? 'test' : 'live';
+		$mode = isset( $_POST['gateway_mode'] ) ? sanitize_text_field( $_POST['gateway_mode'] ) : 'test';
 
 		// Provides general reconnect and disconnect action URLs.
-		$reconnect_disconnect_actions = sprintf( '<a href="%s">%s</a>', esc_url( $this->connect->disconnect_url() ), __( 'Disconnect', 'wp-user-manager' ) );
+		$reconnect_disconnect_actions = sprintf( '<a href="%s">%s</a>', esc_url( $this->connect->disconnect_url( $mode ) ), __( 'Disconnect', 'wp-user-manager' ) );
 
 		// If connecting in Test Mode Stripe gives you the opportunity to create a
 		// temporary account. Alert the user of the limitations associated with
@@ -359,7 +357,7 @@ class Settings {
 					sprintf(
 					/* translators: %1$s Opening anchor tag for disconnecting Stripe, do not translate. %2$s Closing anchor tag, do not translate. */
 						__( '%1$sDisconnect this account%2$s.', 'wp-user-manager' ),
-						'<a href="' . esc_url( $this->connect->disconnect_url() ) . '">',
+						'<a href="' . esc_url( $this->connect->disconnect_url( $mode ) ) . '">',
 						'</a>'
 					)
 				),
@@ -376,7 +374,7 @@ class Settings {
 			'status' => 'warning',
 		);
 
-		$secret = $this->connect->get_stripe_secret();
+		$secret = $this->connect->get_stripe_secret( $mode );
 		if ( empty ( $secret ) ) {
 			return wp_send_json_error( $unknown_error );
 		}
