@@ -129,7 +129,7 @@ class Registration {
 			'type'        => 'radio',
 			'required'    => false,
 			'options'     => $options,
-			'description' => '',
+			'description' => $this->test_mode ? 'Stripe is connected in Test Mode' : '',
 			'priority'    => 9998,
 		);
 

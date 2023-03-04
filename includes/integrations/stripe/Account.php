@@ -120,7 +120,13 @@ class Account {
 	}
 
 	public function account_tab_content() {
-		echo '<h2>' . apply_filters( 'wpum_stripe_account_billing_header', __( 'Billing', 'wp-user-manager' ) ) . '</h2>';
+		echo '<h2>' . apply_filters( 'wpum_stripe_account_billing_header', __( 'Billing', 'wp-user-manager' ) );
+
+		if ( 'test' === $this->gateway_mode ) {
+			echo ' (Stripe is connected in Test Mode)';
+		}
+
+		echo '</h2>';
 
 		$user = new User( get_current_user_id() );
 
