@@ -70,7 +70,7 @@ function wpum_enqueue_scripts() {
 	wp_enqueue_script( 'wpum-frontend-js', WPUM_PLUGIN_URL . 'assets/js/wp-user-manager' . $suffix . '.js', array( 'jquery' ), WPUM_VERSION, true );
 
 	$js_variables = [
-		'dateFormat' => get_option( 'date_format' ),
+		'dateFormat' => apply_filters( 'wpum_field_datepicker_date_format', get_option( 'date_format' ) ),
 	];
 
 	wp_localize_script( 'wpum-frontend-js', 'wpumFrontend', $js_variables );
