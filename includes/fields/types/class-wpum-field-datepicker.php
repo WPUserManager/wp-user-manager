@@ -35,6 +35,6 @@ class WPUM_Field_Datepicker extends WPUM_Field_Type {
 	 * @return string
 	 */
 	public function get_formatted_output( $field, $value ) {
-		return date_i18n( get_option( 'date_format' ), strtotime( $value ) );
+		return date_i18n( apply_filters( 'wpum_field_datepicker_date_format', get_option( 'date_format' ) ), strtotime( $value ) );
 	}
 }
