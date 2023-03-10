@@ -61,10 +61,15 @@ class Settings {
 			),
 		);
 
+		$connect_message = __( 'Connect to your Stripe account to get started.', 'wp-user-manager' );
+		if ( apply_filters( 'wpum_stripe_show_stripe_connect_fee_message', true ) ) {
+			$connect_message .= '<br><i>' . sprintf( __( 'Pay as you go pricing: %d%% per-transaction fee + Stripe fees. <a href="%s">Learn more</a>.', 'wp-user-manager'  ), self::APPLICATION_FEE_PERCENT, 'https://wpusermanager.com/docs' ) . '</i>';
+		}
+
 		$settings['stripe'][] = array(
 			'id'     => 'stripe_connect_test',
 			'name'   => __( 'Connect to Stripe', 'wp-user-manager' ),
-			'desc'   => __( 'Connect to your Stripe account to get started', 'wp-user-manager' ),
+			'desc'   => $connect_message,
 			'type'   => 'html',
 			'html'   => sprintf( '<a href="%s"><img src="%s" style="max-width: 160px;"></a>', $this->connect->connect_url( true ), WPUM_PLUGIN_URL . 'assets/images/stripe-connect.png' ),
 			'std'    => 1,
@@ -112,7 +117,7 @@ class Settings {
 		$settings['stripe'][] = array(
 			'id'     => 'stripe_connect_live',
 			'name'   => __( 'Connect to Stripe', 'wp-user-manager' ),
-			'desc'   => __( 'Connect to your Stripe account to get started', 'wp-user-manager' ),
+			'desc'   => $connect_message,
 			'type'   => 'html',
 			'html'   => sprintf( '<a href="%s"><img src="%s" style="max-width: 160px;"></a>', $this->connect->connect_url( false ), WPUM_PLUGIN_URL . 'assets/images/stripe-connect.png' ),
 			'std'    => 1,
