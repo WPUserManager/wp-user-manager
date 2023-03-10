@@ -63,7 +63,7 @@ class Settings {
 
 		$connect_message = __( 'Connect to your Stripe account to get started.', 'wp-user-manager' );
 		if ( apply_filters( 'wpum_stripe_show_stripe_connect_fee_message', true ) ) {
-			$connect_message .= '<br><i>' . sprintf( __( 'Pay as you go pricing: %d%% per-transaction fee + Stripe fees. <a href="%s">Learn more</a>.', 'wp-user-manager'  ), self::APPLICATION_FEE_PERCENT, 'https://wpusermanager.com/docs' ) . '</i>';
+			$connect_message .= '<br><i>' . sprintf( __( 'Pay as you go pricing: %d%% per-transaction fee + Stripe fees. <a target="_blank" href="%s">Learn more</a>.', 'wp-user-manager'  ), self::APPLICATION_FEE_PERCENT, 'https://wpusermanager.com/docs' ) . '</i>';
 		}
 
 		$settings['stripe'][] = array(
@@ -161,7 +161,6 @@ class Settings {
 			),
 		);
 
-		// TODO remove key textboxes
 		$settings['stripe'][] = array(
 			'id'     => 'test_stripe_publishable_key',
 			'name'   => __( 'Test Key', 'wp-user-manager' ),
@@ -199,12 +198,11 @@ class Settings {
 			),
 		);
 
-		// TODO add webhook help text and link to doc
 		$settings['stripe'][] = array(
 			'id'     => 'test_stripe_webhook_secret',
 			'name'   => __( 'Test Webhook Signing Secret', 'wp-user-manager' ),
 			'type'   => 'text',
-			'desc'   => 'Set up a webhook in Stripe to get the webhook signing secret, using all events for this URL:<br><code>' . WebhookEndpoint::get_webhook_url() . '</code>',
+			'desc'   => sprintf( __( '<a target="_blank" href="%s">Set up a webhook in Stripe</a> to get the webhook signing secret, using all events for this URL:<br><code>%s</code>. ', 'wp-user-manager'), 'https://wpusermanager.com/docs/', WebhookEndpoint::get_webhook_url() ),
 			'toggle' => array(
 				array(
 					'key'   => 'stripe_gateway_mode',
