@@ -438,9 +438,6 @@ if ( ! class_exists( 'WP_User_Manager' ) ) :
 		 */
 		public function init() {
 
-			/**
-			 * @todo document before_wpum_init
-			 */
 			do_action( 'before_wpum_init' );
 
 			// Boot Stripe code
@@ -468,9 +465,6 @@ if ( ! class_exists( 'WP_User_Manager' ) ) :
 
 			require_once WPUM_PLUGIN_DIR . 'includes/shortcodes/shortcodes.php';
 
-			/**
-			 * @todo document after_wpum_init
-			 */
 			do_action( 'after_wpum_init' );
 
 		}

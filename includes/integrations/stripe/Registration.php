@@ -174,10 +174,9 @@ class Registration {
 			} else {
 				$redirect_page = get_permalink( wpum_get_core_page_id( 'register' ) );
 			}
-			$redirect_page = add_query_arg( array( 'registration' => 'success' ), $redirect_page );
 		}
 
-		return $redirect_page;
+		return add_query_arg( array( 'registration' => 'success' ), $redirect_page );
 	}
 
 	/**
@@ -242,8 +241,7 @@ class Registration {
 		}
 
 		$plan_id = sanitize_text_field( $_POST['wpum_stripe_plan'] ); // phpcs:ignore
-
-		// TODO make sure this works for non-default registration form URLs
+		
 		$redirect = $this->get_registration_redirect( $form );
 
 		$user = new User( $user_id );
