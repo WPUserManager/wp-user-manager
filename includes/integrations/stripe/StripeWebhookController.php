@@ -163,20 +163,15 @@ class StripeWebhookController {
 			$subscription_id = $payload['data']['object']['id'];
 		}
 
-		// $plan = Subscription::getPlan( $stripePlan['id'] );
-		// TODO
-		// $trialPeriodDays = isset( $plan['trial'] ) ? $plan['trial'] : 0;
-		$trialPeriodDays = 0;
-		$trialEndsAt     = null;
-		// $trialEndsAt = $trialPeriodDays > 0 ? now()->addDays( $trialPeriodDays ) : null;
-
-		$this->subscriptions->insert( array(
+		$subscription_data = array(
 			'user_id'         => $user_id,
 			'customer_id'     => $payload['data']['object']['customer'],
 			'plan_id'         => $stripePlan['id'],
 			'subscription_id' => $subscription_id,
-			'trial_ends_at'   => $trialEndsAt,
-		) );
+			'trial_ends_at'   => null,
+		);
+
+		$this->subscriptions->insert( apply_filters( 'wpum_stripe_webhook_create_subscription_data', $subscription_data, $subscription_id, $stripePlan, $user_id, $payload ) );
 
 		do_action( 'wpum_stripe_webhook_subscription_created', $user_id );
 
@@ -197,17 +192,13 @@ class StripeWebhookController {
 			throw new \Exception( 'Subscription not found' );
 		}
 
-		$trialEnd = $payload['data']['object']['trial_end'];
-
-		// TODO
-		// $trialEndsAt = $trialEnd ? Carbon::createFromTimestamp( $trialEnd )->toDateTimeString() : null;
-		$trialEndsAt = null;
-
-		$this->subscriptions->update( $subscription->id, array(
+		$subscription_data = array(
 			'plan_id'       => $payload['data']['object']['plan']['id'],
-			'trial_ends_at' => $trialEndsAt,
+			'trial_ends_at' => null,
 			'ends_at'       => $payload['data']['object']['cancel_at_period_end'] ? Carbon::createFromTimestamp( $payload['data']['object']['current_period_end'] )->toDateTimeString() : null,
-		) );
+		);
+
+		$this->subscriptions->update( $subscription->id, apply_filters( 'wpum_stripe_webhook_update_subscription_data', $subscription_data, $subscription->id, $payload ) );
 
 		do_action( 'wpum_stripe_webhook_subscription_updated', $subscription );
 
@@ -244,7 +235,6 @@ class StripeWebhookController {
 	 * @return \WP_REST_Response
 	 */
 	protected function handleInvoicePaymentSucceeded( $payload ) {
-		//error_log( print_r( $payload['data']['object'], true ) );
 		$subscription = $this->subscriptions->where( 'customer_id', $payload['data']['object']['customer'] );
 		if ( ! $subscription ) {
 			throw new \Exception( 'Subscription not found' );

@@ -241,7 +241,7 @@ class Registration {
 		}
 
 		$plan_id = sanitize_text_field( $_POST['wpum_stripe_plan'] ); // phpcs:ignore
-		
+
 		$redirect = $this->get_registration_redirect( $form );
 
 		$user = new User( $user_id );
