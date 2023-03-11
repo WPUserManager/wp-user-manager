@@ -102,13 +102,13 @@ class User extends \WP_User {
 		$product = new Product();
 		$product->hydrate( $product_data );
 
-		// TODO add filter so we check for roles
+		$shouldBeSubscribed = true;
 
 		if ( ! $product->is_recurring() ) {
-			return false;
+			$shouldBeSubscribed = false;
 		}
 
-		return true;
+		return apply_filters( 'wpum_stripe_user_should_be_subscribed', $shouldBeSubscribed, $this, $product );
 	}
 
 	public function isPaid() {
