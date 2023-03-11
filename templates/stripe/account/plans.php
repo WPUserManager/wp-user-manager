@@ -12,7 +12,7 @@
 
 <?php
 
-foreach ( $data->products->all() as $product ) :
+foreach ( $data->products as $product ) :
 	if ( ! empty( $data->allowed_prices ) && empty( array_intersect( array_keys( $product['prices'] ), $data->allowed_prices ) ) ) {
 		continue;
 	} ?>
