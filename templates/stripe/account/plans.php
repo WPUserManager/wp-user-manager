@@ -35,7 +35,7 @@ foreach ( $data->products->all() as $product ) :
 				if ( ! empty( $data->allowed_prices ) && ! in_array( $price_id, $data->allowed_prices ) ) {
 					continue;
 				} ?>
-				<button class="wpum-stripe-checkout button" data-plan-id="<?php echo $price_id; ?>">
+				<button class="wpum-stripe-checkout button" data-nonce="<?php echo wp_create_nonce( 'wpum-stripe-plan-' . $price_id  ); ?>" data-plan-id="<?php echo $price_id; ?>">
 					<?php echo apply_filters( 'wpum_stripe_account_billing_plan_button_label', __( 'Select Plan', 'wp-user-manager' ) ) . '</h4>'; ?>
 				</button><br>
 			<?php endforeach; ?>

@@ -10,5 +10,5 @@
 
 <div class="wpum-form">
 	<p> <?php echo sprintf( __( 'You\'re currently on the %s plan.', 'wp-user-manager' ), $data->plan->name ); ?></p>
-	<button id="wpum-stripe-manage-billing" class="button" style="margin-top: 1rem"><?php _e( 'Manage Billing', 'wp-user-manager' ); ?></button>
+	<button id="wpum-stripe-manage-billing" data-nonce="<?php echo wp_create_nonce( 'wpum-stripe-manage-billing' ); ?>" class="button" style="margin-top: 1rem"><?php _e( 'Manage Billing', 'wp-user-manager' ); ?></button>
 </div>

@@ -50,19 +50,27 @@
 
 		$( '#wpum-stripe-manage-billing').on('click', function(e) {
 			e.preventDefault();
+			var button = $( this );
 
-			$( this ).attr( 'disabled', 'disabled' ).css( 'opacity', '0.8' )
+			button.attr( 'disabled', 'disabled' ).css( 'opacity', '0.8' )
 			$.post( wpum_stripe.ajaxurl, {
 					action: 'wpum_stripe_manage_billing',
+					nonce: button.data('nonce'),
 				},
 				function( response ) {
+					if ( !response.success && response.data ) {
+						alert( response.data );
+						button.removeAttr( 'disabled' ).css( 'opacity', '1' );
+						return;
+					}
+
 					if ( response.data.url ) {
 						window.location.href = response.data.url;
 					}
 					$( this ).removeAttr( 'disabled' ).css( 'opacity', '1' );
 				} )
 				.fail( function() {
-					alert( "error" );
+					alert( "Error" );
 					$( this ).removeAttr( 'disabled' ).css( 'opacity', '1' );
 				} );
 		} );
@@ -70,26 +78,36 @@
 		$( '.wpum-stripe-checkout').on('click', function(e) {
 			e.preventDefault();
 
-			var plan_id = $(this).data('plan-id');
+			var button = $( this );
+			var plan_id = button.data('plan-id');
 
-			$( this ).attr( 'disabled', 'disabled' ).css( 'opacity', '0.8' )
+			button.attr( 'disabled', 'disabled' ).css( 'opacity', '0.8' )
 			$.post( wpum_stripe.ajaxurl, {
 					action: 'wpum_stripe_checkout',
 					plan: plan_id,
+					nonce: button.data('nonce'),
 				},
 				function( response ) {
+					if ( !response.success && response.data ) {
+						alert( response.data );
+						button.removeAttr( 'disabled' ).css( 'opacity', '1' );
+						return;
+					}
+
 					if ( response.data.id ) {
 						const stripe = Stripe( wpum_stripe.stripe );
 
 						stripe.redirectToCheckout( {
 							sessionId: response.data.id,
 						} );
+					} else {
+						alert( "error" );
 					}
 					$( this ).removeAttr( 'disabled' ).css( 'opacity', '1' );
 				} )
 				.fail( function() {
 					alert( "error" );
-					$( this ).removeAttr( 'disabled' ).css( 'opacity', '1' );
+					button.removeAttr( 'disabled' ).css( 'opacity', '1' );
 				} );
 		} );
 

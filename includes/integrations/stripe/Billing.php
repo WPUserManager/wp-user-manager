@@ -126,7 +126,7 @@ class Billing {
 	 * @param string      $customer_id
 	 * @param null|string $returnUrl
 	 *
-	 * @return PortalSession
+	 * @return PortalSession|false
 	 * @throws \Stripe\Exception\ApiErrorException
 	 */
 	public function createStripePortalSession( $secret, $customer_id, $returnUrl = null ) {
@@ -136,9 +136,13 @@ class Billing {
 			$returnUrl = $this->getBillingURL();
 		}
 
-		return PortalSession::create( array(
-			'customer'   => $customer_id,
-			'return_url' => $returnUrl,
-		) );
+		try {
+			return PortalSession::create( array(
+				'customer'   => $customer_id,
+				'return_url' => $returnUrl,
+			) );
+		} catch ( \Stripe\Exception\ApiErrorException $exception ) {
+			return false;
+		}
 	}
 }

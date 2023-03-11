@@ -59,9 +59,7 @@ class Account {
 		add_action( 'template_redirect', array( $this, 'unsubscribed_redirect' ) );
 
 		add_action( 'wp_ajax_wpum_stripe_manage_billing', array( $this, 'handle_manage_billing' ) );
-		add_action( 'wp_ajax_nopriv_wpum_stripe_manage_billing', array( $this, 'handle_manage_billing' ) );
 		add_action( 'wp_ajax_wpum_stripe_checkout', array( $this, 'handle_checkout' ) );
-		add_action( 'wp_ajax_nopriv_wpum_checkout', array( $this, 'handle_checkout' ) );
 
 		add_action( 'template_redirect', array( $this, 'handle_download_invoice' ) );
 		add_action( 'wpum_account_page_content', array( $this, 'render_payment_message' ), 9 );
@@ -89,7 +87,6 @@ class Account {
 			return;
 		}
 
-		// TODO check user should have subscription by looking at signed up plan
 		$user = new User( get_current_user_id() );
 
 		$shouldBeSubscribed = $user->shouldBeSubscribed();
@@ -228,22 +225,35 @@ class Account {
 	}
 
 	public function handle_manage_billing() {
-		// TODO nonce
+		if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( $_POST['nonce'], 'wpum-stripe-manage-billing' ) ) {
+			wp_send_json_error( __( 'Unknown Error', 'wp-user-manager' ) );
+		}
 
 		$user = new User( get_current_user_id() );
 
 		if ( empty( $user->subscription ) ) {
-			wp_send_json_error( 'No subscription' );
+			wp_send_json_error( __( 'No subscription', 'wp-user-manager' ) );
 		}
 
 		$checkout = $this->billing->createStripePortalSession( $this->secret_key, $user->subscription->customer_id );
+
+		if ( ! $checkout ) {
+			wp_send_json_error( __( 'Error creating Stripe session', 'wp-user-manager' ) );
+		}
 
 		wp_send_json_success( $checkout->toArray() );
 	}
 
 	public function handle_checkout() {
-		// TODO nonce
+		if ( ! isset( $_POST['plan'] ) ) {
+			wp_send_json_error( __( 'Unknown plan', 'wp-user-manager' ) );
+		}
+
 		$plan_id = $_POST['plan'];
+
+		if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( $_POST['nonce'], 'wpum-stripe-plan-' . $plan_id ) ) {
+			wp_send_json_error( __( 'Unknown Error', 'wp-user-manager' ) );
+		}
 
 		$user = new User( get_current_user_id() );
 
