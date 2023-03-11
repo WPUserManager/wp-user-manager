@@ -1,5 +1,11 @@
 <?php
-
+/**
+ * Handles the Stripe billing account page
+ *
+ * @package     wp-user-manager
+ * @copyright   Copyright (c) 2022, WP User Manager
+ * @license     https://opensource.org/licenses/GPL-3.0 GNU Public License
+ */
 
 namespace WPUserManager\Stripe;
 
@@ -9,6 +15,9 @@ use WPUserManager\Stripe\Controllers\Invoices;
 use WPUserManager\Stripe\Controllers\Products;
 use WPUserManager\Stripe\Models\User;
 
+/**
+ * Account
+ */
 class Account {
 
 	/**
@@ -39,11 +48,11 @@ class Account {
 	/**
 	 * Registration constructor.
 	 *
-	 * @param $public_key
-	 * @param $secret_key
-	 * @param $gateway_mode
-	 * @param $billing
-	 * @param $products
+	 * @param string   $public_key
+	 * @param string   $secret_key
+	 * @param string   $gateway_mode
+	 * @param Billing  $billing
+	 * @param Products $products
 	 */
 	public function __construct( $public_key, $secret_key, $gateway_mode, $billing, $products ) {
 		$this->public_key   = $public_key;
@@ -53,6 +62,9 @@ class Account {
 		$this->products     = $products;
 	}
 
+	/**
+	 * Init
+	 */
 	public function init() {
 		add_filter( 'wpum_get_account_page_tabs', array( $this, 'register_account_tab' ) );
 		add_action( 'wpum_account_page_content_billing', array( $this, 'account_tab_content' ) );
@@ -66,7 +78,10 @@ class Account {
 
 	}
 
-	function unsubscribed_redirect() {
+	/**
+	 * Redirect users who aren't subscribed or paid
+	 */
+	public function unsubscribed_redirect() {
 		// TODO check we want to restrict content
 		if ( ! is_user_logged_in() || current_user_can( 'administrator' ) ) {
 			return;
@@ -83,7 +98,7 @@ class Account {
 
 		$allowed_pages = apply_filters( 'wpum_stripe_not_paid_allowed_pages', $allowed_pages );
 
-		if ( isset( $post ) && in_array( $post->ID, $allowed_pages ) ) {
+		if ( isset( $post ) && in_array( $post->ID, $allowed_pages, true ) ) {
 			return;
 		}
 
@@ -98,10 +113,15 @@ class Account {
 			return;
 		}
 
-		wp_redirect( $this->billing->getBillingURL() );
+		wp_safe_redirect( $this->billing->getBillingURL() );
 		exit;
 	}
 
+	/**
+	 * @param array $tabs
+	 *
+	 * @return array
+	 */
 	public function register_account_tab( $tabs ) {
 		$user = new User( get_current_user_id() );
 		if ( ! $user->shouldBeSubscribed() || $user->isPaid() ) {
@@ -116,6 +136,11 @@ class Account {
 		return $tabs;
 	}
 
+	/**
+	 * Account content
+	 *
+	 * @throws \Stripe\Exception\ApiErrorException
+	 */
 	public function account_tab_content() {
 		ob_start();
 
@@ -145,7 +170,8 @@ class Account {
 
 		if ( $user->subscription && $user->subscription->onGracePeriod() ) {
 			WPUM()->templates
-				->set_template_data( array( 'message' => apply_filters( 'wpum_stripe_account_subscription_cancelled_message', sprintf( __( 'Your plan will be canceled on <strong>%s</strong>.', 'wp-user-manager' ), mysql2date( __( 'F j, Y' ), $user->subscription->ends_at ) ), $user->subscription->ends_at ) ) )
+				/* translators: %s the datetime the subscription will cancel. */
+				->set_template_data( array( 'message' => apply_filters( 'wpum_stripe_account_subscription_cancelled_message', sprintf( __( 'Your plan will be canceled on <strong>%s</strong>.', 'wp-user-manager' ), mysql2date( 'F j, Y', $user->subscription->ends_at ) ), $user->subscription->ends_at ) ) )
 				->get_template_part( 'messages/general', 'warning' );
 		}
 
@@ -154,7 +180,7 @@ class Account {
 		if ( ( $shouldBeSubscribed && ( ! $user->subscription || ! $user->subscription->active() ) ) || ( ! $shouldBeSubscribed && ! $user->isPaid() ) ) {
 			$plans_data = array(
 				'products'       => $this->products->all(),
-				'allowed_prices' => wpum_get_option( $this->gateway_mode . '_stripe_products', array() )
+				'allowed_prices' => wpum_get_option( $this->gateway_mode . '_stripe_products', array() ),
 			);
 			WPUM()->templates
 				->set_template_data( $plans_data )
@@ -162,7 +188,8 @@ class Account {
 		}
 
 		if ( ! $shouldBeSubscribed ) {
-			echo ob_get_clean();
+			echo ob_get_clean(); // phpcs:ignore
+
 			return;
 		}
 
@@ -181,8 +208,7 @@ class Account {
 			->set_template_data( array( 'invoices' => $invoices ) )
 			->get_template_part( 'stripe/account/invoices' );
 
-
-		echo ob_get_clean();
+		echo ob_get_clean(); // phpcs:ignore
 	}
 
 	/**
@@ -200,13 +226,13 @@ class Account {
 		}
 
 		global $post;
-		if ( ! $post || $post->ID != wpum_get_core_page_id( 'account' ) ) {
+		if ( ! $post || wpum_get_core_page_id( 'account' ) !== $post->ID ) {
 			return;
 		}
 
 		$invoice = ( new Invoices( $this->gateway_mode ) )->find( $id );
 
-		if ( $invoice->user_id != get_current_user_id() ) {
+		if ( get_current_user_id() !== $invoice->user_id ) {
 			return;
 		}
 
@@ -224,8 +250,13 @@ class Account {
 		) )->download();
 	}
 
+	/**
+	 * @throws \Stripe\Exception\ApiErrorException
+	 */
 	public function handle_manage_billing() {
-		if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( $_POST['nonce'], 'wpum-stripe-manage-billing' ) ) {
+		$nonce = filter_input( INPUT_POST, 'nonce', FILTER_SANITIZE_STRING );
+
+		if ( empty( $nonce ) || ! wp_verify_nonce( $nonce, 'wpum-stripe-manage-billing' ) ) {
 			wp_send_json_error( __( 'Unknown Error', 'wp-user-manager' ) );
 		}
 
@@ -244,14 +275,19 @@ class Account {
 		wp_send_json_success( $checkout->toArray() );
 	}
 
+	/**
+	 * Handle checkout
+	 */
 	public function handle_checkout() {
-		if ( ! isset( $_POST['plan'] ) ) {
+		$plan_id = filter_input( INPUT_POST, 'plan', FILTER_SANITIZE_STRING );
+
+		if ( empty( $plan_id ) ) {
 			wp_send_json_error( __( 'Unknown plan', 'wp-user-manager' ) );
 		}
 
-		$plan_id = $_POST['plan'];
+		$nonce = filter_input( INPUT_POST, 'nonce', FILTER_SANITIZE_STRING );
 
-		if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( $_POST['nonce'], 'wpum-stripe-plan-' . $plan_id ) ) {
+		if ( empty( $nonce ) || ! wp_verify_nonce( $nonce, 'wpum-stripe-plan-' . $plan_id ) ) {
 			wp_send_json_error( __( 'Unknown Error', 'wp-user-manager' ) );
 		}
 
@@ -261,7 +297,7 @@ class Account {
 
 		$redirect = $this->get_redirect_after_account_payment( $plan_id, $form );
 
-		$checkout_id = $this->billing->createStripeCheckoutSession( $this->gateway_mode === 'test', $user, $plan_id, $redirect );
+		$checkout_id = $this->billing->createStripeCheckoutSession( 'test' === $this->gateway_mode, $user, $plan_id, $redirect );
 
 		if ( ! $checkout_id ) {
 			$error = __( 'There has been an issue when registering, please contact the site owner', 'wp-user-manager' );
@@ -299,6 +335,9 @@ class Account {
 		return apply_filters( 'wpum_registration_form_redirect', $return_url, $form );
 	}
 
+	/**
+	 * Render payment message
+	 */
 	public function render_payment_message() {
 		$payment = filter_input( INPUT_GET, 'payment', FILTER_SANITIZE_STRING );
 		if ( 'success' !== $payment ) {
@@ -311,6 +350,6 @@ class Account {
 			->set_template_data( array( 'message' => apply_filters( 'wpum_account_payment_success_message', esc_html__( 'Payment successfully completed.', 'wp-user-manager' ) ) ) )
 			->get_template_part( 'messages/general', 'success' );
 
-		echo ob_get_clean();
+		echo ob_get_clean(); // phpcs:ignore
 	}
 }

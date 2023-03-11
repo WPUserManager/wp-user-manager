@@ -1,10 +1,20 @@
 <?php
+/**
+ * Handles the Stripe Invoice Line Item
+ *
+ * @package     wp-user-manager
+ * @copyright   Copyright (c) 2023, WP User Manager
+ * @license     https://opensource.org/licenses/GPL-3.0 GNU Public License
+ */
 
 namespace WPUserManager\Stripe;
 
 use \WPUM\Carbon\Carbon;
 use \WPUM\Stripe\InvoiceLineItem as StripeInvoiceLineItem;
 
+/**
+ * InvoiceLineItem
+ */
 class InvoiceLineItem {
 
 	/**
@@ -81,7 +91,7 @@ class InvoiceLineItem {
 	 * @return bool
 	 */
 	public function isSubscription() {
-		return $this->item->type === 'subscription';
+		return 'subscription' === $this->item->type;
 	}
 
 	/**

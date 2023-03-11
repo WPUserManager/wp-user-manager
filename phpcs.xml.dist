@@ -35,15 +35,15 @@
 		<exclude name="PEAR.Functions.FunctionCallSignature.MultipleArguments"/>
 	</rule>
 	<rule ref="WordPress.Files.FileName.NotHyphenatedLowercase">
-        <exclude-pattern>/includes/stripe</exclude-pattern>
+        <exclude-pattern>/includes/integrations/stripe</exclude-pattern>
     </rule>
     <rule ref="WordPress.Files.FileName.InvalidClassFileName">
-		<exclude-pattern>/includes/stripe</exclude-pattern>
+		<exclude-pattern>/includes/integrations/stripe</exclude-pattern>
 	</rule>
 	<rule ref="WordPress.NamingConventions.ValidVariableName.VariableNotSnakeCase">
-		<exclude-pattern>/includes/stripe</exclude-pattern>
+		<exclude-pattern>/includes/integrations/stripe</exclude-pattern>
 	</rule>
 	<rule ref="WordPress.NamingConventions.ValidVariableName.PropertyNotSnakeCase">
-		<exclude-pattern>/includes/stripe</exclude-pattern>
+		<exclude-pattern>/includes/integrations/stripe</exclude-pattern>
 	</rule>
 </ruleset>

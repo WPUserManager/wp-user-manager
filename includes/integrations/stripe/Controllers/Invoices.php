@@ -1,9 +1,19 @@
 <?php
+/**
+ * Handles the Stripe Invoices controller
+ *
+ * @package     wp-user-manager
+ * @copyright   Copyright (c) 2023, WP User Manager
+ * @license     https://opensource.org/licenses/GPL-3.0 GNU Public License
+ */
 
 namespace WPUserManager\Stripe\Controllers;
 
 use WPUserManager\Stripe\Models\Invoice;
 
+/**
+ * Invoices
+ */
 class Invoices extends \WPUM_DB {
 
 	/**
@@ -78,7 +88,8 @@ class Invoices extends \WPUM_DB {
 	 *
 	 * @access public
 	 *
-	 * @param array $data
+	 * @param array  $data
+	 * @param string $type
 	 *
 	 * @return int ID of the inserted coupon.
 	 */
@@ -168,6 +179,11 @@ class Invoices extends \WPUM_DB {
 		return $last_changed;
 	}
 
+	/**
+	 * @param int $id
+	 *
+	 * @return false|Invoice
+	 */
 	public function find( $id ) {
 		$invoice = $this->where( 'id', $id );
 
@@ -178,15 +194,17 @@ class Invoices extends \WPUM_DB {
 		return false;
 	}
 
+	/**
+	 * @param mixed $key
+	 * @param mixed $value
+	 *
+	 * @return array|object|\stdClass[]|null
+	 */
 	public function where( $key, $value ) {
 		global $wpdb;
 		$where = $this->parse_where( array( $key => $value ) );
 
-		return $wpdb->get_results( "SELECT *
-					FROM $this->table_name
-					$where
-					ORDER BY created_at DESC
-				" );
+		return $wpdb->get_results( "SELECT * FROM $this->table_name $where ORDER BY created_at DESC" ); // phpcs:ignore
 	}
 
 	/**

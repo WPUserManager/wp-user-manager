@@ -1,4 +1,11 @@
 <?php
+/**
+ * Handles the Stripe Invoice
+ *
+ * @package     wp-user-manager
+ * @copyright   Copyright (c) 2023, WP User Manager
+ * @license     https://opensource.org/licenses/GPL-3.0 GNU Public License
+ */
 
 namespace WPUserManager\Stripe;
 
@@ -6,6 +13,9 @@ use WPUM\Dompdf\Dompdf;
 use WPUM\Stripe\Customer;
 use WPUserManager\Stripe\Models\User;
 
+/**
+ * Invoice
+ */
 class Invoice {
 
 	/**
@@ -16,45 +26,63 @@ class Invoice {
 	/**
 	 * @var \WPUserManager\Stripe\Models\Invoice
 	 */
-	public $localInvoice;
+	public $local_invoice;
 
 	/**
 	 * @var User
 	 */
 	public $customer;
 
-	protected $stripeCustomer;
+	/**
+	 * @var Customer
+	 */
+	protected $stripe_customer;
 
 	/**
 	 * Invoice constructor.
 	 *
-	 * @param \WPUM\Stripe\Invoice                     $invoice
-	 * @param \WPUserManager\Stripe\Models\Invoice $localInvoice
+	 * @param \WPUM\Stripe\Invoice                 $invoice
+	 * @param \WPUserManager\Stripe\Models\Invoice $local_invoice
 	 */
-	public function __construct( \WPUM\Stripe\Invoice $invoice, $localInvoice ) {
-		$this->invoice      = $invoice;
-		$this->localInvoice = $localInvoice;
-		$this->customer     = $localInvoice->customer;
+	public function __construct( \WPUM\Stripe\Invoice $invoice, $local_invoice ) {
+		$this->invoice       = $invoice;
+		$this->local_invoice = $local_invoice;
+		$this->customer      = $local_invoice->customer;
 	}
 
+	/**
+	 * @return Customer
+	 * @throws \Stripe\Exception\ApiErrorException
+	 */
 	public function stripeCustomer() {
-		if ( $this->stripeCustomer ) {
-			return $this->stripeCustomer;
+		if ( $this->stripe_customer ) {
+			return $this->stripe_customer;
 		}
 
-		$this->stripeCustomer = Customer::retrieve( $this->invoice->customer );
+		$this->stripe_customer = Customer::retrieve( $this->invoice->customer );
 
-		return $this->stripeCustomer;
+		return $this->stripe_customer;
 	}
 
+	/**
+	 * @return string
+	 */
 	public function customerEmail() {
 		return $this->customer->email;
 	}
 
+	/**
+	 * @return string|null
+	 * @throws \Stripe\Exception\ApiErrorException
+	 */
 	public function customerName() {
 		return $this->stripeCustomer()->name;
 	}
 
+	/**
+	 * @return string
+	 * @throws \Stripe\Exception\ApiErrorException
+	 */
 	public function customerAddress() {
 		$address = $this->stripeCustomer()->address;
 
@@ -77,7 +105,7 @@ class Invoice {
 	 * @return int
 	 */
 	public function id() {
-		return (int) $this->localInvoice->id;
+		return (int) $this->local_invoice->id;
 	}
 
 	/**
@@ -86,16 +114,16 @@ class Invoice {
 	 * @return string
 	 */
 	public function date() {
-		return mysql2date( __( 'F j, Y' ), $this->localInvoice->created_at );
+		return mysql2date( __( 'F j, Y' ), $this->local_invoice->created_at );
 	}
 
 	/**
 	 * Get the invoice total.
 	 *
-	 * @return int
+	 * @return string
 	 */
 	public function total() {
-		return self::formatCurrency( $this->invoice->total, $this->localInvoice->currency );
+		return self::formatCurrency( $this->invoice->total, $this->local_invoice->currency );
 	}
 
 	/**
@@ -130,7 +158,7 @@ class Invoice {
 	 * @return string
 	 */
 	public function discount() {
-		return self::formatCurrency( $this->rawDiscount(), $this->localInvoice->currency );
+		return self::formatCurrency( $this->rawDiscount(), $this->local_invoice->currency );
 	}
 
 	/**
@@ -189,7 +217,7 @@ class Invoice {
 	 * @return string
 	 */
 	public function amountOff() {
-		return self::formatCurrency( $this->rawAmountOff(), $this->localInvoice->currency );
+		return self::formatCurrency( $this->rawAmountOff(), $this->local_invoice->currency );
 	}
 
 	/**
@@ -212,7 +240,7 @@ class Invoice {
 	 */
 	public function download() {
 		$pdf  = new Dompdf();
-		$date = mysql2date( __( 'Y-m-d' ), $this->localInvoice->created_at );
+		$date = mysql2date( __( 'Y-m-d' ), $this->local_invoice->created_at );
 
 		ob_start();
 		WPUM()->templates->set_template_data( apply_filters( 'wpum_stripe_invoice_data', array(
@@ -230,7 +258,8 @@ class Invoice {
 	/**
 	 * Format currency.
 	 *
-	 * @param int $amount
+	 * @param int    $amount
+	 * @param string $currency
 	 *
 	 * @return string
 	 */

@@ -1,20 +1,58 @@
 <?php
-
+/**
+ * Handles the Stripe subscription
+ *
+ * @package     wp-user-manager
+ * @copyright   Copyright (c) 2022, WP User Manager
+ * @license     https://opensource.org/licenses/GPL-3.0 GNU Public License
+ */
 
 namespace WPUserManager\Stripe\Models;
 
+/**
+ * Subscription
+ */
 class Subscription {
 
+	/**
+	 * @var int
+	 */
 	public $id;
+
+	/**
+	 * @var string
+	 */
 	public $plan_id;
+
+	/**
+	 * @var string
+	 */
 	public $subscription_id;
+
+	/**
+	 * @var string
+	 */
 	public $customer_id;
+
+	/**
+	 * @var int
+	 */
 	public $user_id;
+
+	/**
+	 * @var string
+	 */
 	public $ends_at;
+
+	/**
+	 * @var string
+	 */
 	public $trial_ends_at;
 
 	/**
 	 * Subscription constructor.
+	 *
+	 * @param array $data
 	 */
 	public function __construct( $data ) {
 		foreach ( $data as $key => $value ) {

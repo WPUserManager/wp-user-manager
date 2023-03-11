@@ -1,18 +1,39 @@
 <?php
-
+/**
+ * Handles the User
+ *
+ * @package     wp-user-manager
+ * @copyright   Copyright (c) 2023, WP User Manager
+ * @license     https://opensource.org/licenses/GPL-3.0 GNU Public License
+ */
 
 namespace WPUserManager\Stripe\Models;
 
 use WPUserManager\Stripe\Controllers\Subscriptions;
 
+/**
+ * User
+ */
 class User extends \WP_User {
 
+	/**
+	 * @var string
+	 */
 	public $email;
 
+	/**
+	 * @var Subscription|null
+	 */
 	public $subscription;
 
+	/**
+	 * @var mixed
+	 */
 	protected $product_data;
 
+	/**
+	 * @var string
+	 */
 	protected $gateway_mode;
 
 	/**
@@ -26,7 +47,7 @@ class User extends \WP_User {
 		parent::__construct( $id, $name, $site_id );
 
 		$this->gateway_mode = wpum_get_option( 'stripe_gateway_mode', 'test' );
-		$this->email = $this->user_email;
+		$this->email        = $this->user_email;
 
 		$sub = ( new Subscriptions( $this->gateway_mode ) )->where( 'user_id', $this->ID );
 
@@ -56,7 +77,7 @@ class User extends \WP_User {
 	}
 
 	/**
-	 * @return mixed
+	 * @return array
 	 */
 	public function getPlanMeta() {
 		return get_user_meta( $this->ID, 'wpum_stripe_plan_' . $this->gateway_mode, true );
@@ -75,7 +96,7 @@ class User extends \WP_User {
 	}
 
 	/**
-	 * @param $data
+	 * @param array $data
 	 *
 	 * @return bool|int
 	 */
@@ -83,6 +104,9 @@ class User extends \WP_User {
 		return update_user_meta( $this->ID, 'wpum_stripe_plan_' . $this->gateway_mode, $data );
 	}
 
+	/**
+	 * @return array
+	 */
 	protected function getProductData() {
 		if ( $this->product_data ) {
 			return $this->product_data;
@@ -93,6 +117,9 @@ class User extends \WP_User {
 		return $this->product_data;
 	}
 
+	/**
+	 * @return bool
+	 */
 	public function shouldBeSubscribed() {
 		$product_data = $this->getProductData();
 		if ( ! $product_data ) {
@@ -111,6 +138,9 @@ class User extends \WP_User {
 		return apply_filters( 'wpum_stripe_user_should_be_subscribed', $shouldBeSubscribed, $this, $product );
 	}
 
+	/**
+	 * @return bool|mixed
+	 */
 	public function isPaid() {
 		if ( $this->isAdmin() ) {
 			return true;

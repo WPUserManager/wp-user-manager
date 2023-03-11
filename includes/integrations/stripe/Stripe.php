@@ -1,11 +1,24 @@
 <?php
+/**
+ * Handles the Stripe init
+ *
+ * @package     wp-user-manager
+ * @copyright   Copyright (c) 2023, WP User Manager
+ * @license     https://opensource.org/licenses/GPL-3.0 GNU Public License
+ */
 
 namespace WPUserManager\Stripe;
 
 use WPUserManager\Stripe\Controllers\Products;
 
+/**
+ * Stripe
+ */
 class Stripe {
 
+	/**
+	 * Init
+	 */
 	public function init() {
 		$connect = new Connect();
 		$connect->init();
@@ -40,10 +53,18 @@ class Stripe {
 		$webhookEndpoint->init();
 	}
 
+	/**
+	 * @return string
+	 */
 	public static function getBillingURL() {
 		return apply_filters( 'wpum_stripe_account_billing_url', get_permalink( wpum_get_core_page_id( 'account' ) ) . 'billing' );
 	}
 
+	/**
+	 * @param string $currency
+	 *
+	 * @return string
+	 */
 	public static function currencySymbol( $currency ) {
 		$currencies = array(
 			'aed' => 'AED',

@@ -1,7 +1,17 @@
 <?php
+/**
+ * Handles the Stripe Subscriptions controller
+ *
+ * @package     wp-user-manager
+ * @copyright   Copyright (c) 2023, WP User Manager
+ * @license     https://opensource.org/licenses/GPL-3.0 GNU Public License
+ */
 
 namespace WPUserManager\Stripe\Controllers;
 
+/**
+ * Subscriptions
+ */
 class Subscriptions extends \WPUM_DB {
 
 	/**
@@ -78,9 +88,8 @@ class Subscriptions extends \WPUM_DB {
 	/**
 	 * Insert subscription.
 	 *
-	 * @access public
-	 *
-	 * @param array $data
+	 * @param array  $data
+	 * @param string $type
 	 *
 	 * @return int ID of the inserted coupon.
 	 */
@@ -170,16 +179,17 @@ class Subscriptions extends \WPUM_DB {
 		return $last_changed;
 	}
 
+	/**
+	 * @param mixed $key
+	 * @param mixed $value
+	 *
+	 * @return array|object|\stdClass|void|null
+	 */
 	public function where( $key, $value ) {
 		global $wpdb;
 		$where = $this->parse_where( array( $key => $value ) );
 
-		return $wpdb->get_row( "SELECT *
-					FROM $this->table_name
-					$where
-					ORDER BY created_at DESC
-					LIMIT 1;
-				" );
+		return $wpdb->get_row( "SELECT * FROM $this->table_name $where ORDER BY created_at DESC LIMIT 1;" ); // phpcs:ignore
 	}
 
 	/**

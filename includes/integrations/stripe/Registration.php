@@ -72,6 +72,11 @@ class Registration {
 		add_filter( 'wpum_registered_settings_sections', array( $this, 'register_registration_settings_tab' ) );
 	}
 
+	/**
+	 * @param array $sections
+	 *
+	 * @return array
+	 */
 	public function register_registration_settings_tab( $sections ) {
 		$sections['registration']['payment'] = __( 'Payment', 'wp-user-manager' );
 
@@ -96,7 +101,7 @@ class Registration {
 					'multiple' => true,
 					'options'  => $this->products->get_plans(),
 				),
-			)
+			),
 		);
 
 		return array_merge_recursive( $settings, $new_settings );
@@ -142,19 +147,14 @@ class Registration {
 	 * @return string
 	 */
 	public function get_registration_redirect( $form ) {
-		$form          = $form->get_registration_form();
+		$form = $form->get_registration_form();
 
 		$redirect_default = wpum_get_registration_redirect();
 		if ( (bool) $form->get_setting( 'after_registration_form' ) ) {
 			// Successful, the success message now.
-			$referer = isset( $_POST['_wp_http_referer'] ) ? $_POST['_wp_http_referer'] : '';  // phpcs:ignore
-			$redirect = home_url($referer);
-			$redirect = add_query_arg(
-				[
-					'updated' => 'success',
-				],
-				$redirect
-			);
+			$referer  = isset( $_POST['_wp_http_referer'] ) ? $_POST['_wp_http_referer'] : '';  // phpcs:ignore
+			$redirect = home_url( $referer );
+			$redirect = add_query_arg( array( 'updated' => 'success' ), $redirect );
 
 			$redirect_default = $redirect;
 		}

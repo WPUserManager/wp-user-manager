@@ -1,4 +1,11 @@
 <?php
+/**
+ * Handles the Stripe webhook handler
+ *
+ * @package     wp-user-manager
+ * @copyright   Copyright (c) 2022, WP User Manager
+ * @license     https://opensource.org/licenses/GPL-3.0 GNU Public License
+ */
 
 namespace WPUserManager\Stripe;
 
@@ -11,11 +18,24 @@ use WPUserManager\Stripe\Controllers\Subscriptions;
 use WPUserManager\Stripe\Models\Product;
 use WPUserManager\Stripe\Models\User;
 
+/**
+ * StripeWebhookController
+ */
 class StripeWebhookController {
 
+	/**
+	 * @var string
+	 */
 	protected $webhook_secret;
 
+	/**
+	 * @var Subscriptions
+	 */
 	protected $subscriptions;
+
+	/**
+	 * @var Invoices
+	 */
 	protected $invoices;
 
 	/**
@@ -57,6 +77,11 @@ class StripeWebhookController {
 		return new \WP_REST_Response();
 	}
 
+	/**
+	 * @param string $value
+	 *
+	 * @return string
+	 */
 	protected function studly( $value ) {
 		$value = ucwords( str_replace( array( '-', '_' ), ' ', $value ) );
 
@@ -65,6 +90,8 @@ class StripeWebhookController {
 
 	/**
 	 * Verify that the request is from Stripe.
+	 *
+	 * @param \WP_REST_Request $request
 	 *
 	 * @return bool
 	 */
@@ -86,10 +113,11 @@ class StripeWebhookController {
 	 * @param array $payload
 	 *
 	 * @return \WP_REST_Response
+	 * @throws \Exception
 	 */
 	protected function handleCheckoutSessionCompleted( $payload ) {
 		if ( $payload['data']['object']['customer_email'] ) {
-			$user    = get_user_by_email( $payload['data']['object']['customer_email'] );
+			$user    = get_user_by( 'email', $payload['data']['object']['customer_email'] );
 			$user_id = $user->ID;
 		} else {
 			$subscription = $this->subscriptions->where( 'customer_id', $payload['data']['object']['customer'] );
@@ -123,6 +151,7 @@ class StripeWebhookController {
 	 * @param array $payload
 	 *
 	 * @return \WP_REST_Response
+	 * @throws \Exception
 	 */
 	protected function handleCustomerSubscriptionCreated( $payload ) {
 		$subscription = $this->subscriptions->where( 'subscription_id', $payload['data']['object']['id'] );
@@ -142,11 +171,12 @@ class StripeWebhookController {
 	}
 
 	/**
-	 * @param       $user_id
-	 * @param array   $payload
-	 * @param bool    $checkout
+	 * @param int   $user_id
+	 * @param array $payload
+	 * @param bool  $checkout
 	 *
 	 * @return \WP_REST_Response
+	 * @throws \Stripe\Exception\ApiErrorException
 	 */
 	protected function createSubscription( $user_id, $payload, $checkout = true ) {
 		if ( $checkout ) {
@@ -184,6 +214,7 @@ class StripeWebhookController {
 	 * @param array $payload
 	 *
 	 * @return \WP_REST_Response
+	 * @throws \Exception
 	 */
 	protected function handleCustomerSubscriptionUpdated( $payload ) {
 		$subscription = $this->subscriptions->where( 'subscription_id', $payload['data']['object']['id'] );
@@ -211,6 +242,7 @@ class StripeWebhookController {
 	 * @param array $payload
 	 *
 	 * @return \WP_REST_Response
+	 * @throws \Exception
 	 */
 	protected function handleCustomerSubscriptionDeleted( $payload ) {
 		$subscription = $this->subscriptions->where( 'subscription_id', $payload['data']['object']['id'] );
@@ -233,6 +265,7 @@ class StripeWebhookController {
 	 * @param array $payload
 	 *
 	 * @return \WP_REST_Response
+	 * @throws \Exception
 	 */
 	protected function handleInvoicePaymentSucceeded( $payload ) {
 		$subscription = $this->subscriptions->where( 'customer_id', $payload['data']['object']['customer'] );

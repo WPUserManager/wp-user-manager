@@ -1,11 +1,20 @@
 <?php
-
+/**
+ * Handles the Stripe settings
+ *
+ * @package     wp-user-manager
+ * @copyright   Copyright (c) 2022, WP User Manager
+ * @license     https://opensource.org/licenses/GPL-3.0 GNU Public License
+ */
 
 namespace WPUserManager\Stripe;
 
 use WPUM\Stripe\StripeClient;
 use WPUserManager\Stripe\Controllers\Products;
 
+/**
+ * Settings
+ */
 class Settings {
 
 	/**
@@ -21,12 +30,15 @@ class Settings {
 	const APPLICATION_FEE_PERCENT = 2;
 
 	/**
-	 * @param $connect
+	 * @param Connect $connect
 	 */
 	public function __construct( $connect ) {
 		$this->connect = $connect;
 	}
 
+	/**
+	 * Init
+	 */
 	public function init() {
 		add_action( 'wpum_registered_settings', array( $this, 'register_settings' ) );
 		add_filter( 'wpum_settings_tabs', array( $this, 'register_setting_tab' ) );
@@ -48,8 +60,9 @@ class Settings {
 	 * @param array $settings
 	 *
 	 * @return array
+	 * @throws \Stripe\Exception\ApiErrorException
 	 */
-	function register_settings( $settings ) {
+	public function register_settings( $settings ) {
 		$settings['stripe'][] = array(
 			'id'      => 'stripe_gateway_mode',
 			'name'    => __( 'Gateway Mode', 'wp-user-manager' ),
@@ -63,7 +76,8 @@ class Settings {
 
 		$connect_message = __( 'Connect to your Stripe account to get started.', 'wp-user-manager' );
 		if ( apply_filters( 'wpum_stripe_show_stripe_connect_fee_message', true ) ) {
-			$connect_message .= '<br><i>' . sprintf( __( 'Pay as you go pricing: %d%% per-transaction fee + Stripe fees. <a target="_blank" href="%s">Learn more</a>.', 'wp-user-manager'  ), self::APPLICATION_FEE_PERCENT, 'https://wpusermanager.com/docs' ) . '</i>';
+			/* translators: %1$d Stripe application fee percentage. %2$s documentation URL. */
+			$connect_message .= '<br><i>' . sprintf( __( 'Pay as you go pricing: %1$d%% per-transaction fee + Stripe fees. <a target="_blank" href="%2$s">Learn more</a>.', 'wp-user-manager' ), self::APPLICATION_FEE_PERCENT, 'https://wpusermanager.com/docs' ) . '</i>';
 		}
 
 		$settings['stripe'][] = array(
@@ -76,7 +90,7 @@ class Settings {
 			'toggle' => array(
 				array(
 					'key'   => 'stripe_gateway_mode',
-					'value' => 'test'
+					'value' => 'test',
 				),
 				array(
 					'key'   => 'test_stripe_publishable_key',
@@ -99,7 +113,7 @@ class Settings {
 			'toggle' => array(
 				array(
 					'key'   => 'stripe_gateway_mode',
-					'value' => 'test'
+					'value' => 'test',
 				),
 				array(
 					'key'      => 'test_stripe_publishable_key',
@@ -124,7 +138,7 @@ class Settings {
 			'toggle' => array(
 				array(
 					'key'   => 'stripe_gateway_mode',
-					'value' => 'live'
+					'value' => 'live',
 				),
 				array(
 					'key'   => 'live_stripe_publishable_key',
@@ -146,7 +160,7 @@ class Settings {
 			'toggle' => array(
 				array(
 					'key'   => 'stripe_gateway_mode',
-					'value' => 'live'
+					'value' => 'live',
 				),
 				array(
 					'key'      => 'live_stripe_publishable_key',
@@ -167,7 +181,7 @@ class Settings {
 			'type'   => 'hidden',
 			'toggle' => array(
 				'key'   => 'stripe_gateway_mode',
-				'value' => 'test'
+				'value' => 'test',
 			),
 		);
 		$settings['stripe'][] = array(
@@ -176,7 +190,7 @@ class Settings {
 			'type'   => 'hidden',
 			'toggle' => array(
 				'key'   => 'stripe_gateway_mode',
-				'value' => 'test'
+				'value' => 'test',
 			),
 		);
 		$settings['stripe'][] = array(
@@ -185,7 +199,7 @@ class Settings {
 			'type'   => 'hidden',
 			'toggle' => array(
 				'key'   => 'stripe_gateway_mode',
-				'value' => 'live'
+				'value' => 'live',
 			),
 		);
 		$settings['stripe'][] = array(
@@ -194,7 +208,7 @@ class Settings {
 			'type'   => 'hidden',
 			'toggle' => array(
 				'key'   => 'stripe_gateway_mode',
-				'value' => 'live'
+				'value' => 'live',
 			),
 		);
 
@@ -202,11 +216,12 @@ class Settings {
 			'id'     => 'test_stripe_webhook_secret',
 			'name'   => __( 'Test Webhook Signing Secret', 'wp-user-manager' ),
 			'type'   => 'text',
-			'desc'   => sprintf( __( '<a target="_blank" href="%s">Set up a webhook in Stripe</a> to get the webhook signing secret, using all events for this URL:<br><code>%s</code>', 'wp-user-manager'), 'https://wpusermanager.com/docs/', WebhookEndpoint::get_webhook_url() ),
+			/* translators: %1$s webhook documentation URL. %2$s URL to use in the webhook. */
+			'desc'   => sprintf( __( '<a target="_blank" href="%1$s">Set up a webhook in Stripe</a> to get the webhook signing secret, using all events for this URL:<br><code>%2$s</code>', 'wp-user-manager' ), 'https://wpusermanager.com/docs/', WebhookEndpoint::get_webhook_url() ),
 			'toggle' => array(
 				array(
 					'key'   => 'stripe_gateway_mode',
-					'value' => 'test'
+					'value' => 'test',
 				),
 				array(
 					'key'      => 'test_stripe_secret_key',
@@ -220,11 +235,12 @@ class Settings {
 			'id'     => 'live_stripe_webhook_secret',
 			'name'   => __( 'Live Webhook Signing Secret', 'wp-user-manager' ),
 			'type'   => 'text',
-			'desc'   => sprintf( __( '<a target="_blank" href="%s">Set up a webhook in Stripe</a> to get the webhook signing secret, using all events for this URL:<br><code>%s</code>', 'wp-user-manager'), 'https://wpusermanager.com/docs/', WebhookEndpoint::get_webhook_url() ),
+			/* translators: %1$s webhook documentation URL. %2$s URL to use in the webhook. */
+			'desc'   => sprintf( __( '<a target="_blank" href="%1$s">Set up a webhook in Stripe</a> to get the webhook signing secret, using all events for this URL:<br><code>%2$s</code>', 'wp-user-manager' ), 'https://wpusermanager.com/docs/', WebhookEndpoint::get_webhook_url() ),
 			'toggle' => array(
 				array(
 					'key'   => 'stripe_gateway_mode',
-					'value' => 'live'
+					'value' => 'live',
 				),
 				array(
 					'key'      => 'live_stripe_secret_key',
@@ -251,7 +267,7 @@ class Settings {
 				'toggle'   => array(
 					array(
 						'key'   => 'stripe_gateway_mode',
-						'value' => 'test'
+						'value' => 'test',
 					),
 					array(
 						'key'      => 'test_stripe_secret_key',
@@ -271,7 +287,7 @@ class Settings {
 				'toggle'   => array(
 					array(
 						'key'   => 'stripe_gateway_mode',
-						'value' => 'live'
+						'value' => 'live',
 					),
 					array(
 						'key'      => 'live_stripe_secret_key',
@@ -286,6 +302,8 @@ class Settings {
 	}
 
 	/**
+	 * @param string $mode
+	 *
 	 * @return string
 	 */
 	protected function render_admin_disconnect( $mode = 'test' ) {
@@ -294,22 +312,40 @@ class Settings {
 			return '';
 		}
 
+		$args = array(
+			'mode'                      => $mode,
+			'stripe_connect_account_id' => $stripe_connect_account_id,
+		);
+
 		ob_start();
-		include __DIR__ . '/Views/admin-disconnect.php';
+		WPUM()->templates
+			->set_template_data( $args )
+			->get_template_part( 'stripe/admin-disconnect' );
 
 		return ob_get_clean();
 	}
 
+	/**
+	 * @param array $tabs
+	 *
+	 * @return array
+	 */
 	public function register_setting_tab( $tabs ) {
 		$tabs['stripe'] = __( 'Stripe', 'wp-user-manager' );
 
 		return $tabs;
 	}
 
+	/**
+	 * Flush cache
+	 */
 	public function flush_product_cache() {
 		delete_transient( 'wpum_' . $this->connect->get_gateway_mode() . '_stripe_products' );
 	}
 
+	/**
+	 * Connect Response
+	 */
 	public function stripe_connect_account_info_ajax_response() {
 		$unknown_error = array(
 			'message' => esc_html__( 'Unable to retrieve account information.', 'wp-user-manager' ),
@@ -320,14 +356,18 @@ class Settings {
 			return wp_send_json_error( $unknown_error );
 		}
 
+		$nonce = filter_input( INPUT_POST, 'nonce', FILTER_SANITIZE_STRING );
+
 		// Nonce validation, show error on fail.
-		if ( ! isset( $_POST['nonce'] ) || ! wp_verify_nonce( $_POST['nonce'], 'wpum-stripe-connect-account-information' ) ) {
+		if ( empty( $nonce ) || ! wp_verify_nonce( $nonce, 'wpum-stripe-connect-account-information' ) ) {
 			return wp_send_json_error( $unknown_error );
 		}
 
-		$account_id = isset( $_POST['account_id'] ) ? sanitize_text_field( $_POST['account_id'] ) : '';
+		$account_id = filter_input( INPUT_POST, 'account_id', FILTER_SANITIZE_STRING );
+		$account_id = $account_id ? sanitize_text_field( $account_id ) : '';
 
-		$mode = isset( $_POST['gateway_mode'] ) ? sanitize_text_field( $_POST['gateway_mode'] ) : 'test';
+		$gateway_mode = filter_input( INPUT_POST, 'gateway_mode', FILTER_SANITIZE_STRING );
+		$mode         = $gateway_mode ? sanitize_text_field( $gateway_mode ) : 'test';
 
 		// Provides general reconnect and disconnect action URLs.
 		$reconnect_disconnect_actions = sprintf( '<a href="%s">%s</a>', esc_url( $this->connect->disconnect_url( $mode ) ), __( 'Disconnect', 'wp-user-manager' ) );
@@ -339,8 +379,8 @@ class Settings {
 			'message' => wp_kses(
 				wpautop(
 					sprintf(
+					/* translators: %1$s Opening bold tag, do not translate. %2$s Closing bold tag, do not translate. */
 						__(
-						/* translators: %1$s Opening bold tag, do not translate. %2$s Closing bold tag, do not translate. */
 							'You are currently connected to a %1$stemporary%2$s Stripe test account, which can only be used for testing purposes. You cannot manage this account in Stripe.',
 							'wp-user-manager'
 						),
@@ -348,8 +388,8 @@ class Settings {
 						'</strong>'
 					) . ' ' .
 					sprintf(
+					/* translators: %1$s Opening link tag, do not translate. %2$s Closing link tag, do not translate. */
 						__(
-						/* translators: %1$s Opening link tag, do not translate. %2$s Closing link tag, do not translate. */
 							'%1$sRegister a Stripe account%2$s for full access.',
 							'wp-user-manager'
 						),
@@ -371,14 +411,14 @@ class Settings {
 						'href'   => true,
 						'rel'    => true,
 						'target' => true,
-					)
+					),
 				)
 			),
-			'status' => 'warning',
+			'status'  => 'warning',
 		);
 
 		$secret = $this->connect->get_stripe_secret( $mode );
-		if ( empty ( $secret ) ) {
+		if ( empty( $secret ) ) {
 			return wp_send_json_error( $unknown_error );
 		}
 
@@ -420,18 +460,11 @@ class Settings {
 					$email = $email . ' &mdash; ';
 				}
 
-				/**
-				 * Filters if the Stripe Connect fee messaging should show.
-				 *
-				 * @since 2.8.1
-				 *
-				 * @param bool $show_fee_message Show fee message, or not.
-				 */
 				$show_fee_message = apply_filters( 'wpum_stripe_show_stripe_connect_fee_message', true );
 
-				$fee_message = true === $show_fee_message  ? '<br>' . esc_html( sprintf( 'Pay as you go pricing: %d%% per-transaction fee + Stripe fees.', self::APPLICATION_FEE_PERCENT ), 'wp-user-manager' )  : '';
+				/* translators: %d Stripe application fee percentage.*/
+				$fee_message = true === $show_fee_message ? '<br>' . esc_html( sprintf( __( 'Pay as you go pricing: %d%% per-transaction fee + Stripe fees.', 'wp-user-manager' ), self::APPLICATION_FEE_PERCENT ) ) : '';
 
-				// Return a message with name, email, and reconnect/disconnect actions.
 				return wp_send_json_success(
 					array(
 						'message' => wpautop(
@@ -507,19 +540,22 @@ class Settings {
 	 * @return bool|void
 	 */
 	public function handle_stripe_connect_disconnect() {
-		if ( ! isset( $_GET['page'] ) ) {
+		$page = filter_input( INPUT_GET, 'page', FILTER_SANITIZE_STRING );
+		if ( empty( $page ) ) {
 			return;
 		}
 
-		if ( 'wpum-settings' !== $_GET['page'] ) {
+		if ( 'wpum-settings' !== $page ) {
 			return;
 		}
 
-		if ( ! isset( $_GET['disconnect'] ) ) {
+		$disconnect = filter_input( INPUT_GET, 'disconnect', FILTER_SANITIZE_STRING );
+		if ( empty( $disconnect ) ) {
 			return;
 		}
 
-		if ( ! isset( $_GET['mode'] ) ) {
+		$mode = filter_input( INPUT_GET, 'mode', FILTER_SANITIZE_STRING );
+		if ( empty( $mode ) ) {
 			return;
 		}
 
@@ -528,15 +564,16 @@ class Settings {
 			return;
 		}
 
-		if ( ! isset( $_GET['_wpnonce'] ) ) {
+		$nonce = filter_input( INPUT_GET, '_wpnonce', FILTER_SANITIZE_STRING );
+		if ( empty( $nonce ) ) {
 			return;
 		}
 
-		if ( ! wp_verify_nonce( $_GET['_wpnonce'], 'wpum-stripe-connect-disconnect' ) ) {
+		if ( ! wp_verify_nonce( $nonce, 'wpum-stripe-connect-disconnect' ) ) {
 			return;
 		}
 
-		$prefix = $_GET['mode'];
+		$prefix = $mode;
 
 		$options = array(
 			$prefix . '_stripe_publishable_key',
@@ -558,6 +595,6 @@ class Settings {
 			)
 		);
 
-		return wp_redirect( esc_url_raw( $redirect ) );
+		return wp_safe_redirect( esc_url_raw( $redirect ) );
 	}
 }

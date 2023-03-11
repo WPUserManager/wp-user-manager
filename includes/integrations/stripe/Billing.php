@@ -54,12 +54,21 @@ class Billing {
 		return $this->billing_url;
 	}
 
-	protected function prepareData( $test_mode, $user, $plan, $returnUrl, $stripe_account_id = null) {
+	/**
+	 * @param string      $test_mode
+	 * @param User        $user
+	 * @param string      $plan
+	 * @param string      $returnUrl
+	 * @param null|string $stripe_account_id
+	 *
+	 * @return array
+	 */
+	protected function prepareData( $test_mode, $user, $plan, $returnUrl, $stripe_account_id = null ) {
 		$data = array(
-			'test_mode'         => (int) $test_mode,
-			'plan'              => $plan,
-			'success_url'       => $returnUrl,
-			'cancel_url'        => $this->getBillingURL(),
+			'test_mode'   => (int) $test_mode,
+			'plan'        => $plan,
+			'success_url' => $returnUrl,
+			'cancel_url'  => $this->getBillingURL(),
 		);
 
 		if ( $stripe_account_id ) {
@@ -69,7 +78,7 @@ class Billing {
 		if ( $user->subscription && $user->subscription->customer_id ) {
 			$data['customer'] = $user->subscription->customer_id;
 		} else {
-			$data['customer_email'] = urlencode( $user->email );
+			$data['customer_email'] = rawurlencode( $user->email );
 		}
 
 		$product = $this->products->get_by_plan( $plan );

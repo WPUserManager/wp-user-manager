@@ -1,4 +1,11 @@
 <?php
+/**
+ * Handles the Stripe Products controller
+ *
+ * @package     wp-user-manager
+ * @copyright   Copyright (c) 2023, WP User Manager
+ * @license     https://opensource.org/licenses/GPL-3.0 GNU Public License
+ */
 
 namespace WPUserManager\Stripe\Controllers;
 
@@ -6,6 +13,9 @@ use WPUM\Stripe\Stripe;
 use WPUserManager\Stripe\Billing;
 use WPUserManager\Stripe\Models\Product;
 
+/**
+ * Products
+ */
 class Products {
 
 	/**
@@ -35,10 +45,18 @@ class Products {
 		$this->products     = $this->all();
 	}
 
+	/**
+	 * @return array
+	 * @throws \Stripe\Exception\ApiErrorException
+	 */
 	protected function getProducts() {
 		Stripe::setApiKey( $this->secret_key );
 
-		$all_products = \WPUM\Stripe\Product::all();
+		try {
+			$all_products = \WPUM\Stripe\Product::all();
+		} catch ( \Stripe\Exception\ApiErrorException $exception ) {
+			$all_products = array();
+		}
 
 		$products = array();
 		foreach ( $all_products as $product ) {
@@ -58,6 +76,12 @@ class Products {
 		return $products;
 	}
 
+	/**
+	 * @param false $force
+	 *
+	 * @return array|mixed
+	 * @throws \Stripe\Exception\ApiErrorException
+	 */
 	public function all( $force = false ) {
 		$transient = get_transient( 'wpum_' . $this->gateway_mode . '_stripe_products' );
 
@@ -72,7 +96,7 @@ class Products {
 	}
 
 	/**
-	 * @param $plan_id
+	 * @param string $plan_id
 	 *
 	 * @return false|mixed
 	 */
@@ -90,6 +114,10 @@ class Products {
 		return false;
 	}
 
+	/**
+	 * @return array
+	 * @throws \Stripe\Exception\ApiErrorException
+	 */
 	public function get_plans() {
 		$list     = array();
 		$products = $this->all();
@@ -105,6 +133,10 @@ class Products {
 		return $list;
 	}
 
+	/**
+	 * @return int
+	 * @throws \Stripe\Exception\ApiErrorException
+	 */
 	public function totalRecurringProducts() {
 		$total    = 0;
 		$products = $this->all();

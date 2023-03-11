@@ -1,16 +1,52 @@
 <?php
-
+/**
+ * Handles the Product
+ *
+ * @package     wp-user-manager
+ * @copyright   Copyright (c) 2023, WP User Manager
+ * @license     https://opensource.org/licenses/GPL-3.0 GNU Public License
+ */
 
 namespace WPUserManager\Stripe\Models;
 
+/**
+ * Product
+ */
 class Product {
 
+	/**
+	 * @var string
+	 */
 	public $id;
+
+	/**
+	 * @var mixed
+	 */
 	public $name;
+
+	/**
+	 * @var mixed
+	 */
 	public $type;
+
+	/**
+	 * @var mixed
+	 */
 	public $amount;
+
+	/**
+	 * @var false
+	 */
 	public $paid;
+
+	/**
+	 * @var int
+	 */
 	public $when_signed;
+
+	/**
+	 * @var mixed
+	 */
 	public $when_paid;
 
 	/**
@@ -31,12 +67,15 @@ class Product {
 		}
 	}
 
+	/**
+	 * @return bool
+	 */
 	public function is_recurring() {
 		return 'one_time' !== $this->type;
 	}
 
 	/**
-	 * @param $data
+	 * @param array $data
 	 */
 	public function hydrate( $data ) {
 		foreach ( $data as $key => $value ) {
@@ -51,6 +90,9 @@ class Product {
 		return get_object_vars( $this );
 	}
 
+	/**
+	 * Set product as paid
+	 */
 	public function setPaid() {
 		$this->paid      = true;
 		$this->when_paid = time();
