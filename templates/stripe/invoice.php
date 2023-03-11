@@ -14,7 +14,7 @@
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-	<title><?php echo $data->site_name; ?> Invoice</title>
+	<title><?php echo $data->site_name; ?> <?php echo __( 'Invoice', 'wp-user-manager' ); ?></title>
 
 	<style>
 		body {

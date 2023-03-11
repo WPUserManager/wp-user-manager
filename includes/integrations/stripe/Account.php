@@ -120,121 +120,72 @@ class Account {
 	}
 
 	public function account_tab_content() {
-		echo '<h2>' . apply_filters( 'wpum_stripe_account_billing_header', __( 'Billing', 'wp-user-manager' ) );
+		ob_start();
 
+		$header = __( 'Billing', 'wp-user-manager' );
 		if ( 'test' === $this->gateway_mode ) {
-			echo ' (Stripe is connected in Test Mode)';
+			$header .= ' (Stripe is connected in Test Mode)';
 		}
 
-		echo '</h2>';
+		WPUM()->templates
+			->set_template_data( array( 'header' => apply_filters( 'wpum_stripe_account_billing_header', $header ) ) )
+			->get_template_part( 'stripe/account/header' );
 
 		$user = new User( get_current_user_id() );
 
 		$shouldBeSubscribed = $user->shouldBeSubscribed();
 		if ( $shouldBeSubscribed && ! $user->isSubscribed() ) {
-			echo '<div class="wpum-message error">' . apply_filters( 'wpum_stripe_account_subscription_required_error_message', __( 'An active subscription is required.', 'wp-user-manager' ) ) . '</div>';
+			WPUM()->templates
+				->set_template_data( array( 'message' => apply_filters( 'wpum_stripe_account_subscription_required_error_message', __( 'An active subscription is required.', 'wp-user-manager' ) ) ) )
+				->get_template_part( 'messages/general', 'error' );
 		}
 
 		if ( ! $shouldBeSubscribed && ! $user->isPaid() ) {
-			echo '<div class="wpum-message error">' . apply_filters( 'wpum_stripe_account_payment_required_error_message', __( 'Payment is required for access to the site.', 'wp-user-manager' ) ) . '</div>';
-		}
-		if ( $user->subscription && $user->subscription->active() && $user->subscription->onTrial() && ! $user->subscription->onGracePeriod() ) {
-			echo '<div class="wpum-message info">' . apply_filters( 'wpum_stripe_account_free_trial_message', sprintf( __( 'After your free trial ends on <strong>%s</strong>, this plan will continue automatically.', 'wp-user-manager' ), mysql2date( __( 'F j, Y' ), $user->subscription->trial_ends_at ) ), $user->subscription->trial_ends_at ) . '</div>';
+			WPUM()->templates
+				->set_template_data( array( 'message' => apply_filters( 'wpum_stripe_account_payment_required_error_message', __( 'Payment is required for access to the site.', 'wp-user-manager' ) ) ) )
+				->get_template_part( 'messages/general', 'error' );
 		}
 
 		if ( $user->subscription && $user->subscription->onGracePeriod() ) {
-			echo '<div class="wpum-message warning">' . apply_filters( 'wpum_stripe_account_subscription_cancelled_message', sprintf( __( 'Your plan will be canceled on <strong>%s</strong>.', 'wp-user-manager' ), mysql2date( __( 'F j, Y' ), $user->subscription->ends_at ) ), $user->subscription->ends_at ) . '</div>';
+			WPUM()->templates
+				->set_template_data( array( 'message' => apply_filters( 'wpum_stripe_account_subscription_cancelled_message', sprintf( __( 'Your plan will be canceled on <strong>%s</strong>.', 'wp-user-manager' ), mysql2date( __( 'F j, Y' ), $user->subscription->ends_at ) ), $user->subscription->ends_at ) ) )
+				->get_template_part( 'messages/general', 'warning' );
 		}
 
+		do_action( 'wpum_stripe_account_after_notices', $user );
+
 		if ( ( $shouldBeSubscribed && ( ! $user->subscription || ! $user->subscription->active() ) ) || ( ! $shouldBeSubscribed && ! $user->isPaid() ) ) {
-			echo '<h4>' . apply_filters( 'wpum_stripe_account_billing_plan_header', __( 'Select Plan', 'wp-user-manager' ) ) . '</h4>'; ?>
-
-			<?php
-			$allowed_prices = wpum_get_option( $this->gateway_mode . '_stripe_products', array() );
-
-			foreach ( $this->products->all() as $product ) :
-				if ( ! empty( $allowed_prices ) && empty( array_intersect( array_keys( $product['prices'] ), $allowed_prices ) ) ) {
-					continue;
-				}
-				?>
-				<div class="wpum-row wpum-form" style="margin-bottom: 1rem;">
-					<div class="wpum-col-xs-3">
-						<?php echo $product['name']; ?>
-					</div>
-					<div class="wpum-col-xs-3">
-						<?php foreach ( $product['prices'] as $price_id => $price ) :
-							if ( ! empty( $allowed_prices ) && ! in_array( $price_id, $allowed_prices ) ) {
-								continue;
-							} ?>
-							<strong><?php echo \WPUserManager\Stripe\Stripe::currencySymbol( $price['currency'] ) . number_format( $price['unit_amount'] / 100 ); ?></strong><?php echo isset( $price['recurring']['interval'] ) ? '/' . $price['recurring']['interval'] : ''; ?>
-							<br>
-						<?php endforeach; ?>
-					</div>
-					<div class="wpum-col-xs-3">
-						<?php foreach ( $product['prices'] as $price_id => $price )  :
-							if ( ! empty( $allowed_prices ) && ! in_array( $price_id, $allowed_prices ) ) {
-								continue;
-							} ?>
-							<button class="wpum-stripe-checkout button" data-plan-id="<?php echo $price_id; ?>">
-								<?php echo apply_filters( 'wpum_stripe_account_billing_plan_button_label', __( 'Select Plan', 'wp-user-manager' ) ) . '</h4>'; ?>
-							</button><br>
-						<?php endforeach; ?>
-					</div>
-				</div>
-			<?php endforeach; ?>
-			<?php
+			$plans_data = array(
+				'products'       => $this->products->all(),
+				'allowed_prices' => wpum_get_option( $this->gateway_mode . '_stripe_products', array() )
+			);
+			WPUM()->templates
+				->set_template_data( $plans_data )
+				->get_template_part( 'stripe/account/plans' );
 		}
 
 		if ( ! $shouldBeSubscribed ) {
+			echo ob_get_clean();
 			return;
 		}
 
 		if ( $user->subscription && $user->subscription->active() ) {
-			// TODO move to templates
 			// Manage billing
 			$plan = $this->products->get_by_plan( $user->subscription->plan_id );
-			echo '<div class="wpum-form">';
-			echo '<p>' . sprintf( __( 'You\'re currently on the %s plan.', 'wp-user-manager' ), $plan->name ) . '</p>';
 
-			echo '<button id="wpum-stripe-manage-billing" class="button" style="margin-top: 1rem">' . __( 'Manage Billing', 'wp-user-manager' ) . '</button>';
-			echo '</div>';
+			WPUM()->templates
+				->set_template_data( array( 'plan' => $plan ) )
+				->get_template_part( 'stripe/account/manage-billing' );
 		}
 
 		$invoices = ( new Invoices( $this->gateway_mode ) )->where( 'user_id', $user->ID );
-		echo '<div class="wpum-form" style="margin-top: 2rem;">';
-		echo '<h3>Invoices</h3>';
-		if ( empty( $invoices ) ) {
-			echo '<p> ' . __( 'You don\'t have any invoices yet.', 'wp-user-manager' ) . '</p></div>';
-			return;
-		}
-		?>
-		<table class="table mb-0">
-			<tbody>
-			<?php
-			foreach ( $invoices as $invoice ) :
-				if ( $invoice->total <= 0 ) {
-					continue;
-				}
-				?>
-				<tr>
-					<td class="">
-						<?php echo mysql2date( __( 'F j, Y' ), $invoice->created_at ); ?>
-					</td>
-					<td class="">
-						<?php echo \WPUserManager\Stripe\Stripe::currencySymbol( $invoice->currency ); ?><?php echo number_format( $invoice->total ); ?>
-					</td>
-					<td class="text-right">
-						<a href="<?php echo home_url( '/account/billing/?invoice_id=' . $invoice->id ); ?>">
-							Download
-						</a>
-					</td>
-				</tr>
-			<?php endforeach; ?>
-			</tbody>
-		</table>
-		</div>
-		<?php
 
+		WPUM()->templates
+			->set_template_data( array( 'invoices' => $invoices ) )
+			->get_template_part( 'stripe/account/invoices' );
+
+
+		echo ob_get_clean();
 	}
 
 	/**
