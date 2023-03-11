@@ -197,7 +197,7 @@ if ( ! class_exists( 'WP_User_Manager' ) ) :
 				require_once dirname( $this->plugin_file ) . '/vendor-dist/scoper-autoload.php';
 				\spl_autoload_register( array( $this, 'ensure_addon_class_alias' ), true, true );
 				require_once dirname( $this->plugin_file ) . '/includes/functions-scoped.php ';
-			} else if ( file_exists( dirname( $this->plugin_file ) . '/vendor/autoload.php' ) ) {
+			} elseif ( file_exists( dirname( $this->plugin_file ) . '/vendor/autoload.php' ) ) {
 				require_once dirname( $this->plugin_file ) . '/vendor/autoload.php';
 				\spl_autoload_register( array( $this, 'ensure_class_alias' ), true, true );
 			}
@@ -565,7 +565,7 @@ if ( ! class_exists( 'WP_User_Manager' ) ) :
 					'title'       => 'WPUM Social Login',
 					'min_version' => '2.0.9',
 					'file'        => 'wpum-social-login/wpum-social-login.php',
-				)
+				),
 			);
 
 			foreach ( $addons as $addon ) {

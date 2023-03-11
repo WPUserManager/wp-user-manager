@@ -964,7 +964,7 @@ add_action( 'wp_ajax_validate_user_meta_key', 'validate_user_meta_key' );
 
 add_action( 'the_content', function( $content ) {
 	$registration = filter_input( INPUT_GET, 'registration', FILTER_SANITIZE_STRING );
-	if ( empty( $registration ) ||  'success' !== $registration ) {
+	if ( empty( $registration ) || 'success' !== $registration ) {
 		return $content;
 	}
 
@@ -989,5 +989,5 @@ add_action( 'the_content', function( $content ) {
 		)
 		->get_template_part( 'messages/general', 'success' );
 
-	return ob_get_clean(). $content;
+	return ob_get_clean() . $content;
 } );

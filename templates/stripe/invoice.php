@@ -6,6 +6,7 @@
  *
  * @version 2.9.0
  */
+
 ?>
 <!doctype html>
 <html>
@@ -13,7 +14,7 @@
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-	<title><?php echo $data->site_name; ?> <?php echo __( 'Invoice', 'wp-user-manager' ); ?></title>
+	<title><?php echo esc_html( $data->site_name ); ?><?php echo esc_html( __( 'Invoice', 'wp-user-manager' ) ); ?></title>
 
 	<style>
 		body {
@@ -107,13 +108,13 @@
 				<table>
 					<tr>
 						<td class="title">
-							<strong><?php echo $data->site_name; ?></strong><br>
-							<?php echo $data->address; ?>
+							<strong><?php echo esc_html( $data->site_name ); ?></strong><br>
+							<?php echo esc_html( $data->address ); ?>
 						</td>
 
 						<td>
-							Invoice #: <?php echo $data->invoice->id(); ?><br>
-							Date: <?php echo $data->invoice->date(); ?>
+							Invoice #: <?php echo esc_html( $data->invoice->id() ); ?><br>
+							Date: <?php echo esc_html( $data->invoice->date() ); ?>
 						</td>
 					</tr>
 				</table>
@@ -128,9 +129,9 @@
 						</td>
 
 						<td>
-							<?php echo $data->invoice->customerEmail(); ?><br>
-							<?php echo $data->invoice->customerName(); ?><br>
-							<?php echo nl2br( $data->invoice->customerAddress() ); ?>
+							<?php echo esc_html( $data->invoice->customerEmail() ); ?><br>
+							<?php echo esc_html( $data->invoice->customerName() ); ?><br>
+							<?php echo nl2br( $data->invoice->customerAddress() ); // phpcs:ignore ?>
 						</td>
 					</tr>
 				</table>
@@ -147,46 +148,52 @@
 			</td>
 		</tr>
 
-		<?php foreach($data->invoice->lineItems() as $data->item) :?>
-		<tr class="item">
-			<td>
-				<?php echo $data->item->description; ?><br>
+		<?php foreach ( $data->invoice->lineItems() as $data->item ) : ?>
+			<tr class="item">
+				<td>
+					<?php echo esc_html( $data->item->description ); ?><br>
 
-				<?php if($data->item->isSubscription()) : ?>
-				<span class="item-date">
-                           <?php echo  $data->item->startDateAsCarbon()->formatLocalized('%B %e, %Y') ; ?> -
-                            <?php echo $data->item->endDateAsCarbon()->formatLocalized('%B %e, %Y') ; ?>
-                        </span>
-				<?php endif; ?>
-			</td>
+					<?php if ( $data->item->isSubscription() ) : ?>
+						<span class="item-date">
+							<?php echo esc_html( $data->item->startDateAsCarbon()->formatLocalized( '%B %e, %Y' ) ); ?> -
+							<?php echo esc_html( $data->item->endDateAsCarbon()->formatLocalized( '%B %e, %Y' ) ); ?>
+						</span>
+					<?php endif; ?>
+				</td>
 
-			<td>
-				<?php echo $data->item->total(); ?>
-		</tr>
+				<td>
+					<?php echo esc_html( $data->item->total() ); ?>
+			</tr>
 		<?php endforeach; ?>
 
-		<?php if ($data->invoice->hasDiscount()) : ?>
-		<tr class="item">
-			<td>
-				<?php if ($data->invoice->discountIsPercentage()) : ?>
-					<?php echo $data->invoice->coupon(); ?> (<?php echo $data->invoice->percentOff(); ?>% Off)
-				<?php else : ?>
-					<?php echo $data->invoice->coupon(); ?> (<?php echo $data->invoice->amountOff(); ?> Off)
-				<?php endif; ?>
-			</td>
+		<?php if ( $data->invoice->hasDiscount() ) : ?>
+			<tr class="item">
+				<td>
+					<?php if ( $data->invoice->discountIsPercentage() ) : ?>
+						<?php echo esc_html( $data->invoice->coupon() ); ?> (<?php echo esc_html( $data->invoice->percentOff() ); ?>% Off)
+					<?php else : ?>
+						<?php echo esc_html( $data->invoice->coupon() ); ?> (<?php echo esc_html( $data->invoice->amountOff() ); ?> Off)
+					<?php endif; ?>
+				</td>
 
-			<td>-<?php echo $data->invoice->discount(); ?></td>
-		</tr>
+				<td>-<?php echo esc_html( $data->invoice->discount() ); ?></td>
+			</tr>
 		<?php endif; ?>
 
 		<tr class="total">
 			<td>
-				<?php echo $data->invoice->total(); ?>
+				<?php echo esc_html( $data->invoice->total() ); ?>
 			</td>
 		</tr>
-		<tr><td colspan="2"></td></tr>
-		<tr><td colspan="2"></td></tr>
-		<tr><td colspan="2"></td></tr>
+		<tr>
+			<td colspan="2"></td>
+		</tr>
+		<tr>
+			<td colspan="2"></td>
+		</tr>
+		<tr>
+			<td colspan="2"></td>
+		</tr>
 	</table>
 </div>
 </body>

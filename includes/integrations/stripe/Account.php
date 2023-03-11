@@ -97,6 +97,7 @@ class Account {
 		}
 
 		$allowed_pages = apply_filters( 'wpum_stripe_not_paid_allowed_pages', $allowed_pages );
+		$allowed_pages = array_map( 'intval', $allowed_pages );
 
 		if ( isset( $post ) && in_array( $post->ID, $allowed_pages, true ) ) {
 			return;
@@ -226,13 +227,13 @@ class Account {
 		}
 
 		global $post;
-		if ( ! $post || wpum_get_core_page_id( 'account' ) !== $post->ID ) {
+		if ( ! $post || (int) wpum_get_core_page_id( 'account' ) !== $post->ID ) {
 			return;
 		}
 
 		$invoice = ( new Invoices( $this->gateway_mode ) )->find( $id );
 
-		if ( get_current_user_id() !== $invoice->user_id ) {
+		if ( get_current_user_id() !== (int) $invoice->user_id ) {
 			return;
 		}
 

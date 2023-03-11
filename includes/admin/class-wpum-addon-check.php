@@ -2,16 +2,17 @@
 /**
  * WPUM Addon Version Check
  *
- * Copyright (c) 2022 WP USer Manager
+ * Copyright (c) 2022 WP User Manager
  */
 
+/**
+ * WPUM_Addon_Check
+ */
 class WPUM_Addon_Check {
 
 	/**
 	 * Default name of the plugin.
 	 *
-	 * @since 1.0.0
-	 * @access private
 	 * @var string
 	 */
 	private $title = '';
@@ -26,7 +27,7 @@ class WPUM_Addon_Check {
 	/**
 	 * Path to the main plugin file.
 	 *
-	 * @since 1.0.0
+	 * @since  1.0.0
 	 * @access private
 	 * @var string
 	 */
@@ -35,15 +36,12 @@ class WPUM_Addon_Check {
 	/**
 	 * Constructor.
 	 *
-	 * @since 1.0.0
-	 * @access public
+	 * @param array $args    {
+	 *                       An array of arguments to overwrite the default requirements.
 	 *
-	 * @param array $args {
-	 *     An array of arguments to overwrite the default requirements.
-	 *
-	 *     @type string $title Name of the plugin.
-	 *     @type string $version Minimum required PHP version.
-	 *     @type string $file  Path to the main plugin file.
+	 * @type string $title   Name of the plugin.
+	 * @type string $version Minimum required PHP version.
+	 * @type string $file    Path to the main plugin file.
 	 * }
 	 */
 	public function __construct( $args ) {
@@ -57,9 +55,6 @@ class WPUM_Addon_Check {
 	/**
 	 * Check if the install passes the requirements.
 	 *
-	 * @since 1.0.0
-	 * @access public
-	 *
 	 * @return bool True if the install passes the requirements, false otherwise.
 	 */
 	public function passes() {
@@ -67,6 +62,7 @@ class WPUM_Addon_Check {
 		if ( ! $passes ) {
 			add_action( 'admin_notices', array( $this, 'deactivate' ) );
 		}
+
 		return $passes;
 	}
 
@@ -82,7 +78,7 @@ class WPUM_Addon_Check {
 		}
 
 		if ( ! function_exists( 'is_plugin_active' ) ) {
-			require_once( ABSPATH . '/wp-admin/includes/plugin.php' );
+			require_once ABSPATH . '/wp-admin/includes/plugin.php';
 		}
 
 		if ( ! is_plugin_active( str_replace( WP_PLUGIN_DIR . '/', '', $this->file ) ) ) {
@@ -90,7 +86,7 @@ class WPUM_Addon_Check {
 			return true;
 		}
 
-		$plugin_data = get_plugin_data($this->file  );
+		$plugin_data = get_plugin_data( $this->file );
 		if ( empty( $plugin_data ) || ! isset( $plugin_data['Version'] ) || empty( $plugin_data['Version'] ) ) {
 			// Can't get addon version
 			return true;
@@ -119,9 +115,6 @@ class WPUM_Addon_Check {
 
 	/**
 	 * Deactivates the plugin again.
-	 *
-	 * @since 1.0.0
-	 * @access public
 	 */
 	public function deactivate() {
 		if ( null !== $this->file ) {
@@ -131,16 +124,13 @@ class WPUM_Addon_Check {
 
 	/**
 	 * Show the WordPress version notice.
-	 *
-	 * @since 1.0.0
-	 * @access public
 	 */
 	public function addon_version_notice() {
 		$basename   = plugin_basename( $this->file );
-		$update_url = wp_nonce_url( admin_url() . 'update.php?action=upgrade-plugin&plugin=' . urlencode( $basename ), 'upgrade-plugin_' . $basename );
+		$update_url = wp_nonce_url( admin_url() . 'update.php?action=upgrade-plugin&plugin=' . rawurlencode( $basename ), 'upgrade-plugin_' . $basename );
 		?>
 		<div class="error">
-			<p><?php printf( '<strong>WP User Manager</strong> &mdash; %s addon has been deactivated as it cannot run on WP User Manager %s. Please <a href="%s">update</a> the addon to version %s or higher.', esc_html( $this->title ), WPUM_VERSION, $update_url, $this->min_version ); ?></p>
+			<p><?php printf( '<strong>WP User Manager</strong> &mdash; %s addon has been deactivated as it cannot run on WP User Manager %s. Please <a href="%s">update</a> the addon to version %s or higher.', esc_html( $this->title ), WPUM_VERSION, $update_url, $this->min_version ); // phpcs:ignore ?></p>
 		</div>
 		<?php
 	}

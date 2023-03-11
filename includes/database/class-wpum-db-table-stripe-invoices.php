@@ -12,6 +12,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+/**
+ * WPUM_DB_Table_Stripe_Invoices
+ */
 final class WPUM_DB_Table_Stripe_Invoices extends WPUM_DB_Table {
 
 	/**
@@ -38,7 +41,7 @@ final class WPUM_DB_Table_Stripe_Invoices extends WPUM_DB_Table {
 	 */
 	protected function set_schema() {
 
-		$this->schema = "`id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+		$this->schema = '`id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `user_id` bigint(20) unsigned NOT NULL,
   `invoice_id` varchar(255) NOT NULL,
   `total` decimal(8,2) NOT NULL,
@@ -46,7 +49,7 @@ final class WPUM_DB_Table_Stripe_Invoices extends WPUM_DB_Table {
   `gateway_mode` varchar(4) NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
-			PRIMARY KEY (id)";
+			PRIMARY KEY (id)';
 	}
 
 	/**

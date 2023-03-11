@@ -12,6 +12,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+/**
+ * WPUM_DB_Table_Stripe_Subscriptions
+ */
 final class WPUM_DB_Table_Stripe_Subscriptions extends WPUM_DB_Table {
 
 	/**
@@ -38,7 +41,7 @@ final class WPUM_DB_Table_Stripe_Subscriptions extends WPUM_DB_Table {
 	 */
 	protected function set_schema() {
 
-		$this->schema = "`id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+		$this->schema = '`id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
   `user_id` bigint(20) unsigned NOT NULL,
   `customer_id` varchar(255) NOT NULL,
   `plan_id` varchar(255) NOT NULL,
@@ -48,7 +51,7 @@ final class WPUM_DB_Table_Stripe_Subscriptions extends WPUM_DB_Table {
   `gateway_mode` varchar(4) NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL,
-			PRIMARY KEY (id)";
+			PRIMARY KEY (id)';
 	}
 
 	/**
