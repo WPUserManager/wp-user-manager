@@ -202,7 +202,7 @@ class Settings {
 			'id'     => 'test_stripe_webhook_secret',
 			'name'   => __( 'Test Webhook Signing Secret', 'wp-user-manager' ),
 			'type'   => 'text',
-			'desc'   => sprintf( __( '<a target="_blank" href="%s">Set up a webhook in Stripe</a> to get the webhook signing secret, using all events for this URL:<br><code>%s</code>. ', 'wp-user-manager'), 'https://wpusermanager.com/docs/', WebhookEndpoint::get_webhook_url() ),
+			'desc'   => sprintf( __( '<a target="_blank" href="%s">Set up a webhook in Stripe</a> to get the webhook signing secret, using all events for this URL:<br><code>%s</code>', 'wp-user-manager'), 'https://wpusermanager.com/docs/', WebhookEndpoint::get_webhook_url() ),
 			'toggle' => array(
 				array(
 					'key'   => 'stripe_gateway_mode',
@@ -220,7 +220,7 @@ class Settings {
 			'id'     => 'live_stripe_webhook_secret',
 			'name'   => __( 'Live Webhook Signing Secret', 'wp-user-manager' ),
 			'type'   => 'text',
-			'desc'   => 'Set up a webhook in Stripe to get the webhook signing secret, using all events for this URL:<br><code>' . WebhookEndpoint::get_webhook_url() . '</code>',
+			'desc'   => sprintf( __( '<a target="_blank" href="%s">Set up a webhook in Stripe</a> to get the webhook signing secret, using all events for this URL:<br><code>%s</code>', 'wp-user-manager'), 'https://wpusermanager.com/docs/', WebhookEndpoint::get_webhook_url() ),
 			'toggle' => array(
 				array(
 					'key'   => 'stripe_gateway_mode',
