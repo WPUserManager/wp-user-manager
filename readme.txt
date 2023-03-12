@@ -8,7 +8,7 @@ Tested up to: 6.1
 Requires PHP: 5.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
-Stable Tag: 2.8.18
+Stable Tag: 2.9
 
 The most customizable profiles & community builder WordPress plugin with front-end login, registration, profile customization and content restriction.
 
@@ -127,6 +127,12 @@ Please note that using WPUM and the mentioned add-ons does NOT guarantee complia
 13. Login form.
 
 == Changelog ==
+
+= 2.8.19 (3rd February 2023) =
+
+- Improvement: Pagination for comments on the profile, with comments per page setting
+- Fix: Email customizer now works with the OceanWP theme
+- Fix: Conditional logic support for Repeater subfields
 
 = 2.8.18 (23rd January 2023) =
 

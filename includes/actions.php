@@ -8,8 +8,8 @@
  * @since       1.0.0
  */
 
-use Carbon_Fields\Container;
-use Carbon_Fields\Field;
+use WPUM\Carbon_Fields\Container;
+use WPUM\Carbon_Fields\Field;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -665,10 +665,12 @@ function wpum_field_conditional_logic_rules( $data ) {
 		(function() {
 			var ruleset = <?php echo wp_json_encode( $rulesets ); ?>;
 			Object.keys( ruleset ).forEach( function( fieldName ) {
-				var field = document.querySelector( '.fieldset-' + fieldName );
-				if ( field ) {
-					field.style.display = 'none';
-					field.dataset.condition = JSON.stringify( ruleset[ fieldName ] );
+				var fields = document.querySelectorAll( '.fieldset-' + fieldName );
+				if ( fields.length > 0 ) {
+					fields.forEach(function(field){
+						field.style.display = 'none';
+						field.dataset.condition = JSON.stringify( ruleset[ fieldName ] );
+					});
 				}
 			} );
 		})();
@@ -726,6 +728,18 @@ add_filter( 'wpum_form_skip_field_validation', 'wpum_conditional_fields_maybe_sk
  * @return bool
  */
 function wpum_validate_rule_value_not_equals( $valid, $rule, $values ) {
+	if ( isset( $rule['parent'] ) && isset( $values[ $rule['parent'] ] ) && is_array( $values[ $rule['parent'] ] ) ) {
+		foreach ( $values[ $rule['parent'] ] as $child ) {
+			if ( isset( $child[ $rule['field'] ] ) ) {
+				if ( $child[ $rule['field'] ] !== $rule['value'] ) {
+					return true;
+				}
+			}
+		}
+
+		return false;
+	}
+
 	return $values[ $rule['field'] ] !== $rule['value'];
 }
 
@@ -739,6 +753,18 @@ add_filter( 'wpum_conditional_field_validate_rule_value_not_equals', 'wpum_valid
  * @return bool
  */
 function wpum_validate_rule_value_equals( $valid, $rule, $values ) {
+	if ( isset( $rule['parent'] ) && isset( $values[ $rule['parent'] ] ) && is_array( $values[ $rule['parent'] ] ) ) {
+		foreach ( $values[ $rule['parent'] ] as $child ) {
+			if ( isset( $child[ $rule['field'] ] ) ) {
+				if ( $child[ $rule['field'] ] === $rule['value'] ) {
+					return true;
+				}
+			}
+		}
+
+		return false;
+	}
+
 	return $values[ $rule['field'] ] === $rule['value'];
 }
 
@@ -752,8 +778,20 @@ add_filter( 'wpum_conditional_field_validate_rule_value_equals', 'wpum_validate_
  * @return bool
  */
 function wpum_validate_rule_value_contains( $valid, $rule, $values ) {
-	if ( is_array( $values[ $rule['field'] ] ) ) {
+	if ( isset( $values[ $rule['field'] ] ) && is_array( $values[ $rule['field'] ] ) ) {
 		return in_array( $rule['value'], $values[ $rule['field'] ], true );
+	}
+
+	if ( isset( $rule['parent'] ) && isset( $values[ $rule['parent'] ] ) && is_array( $values[ $rule['parent'] ] ) ) {
+		foreach ( $values[ $rule['parent'] ] as $child ) {
+			if ( isset( $child[ $rule['field'] ] ) ) {
+				if ( strpos( $child[ $rule['field'] ], $rule['value'] ) ) {
+					return true;
+				}
+			}
+		}
+
+		return false;
 	}
 
 	return strpos( $values[ $rule['field'] ], $rule['value'] );
@@ -769,8 +807,20 @@ add_filter( 'wpum_conditional_field_validate_rule_value_contains', 'wpum_validat
  * @return bool
  */
 function wpum_validate_rule_has_value( $valid, $rule, $values ) {
-	if ( is_array( $values[ $rule['field'] ] ) ) {
+	if ( isset( $values[ $rule['field'] ] ) && is_array( $values[ $rule['field'] ] ) ) {
 		return ! empty( $values[ $rule['field'] ] );
+	}
+
+	if ( isset( $rule['parent'] ) && isset( $values[ $rule['parent'] ] ) && is_array( $values[ $rule['parent'] ] ) ) {
+		foreach ( $values[ $rule['parent'] ] as $child ) {
+			if ( isset( $child[ $rule['field'] ] ) ) {
+				if ( '' !== $child[ $rule['field'] ] ) {
+					return true;
+				}
+			}
+		}
+
+		return false;
 	}
 
 	return '' !== $values[ $rule['field'] ];
@@ -786,8 +836,20 @@ add_filter( 'wpum_conditional_field_validate_rule_has_value', 'wpum_validate_rul
  * @return bool
  */
 function wpum_validate_rule_has_no_value( $valid, $rule, $values ) {
-	if ( is_array( $values[ $rule['field'] ] ) ) {
+	if ( isset( $values[ $rule['field'] ] ) && is_array( $values[ $rule['field'] ] ) ) {
 		return empty( $values[ $rule['field'] ] );
+	}
+
+	if ( isset( $rule['parent'] ) && isset( $values[ $rule['parent'] ] ) && is_array( $values[ $rule['parent'] ] ) ) {
+		foreach ( $values[ $rule['parent'] ] as $child ) {
+			if ( isset( $child[ $rule['field'] ] ) ) {
+				if ( '' === $child[ $rule['field'] ] ) {
+					return true;
+				}
+			}
+		}
+
+		return false;
 	}
 
 	return '' === $values[ $rule['field'] ];
@@ -803,6 +865,18 @@ add_filter( 'wpum_conditional_field_validate_rule_has_no_value', 'wpum_validate_
  * @return bool
  */
 function wpum_validate_rule_value_greater( $valid, $rule, $values ) {
+	if ( isset( $rule['parent'] ) && isset( $values[ $rule['parent'] ] ) && is_array( $values[ $rule['parent'] ] ) ) {
+		foreach ( $values[ $rule['parent'] ] as $child ) {
+			if ( isset( $child[ $rule['field'] ] ) ) {
+				if ( $child[ $rule['field'] ] > $rule['value'] ) {
+					return true;
+				}
+			}
+		}
+
+		return false;
+	}
+
 	return $values[ $rule['field'] ] > $rule['value'];
 }
 
@@ -816,6 +890,18 @@ add_filter( 'wpum_conditional_field_validate_rule_value_greater', 'wpum_validate
  * @return bool
  */
 function wpum_validate_rule_value_less( $valid, $rule, $values ) {
+	if ( isset( $rule['parent'] ) && isset( $values[ $rule['parent'] ] ) && is_array( $values[ $rule['parent'] ] ) ) {
+		foreach ( $values[ $rule['parent'] ] as $child ) {
+			if ( isset( $child[ $rule['field'] ] ) ) {
+				if ( $child[ $rule['field'] ] < $rule['value'] ) {
+					return true;
+				}
+			}
+		}
+
+		return false;
+	}
+
 	return $values[ $rule['field'] ] < $rule['value'];
 }
 
@@ -874,3 +960,34 @@ function validate_user_meta_key() {
 	wp_send_json_success( $response );
 }
 add_action( 'wp_ajax_validate_user_meta_key', 'validate_user_meta_key' );
+
+
+add_action( 'the_content', function( $content ) {
+	$registration = filter_input( INPUT_GET, 'registration', FILTER_SANITIZE_STRING );
+	if ( empty( $registration ) || 'success' !== $registration ) {
+		return $content;
+	}
+
+	if ( is_page( wpum_get_core_page_id( 'register' ) ) ) {
+		return $content;
+	}
+
+	global $post;
+
+	if ( isset( $post ) && ( has_shortcode( $post->post_content, 'wpum_register' ) || has_block( 'wpum/registration-form', $post ) ) ) {
+		return $content;
+	}
+
+	$success_message = apply_filters( 'wpum_registration_success_message', esc_html__( 'Registration complete. We have sent you a confirmation email with your details.', 'wp-user-manager' ) );
+
+	ob_start();
+	WPUM()->templates
+		->set_template_data(
+			array(
+				'message' => $success_message,
+			)
+		)
+		->get_template_part( 'messages/general', 'success' );
+
+	return ob_get_clean() . $content;
+} );

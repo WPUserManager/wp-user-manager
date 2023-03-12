@@ -2,6 +2,12 @@
 
 == Changelog ==
 
+= 2.8.19 (3rd February 2023) =
+
+- Improvement: Pagination for comments on the profile, with comments per page setting
+- Fix: Email customizer now works with the OceanWP theme
+- Fix: Conditional logic support for Repeater subfields
+
 = 2.8.18 (23rd January 2023) =
 
 - Fix: Code fixes using PHPStan (props [szepeviktor](https://github.com/szepeviktor))
@@ -431,7 +437,7 @@
 
 = 2.1.9 (27th September 2019) =
 
-- WP User Manager has been [acquired by Pole Vault Web](https://wpusermanager.com/acquired/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager)
+- WP User Manager has been [acquired by Pole Vault Web](https://wpusermanager.com/news/acquired/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager)
 - Improvement: Added Homepage option for login, logout, and registration redirects for sites showing blog posts as the homepage
 - Improvement: Filter `wpum_directory_search_meta_keys` for user meta keys involved in directory search
 - Fix: Directory search not finding users when searching by first/last name
@@ -510,7 +516,7 @@
 - Fix: when avatars disabled the avatar field would still be visible
 - Fix: when changing password, verification fails to detect if passwords do not match
 - Fix: when changing password, the form would redirect to the main account page instead of showing the success message
-- Tweak: added a toggle to disable the built-in custom menus controller [https://docs.wpusermanager.com/article/430-how-to-disable-the-built-in-custom-menu-controller](https://docs.wpusermanager.com/article/430-how-to-disable-the-built-in-custom-menu-controller)
+- Tweak: added a toggle to [disable the built-in custom menus controller](https://wpusermanager.com/article/137-how-to-disable-the-built-in-custom-menu-controller/)
 
 = 2.0.7 (19th September 2018) =
 

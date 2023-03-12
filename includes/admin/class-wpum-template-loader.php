@@ -15,7 +15,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Dynamic templates loader for WPUM.
  */
-class WPUM_Template_Loader extends Gamajo_Template_Loader {
+class WPUM_Template_Loader extends WPUM\Gamajo_Template_Loader {
 
 	/**
 	 * Prefix for filter names.

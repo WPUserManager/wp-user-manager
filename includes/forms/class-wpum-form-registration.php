@@ -505,7 +505,7 @@ class WPUM_Form_Registration extends WPUM_Form {
 
 			$values = $this->get_posted_fields();
 
-			$nonce = filter_input( INPUT_POST, 'registration_nonce' );
+			$nonce = isset( $_POST['registration_nonce'] ) ? sanitize_text_field( $_POST['registration_nonce'] ) : false; // phpcs:ignore
 
 			if ( empty( $nonce ) || ! wp_verify_nonce( $nonce, 'verify_registration_form' ) ) {
 				return false;
@@ -627,16 +627,14 @@ class WPUM_Form_Registration extends WPUM_Form {
 	public function done() {
 		$redirect_page = $this->get_redirect_page();
 
-		if ( $redirect_page ) {
-			wp_safe_redirect( $redirect_page );
-			exit;
-		} else {
-			$registration_page = get_permalink( wpum_get_core_page_id( 'register' ) );
-			$registration_page = add_query_arg( array( 'registration' => 'success' ), $registration_page );
-
-			wp_safe_redirect( $registration_page );
-			exit;
+		if ( ! $redirect_page ) {
+			$redirect_page = get_permalink( wpum_get_core_page_id( 'register' ) );
 		}
+
+		$registration_page = add_query_arg( array( 'registration' => 'success' ), $redirect_page );
+
+		wp_safe_redirect( $registration_page );
+		exit;
 	}
 
 	/**

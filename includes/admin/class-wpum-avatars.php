@@ -7,8 +7,8 @@
  * @license     https://opensource.org/licenses/GPL-3.0 GNU Public License
  */
 
-use Carbon_Fields\Container;
-use Carbon_Fields\Field;
+use WPUM\Carbon_Fields\Container;
+use WPUM\Carbon_Fields\Field;
 
 // Exit if accessed directly
 if ( ! defined( 'ABSPATH' ) ) {
@@ -165,7 +165,7 @@ class WPUM_Avatars {
 			return $url;
 		}
 
-		$custom_avatar = carbon_get_user_meta( $this->get_user_id( $id_or_email ), 'current_user_avatar' );
+		$custom_avatar = \WPUM\carbon_get_user_meta( $this->get_user_id( $id_or_email ), 'current_user_avatar' );
 
 		if ( $custom_avatar && 'false' !== $custom_avatar ) {
 			$url = $custom_avatar;

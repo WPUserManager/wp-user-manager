@@ -2,7 +2,7 @@
   "name": "wp-user-manager",
   "title": "WP User Manager",
   "description": "Plugin",
-  "version": "2.8.18",
+  "version": "2.9",
   "homepage": "https://wpusermanager.com",
   "author": {
     "name": "WP User Manager",
@@ -10,7 +10,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/alessandrotesoro/wp-user-manager.git"
+    "url": "https://github.com/WPUserManager/wp-user-manager.git"
   },
   "scripts": {
     "dev": "webpack-dev-server --inline --progress --config build/webpack.dev.conf.js",

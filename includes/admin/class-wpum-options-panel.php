@@ -31,7 +31,7 @@ class WPUM_Options_Panel {
 		// Setup labels for the options panel.
 		add_filter( 'wpum_labels', array( $this, 'register_labels' ) );
 
-		$this->panel = new TDP\OptionsKit( 'wpum' );
+		$this->panel = new \WPUM\TDP\OptionsKit( 'wpum' );
 		$this->panel->set_page_title( 'WP User Manager Settings' );
 
 		// Add a logo to the options panel.
@@ -419,6 +419,17 @@ class WPUM_Options_Panel {
 					'name' => __( 'Display Comments', 'wp-user-manager' ),
 					'desc' => __( 'Enable this option to display users submitted comments on their profile page.', 'wp-user-manager' ),
 					'type' => 'checkbox',
+				),
+				array(
+					'id'     => 'number_of_comments',
+					'name'   => __( 'Number of Comments', 'wp-user-manager' ),
+					'desc'   => __( 'The default number of comments displayed in profile page.', 'wp-user-manager' ),
+					'type'   => 'text',
+					'std'    => 10,
+					'toggle' => array(
+						'key'   => 'profile_comments',
+						'value' => true,
+					),
 				),
 			),
 			'account'              => array(
