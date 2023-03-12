@@ -82,7 +82,6 @@ class Account {
 	 * Redirect users who aren't subscribed or paid
 	 */
 	public function unsubscribed_redirect() {
-		// TODO check we want to restrict content
 		if ( ! is_user_logged_in() || current_user_can( 'administrator' ) ) {
 			return;
 		}

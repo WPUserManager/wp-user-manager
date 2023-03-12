@@ -153,4 +153,23 @@ class User extends \WP_User {
 
 		return $product_data['paid'];
 	}
+
+	/**
+	 * @param string $plan
+	 *
+	 * @return bool
+	 */
+	public function hasPaidByPlan( $plan ) {
+		if ( $this->subscription && $plan === $this->subscription->plan_id ) {
+			return true;
+		}
+
+		$purchased = $this->getProductData();
+
+		if ( is_array( $purchased ) && $plan === $purchased['id'] ) {
+			return true;
+		}
+
+		return false;
+	}
 }

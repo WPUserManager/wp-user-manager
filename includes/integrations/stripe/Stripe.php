@@ -17,6 +17,11 @@ use WPUserManager\Stripe\Controllers\Products;
 class Stripe {
 
 	/**
+	 * @var Products
+	 */
+	protected static $products;
+
+	/**
 	 * Init
 	 */
 	public function init() {
@@ -38,6 +43,7 @@ class Stripe {
 		}
 
 		$products = new Products( $secret, $connect->get_gateway_mode() );
+		self::$products = $products;
 
 		$billingClass = apply_filters( 'wpum_stripe_billing_class', Billing::class );
 		$billing      = new $billingClass( $products, $connect->get_base_url() );
@@ -51,6 +57,13 @@ class Stripe {
 		( new Account( $key, $secret, $connect->get_gateway_mode(), $billing, $products ) )->init();
 
 		$webhookEndpoint->init();
+	}
+
+	/**
+	 * @return Products
+	 */
+	public static function products() {
+		return self::$products;
 	}
 
 	/**
