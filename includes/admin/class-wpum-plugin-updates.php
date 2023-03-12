@@ -62,6 +62,10 @@ class WPUM_Plugin_Updates {
 			$this->upgrade_v2_8();
 		}
 
+		if ( version_compare( $installed_version, '2.9', '<' ) ) {
+			$this->upgrade_v2_9();
+		}
+
 		update_option( 'wpum_version', $latest_version );
 	}
 
@@ -127,6 +131,22 @@ class WPUM_Plugin_Updates {
 		if ( ! isset( $existing_emails['registration_admin_notification'] ) ) {
 			$existing_emails['registration_admin_notification'] = $emails['registration_admin_notification'];
 			update_option( 'wpum_email', $existing_emails );
+		}
+	}
+
+	/**
+	 * Upgrade 2.9
+	 */
+	protected function upgrade_v2_9() {
+		$tables = array(
+			'subscriptions' => new WPUM_DB_Table_Stripe_Subscriptions(),
+			'invoice'       => new WPUM_DB_Table_Stripe_Invoices(),
+		);
+
+		foreach ( $tables as $key => $table ) {
+			if ( ! $table->exists() ) {
+				$table->create();
+			}
 		}
 	}
 
