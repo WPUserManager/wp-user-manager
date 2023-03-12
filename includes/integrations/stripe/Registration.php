@@ -43,6 +43,11 @@ class Registration {
 	protected $products;
 
 	/**
+	 * @var array
+	 */
+	protected $allowed_plans;
+
+	/**
 	 * Registration constructor.
 	 *
 	 * @param string   $public_key
@@ -52,11 +57,12 @@ class Registration {
 	 * @param Products $products
 	 */
 	public function __construct( $public_key, $secret_key, $test_mode, $billing, $products ) {
-		$this->public_key = $public_key;
-		$this->secret_key = $secret_key;
-		$this->test_mode  = $test_mode;
-		$this->billing    = $billing;
-		$this->products   = $products;
+		$this->public_key    = $public_key;
+		$this->secret_key    = $secret_key;
+		$this->test_mode     = $test_mode;
+		$this->billing       = $billing;
+		$this->products      = $products;
+		$this->allowed_plans = wpum_get_option( ( $this->test_mode ? 'test' : 'live' ) . '_stripe_products', array() );
 	}
 
 	/**
@@ -99,7 +105,7 @@ class Registration {
 					'desc'     => __( 'Take payment at registration for this Stripe product. Selecting multiple products will allow the user to choose at registration.', 'wp-user-manager' ),
 					'type'     => 'multiselect',
 					'multiple' => true,
-					'options'  => $this->products->get_plans(),
+					'options'  => $this->products->get_plans( $this->allowed_plans ),
 				),
 			),
 		);
@@ -120,7 +126,7 @@ class Registration {
 			return $fields;
 		}
 
-		$plans = $this->products->get_plans();
+		$plans = $this->products->get_plans( $this->allowed_plans );
 
 		$options = array();
 		foreach ( $plans as $plan ) {

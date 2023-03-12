@@ -115,14 +115,20 @@ class Products {
 	}
 
 	/**
+	 * @param array $allowed
+	 *
 	 * @return array
 	 * @throws \Stripe\Exception\ApiErrorException
 	 */
-	public function get_plans() {
+	public function get_plans( $allowed = array() ) {
 		$list     = array();
 		$products = $this->all();
 		foreach ( $products as $product ) {
 			foreach ( $product['prices'] as $id => $price ) {
+				if ( ! empty( $allowed ) && ! in_array( $id, $allowed, true ) ) {
+					continue;
+				}
+
 				$list[] = array(
 					'label' => $product['name'] . ' - ' . html_entity_decode( \WPUserManager\Stripe\Stripe::currencySymbol( $price['currency'] ) ) . number_format( $price['unit_amount'] / 100 ),
 					'value' => $id,
