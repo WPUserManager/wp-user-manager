@@ -260,7 +260,7 @@ class Settings {
 			$settings['stripe'][] = array(
 				'id'       => 'test_stripe_products',
 				'name'     => __( 'Eligible Products', 'wp-user-manager' ),
-				'desc'     => sprintf( 'Select the product prices users can subscribe to on the account page. This should be the same as the products defined in the <a target="_blank" href="%s">Stripe Customer Portal Subscription settings</a>.', 'https://dashboard.stripe.com/test/settings/billing/portal' ),
+				'desc'     => sprintf( 'Select the product prices users can subscribe to on the account page. This should be the same as the products defined in the <a target="_blank" href="%s">Stripe Customer Portal Subscription settings</a>.', 'https://wpusermanager.com/article/337-recurring-subscriptions/#configure-eligible-products' ),
 				'type'     => 'multiselect',
 				'multiple' => true,
 				'options'  => $this->products->get_plans(),
@@ -280,7 +280,7 @@ class Settings {
 			$settings['stripe'][] = array(
 				'id'       => 'live_stripe_products',
 				'name'     => __( 'Eligible Products', 'wp-user-manager' ),
-				'desc'     => sprintf( 'Select the product prices users can subscribe to on the account page. This should be the same as the products defined in the <a target="_blank" href="%s">Stripe Customer Portal Subscription settings</a>.', 'https://dashboard.stripe.com/settings/billing/portal' ),
+				'desc'     => sprintf( 'Select the product prices users can subscribe to on the account page. This should be the same as the products defined in the <a target="_blank" href="%s">Stripe Customer Portal Subscription settings</a>.', 'https://wpusermanager.com/article/337-recurring-subscriptions/#configure-eligible-products' ),
 				'type'     => 'multiselect',
 				'multiple' => true,
 				'options'  => $this->products->get_plans(),
