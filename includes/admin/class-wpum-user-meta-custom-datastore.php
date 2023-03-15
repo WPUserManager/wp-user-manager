@@ -82,6 +82,11 @@ class WPUM_User_Meta_Custom_Datastore extends Datastore {
 		if ( is_a( $field, '\\Carbon_Fields\\Field\\Complex_Field' ) ) {
 			$value = $field->get_value_tree();
 		}
+
+		if ( is_a( $field, '\\Carbon_Fields\\Field\\Date_Field' ) ) {
+			$value = date( 'Y-m-d', strtotime( $value ) );
+		}
+
 		$this->save_key_value_pair_with_autoload( $key, $value, $field->get_autoload() );
 	}
 

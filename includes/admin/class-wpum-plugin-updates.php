@@ -148,6 +148,25 @@ class WPUM_Plugin_Updates {
 				$table->create();
 			}
 		}
+
+		$date_fields = WPUM()->fields->get_fields( array(
+			'type' => 'datepicker',
+		) );
+
+		global $wpdb;
+
+		foreach ( $date_fields as $date_field ) {
+			$meta_key = $date_field->get_key();
+
+			$results = $wpdb->get_results( $wpdb->prepare( "SELECT user_id, meta_value FROM $wpdb->usermeta WHERE `meta_key` = %s AND `meta_value` != ''", $meta_key ) );
+			foreach ( $results as $result ) {
+				if ( empty( $result->meta_value ) ) {
+					continue;
+				}
+				$value = date( 'Y-m-d', strtotime( $result->meta_value ) );
+				update_user_meta( $result->user_id, $meta_key, $value );
+			}
+		}
 	}
 
 	/**
