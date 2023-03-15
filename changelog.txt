@@ -2,6 +2,14 @@
 
 == Changelog ==
 
+= 2.9 (16th March 2023) =
+
+- New: Collect payment for site access with credit cards using our Stripe integration
+- New: Use native Elementor widgets instead of WP User Manager shortcodes
+- New: Choose an image as the default avatar for users who haven't uploaded one
+- New: Compatibility with the [Stripe Pro](https://wpusermanager.com/addons/stripe-pro/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager) addon
+- Fix: PHP notice on form submit with Repeater field with conditional logic
+
 = 2.8.19 (3rd February 2023) =
 
 - Improvement: Pagination for comments on the profile, with comments per page setting
