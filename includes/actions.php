@@ -224,6 +224,7 @@ function wpum_restrict_wp_profile() {
 
 	$profile_redirect = wpum_get_option( 'backend_profile_redirect' );
 
+	// @phpstan-ignore-next-line IS_PROFILE_PAGE is defined in wp-admin/profile.php
 	if ( ! current_user_can( 'administrator' ) && IS_PROFILE_PAGE && $profile_redirect ) {
 		wp_safe_redirect( esc_url( get_permalink( $profile_redirect[0] ) ) );
 		exit;
