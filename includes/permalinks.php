@@ -12,8 +12,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-use Brain\Cortex\Route\RouteCollectionInterface;
-use Brain\Cortex\Route\QueryRoute;
+use WPUM\Brain\Cortex\Route\RouteCollectionInterface;
+use WPUM\Brain\Cortex\Route\QueryRoute;
 
 /**
  * Register custom routing for the account page.

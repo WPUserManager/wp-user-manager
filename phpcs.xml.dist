@@ -4,6 +4,7 @@
 	<exclude-pattern>includes/updates/WPUM_EDD_SL_Plugin_Updater</exclude-pattern>
 	<exclude-pattern>includes/compatibility/oceanwp</exclude-pattern>
 	<exclude-pattern>vendor</exclude-pattern>
+	<exclude-pattern>bin</exclude-pattern>
 	<exclude-pattern>release</exclude-pattern>
 	<exclude-pattern>languages</exclude-pattern>
 	<exclude-pattern>dist</exclude-pattern>
@@ -15,6 +16,7 @@
 	<exclude-pattern>static</exclude-pattern>
 	<exclude-pattern>Gruntfile.js</exclude-pattern>
 	<exclude-pattern>.sass-cache</exclude-pattern>
+	<exclude-pattern>scoper.inc.php</exclude-pattern>
 	<exclude-pattern>node_modules/</exclude-pattern>
 	<rule ref="WordPress">
 		<exclude name="Squiz.Commenting.FileComment.MissingPackageTag" />
@@ -31,5 +33,17 @@
 		<exclude name="PEAR.Functions.FunctionCallSignature.ContentAfterOpenBracket"/>
 		<exclude name="PEAR.Functions.FunctionCallSignature.CloseBracketLine"/>
 		<exclude name="PEAR.Functions.FunctionCallSignature.MultipleArguments"/>
+	</rule>
+	<rule ref="WordPress.Files.FileName.NotHyphenatedLowercase">
+        <exclude-pattern>/includes/integrations/stripe</exclude-pattern>
+    </rule>
+    <rule ref="WordPress.Files.FileName.InvalidClassFileName">
+		<exclude-pattern>/includes/integrations/stripe</exclude-pattern>
+	</rule>
+	<rule ref="WordPress.NamingConventions.ValidVariableName.VariableNotSnakeCase">
+		<exclude-pattern>/includes/integrations/stripe</exclude-pattern>
+	</rule>
+	<rule ref="WordPress.NamingConventions.ValidVariableName.PropertyNotSnakeCase">
+		<exclude-pattern>/includes/integrations/stripe</exclude-pattern>
 	</rule>
 </ruleset>

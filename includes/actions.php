@@ -8,8 +8,8 @@
  * @since       1.0.0
  */
 
-use Carbon_Fields\Container;
-use Carbon_Fields\Field;
+use WPUM\Carbon_Fields\Container;
+use WPUM\Carbon_Fields\Field;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -960,3 +960,34 @@ function validate_user_meta_key() {
 	wp_send_json_success( $response );
 }
 add_action( 'wp_ajax_validate_user_meta_key', 'validate_user_meta_key' );
+
+
+add_action( 'the_content', function( $content ) {
+	$registration = filter_input( INPUT_GET, 'registration', FILTER_SANITIZE_STRING );
+	if ( empty( $registration ) || 'success' !== $registration ) {
+		return $content;
+	}
+
+	if ( is_page( wpum_get_core_page_id( 'register' ) ) ) {
+		return $content;
+	}
+
+	global $post;
+
+	if ( isset( $post ) && ( has_shortcode( $post->post_content, 'wpum_register' ) || has_block( 'wpum/registration-form', $post ) ) ) {
+		return $content;
+	}
+
+	$success_message = apply_filters( 'wpum_registration_success_message', esc_html__( 'Registration complete. We have sent you a confirmation email with your details.', 'wp-user-manager' ) );
+
+	ob_start();
+	WPUM()->templates
+		->set_template_data(
+			array(
+				'message' => $success_message,
+			)
+		)
+		->get_template_part( 'messages/general', 'success' );
+
+	return ob_get_clean() . $content;
+} );

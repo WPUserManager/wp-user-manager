@@ -64,3 +64,5 @@ $wpdb->query( 'DROP TABLE IF EXISTS ' . $wpdb->prefix . 'wpum_fieldsgroups' ); /
 $wpdb->query( 'DROP TABLE IF EXISTS ' . $wpdb->prefix . 'wpum_registration_formmeta' ); // phpcs:ignore
 $wpdb->query( 'DROP TABLE IF EXISTS ' . $wpdb->prefix . 'wpum_registration_forms' ); // phpcs:ignore
 $wpdb->query( 'DROP TABLE IF EXISTS ' . $wpdb->prefix . 'wpum_search_fields' ); // phpcs:ignore
+$wpdb->query( 'DROP TABLE IF EXISTS ' . $wpdb->prefix . 'wpum_stripe_invoices' ); // phpcs:ignore
+$wpdb->query( 'DROP TABLE IF EXISTS ' . $wpdb->prefix . 'wpum_stripe_subscriptions' ); // phpcs:ignore

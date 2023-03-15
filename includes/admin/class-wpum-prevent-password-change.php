@@ -7,8 +7,8 @@
  * @license     https://opensource.org/licenses/GPL-3.0 GNU Public License
  */
 
-use Carbon_Fields\Container;
-use Carbon_Fields\Field;
+use WPUM\Carbon_Fields\Container;
+use WPUM\Carbon_Fields\Field;
 
 // Exit if accessed directly
 if ( ! defined( 'ABSPATH' ) ) {
@@ -59,7 +59,7 @@ class WPUM_Prevent_Password_Change {
 
 			$user_id = get_current_user_id();
 
-			if ( carbon_get_user_meta( $user_id, 'prevent_password_change' ) ) {
+			if ( \WPUM\carbon_get_user_meta( $user_id, 'prevent_password_change' ) ) {
 				return new WP_Error( 'password-validation-error', esc_html__( 'Changing password for this account is currently disabled.', 'wp-user-manager' ) );
 			}
 		}

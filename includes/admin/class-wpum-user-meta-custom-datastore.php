@@ -7,9 +7,9 @@
  * @license     https://opensource.org/licenses/GPL-3.0 GNU Public License
  */
 
-use Carbon_Fields\Field\Field;
-use Carbon_Fields\Datastore\Datastore;
-use Carbon_Fields\Helper\Helper;
+use WPUM\Carbon_Fields\Field\Field;
+use WPUM\Carbon_Fields\Datastore\Datastore;
+use WPUM\Carbon_Fields\Helper\Helper;
 
 /**
  * Stores serialized values in the database
@@ -82,6 +82,11 @@ class WPUM_User_Meta_Custom_Datastore extends Datastore {
 		if ( is_a( $field, '\\Carbon_Fields\\Field\\Complex_Field' ) ) {
 			$value = $field->get_value_tree();
 		}
+
+		if ( is_a( $field, '\\Carbon_Fields\\Field\\Date_Field' ) ) {
+			$value = gmdate( 'Y-m-d', strtotime( $value ) );
+		}
+
 		$this->save_key_value_pair_with_autoload( $key, $value, $field->get_autoload() );
 	}
 

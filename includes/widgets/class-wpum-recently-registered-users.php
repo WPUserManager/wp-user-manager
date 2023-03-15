@@ -18,7 +18,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * @since 1.0.0
  */
-class WPUM_Recently_Registered_Users extends WPH_Widget {
+class WPUM_Recently_Registered_Users extends \WPUM\WPH_Widget {
 
 	/**
 	 * __construct function.
