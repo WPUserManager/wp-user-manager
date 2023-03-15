@@ -346,8 +346,7 @@ module.exports = function( grunt ) {
 	grunt.registerTask( 'do_git', [  'gitcommit', 'gittag', 'gitpush' ] );
 	grunt.registerTask( 'release', [ 'pre_vcs', 'do_svn', 'do_git'  ] );
 
-	grunt.registerTask( 'build', ['clean:main', 'copy', 'shell:prefixComposerDependencies', 'clean:build', 'compress'] );
-	grunt.registerTask( 'dev-build', ['clean:main', 'copy', 'shell:prefixComposerDependencies', 'clean:build', 'compress', 'shell:symlinkScopedVendor'] );
+	grunt.registerTask( 'build', ['clean:main', 'copy', 'shell:prefixComposerDependencies', 'clean:build', 'compress', 'shell:symlinkScopedVendor'] );
 	grunt.registerTask( 'symlink-vendor', [ 'shell:symlinkScopedVendor'] );
 
 	grunt.util.linefeed = '\n';
