@@ -10,6 +10,8 @@
 - New: Compatibility with the [Stripe Pro](https://wpusermanager.com/addons/stripe-pro/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager) addon
 - Improvement: Registration success notice now shows on after registration redirect pages
 - Improvement: Third-party dependency code is now prefixed to avoid clashes with other plugins
+- Improvement: Storage date format for the Date picker field updated to 'Y-m-d' for standardization
+- Improvement: Date format for the Date picker field can be altered with the 'wpum_field_datepicker_date_format' filter
 - Fix: PHP notice on form submit with Repeater field with conditional logic
 
 = 2.8.19 (3rd February 2023) =
