@@ -135,6 +135,26 @@ return [
 			    $contents = str_replace( '\\\\Carbon_Fields\\\\Container', '\\\\' . $prefix . '\\\\Carbon_Fields\\\\Container', $contents );
 		    }
 
+		    if ( false !== strrpos( $filePath, 'htmlburger/carbon-fields/core/Helper/Helper.php' ) ) {
+			    $contents = str_replace(  'use ' . $prefix . '\\WP_Query;', 'use \\WP_Query;', $contents );
+		    }
+
+		    if ( false !== strrpos( $filePath, 'htmlburger/carbon-fields/core/Widget/Widget.php' ) ) {
+			    $contents = str_replace(  '\\' . $prefix . '\\WP_Widget', '\\WP_Widget', $contents );
+		    }
+
+		    if ( false !== strrpos( $filePath, 'htmlburger/carbon-fields/core/Libraries/Sidebar_Manager/Sidebar_Manager.php' ) ) {
+			    $contents = str_replace(  '\\' . $prefix . '\\WP_Error', '\\WP_Error', $contents );
+		    }
+
+		    if ( false !== strrpos( $filePath, 'htmlburger/carbon-fields/core/REST_API/Router.php' ) ) {
+			    $contents = str_replace(  '\\' . $prefix . '\\WP_REST_Response', '\\WP_REST_Response', $contents );
+		    }
+
+		    if ( false !== strrpos( $filePath, 'htmlburger/carbon-fields/core/Toolset/WP_Toolset.php' ) ) {
+			    $contents = str_replace(  '\\' . $prefix . '\\WP_Term', '\\WP_Term', $contents );
+		    }
+
 		    if ( false !== strrpos( $filePath, 'wp-user-manager/wpum-blocks/blocks-loader.php' ) ) {
 			    $contents = str_replace( 'WP_Block_Type_Registry', '\\WP_Block_Type_Registry', $contents );
 		    }
