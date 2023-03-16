@@ -2,6 +2,10 @@
 
 == Changelog ==
 
+= 2.9.2 (16th March 2023) =
+
+- Fix: PHP 8 Fatal error: Uncaught TypeError: spl_autoload_unregister(): Argument #1 ($callback) must be a valid callback
+
 = 2.9.1 (16th March 2023) =
 
 - Fix: PHP Fatal error failed opening required /includes/functions-scoped.php
