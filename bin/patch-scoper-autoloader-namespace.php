@@ -23,6 +23,7 @@ function prefix_namespace_in_autoloader_file( $file, $prefix ) {
 	$path     = $file;
 	$contents = file_get_contents( $path );
 	$contents = str_replace( 'Composer\\\\Autoload', $prefix . '\\\\Composer\\\\Autoload', $contents );
+	$contents = str_replace( 'spl_autoload_unregister(array(\'ComposerAutoloader', 'spl_autoload_unregister(array(\'' . $prefix . '\\\\ComposerAutoloader', $contents );
 	file_put_contents( $path, $contents );
 }
 
