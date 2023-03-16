@@ -36,8 +36,7 @@ function wpum_login_form( $atts, $content = null ) {
 
 	ob_start();
 
-	$context = filter_input( INPUT_GET, 'context', FILTER_SANITIZE_STRING );
-	if ( is_user_logged_in() && 'edit' !== $context ) {
+	if ( is_user_logged_in() && ! apply_filters( 'wpum_shortcode_logged_in_override', false, 'wpum_login_form' ) ) {
 		WPUM()->templates
 			->get_template_part( 'already-logged-in' );
 	} else {
@@ -77,9 +76,7 @@ function wpum_password_recovery( $atts, $content = null ) {
 
 	ob_start();
 
-	$context = filter_input( INPUT_GET, 'context', FILTER_SANITIZE_STRING );
-
-	if ( is_user_logged_in() && 'edit' !== $context ) {
+	if ( is_user_logged_in() && ! apply_filters( 'wpum_shortcode_logged_in_override', false, 'wpum_password_recovery' ) ) {
 		WPUM()->templates
 			->get_template_part( 'already-logged-in' );
 	} else {
@@ -111,8 +108,7 @@ function wpum_login_link( $atts, $content = null ) {
 		$atts
 	);
 
-	$context = filter_input( INPUT_GET, 'context', FILTER_SANITIZE_STRING );
-	if ( is_user_logged_in() && 'edit' !== $context ) {
+	if ( is_user_logged_in() && ! apply_filters( 'wpum_shortcode_logged_in_override', false, 'wpum_login_link' ) ) {
 		$output = '';
 	} else {
 
@@ -157,8 +153,7 @@ function wpum_logout_link( $atts, $content = null ) {
 
 	$output = '';
 
-	$context = filter_input( INPUT_GET, 'context', FILTER_SANITIZE_STRING );
-	if ( is_user_logged_in() || 'edit' !== $context ) {
+	if ( is_user_logged_in() || apply_filters( 'wpum_shortcode_logged_in_override', false, 'wpum_logout_link' ) ) {
 		$output = '<a href="' . esc_url( wp_logout_url( $args['redirect'] ) ) . '">' . esc_html( $args['label'] ) . '</a>';
 	}
 
@@ -195,8 +190,7 @@ function wpum_registration_form( $atts, $content = null ) {
 
 		$finalstep = apply_filters( 'wpum_check_next_step', true );
 
-		$context = filter_input( INPUT_GET, 'context', FILTER_SANITIZE_STRING );
-		if ( is_user_logged_in() && $finalstep && ! $is_success && 'edit' !== $context ) {
+		if ( is_user_logged_in() && $finalstep && ! $is_success && ! apply_filters( 'wpum_shortcode_logged_in_override', false, 'wpum_registration_form' ) ) {
 
 			WPUM()->templates
 				->get_template_part( 'already-logged-in' );
@@ -698,6 +692,10 @@ function wpum_profile_card( $atts, $content = null ) {
 		$user_id = get_current_user_id();
 	}
 
+	if ( empty( $user_id ) ) {
+		return '';
+	}
+
 	WPUM()->templates
 		->set_template_data(
 			array(
@@ -745,15 +743,15 @@ function wpum_directory( $atts, $content = null ) {
 	$check_directory = get_post_status( $directory_id );
 
 	// Directory settings.
-	$has_sort_by             = carbon_get_post_meta( $directory_id, 'directory_display_sorter' );
-	$sort_by_default         = carbon_get_post_meta( $directory_id, 'directory_sorting_method' );
-	$has_search_form         = carbon_get_post_meta( $directory_id, 'directory_search_form' );
-	$has_amount_modifier     = carbon_get_post_meta( $directory_id, 'directory_display_amount_filter' );
-	$assigned_roles          = carbon_get_post_meta( $directory_id, 'directory_assigned_roles' );
-	$profiles_per_page       = carbon_get_post_meta( $directory_id, 'directory_profiles_per_page' ) ? carbon_get_post_meta( $directory_id, 'directory_profiles_per_page' ) : 10;
-	$excluded_users          = carbon_get_post_meta( $directory_id, 'directory_excluded_users' );
-	$directory_template      = carbon_get_post_meta( $directory_id, 'directory_template' );
-	$directory_user_template = carbon_get_post_meta( $directory_id, 'directory_user_template' );
+	$has_sort_by             = \WPUM\carbon_get_post_meta( $directory_id, 'directory_display_sorter' );
+	$sort_by_default         = \WPUM\carbon_get_post_meta( $directory_id, 'directory_sorting_method' );
+	$has_search_form         = \WPUM\carbon_get_post_meta( $directory_id, 'directory_search_form' );
+	$has_amount_modifier     = \WPUM\carbon_get_post_meta( $directory_id, 'directory_display_amount_filter' );
+	$assigned_roles          = \WPUM\carbon_get_post_meta( $directory_id, 'directory_assigned_roles' );
+	$profiles_per_page       = \WPUM\carbon_get_post_meta( $directory_id, 'directory_profiles_per_page' ) ? carbon_get_post_meta( $directory_id, 'directory_profiles_per_page' ) : 10;
+	$excluded_users          = \WPUM\carbon_get_post_meta( $directory_id, 'directory_excluded_users' );
+	$directory_template      = \WPUM\carbon_get_post_meta( $directory_id, 'directory_template' );
+	$directory_user_template = \WPUM\carbon_get_post_meta( $directory_id, 'directory_user_template' );
 
 	// Modify the number argument if changed from the search form.
 	$amount_post = filter_input( INPUT_POST, 'amount', FILTER_VALIDATE_INT );
@@ -849,7 +847,7 @@ function wpum_directory( $atts, $content = null ) {
 		$search_string  = sanitize_text_field( trim( wp_unslash( $directory_search ) ) );
 		$args['search'] = '*' . esc_attr( $search_string ) . '*';
 
-		$search_field_keys = carbon_get_post_meta( $directory_id, 'directory_search_fields' );
+		$search_field_keys = \WPUM\carbon_get_post_meta( $directory_id, 'directory_search_fields' );
 		$search_meta_keys  = apply_filters( 'wpum_directory_search_meta_keys', $search_field_keys );
 		$search_meta_keys  = array_unique( $search_meta_keys );
 
@@ -981,3 +979,13 @@ function wpum_maybe_fix_carbon_fields_search_keys( $args ) {
 }
 
 add_filter( 'wpum_directory_search_query_args', 'wpum_maybe_fix_carbon_fields_search_keys', 100 );
+
+add_filter( 'wpum_shortcode_logged_in_override', function ( $override ) {
+	$context = filter_input( INPUT_GET, 'context', FILTER_SANITIZE_STRING );
+
+	if ( empty( $context ) ) {
+		return $override;
+	}
+
+	return 'edit' === $context;
+} );

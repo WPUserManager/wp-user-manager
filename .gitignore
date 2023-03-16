@@ -8,6 +8,7 @@ node_modules/
 *.tar.gz
 *.zip
 /vendor
+/vendor-dist
 yarn-error.log
 .sass-cache
 #dist

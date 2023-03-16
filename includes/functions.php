@@ -1055,7 +1055,7 @@ function wpum_get_comments_for_profile( $user_id ) {
  * @return bool
  */
 function wpum_guests_can_view_profiles( $user_id ) {
-	if ( carbon_get_user_meta( $user_id, 'hide_profile_guests' ) ) {
+	if ( \WPUM\carbon_get_user_meta( $user_id, 'hide_profile_guests' ) ) {
 		return false;
 	}
 
@@ -1070,7 +1070,7 @@ function wpum_guests_can_view_profiles( $user_id ) {
  * @return bool
  */
 function wpum_members_can_view_profiles( $user_id ) {
-	if ( carbon_get_user_meta( $user_id, 'hide_profile_members' ) ) {
+	if ( \WPUM\carbon_get_user_meta( $user_id, 'hide_profile_members' ) ) {
 		return false;
 	}
 

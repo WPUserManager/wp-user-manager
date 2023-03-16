@@ -293,6 +293,16 @@ class WPUM_DB_Fields extends WPUM_DB {
 			$where .= " AND `group_id` IN( '{$group_ids}' ) ";
 		}
 
+		// Specific field types.
+		if ( ! empty( $args['type'] ) ) {
+			if ( is_array( $args['type'] ) ) {
+				$types = implode( "','", array_map( 'sanitize_text_field', $args['type'] ) );
+			} else {
+				$types = sanitize_text_field( $args['type'] );
+			}
+			$where .= " AND `type` IN( '{$types}' ) ";
+		}
+
 		if ( ! empty( $where ) ) {
 			$where = ' WHERE 1=1 ' . $where;
 		}

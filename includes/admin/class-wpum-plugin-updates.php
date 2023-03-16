@@ -62,6 +62,10 @@ class WPUM_Plugin_Updates {
 			$this->upgrade_v2_8();
 		}
 
+		if ( version_compare( $installed_version, '2.9', '<' ) ) {
+			$this->upgrade_v2_9();
+		}
+
 		update_option( 'wpum_version', $latest_version );
 	}
 
@@ -127,6 +131,41 @@ class WPUM_Plugin_Updates {
 		if ( ! isset( $existing_emails['registration_admin_notification'] ) ) {
 			$existing_emails['registration_admin_notification'] = $emails['registration_admin_notification'];
 			update_option( 'wpum_email', $existing_emails );
+		}
+	}
+
+	/**
+	 * Upgrade 2.9
+	 */
+	protected function upgrade_v2_9() {
+		$tables = array(
+			'subscriptions' => new WPUM_DB_Table_Stripe_Subscriptions(),
+			'invoice'       => new WPUM_DB_Table_Stripe_Invoices(),
+		);
+
+		foreach ( $tables as $key => $table ) {
+			if ( ! $table->exists() ) {
+				$table->create();
+			}
+		}
+
+		$date_fields = WPUM()->fields->get_fields( array(
+			'type' => 'datepicker',
+		) );
+
+		global $wpdb;
+
+		foreach ( $date_fields as $date_field ) {
+			$meta_key = $date_field->get_key();
+
+			$results = $wpdb->get_results( $wpdb->prepare( "SELECT user_id, meta_value FROM $wpdb->usermeta WHERE `meta_key` = %s AND `meta_value` != ''", $meta_key ) ); // phpcs:ignore
+			foreach ( $results as $result ) {
+				if ( empty( $result->meta_value ) ) {
+					continue;
+				}
+				$value = gmdate( 'Y-m-d', strtotime( $result->meta_value ) );
+				update_user_meta( $result->user_id, $meta_key, $value );
+			}
 		}
 	}
 

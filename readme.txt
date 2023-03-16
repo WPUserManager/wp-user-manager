@@ -8,7 +8,7 @@ Tested up to: 6.1
 Requires PHP: 5.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
-Stable Tag: 2.8.19
+Stable Tag: 2.9
 
 The most customizable profiles & community builder WordPress plugin with front-end login, registration, profile customization and content restriction.
 
@@ -27,6 +27,7 @@ Create a custom login page, have full control over the registration form, give y
 = Features included =
 
 - [Frontend forms](https://wpusermanager.com/features/front-end-forms/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager): Allow users to register and login from the front of the site. Customize the registration form with custom fields to collect data
+- [Stripe integration](https://wpusermanager.com/articles/332-stripe/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager): Customize the emails sent to users when the register, reset their password and more
 - [Custom email notifications](https://wpusermanager.com/features/custom-email-notifications/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager): Customize the emails sent to users when the register, reset their password and more
 - [Custom avatars](https://wpusermanager.com/features/custom-avatars/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager): Users can edit their site avatar by uploading an image from the account page
 - [Elegant user profiles](https://wpusermanager.com/features/elegant-user-profiles/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager): All users have a public profile page to display their data
@@ -128,9 +129,22 @@ Please note that using WPUM and the mentioned add-ons does NOT guarantee complia
 
 == Changelog ==
 
+= 2.9 (16th March 2023) =
+
+- New: Collect payment for site access with credit cards using our Stripe integration
+- New: Use native Elementor widgets instead of WP User Manager shortcodes
+- New: Choose an image as the default avatar for users who haven't uploaded one
+- New: Compatibility with the [Stripe Pro](https://wpusermanager.com/addons/stripe-pro/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager) addon
+- Improvement: Registration success notice now shows on after registration redirect pages
+- Improvement: Third-party dependency code is now prefixed to avoid clashes with other plugins
+- Improvement: Storage date format for the Date picker field updated to 'Y-m-d' for standardization
+- Improvement: Date format for the Date picker field can be altered with the 'wpum_field_datepicker_date_format' filter
+- Fix: PHP notice on form submit with Repeater field with conditional logic
+
 = 2.8.19 (3rd February 2023) =
 
 - Improvement: Pagination for comments on the profile, with comments per page setting
+- Fix: Email customizer now works with the OceanWP theme
 - Fix: Conditional logic support for Repeater subfields
 
 = 2.8.18 (23rd January 2023) =

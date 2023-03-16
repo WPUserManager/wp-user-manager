@@ -20,11 +20,26 @@ module.exports = function( grunt ) {
 					'assets/js/src/wp-user-manager.js'
 				],
 				dest: 'assets/js/wp-user-manager.js'
+			},
+			wpum_directories: {
+				src: [
+					'assets/js/src/wpum-directories.js'
+				],
+				dest: 'assets/js/wpum-directories.js'
+			},
+			wpum_stripe: {
+				src: [
+					'assets/js/src/wpum-stripe.js'
+				],
+				dest: 'assets/js/wpum-stripe.js'
 			}
 		},
 		shell: {
-			composerDependencies: {
-				command: 'composer install --no-dev'
+			prefixComposerDependencies: {
+				command: 'sh bin/prefix-dependencies.sh <%= pkg.version %>'
+			},
+			symlinkScopedVendor: {
+				command: 'rm -rf ./vendor-dist; rsync -avz ./release/<%= pkg.version %>/vendor-dist ./'
 			}
 		},
 		jshint: {
@@ -60,7 +75,8 @@ module.exports = function( grunt ) {
 					'assets/js/admin/admin-email-customizer-controls.min.js': ['assets/js/src/admin/admin-email-customizer-controls.js'],
 					'assets/js/admin/admin-menus.min.js': ['assets/js/src/admin/admin-menus.js'],
 					'assets/js/wp-user-manager.min.js': ['assets/js/src/wp-user-manager.js'],
-					'assets/js/wpum-directories.min.js': ['assets/js/src/wpum-directories.js']
+					'assets/js/wpum-directories.min.js': ['assets/js/src/wpum-directories.js'],
+					'assets/js/wpum-stripe.min.js': ['assets/js/src/wpum-stripe.js']
 				},
 				options: {
 					banner: '/*! <%= pkg.title %> - v<%= pkg.version %>\n' +
@@ -173,7 +189,22 @@ module.exports = function( grunt ) {
 		},
 		clean: {
 			main: ['release'],
-			build: ['release/<%= pkg.version %>/build', 'release/<%= pkg.version %>/vendor/nikic/fast-route/test', 'release/<%= pkg.version %>/vendor/typisttech/imposter', 'release/<%= pkg.version %>/vendor/typisttech/imposter-plugin']
+			build: [
+				'release/<%= pkg.version %>/build',
+				'release/<%= pkg.version %>/vendor-dist/nikic/fast-route/test',
+				'release/<%= pkg.version %>/vendor-dist/typisttech/imposter',
+				'release/<%= pkg.version %>/vendor-dist/typisttech/imposter-plugin',
+				'release/<%= pkg.version %>/vendor-dist/dompdf/dompdf/lib/fonts/*.html',
+				'release/<%= pkg.version %>/vendor-dist/dompdf/dompdf/lib/fonts/*.afm',
+				'!release/<%= pkg.version %>/vendor-dist/dompdf/dompdf/lib/fonts/Helvetica.afm',
+				'!release/<%= pkg.version %>/vendor-dist/dompdf/dompdf/lib/fonts/Helvetica-Bold.afm',
+				'release/<%= pkg.version %>/vendor-dist/dompdf/dompdf/lib/fonts/*.ufm',
+				'release/<%= pkg.version %>/vendor-dist/dompdf/dompdf/lib/fonts/*.ttf',
+				'release/<%= pkg.version %>/vendor-dist/nesbot/carbon/src/Carbon/Lang',
+				'release/<%= pkg.version %>/vendor-dist/htmlburger/carbon-fields/assets/dist/carbon.vendor.js',
+				'release/<%= pkg.version %>/vendor-dist/htmlburger/carbon-fields/assets/dist/carbon.core.js',
+				'release/<%= pkg.version %>/vendor-dist/htmlburger/carbon-fields/yarn.lock',
+			]
 		},
 		gittag: {
            addtag: {
@@ -211,6 +242,7 @@ module.exports = function( grunt ) {
 				src:  [
 					'**',
 					'!vendor/**',
+					'!bin/**',
 					'!node_modules/**',
 					'!tests/**',
 					'!release/**',
@@ -227,7 +259,10 @@ module.exports = function( grunt ) {
 					'!phpcs.xml.dist',
 					'!README.md',
 					'!yarn.lock',
-					'!phpstan.neon.dist'
+					'!phpstan.neon.dist',
+					'!scoper.inc.php',
+					'!composer.json',
+					'!composer.lock'
 				],
 				dest: 'release/<%= pkg.version %>/'
 			}
@@ -312,7 +347,8 @@ module.exports = function( grunt ) {
 	grunt.registerTask( 'do_git', [  'gitcommit', 'gittag', 'gitpush' ] );
 	grunt.registerTask( 'release', [ 'pre_vcs', 'do_svn', 'do_git'  ] );
 
-	grunt.registerTask( 'build', ['clean:main', 'copy', 'composer:install:no-dev', 'clean:build', 'compress'] );
+	grunt.registerTask( 'build', ['clean:main', 'copy', 'shell:prefixComposerDependencies', 'clean:build', 'compress', 'shell:symlinkScopedVendor'] );
+	grunt.registerTask( 'symlink-vendor', [ 'shell:symlinkScopedVendor'] );
 
 	grunt.util.linefeed = '\n';
 };

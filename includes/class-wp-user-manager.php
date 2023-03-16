@@ -182,6 +182,8 @@ if ( ! class_exists( 'WP_User_Manager' ) ) :
 			$this->autoload_options();
 			$this->includes();
 
+			$this->addons_can_run();
+
 			$this->init_hooks();
 		}
 
@@ -191,7 +193,66 @@ if ( ! class_exists( 'WP_User_Manager' ) ) :
 		 * @return void
 		 */
 		private function autoload() {
-			require dirname( $this->plugin_file ) . '/vendor/autoload.php';
+			if ( file_exists( dirname( $this->plugin_file ) . '/vendor-dist/scoper-autoload.php' ) ) {
+				require_once dirname( $this->plugin_file ) . '/vendor-dist/scoper-autoload.php';
+				\spl_autoload_register( array( $this, 'ensure_addon_class_alias' ), true, true );
+				require_once dirname( $this->plugin_file ) . '/includes/functions-scoped.php ';
+			} elseif ( file_exists( dirname( $this->plugin_file ) . '/vendor/autoload.php' ) ) {
+				require_once dirname( $this->plugin_file ) . '/vendor/autoload.php';
+				\spl_autoload_register( array( $this, 'ensure_class_alias' ), true, true );
+			}
+		}
+
+		/**
+		 * Ensure WPUM addon calls to core dependencies still work when calling unscoped versions
+		 *
+		 * @param string $class Class to create alias for.
+		 *
+		 * @return void
+		 */
+		public function ensure_addon_class_alias( $class ) {
+			if ( strpos( $class, 'WPUM\\' ) === 0 ) {
+				// Class is already scoped
+				return;
+			}
+
+			if ( class_exists( $class ) ) {
+				// Class exists already
+				return;
+			}
+
+			$scoped = 'WPUM\\' . $class;
+			if ( ! class_exists( $scoped ) ) {
+				// Scoped version of the class doesn't exist
+				return;
+			}
+
+			if ( ! apply_filters( 'wpum_alias_class_to_scoped_class', true, $class ) ) {
+				// Ability to filter on class name and check where the call is coming from, and not alias
+				return;
+			}
+
+			class_alias( $scoped, $class );
+		}
+
+		/**
+		 * Makes sure a class alias is created when a base class exists.
+		 *
+		 * @param string $class Class to create alias for.
+		 *
+		 * @return void
+		 */
+		public function ensure_class_alias( $class ) {
+			// If the namespace beings with the dependency class prefix, make an alias for regular class.
+			if ( strpos( $class, 'WPUM' ) !== 0 ) {
+				return;
+			}
+			$base = substr( $class, ( strlen( 'WPUM' ) + 1 ) );
+			if ( ! class_exists( $base ) ) {
+				return;
+			}
+
+			class_alias( $base, $class );
 		}
 
 		/**
@@ -211,7 +272,6 @@ if ( ! class_exists( 'WP_User_Manager' ) ) :
 		 * @return void
 		 */
 		private function includes() {
-
 			require_once WPUM_PLUGIN_DIR . 'includes/functions.php';
 			require_once WPUM_PLUGIN_DIR . 'includes/forms/trait-wpum-account.php';
 			require_once WPUM_PLUGIN_DIR . 'includes/permalinks.php';
@@ -222,6 +282,7 @@ if ( ! class_exists( 'WP_User_Manager' ) ) :
 			require_once WPUM_PLUGIN_DIR . 'includes/abstracts/class-wpum-db.php';
 			require_once WPUM_PLUGIN_DIR . 'includes/abstracts/class-wpum-shortcode-generator.php';
 			require_once WPUM_PLUGIN_DIR . 'includes/admin/class-wpum-user-meta-custom-datastore.php';
+			require_once WPUM_PLUGIN_DIR . 'includes/admin/class-wpum-addon-check.php';
 			require_once WPUM_PLUGIN_DIR . 'includes/database/class-wpum-db-table.php';
 			require_once WPUM_PLUGIN_DIR . 'includes/database/class-wpum-db-table-fields.php';
 			require_once WPUM_PLUGIN_DIR . 'includes/database/class-wpum-db-table-field-meta.php';
@@ -229,6 +290,8 @@ if ( ! class_exists( 'WP_User_Manager' ) ) :
 			require_once WPUM_PLUGIN_DIR . 'includes/database/class-wpum-db-table-registration-forms.php';
 			require_once WPUM_PLUGIN_DIR . 'includes/database/class-wpum-db-table-registration-forms-meta.php';
 			require_once WPUM_PLUGIN_DIR . 'includes/database/class-wpum-db-table-search-fields.php';
+			require_once WPUM_PLUGIN_DIR . 'includes/database/class-wpum-db-table-stripe-invoices.php';
+			require_once WPUM_PLUGIN_DIR . 'includes/database/class-wpum-db-table-stripe-subscriptions.php';
 			require_once WPUM_PLUGIN_DIR . 'includes/database/class-wpum-db-fields-groups.php';
 			require_once WPUM_PLUGIN_DIR . 'includes/database/class-wpum-db-fields.php';
 			require_once WPUM_PLUGIN_DIR . 'includes/database/class-wpum-db-field-meta.php';
@@ -262,6 +325,7 @@ if ( ! class_exists( 'WP_User_Manager' ) ) :
 			require_once WPUM_PLUGIN_DIR . 'includes/directories/class-wpum-directories-editor.php';
 			require_once WPUM_PLUGIN_DIR . 'includes/directories/wpum-directories-functions.php';
 			require_once WPUM_PLUGIN_DIR . 'includes/widgets.php';
+			require_once WPUM_PLUGIN_DIR . 'includes/integrations/elementor/class-wpum-elementor-loader.php';
 
 			require_once WPUM_PLUGIN_DIR . 'includes/admin/class-wpum-plugin-updates.php';
 
@@ -313,7 +377,7 @@ if ( ! class_exists( 'WP_User_Manager' ) ) :
 
 			require_once WPUM_PLUGIN_DIR . 'includes/compatibility/oceanwp.php';
 
-			WPUM_Blocks::get_instance();
+			\WPUM\WPUM_Blocks::get_instance();
 		}
 
 		/**
@@ -352,6 +416,8 @@ if ( ! class_exists( 'WP_User_Manager' ) ) :
 
 			( new WPUM_Plugin_Updates() )->init();
 
+			( new WPUM_Elementor_Loader() )::get_instance();
+
 			$this->field_types = new WPUM_Fields();
 			$this->field_types->init();
 
@@ -375,20 +441,20 @@ if ( ! class_exists( 'WP_User_Manager' ) ) :
 		 */
 		public function init() {
 
-			/**
-			 * @todo document before_wpum_init
-			 */
 			do_action( 'before_wpum_init' );
 
+			// Boot Stripe code
+			( new \WPUserManager\Stripe\Stripe() )->init();
+
 			// Boot the custom routing library.
-			Brain\Cortex::boot();
+			\WPUM\Brain\Cortex::boot();
 
 			// Start carbon fields and remove the sidebar manager scripts.
-			\Carbon_Fields\Carbon_Fields::boot();
-			$sidebar_manager = \Carbon_Fields\Carbon_Fields::resolve( 'sidebar_manager' );
+			\WPUM\Carbon_Fields\Carbon_Fields::boot();
+			$sidebar_manager = \WPUM\Carbon_Fields\Carbon_Fields::resolve( 'sidebar_manager' );
 			remove_action( 'admin_enqueue_scripts', array( $sidebar_manager, 'enqueue_scripts' ) );
 
-			$this->notices                = TDP\WP_Notice::instance();
+			$this->notices                = \WPUM\TDP\WP_Notice::instance();
 			$this->forms                  = WPUM_Forms::instance();
 			$this->templates              = new WPUM_Template_Loader();
 			$this->emails                 = new WPUM_Emails();
@@ -402,9 +468,6 @@ if ( ! class_exists( 'WP_User_Manager' ) ) :
 
 			require_once WPUM_PLUGIN_DIR . 'includes/shortcodes/shortcodes.php';
 
-			/**
-			 * @todo document after_wpum_init
-			 */
 			do_action( 'after_wpum_init' );
 
 		}
@@ -478,7 +541,7 @@ if ( ! class_exists( 'WP_User_Manager' ) ) :
 		 * @return boolean
 		 */
 		private function plugin_can_run() {
-			$requirements_check = new WP_Requirements_Check(
+			$requirements_check = new \WPUM\WP_Requirements_Check(
 				array(
 					'title' => 'WP User Manager',
 					'php'   => '5.5',
@@ -488,6 +551,30 @@ if ( ! class_exists( 'WP_User_Manager' ) ) :
 			);
 
 			return $requirements_check->passes();
+		}
+
+		/**
+		 * Ensure the minimum required versions of addons are installed.
+		 * Prevents fatals when addons are out of date with core.
+		 */
+		protected function addons_can_run() {
+			$addons = array(
+				array(
+					'title'       => 'WPUM Groups',
+					'min_version' => '1.2.3',
+					'file'        => 'wpum-groups/wpum-groups.php',
+				),
+				array(
+					'title'       => 'WPUM Social Login',
+					'min_version' => '2.0.9',
+					'file'        => 'wpum-social-login/wpum-social-login.php',
+				),
+			);
+
+			foreach ( $addons as $addon ) {
+				$addon['file'] = WP_PLUGIN_DIR . '/' . $addon['file'];
+				( new WPUM_Addon_Check( $addon ) )->passes();
+			}
 		}
 
 	}

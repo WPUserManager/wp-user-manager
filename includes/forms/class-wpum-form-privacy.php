@@ -101,14 +101,14 @@ class WPUM_Form_Privacy extends WPUM_Form {
 					'type'     => 'checkbox',
 					'required' => false,
 					'priority' => 0,
-					'value'    => carbon_get_user_meta( get_current_user_id(), 'hide_profile_guests' ),
+					'value'    => \WPUM\carbon_get_user_meta( get_current_user_id(), 'hide_profile_guests' ),
 				),
 				'hide_profile_members' => array(
 					'label'    => esc_html__( 'Hide my profile from members', 'wp-user-manager' ),
 					'type'     => 'checkbox',
 					'required' => false,
 					'priority' => 1,
-					'value'    => carbon_get_user_meta( get_current_user_id(), 'hide_profile_members' ),
+					'value'    => \WPUM\carbon_get_user_meta( get_current_user_id(), 'hide_profile_members' ),
 				),
 			),
 		);
