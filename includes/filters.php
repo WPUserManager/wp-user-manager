@@ -407,3 +407,11 @@ if ( wpum_get_option( 'obfuscate_display_name_emails' ) ) {
 	}, 10, 2 );
 }
 
+add_filter( 'wpum_alias_class_to_scoped_class', function ( $check, $class ) {
+	if ( 0 === strpos( $class, 'ET_Builder_' ) ) {
+		return false;
+	}
+
+	return $check;
+}, 10, 2 );
+
