@@ -2,6 +2,10 @@
 
 == Changelog ==
 
+= 2.9.1 (16th March 2023) =
+
+- Fix: PHP Fatal error failed opening required /includes/functions-scoped.php
+
 = 2.9 (16th March 2023) =
 
 - New: Collect payment for site access with credit cards using our Stripe integration
