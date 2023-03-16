@@ -221,14 +221,14 @@ if ( ! class_exists( 'WP_User_Manager' ) ) :
 				return;
 			}
 
-			$scoped = 'WPUM\\' . $class;
-			if ( ! class_exists( $scoped ) ) {
-				// Scoped version of the class doesn't exist
+			if ( ! apply_filters( 'wpum_alias_class_to_scoped_class', true, $class ) ) {
+				// Ability to filter on class name and check where the call is coming from, and not alias
 				return;
 			}
 
-			if ( ! apply_filters( 'wpum_alias_class_to_scoped_class', true, $class ) ) {
-				// Ability to filter on class name and check where the call is coming from, and not alias
+			$scoped = 'WPUM\\' . $class;
+			if ( ! class_exists( $scoped ) ) {
+				// Scoped version of the class doesn't exist
 				return;
 			}
 

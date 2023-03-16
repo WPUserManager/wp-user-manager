@@ -8,7 +8,7 @@ Tested up to: 6.1
 Requires PHP: 5.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
-Stable Tag: 2.9.2
+Stable Tag: 2.9.3
 
 The most customizable profiles & community builder WordPress plugin with front-end login, registration, profile customization and content restriction.
 
@@ -53,6 +53,7 @@ For more advanced functionality check out the [pricing page](https://wpusermanag
 
 - [Custom Fields](https://wpusermanager.com/addons/custom-fields/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager): Add custom fields to members profiles and registration forms
 - [WooCommerce](https://wpusermanager.com/addons/woocommerce/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager): Integration with WooCommerce. Collect payment at registration, allow members to update their billing and shipping addresses, display product purchases, reviews and more!
+- [Stripe Pro](https://wpusermanager.com/addons/stripe-pro/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager): Integration with Stripe. Collect payment at registration with Stripe, restrict access to your site, remove the commission fees.
 - [User Verification](https://wpusermanager.com/addons/user-verification/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager): Send a verification link via email upon registration or manually approve users before they can login
 - [Groups](https://wpusermanager.com/addons/groups/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager): Give your users the ability to create and join groups
 - [Security](https://wpusermanager.com/addons/security/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager): Add password security features and user login management features
@@ -128,6 +129,10 @@ Please note that using WPUM and the mentioned add-ons does NOT guarantee complia
 13. Login form.
 
 == Changelog ==
+
+= 2.9.3 (16th March 2023) =
+
+- Fix: Fatal errors on sites using Divi
 
 = 2.9.2 (16th March 2023) =
 
