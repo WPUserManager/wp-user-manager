@@ -196,7 +196,7 @@ if ( ! class_exists( 'WP_User_Manager' ) ) :
 			if ( file_exists( dirname( $this->plugin_file ) . '/vendor-dist/scoper-autoload.php' ) ) {
 				require_once dirname( $this->plugin_file ) . '/vendor-dist/scoper-autoload.php';
 				\spl_autoload_register( array( $this, 'ensure_addon_class_alias' ), true, true );
-				require_once dirname( $this->plugin_file ) . '/includes/functions-scoped.php ';
+				require_once dirname( $this->plugin_file ) . '/includes/functions-scoped.php';
 			} elseif ( file_exists( dirname( $this->plugin_file ) . '/vendor/autoload.php' ) ) {
 				require_once dirname( $this->plugin_file ) . '/vendor/autoload.php';
 				\spl_autoload_register( array( $this, 'ensure_class_alias' ), true, true );
