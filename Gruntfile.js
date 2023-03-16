@@ -242,6 +242,7 @@ module.exports = function( grunt ) {
 				src:  [
 					'**',
 					'!vendor/**',
+					'!bin/**',
 					'!node_modules/**',
 					'!tests/**',
 					'!release/**',
