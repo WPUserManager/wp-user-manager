@@ -2,6 +2,10 @@
 
 == Changelog ==
 
+= 2.9.4 (17th March 2023) =
+
+- Fix: Fatal error: Cannot declare because the name is already in use in errors
+
 = 2.9.3 (16th March 2023) =
 
 - Fix: Fatal errors on sites using Divi
