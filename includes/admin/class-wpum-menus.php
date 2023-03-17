@@ -207,7 +207,7 @@ class WPUM_Menus {
 	 * @param stdClass|null $args
 	 */
 	public function nav_walker_overide_fix( $id, $item, $depth, $args ) {
-		if ( is_a( $args->walker, 'Carbon_Fields\\Walker\\Nav_Menu_Item_Edit_Walker' ) ) {
+		if ( is_a( $args->walker, 'WPUM\\Carbon_Fields\\Walker\\Nav_Menu_Item_Edit_Walker' ) ) {
 			return;
 		}
 

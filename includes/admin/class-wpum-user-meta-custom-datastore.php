@@ -58,7 +58,7 @@ class WPUM_User_Meta_Custom_Datastore extends Datastore {
 		if ( empty( $value ) ) {
 			$value = '';
 		}
-		if ( empty( $value ) && is_a( $field, '\\Carbon_Fields\\Field\\Complex_Field' ) ) {
+		if ( empty( $value ) && is_a( $field, '\\WPUM\\Carbon_Fields\\Field\\Complex_Field' ) ) {
 			$value = array();
 		}
 
@@ -79,11 +79,11 @@ class WPUM_User_Meta_Custom_Datastore extends Datastore {
 		}
 		$key   = $this->get_key_for_field( $field );
 		$value = $field->get_value();
-		if ( is_a( $field, '\\Carbon_Fields\\Field\\Complex_Field' ) ) {
+		if ( is_a( $field, '\\WPUM\\Carbon_Fields\\Field\\Complex_Field' ) ) {
 			$value = $field->get_value_tree();
 		}
 
-		if ( is_a( $field, '\\Carbon_Fields\\Field\\Date_Field' ) ) {
+		if ( is_a( $field, '\\WPUM\\Carbon_Fields\\Field\\Date_Field' ) ) {
 			$value = gmdate( 'Y-m-d', strtotime( $value ) );
 		}
 

@@ -147,6 +147,10 @@ return [
 			    $contents = str_replace(  '\\' . $prefix . '\\WP_Error', '\\WP_Error', $contents );
 		    }
 
+			if ( false !== strrpos( $filePath, 'htmlburger/carbon-fields/core/Walker/Nav_Menu_Item_Edit_Walker.php' ) ) {
+			    $contents = str_replace(  '\\' . $prefix . '\\Walker_Nav_Menu_Edit', '\\Walker_Nav_Menu_Edit', $contents );
+		    }
+
 		    if ( false !== strrpos( $filePath, 'htmlburger/carbon-fields/core/REST_API/Router.php' ) ) {
 			    $contents = str_replace(  '\\' . $prefix . '\\WP_REST_Response', '\\WP_REST_Response', $contents );
 		    }
