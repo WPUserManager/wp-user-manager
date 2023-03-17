@@ -142,6 +142,11 @@ if ( ! class_exists( 'WP_User_Manager' ) ) :
 		public $directories_editor;
 
 		/**
+		 * @var array
+		 */
+		protected $aliased_classes = array();
+
+		/**
 		 * Main WPUM Instance.
 		 *
 		 * Ensures that only one instance of WPUM exists in memory at any one
@@ -221,8 +226,17 @@ if ( ! class_exists( 'WP_User_Manager' ) ) :
 				return;
 			}
 
-			if ( ! apply_filters( 'wpum_alias_class_to_scoped_class', true, $class ) ) {
-				// Ability to filter on class name and check where the call is coming from, and not alias
+			$allowed = array(
+				'Gamajo_Template_Loader',
+				'Carbon_Fields\Field',
+				'Carbon_Fields\Container',
+				'Carbon_Fields\Carbon_Fields',
+				'Brain\Cortex\Route\RedirectRoute',
+				'Brain\Cortex\Route\QueryRoute',
+				'TDP\OptionsKit',
+			);
+
+			if ( ! in_array( $class, apply_filters( 'wpum_allowed_classes_to_alias_to_scoped_class', $allowed ), true ) ) {
 				return;
 			}
 
@@ -231,6 +245,12 @@ if ( ! class_exists( 'WP_User_Manager' ) ) :
 				// Scoped version of the class doesn't exist
 				return;
 			}
+
+			if ( in_array( $class, $this->aliased_classes, true ) ) {
+				return;
+			}
+
+			$this->aliased_classes[] = $class;
 
 			class_alias( $scoped, $class );
 		}
