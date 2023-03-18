@@ -1,4 +1,4 @@
-/*! WP User Manager - v2.9
+/*! WP User Manager - v2.9.5
  * https://wpusermanager.com
  * Copyright (c) 2023; * Licensed GPLv2+ */
 jQuery( function( $ ) {
@@ -8,7 +8,9 @@ jQuery( function( $ ) {
 		} );
 
 		$( '.wpum-datepicker:not([readonly]):not(.wpum-clone-field)' ).flatpickr( {
-			dateFormat: wpumFrontend.dateFormat
+			altFormat : wpumFrontend.dateFormat,
+			altInput: true,
+			dateFormat: "Y-m-d"
 		} );
 	}
 
