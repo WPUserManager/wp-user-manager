@@ -423,11 +423,8 @@ function wpum_prevent_entire_site() {
 	$wp_login_locked = wpum_get_option( 'lock_wplogin' );
 	$is_wp_login     = $pagenow && 'wp-login.php' === $pagenow;
 
-	$url_part = filter_input( INPUT_SERVER, 'REQUEST_URI' );
-
-	if ( empty( $url_part ) ) {
-		$url_part = '';
-	}
+	$url_part = basename( $_SERVER['REQUEST_URI'] );
+	$url_part .= '/';
 
 	$url = home_url( $url_part );
 
