@@ -2,6 +2,12 @@
 
 == Changelog ==
 
+= 2.9.6 (21st March 2023) =
+
+- Improvement: Plugin now requires PHP 7.2+
+- Fix: PHP Fatal error: Cannot declare because the name is already in use in
+- Fix: Date picker on the account page now uses the correct display format
+
 = 2.9.5 (17th March 2023) =
 
 - Fix: PHP Fatal error:  Uncaught Error: Class 'WPUM\Walker_Nav_Menu_Edit' not found
