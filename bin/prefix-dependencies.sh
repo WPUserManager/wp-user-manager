@@ -15,10 +15,9 @@ composer install --no-dev --optimize-autoloader
 
 php -d memory_limit=-1 ./php-scoper.phar add-prefix --no-interaction --force --output-dir=scoped
 (
-    cd ./scoped
-    composer dump-autoload -o --no-dev
+    composer dump-autoload -o --no-dev --working-dir=scoped/
 
-  	cd ../../../
+  	cd ../../
     php ./bin/patch-scoper-autoloader-unique-array-key.php "version=$VERSION"
     php ./bin/patch-scoper-autoloader-namespace.php "version=$VERSION&prefix=WPUM"
 
