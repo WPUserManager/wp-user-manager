@@ -130,7 +130,7 @@ Please note that using WPUM and the mentioned add-ons does NOT guarantee complia
 
 == Changelog ==
 
-= 2.9.6 (21st March 2023) =
+= 2.9.6 (22nd March 2023) =
 
 - Improvement: Plugin now requires PHP 7.2+
 - Fix: PHP Fatal error: Cannot declare because the name is already in use in
