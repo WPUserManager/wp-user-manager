@@ -7,30 +7,28 @@ fi
 
 VERSION=$1
 
-rm -rf ./release/scoper
-mkdir ./release/scoper
-cp ./composer.json ./release/scoper/composer.json
-cp ./composer.lock ./release/scoper/composer.lock
-cp ./scoper.inc.php ./release/scoper/scoper.inc.php
-cd ./release/scoper
+cd ./release/$VERSION
 PHAR_URL="https://github.com/humbug/php-scoper/releases/download/0.17.2/php-scoper.phar"
 curl -O -L $PHAR_URL
 
 composer install --no-dev --optimize-autoloader
 
-php -d memory_limit=-1 ./php-scoper.phar add-prefix --no-interaction --force
+php -d memory_limit=-1 ./php-scoper.phar add-prefix --no-interaction --force --output-dir=scoped
 (
-    composer dump-autoload --classmap-authoritative --no-dev
+    composer dump-autoload -o --no-dev --working-dir=scoped/
 
-    cd ../../
-    # Fix Composer autoloader issues after scoping
-    #php ./bin/patch-scoper-autoloader-unique-array-key.php
-    php ./bin/patch-scoper-autoloader-namespace.php WPUM
+  	cd ../../
+    php ./bin/patch-scoper-autoloader-unique-array-key.php "version=$VERSION"
+    php ./bin/patch-scoper-autoloader-namespace.php "version=$VERSION&prefix=WPUM"
 
     # Move to vendor-dist
-    rm -rf ./release/$VERSION/vendor
     rm -rf ./release/$VERSION/vendor-dist
-    mv ./release/scoper/build/vendor ./release/$VERSION/vendor-dist
-    mv ./release/scoper/vendor/dompdf/dompdf/lib/fonts/installed-fonts.dist.json ./release/$VERSION/vendor-dist/dompdf/dompdf/lib/fonts/installed-fonts.dist.json
-    rm -rf ./release/scoper
+    mv ./release/$VERSION/scoped/vendor ./release/$VERSION/vendor-dist
+    mv ./release/$VERSION/vendor/dompdf/dompdf/lib/fonts/installed-fonts.dist.json ./release/$VERSION/vendor-dist/dompdf/dompdf/lib/fonts/installed-fonts.dist.json
+    rm -rf ./release/$VERSION/scoped
+    rm -rf ./release/$VERSION/php-scoper.phar
+    rm -rf ./release/$VERSION/vendor
+    rm -rf ./release/$VERSION/composer.json
+    rm -rf ./release/$VERSION/composer.lock
+    rm -rf ./release/$VERSION/scoper.inc.php
 )

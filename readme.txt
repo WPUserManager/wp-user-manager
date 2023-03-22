@@ -5,10 +5,10 @@ Contributors: wpusermanager, polevaultweb, alessandro.tesoro
 Tags: members, membership, community, user profile, user registration
 Requires at least: 4.9
 Tested up to: 6.1
-Requires PHP: 5.5
+Requires PHP: 7.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
-Stable Tag: 2.9.5
+Stable Tag: 2.9.6
 
 The most customizable profiles & community builder WordPress plugin with front-end login, registration, profile customization and content restriction.
 
@@ -129,6 +129,12 @@ Please note that using WPUM and the mentioned add-ons does NOT guarantee complia
 13. Login form.
 
 == Changelog ==
+
+= 2.9.6 (22nd March 2023) =
+
+- Improvement: Plugin now requires PHP 7.2+
+- Fix: PHP Fatal error: Cannot declare because the name is already in use in
+- Fix: Date picker on the account page now uses the correct display format
 
 = 2.9.5 (17th March 2023) =
 

@@ -560,12 +560,16 @@ class WPUM_Form_Registration extends WPUM_Form {
 
 			$new_user_id = wp_update_user( apply_filters( 'wpum_registration_user_data', $new_user_data, $new_user_id, $form ) );
 
+			if ( is_wp_error( $new_user_id ) ) {
+				throw new Exception( $new_user_id->get_error_message() );
+			}
+
+			$user = new WP_User( $new_user_id );
+
 			// Assign the role set into the registration form.
 			if ( $form->get_setting( 'allow_role_select' ) && isset( $values['register']['role'] ) ) {
-				$user = new WP_User( $new_user_id );
 				$user->set_role( $values['register']['role'] );
 			} else {
-				$user = new WP_User( $new_user_id );
 				$user->set_role( $this->role );
 			}
 

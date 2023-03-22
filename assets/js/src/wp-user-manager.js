@@ -5,7 +5,9 @@ jQuery( function( $ ) {
 		} );
 
 		$( '.wpum-datepicker:not([readonly]):not(.wpum-clone-field)' ).flatpickr( {
-			dateFormat: wpumFrontend.dateFormat
+			altFormat : wpumFrontend.dateFormat,
+			altInput: true,
+			dateFormat: "Y-m-d"
 		} );
 	}
 

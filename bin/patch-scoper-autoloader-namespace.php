@@ -10,27 +10,37 @@ if ( empty( $argv[1] ) ) {
 	return;
 }
 
-$prefix      = $argv[1];
-$scoper_path = './release/scoper/build/vendor/composer';
+parse_str( $argv[1], $args );
 
-prefix_namespace_in_autoloader_file( $scoper_path . '/autoload_static.php', $prefix );
+$scoper_path = './release/' . $args['version'] . '/scoped/vendor/composer';
+$prefix      = $args['prefix'];
+
+remove_prefix_namespace_in_autoloader_file( $scoper_path . '/autoload_static.php', $prefix );
+remove_prefix_namespace_in_autoloader_file( $scoper_path . '/autoload_psr4.php', $prefix );
+remove_prefix_namespace_in_autoloader_file( $scoper_path . '/autoload_classmap.php', $prefix );
+update_prefixLengthsPsr4( $scoper_path . '/autoload_static.php', $prefix );
 prefix_namespace_in_autoloader_file( $scoper_path . '/autoload_real.php', $prefix );
+prefix_namespace_in_autoloader_file( $scoper_path . '/autoload_static.php', $prefix );
 prefix_namespace_in_autoloader_file( $scoper_path . '/ClassLoader.php', $prefix );
-prefix_namespace_in_classmap_file( $scoper_path . '/autoload_classmap.php', $prefix );
-prefix_namespace_in_classmap_file( $scoper_path . '/autoload_static.php', $prefix );
 
+function remove_prefix_namespace_in_autoloader_file( $file, $prefix ) {
+	$path     = $file;
+	$contents = file_get_contents( $path );
+	$contents = str_replace( $prefix .'\\\\WPUserManager\\\\Stripe', 'WPUserManager\\\\Stripe', $contents );
+	file_put_contents( $path, $contents );
+}
+
+function update_prefixLengthsPsr4( $file ) {
+	$path     = $file;
+	$contents = file_get_contents( $path );
+	$contents = str_replace(  'WPUserManager\\\\Stripe\\\\\' => 26', 'WPUserManager\\\\Stripe\\\\\' => 21', $contents );
+	file_put_contents( $path, $contents );
+}
 function prefix_namespace_in_autoloader_file( $file, $prefix ) {
 	$path     = $file;
 	$contents = file_get_contents( $path );
-	$contents = str_replace( 'Composer\\\\Autoload', $prefix . '\\\\Composer\\\\Autoload', $contents );
-	$contents = str_replace( 'spl_autoload_unregister(array(\'ComposerAutoloader', 'spl_autoload_unregister(array(\'' . $prefix . '\\\\ComposerAutoloader', $contents );
+	$contents = str_replace( 'Composer\\Autoload', $prefix . '\\Composer\\Autoload', $contents );
 	file_put_contents( $path, $contents );
 }
 
-function prefix_namespace_in_classmap_file( $file, $prefix ) {
-	$path     = $file;
-	$contents = file_get_contents( $path );
-	$contents = str_replace( "'Gamajo_Template_Loader", "'" . $prefix . "\\\\Gamajo_Template_Loader", $contents );
-	$contents = str_replace( "'WP_Requirements_Check", "'" . $prefix . "\\\\WP_Requirements_Check", $contents );
-	file_put_contents( $path, $contents );
-}
+

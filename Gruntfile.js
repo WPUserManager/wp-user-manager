@@ -191,6 +191,8 @@ module.exports = function( grunt ) {
 			main: ['release'],
 			build: [
 				'release/<%= pkg.version %>/build',
+				'release/<%= pkg.version %>/scoped',
+				'release/<%= pkg.version %>/php-scoper.phar',
 				'release/<%= pkg.version %>/vendor-dist/nikic/fast-route/test',
 				'release/<%= pkg.version %>/vendor-dist/typisttech/imposter',
 				'release/<%= pkg.version %>/vendor-dist/typisttech/imposter-plugin',
@@ -242,6 +244,7 @@ module.exports = function( grunt ) {
 				src:  [
 					'**',
 					'!vendor/**',
+					'!vendor-dist/**',
 					'!bin/**',
 					'!node_modules/**',
 					'!tests/**',
@@ -259,10 +262,7 @@ module.exports = function( grunt ) {
 					'!phpcs.xml.dist',
 					'!README.md',
 					'!yarn.lock',
-					'!phpstan.neon.dist',
-					'!scoper.inc.php',
-					'!composer.json',
-					'!composer.lock'
+					'!phpstan.neon.dist'
 				],
 				dest: 'release/<%= pkg.version %>/'
 			}
@@ -346,6 +346,7 @@ module.exports = function( grunt ) {
 	grunt.registerTask( 'do_svn', [ 'svn_checkout', 'copy:svn_trunk', 'copy:svn_tag', 'push_svn' ] );
 	grunt.registerTask( 'do_git', [  'gitcommit', 'gittag', 'gitpush' ] );
 	grunt.registerTask( 'release', [ 'pre_vcs', 'do_svn', 'do_git'  ] );
+	grunt.registerTask( 'test', ['clean:main', 'copy'] );
 
 	grunt.registerTask( 'build', ['clean:main', 'copy', 'shell:prefixComposerDependencies', 'clean:build', 'compress', 'shell:symlinkScopedVendor'] );
 	grunt.registerTask( 'symlink-vendor', [ 'shell:symlinkScopedVendor'] );
