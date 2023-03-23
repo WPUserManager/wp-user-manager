@@ -409,6 +409,10 @@ function wpum_prevent_entire_site() {
 		return;
 	}
 
+	if ( wpum_is_rest_api_request() ) {
+		return;
+	}
+
 	if ( defined( 'WP_CLI' ) && WP_CLI ) {
 		return;
 	}

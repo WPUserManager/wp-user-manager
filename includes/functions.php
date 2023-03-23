@@ -1383,3 +1383,19 @@ function wpum_strip_slashes( $content ) {
 
 	return $content;
 }
+
+/**
+ * Returns true if the request is a REST API request.
+ * 
+ * @return bool
+ */
+function wpum_is_rest_api_request() {
+	if ( empty( $_SERVER['REQUEST_URI'] ) ) {
+		return false;
+	}
+
+	$rest_prefix         = trailingslashit( rest_get_url_prefix() );
+	$is_rest_api_request = ( false !== strpos( $_SERVER['REQUEST_URI'], $rest_prefix ) );
+
+	return $is_rest_api_request;
+}
