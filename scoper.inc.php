@@ -160,10 +160,8 @@ return [
 		    }
 
 		    if ( false !== strrpos( $filePath, 'wp-user-manager/wpum-blocks/blocks-loader.php' ) ) {
+			    $contents = str_replace( 'vendor/wp-user-manager/wpum-blocks/', 'vendor-dist/wp-user-manager/wpum-blocks/', $contents );
 			    $contents = str_replace( 'WP_Block_Type_Registry', '\\WP_Block_Type_Registry', $contents );
-		    }
-
-		    if ( false !== strrpos( $filePath, 'wp-user-manager/wpum-blocks/blocks-loader.php' ) ) {
 			    $contents = str_replace( 'new WPUserManagerBlocks\Loader()', 'new \\' . $prefix . '\\WPUserManagerBlocks\Loader()', $contents );
 		    }
 
