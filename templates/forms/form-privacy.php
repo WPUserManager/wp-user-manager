@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	<h2><?php echo esc_html( $data->step_name ); ?></h2>
 
 	<?php
-	$updated = filter_input( INPUT_GET, 'updated', FILTER_SANITIZE_STRING );
+	$updated = filter_input( INPUT_GET, 'updated', FILTER_UNSAFE_RAW );
 
 	if ( 'success' === $updated ) :
 		WPUM()->templates

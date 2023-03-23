@@ -49,7 +49,7 @@ class WPUM_Field_Userrole extends WPUM_Field_Type {
 			return isset( $_POST[ $key ] ) ? array_map( 'sanitize_text_field', $_POST[ $key ] ) : array(); // phpcs:ignore
 		}
 
-		return filter_input( INPUT_POST, $key, FILTER_SANITIZE_STRING );
+		return filter_input( INPUT_POST, $key, FILTER_UNSAFE_RAW );
 	}
 
 	/**

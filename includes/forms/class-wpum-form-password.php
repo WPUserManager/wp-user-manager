@@ -244,7 +244,7 @@ class WPUM_Form_Password extends WPUM_Form {
 
 				$active_tab = get_query_var( 'tab' );
 				if ( empty( $active_tab ) ) {
-					$tab = filter_input( INPUT_GET, 'tab', FILTER_SANITIZE_STRING );
+					$tab = filter_input( INPUT_GET, 'tab', FILTER_UNSAFE_RAW );
 
 					$active_tab = $tab ? $tab : 'password';
 				}

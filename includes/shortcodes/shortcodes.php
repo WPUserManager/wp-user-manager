@@ -181,7 +181,7 @@ function wpum_registration_form( $atts, $content = null ) {
 		)
 	);
 
-	$registration = filter_input( INPUT_GET, 'registration', FILTER_SANITIZE_STRING );
+	$registration = filter_input( INPUT_GET, 'registration', FILTER_UNSAFE_RAW );
 	$is_success   = 'success' === $registration;
 
 	ob_start();
@@ -787,7 +787,7 @@ function wpum_directory( $atts, $content = null ) {
 		$offset = ( $paged - 1 ) * $profiles_per_page;
 	}
 
-	$sortby = filter_input( INPUT_GET, 'sortby', FILTER_SANITIZE_STRING );
+	$sortby = filter_input( INPUT_GET, 'sortby', FILTER_UNSAFE_RAW );
 	// Set sort by method if any specified from the search form.
 	if ( $sortby ) {
 		$sortby = esc_attr( $sortby );
@@ -981,7 +981,7 @@ function wpum_maybe_fix_carbon_fields_search_keys( $args ) {
 add_filter( 'wpum_directory_search_query_args', 'wpum_maybe_fix_carbon_fields_search_keys', 100 );
 
 add_filter( 'wpum_shortcode_logged_in_override', function ( $override ) {
-	$context = filter_input( INPUT_GET, 'context', FILTER_SANITIZE_STRING );
+	$context = filter_input( INPUT_GET, 'context', FILTER_UNSAFE_RAW );
 
 	if ( empty( $context ) ) {
 		return $override;
