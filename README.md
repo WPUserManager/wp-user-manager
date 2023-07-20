@@ -18,3 +18,8 @@ Then run `vendor/bin/phpcs`, you can also supply a file path as an argument.
 ### Automated acceptance tests
 
 Run `tests/bin/run-acceptancetests.sh`
+
+## Security
+
+Please report security bugs found in the source code of the WP User Manager plugin through the [Patchstack Vulnerability Disclosure Program](https://patchstack.com/database/vdp/wp-user-manager/). The Patchstack team will assist you with verification, CVE assignment, and notify the developers of this plugin.
+
