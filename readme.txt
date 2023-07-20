@@ -104,6 +104,10 @@ Please refer to the [official documentation](https://docs.wpusermanager.com/cate
 = My emails aren't delivering =
 Please refer to the [official documentation](https://docs.wpusermanager.com/article/73-my-emails-arent-delivering/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager).
 
+= Where do I report security bugs found in this plugin? =
+
+Please report security bugs found in the source code of the WP User Manager plugin through the [Patchstack Vulnerability Disclosure Program](https://patchstack.com/database/vdp/wp-user-manager). The Patchstack team will assist you with verification, CVE assignment, and notify the developers of this plugin.
+
 = Is WP User Manager GDPR compliant? =
 
 Please refer to the [official documentation for gdpr compliance](https://docs.wpusermanager.com/article/427-gdpr-compliance/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager).
