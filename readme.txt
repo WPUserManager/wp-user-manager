@@ -106,7 +106,7 @@ Please refer to the [official documentation](https://docs.wpusermanager.com/arti
 
 = Where do I report security bugs found in this plugin? =
 
-Please report security bugs found in the source code of the WP User Manager plugin through the [Patchstack Vulnerability Disclosure Program](https://patchstack.com/database/vdp/wp-user-manager). The Patchstack team will assist you with verification, CVE assignment, and notify the developers of this plugin.
+Please report security bugs found in the source code of the WP User Manager plugin through the [Patchstack Vulnerability Disclosure Program](https://patchstack.com/database/vdp/wp-user-manager/). The Patchstack team will assist you with verification, CVE assignment, and notify the developers of this plugin.
 
 = Is WP User Manager GDPR compliant? =
 
