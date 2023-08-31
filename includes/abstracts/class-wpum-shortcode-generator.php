@@ -240,7 +240,7 @@ abstract class WPUM_Shortcode_Generator {
 	/**
 	 * Generate a textbox for the window.
 	 *
-	 * @param [type] $field
+	 * @param array $field
 	 *
 	 * @return array|false
 	 */
@@ -257,6 +257,7 @@ abstract class WPUM_Shortcode_Generator {
 			'value'     => '',
 			'classes'   => '',
 		), $field );
+
 		if ( $this->validate( $field ) ) {
 			return array_filter( $textbox, array( $this, 'return_textbox_value' ) );
 		}

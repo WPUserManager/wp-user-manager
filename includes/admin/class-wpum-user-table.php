@@ -127,14 +127,14 @@ class WPUM_User_Table {
 			$role = sanitize_text_field( wp_unslash( $_REQUEST['wpum-add-role-bottom'] ) );
 		}
 
-		$m_role = wpum_get_role( $role );
-		$roles  = array_column( wpum_get_roles( false, true ), 'value' );
+		$roles = array_column( wpum_get_roles( false, true ), 'value' );
 
 		if ( empty( $role ) || ! in_array( $role, $roles, true ) ) {
 			return;
 		}
 
-		$count = 0;
+		$m_role = wpum_get_role( $role );
+		$count  = 0;
 
 		$users = filter_input( INPUT_GET, 'users', FILTER_VALIDATE_INT, FILTER_REQUIRE_ARRAY );
 		if ( empty( $users ) ) {

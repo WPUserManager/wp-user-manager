@@ -774,7 +774,7 @@ function wpum_directory( $atts, $content = null ) {
 	}
 
 	// Exclude users if anything specified.
-	if ( $excluded_users && ! empty( $excluded_users ) ) {
+	if ( ! empty( $excluded_users ) ) {
 		$excluded_users  = trim( str_replace( ' ', '', $excluded_users ) );
 		$args['exclude'] = explode( ',', $excluded_users );
 	}

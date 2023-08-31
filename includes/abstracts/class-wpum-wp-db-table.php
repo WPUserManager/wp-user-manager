@@ -72,7 +72,7 @@ if ( ! class_exists( 'WPUM_WP_DB_Table' ) ) :
 		 */
 		protected $charset_collation = '';
 		/**
-		 * @var WPDB Database object (usually $GLOBALS['wpdb'])
+		 * @var \wpdb Database object (usually $GLOBALS['wpdb'])
 		 */
 		protected $db = false;
 		/** Methods ***************************************************************/

@@ -470,7 +470,7 @@ abstract class WPUM_Form {
 
 		if ( ! empty( $nicename ) ) {
 			return str_replace( ' ', '_', strtolower( $nicename ) );
-		} elseif ( empty( $nicename ) && $field->get_meta( 'user_meta_key' ) ) {
+		} elseif ( $field->get_meta( 'user_meta_key' ) ) {
 			return $field->get_meta( 'user_meta_key' );
 		}
 
