@@ -24,4 +24,4 @@ function WPUM() {
 	return WP_User_Manager::instance( __FILE__, '2.9.7' );
 }
 
-WPUM();
+add_action( 'plugins_loaded', 'WPUM' );
