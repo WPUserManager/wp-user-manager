@@ -385,8 +385,8 @@ function wpum_complete_setup() {
 function wpum_prevent_wp_login() {
 	global $pagenow;
 
-	$action        = filter_input( INPUT_GET, 'action', FILTER_SANITIZE_STRING );
-	$wpum_override = filter_input( INPUT_GET, 'wpum_override' );
+	$action        = sanitize_text_field( $_GET['action'] );
+	$wpum_override = sanitize_text_field( $_GET['wpum_override'] );
 
 	if ( $pagenow && 'wp-login.php' === $pagenow && ! $wpum_override && ( ! $action || ( ! in_array( $action, array( 'logout', 'lostpassword', 'rp', 'resetpass', 'postpass' ), true ) ) ) ) {
 		$page = wp_login_url();
@@ -963,7 +963,7 @@ add_action( 'wp_ajax_validate_user_meta_key', 'validate_user_meta_key' );
 
 
 add_action( 'the_content', function( $content ) {
-	$registration = filter_input( INPUT_GET, 'registration', FILTER_SANITIZE_STRING );
+	$registration = sanitize_text_field( $_GET['registration'] ?? '' );
 	if ( empty( $registration ) || 'success' !== $registration ) {
 		return $content;
 	}

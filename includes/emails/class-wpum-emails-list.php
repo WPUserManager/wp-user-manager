@@ -57,7 +57,7 @@ class WPUM_Emails_List {
 	 * @return void
 	 */
 	public function load_scripts() {
-		$page = filter_input( INPUT_GET, 'page', FILTER_SANITIZE_STRING );
+		$page = sanitize_text_field( $_GET['page'] ?? '' );
 
 		if ( 'wpum-emails' === $page ) {
 
@@ -155,8 +155,8 @@ class WPUM_Emails_List {
 
 		check_ajax_referer( 'wpum_test_email', 'nonce' );
 
-		$enabled = filter_input( INPUT_POST, 'enabled', FILTER_SANITIZE_STRING );
-		$key     = filter_input( INPUT_POST, 'key', FILTER_SANITIZE_STRING );
+		$enabled = sanitize_text_field( $_POST['enabled'] ?? '' );
+		$key     = sanitize_text_field( $_POST['key'] ?? '' );
 
 		if ( ! empty( $key ) && current_user_can( apply_filters( 'wpum_admin_pages_capability', 'manage_options' ) ) && is_admin() ) {
 			$emails                    = wpum_get_emails();

@@ -80,7 +80,7 @@ class WPUM_Emails_Customizer {
 	 * @return bool
 	 */
 	public function remove_sections( $active, $section ) {
-		$wpum_email_customizer = filter_input( INPUT_GET, 'wpum_email_customizer', FILTER_SANITIZE_STRING );
+		$wpum_email_customizer = sanitize_text_field( $_GET['wpum_email_customizer'] ?? '' );
 
 		// Bail if not our customizer.
 		if ( empty( $wpum_email_customizer ) ) {
@@ -112,7 +112,7 @@ class WPUM_Emails_Customizer {
 	 * @return bool
 	 */
 	public function remove_panels( $active, $panel ) {
-		$wpum_email_customizer = filter_input( INPUT_GET, 'wpum_email_customizer', FILTER_SANITIZE_STRING );
+		$wpum_email_customizer = sanitize_text_field( $_GET['wpum_email_customizer'] ?? '' );
 
 		if ( empty( $wpum_email_customizer ) ) {
 			return true;
@@ -124,7 +124,9 @@ class WPUM_Emails_Customizer {
 			foreach ( wpum_get_registered_emails() as $email_id => $registered_email ) {
 				$panels[] = $email_id;
 			}
-			if ( in_array( $panel->id, $panels, true ) && filter_input( INPUT_GET, 'email', FILTER_SANITIZE_STRING ) === $panel->id ) {
+
+			$email_id = sanitize_text_field( $_GET['email'] ?? '' );
+			if ( in_array( $panel->id, $panels, true ) && $email_id === $panel->id ) {
 				return true;
 			}
 			return false;
@@ -283,11 +285,9 @@ class WPUM_Emails_Customizer {
 	 * @return void
 	 */
 	public function customizer_setup_preview() {
-		$email = filter_input( INPUT_GET, 'email', FILTER_SANITIZE_STRING );
+		$email_id = sanitize_text_field( $_GET['email'] ?? '' );
 
-		if ( is_customize_preview() && $email ) {
-
-			$email_id = sanitize_text_field( $email );
+		if ( is_customize_preview() && $email_id ) {
 
 			WPUM()->templates
 				->set_template_data( array(

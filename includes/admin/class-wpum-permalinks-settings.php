@@ -119,7 +119,7 @@ class WPUM_Permalinks_Settings {
 		}
 
 		// Check that the saved permalink method is one of the registered structures.
-		$user_permalink = filter_input( INPUT_POST, 'user_permalink', FILTER_SANITIZE_STRING );
+		$user_permalink = sanitize_text_field( $_POST['user_permalink'] ?? '' );
 		if ( array_key_exists( $user_permalink, wpum_get_permalink_structures() ) ) {
 			$user_permalink = sanitize_text_field( $user_permalink );
 			update_option( 'wpum_permalink', $user_permalink );

@@ -356,18 +356,15 @@ class Settings {
 			return wp_send_json_error( $unknown_error );
 		}
 
-		$nonce = filter_input( INPUT_POST, 'nonce', FILTER_SANITIZE_STRING );
+		$nonce = sanitize_text_field( $_POST['nonce'] ?? '' );
 
 		// Nonce validation, show error on fail.
 		if ( empty( $nonce ) || ! wp_verify_nonce( $nonce, 'wpum-stripe-connect-account-information' ) ) {
 			return wp_send_json_error( $unknown_error );
 		}
 
-		$account_id = filter_input( INPUT_POST, 'account_id', FILTER_SANITIZE_STRING );
-		$account_id = $account_id ? sanitize_text_field( $account_id ) : '';
-
-		$gateway_mode = filter_input( INPUT_POST, 'gateway_mode', FILTER_SANITIZE_STRING );
-		$mode         = $gateway_mode ? sanitize_text_field( $gateway_mode ) : 'test';
+		$account_id = sanitize_text_field( $_POST['account_id'] ?? '' );
+		$mode       = sanitize_text_field( $_POST['gateway_mode'] ?? 'test' );
 
 		// Provides general reconnect and disconnect action URLs.
 		$reconnect_disconnect_actions = sprintf( '<a href="%s">%s</a>', esc_url( $this->connect->disconnect_url( $mode ) ), __( 'Disconnect', 'wp-user-manager' ) );
@@ -540,7 +537,7 @@ class Settings {
 	 * @return bool|void
 	 */
 	public function handle_stripe_connect_disconnect() {
-		$page = filter_input( INPUT_GET, 'page', FILTER_SANITIZE_STRING );
+		$page = sanitize_text_field( $_GET['page'] ?? '' );
 		if ( empty( $page ) ) {
 			return;
 		}
@@ -549,12 +546,12 @@ class Settings {
 			return;
 		}
 
-		$disconnect = filter_input( INPUT_GET, 'disconnect', FILTER_SANITIZE_STRING );
+		$disconnect = sanitize_text_field( $_GET['disconnect'] ?? '' );
 		if ( empty( $disconnect ) ) {
 			return;
 		}
 
-		$mode = filter_input( INPUT_GET, 'mode', FILTER_SANITIZE_STRING );
+		$mode = sanitize_text_field( $_GET['mode'] ?? '' );
 		if ( empty( $mode ) ) {
 			return;
 		}
@@ -564,7 +561,7 @@ class Settings {
 			return;
 		}
 
-		$nonce = filter_input( INPUT_GET, '_wpnonce', FILTER_SANITIZE_STRING );
+		$nonce = sanitize_text_field( $_GET['_wpnonce'] ?? '' );
 		if ( empty( $nonce ) ) {
 			return;
 		}
