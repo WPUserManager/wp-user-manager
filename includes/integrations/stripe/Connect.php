@@ -162,17 +162,20 @@ class Connect {
 	 * Complete connection
 	 */
 	public function complete() {
-		$page = sanitize_text_field( $_GET['page'] ?? '' );
+		$page = filter_input( INPUT_GET, 'page', FILTER_UNSAFE_RAW );
+		$page = sanitize_text_field( $page );
 		if ( empty( $page ) || 'wpum-settings' !== $page ) {
 			return;
 		}
 
-		$action = sanitize_text_field( $_GET['action'] ?? '' );
+		$action = filter_input( INPUT_GET, 'action', FILTER_UNSAFE_RAW );
+		$action = sanitize_text_field( $action );
 		if ( empty( $action ) || 'stripe_connect' !== $action ) {
 			return;
 		}
 
-		$state = sanitize_text_field( $_GET['state'] ?? '' );
+		$state = filter_input( INPUT_GET, 'state', FILTER_UNSAFE_RAW );
+		$state = sanitize_text_field( $state );
 		if ( empty( $state ) ) {
 			return;
 		}

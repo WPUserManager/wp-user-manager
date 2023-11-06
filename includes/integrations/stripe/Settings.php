@@ -356,15 +356,19 @@ class Settings {
 			return wp_send_json_error( $unknown_error );
 		}
 
-		$nonce = sanitize_text_field( $_POST['nonce'] ?? '' );
+		$nonce = filter_input( INPUT_POST, 'nonce', FILTER_UNSAFE_RAW );
+		$nonce = sanitize_text_field( $nonce );
 
 		// Nonce validation, show error on fail.
 		if ( empty( $nonce ) || ! wp_verify_nonce( $nonce, 'wpum-stripe-connect-account-information' ) ) {
 			return wp_send_json_error( $unknown_error );
 		}
 
-		$account_id = sanitize_text_field( $_POST['account_id'] ?? '' );
-		$mode       = sanitize_text_field( $_POST['gateway_mode'] ?? 'test' );
+		$account_id = filter_input( INPUT_POST, 'account_id', FILTER_UNSAFE_RAW );
+		$account_id = sanitize_text_field( $account_id );
+
+		$gateway_mode = filter_input( INPUT_POST, 'gateway_mode', FILTER_UNSAFE_RAW );
+		$mode         = $gateway_mode ? sanitize_text_field( $gateway_mode ) : 'test';
 
 		// Provides general reconnect and disconnect action URLs.
 		$reconnect_disconnect_actions = sprintf( '<a href="%s">%s</a>', esc_url( $this->connect->disconnect_url( $mode ) ), __( 'Disconnect', 'wp-user-manager' ) );
@@ -537,7 +541,8 @@ class Settings {
 	 * @return bool|void
 	 */
 	public function handle_stripe_connect_disconnect() {
-		$page = sanitize_text_field( $_GET['page'] ?? '' );
+		$page = filter_input( INPUT_GET, 'page', FILTER_UNSAFE_RAW );
+		$page = sanitize_text_field( $page );
 		if ( empty( $page ) ) {
 			return;
 		}
@@ -546,12 +551,14 @@ class Settings {
 			return;
 		}
 
-		$disconnect = sanitize_text_field( $_GET['disconnect'] ?? '' );
+		$disconnect = filter_input( INPUT_GET, 'disconnect', FILTER_UNSAFE_RAW );
+		$disconnect = sanitize_text_field( $disconnect );
 		if ( empty( $disconnect ) ) {
 			return;
 		}
 
-		$mode = sanitize_text_field( $_GET['mode'] ?? '' );
+		$mode = filter_input( INPUT_GET, 'mode', FILTER_UNSAFE_RAW );
+		$mode = sanitize_text_field( $mode );
 		if ( empty( $mode ) ) {
 			return;
 		}
@@ -561,7 +568,8 @@ class Settings {
 			return;
 		}
 
-		$nonce = sanitize_text_field( $_GET['_wpnonce'] ?? '' );
+		$nonce = filter_input( INPUT_GET, '_wpnonce', FILTER_UNSAFE_RAW );
+		$nonce = sanitize_text_field( $nonce );
 		if ( empty( $nonce ) ) {
 			return;
 		}

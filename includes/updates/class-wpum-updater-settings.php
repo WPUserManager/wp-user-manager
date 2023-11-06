@@ -93,7 +93,8 @@ class WPUM_Updater_Settings {
 	 * @return void
 	 */
 	public function notices() {
-		$license = sanitize_text_field( $_GET['license'] ?? '' );
+		$license = filter_input( INPUT_GET, 'license', FILTER_UNSAFE_RAW );
+		$license = sanitize_text_field( $license );
 		if ( is_admin() && current_user_can( 'manage_options' ) && 'deactivated' === $license ) {
 
 			?>

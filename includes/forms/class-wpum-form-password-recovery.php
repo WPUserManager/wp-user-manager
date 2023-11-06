@@ -313,7 +313,8 @@ class WPUM_Form_Password_Recovery extends WPUM_Form {
 		$this->init_fields();
 
 		$cookie_key = self::get_cookie();
-		$cookie     = sanitize_text_field( $_COOKIE[ $cookie_key ] ?? '' );
+		$cookie     = filter_input( INPUT_COOKIE, $cookie_key, FILTER_UNSAFE_RAW );
+		$cookie     = sanitize_text_field( $cookie );
 
 		if ( $cookie && 0 < strpos( $cookie, ':' ) ) {
 			list( $rp_login, $verification_key ) = explode( ':', wp_unslash( $cookie ), 2 );
@@ -421,7 +422,8 @@ class WPUM_Form_Password_Recovery extends WPUM_Form {
 			$password_2 = $values['password']['password_2'];
 
 			$cookie_key = self::get_cookie();
-			$cookie     = sanitize_text_field( $_COOKIE[ $cookie_key ] ?? '' );
+			$cookie     = filter_input( INPUT_COOKIE, $cookie_key, FILTER_UNSAFE_RAW );
+			$cookie     = sanitize_text_field( $cookie );
 			if ( $cookie && 0 < strpos( $cookie, ':' ) ) {
 				list( $rp_login, $verification_key ) = explode( ':', wp_unslash( $cookie ), 2 );
 

@@ -41,9 +41,15 @@ class WPUM_Elementor_Loader {
 		add_filter( 'elementor/widget/render_content', array( $this, 'wpum_restrict_widget_content' ), 10, 2 );
 
 		add_filter( 'wpum_shortcode_logged_in_override', function ( $override ) {
-			$post       = sanitize_text_field( $_GET['post'] ?? '' );
-			$elementor1 = sanitize_text_field( $_GET['elementor'] ?? '' );
-			$elementor2 = 'elementor' === sanitize_text_field( $_GET['action'] ?? '' );
+			$post = filter_input( INPUT_GET, 'post', FILTER_UNSAFE_RAW );
+			$post = sanitize_text_field( $post );
+
+			$elementor1 = filter_input( INPUT_GET, 'elementor', FILTER_UNSAFE_RAW );
+			$elementor1 = sanitize_text_field( $elementor1 );
+
+			$action = filter_input( INPUT_GET, 'action', FILTER_UNSAFE_RAW );
+			$action = sanitize_text_field( $elementor2 );
+			$elementor2 = 'elementor' === $action;
 
 			if ( ! empty( $post ) && ( ! empty( $elementor1 ) || $elementor2 ) ) {
 				return true;

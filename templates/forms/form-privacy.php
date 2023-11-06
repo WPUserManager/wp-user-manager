@@ -24,7 +24,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 	<h2><?php echo esc_html( $data->step_name ); ?></h2>
 
 	<?php
-	$updated = sanitize_text_field( $_GET['updated'] ?? '' );
+	$updated = filter_input( INPUT_GET, 'updated', FILTER_UNSAFE_RAW );
+	$updated = sanitize_text_field( $updated );
 	if ( 'success' === $updated ) :
 		WPUM()->templates
 			->set_template_data( array( 'message' => esc_html__( 'Profile privacy settings successfully updated.', 'wp-user-manager' ) ) )

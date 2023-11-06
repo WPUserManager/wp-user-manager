@@ -25,7 +25,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 	<h2><?php echo esc_html( $data->step_name ); ?></h2>
 
 	<?php
-	$updated = sanitize_text_field( $_GET['updated'] ?? '' );
+	$updated = filter_input( INPUT_GET, 'updated', FILTER_UNSAFE_RAW );
+	$updated = sanitize_text_field( $updated );
 	if ( 'success' === $updated ) :
 		WPUM()->templates
 			->set_template_data( array( 'message' => esc_html__( 'Profile successfully updated.', 'wp-user-manager' ) ) )
@@ -34,7 +35,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 	?>
 
 	<?php
-	$password_updated = sanitize_text_field( $_GET['password-updated'] ?? '' );
+	$password_updated = filter_input( INPUT_GET, 'password-updated', FILTER_UNSAFE_RAW );
+	$password_updated = sanitize_text_field( $password_updated );
 	if ( 'success' === $password_updated ) :
 		WPUM()->templates
 			->set_template_data( array( 'message' => esc_html__( 'Password successfully updated.', 'wp-user-manager' ) ) )

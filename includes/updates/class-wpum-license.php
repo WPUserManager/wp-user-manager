@@ -186,7 +186,8 @@ class WPUM_License {
 				return;
 			}
 
-			$license = sanitize_text_field( $_POST[ $this->item_shortname . '_license_key' ] ?? '' );
+			$license = filter_input( INPUT_POST, '_' . $this->item_shortname . '_license_key', FILTER_UNSAFE_RAW );
+			$license = sanitize_text_field( $license );
 
 			if ( empty( $license ) ) {
 				return;

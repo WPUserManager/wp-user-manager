@@ -236,8 +236,8 @@ class WPUM_Registration_Forms_Editor {
 		}
 
 		$form_id   = filter_input( INPUT_POST, 'form_id', FILTER_VALIDATE_INT );
-		$form_name = sanitize_text_field( $_POST['form_name'] ?? '' );
-		$form_name = $form_name ? $form_name : false;
+		$form_name = filter_input( INPUT_POST, 'form_name', FILTER_UNSAFE_RAW );
+		$form_name = $form_name ? sanitize_text_field( $form_name ) : false;
 
 		if ( $form_id && $form_name ) {
 
