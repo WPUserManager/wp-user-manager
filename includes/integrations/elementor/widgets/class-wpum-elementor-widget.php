@@ -108,7 +108,7 @@ abstract class WPUM_Elementor_Widget extends \Elementor\Widget_Base {
 	 */
 	protected function render() {
 		$shortcode = do_shortcode( shortcode_unautop( $this->generate_shortcode_string() ) );
-		$output    = preg_replace( "/<form action=([\"'])(.*?)\"/", '<form action="javascript:void(0);"', $shortcode );
+		$output    = $shortcode;
 		echo $output; // phpcs:ignore
 	}
 
