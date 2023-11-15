@@ -385,8 +385,8 @@ function wpum_complete_setup() {
 function wpum_prevent_wp_login() {
 	global $pagenow;
 
-	$action        = filter_input( INPUT_GET, 'action', FILTER_UNSAFE_RAW );
-	$action        = sanitize_text_field( $action );
+	$action = filter_input( INPUT_GET, 'action', FILTER_UNSAFE_RAW );
+	$action = sanitize_text_field( $action );
 
 	$wpum_override = filter_input( INPUT_GET, 'wpum_override', FILTER_UNSAFE_RAW );
 	$wpum_override = sanitize_text_field( $wpum_override );
