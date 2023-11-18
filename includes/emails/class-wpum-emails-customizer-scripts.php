@@ -57,7 +57,8 @@ class WPUM_Emails_Customizer_Scripts {
 	 * @return void
 	 */
 	public function customize_controls() {
-		$selected_email_id = filter_input( INPUT_GET, 'email', FILTER_SANITIZE_STRING );
+		$selected_email_id = filter_input( INPUT_GET, 'email', FILTER_UNSAFE_RAW );
+		$selected_email_id = sanitize_text_field( $selected_email_id );
 
 		wp_enqueue_editor();
 		wp_enqueue_script( 'wpum-email-customize-controls', WPUM_PLUGIN_URL . 'assets/js/admin/admin-email-customizer-controls.min.js', array( 'customize-controls' ), WPUM_VERSION, true );

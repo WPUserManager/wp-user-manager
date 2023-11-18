@@ -652,7 +652,8 @@ class WPUM_Plugin_Updates {
 	 * @return void
 	 */
 	public function upgrade() {
-		$update_version = filter_input( INPUT_GET, 'wpum-plugin-updates', FILTER_SANITIZE_STRING );
+		$update_version = filter_input( INPUT_GET, 'wpum-plugin-updates', FILTER_UNSAFE_RAW );
+		$update_version = sanitize_text_field( $update_version );
 
 		if ( 'v202' === $update_version && current_user_can( 'manage_options' ) && ! get_option( 'v202_upgrade' ) ) {
 

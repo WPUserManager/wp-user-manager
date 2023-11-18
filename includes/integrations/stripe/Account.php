@@ -254,7 +254,8 @@ class Account {
 	 * @throws \Stripe\Exception\ApiErrorException
 	 */
 	public function handle_manage_billing() {
-		$nonce = filter_input( INPUT_POST, 'nonce', FILTER_SANITIZE_STRING );
+		$nonce = filter_input( INPUT_POST, 'nonce', FILTER_UNSAFE_RAW );
+		$nonce = sanitize_text_field( $nonce );
 
 		if ( empty( $nonce ) || ! wp_verify_nonce( $nonce, 'wpum-stripe-manage-billing' ) ) {
 			wp_send_json_error( __( 'Unknown Error', 'wp-user-manager' ) );
@@ -279,13 +280,15 @@ class Account {
 	 * Handle checkout
 	 */
 	public function handle_checkout() {
-		$plan_id = filter_input( INPUT_POST, 'plan', FILTER_SANITIZE_STRING );
+		$plan_id = filter_input( INPUT_POST, 'plan', FILTER_UNSAFE_RAW );
+		$plan_id = sanitize_text_field( $plan_id );
 
 		if ( empty( $plan_id ) ) {
 			wp_send_json_error( __( 'Unknown plan', 'wp-user-manager' ) );
 		}
 
-		$nonce = filter_input( INPUT_POST, 'nonce', FILTER_SANITIZE_STRING );
+		$nonce = filter_input( INPUT_POST, 'nonce', FILTER_UNSAFE_RAW );
+		$nonce = sanitize_text_field( $nonce );
 
 		if ( empty( $nonce ) || ! wp_verify_nonce( $nonce, 'wpum-stripe-plan-' . $plan_id ) ) {
 			wp_send_json_error( __( 'Unknown Error', 'wp-user-manager' ) );
@@ -339,7 +342,8 @@ class Account {
 	 * Render payment message
 	 */
 	public function render_payment_message() {
-		$payment = filter_input( INPUT_GET, 'payment', FILTER_SANITIZE_STRING );
+		$payment = filter_input( INPUT_GET, 'payment', FILTER_UNSAFE_RAW );
+		$payment = sanitize_text_field( $payment );
 		if ( 'success' !== $payment ) {
 			return;
 		}
