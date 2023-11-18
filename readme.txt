@@ -8,7 +8,7 @@ Tested up to: 6.4
 Requires PHP: 7.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
-Stable Tag: 2.9.7
+Stable Tag: 2.9.8
 
 The most customizable profiles & community builder WordPress plugin with front-end login, registration, profile customization and content restriction.
 
@@ -133,6 +133,17 @@ Please note that using WPUM and the mentioned add-ons does NOT guarantee complia
 13. Login form.
 
 == Changelog ==
+
+= 2.9.8 (18th November 2023) =
+
+- Fix: Unable to add new WPUM Blocks or edit existing ones
+- Fix: PHP 8.1 and 8.2 notices
+- Fix: Redirect loop when preventing access to the site unless logged in for sites installed in a subdirectory
+- Fix: Unable to submit WPUM forms as Elementor widgets
+- Fix: Displayed Stripe product prices incorrectly rounded to whole numbers
+- Fix: REST API endpoints not accessible when preventing access to the site unless logged in
+- Fix: Unable to remove all "Allowed Roles" in the custom field permissions tab
+- Fix: Unable to add blocks for the Likes, Private Content, and Social Login addons
 
 = 2.9.7 (23rd March 2023) =
 
