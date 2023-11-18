@@ -87,6 +87,9 @@ class WPUM_Getting_Started {
 		.welcome-panel {
 			background: #016afe;
 		}
+		.welcome-panel:before {
+			display: none;
+		}
 		.welcome-panel-column {
 			display: inline-block;
 		}
