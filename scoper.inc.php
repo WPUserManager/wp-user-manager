@@ -124,6 +124,9 @@ return [
 
 			if ( false !== strrpos( $filePath, 'wpbp/widgets-helper/wph-widget.php' ) ) {
 			    $contents = str_replace( $prefix . '\\\\WP_Widget', '\\WP_Widget', $contents );
+		    }
+
+			if ( false !== strrpos( $filePath, 'wpbp/widgets-helper/class.wph-widget.php' ) ) {
 			    $contents = str_replace( 'extends WP_Widget', 'extends \\WP_Widget', $contents );
 		    }
 
