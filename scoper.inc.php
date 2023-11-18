@@ -169,6 +169,9 @@ return [
 			    $contents = str_replace( $prefix . '\\\\register_block_type', '\\\\register_block_type', $contents );
 			    $contents = str_replace( $prefix . '\\\\WPUM_Groups', '\\\\WPUM_Groups', $contents );
 			    $contents = str_replace( $prefix . '\\\\WPUM_Frontend_Posting', '\\\\WPUM_Frontend_Posting', $contents );
+			    $contents = str_replace( $prefix . '\\\\WPUM_Likes', '\\\\WPUM_Likes', $contents );
+			    $contents = str_replace( $prefix . '\\\\WPUM_Social_Login', '\\\\WPUM_Social_Login', $contents );
+			    $contents = str_replace( $prefix . '\\\\WPUM_Private_Content', '\\\\WPUM_Private_Content', $contents );
 		    }
 
 			if ( false !== strrpos( $filePath, 'brain/cortex' ) ) {
