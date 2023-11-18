@@ -423,12 +423,9 @@ function wpum_prevent_entire_site() {
 	$wp_login_locked = wpum_get_option( 'lock_wplogin' );
 	$is_wp_login     = $pagenow && 'wp-login.php' === $pagenow;
 
-	$url_part = basename( $_SERVER['REQUEST_URI'] );
-	$url_part .= '/';
+	$requested_url = ( is_ssl() ? 'https://' : 'http://' ) . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']; // phpcs:ignore
 
-	$url = home_url( $url_part );
-
-	if ( isset( $_SERVER['REQUEST_URI'] ) && $url === $login_page || ( $is_wp_login && ( ! empty( $_GET['wpum_override'] ) || ! $wp_login_locked ) ) ) { // phpcs:ignore
+	if ( $requested_url === $login_page || ( $is_wp_login && ( ! empty( $_GET['wpum_override'] ) || ! $wp_login_locked ) ) ) { // phpcs:ignore
 		return;
 	}
 
@@ -439,7 +436,7 @@ function wpum_prevent_entire_site() {
 	$password_reset_page_id = wpum_get_core_page_id( 'password' );
 	if ( ! empty( $password_reset_page_id ) ) {
 		$password_reset_page = get_permalink( $password_reset_page_id );
-		if ( 0 === strpos( $url, $password_reset_page ) ) {
+		if ( 0 === strpos( $requested_url, $password_reset_page ) ) {
 			return;
 		}
 	}
@@ -449,14 +446,14 @@ function wpum_prevent_entire_site() {
 		$registration_pages[] = get_permalink( wpum_get_core_page_id( 'register' ) );
 
 		foreach ( apply_filters( 'wpum_registration_pages', $registration_pages ) as $registration_page ) {
-			if ( $url === $registration_page ) {
+			if ( $requested_url === $registration_page ) {
 				return;
 			}
 		}
 	}
 
 	foreach ( apply_filters( 'wpum_prevent_entire_site_access_allowed_urls', array() ) as $allowed_url ) {
-		if ( $url === $allowed_url ) {
+		if ( $requested_url === $allowed_url ) {
 			return;
 		}
 	}
