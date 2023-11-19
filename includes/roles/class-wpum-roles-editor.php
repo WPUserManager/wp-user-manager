@@ -367,7 +367,7 @@ class WPUM_Roles_Editor {
 
 		$role_id = filter_input( INPUT_POST, 'role_id', FILTER_UNSAFE_RAW );
 		$role_id = sanitize_text_field( $role_id );
-		if ( ! current_user_can( 'manage_options' ) || ! current_user_can( 'delete_roles' ) || empty( $role_id ) ) {
+		if ( ! current_user_can( 'manage_options' ) || empty( $role_id ) ) {
 			wp_die( esc_html__( 'Something went wrong: could not delete the role.', 'wp-user-manager' ), 403 );
 		}
 
