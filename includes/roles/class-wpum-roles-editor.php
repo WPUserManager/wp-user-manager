@@ -98,7 +98,7 @@ class WPUM_Roles_Editor {
 
 			wp_enqueue_script( 'wpum-roles-editor' );
 			wp_enqueue_style( 'wpum-registration-forms-editor', WPUM_PLUGIN_URL . 'assets/css/admin/fields-editor.css', array(), WPUM_VERSION );
-			wp_enqueue_style( 'wpum-roles-editor-ok', WPUM_PLUGIN_URL . 'vendor/wp-user-manager/wp-optionskit/dist/static/css/app.css', array(), WPUM_VERSION );
+			wp_enqueue_style( 'wpum-roles-editor-ok', WPUM_PLUGIN_URL . WPUM()->get_vendor_dir() . '/wp-user-manager/wp-optionskit/dist/static/css/app.css', array(), WPUM_VERSION );
 
 			$js_variables = array(
 				'labels'            => $this->get_labels(),
