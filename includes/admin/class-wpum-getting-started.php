@@ -87,6 +87,9 @@ class WPUM_Getting_Started {
 		.welcome-panel {
 			background: #016afe;
 		}
+		.welcome-panel:before {
+			display: none;
+		}
 		.welcome-panel-column {
 			display: inline-block;
 		}
@@ -169,7 +172,7 @@ class WPUM_Getting_Started {
 				echo esc_html( sprintf( __( 'Thank you for installing the latest version! WP User Manager %s is ready to provide improved control over your WordPress users.', 'wp-user-manager' ), WPUM_VERSION ) );
 				?>
 				<form target="_blank" class="wpum-newsletter-subscribe" action="https://s.wpusermanager.com/subscribe" method="post" accept-charset="utf-8">
-					<p class="wpum-pre-newsletter-form">&#9993; <?php esc_html_e( 'Be sure to sign up for the WPUM newsletter below to stay informed of important updates and news.', 'wp-user-manager' ); ?></p>
+					<p class="wpum-pre-newsletter-form">✉️ <?php esc_html_e( 'Be sure to sign up for the WPUM newsletter below to stay informed of important updates and news.', 'wp-user-manager' ); ?></p>
 					<table class="form-table wpum-newsletter-form">
 						<tbody>
 							<tr>

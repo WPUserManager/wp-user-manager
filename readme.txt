@@ -4,11 +4,11 @@ Plugin URI: https://wpusermanager.com
 Contributors: wpusermanager, polevaultweb, alessandro.tesoro
 Tags: members, membership, community, user profile, user registration
 Requires at least: 4.9
-Tested up to: 6.1
+Tested up to: 6.4
 Requires PHP: 7.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
-Stable Tag: 2.9.7
+Stable Tag: 2.9.8
 
 The most customizable profiles & community builder WordPress plugin with front-end login, registration, profile customization and content restriction.
 
@@ -104,6 +104,10 @@ Please refer to the [official documentation](https://docs.wpusermanager.com/cate
 = My emails aren't delivering =
 Please refer to the [official documentation](https://docs.wpusermanager.com/article/73-my-emails-arent-delivering/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager).
 
+= Where do I report security bugs found in this plugin? =
+
+Please report security bugs found in the source code of the WP User Manager plugin through the [Patchstack Vulnerability Disclosure Program](https://patchstack.com/database/vdp/wp-user-manager/). The Patchstack team will assist you with verification, CVE assignment, and notify the developers of this plugin.
+
 = Is WP User Manager GDPR compliant? =
 
 Please refer to the [official documentation for gdpr compliance](https://docs.wpusermanager.com/article/427-gdpr-compliance/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager).
@@ -129,6 +133,18 @@ Please note that using WPUM and the mentioned add-ons does NOT guarantee complia
 13. Login form.
 
 == Changelog ==
+
+= 2.9.8 (19th November 2023) =
+
+- Fix: Unable to add new WPUM Blocks or edit existing ones
+- Fix: PHP 8.1 and 8.2 notices
+- Fix: Redirect loop when preventing access to the site unless logged in for sites installed in a subdirectory
+- Fix: Unable to submit WPUM forms as Elementor widgets
+- Fix: Displayed Stripe product prices incorrectly rounded to whole numbers
+- Fix: REST API endpoints not accessible when preventing access to the site unless logged in
+- Fix: Unable to remove all "Allowed Roles" in the custom field permissions tab
+- Fix: Unable to add blocks for the Likes, Private Content, and Social Login addons
+- Fix: Unable to delete custom role
 
 = 2.9.7 (23rd March 2023) =
 

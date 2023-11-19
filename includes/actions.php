@@ -385,8 +385,11 @@ function wpum_complete_setup() {
 function wpum_prevent_wp_login() {
 	global $pagenow;
 
-	$action        = filter_input( INPUT_GET, 'action', FILTER_SANITIZE_STRING );
-	$wpum_override = filter_input( INPUT_GET, 'wpum_override' );
+	$action = filter_input( INPUT_GET, 'action', FILTER_UNSAFE_RAW );
+	$action = sanitize_text_field( $action );
+
+	$wpum_override = filter_input( INPUT_GET, 'wpum_override', FILTER_UNSAFE_RAW );
+	$wpum_override = sanitize_text_field( $wpum_override );
 
 	if ( $pagenow && 'wp-login.php' === $pagenow && ! $wpum_override && ( ! $action || ( ! in_array( $action, array( 'logout', 'lostpassword', 'rp', 'resetpass', 'postpass' ), true ) ) ) ) {
 		$page = wp_login_url();
@@ -409,6 +412,10 @@ function wpum_prevent_entire_site() {
 		return;
 	}
 
+	if ( wpum_is_rest_api_request() ) {
+		return;
+	}
+
 	if ( defined( 'WP_CLI' ) && WP_CLI ) {
 		return;
 	}
@@ -423,15 +430,9 @@ function wpum_prevent_entire_site() {
 	$wp_login_locked = wpum_get_option( 'lock_wplogin' );
 	$is_wp_login     = $pagenow && 'wp-login.php' === $pagenow;
 
-	$url_part = filter_input( INPUT_SERVER, 'REQUEST_URI' );
+	$requested_url = ( is_ssl() ? 'https://' : 'http://' ) . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']; // phpcs:ignore
 
-	if ( empty( $url_part ) ) {
-		$url_part = '';
-	}
-
-	$url = home_url( $url_part );
-
-	if ( isset( $_SERVER['REQUEST_URI'] ) && $url === $login_page || ( $is_wp_login && ( ! empty( $_GET['wpum_override'] ) || ! $wp_login_locked ) ) ) { // phpcs:ignore
+	if ( $requested_url === $login_page || ( $is_wp_login && ( ! empty( $_GET['wpum_override'] ) || ! $wp_login_locked ) ) ) { // phpcs:ignore
 		return;
 	}
 
@@ -442,7 +443,7 @@ function wpum_prevent_entire_site() {
 	$password_reset_page_id = wpum_get_core_page_id( 'password' );
 	if ( ! empty( $password_reset_page_id ) ) {
 		$password_reset_page = get_permalink( $password_reset_page_id );
-		if ( 0 === strpos( $url, $password_reset_page ) ) {
+		if ( 0 === strpos( $requested_url, $password_reset_page ) ) {
 			return;
 		}
 	}
@@ -452,14 +453,14 @@ function wpum_prevent_entire_site() {
 		$registration_pages[] = get_permalink( wpum_get_core_page_id( 'register' ) );
 
 		foreach ( apply_filters( 'wpum_registration_pages', $registration_pages ) as $registration_page ) {
-			if ( $url === $registration_page ) {
+			if ( $requested_url === $registration_page ) {
 				return;
 			}
 		}
 	}
 
 	foreach ( apply_filters( 'wpum_prevent_entire_site_access_allowed_urls', array() ) as $allowed_url ) {
-		if ( $url === $allowed_url ) {
+		if ( $requested_url === $allowed_url ) {
 			return;
 		}
 	}
@@ -963,7 +964,8 @@ add_action( 'wp_ajax_validate_user_meta_key', 'validate_user_meta_key' );
 
 
 add_action( 'the_content', function( $content ) {
-	$registration = filter_input( INPUT_GET, 'registration', FILTER_SANITIZE_STRING );
+	$registration = filter_input( INPUT_GET, 'registration', FILTER_UNSAFE_RAW );
+	$registration = sanitize_text_field( $registration );
 	if ( empty( $registration ) || 'success' !== $registration ) {
 		return $content;
 	}

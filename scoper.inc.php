@@ -124,6 +124,10 @@ return [
 
 			if ( false !== strrpos( $filePath, 'wpbp/widgets-helper/wph-widget.php' ) ) {
 			    $contents = str_replace( $prefix . '\\\\WP_Widget', '\\WP_Widget', $contents );
+				$contents = str_replace( 'extends WP_Widget', 'extends \\WP_Widget', $contents );
+		    }
+
+			if ( false !== strrpos( $filePath, 'wpbp/widgets-helper/class.wph-widget.php' ) ) {
 			    $contents = str_replace( 'extends WP_Widget', 'extends \\WP_Widget', $contents );
 		    }
 
@@ -169,6 +173,9 @@ return [
 			    $contents = str_replace( $prefix . '\\\\register_block_type', '\\\\register_block_type', $contents );
 			    $contents = str_replace( $prefix . '\\\\WPUM_Groups', '\\\\WPUM_Groups', $contents );
 			    $contents = str_replace( $prefix . '\\\\WPUM_Frontend_Posting', '\\\\WPUM_Frontend_Posting', $contents );
+			    $contents = str_replace( $prefix . '\\\\WPUM_Likes', '\\\\WPUM_Likes', $contents );
+			    $contents = str_replace( $prefix . '\\\\WPUM_Social_Login', '\\\\WPUM_Social_Login', $contents );
+			    $contents = str_replace( $prefix . '\\\\WPUM_Private_Content', '\\\\WPUM_Private_Content', $contents );
 		    }
 
 			if ( false !== strrpos( $filePath, 'brain/cortex' ) ) {

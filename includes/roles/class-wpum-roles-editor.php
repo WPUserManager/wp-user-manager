@@ -98,7 +98,7 @@ class WPUM_Roles_Editor {
 
 			wp_enqueue_script( 'wpum-roles-editor' );
 			wp_enqueue_style( 'wpum-registration-forms-editor', WPUM_PLUGIN_URL . 'assets/css/admin/fields-editor.css', array(), WPUM_VERSION );
-			wp_enqueue_style( 'wpum-roles-editor-ok', WPUM_PLUGIN_URL . 'vendor/wp-user-manager/wp-optionskit/dist/static/css/app.css', array(), WPUM_VERSION );
+			wp_enqueue_style( 'wpum-roles-editor-ok', WPUM_PLUGIN_URL . WPUM()->get_vendor_dir() . '/wp-user-manager/wp-optionskit/dist/static/css/app.css', array(), WPUM_VERSION );
 
 			$js_variables = array(
 				'labels'            => $this->get_labels(),
@@ -337,8 +337,11 @@ class WPUM_Roles_Editor {
 			wp_die( esc_html__( 'Something went wrong: could not update the role details.', 'wp-user-manager' ), 403 );
 		}
 
-		$role_id   = filter_input( INPUT_POST, 'role_id', FILTER_SANITIZE_STRING );
-		$role_name = filter_input( INPUT_POST, 'role_name', FILTER_SANITIZE_STRING );
+		$role_id = filter_input( INPUT_POST, 'role_id', FILTER_UNSAFE_RAW );
+		$role_id = sanitize_text_field( $role_id );
+
+		$role_name = filter_input( INPUT_POST, 'role_name', FILTER_UNSAFE_RAW );
+		$role_name = sanitize_text_field( $role_name );
 
 		if ( $role_id && $role_name ) {
 
@@ -362,10 +365,9 @@ class WPUM_Roles_Editor {
 	public function delete_role() {
 		check_ajax_referer( 'wpum_delete_role', 'nonce' );
 
-		$role_id = filter_input( INPUT_POST, 'role_id', FILTER_SANITIZE_STRING );
+		$role_id = filter_input( INPUT_POST, 'role_id', FILTER_UNSAFE_RAW );
 		$role_id = sanitize_text_field( $role_id );
-
-		if ( ! current_user_can( 'manage_options' ) || ! current_user_can( 'delete_roles' ) || empty( $role_id ) ) {
+		if ( ! current_user_can( 'manage_options' ) || empty( $role_id ) ) {
 			wp_die( esc_html__( 'Something went wrong: could not delete the role.', 'wp-user-manager' ), 403 );
 		}
 
@@ -409,7 +411,7 @@ class WPUM_Roles_Editor {
 			wp_die( esc_html__( 'Something went wrong: could not create new role.', 'wp-user-manager' ), 403 );
 		}
 
-		$role_name = filter_input( INPUT_POST, 'role_name', FILTER_SANITIZE_STRING );
+		$role_name = filter_input( INPUT_POST, 'role_name', FILTER_UNSAFE_RAW );
 		$role_name = sanitize_text_field( $role_name );
 
 		if ( $role_name ) {
@@ -420,7 +422,8 @@ class WPUM_Roles_Editor {
 				'label' => $role_name,
 			);
 
-			$orig_role_id = filter_input( INPUT_POST, 'orig_role_id', FILTER_SANITIZE_STRING );
+			$orig_role_id = filter_input( INPUT_POST, 'orig_role_id', FILTER_UNSAFE_RAW );
+			$orig_role_id = sanitize_text_field( $orig_role_id );
 
 			if ( $orig_role_id ) {
 				$orig_role = wpum_get_role( $orig_role_id );

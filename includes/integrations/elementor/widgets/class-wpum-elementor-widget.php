@@ -107,8 +107,10 @@ abstract class WPUM_Elementor_Widget extends \Elementor\Widget_Base {
 	 * Written in PHP and used to generate the final HTML.
 	 */
 	protected function render() {
-		$shortcode = do_shortcode( shortcode_unautop( $this->generate_shortcode_string() ) );
-		$output    = preg_replace( "/<form action=([\"'])(.*?)\"/", '<form action="javascript:void(0);"', $shortcode );
+		$output = do_shortcode( shortcode_unautop( $this->generate_shortcode_string() ) );
+		if ( is_admin() ) {
+			$output = preg_replace( "/<form action=([\"'])(.*?)\"/", '<form action="javascript:void(0);"', $output );
+		}
 		echo $output; // phpcs:ignore
 	}
 

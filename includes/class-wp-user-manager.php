@@ -147,6 +147,11 @@ if ( ! class_exists( 'WP_User_Manager' ) ) :
 		protected $aliased_classes = array();
 
 		/**
+		 * @var string
+		 */
+		protected $vendor_dir;
+
+		/**
 		 * Main WPUM Instance.
 		 *
 		 * Ensures that only one instance of WPUM exists in memory at any one
@@ -202,10 +207,19 @@ if ( ! class_exists( 'WP_User_Manager' ) ) :
 				require_once dirname( $this->plugin_file ) . '/vendor-dist/scoper-autoload.php';
 				\spl_autoload_register( array( $this, 'ensure_addon_class_alias' ), true, true );
 				require_once dirname( $this->plugin_file ) . '/includes/functions-scoped.php';
+				$this->vendor_dir = 'vendor-dist';
 			} elseif ( file_exists( dirname( $this->plugin_file ) . '/vendor/autoload.php' ) ) {
 				require_once dirname( $this->plugin_file ) . '/vendor/autoload.php';
 				\spl_autoload_register( array( $this, 'ensure_class_alias' ), true, true );
+				$this->vendor_dir = 'vendor';
 			}
+		}
+
+		/**
+		 * @return string
+		 */
+		public function get_vendor_dir() {
+			return $this->vendor_dir;
 		}
 
 		/**
@@ -386,7 +400,8 @@ if ( ! class_exists( 'WP_User_Manager' ) ) :
 
 			require_once WPUM_PLUGIN_DIR . 'includes/install.php';
 
-			$email_customizer = filter_input( INPUT_GET, 'wpum_email_customizer', FILTER_SANITIZE_STRING );
+			$email_customizer = filter_input( INPUT_GET, 'wpum_email_customizer', FILTER_UNSAFE_RAW );
+			$email_customizer = sanitize_text_field( $email_customizer );
 			if ( defined( 'DOING_AJAX' ) || 'true' === $email_customizer ) {
 				require_once WPUM_PLUGIN_DIR . 'includes/emails/class-wpum-emails-customizer-scripts.php';
 				require_once WPUM_PLUGIN_DIR . 'includes/emails/class-wpum-emails-customizer.php';

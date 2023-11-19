@@ -24,7 +24,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 	<h2><?php echo esc_html( $data->step_name ); ?></h2>
 
 	<?php
-	$password_updated = filter_input( INPUT_GET, 'password-updated', FILTER_SANITIZE_STRING );
+	$password_updated = filter_input( INPUT_GET, 'password-updated', FILTER_UNSAFE_RAW );
+	$password_updated = sanitize_text_field( $password_updated );
 	if ( 'success' === $password_updated ) :
 		WPUM()->templates
 			->set_template_data( array( 'message' => esc_html__( 'Password successfully updated.', 'wp-user-manager' ) ) )
