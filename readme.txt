@@ -134,7 +134,7 @@ Please note that using WPUM and the mentioned add-ons does NOT guarantee complia
 
 == Changelog ==
 
-= 2.9.8 (18th November 2023) =
+= 2.9.8 (19th November 2023) =
 
 - Fix: Unable to add new WPUM Blocks or edit existing ones
 - Fix: PHP 8.1 and 8.2 notices
@@ -144,6 +144,7 @@ Please note that using WPUM and the mentioned add-ons does NOT guarantee complia
 - Fix: REST API endpoints not accessible when preventing access to the site unless logged in
 - Fix: Unable to remove all "Allowed Roles" in the custom field permissions tab
 - Fix: Unable to add blocks for the Likes, Private Content, and Social Login addons
+- Fix: Unable to delete custom role
 
 = 2.9.7 (23rd March 2023) =
 
