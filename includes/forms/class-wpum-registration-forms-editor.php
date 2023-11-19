@@ -112,7 +112,7 @@ class WPUM_Registration_Forms_Editor {
 
 			wp_enqueue_script( 'wpum-registration-forms-editor' );
 			wp_enqueue_style( 'wpum-registration-forms-editor', WPUM_PLUGIN_URL . 'assets/css/admin/fields-editor.css', array(), WPUM_VERSION );
-			wp_enqueue_style( 'wpum-registration-forms-editor-ok', WPUM_PLUGIN_URL . 'vendor/wp-user-manager/wp-optionskit/dist/static/css/app.css', array(), WPUM_VERSION );
+			wp_enqueue_style( 'wpum-registration-forms-editor-ok', WPUM_PLUGIN_URL . WPUM()->get_vendor_dir() . '/wp-user-manager/wp-optionskit/dist/static/css/app.css', array(), WPUM_VERSION );
 
 			$js_variables = array(
 				'is_addon_installed'    => apply_filters( 'wpum_registration_forms_has_registration_forms_addon', false ),
