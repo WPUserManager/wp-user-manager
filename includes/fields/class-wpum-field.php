@@ -637,7 +637,7 @@ class WPUM_Field {
 					$value = $user->data->user_email;
 					break;
 			}
-		} elseif ( strpos( $this->get_meta( 'user_meta_key' ), 'wpum_' ) === 0 ) {
+		} elseif ( strpos( $this->get_meta( 'user_meta_key' ), 'wpum_' ) === 0 && $this->get_type() !== 'taxonomy' ) {
 			$value = \WPUM\carbon_get_user_meta( $user_id, $this->get_meta( 'user_meta_key' ) );
 		} else {
 			$value = get_user_meta( $user_id, $this->get_meta( 'user_meta_key' ), true );
