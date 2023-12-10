@@ -116,6 +116,11 @@ class StripeWebhookController {
 	 * @throws \Exception
 	 */
 	protected function handleCheckoutSessionCompleted( $payload ) {
+		$subscription = $this->subscriptions->where( 'subscription_id', $payload['data']['object']['subscription'] );
+		if ( $subscription ) {
+			return new \WP_REST_Response( 'Webhook handled', 200 );
+		}
+
 		if ( $payload['data']['object']['customer_email'] ) {
 			$user    = get_user_by( 'email', $payload['data']['object']['customer_email'] );
 			$user_id = $user->ID;
@@ -160,8 +165,13 @@ class StripeWebhookController {
 			return new \WP_REST_Response( 'Webhook handled', 200 );
 		}
 
-		$customer_id = $payload['data']['object']['customer'];
+		// Check if user_id exists in the metadata
+		if ( isset( $payload['data']['object']['metadata']['user_id'] ) ) {
+			$user_id = $payload['data']['object']['metadata']['user_id'];
+			return $this->createSubscription( $user_id, $payload, false );
+		}
 
+		$customer_id  = $payload['data']['object']['customer'];
 		$subscription = $this->subscriptions->where( 'customer_id', $customer_id );
 		if ( ! $subscription ) {
 			throw new \Exception( 'Subscription not found' );
