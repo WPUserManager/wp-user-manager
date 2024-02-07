@@ -176,7 +176,7 @@ class WPUM_Form_Registration extends WPUM_Form {
 				return new WP_Error( 'nickname-validation-error', __( 'This username cannot be used.', 'wp-user-manager' ) );
 			}
 
-			if ( preg_match('/[^a-z0-9._-]/i', $values['register']['username'] ) ) {
+			if ( preg_match( '/[^a-z0-9._-]/i', $values['register']['username'] ) ) {
 				return new WP_Error( 'nickname-validation-error', __( 'This username is invalid because it uses illegal characters.', 'wp-user-manager' ) );
 			}
 		}
