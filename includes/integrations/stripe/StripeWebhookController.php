@@ -168,6 +168,7 @@ class StripeWebhookController {
 		// Check if user_id exists in the metadata
 		if ( isset( $payload['data']['object']['metadata']['user_id'] ) ) {
 			$user_id = $payload['data']['object']['metadata']['user_id'];
+
 			return $this->createSubscription( $user_id, $payload, false );
 		}
 
