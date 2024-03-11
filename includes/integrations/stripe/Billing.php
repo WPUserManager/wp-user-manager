@@ -69,6 +69,7 @@ class Billing {
 			'plan'        => $plan,
 			'success_url' => $returnUrl,
 			'cancel_url'  => $this->getBillingURL(),
+			'user_id'     => $user->ID,
 		);
 
 		if ( $stripe_account_id ) {
