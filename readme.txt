@@ -8,7 +8,7 @@ Tested up to: 6.4
 Requires PHP: 7.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
-Stable Tag: 2.9.8
+Stable Tag: 2.9.9
 
 The most customizable profiles & community builder WordPress plugin with front-end login, registration, profile customization and content restriction.
 
@@ -133,6 +133,11 @@ Please note that using WPUM and the mentioned add-ons does NOT guarantee complia
 13. Login form.
 
 == Changelog ==
+
+= 2.9.9 (11th March 2024) =
+
+- Fix: Stripe subscriptions not connecting to user correctly
+- Fix: Password field not allowing special characters
 
 = 2.9.8 (19th November 2023) =
 
