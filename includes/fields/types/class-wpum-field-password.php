@@ -61,6 +61,6 @@ class WPUM_Field_Password extends WPUM_Field_Type {
 	 * @return string|array
 	 */
 	public function get_posted_field( $key, $field ) {
-		return filter_input( INPUT_POST, $key );
+		return filter_var( $_POST[ $key ], FILTER_UNSAFE_RAW ); // phpcs:ignore
 	}
 }
