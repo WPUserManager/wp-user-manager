@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 	<label><input
 		type="checkbox"
-		class="input-checkbox"
+		class="input-checkbox input-checkboxes"
 		name="<?php echo esc_attr( isset( $data->name ) ? $data->name : $data->key ); ?>[]"
 		<?php
 		if ( ! empty( $data->value ) && is_array( $data->value ) ) {
