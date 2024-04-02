@@ -2,6 +2,23 @@
 
 == Changelog ==
 
+= 2.9.9 (11th March 2024) =
+
+- Fix: Stripe subscriptions not connecting to user correctly
+- Fix: Password field not allowing special characters
+
+= 2.9.8 (19th November 2023) =
+
+- Fix: Unable to add new WPUM Blocks or edit existing ones
+- Fix: PHP 8.1 and 8.2 notices
+- Fix: Redirect loop when preventing access to the site unless logged in for sites installed in a subdirectory
+- Fix: Unable to submit WPUM forms as Elementor widgets
+- Fix: Displayed Stripe product prices incorrectly rounded to whole numbers
+- Fix: REST API endpoints not accessible when preventing access to the site unless logged in
+- Fix: Unable to remove all "Allowed Roles" in the custom field permissions tab
+- Fix: Unable to add blocks for the Likes, Private Content, and Social Login addons
+- Fix: Unable to delete custom role
+
 = 2.9.7 (23rd March 2023) =
 
 - Fix: WP User Manager custom blocks and block restriction settings now appear in the block editor

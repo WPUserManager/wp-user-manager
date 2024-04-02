@@ -37,9 +37,9 @@ if ( ! empty( $field['default_value'] ) ) {
 }
 ?>
 
-<fieldset <?php echo isset( $field['wrapper_id'] ) ? 'id="' . esc_attr( $field['wrapper_id'] ) . '"' : ''; ?> class="fieldset-<?php echo esc_attr( $key ); ?> <?php echo isset( $field['wrapper_class'] ) ? esc_attr( $field['wrapper_class'] ) : ''; ?>"  <?php echo isset( $field['wrapper_width'] ) ? 'style="width: ' . esc_attr( $field['wrapper_width'] ) . '%; "' : ''; ?>>
+<fieldset <?php echo isset( $field['wrapper_id'] ) && $field['wrapper_id'] ? 'id="' . esc_attr( $field['wrapper_id'] ) . '"' : ''; ?> class="fieldset-<?php echo esc_attr( $key ); ?><?php echo isset( $field['wrapper_class'] ) && trim( $field['wrapper_class'] ) !== '' ? ' ' . esc_attr( $field['wrapper_class'] ) : ''; ?>" <?php echo isset( $field['wrapper_width'] ) && $field['wrapper_width'] ? 'style="width: ' . esc_attr( $field['wrapper_width'] ) . '%; "' : ''; ?>>
 
-	<?php if ( 'checkbox' === $field['type'] ) : ?>
+<?php if ( 'checkbox' === $field['type'] ) : ?>
 
 		<label for="<?php echo esc_attr( $key ); ?>">
 			<span class="field <?php echo $field['required'] ? 'required-field' : ''; ?>">
