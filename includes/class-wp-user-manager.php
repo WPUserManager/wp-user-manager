@@ -484,10 +484,8 @@ if ( ! class_exists( 'WP_User_Manager' ) ) :
 			// Boot the custom routing library.
 			\WPUM\Brain\Cortex::boot();
 
-			// Start carbon fields and remove the sidebar manager scripts.
-			\WPUM\Carbon_Fields\Carbon_Fields::boot();
-			$sidebar_manager = \WPUM\Carbon_Fields\Carbon_Fields::resolve( 'sidebar_manager' );
-			remove_action( 'admin_enqueue_scripts', array( $sidebar_manager, 'enqueue_scripts' ) );
+			// Start carbon fields
+			$this->carbon_fields();
 
 			$this->notices                = \WPUM\TDP\WP_Notice::instance();
 			$this->forms                  = WPUM_Forms::instance();
@@ -505,6 +503,19 @@ if ( ! class_exists( 'WP_User_Manager' ) ) :
 
 			do_action( 'after_wpum_init' );
 
+		}
+
+		/**
+		 * Start carbon fields and remove the sidebar manager scripts.
+		 *
+		 * @return void
+		 */
+		protected function carbon_fields() {
+			\WPUM\Carbon_Fields\Carbon_Fields::boot();
+			$sidebar_manager = \WPUM\Carbon_Fields\Carbon_Fields::resolve( 'sidebar_manager' );
+			remove_action( 'admin_enqueue_scripts', array( $sidebar_manager, 'enqueue_scripts' ) );
+			remove_action( 'wp_ajax_carbon_fields_add_sidebar', array( $sidebar_manager, 'action_handler' ) );
+			remove_action( 'wp_ajax_carbon_fields_remove_sidebar', array( $sidebar_manager, 'action_handler' ) );
 		}
 
 		/**
