@@ -948,6 +948,14 @@ function validate_user_meta_key() {
 		return;
 	}
 
+	if ( ! check_ajax_referer( 'wpum_check_field', 'nonce' ) ) {
+		return;
+	}
+
+	if ( ! current_user_can( apply_filters( 'wpum_admin_pages_capability', 'manage_options' ) ) ) {
+		return;
+	}
+
 	$user_meta_key = sanitize_text_field( filter_input( INPUT_POST, 'user_meta_key' ) );
 	$user_meta_key = 'wpum_' . $user_meta_key;
 
