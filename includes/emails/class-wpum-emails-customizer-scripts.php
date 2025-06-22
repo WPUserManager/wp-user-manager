@@ -83,6 +83,10 @@ class WPUM_Emails_Customizer_Scripts {
 		);
 		wp_localize_script( 'wpum-email-customize-controls', 'wpumCustomizeControls', $js_variables );
 
+		// This is a workaround to ensure that the tinymce editor is initialized in a block theme.
+		if ( function_exists( 'wp_is_block_theme' ) && wp_is_block_theme() ) {
+			do_action( 'admin_print_footer_scripts' );
+		}
 	}
 
 }
