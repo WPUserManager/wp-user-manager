@@ -446,7 +446,7 @@ if ( ! class_exists( 'WP_User_Manager' ) ) :
 		 */
 		private function init_hooks() {
 			register_activation_hook( WPUM_PLUGIN_FILE, 'wp_user_manager_install' );
-			add_action( 'plugins_loaded', array( $this, 'load_textdomain' ), 0 );
+			add_action( 'init', array( $this, 'load_textdomain' ) );
 			add_action( 'plugins_loaded', array( $this, 'init' ), 0 );
 
 			( new WPUM_Plugin_Updates() )->init();
