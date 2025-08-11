@@ -191,7 +191,6 @@ jQuery( function( $ ) {
 			var repeater = $(fieldSet).find( ' > .fieldset-wpum_field_group' ).not( '.fieldset-wpum_field_group-clone' );
 			var addBtn = $(fieldSet).find( ' > .add-repeater-row' );
 			var maxRows = addBtn.data('max-row');
-			const repeaterKey = this.getRepeaterKey(fieldSet);
 
 			if ( !maxRows || parseInt( maxRows ) < 1 ) {
 				return true;
