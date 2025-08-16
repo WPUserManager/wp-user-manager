@@ -36,7 +36,9 @@ class WPUM_Avatars {
 
 		if ( wpum_get_option( 'custom_avatars' ) ) {
 			add_action( 'carbon_fields_register_fields', array( $this, 'avatar_field' ) );
-			add_filter( 'get_avatar_url', array( $this, 'set_avatar_url' ), 10, 3 );
+
+			// Set user uploaded avatar a higher priority than the default avatar.
+			add_filter( 'get_avatar_url', array( $this, 'set_avatar_url' ), 11, 3 );
 		}
 
 		if ( ! wpum_get_option( 'disable_profile_cover' ) ) {
