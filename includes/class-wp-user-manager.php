@@ -446,7 +446,11 @@ if ( ! class_exists( 'WP_User_Manager' ) ) :
 		 */
 		private function init_hooks() {
 			register_activation_hook( WPUM_PLUGIN_FILE, 'wp_user_manager_install' );
-			add_action( 'plugins_loaded', array( $this, 'load_textdomain' ), 0 );
+
+			// Starting WordPress version 6.7, the language translations needs to be loaded on init
+			// @see https://make.wordpress.org/core/2024/10/21/i18n-improvements-6-7/#Enhanced-support-for-only-using-PHP-translation-files
+			add_action( 'init', array( $this, 'load_textdomain' ), 0 );
+
 			add_action( 'plugins_loaded', array( $this, 'init' ), 0 );
 
 			( new WPUM_Plugin_Updates() )->init();

@@ -21,12 +21,20 @@ class WPUM_Field_Checkbox extends WPUM_Field_Type {
 	 * Construct
 	 */
 	public function __construct() {
-		$this->name          = esc_html__( 'Single checkbox', 'wp-user-manager' );
 		$this->type          = 'checkbox';
 		$this->icon          = 'dashicons-yes';
 		$this->order         = 3;
 		$this->allow_default = true;
 		$this->default_type  = 'checkbox';
+	}
+
+	/**
+	 * Set the name of the field.
+	 * 
+	 * @return void
+	 */
+	public function set_name() {
+		$this->name = esc_html__( 'Single checkbox', 'wp-user-manager' );
 	}
 
 	/**

@@ -28,9 +28,20 @@ class WPUM_Emails_Customizer_Scripts {
 	 * Get things started.
 	 */
 	public function __construct() {
-		$this->registered_emails = wpum_get_registered_emails();
+		// Set the registered emails during 'init' to avoid early translation issues.
+		add_action( 'init', array( $this, 'set_registered_emails' ) );
+
 		add_action( 'customize_preview_init', array( $this, 'customize_preview' ) );
 		add_action( 'customize_controls_enqueue_scripts', array( $this, 'customize_controls' ), 90 );
+	}
+
+	/**
+	 * Initialize the registered emails.
+	 *
+	 * @return void
+	 */
+	public function set_registered_emails() {
+		$this->registered_emails = wpum_get_registered_emails();
 	}
 
 	/**

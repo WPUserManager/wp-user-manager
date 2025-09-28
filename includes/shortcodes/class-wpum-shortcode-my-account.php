@@ -21,11 +21,18 @@ class WPUM_Shortcode_My_Account extends WPUM_Shortcode_Generator {
 	 * Inject the editor for this shortcode.
 	 */
 	public function __construct() {
-		$this->shortcode['title'] = esc_html__( 'Account page', 'wp-user-manager' );
-		$this->shortcode['label'] = esc_html__( 'Account page', 'wp-user-manager' );
 		parent::__construct( 'wpum_account' );
 	}
 
+	/**
+	 * Set the label and title of the shortcode.
+	 *
+	 * @return void
+	 */
+	public function set_labels() {
+		$this->shortcode['title'] = esc_html__( 'Account page', 'wp-user-manager' );
+		$this->shortcode['label'] = esc_html__( 'Account page', 'wp-user-manager' );
+	}
 }
 
 new WPUM_Shortcode_My_Account();

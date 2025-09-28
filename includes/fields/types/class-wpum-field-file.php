@@ -22,10 +22,18 @@ class WPUM_Field_File extends WPUM_Field_Type {
 	 */
 	public function __construct() {
 		$this->group = 'advanced';
-		$this->name  = esc_html__( 'File', 'wp-user-manager' );
 		$this->type  = 'file';
 		$this->icon  = 'dashicons-paperclip';
 		$this->order = 3;
+	}
+
+	/**
+	 * Set the name of the field.
+	 * 
+	 * @return void
+	 */
+	public function set_name() {
+		$this->name = esc_html__( 'File', 'wp-user-manager' );
 	}
 
 	/**

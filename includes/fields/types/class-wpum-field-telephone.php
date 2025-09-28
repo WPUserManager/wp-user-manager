@@ -21,11 +21,19 @@ class WPUM_Field_Telephone extends WPUM_Field_Type {
 	 * Construct
 	 */
 	public function __construct() {
-		$this->name              = esc_html__( 'Telephone', 'wp-user-manager' );
 		$this->type              = 'telephone';
 		$this->icon              = 'dashicons-phone';
 		$this->order             = 3;
 		$this->min_addon_version = '2.1';
+	}
+
+	/**
+	 * Set the name of the field.
+	 * 
+	 * @return void
+	 */
+	public function set_name() {
+		$this->name = esc_html__( 'Telephone', 'wp-user-manager' );
 	}
 
 	/**

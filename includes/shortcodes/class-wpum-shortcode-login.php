@@ -21,9 +21,17 @@ class WPUM_Shortcode_Login extends WPUM_Shortcode_Generator {
 	 * Inject the editor for this shortcode.
 	 */
 	public function __construct() {
+		parent::__construct( 'wpum_login_form' );
+	}
+
+	/**
+	 * Set the label and title of the shortcode.
+	 *
+	 * @return void
+	 */
+	public function set_labels() {
 		$this->shortcode['title'] = esc_html__( 'Login form', 'wp-user-manager' );
 		$this->shortcode['label'] = esc_html__( 'Login form', 'wp-user-manager' );
-		parent::__construct( 'wpum_login_form' );
 	}
 
 	/**

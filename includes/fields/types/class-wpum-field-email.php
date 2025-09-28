@@ -21,10 +21,18 @@ class WPUM_Field_Email extends WPUM_Field_Type {
 	 * Contruct
 	 */
 	public function __construct() {
-		$this->name  = esc_html__( 'Email', 'wp-user-manager' );
 		$this->type  = 'email';
 		$this->icon  = 'dashicons-email-alt';
 		$this->order = 3;
+	}
+
+	/**
+	 * Set the name of the field.
+	 * 
+	 * @return void
+	 */
+	public function set_name() {
+		$this->name = esc_html__( 'Email', 'wp-user-manager' );
 	}
 
 	/**

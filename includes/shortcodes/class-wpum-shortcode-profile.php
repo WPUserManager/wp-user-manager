@@ -21,11 +21,18 @@ class WPUM_Shortcode_Profile extends WPUM_Shortcode_Generator {
 	 * Inject the editor for this shortcode.
 	 */
 	public function __construct() {
-		$this->shortcode['title'] = esc_html__( 'Profile page', 'wp-user-manager' );
-		$this->shortcode['label'] = esc_html__( 'Profiles page', 'wp-user-manager' );
 		parent::__construct( 'wpum_profile' );
 	}
 
+	/**
+	 * Set the label and title of the shortcode.
+	 *
+	 * @return void
+	 */
+	public function set_labels() {
+		$this->shortcode['title'] = esc_html__( 'Profile page', 'wp-user-manager' );
+		$this->shortcode['label'] = esc_html__( 'Profiles page', 'wp-user-manager' );
+	}
 }
 
 new WPUM_Shortcode_Profile();

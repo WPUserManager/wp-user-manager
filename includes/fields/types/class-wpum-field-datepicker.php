@@ -22,10 +22,19 @@ class WPUM_Field_Datepicker extends WPUM_Field_Type {
 	 */
 	public function __construct() {
 		$this->group = 'advanced';
-		$this->name  = esc_html__( 'Datepicker', 'wp-user-manager' );
 		$this->type  = 'datepicker';
 		$this->icon  = 'dashicons-calendar-alt';
 		$this->order = 3;
+
+	}
+
+	/**
+	 * Set the name of the field.
+	 * 
+	 * @return void
+	 */
+	public function set_name() {
+		$this->name = esc_html__( 'Datepicker', 'wp-user-manager' );
 	}
 
 	/**

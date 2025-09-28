@@ -21,11 +21,19 @@ class WPUM_Field_Userrole extends WPUM_Field_Type {
 	 * Construct
 	 */
 	public function __construct() {
-		$this->name              = esc_html__( 'User Role', 'wp-user-manager' );
 		$this->type              = 'userrole';
 		$this->icon              = 'dashicons-admin-generic';
 		$this->group             = 'advanced';
 		$this->min_addon_version = '2.5';
+	}
+
+	/**
+	 * Set the name of the field.
+	 * 
+	 * @return void
+	 */
+	public function set_name() {
+		$this->name = esc_html__( 'User Role', 'wp-user-manager' );
 	}
 
 	/**

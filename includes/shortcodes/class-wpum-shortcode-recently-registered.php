@@ -21,11 +21,18 @@ class WPUM_Shortcode_Recently_Registered extends WPUM_Shortcode_Generator {
 	 * Inject the editor for this shortcode.
 	 */
 	public function __construct() {
-		$this->shortcode['title'] = esc_html__( 'Recently registered list', 'wp-user-manager' );
-		$this->shortcode['label'] = esc_html__( 'Recently registered list', 'wp-user-manager' );
 		parent::__construct( 'wpum_recently_registered' );
 	}
 
+	/**
+	 * Set the label and title of the shortcode.
+	 *
+	 * @return void
+	 */
+	public function set_labels() {
+		$this->shortcode['title'] = esc_html__( 'Recently registered list', 'wp-user-manager' );
+		$this->shortcode['label'] = esc_html__( 'Recently registered list', 'wp-user-manager' );
+	}
 	/**
 	 * Setup fields for the login shortcode window.
 	 *

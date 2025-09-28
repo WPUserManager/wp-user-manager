@@ -21,12 +21,20 @@ class WPUM_Field_Hidden extends WPUM_Field_Type {
 	 * Construct
 	 */
 	public function __construct() {
-		$this->name              = esc_html__( 'Hidden', 'wp-user-manager' );
 		$this->type              = 'hidden';
 		$this->icon              = 'dashicons-hidden';
 		$this->group             = 'advanced';
 		$this->allow_default     = true;
 		$this->min_addon_version = '2.2.1';
+	}
+
+	/**
+	 * Set the name of the field.
+	 * 
+	 * @return void
+	 */
+	public function set_name() {
+		$this->name = esc_html__( 'Hidden', 'wp-user-manager' );
 	}
 }
 

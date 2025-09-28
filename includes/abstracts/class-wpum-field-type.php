@@ -111,6 +111,22 @@ abstract class WPUM_Field_Type {
 	public $min_addon_version = false;
 
 	/**
+	 * Set the name of the field.
+	 * 
+	 * @return void
+	 */
+	public function set_name() {}
+
+	/**
+	 * Get the name of the field.
+	 * 
+	 * @return string
+	 */
+	public function get_name() {
+		return $this->name;
+	}
+
+	/**
 	 * Register the field
 	 *
 	 * @since 2.0.0
@@ -123,6 +139,9 @@ abstract class WPUM_Field_Type {
 
 		// Add fields tab.
 		add_filter( 'wpum_registered_field_types', array( $this, 'register_field_type' ), 15 );
+
+		// Set the field name during 'init' to avoid early translation issues.
+		add_action( 'init', array( $this, 'set_name' ), 0 );
 	}
 
 	/**
@@ -306,7 +325,7 @@ abstract class WPUM_Field_Type {
 
 		$fields[ $this->group ]['fields'][] = array(
 			'order'             => $this->order,
-			'name'              => $this->name,
+			'name'              => $this->get_name(),
 			'type'              => $this->type,
 			'icon'              => $this->icon,
 			'min_addon_version' => $min_addon_version,
