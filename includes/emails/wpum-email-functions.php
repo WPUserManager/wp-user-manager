@@ -131,7 +131,7 @@ function wpum_email_tag_lastname( $user_id ) {
  *
  * @return string
  */
-function wpum_email_tag_login_page_link( $user_id = false ) {
+function wpum_email_tag_login_page_url( $user_id = false ) {
 
 	$login_page_url = wpum_get_core_page_id( 'login' );
 	$login_page_url = get_permalink( $login_page_url );
@@ -146,7 +146,7 @@ function wpum_email_tag_login_page_link( $user_id = false ) {
  *
  * @return string
  */
-function wpum_email_tag_login_page_url( $user_id = false ) {
+function wpum_email_tag_login_page_link( $user_id = false ) {
 
 	$login_page_url = wpum_get_core_page_id( 'login' );
 	$login_page_url = get_permalink( $login_page_url );
@@ -182,7 +182,7 @@ function wpum_email_tag_password( $user_id = false, $password_reset_key = false,
  *
  * @return string
  */
-function wpum_email_tag_password_recovery_link( $user_id, $password_reset_key, $plain_text_password, $tag, $email ) {
+function wpum_email_tag_password_recovery_url( $user_id, $password_reset_key, $plain_text_password, $tag, $email ) {
 
 	$reset_page = wpum_get_core_page_id( 'password' );
 	$reset_page = get_permalink( $reset_page );
@@ -206,7 +206,7 @@ function wpum_email_tag_password_recovery_link( $user_id, $password_reset_key, $
  *
  * @return string
  */
-function wpum_email_tag_password_recovery_url( $user_id, $password_reset_key, $plain_text_password, $tag, $email ) {
+function wpum_email_tag_password_recovery_link( $user_id, $password_reset_key, $plain_text_password, $tag, $email ) {
 
 	$reset_page = wpum_get_core_page_id( 'password' );
 	$reset_page = get_permalink( $reset_page );
