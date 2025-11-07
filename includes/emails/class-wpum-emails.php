@@ -405,10 +405,22 @@ class WPUM_Emails {
 				'function'    => 'wpum_email_tag_login_page_url',
 			),
 			array(
+				'name'        => esc_html__( 'Login page link', 'wp-user-manager' ),
+				'description' => esc_html__( 'Display the login page url.', 'wp-user-manager' ),
+				'tag'         => 'login_page_link',
+				'function'    => 'wpum_email_tag_login_page_link',
+			),
+			array(
 				'name'        => esc_html__( 'Password recovery url', 'wp-user-manager' ),
 				'description' => esc_html__( 'Display the password recovery url.', 'wp-user-manager' ),
 				'tag'         => 'recovery_url',
 				'function'    => 'wpum_email_tag_password_recovery_url',
+			),
+			array(
+				'name'        => esc_html__( 'Password recovery link', 'wp-user-manager' ),
+				'description' => esc_html__( 'Display the password recovery link.', 'wp-user-manager' ),
+				'tag'         => 'recovery_link',
+				'function'    => 'wpum_email_tag_password_recovery_link',
 			),
 		);
 
