@@ -37,8 +37,8 @@ class WPUM_Options_Panel {
 		// Add a logo to the options panel.
 		$this->panel->add_image( WPUM_PLUGIN_URL . 'assets/images/logo.svg' );
 
-		// Register action buttons for the header.
-		$this->register_action_buttons();
+		// Register action buttons for the header on admin init to wait for the addons to load.
+		add_action( 'admin_init', array( $this, 'register_action_buttons' ) );
 
 		// Setup the options panel menu.
 		add_filter( 'wpum_menu', [ $this, 'setup_menu' ] );
@@ -54,7 +54,7 @@ class WPUM_Options_Panel {
 	/**
 	 * Register action buttons for the options panel.
 	 */
-	private function register_action_buttons() {
+	public function register_action_buttons() {
 		$this->panel->add_action_button(
 			array(
 				'title' => __( 'View Addons', 'wp-user-manager' ),
@@ -69,12 +69,15 @@ class WPUM_Options_Panel {
 			)
 		);
 
-		$this->panel->add_action_button(
-			array(
-				'title' => __( 'Licenses', 'wp-user-manager' ),
-				'url'   => admin_url( 'options-general.php?page=wpum-licenses' ),
-			)
-		);
+		// Check for the extension activation class; if present, one of the WPUM addon is installed.
+		if ( class_exists( 'WPUM_Extension_Activation' ) ) {
+			$this->panel->add_action_button(
+				array(
+					'title' => __( 'Licenses', 'wp-user-manager' ),
+					'url'   => admin_url( 'options-general.php?page=wpum-licenses' ),
+				)
+			);
+		}
 	}
 
 	/**
