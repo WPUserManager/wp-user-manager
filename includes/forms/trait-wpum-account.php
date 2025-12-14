@@ -66,14 +66,24 @@ trait WPUM_Form_Account {
 			throw new Exception( $updated_user_id->get_error_message() );
 		}
 
+		$upload_dir = wp_upload_dir();
+		$upload_dir = $upload_dir['basedir'];
+
 		if ( wpum_get_option( 'custom_avatars' ) ) {
 			$current_uploaded_avatar = filter_input( INPUT_POST, 'current_user_avatar' );
 			$currently_uploaded_file = $current_uploaded_avatar ? esc_url_raw( $current_uploaded_avatar ) : false;
-
 			$existing_avatar_file_path = get_user_meta( $updated_user_id, '_current_user_avatar_path', true );
+
+			if ( $existing_avatar_file_path && strpos( realpath( $existing_avatar_file_path ), $upload_dir ) !== 0 ) {
+				throw new Exception( __( 'Path error with existing avatar', 'wp-user-manager' ) );
+			}
+
+			// Delete previous avatar if a new one has been uploaded.
 			if ( $currently_uploaded_file && $existing_avatar_file_path && isset( $values['account']['user_avatar']['url'] ) && $values['account']['user_avatar']['url'] !== $currently_uploaded_file ) {
 				wp_delete_file( $existing_avatar_file_path );
 			}
+
+			// If no new avatar uploaded and existing file exists, delete it.
 			if ( ! $currently_uploaded_file && file_exists( $existing_avatar_file_path ) ) {
 				wp_delete_file( $existing_avatar_file_path );
 				carbon_set_user_meta( $updated_user_id, 'current_user_avatar', false );
@@ -92,6 +102,10 @@ trait WPUM_Form_Account {
 		$current_uploaded_cover   = filter_input( INPUT_POST, 'current_user_cover' );
 		$currently_uploaded_cover = $current_uploaded_cover ? esc_url_raw( $current_uploaded_cover ) : false;
 		$existing_cover_file_path = get_user_meta( $updated_user_id, '_user_cover_path', true );
+
+		if ( $existing_cover_file_path && strpos( realpath( $existing_cover_file_path ), $upload_dir ) !== 0 ) {
+			throw new Exception( __( 'Path error with existing cover', 'wp-user-manager' ) );
+		}
 
 		if ( isset( $values['account']['user_cover']['url'] ) ) {
 			if ( $currently_uploaded_cover && $existing_cover_file_path && isset( $values['account']['user_cover']['url'] ) && $values['account']['user_cover']['url'] !== $currently_uploaded_cover ) {
