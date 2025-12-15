@@ -260,7 +260,7 @@ class Settings {
 		$fetch_products_url = add_query_arg(
 			array(
 				'page'           => 'wpum-settings',
-				'fetch-products' => true
+				'fetch-products' => true,
 			),
 			admin_url( 'users.php' )
 		);
@@ -662,7 +662,7 @@ class Settings {
 		$redirect = remove_query_arg(
 			array(
 				'_wpnonce',
-				'fetch-products'
+				'fetch-products',
 			)
 		);
 
