@@ -45,6 +45,7 @@ class Settings {
 		add_action( 'update_option_wpum_settings', array( $this, 'flush_product_cache' ) );
 		add_action( 'wp_ajax_wpum_stripe_connect_account_info', array( $this, 'stripe_connect_account_info_ajax_response' ) );
 		add_action( 'admin_init', array( $this, 'handle_stripe_connect_disconnect' ) );
+		add_action( 'admin_init', array( $this, 'handle_fetch_stripe_products' ) );
 	}
 
 	/**
@@ -256,11 +257,22 @@ class Settings {
 			'type' => 'hidden',
 		);
 
+		$fetch_products_url = add_query_arg(
+			array(
+				'page'           => 'wpum-settings',
+				'fetch-products' => true
+			),
+			admin_url( 'users.php' )
+		);
+
+		$fetch_products_url = wp_nonce_url( $fetch_products_url, 'wpum-stripe-fetch-products' );
+		$fetch_product_btn  = sprintf( '<p><a href="%s#/stripe" class="button button-secondary">Fetch Stripe Products</a></p>', esc_url( $fetch_products_url ) );
+
 		if ( $this->products && $this->products->totalRecurringProducts() > 1 ) {
 			$settings['stripe'][] = array(
 				'id'       => 'test_stripe_products',
 				'name'     => __( 'Eligible Products', 'wp-user-manager' ),
-				'desc'     => sprintf( 'Select the product prices users can subscribe to on the account page. This should be the same as the products defined in the <a target="_blank" href="%s">Stripe Customer Portal Subscription settings</a>.', 'https://wpusermanager.com/article/337-recurring-subscriptions/#configure-eligible-products' ),
+				'desc'     => sprintf( 'Select the product prices users can subscribe to on the account page. This should be the same as the products defined in the <a target="_blank" href="%s">Stripe Customer Portal Subscription settings</a>. %s', 'https://wpusermanager.com/article/337-recurring-subscriptions/#configure-eligible-products ', $fetch_product_btn ),
 				'type'     => 'multiselect',
 				'multiple' => true,
 				'options'  => $this->products->get_plans(),
@@ -280,7 +292,7 @@ class Settings {
 			$settings['stripe'][] = array(
 				'id'       => 'live_stripe_products',
 				'name'     => __( 'Eligible Products', 'wp-user-manager' ),
-				'desc'     => sprintf( 'Select the product prices users can subscribe to on the account page. This should be the same as the products defined in the <a target="_blank" href="%s">Stripe Customer Portal Subscription settings</a>.', 'https://wpusermanager.com/article/337-recurring-subscriptions/#configure-eligible-products' ),
+				'desc'     => sprintf( 'Select the product prices users can subscribe to on the account page. This should be the same as the products defined in the <a target="_blank" href="%s">Stripe Customer Portal Subscription settings</a>. %s', 'https://wpusermanager.com/article/337-recurring-subscriptions/#configure-eligible-products', $fetch_product_btn ),
 				'type'     => 'multiselect',
 				'multiple' => true,
 				'options'  => $this->products->get_plans(),
@@ -597,6 +609,60 @@ class Settings {
 				'_wpnonce',
 				'disconnect',
 				'mode',
+			)
+		);
+
+		return wp_safe_redirect( esc_url_raw( $redirect ) );
+	}
+
+	/**
+	 * Fetch Stripe Products
+	 */
+	public function handle_fetch_stripe_products() {
+		$page = filter_input( INPUT_GET, 'page', FILTER_UNSAFE_RAW );
+		$page = sanitize_text_field( $page );
+
+		if ( empty( $page ) ) {
+			return;
+		}
+
+		if ( 'wpum-settings' !== $page ) {
+			return;
+		}
+
+		$fetch_products = filter_input( INPUT_GET, 'fetch-products', FILTER_UNSAFE_RAW );
+		$fetch_products = sanitize_text_field( $fetch_products );
+
+		if ( empty( $fetch_products ) ) {
+			return;
+		}
+
+		// Current user cannot handle this request, bail.
+		if ( ! current_user_can( 'manage_options' ) ) {
+			return;
+		}
+
+		$nonce = filter_input( INPUT_GET, '_wpnonce', FILTER_UNSAFE_RAW );
+		$nonce = sanitize_text_field( $nonce );
+
+		if ( empty( $nonce ) ) {
+			return;
+		}
+
+		if ( ! wp_verify_nonce( $nonce, 'wpum-stripe-fetch-products' ) ) {
+			return;
+		}
+
+		// Clear product cache
+		$this->flush_product_cache();
+
+		$products = new Products( $this->connect->get_stripe_secret(), $this->connect->get_gateway_mode() );
+		$products->all( true );
+
+		$redirect = remove_query_arg(
+			array(
+				'_wpnonce',
+				'fetch-products'
 			)
 		);
 
