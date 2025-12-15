@@ -243,9 +243,7 @@ class WPUM_Form_Profile extends WPUM_Form {
 	 * @return bool|WP_Error
 	 */
 	protected function validate_fields( $values ) {
-		if ( ( isset( $_POST['current_user_avatar'] ) && is_array( $_POST['current_user_avatar'] ) ) ||
-		     ( isset( $_POST['current_user_cover'] ) && is_array( $_POST['current_user_cover'] ) ) ) {
-
+		if ( ( isset( $_POST['current_user_avatar'] ) && is_array( $_POST['current_user_avatar'] ) ) || ( isset( $_POST['current_user_cover'] ) && is_array( $_POST['current_user_cover'] ) ) ) { // phpcs:ignore
 			return new WP_Error( 'validation-error', __( 'Invalid input: array values are not allowed for avatar or cover', 'wp-user-manager' ) );
 		}
 

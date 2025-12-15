@@ -70,8 +70,8 @@ trait WPUM_Form_Account {
 		$upload_dir = $upload_dir['basedir'];
 
 		if ( wpum_get_option( 'custom_avatars' ) ) {
-			$current_uploaded_avatar = filter_input( INPUT_POST, 'current_user_avatar' );
-			$currently_uploaded_file = $current_uploaded_avatar ? esc_url_raw( $current_uploaded_avatar ) : false;
+			$current_uploaded_avatar   = filter_input( INPUT_POST, 'current_user_avatar' );
+			$currently_uploaded_file   = $current_uploaded_avatar ? esc_url_raw( $current_uploaded_avatar ) : false;
 			$existing_avatar_file_path = get_user_meta( $updated_user_id, '_current_user_avatar_path', true );
 
 			if ( $existing_avatar_file_path && strpos( realpath( $existing_avatar_file_path ), $upload_dir ) !== 0 ) {
