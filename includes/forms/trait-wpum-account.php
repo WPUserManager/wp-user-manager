@@ -28,35 +28,35 @@ trait WPUM_Form_Account {
 
 		// Update first name and last name.
 		if ( isset( $values['account']['user_firstname'] ) ) {
-			$user_data['first_name'] = $values['account']['user_firstname'];
+			$user_data['first_name'] = wpum_sanitize_text( $values['account']['user_firstname'] );
 		}
 		if ( isset( $values['account']['user_lastname'] ) ) {
-			$user_data['last_name'] = $values['account']['user_lastname'];
+			$user_data['last_name'] = wpum_sanitize_text( $values['account']['user_lastname'] );
 		}
 
 		// Update email address.
 		if ( isset( $values['account']['user_email'] ) ) {
-			$user_data['user_email'] = $values['account']['user_email'];
+			$user_data['user_email'] = wpum_sanitize_text( $values['account']['user_email'] );
 		}
 
 		// Update nickname.
 		if ( isset( $values['account']['user_nickname'] ) ) {
-			$user_data['nickname'] = $values['account']['user_nickname'];
+			$user_data['nickname'] = wpum_sanitize_text( $values['account']['user_nickname'] );
 		}
 
 		// Update website.
 		if ( isset( $values['account']['user_website'] ) ) {
-			$user_data['user_url'] = $values['account']['user_website'];
+			$user_data['user_url'] = wpum_sanitize_text( $values['account']['user_website'] );
 		}
 
 		// Update description.
 		if ( isset( $values['account']['user_description'] ) ) {
-			$user_data['description'] = $values['account']['user_description'];
+			$user_data['description'] = wpum_sanitize_text( $values['account']['user_description'] );
 		}
 
 		// Update displayed name.
 		if ( isset( $values['account']['user_displayname'] ) ) {
-			$user_data['display_name'] = $this->parse_displayname( $values['account'], $values['account']['user_displayname'] );
+			$user_data['display_name'] = wpum_sanitize_text( $this->parse_displayname( $values['account'], $values['account']['user_displayname'] ) );
 		}
 
 		// Now update the user.

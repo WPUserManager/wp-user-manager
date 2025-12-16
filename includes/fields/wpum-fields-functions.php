@@ -632,3 +632,17 @@ function wpum_maybe_unserialize( $data ) {
 
 	return $data;
 }
+
+/**
+ * Ensure a string is text not a serialized string
+ * @param string $data
+ *
+ * @return string
+ */
+function wpum_sanitize_text( $data ) {
+	if ( ! is_string( $data ) || is_serialized( $data ) ) {
+		return '';
+	}
+
+	return sanitize_text_field( $data );
+}
