@@ -28,35 +28,35 @@ trait WPUM_Form_Account {
 
 		// Update first name and last name.
 		if ( isset( $values['account']['user_firstname'] ) ) {
-			$user_data['first_name'] = $values['account']['user_firstname'];
+			$user_data['first_name'] = wpum_sanitize_text( $values['account']['user_firstname'] );
 		}
 		if ( isset( $values['account']['user_lastname'] ) ) {
-			$user_data['last_name'] = $values['account']['user_lastname'];
+			$user_data['last_name'] = wpum_sanitize_text( $values['account']['user_lastname'] );
 		}
 
 		// Update email address.
 		if ( isset( $values['account']['user_email'] ) ) {
-			$user_data['user_email'] = $values['account']['user_email'];
+			$user_data['user_email'] = wpum_sanitize_text( $values['account']['user_email'] );
 		}
 
 		// Update nickname.
 		if ( isset( $values['account']['user_nickname'] ) ) {
-			$user_data['nickname'] = $values['account']['user_nickname'];
+			$user_data['nickname'] = wpum_sanitize_text( $values['account']['user_nickname'] );
 		}
 
 		// Update website.
 		if ( isset( $values['account']['user_website'] ) ) {
-			$user_data['user_url'] = $values['account']['user_website'];
+			$user_data['user_url'] = wpum_sanitize_text( $values['account']['user_website'] );
 		}
 
 		// Update description.
 		if ( isset( $values['account']['user_description'] ) ) {
-			$user_data['description'] = $values['account']['user_description'];
+			$user_data['description'] = wpum_sanitize_text( $values['account']['user_description'] );
 		}
 
 		// Update displayed name.
 		if ( isset( $values['account']['user_displayname'] ) ) {
-			$user_data['display_name'] = $this->parse_displayname( $values['account'], $values['account']['user_displayname'] );
+			$user_data['display_name'] = wpum_sanitize_text( $this->parse_displayname( $values['account'], $values['account']['user_displayname'] ) );
 		}
 
 		// Now update the user.
@@ -66,14 +66,24 @@ trait WPUM_Form_Account {
 			throw new Exception( $updated_user_id->get_error_message() );
 		}
 
-		if ( wpum_get_option( 'custom_avatars' ) ) {
-			$current_uploaded_avatar = filter_input( INPUT_POST, 'current_user_avatar' );
-			$currently_uploaded_file = $current_uploaded_avatar ? esc_url_raw( $current_uploaded_avatar ) : false;
+		$upload_dir = wp_upload_dir();
+		$upload_dir = $upload_dir['basedir'];
 
+		if ( wpum_get_option( 'custom_avatars' ) ) {
+			$current_uploaded_avatar   = filter_input( INPUT_POST, 'current_user_avatar' );
+			$currently_uploaded_file   = $current_uploaded_avatar ? esc_url_raw( $current_uploaded_avatar ) : false;
 			$existing_avatar_file_path = get_user_meta( $updated_user_id, '_current_user_avatar_path', true );
+
+			if ( $existing_avatar_file_path && strpos( realpath( $existing_avatar_file_path ), $upload_dir ) !== 0 ) {
+				throw new Exception( __( 'Path error with existing avatar', 'wp-user-manager' ) );
+			}
+
+			// Delete previous avatar if a new one has been uploaded.
 			if ( $currently_uploaded_file && $existing_avatar_file_path && isset( $values['account']['user_avatar']['url'] ) && $values['account']['user_avatar']['url'] !== $currently_uploaded_file ) {
 				wp_delete_file( $existing_avatar_file_path );
 			}
+
+			// If no new avatar uploaded and existing file exists, delete it.
 			if ( ! $currently_uploaded_file && file_exists( $existing_avatar_file_path ) ) {
 				wp_delete_file( $existing_avatar_file_path );
 				carbon_set_user_meta( $updated_user_id, 'current_user_avatar', false );
@@ -92,6 +102,10 @@ trait WPUM_Form_Account {
 		$current_uploaded_cover   = filter_input( INPUT_POST, 'current_user_cover' );
 		$currently_uploaded_cover = $current_uploaded_cover ? esc_url_raw( $current_uploaded_cover ) : false;
 		$existing_cover_file_path = get_user_meta( $updated_user_id, '_user_cover_path', true );
+
+		if ( $existing_cover_file_path && strpos( realpath( $existing_cover_file_path ), $upload_dir ) !== 0 ) {
+			throw new Exception( __( 'Path error with existing cover', 'wp-user-manager' ) );
+		}
 
 		if ( isset( $values['account']['user_cover']['url'] ) ) {
 			if ( $currently_uploaded_cover && $existing_cover_file_path && isset( $values['account']['user_cover']['url'] ) && $values['account']['user_cover']['url'] !== $currently_uploaded_cover ) {

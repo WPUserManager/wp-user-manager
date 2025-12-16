@@ -617,3 +617,33 @@ function wpum_get_registered_parent_field_types() {
 
 	return apply_filters( 'wpum_registered_parent_field_types', array() );
 }
+
+/**
+ * Safe unserialization that doesn't allow classes
+ *
+ * @param mixed $data Data that might be unserialized.
+ *
+ * @return mixed Unserialized data can be any type.
+ */
+function wpum_maybe_unserialize( $data ) {
+	if ( is_serialized( $data ) ) { // Don't attempt to unserialize data that wasn't serialized going in.
+		return @unserialize( trim( $data ), array( 'allowed_classes' => false ) ); // phpcs:ignore
+	}
+
+	return $data;
+}
+
+/**
+ * Ensure a string is text not a serialized string
+ *
+ * @param string $data
+ *
+ * @return string
+ */
+function wpum_sanitize_text( $data ) {
+	if ( ! is_string( $data ) || is_serialized( $data ) ) {
+		return '';
+	}
+
+	return sanitize_text_field( $data );
+}

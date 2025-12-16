@@ -155,7 +155,7 @@ class WPUM_Field_File extends WPUM_Field_Type {
 	 * @return string
 	 */
 	public function get_formatted_output( $field, $value ) {
-		$value = maybe_unserialize( $value );
+		$value = wpum_maybe_unserialize( $value );
 
 		if ( is_numeric( $value ) ) {
 			$image_src = wp_get_attachment_image_src( absint( $value ) );

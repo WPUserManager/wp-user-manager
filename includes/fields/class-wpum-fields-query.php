@@ -282,7 +282,7 @@ class WPUM_Fields_Query {
 		$wpum_field = $this->next_field();
 
 		if ( ! empty( $wpum_field->get_value() ) ) {
-			$value = maybe_unserialize( $wpum_field->get_value() );
+			$value = wpum_maybe_unserialize( $wpum_field->get_value() );
 		} else {
 			$value = false;
 		}
