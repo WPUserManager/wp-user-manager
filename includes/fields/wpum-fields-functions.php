@@ -627,7 +627,7 @@ function wpum_get_registered_parent_field_types() {
  */
 function wpum_maybe_unserialize( $data ) {
 	if ( is_serialized( $data ) ) { // Don't attempt to unserialize data that wasn't serialized going in.
-		return @unserialize( trim( $data ), array( 'allowed_classes' => false ) ); // Don't allow unserializing objects
+		return @unserialize( trim( $data ), array( 'allowed_classes' => false ) ); // phpcs:ignore
 	}
 
 	return $data;
@@ -635,6 +635,7 @@ function wpum_maybe_unserialize( $data ) {
 
 /**
  * Ensure a string is text not a serialized string
+ *
  * @param string $data
  *
  * @return string
