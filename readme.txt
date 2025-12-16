@@ -4,7 +4,7 @@ Plugin URI: https://wpusermanager.com
 Contributors: wpusermanager, polevaultweb, alessandro.tesoro
 Tags: members, membership, community, user profile, user registration
 Requires at least: 4.9
-Tested up to: 6.8
+Tested up to: 6.9
 Requires PHP: 7.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -133,6 +133,11 @@ Please note that using WPUM and the mentioned add-ons does NOT guarantee complia
 13. Login form.
 
 == Changelog ==
+
+= 2.9.13 (16th Dec 2025) =
+
+- Security: Fixed authenticated arbitrary file deletion vulnerability in custom avatar and cover image handling (Thanks to YC_Infosec via Wordfence)
+- Security: Fixed a PHP Object Injection vulnerability in the user nickname profile field (Thanks to Nguyen Ngoc Quang Bach (maysbachs) via Patchstack)
 
 = 2.9.12 (21st Nov 2024) =
 
