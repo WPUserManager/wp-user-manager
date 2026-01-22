@@ -3,9 +3,31 @@ includes:
 parameters:
     scanFiles:
         - vendor/htmlburger/carbon-fields/core/functions.php
+        - vendor/wpbp/widgets-helper/class.wph-widget.php
+    bootstrapFiles:
+        - tests/phpstan/bootstrap.php
+    dynamicConstantNames:
+        - COOKIEHASH
+        - COOKIE_DOMAIN
     #level: 5
-    level: 0
+    level: 2
     paths:
         - wp-user-manager.php
         - uninstall.php
         - includes/
+    ignoreErrors:
+        # TDP docblock problem
+        -
+            message: '#^Result of static method TDP\\WP_Notice::instance\(\) \(void\) is used\.$#'
+            path: includes/class-wp-user-manager.php
+            count: 1
+        # `new static` in non-final class
+        -
+            message: '#^Unsafe usage of new static\(\)\.$#'
+            path: includes/roles/class-wpum-collection.php
+            count: 1
+        # Carbon Fields has general Container return type
+        -
+            message: '#^Call to an undefined method Carbon_Fields\\Container\\Container::set_page_parent\(\)\.$#'
+            path: includes/updates/class-wpum-updater-settings.php
+            count: 1

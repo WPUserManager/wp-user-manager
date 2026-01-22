@@ -65,7 +65,7 @@ class WPUM_Permalinks_Settings {
 
 		<?php } else { ?>
 
-			<p><?php echo wp_kses_post( 'These settings control the permalinks used for users profiles. These settings only apply when <strong>not using "default" permalinks above</strong>.', 'wp-user-manager' ); ?></p>
+			<p><?php esc_html_e( 'These settings control the permalinks used for users profiles. These settings only apply when <strong>not using "default" permalinks above</strong>.', 'wp-user-manager' ); ?></p>
 
 			<table class="form-table">
 				<tbody>

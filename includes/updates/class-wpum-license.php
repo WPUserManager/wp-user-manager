@@ -242,7 +242,7 @@ class WPUM_License {
 	 * @param string $license
 	 * @param string $site_url
 	 *
-	 * @return mixed|WP_Error|null
+	 * @return object|WP_Error|null
 	 */
 	protected function api_request( $endpoint, $license, $site_url ) {
 		$api_params = array(
@@ -276,7 +276,7 @@ class WPUM_License {
 	 * @param string $license
 	 * @param string $site_url
 	 *
-	 * @return mixed|WP_Error|null
+	 * @return object|WP_Error|null
 	 */
 	protected function activate_license( $license, $site_url ) {
 		return $this->api_request( 'activate_license', $license, $site_url );
@@ -285,7 +285,7 @@ class WPUM_License {
 	/**
 	 * @param string $site_url
 	 *
-	 * @return mixed|WP_Error|null
+	 * @return object|WP_Error|null
 	 */
 	protected function deactivate_license( $site_url ) {
 		return $this->api_request( 'deactivate_license', $this->license, $site_url );
@@ -325,7 +325,7 @@ class WPUM_License {
 	}
 
 	/**
-	 * @param array $license_data
+	 * @param object $license_data
 	 *
 	 * @return array
 	 */
@@ -346,7 +346,7 @@ class WPUM_License {
 			'status' => $license_data->license,
 		);
 
-		if ( isset( $license_data->success ) && $license_data->success ) {
+		if ( isset( $license_data->success ) && $license_data->success && isset( $license_data->expires ) ) {
 			$data['expires'] = $license_data->expires;
 		}
 

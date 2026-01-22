@@ -239,7 +239,7 @@ class WPUM_EDD_SL_Plugin_Updater {
 
 			// build a plugin list row, with update notification
 			$wp_list_table = _get_list_table( 'WP_Plugins_List_Table' );
-			# <tr class="plugin-update-tr"><td colspan="' . $wp_list_table->get_column_count() . '" class="plugin-update colspanchange">
+			// <tr class="plugin-update-tr"><td colspan="' . $wp_list_table->get_column_count() . '" class="plugin-update colspanchange">
 			echo '<tr class="plugin-update-tr" id="' . $this->slug . '-update" data-slug="' . $this->slug . '" data-plugin="' . $this->slug . '/' . $file . '">';
 			echo '<td colspan="3" class="plugin-update colspanchange">';
 			echo '<div class="update-message notice inline notice-warning notice-alt">';
