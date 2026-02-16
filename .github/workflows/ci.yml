@@ -17,7 +17,7 @@ on:
       - ".github/workflows/ci.yml"
   push:
     branches:
-      - main
+      - master
       - develop
 
 concurrency:
@@ -51,7 +51,7 @@ jobs:
           restore-keys: ${{ runner.os }}-composer-
 
       - name: Install dependencies
-        run: composer install --prefer-dist --no-progress --no-suggest
+        run: composer update --prefer-dist --no-progress
 
       - name: Detect coding standard violations
         run: vendor/bin/phpcs -q --report=checkstyle | cs2pr --graceful-warnings
@@ -81,7 +81,7 @@ jobs:
           restore-keys: ${{ runner.os }}-composer-
 
       - name: Install dependencies
-        run: composer install --prefer-dist --no-progress --no-suggest
+        run: composer update --prefer-dist --no-progress
 
       - name: Run PHPStan
         run: vendor/bin/phpstan analyse --no-progress --error-format=github
@@ -104,10 +104,12 @@ jobs:
           coverage: none
 
       - name: Install dependencies
-        run: composer install --prefer-dist --no-progress --no-suggest
+        run: composer update --prefer-dist --no-progress
 
       - name: Check for fatal errors
-        run: php -l wp-user-manager.php && find includes/ -name "*.php" -exec php -l {} \; | grep -v "No syntax errors"
+        run: |
+          php -l wp-user-manager.php
+          find includes/ -name "*.php" -print0 | xargs -0 -n1 php -l 2>&1 | { grep -v "No syntax errors" || true; } | { ! grep -q "Parse error"; }
 
   # Uncomment when Codeception tests are added:
   #
