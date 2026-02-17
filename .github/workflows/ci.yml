@@ -52,11 +52,8 @@ jobs:
       - name: Install dependencies
         run: composer install --prefer-dist --no-progress --ignore-platform-reqs
 
-      - name: Register WordPress coding standards
-        run: vendor/bin/phpcs --config-set installed_paths vendor/wp-coding-standards/wpcs
-
       - name: Detect coding standard violations
-        run: php -d error_reporting=24575 vendor/bin/phpcs -q --report=checkstyle | cs2pr --graceful-warnings
+        run: vendor/bin/phpcs -q --report=checkstyle | cs2pr --graceful-warnings
 
   phpstan:
     name: PHPStan
