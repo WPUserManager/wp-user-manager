@@ -42,6 +42,12 @@ jobs:
         run: |
           mkdir -p release/ci
           cp composer.json composer.lock scoper.inc.php release/ci/
+          # Use a unique autoloader suffix to avoid collision with dev vendor/
+          php -r "
+            \$j = json_decode(file_get_contents('release/ci/composer.json'), true);
+            \$j['config']['autoloader-suffix'] = 'WPUMScoped';
+            file_put_contents('release/ci/composer.json', json_encode(\$j, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
+          "
           bash bin/prefix-dependencies.sh ci
           mv release/ci/vendor-dist ./vendor-dist
           rm -rf release/ci
