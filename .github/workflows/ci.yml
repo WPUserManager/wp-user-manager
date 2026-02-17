@@ -1,0 +1,127 @@
+# WPUM Core CI Pipeline
+#
+# PHPCS + PHPStan run once on PHP 8.2. PHP compatibility checked across 8.0-8.3.
+# Unit tests are in a separate workflow (tests.yml).
+
+name: CI
+
+on:
+  pull_request:
+    paths:
+      - "**.php"
+      - "composer.json"
+      - "composer.lock"
+      - "phpcs.xml.dist"
+      - "phpstan.neon.dist"
+      - ".github/workflows/ci.yml"
+  push:
+    branches:
+      - master
+      - develop
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  phpcs:
+    name: PHPCS
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.2"
+          coverage: none
+          tools: cs2pr
+
+      - name: Get Composer cache directory
+        id: composer-cache
+        run: echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
+
+      - name: Cache Composer dependencies
+        uses: actions/cache@v4
+        with:
+          path: ${{ steps.composer-cache.outputs.dir }}
+          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+          restore-keys: ${{ runner.os }}-composer-
+
+      - name: Install dependencies
+        run: composer install --prefer-dist --no-progress --ignore-platform-reqs
+
+      - name: Register WordPress coding standards
+        run: vendor/bin/phpcs --config-set installed_paths vendor/wp-coding-standards/wpcs
+
+      - name: Detect coding standard violations
+        run: php -d error_reporting=24575 vendor/bin/phpcs -q --report=checkstyle | cs2pr --graceful-warnings
+
+  phpstan:
+    name: PHPStan
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.2"
+          coverage: none
+
+      - name: Get Composer cache directory
+        id: composer-cache
+        run: echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
+
+      - name: Cache Composer dependencies
+        uses: actions/cache@v4
+        with:
+          path: ${{ steps.composer-cache.outputs.dir }}
+          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+          restore-keys: ${{ runner.os }}-composer-
+
+      - name: Install dependencies
+        run: composer install --prefer-dist --no-progress --ignore-platform-reqs
+
+      - name: Build scoped vendor (vendor-dist)
+        run: |
+          mkdir -p release/ci
+          cp composer.json composer.lock scoper.inc.php release/ci/
+          php -r "
+            \$j = json_decode(file_get_contents('release/ci/composer.json'), true);
+            \$j['config']['autoloader-suffix'] = 'WPUMScoped';
+            file_put_contents('release/ci/composer.json', json_encode(\$j, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
+          "
+          bash bin/prefix-dependencies.sh ci
+          mv release/ci/vendor-dist ./vendor-dist
+          rm -rf release/ci
+
+      - name: Run PHPStan
+        run: vendor/bin/phpstan analyse --no-progress --memory-limit=2G --error-format=github
+
+  php-compatibility:
+    name: PHP ${{ matrix.php }} Compatibility
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        php: ["8.0", "8.1", "8.2", "8.3"]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          coverage: none
+
+      - name: Install dependencies
+        run: composer install --prefer-dist --no-progress --ignore-platform-reqs
+
+      - name: Check for fatal errors
+        run: |
+          php -l wp-user-manager.php
+          find includes/ -name "*.php" -print0 | xargs -0 -n1 php -l 2>&1 | { grep -v "No syntax errors" || true; } | { ! grep -q "Parse error"; }
