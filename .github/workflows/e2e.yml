@@ -1,7 +1,7 @@
 # WPUM E2E Tests
 #
 # Runs Playwright browser tests against a wp-env WordPress instance.
-# The plugin uses vendor/autoload.php (no vendor-dist build needed for testing).
+# Builds vendor-dist (scoped dependencies) so the plugin loads correctly.
 
 name: E2E Tests
 
@@ -45,7 +45,20 @@ jobs:
           restore-keys: ${{ runner.os }}-composer-
 
       - name: Install Composer dependencies
-        run: composer install --no-dev --prefer-dist --no-progress --ignore-platform-reqs
+        run: composer install --prefer-dist --no-progress --ignore-platform-reqs
+
+      - name: Build scoped vendor (vendor-dist)
+        run: |
+          mkdir -p release/ci
+          cp composer.json composer.lock scoper.inc.php release/ci/
+          php -r "
+            \$j = json_decode(file_get_contents('release/ci/composer.json'), true);
+            \$j['config']['autoloader-suffix'] = 'WPUMScoped';
+            file_put_contents('release/ci/composer.json', json_encode(\$j, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
+          "
+          bash bin/prefix-dependencies.sh ci
+          mv release/ci/vendor-dist ./vendor-dist
+          rm -rf release/ci
 
       - name: Install npm dependencies
         run: npm ci --ignore-scripts --legacy-peer-deps
