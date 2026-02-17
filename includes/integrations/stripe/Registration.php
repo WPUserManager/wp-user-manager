@@ -69,7 +69,7 @@ class Registration {
 	 * Start it up
 	 */
 	public function init() {
-		add_action( 'wpum_registration_edit_form_settings_sections', array( $this, 'register_settings' ) );
+		add_filter( 'wpum_registration_edit_form_settings_sections', array( $this, 'register_settings' ) );
 		add_filter( 'wpum_get_registration_fields', array( $this, 'inject_registration_fields' ), 10, 2 );
 		add_action( 'wpum_before_registration_end', array( $this, 'save_plan_after_registration' ), 10, 3 );
 		add_action( 'wpum_after_existing_registration', array( $this, 'save_plan' ) );

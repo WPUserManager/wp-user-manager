@@ -451,7 +451,8 @@ if ( ! class_exists( 'WP_User_Manager' ) ) :
 
 			( new WPUM_Plugin_Updates() )->init();
 
-			( new WPUM_Elementor_Loader() )::get_instance();
+			/** @phpstan-ignore-next-line Class is conditionally loaded when Elementor is active. */
+		( new WPUM_Elementor_Loader() )::get_instance();
 
 			$this->field_types = new WPUM_Fields();
 			$this->field_types->init();
@@ -487,7 +488,8 @@ if ( ! class_exists( 'WP_User_Manager' ) ) :
 			// Start carbon fields
 			$this->carbon_fields();
 
-			$this->notices                = \WPUM\TDP\WP_Notice::instance();
+			/** @phpstan-ignore-next-line Library docblock says void but actually returns instance. */
+		$this->notices                = \WPUM\TDP\WP_Notice::instance();
 			$this->forms                  = WPUM_Forms::instance();
 			$this->templates              = new WPUM_Template_Loader();
 			$this->emails                 = new WPUM_Emails();
