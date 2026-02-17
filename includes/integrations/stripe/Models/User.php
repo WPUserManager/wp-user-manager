@@ -64,7 +64,7 @@ class User extends \WP_User {
 	 * @return bool
 	 */
 	public function isAdmin() {
-		 return $this->has_cap( 'administrator' );
+		return $this->has_cap( 'administrator' );
 	}
 
 	/**

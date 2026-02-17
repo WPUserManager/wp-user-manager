@@ -158,7 +158,6 @@ class WPUM_Field {
 		} else {
 			return false;
 		}
-
 	}
 
 	/**
@@ -223,7 +222,6 @@ class WPUM_Field {
 		}
 
 		return false;
-
 	}
 
 	/**
@@ -455,7 +453,6 @@ class WPUM_Field {
 		}
 
 		return $primary;
-
 	}
 
 	/**
@@ -518,7 +515,6 @@ class WPUM_Field {
 		do_action( 'wpum_post_insert_field', $args, $this->id );
 
 		return $id;
-
 	}
 
 	/**
@@ -551,7 +547,6 @@ class WPUM_Field {
 		do_action( 'wpum_post_update_field', $args, $this->id );
 
 		return $ret;
-
 	}
 
 	/**
@@ -595,7 +590,6 @@ class WPUM_Field {
 		}
 
 		return $data;
-
 	}
 
 	/**
@@ -647,7 +641,6 @@ class WPUM_Field {
 			$value       = $this->format_value( $value );
 			$this->value = $value;
 		}
-
 	}
 
 	/**

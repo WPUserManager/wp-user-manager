@@ -75,7 +75,6 @@ class Account {
 
 		add_action( 'template_redirect', array( $this, 'handle_download_invoice' ) );
 		add_action( 'wpum_account_page_content', array( $this, 'render_payment_message' ), 9 );
-
 	}
 
 	/**

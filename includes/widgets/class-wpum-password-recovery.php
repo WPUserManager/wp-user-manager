@@ -47,7 +47,6 @@ class WPUM_Password_Recovery extends \WPUM\WPH_Widget {
 
 		// create widget
 		$this->create_widget( $args );
-
 	}
 
 	/**
@@ -72,5 +71,4 @@ class WPUM_Password_Recovery extends \WPUM\WPH_Widget {
 
 		echo wp_kses_post( $args['after_widget'] );
 	}
-
 }

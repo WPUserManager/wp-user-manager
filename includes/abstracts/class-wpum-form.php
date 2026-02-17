@@ -108,7 +108,6 @@ abstract class WPUM_Form {
 		if ( $next_step_key && $step_key !== $next_step_key && ! is_callable( $this->steps[ $next_step_key ]['view'] ) ) {
 			$this->process();
 		}
-
 	}
 
 	/**
@@ -213,14 +212,14 @@ abstract class WPUM_Form {
 	 * Increases step from outside of the class.
 	 */
 	public function next_step() {
-		$this->step ++;
+		++$this->step;
 	}
 
 	/**
 	 * Decreases step from outside of the class.
 	 */
 	public function previous_step() {
-		$this->step --;
+		--$this->step;
 	}
 
 	/**
@@ -515,7 +514,6 @@ abstract class WPUM_Form {
 		}
 
 		return $options;
-
 	}
 
 	/**
@@ -575,5 +573,4 @@ abstract class WPUM_Form {
 
 		return apply_filters( 'wpum_form_custom_field_dropdown_options', $options, $field );
 	}
-
 }

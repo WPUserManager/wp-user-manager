@@ -36,5 +36,4 @@ class WPUM_Field_Audio extends WPUM_Field_File {
 	public function default_allowed_mime_types() {
 		return 'mp3,m4a,ogg,wav';
 	}
-
 }

@@ -111,7 +111,6 @@ class WPUM_License {
 
 		$this->includes();
 		$this->hooks();
-
 	}
 
 	/**
@@ -122,7 +121,6 @@ class WPUM_License {
 		if ( ! class_exists( 'WPUM_EDD_SL_Plugin_Updater' ) ) {
 			require_once WPUM_PLUGIN_DIR . 'includes/updates/WPUM_EDD_SL_Plugin_Updater.php';
 		}
-
 	}
 
 	/**
@@ -163,7 +161,7 @@ class WPUM_License {
 
 		// translators: %1$s wpum addon name
 		$new_settings[] = Field::make( 'text', $this->item_shortname . '_license_key', sprintf( __( '%1$s License Key', 'wp-user-manager' ), $this->item_name ) )
-							   ->set_help_text( $this->get_status_notice( $status, $expires ) );
+								->set_help_text( $this->get_status_notice( $status, $expires ) );
 
 		return array_merge( $settings, $new_settings );
 	}
@@ -269,7 +267,6 @@ class WPUM_License {
 		}
 
 		return json_decode( wp_remote_retrieve_body( $response ) );
-
 	}
 
 	/**
@@ -650,5 +647,4 @@ class WPUM_License {
 
 		return $message;
 	}
-
 }

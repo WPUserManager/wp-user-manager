@@ -41,7 +41,6 @@ class WPUM_Shortcode_Content_Loggedin extends WPUM_Shortcode_Generator {
 			),
 		);
 	}
-
 }
 
 new WPUM_Shortcode_Content_Loggedin();

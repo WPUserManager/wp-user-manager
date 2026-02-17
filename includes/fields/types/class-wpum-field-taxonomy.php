@@ -115,5 +115,4 @@ class WPUM_Field_Taxonomy extends WPUM_Field_Type {
 
 		return implode( ', ', $values );
 	}
-
 }

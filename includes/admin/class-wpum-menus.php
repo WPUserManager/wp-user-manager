@@ -84,7 +84,6 @@ class WPUM_Menus {
 		}
 
 		return $roles;
-
 	}
 
 	/**
@@ -143,7 +142,6 @@ class WPUM_Menus {
 		}
 
 		return $atts;
-
 	}
 
 	/**
@@ -194,7 +192,6 @@ class WPUM_Menus {
 		}
 
 		return $items;
-
 	}
 
 	/**
@@ -220,7 +217,6 @@ class WPUM_Menus {
 
 		echo wp_kses_post( $output );
 	}
-
 }
 
 new WPUM_Menus();

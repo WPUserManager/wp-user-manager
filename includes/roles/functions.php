@@ -310,7 +310,6 @@ function wpum_register_caps() {
 	foreach ( $unregistered as $cap ) {
 		wpum_register_cap( $cap, array( 'label' => $cap ) );
 	}
-
 }
 
 /**

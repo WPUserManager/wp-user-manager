@@ -9,8 +9,8 @@
 
 namespace WPUserManager\Stripe;
 
-use \WPUM\Carbon\Carbon;
-use \WPUM\Stripe\InvoiceLineItem as StripeInvoiceLineItem;
+use WPUM\Carbon\Carbon;
+use WPUM\Stripe\InvoiceLineItem as StripeInvoiceLineItem;
 
 /**
  * InvoiceLineItem

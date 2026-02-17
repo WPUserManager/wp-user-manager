@@ -57,5 +57,4 @@ final class WPUM_DB_Table_Field_Meta extends WPUM_DB_Table {
 	 * @return void
 	 */
 	protected function upgrade() {}
-
 }
