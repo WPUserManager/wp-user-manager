@@ -26,7 +26,7 @@ Create a custom login page, have full control over the registration form, give y
 
 = Features included =
 
-- [Frontend forms](https://wpusermanager.com/features/front-end-forms/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager): Allow users to register and login from the front of the site. Customized the registration form
+- [Frontend forms](https://wpusermanager.com/features/front-end-forms/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager): Allow users to register and login from the front of the site. Customize the registration form with custom fields to collect data
 - [Stripe integration](https://wpusermanager.com/articles/332-stripe/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager): Customize the emails sent to users when the register, reset their password and more
 - [Custom email notifications](https://wpusermanager.com/features/custom-email-notifications/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager): Customize the emails sent to users when the register, reset their password and more
 - [Custom avatars](https://wpusermanager.com/features/custom-avatars/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager): Users can edit their site avatar by uploading an image from the account page
