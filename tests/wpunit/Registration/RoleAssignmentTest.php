@@ -3,7 +3,7 @@
  * Tests for registration role assignment.
  */
 
-namespace WPUM\Tests\Registration;
+require_once __DIR__ . '/RegistrationTestCase.php';
 
 class RoleAssignmentTest extends RegistrationTestCase {
 
@@ -51,8 +51,8 @@ class RoleAssignmentTest extends RegistrationTestCase {
 		}
 
 		// Enable role select and set allowed roles.
-		$this->default_form->update_setting( 'allow_role_select', true );
-		$this->default_form->update_setting( 'register_roles', array( 'subscriber', 'contributor' ) );
+		$this->default_form->update_meta( 'allow_role_select', true );
+		$this->default_form->update_meta( 'register_roles', array( 'subscriber', 'contributor' ) );
 
 		$data    = $this->get_valid_registration_data( array(
 			'register' => array( 'role' => 'contributor' ),
@@ -68,7 +68,7 @@ class RoleAssignmentTest extends RegistrationTestCase {
 		);
 
 		// Reset.
-		$this->default_form->update_setting( 'allow_role_select', false );
+		$this->default_form->update_meta( 'allow_role_select', false );
 	}
 
 	public function test_role_select_with_disallowed_role_fails() {
@@ -77,8 +77,8 @@ class RoleAssignmentTest extends RegistrationTestCase {
 		}
 
 		// Enable role select but only allow 'subscriber'.
-		$this->default_form->update_setting( 'allow_role_select', true );
-		$this->default_form->update_setting( 'register_roles', array( 'subscriber' ) );
+		$this->default_form->update_meta( 'allow_role_select', true );
+		$this->default_form->update_meta( 'register_roles', array( 'subscriber' ) );
 
 		$data    = $this->get_valid_registration_data( array(
 			'register' => array( 'role' => 'administrator' ),
@@ -88,6 +88,6 @@ class RoleAssignmentTest extends RegistrationTestCase {
 		$this->assertFalse( $user_id, 'Registration with disallowed role should fail' );
 
 		// Reset.
-		$this->default_form->update_setting( 'allow_role_select', false );
+		$this->default_form->update_meta( 'allow_role_select', false );
 	}
 }

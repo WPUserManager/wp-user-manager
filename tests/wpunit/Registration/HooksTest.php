@@ -6,7 +6,7 @@
  * If any of these break, addon compatibility breaks.
  */
 
-namespace WPUM\Tests\Registration;
+require_once __DIR__ . '/RegistrationTestCase.php';
 
 class HooksTest extends RegistrationTestCase {
 

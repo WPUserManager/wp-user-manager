@@ -1,9 +1,12 @@
 <?php
 /**
  * Tests for successful user registration.
+ *
+ * The default registration form has: user_email, user_password, robo (honeypot), privacy.
+ * It uses email-based registration (no username field).
  */
 
-namespace WPUM\Tests\Registration;
+require_once __DIR__ . '/RegistrationTestCase.php';
 
 class SuccessfulRegistrationTest extends RegistrationTestCase {
 
@@ -38,26 +41,10 @@ class SuccessfulRegistrationTest extends RegistrationTestCase {
 		$this->assertTrue( in_array( $default_role, $user->roles, true ) );
 	}
 
-	public function test_successful_registration_sets_first_and_last_name() {
-		$data = $this->get_valid_registration_data( array(
-			'register' => array(
-				'user_firstname' => 'John',
-				'user_lastname'  => 'Doe',
-			),
-		) );
-
-		$user_id = $this->submit_registration( $data );
-
-		$this->assertIsInt( $user_id );
-		$this->assertEquals( 'John', get_user_meta( $user_id, 'first_name', true ) );
-		$this->assertEquals( 'Doe', get_user_meta( $user_id, 'last_name', true ) );
-	}
-
-	public function test_successful_registration_sets_website() {
-		$data = $this->get_valid_registration_data( array(
-			'register' => array(
-				'user_website' => 'https://example.com',
-			),
+	public function test_successful_registration_uses_email_as_login() {
+		$email = 'logintest_' . wp_rand() . '@example.com';
+		$data  = $this->get_valid_registration_data( array(
+			'register' => array( 'user_email' => $email ),
 		) );
 
 		$user_id = $this->submit_registration( $data );
@@ -65,7 +52,7 @@ class SuccessfulRegistrationTest extends RegistrationTestCase {
 		$this->assertIsInt( $user_id );
 
 		$user = get_userdata( $user_id );
-		$this->assertEquals( 'https://example.com', $user->user_url );
+		$this->assertEquals( $email, $user->user_login, 'Email-based registration should use email as user_login' );
 	}
 
 	public function test_successful_registration_fires_before_hook() {
@@ -96,33 +83,31 @@ class SuccessfulRegistrationTest extends RegistrationTestCase {
 		$this->assertEquals( $user_id, $captured_user_id, 'wpum_after_registration should fire with the new user ID' );
 	}
 
-	public function test_registration_generates_password_when_not_provided() {
-		$data = $this->get_valid_registration_data();
-		unset( $data['register']['user_password'] );
+	public function test_registration_stores_password_correctly() {
+		$password = 'MyStr0ng!P@ss';
+		$data     = $this->get_valid_registration_data( array(
+			'register' => array( 'user_password' => $password ),
+		) );
 
 		$user_id = $this->submit_registration( $data );
 
-		// User should still be created — password auto-generated.
 		$this->assertIsInt( $user_id );
-		$this->assertGreaterThan( 0, $user_id );
+
+		// Verify the password was stored correctly (can authenticate with it).
+		$user = wp_authenticate( get_userdata( $user_id )->user_login, $password );
+		$this->assertInstanceOf( \WP_User::class, $user );
+		$this->assertEquals( $user_id, $user->ID );
 	}
 
-	public function test_registration_with_email_as_username() {
-		// Remove username field from the data — registration should use email.
-		$email = 'emailuser_' . wp_rand() . '@example.com';
-		$data  = $this->get_valid_registration_data( array(
-			'register' => array(
-				'user_email'    => $email,
-				'user_password' => 'StrongP@ssw0rd!123',
-			),
-		) );
-		unset( $data['register']['username'] );
+	public function test_two_registrations_create_distinct_users() {
+		$data1   = $this->get_valid_registration_data();
+		$user_id1 = $this->submit_registration( $data1 );
 
-		$user_id = $this->submit_registration( $data );
+		$data2   = $this->get_valid_registration_data();
+		$user_id2 = $this->submit_registration( $data2 );
 
-		if ( is_int( $user_id ) && $user_id > 0 ) {
-			$user = get_userdata( $user_id );
-			$this->assertEquals( $email, $user->user_login );
-		}
+		$this->assertIsInt( $user_id1 );
+		$this->assertIsInt( $user_id2 );
+		$this->assertNotEquals( $user_id1, $user_id2 );
 	}
 }

@@ -1,9 +1,11 @@
 <?php
 /**
  * Tests for registration form field validation.
+ *
+ * The default form uses email-based registration (no username field).
  */
 
-namespace WPUM\Tests\Registration;
+require_once __DIR__ . '/RegistrationTestCase.php';
 
 class ValidationTest extends RegistrationTestCase {
 
@@ -19,20 +21,6 @@ class ValidationTest extends RegistrationTestCase {
 		$user_id = $this->submit_registration( $data );
 
 		$this->assertFalse( $user_id, 'Registration with duplicate email should fail' );
-	}
-
-	public function test_duplicate_username_fails() {
-		$username = 'dupeuser_' . wp_rand();
-
-		// Create first user.
-		$this->factory()->user->create( array( 'user_login' => $username ) );
-
-		$data    = $this->get_valid_registration_data( array(
-			'register' => array( 'username' => $username ),
-		) );
-		$user_id = $this->submit_registration( $data );
-
-		$this->assertFalse( $user_id, 'Registration with duplicate username should fail' );
 	}
 
 	public function test_invalid_email_fails() {
@@ -62,29 +50,22 @@ class ValidationTest extends RegistrationTestCase {
 		$this->assertFalse( $user_id, 'Registration with filled honeypot should fail' );
 	}
 
-	public function test_illegal_username_characters_fail() {
+	public function test_empty_email_fails() {
 		$data    = $this->get_valid_registration_data( array(
-			'register' => array( 'username' => 'user name with spaces!' ),
+			'register' => array( 'user_email' => '' ),
 		) );
 		$user_id = $this->submit_registration( $data );
 
-		$this->assertFalse( $user_id, 'Registration with illegal username characters should fail' );
+		$this->assertFalse( $user_id, 'Registration with empty email should fail' );
 	}
 
-	public function test_excluded_username_fails() {
-		// Enable the excluded usernames setting.
-		wpum_update_option( 'exclude_usernames', true );
-
-		// Get the disabled usernames list and ensure 'admin' is excluded.
+	public function test_empty_password_fails() {
 		$data    = $this->get_valid_registration_data( array(
-			'register' => array( 'username' => 'admin' ),
+			'register' => array( 'user_password' => '' ),
 		) );
 		$user_id = $this->submit_registration( $data );
 
-		// Restore setting.
-		wpum_update_option( 'exclude_usernames', false );
-
-		$this->assertFalse( $user_id, 'Registration with excluded username should fail' );
+		$this->assertFalse( $user_id, 'Registration with empty password should fail' );
 	}
 
 	public function test_weak_password_rejected_when_strength_enforced() {
@@ -97,5 +78,14 @@ class ValidationTest extends RegistrationTestCase {
 		$user_id = $this->submit_registration( $data );
 
 		$this->assertFalse( $user_id, 'Registration with weak password should fail when strength is enforced' );
+	}
+
+	public function test_privacy_not_accepted_fails() {
+		$data = $this->get_valid_registration_data( array(
+			'register' => array( 'privacy' => '' ),
+		) );
+		$user_id = $this->submit_registration( $data );
+
+		$this->assertFalse( $user_id, 'Registration should fail when privacy checkbox is not accepted' );
 	}
 }

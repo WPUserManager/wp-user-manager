@@ -3,7 +3,7 @@
  * Tests for registration email notifications.
  */
 
-namespace WPUM\Tests\Registration;
+require_once __DIR__ . '/RegistrationTestCase.php';
 
 class EmailNotificationTest extends RegistrationTestCase {
 
@@ -14,8 +14,8 @@ class EmailNotificationTest extends RegistrationTestCase {
 	 */
 	protected $sent_emails = array();
 
-	public function set_up() {
-		parent::set_up();
+	public function _setUp() {
+		parent::_setUp();
 
 		// Install default email templates if not present.
 		if ( ! get_option( 'wpum_email' ) ) {
@@ -27,9 +27,9 @@ class EmailNotificationTest extends RegistrationTestCase {
 		add_filter( 'wp_mail', array( $this, 'capture_email' ) );
 	}
 
-	public function tear_down() {
+	public function _tearDown() {
 		remove_filter( 'wp_mail', array( $this, 'capture_email' ) );
-		parent::tear_down();
+		parent::_tearDown();
 	}
 
 	/**
@@ -77,20 +77,16 @@ class EmailNotificationTest extends RegistrationTestCase {
 		$this->assertNotEmpty( $admin_emails, 'An admin notification email should be sent after registration' );
 	}
 
-	public function test_user_email_contains_username() {
-		$email    = 'tagtest_' . wp_rand() . '@example.com';
-		$username = 'taguser_' . wp_rand();
-		$data     = $this->get_valid_registration_data( array(
-			'register' => array(
-				'user_email' => $email,
-				'username'   => $username,
-			),
+	public function test_user_email_contains_login_credentials() {
+		$email = 'tagtest_' . wp_rand() . '@example.com';
+		$data  = $this->get_valid_registration_data( array(
+			'register' => array( 'user_email' => $email ),
 		) );
 
 		$user_id = $this->submit_registration( $data );
 		$this->assertIsInt( $user_id );
 
-		// Find the user's email and check for username in body.
+		// Find the user's email and check for their login (email) in the body.
 		$user_emails = array_filter( $this->sent_emails, function ( $mail ) use ( $email ) {
 			$to = is_array( $mail['to'] ) ? implode( ',', $mail['to'] ) : $mail['to'];
 			return strpos( $to, $email ) !== false;
@@ -99,9 +95,9 @@ class EmailNotificationTest extends RegistrationTestCase {
 		if ( ! empty( $user_emails ) ) {
 			$first_email = reset( $user_emails );
 			$this->assertStringContainsString(
-				$username,
+				$email,
 				$first_email['message'],
-				'User confirmation email should contain the username'
+				'User confirmation email should contain the login (email address)'
 			);
 		}
 	}

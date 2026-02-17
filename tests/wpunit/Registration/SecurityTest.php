@@ -3,12 +3,14 @@
  * Tests for registration security: nonce, XSS, sanitisation.
  */
 
-namespace WPUM\Tests\Registration;
+require_once __DIR__ . '/RegistrationTestCase.php';
 
 class SecurityTest extends RegistrationTestCase {
 
 	public function test_missing_nonce_rejects_submission() {
 		$data = $this->get_valid_registration_data();
+
+		$fields = isset( $data['register'] ) ? $data['register'] : array();
 
 		$_POST = array_merge(
 			array(
@@ -16,7 +18,7 @@ class SecurityTest extends RegistrationTestCase {
 				'registration_nonce'  => '', // Empty nonce.
 				'submit_registration' => 'Register',
 			),
-			$data
+			$fields
 		);
 
 		$form    = \WPUM_Form_Registration::instance();
@@ -28,13 +30,15 @@ class SecurityTest extends RegistrationTestCase {
 	public function test_invalid_nonce_rejects_submission() {
 		$data = $this->get_valid_registration_data();
 
+		$fields = isset( $data['register'] ) ? $data['register'] : array();
+
 		$_POST = array_merge(
 			array(
 				'wpum_form'           => 'registration',
 				'registration_nonce'  => 'totally-invalid-nonce',
 				'submit_registration' => 'Register',
 			),
-			$data
+			$fields
 		);
 
 		$form    = \WPUM_Form_Registration::instance();
@@ -46,13 +50,15 @@ class SecurityTest extends RegistrationTestCase {
 	public function test_missing_submit_button_rejects_submission() {
 		$data = $this->get_valid_registration_data();
 
+		$fields = isset( $data['register'] ) ? $data['register'] : array();
+
 		$_POST = array_merge(
 			array(
 				'wpum_form'          => 'registration',
 				'registration_nonce' => wp_create_nonce( 'verify_registration_form' ),
 				// Missing 'submit_registration'.
 			),
-			$data
+			$fields
 		);
 
 		$form    = \WPUM_Form_Registration::instance();
@@ -89,32 +95,18 @@ class SecurityTest extends RegistrationTestCase {
 		}
 	}
 
-	public function test_sql_injection_in_username_does_not_execute() {
+	public function test_sql_injection_in_email_does_not_execute() {
 		$data    = $this->get_valid_registration_data( array(
 			'register' => array(
-				'username' => "admin'; DROP TABLE wp_users; --",
+				'user_email' => "admin@test.com'; DROP TABLE wp_users; --",
 			),
 		) );
 		$user_id = $this->submit_registration( $data );
 
-		// Should fail validation (illegal characters), but even if it somehow passes,
-		// the users table should still exist.
+		// Should fail validation (invalid email), but the users table should still exist.
 		global $wpdb;
 		$table_exists = $wpdb->get_var( "SHOW TABLES LIKE '{$wpdb->users}'" );
 		$this->assertNotNull( $table_exists, 'Users table should still exist after SQL injection attempt' );
-	}
-
-	public function test_very_long_username_handled() {
-		$long_username = str_repeat( 'a', 500 );
-		$data          = $this->get_valid_registration_data( array(
-			'register' => array( 'username' => $long_username ),
-		) );
-
-		// Should either succeed (WordPress truncates) or fail gracefully — never fatal.
-		$user_id = $this->submit_registration( $data );
-
-		// Just assert no fatal error occurred — result can be int or false.
-		$this->assertTrue( is_int( $user_id ) || $user_id === false );
 	}
 
 	public function test_special_characters_in_email_handled() {

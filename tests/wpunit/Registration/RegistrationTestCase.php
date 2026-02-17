@@ -6,11 +6,7 @@
  * installs default fields, and provides helper methods.
  */
 
-namespace WPUM\Tests\Registration;
-
-use Codeception\TestCase\WPTestCase;
-
-abstract class RegistrationTestCase extends WPTestCase {
+abstract class RegistrationTestCase extends \Codeception\TestCase\WPTestCase {
 
 	/**
 	 * @var \WPUM_Registration_Form
@@ -22,8 +18,8 @@ abstract class RegistrationTestCase extends WPTestCase {
 	 */
 	protected $default_form_id;
 
-	public function set_up() {
-		parent::set_up();
+	public function _setUp() {
+		parent::_setUp();
 
 		// Ensure WPUM is loaded.
 		if ( ! function_exists( 'WPUM' ) ) {
@@ -48,14 +44,16 @@ abstract class RegistrationTestCase extends WPTestCase {
 		}
 	}
 
-	public function tear_down() {
+	public function _tearDown() {
 		// Reset the singleton so each test gets a fresh form instance.
-		$ref = new \ReflectionClass( 'WPUM_Form_Registration' );
-		$prop = $ref->getProperty( '_instance' );
-		$prop->setAccessible( true );
-		$prop->setValue( null, null );
+		if ( class_exists( 'WPUM_Form_Registration' ) ) {
+			$ref = new \ReflectionClass( 'WPUM_Form_Registration' );
+			$prop = $ref->getProperty( '_instance' );
+			$prop->setAccessible( true );
+			$prop->setValue( null, null );
+		}
 
-		parent::tear_down();
+		parent::_tearDown();
 	}
 
 	/**
@@ -85,8 +83,10 @@ abstract class RegistrationTestCase extends WPTestCase {
 		$forms = WPUM()->registration_forms->get_forms();
 
 		if ( empty( $forms ) ) {
-			// Install default field group + fields.
-			wpum_install_fields();
+			// Install default field group, fields, and registration form.
+			wpum_install_default_field_group();
+			$fields = wpum_install_fields();
+			wpum_install_registration_form( $fields );
 			// Re-fetch forms.
 			$forms = WPUM()->registration_forms->get_forms();
 		}
@@ -107,18 +107,23 @@ abstract class RegistrationTestCase extends WPTestCase {
 		// Set up nonce.
 		$nonce = wp_create_nonce( 'verify_registration_form' );
 
+		// Field types read from $_POST[$key] directly (flat), not nested.
+		$fields = isset( $post_data['register'] ) ? $post_data['register'] : array();
+
 		$_POST = array_merge(
 			array(
-				'wpum_form'          => 'registration',
-				'registration_nonce' => $nonce,
+				'wpum_form'           => 'registration',
+				'registration_nonce'  => $nonce,
 				'submit_registration' => 'Register',
 			),
-			$post_data
+			$fields
 		);
 
 		$form = \WPUM_Form_Registration::instance();
 
-		return $form->submit_handler();
+		$result = $form->submit_handler();
+
+		return $result;
 	}
 
 	/**
@@ -128,19 +133,20 @@ abstract class RegistrationTestCase extends WPTestCase {
 	 * @return array
 	 */
 	protected function get_valid_registration_data( array $overrides = array() ) {
+		$register_overrides = isset( $overrides['register'] ) ? $overrides['register'] : array();
+		unset( $overrides['register'] );
+
 		$defaults = array(
 			'register' => array_merge(
 				array(
 					'user_email'    => 'testuser_' . wp_rand() . '@example.com',
 					'user_password' => 'StrongP@ssw0rd!123',
-					'username'      => 'testuser_' . wp_rand(),
 					'robo'          => '', // Honeypot must be empty.
+					'privacy'       => '1', // Accept privacy policy.
 				),
-				isset( $overrides['register'] ) ? $overrides['register'] : array()
+				$register_overrides
 			),
 		);
-
-		unset( $overrides['register'] );
 
 		return array_merge( $defaults, $overrides );
 	}
