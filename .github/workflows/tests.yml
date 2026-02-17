@@ -38,7 +38,66 @@ jobs:
           key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
           restore-keys: ${{ runner.os }}-composer-
 
-      - name: Install Composer dependencies
+      - name: Build scoped vendor (vendor-dist)
+        run: |
+          # Install production deps only
+          composer install --no-dev --optimize-autoloader --ignore-platform-reqs
+
+          # Download PHP-Scoper (same version as bin/prefix-dependencies.sh)
+          curl -sOL https://github.com/humbug/php-scoper/releases/download/0.17.2/php-scoper.phar
+
+          # Scope vendor into scoped/
+          php -d memory_limit=-1 php-scoper.phar add-prefix --no-interaction --force --output-dir=scoped
+
+          # Regenerate autoloader in scoped dir
+          composer dump-autoload -o --no-dev --working-dir=scoped/
+
+          # Patch 1: Unique array keys to avoid collisions with host autoloader
+          SCOPER_COMPOSER="scoped/vendor/composer"
+          php -r "
+            \$f = '$SCOPER_COMPOSER/autoload_static.php';
+            \$c = file_get_contents(\$f);
+            \$c = preg_replace('/\'([A-Za-z0-9]*?)\' => __DIR__ \. (.*?)/', '\'wpum\$1\' => __DIR__ . \$2', \$c);
+            file_put_contents(\$f, \$c);
+
+            \$f2 = '$SCOPER_COMPOSER/autoload_files.php';
+            \$c2 = file_get_contents(\$f2);
+            \$c2 = preg_replace('/\'(.*?)\' => /', '\'wpum\$1\' => ', \$c2);
+            file_put_contents(\$f2, \$c2);
+          "
+
+          # Patch 2: Prefix Composer\Autoload namespace and fix Stripe namespace
+          php -r "
+            \$prefix = 'WPUM';
+            \$dir = '$SCOPER_COMPOSER';
+            foreach (['autoload_static.php', 'autoload_psr4.php', 'autoload_classmap.php'] as \$file) {
+              \$path = \$dir . '/' . \$file;
+              if (!file_exists(\$path)) continue;
+              \$c = file_get_contents(\$path);
+              \$c = str_replace(\$prefix . '\\\\\\\\WPUserManager\\\\\\\\Stripe', 'WPUserManager\\\\\\\\Stripe', \$c);
+              file_put_contents(\$path, \$c);
+            }
+            // Fix PSR-4 prefix length for Stripe
+            \$static = \$dir . '/autoload_static.php';
+            \$c = file_get_contents(\$static);
+            \$c = str_replace(\"WPUserManager\\\\\\\\Stripe\\\\\\\\' => 26\", \"WPUserManager\\\\\\\\Stripe\\\\\\\\' => 21\", \$c);
+            file_put_contents(\$static, \$c);
+            // Prefix Composer\\Autoload namespace
+            foreach (['autoload_real.php', 'autoload_static.php', 'ClassLoader.php'] as \$file) {
+              \$path = \$dir . '/' . \$file;
+              if (!file_exists(\$path)) continue;
+              \$c = file_get_contents(\$path);
+              \$c = str_replace('Composer\\\\Autoload', \$prefix . '\\\\Composer\\\\Autoload', \$c);
+              file_put_contents(\$path, \$c);
+            }
+          "
+
+          # Move scoped vendor to vendor-dist and clean up
+          mv scoped/vendor vendor-dist
+          cp vendor/dompdf/dompdf/lib/fonts/installed-fonts.dist.json vendor-dist/dompdf/dompdf/lib/fonts/installed-fonts.dist.json 2>/dev/null || true
+          rm -rf scoped php-scoper.phar
+
+      - name: Install dev dependencies
         run: composer install --prefer-dist --no-progress --ignore-platform-reqs
 
       - name: Configure test environment
@@ -56,12 +115,6 @@ jobs:
 
       - name: Start wp-env
         run: npx @wordpress/env start
-
-      - name: Debug container state
-        run: |
-          npx @wordpress/env run tests-cli \
-            --env-cwd=/var/www/html/wp-content/plugins/wp-user-manager \
-            bash -c "echo '=== vendor exists ===' && ls vendor/ | head -20 && echo '=== vendor-dist exists ===' && ls vendor-dist/ 2>&1 | head -5 && echo '=== WPH_Widget ===' && grep -r 'class WPH_Widget' vendor/ 2>&1 | head -5 && echo '=== autoload files ===' && grep -A2 'files' vendor/composer/autoload_static.php 2>&1 | head -10"
 
       - name: Run WPUnit tests
         run: |
