@@ -186,7 +186,7 @@ function wpum_get_core_page_id( $page = null ) {
  *               corresponding to `$index_key`. If `$index_key` is null, array keys from the original
  *               `$list` will be preserved in the results.
  */
-function wpum_list_pluck( $list, $field, $index_key = null ) {
+function wpum_list_pluck( $list, $field, $index_key = null ) { // phpcs:ignore Universal.NamingConventions.NoReservedKeywordParameterNames.listFound -- Public API, cannot rename.
 	if ( ! $index_key ) {
 		/**
 		 * This is simple. Could at some point wrap array_column()
@@ -1273,7 +1273,7 @@ if ( ! function_exists( 'wp_new_user_notification' ) ) {
 	 *
 	 * @return void
 	 */
-	function wp_new_user_notification( $user_id, $plaintext_pass = '' ) {
+	function wp_new_user_notification( $user_id, $plaintext_pass = '' ) { // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.FoundAfterLastUsed -- Matches WordPress core function signature.
 
 		$password_set_by_admin = false;
 		if ( isset( $_POST['pass1-text'] ) ) { // phpcs:ignore

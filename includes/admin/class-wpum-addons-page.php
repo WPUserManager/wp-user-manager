@@ -87,7 +87,7 @@ class WPUM_Addons_Page {
 
 		$tab = filter_input( INPUT_GET, 'tab' );
 
-		if ( 'users_page_wpum-addons' === $screen->base || 'plugin-install' === $screen->base && 'wpum_addons' === $tab ) {
+		if ( 'users_page_wpum-addons' === $screen->base || ( 'plugin-install' === $screen->base && 'wpum_addons' === $tab ) ) {
 			wp_enqueue_style( 'wpum-addons', WPUM_PLUGIN_URL . 'assets/css/admin/addons.css', false, WPUM_VERSION );
 		}
 	}

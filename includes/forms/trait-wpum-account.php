@@ -63,7 +63,7 @@ trait WPUM_Form_Account {
 		$updated_user_id = wp_update_user( $user_data );
 
 		if ( is_wp_error( $updated_user_id ) ) {
-			throw new Exception( $updated_user_id->get_error_message() );
+			throw new Exception( esc_html( $updated_user_id->get_error_message() ) );
 		}
 
 		$upload_dir = wp_upload_dir();
@@ -75,7 +75,7 @@ trait WPUM_Form_Account {
 			$existing_avatar_file_path = get_user_meta( $updated_user_id, '_current_user_avatar_path', true );
 
 			if ( $existing_avatar_file_path && strpos( realpath( $existing_avatar_file_path ), $upload_dir ) !== 0 ) {
-				throw new Exception( __( 'Path error with existing avatar', 'wp-user-manager' ) );
+				throw new Exception( esc_html__( 'Path error with existing avatar', 'wp-user-manager' ) );
 			}
 
 			// Delete previous avatar if a new one has been uploaded.
@@ -104,7 +104,7 @@ trait WPUM_Form_Account {
 		$existing_cover_file_path = get_user_meta( $updated_user_id, '_user_cover_path', true );
 
 		if ( $existing_cover_file_path && strpos( realpath( $existing_cover_file_path ), $upload_dir ) !== 0 ) {
-			throw new Exception( __( 'Path error with existing cover', 'wp-user-manager' ) );
+			throw new Exception( esc_html__( 'Path error with existing cover', 'wp-user-manager' ) );
 		}
 
 		if ( isset( $values['account']['user_cover']['url'] ) ) {

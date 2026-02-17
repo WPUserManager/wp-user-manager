@@ -21,7 +21,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * @return array
  */
-function wpum_login_form( $atts, $content = null ) {
+function wpum_login_form( $atts, $content = null ) { // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.FoundAfterLastUsed -- Required by WordPress shortcode callback signature.
 
 	extract( // phpcs:ignore
 		shortcode_atts(
@@ -61,7 +61,7 @@ add_shortcode( 'wpum_login_form', 'wpum_login_form' );
  *
  * @return string
  */
-function wpum_password_recovery( $atts, $content = null ) {
+function wpum_password_recovery( $atts, $content = null ) { // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.FoundAfterLastUsed -- Required by WordPress shortcode callback signature.
 
 	extract( // phpcs:ignore
 		shortcode_atts(
@@ -96,7 +96,7 @@ add_shortcode( 'wpum_password_recovery', 'wpum_password_recovery' );
  *
  * @return string
  */
-function wpum_login_link( $atts, $content = null ) {
+function wpum_login_link( $atts, $content = null ) { // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.FoundAfterLastUsed -- Required by WordPress shortcode callback signature.
 
 	$args = shortcode_atts(
 		array(
@@ -139,7 +139,7 @@ add_shortcode( 'wpum_login', 'wpum_login_link' );
  *
  * @return string
  */
-function wpum_logout_link( $atts, $content = null ) {
+function wpum_logout_link( $atts, $content = null ) { // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.FoundAfterLastUsed -- Required by WordPress shortcode callback signature.
 
 	$args = shortcode_atts(
 		array(
@@ -167,7 +167,7 @@ add_shortcode( 'wpum_logout', 'wpum_logout_link' );
  *
  * @return string
  */
-function wpum_registration_form( $atts, $content = null ) {
+function wpum_registration_form( $atts, $content = null ) { // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.FoundAfterLastUsed -- Required by WordPress shortcode callback signature.
 
 	extract( // phpcs:ignore
 		shortcode_atts(
@@ -237,7 +237,7 @@ add_shortcode( 'wpum_register', 'wpum_registration_form' );
  *
  * @return string
  */
-function wpum_account_page( $atts, $content = null ) {
+function wpum_account_page( $atts, $content = null ) { // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.FoundAfterLastUsed -- Required by WordPress shortcode callback signature.
 
 	ob_start();
 
@@ -259,7 +259,7 @@ add_shortcode( 'wpum_account', 'wpum_account_page' );
  *
  * @return string
  */
-function wpum_profile( $atts, $content = null ) {
+function wpum_profile( $atts, $content = null ) { // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.FoundAfterLastUsed -- Required by WordPress shortcode callback signature.
 
 	ob_start();
 
@@ -306,7 +306,7 @@ function wpum_profile( $atts, $content = null ) {
 			)
 			->get_template_part( 'messages/general', 'warning' );
 
-	} elseif ( is_user_logged_in() && $queried_user_id && ! wpum_members_can_view_profiles( $queried_user_id ) && ! wpum_is_own_profile() && ! current_user_can( 'administrator' ) ) {
+	} elseif ( is_user_logged_in() && $queried_user_id && ! wpum_members_can_view_profiles( $queried_user_id ) && ! wpum_is_own_profile() && ! current_user_can( 'manage_options' ) ) {
 
 		WPUM()->templates
 			->set_template_data(
@@ -623,7 +623,7 @@ add_shortcode( 'wpum_restrict_to_user_roles', 'wpum_restrict_to_user_roles' );
  *
  * @return string
  */
-function wpum_recently_registered( $atts, $content = null ) {
+function wpum_recently_registered( $atts, $content = null ) { // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.FoundAfterLastUsed -- Required by WordPress shortcode callback signature.
 
 	extract( // phpcs:ignore
 		shortcode_atts(
@@ -660,7 +660,7 @@ add_shortcode( 'wpum_recently_registered', 'wpum_recently_registered' );
  *
  * @return string
  */
-function wpum_profile_card( $atts, $content = null ) {
+function wpum_profile_card( $atts, $content = null ) { // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.FoundAfterLastUsed -- Required by WordPress shortcode callback signature.
 
 	extract( // phpcs:ignore
 		shortcode_atts(
@@ -714,7 +714,7 @@ add_shortcode( 'wpum_profile_card', 'wpum_profile_card' );
  *
  * @return string
  */
-function wpum_directory( $atts, $content = null ) {
+function wpum_directory( $atts, $content = null ) { // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.FoundAfterLastUsed -- Required by WordPress shortcode callback signature.
 
 	extract( // phpcs:ignore
 		shortcode_atts(

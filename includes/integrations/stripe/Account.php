@@ -81,7 +81,7 @@ class Account {
 	 * Redirect users who aren't subscribed or paid
 	 */
 	public function unsubscribed_redirect() {
-		if ( ! is_user_logged_in() || current_user_can( 'administrator' ) ) {
+		if ( ! is_user_logged_in() || current_user_can( 'manage_options' ) ) {
 			return;
 		}
 

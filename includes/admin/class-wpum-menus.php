@@ -133,7 +133,7 @@ class WPUM_Menus {
 	 * @param array  $args
 	 * @return array
 	 */
-	public function set_nav_item_as_logout( $atts, $item, $args ) {
+	public function set_nav_item_as_logout( $atts, $item, $args ) { // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.FoundAfterLastUsed -- Required by nav_menu_link_attributes hook.
 
 		$is_logout = $this->is_nav_item_logout( $item );
 
@@ -153,7 +153,7 @@ class WPUM_Menus {
 	 *
 	 * @return array
 	 */
-	public function exclude_menu_items( $items, $menu, $args ) {
+	public function exclude_menu_items( $items, $menu, $args ) { // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.FoundAfterLastUsed -- Required by wp_get_nav_menu_items hook.
 
 		foreach ( $items as $key => $item ) {
 
@@ -172,7 +172,7 @@ class WPUM_Menus {
 							$visible = false;
 						}
 
-						if ( current_user_can( 'administrator' ) && apply_filters( 'wpum_menu_restriction_allow_admins', true ) ) {
+						if ( current_user_can( 'manage_options' ) && apply_filters( 'wpum_menu_restriction_allow_admins', true ) ) {
 							$visible = true;
 						}
 					}
