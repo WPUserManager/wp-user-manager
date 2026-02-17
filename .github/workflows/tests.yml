@@ -57,6 +57,12 @@ jobs:
       - name: Start wp-env
         run: npx @wordpress/env start
 
+      - name: Debug container state
+        run: |
+          npx @wordpress/env run tests-cli \
+            --env-cwd=/var/www/html/wp-content/plugins/wp-user-manager \
+            bash -c "echo '=== vendor exists ===' && ls vendor/ | head -20 && echo '=== vendor-dist exists ===' && ls vendor-dist/ 2>&1 | head -5 && echo '=== WPH_Widget ===' && grep -r 'class WPH_Widget' vendor/ 2>&1 | head -5 && echo '=== autoload files ===' && grep -A2 'files' vendor/composer/autoload_static.php 2>&1 | head -10"
+
       - name: Run WPUnit tests
         run: |
           npx @wordpress/env run tests-cli \
