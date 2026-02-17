@@ -3,9 +3,6 @@ name: Unit Tests
 on:
   pull_request:
   push:
-    branches:
-      - master
-      - develop
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
