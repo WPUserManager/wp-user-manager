@@ -1,6 +1,5 @@
 includes:
     - vendor/szepeviktor/phpstan-wordpress/extension.neon
-    - phpstan-baseline.neon
 parameters:
     scanFiles:
         - vendor/htmlburger/carbon-fields/core/functions.php

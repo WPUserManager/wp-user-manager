@@ -212,7 +212,7 @@ class Account {
 	}
 
 	/**
-	 * @return mixed|void
+	 * @return void
 	 * @throws \Stripe\Exception\ApiErrorException
 	 */
 	public function handle_download_invoice() {
@@ -244,7 +244,7 @@ class Account {
 			return;
 		}
 
-		return ( new Invoice(
+		( new Invoice(
 			$stripe_invoice,
 			$invoice
 		) )->download();
