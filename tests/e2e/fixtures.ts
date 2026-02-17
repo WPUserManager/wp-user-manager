@@ -253,6 +253,56 @@ export function setupContentRestrictionPages(): void {
 }
 
 /**
+ * Create a wpum_directory CPT post and a page with the [wpum_user_directory] shortcode.
+ * The directory is configured with search form enabled.
+ */
+export function setupDirectoryPage(): void {
+  // Check if the directory CPT post already exists
+  let directoryId = '';
+  try {
+    directoryId = wpCli(
+      'post list --post_type=wpum_directory --post_status=publish --field=ID --posts_per_page=1'
+    );
+  } catch {
+    // ignore
+  }
+
+  if (!directoryId || !directoryId.match(/^\d+$/)) {
+    directoryId = wpCli(
+      'post create --post_type=wpum_directory --post_title="Test Directory" --post_status=publish --porcelain'
+    );
+  }
+
+  directoryId = directoryId.trim();
+
+  // Enable search form on the directory via Carbon Fields meta
+  if (directoryId && directoryId.match(/^\d+$/)) {
+    wpCli(
+      `post meta update ${directoryId} _directory_search_form "yes"`
+    );
+    wpCli(
+      `post meta update ${directoryId} _directory_display_sorter "yes"`
+    );
+  }
+
+  // Create the page with the directory shortcode
+  let pageId = '';
+  try {
+    pageId = wpCli(
+      'post list --post_type=page --name="wpum-directory" --post_status=publish --field=ID'
+    );
+  } catch {
+    // ignore
+  }
+
+  if (!pageId || !pageId.match(/^\d+$/)) {
+    wpCli(
+      `post create --post_type=page --post_title="User Directory" --post_name="wpum-directory" --post_status=publish --post_content='[wpum_user_directory id="${directoryId}"]'`
+    );
+  }
+}
+
+/**
  * Delete a user by username (for cleanup between test runs).
  */
 export function deleteUser(username: string): void {
@@ -290,6 +340,12 @@ type WpumFixtures = {
   passwordRecoveryPage: string;
   loggedInContentPage: string;
   loggedOutContentPage: string;
+  directoryPage: string;
+  profileCardPage: string;
+  recentUsersPage: string;
+  loginLinkPage: string;
+  logoutLinkPage: string;
+  roleRestrictedPage: string;
 };
 
 export const test = base.extend<WpumFixtures>({
@@ -300,6 +356,12 @@ export const test = base.extend<WpumFixtures>({
   passwordRecoveryPage: '/wpum-password-recovery/',
   loggedInContentPage: '/wpum-logged-in-content/',
   loggedOutContentPage: '/wpum-logged-out-content/',
+  directoryPage: '/wpum-directory/',
+  profileCardPage: '/wpum-profile-card/',
+  recentUsersPage: '/wpum-recent-users/',
+  loginLinkPage: '/wpum-login-link/',
+  logoutLinkPage: '/wpum-logout-link/',
+  roleRestrictedPage: '/wpum-role-restricted/',
 });
 
 export { expect };
