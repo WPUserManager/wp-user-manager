@@ -194,7 +194,7 @@ class Registration {
 
 			$user = new User( $new_user_id );
 			$user->setPlanMeta( $product->to_array() );
-		};
+		}
 	}
 
 	/**

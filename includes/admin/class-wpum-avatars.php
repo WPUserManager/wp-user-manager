@@ -225,7 +225,6 @@ class WPUM_Avatars {
 
 		return $url;
 	}
-
 }
 
 new WPUM_Avatars();

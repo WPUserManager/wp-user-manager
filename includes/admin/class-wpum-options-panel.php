@@ -510,5 +510,4 @@ class WPUM_Options_Panel {
 
 		return array_merge( $settings, $plugin_settings );
 	}
-
 }

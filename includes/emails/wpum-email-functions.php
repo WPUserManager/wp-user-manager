@@ -221,7 +221,6 @@ function wpum_get_registered_emails() {
 	);
 
 	return apply_filters( 'wpum_registered_emails', $emails );
-
 }
 
 /**
@@ -249,7 +248,6 @@ function wpum_get_email_field( $email_id = false, $field_id = false ) {
 	}
 
 	return $output;
-
 }
 
 /**

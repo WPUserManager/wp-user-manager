@@ -65,7 +65,6 @@ class WPUM_Recently_Registered_Users extends \WPUM\WPH_Widget {
 
 		// create widget
 		$this->create_widget( $args );
-
 	}
 
 	/**
@@ -101,7 +100,5 @@ class WPUM_Recently_Registered_Users extends \WPUM\WPH_Widget {
 		echo wp_kses_post( $output );
 
 		echo wp_kses_post( $args['after_widget'] );
-
 	}
-
 }

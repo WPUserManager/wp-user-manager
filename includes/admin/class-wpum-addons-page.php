@@ -31,7 +31,6 @@ class WPUM_Addons_Page {
 
 		$this->api = 'https://wpusermanager.com/wp-json/wp/v2/edd-addons';
 		$this->hooks();
-
 	}
 
 	/**
@@ -110,7 +109,6 @@ class WPUM_Addons_Page {
 	public function view_addons() {
 
 		include WPUM_PLUGIN_DIR . 'includes/admin/views/addons.php';
-
 	}
 
 	/**
@@ -125,7 +123,6 @@ class WPUM_Addons_Page {
 
 		return $tabs;
 	}
-
 }
 
 new WPUM_Addons_Page();

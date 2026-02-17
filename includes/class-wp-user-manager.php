@@ -452,7 +452,7 @@ if ( ! class_exists( 'WP_User_Manager' ) ) :
 			( new WPUM_Plugin_Updates() )->init();
 
 			/** @phpstan-ignore-next-line Class is conditionally loaded when Elementor is active. */
-		( new WPUM_Elementor_Loader() )::get_instance();
+			( new WPUM_Elementor_Loader() )::get_instance();
 
 			$this->field_types = new WPUM_Fields();
 			$this->field_types->init();
@@ -489,7 +489,7 @@ if ( ! class_exists( 'WP_User_Manager' ) ) :
 			$this->carbon_fields();
 
 			/** @phpstan-ignore-next-line Library docblock says void but actually returns instance. */
-		$this->notices                = \WPUM\TDP\WP_Notice::instance();
+			$this->notices                = \WPUM\TDP\WP_Notice::instance();
 			$this->forms                  = WPUM_Forms::instance();
 			$this->templates              = new WPUM_Template_Loader();
 			$this->emails                 = new WPUM_Emails();
@@ -504,7 +504,6 @@ if ( ! class_exists( 'WP_User_Manager' ) ) :
 			require_once WPUM_PLUGIN_DIR . 'includes/shortcodes/shortcodes.php';
 
 			do_action( 'after_wpum_init' );
-
 		}
 
 		/**
@@ -580,7 +579,6 @@ if ( ! class_exists( 'WP_User_Manager' ) ) :
 			if ( ! defined( 'WPUM_SLUG' ) ) {
 				define( 'WPUM_SLUG', plugin_basename( $this->plugin_file ) );
 			}
-
 		}
 
 		/**
@@ -624,7 +622,6 @@ if ( ! class_exists( 'WP_User_Manager' ) ) :
 				( new WPUM_Addon_Check( $addon ) )->passes();
 			}
 		}
-
 	}
 
 endif; // End if class_exists check.

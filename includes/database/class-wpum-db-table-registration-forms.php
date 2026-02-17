@@ -52,5 +52,4 @@ final class WPUM_DB_Table_Registration_Forms extends WPUM_DB_Table {
 	 * @return void
 	 */
 	protected function upgrade() {}
-
 }

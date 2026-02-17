@@ -50,7 +50,6 @@ function wpum_login_form( $atts, $content = null ) {
 	$output = ob_get_clean();
 
 	return $output;
-
 }
 add_shortcode( 'wpum_login_form', 'wpum_login_form' );
 
@@ -86,7 +85,6 @@ function wpum_password_recovery( $atts, $content = null ) {
 	$output = ob_get_clean();
 
 	return $output;
-
 }
 add_shortcode( 'wpum_password_recovery', 'wpum_password_recovery' );
 
@@ -228,7 +226,6 @@ function wpum_registration_form( $atts, $content = null ) {
 	$output = ob_get_clean();
 
 	return $output;
-
 }
 add_shortcode( 'wpum_register', 'wpum_registration_form' );
 
@@ -251,7 +248,6 @@ function wpum_account_page( $atts, $content = null ) {
 	$output = ob_get_clean();
 
 	return $output;
-
 }
 add_shortcode( 'wpum_account', 'wpum_account_page' );
 
@@ -320,9 +316,8 @@ function wpum_profile( $atts, $content = null ) {
 			)
 			->get_template_part( 'messages/general', 'warning' );
 
-	} else {
+	} elseif ( ! $queried_user_id ) {
 
-		if ( ! $queried_user_id ) {
 			WPUM()->templates
 				->set_template_data(
 					array(
@@ -330,22 +325,20 @@ function wpum_profile( $atts, $content = null ) {
 					)
 				)
 				->get_template_part( 'messages/general', 'warning' );
-		} else {
-			WPUM()->templates
-				->set_template_data(
-					array(
-						'user'            => get_user_by( 'id', $queried_user_id ),
-						'current_user_id' => get_current_user_id(),
-					)
+	} else {
+		WPUM()->templates
+			->set_template_data(
+				array(
+					'user'            => get_user_by( 'id', $queried_user_id ),
+					'current_user_id' => get_current_user_id(),
 				)
-				->get_template_part( 'profile' );
-		}
+			)
+			->get_template_part( 'profile' );
 	}
 
 	$output = ob_get_clean();
 
 	return $output;
-
 }
 add_shortcode( 'wpum_profile', 'wpum_profile' );
 
@@ -548,7 +541,6 @@ function wpum_restrict_to_users( $atts, $content = null ) {
 	$output = ob_get_clean();
 
 	return $output;
-
 }
 add_shortcode( 'wpum_restrict_to_users', 'wpum_restrict_to_users' );
 
@@ -711,7 +703,6 @@ function wpum_profile_card( $atts, $content = null ) {
 	$output = ob_get_clean();
 
 	return $output;
-
 }
 add_shortcode( 'wpum_profile_card', 'wpum_profile_card' );
 
@@ -943,7 +934,6 @@ function wpum_directory( $atts, $content = null ) {
 	wp_enqueue_script( 'wpum-directories' );
 
 	return $output;
-
 }
 add_shortcode( 'wpum_user_directory', 'wpum_directory' );
 

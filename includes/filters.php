@@ -86,7 +86,6 @@ function wpum_set_lostpassword_url( $url, $redirect ) {
 	} else {
 		return $url;
 	}
-
 }
 add_filter( 'lostpassword_url', 'wpum_set_lostpassword_url', 10, 2 );
 
@@ -133,7 +132,6 @@ function wpum_login_url( $login_url, $redirect, $force_reauth ) {
 	}
 
 	return $wpum_login_page;
-
 }
 if ( wpum_get_option( 'lock_wplogin' ) || wpum_get_option( 'lock_complete_site' ) ) {
 	add_filter( 'login_url', 'wpum_login_url', 10, 3 );
@@ -181,7 +179,6 @@ function wpum_authentication( $wp_user, $username, $password ) {
 	}
 
 	return $wp_user;
-
 }
 add_filter( 'authenticate', 'wpum_authentication', 20, 3 );
 
@@ -212,7 +209,6 @@ function wpum_highlight_pages( $post_states, $post ) {
 	}
 
 	return $post_states;
-
 }
 add_filter( 'display_post_states', 'wpum_highlight_pages', 10, 2 );
 
@@ -406,4 +402,3 @@ if ( wpum_get_option( 'obfuscate_display_name_emails' ) ) {
 		return wpum_mask_email_address( $display_name );
 	}, 10, 2 );
 }
-

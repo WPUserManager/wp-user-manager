@@ -50,5 +50,4 @@ class WPUM_Field_Dropdown extends WPUM_Field_Type {
 
 		return $value;
 	}
-
 }

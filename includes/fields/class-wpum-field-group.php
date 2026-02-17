@@ -102,7 +102,6 @@ class WPUM_Field_Group {
 		} else {
 			return false;
 		}
-
 	}
 
 	/**
@@ -166,7 +165,6 @@ class WPUM_Field_Group {
 		}
 
 		return false;
-
 	}
 
 	/**
@@ -283,7 +281,6 @@ class WPUM_Field_Group {
 		do_action( 'wpum_post_insert_field_group', $args, $this->id );
 
 		return $id;
-
 	}
 
 	/**
@@ -316,7 +313,6 @@ class WPUM_Field_Group {
 		do_action( 'wpum_post_update_field_group', $args, $this->id );
 
 		return $ret;
-
 	}
 
 	/**
@@ -360,7 +356,6 @@ class WPUM_Field_Group {
 		}
 
 		return $data;
-
 	}
 
 	/**
@@ -390,5 +385,4 @@ class WPUM_Field_Group {
 
 		return $count;
 	}
-
 }

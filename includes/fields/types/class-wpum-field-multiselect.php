@@ -62,7 +62,5 @@ class WPUM_Field_Multiselect extends WPUM_Field_Type {
 		}
 
 		return implode( ', ', $values );
-
 	}
-
 }

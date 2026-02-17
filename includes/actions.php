@@ -29,7 +29,6 @@ function wpum_delete_pages_transient( $post_id ) {
 	}
 
 	delete_transient( 'wpum_get_pages' );
-
 }
 add_action( 'save_post_page', 'wpum_delete_pages_transient' );
 
@@ -101,7 +100,6 @@ function wpum_admin_bar_menu( $wp_admin_bar ) {
 		'parent' => 'wpum_node',
 	);
 	$wp_admin_bar->add_node( $args );
-
 }
 add_action( 'admin_bar_menu', 'wpum_admin_bar_menu', 100 );
 
@@ -194,7 +192,6 @@ function wpum_restrict_wp_registration() {
 		wp_safe_redirect( esc_url( get_permalink( $registration_redirect[0] ) ) );
 		exit;
 	}
-
 }
 add_action( 'login_form_register', 'wpum_restrict_wp_registration' );
 
@@ -211,7 +208,6 @@ function wpum_restrict_wp_lostpassword() {
 		wp_safe_redirect( esc_url( get_permalink( $password_redirect[0] ) ) );
 		exit;
 	}
-
 }
 add_action( 'login_form_lostpassword', 'wpum_restrict_wp_lostpassword' );
 
@@ -228,7 +224,6 @@ function wpum_restrict_wp_profile() {
 		wp_safe_redirect( esc_url( get_permalink( $profile_redirect[0] ) ) );
 		exit;
 	}
-
 }
 add_action( 'load-profile.php', 'wpum_restrict_wp_profile' );
 
@@ -257,7 +252,6 @@ function wpum_restrict_account_page() {
 		exit;
 
 	}
-
 }
 add_action( 'template_redirect', 'wpum_restrict_account_page' );
 
@@ -283,7 +277,6 @@ function wpum_display_account_page_content() {
 	} else {
 		do_action( 'wpum_account_page_content_' . $active_tab );
 	}
-
 }
 add_action( 'wpum_account_page_content', 'wpum_display_account_page_content' );
 
@@ -488,7 +481,6 @@ function wpum_finish_db_setup_after_plugin_init() {
 	if ( ! $upgrade ) {
 		wpum_complete_setup();
 	}
-
 }
 add_action( 'after_wpum_init', 'wpum_finish_db_setup_after_plugin_init' );
 
@@ -971,7 +963,7 @@ function validate_user_meta_key() {
 add_action( 'wp_ajax_validate_user_meta_key', 'validate_user_meta_key' );
 
 
-add_action( 'the_content', function( $content ) {
+add_action( 'the_content', function ( $content ) {
 	$registration = filter_input( INPUT_GET, 'registration', FILTER_UNSAFE_RAW );
 	$registration = sanitize_text_field( $registration );
 	if ( empty( $registration ) || 'success' !== $registration ) {

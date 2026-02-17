@@ -65,5 +65,4 @@ class WPUM_Field_Telephone extends WPUM_Field_Type {
 			),
 		);
 	}
-
 }

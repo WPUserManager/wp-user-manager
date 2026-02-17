@@ -91,7 +91,6 @@ class WPUM_Registration_Form {
 		} else {
 			return false;
 		}
-
 	}
 
 	/**

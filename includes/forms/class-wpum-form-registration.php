@@ -182,7 +182,6 @@ class WPUM_Form_Registration extends WPUM_Form {
 		}
 
 		return $pass;
-
 	}
 
 	/**
@@ -203,7 +202,6 @@ class WPUM_Form_Registration extends WPUM_Form {
 		}
 
 		return $pass;
-
 	}
 
 	/**
@@ -292,7 +290,6 @@ class WPUM_Form_Registration extends WPUM_Form {
 		}
 
 		$this->fields = array( 'register' => $this->get_registration_fields() );
-
 	}
 
 	/**
@@ -446,7 +443,6 @@ class WPUM_Form_Registration extends WPUM_Form {
 		}
 
 		return $by;
-
 	}
 
 	/**
@@ -492,7 +488,6 @@ class WPUM_Form_Registration extends WPUM_Form {
 			WPUM()->templates->set_template_data( array( 'message' => sprintf( __( 'The registration form cannot be used because either a username or email field is required to process registrations. Please edit the form and add at least the email field. <a href="%1$s">%2$s</a>', 'wp-user-manager' ), esc_url_raw( $admin_url ), $admin_url ) ) )->get_template_part( 'messages/general', 'error' );
 
 		}
-
 	}
 
 	/**
@@ -607,7 +602,7 @@ class WPUM_Form_Registration extends WPUM_Form {
 			}
 
 			// Successful, show next step.
-			$this->step ++;
+			++$this->step;
 
 		} catch ( Exception $e ) {
 			$this->add_error( $e->getMessage(), 'registration_submit' );
@@ -666,7 +661,7 @@ class WPUM_Form_Registration extends WPUM_Form {
 				$template     = isset( $field['template'] ) ? $field['template'] : $field['type'];
 
 				WPUM()->templates->set_template_data( $field )
-								 ->get_template_part( 'form-fields/' . $template, 'field' );
+								->get_template_part( 'form-fields/' . $template, 'field' );
 
 				return;
 			}
@@ -676,8 +671,7 @@ class WPUM_Form_Registration extends WPUM_Form {
 				'key'     => $key,
 				'form_id' => $this->form_id,
 			) )
-							 ->get_template_part( 'forms/form-registration-fields', 'field' );
+							->get_template_part( 'forms/form-registration-fields', 'field' );
 		}
 	}
-
 }

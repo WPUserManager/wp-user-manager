@@ -19,7 +19,7 @@
  * @return WP_User_Manager
  */
 function WPUM() {
-	require_once dirname( __FILE__ ) . '/includes/class-wp-user-manager.php';
+	require_once __DIR__ . '/includes/class-wp-user-manager.php';
 
 	return WP_User_Manager::instance( __FILE__, '2.9.13' );
 }
