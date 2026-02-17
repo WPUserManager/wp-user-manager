@@ -3,6 +3,8 @@ includes:
 parameters:
     scanFiles:
         - vendor/htmlburger/carbon-fields/core/functions.php
+    scanDirectories:
+        - vendor-dist
     #level: 5
     level: 0
     paths:

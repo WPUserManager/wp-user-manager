@@ -52,6 +52,9 @@ jobs:
       - name: Install dependencies
         run: composer update --prefer-dist --no-progress --ignore-platform-reqs
 
+      - name: Register WordPress coding standards
+        run: vendor/bin/phpcs --config-set installed_paths vendor/wp-coding-standards/wpcs
+
       - name: Detect coding standard violations
         run: vendor/bin/phpcs -q --report=checkstyle | cs2pr --graceful-warnings
 
@@ -81,6 +84,19 @@ jobs:
 
       - name: Install dependencies
         run: composer update --prefer-dist --no-progress --ignore-platform-reqs
+
+      - name: Build scoped vendor (vendor-dist)
+        run: |
+          mkdir -p release/ci
+          cp composer.json composer.lock scoper.inc.php release/ci/
+          php -r "
+            \$j = json_decode(file_get_contents('release/ci/composer.json'), true);
+            \$j['config']['autoloader-suffix'] = 'WPUMScoped';
+            file_put_contents('release/ci/composer.json', json_encode(\$j, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
+          "
+          bash bin/prefix-dependencies.sh ci
+          mv release/ci/vendor-dist ./vendor-dist
+          rm -rf release/ci
 
       - name: Run PHPStan
         run: vendor/bin/phpstan analyse --no-progress --error-format=github
