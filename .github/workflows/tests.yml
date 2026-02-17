@@ -41,6 +41,19 @@ jobs:
       - name: Install Composer dependencies
         run: composer install --prefer-dist --no-progress --ignore-platform-reqs
 
+      - name: Configure test environment
+        run: |
+          printf 'params:\n    - .env.local\n' > tests/codeception.yml
+          printf 'WP_ROOT_FOLDER=/var/www/html\n' > tests/.env.local
+          printf 'TEST_DB_NAME=tests-wordpress\n' >> tests/.env.local
+          printf 'TEST_DB_HOST=tests-mysql\n' >> tests/.env.local
+          printf 'TEST_DB_USER=root\n' >> tests/.env.local
+          printf 'TEST_DB_PASSWORD=password\n' >> tests/.env.local
+          printf 'TEST_TABLE_PREFIX=wp_\n' >> tests/.env.local
+          printf 'TEST_SITE_WP_DOMAIN=localhost:8889\n' >> tests/.env.local
+          printf 'TEST_SITE_ADMIN_EMAIL=admin@example.com\n' >> tests/.env.local
+          printf 'TEST_SITE_WP_URL=http://localhost:8889\n' >> tests/.env.local
+
       - name: Start wp-env
         run: npx @wordpress/env start
 
