@@ -48,7 +48,8 @@
     "szepeviktor/phpstan-wordpress": "^1.1",
     "voku/simple_html_dom": "^4.8",
     "whatdafox/codeception-mailtrap": "^1.4",
-    "wp-coding-standards/wpcs": "^2.3"
+    "dealerdirect/phpcodesniffer-composer-installer": "^1.0",
+    "wp-coding-standards/wpcs": "^3.0"
   },
   "autoload": {
     "psr-4": {"WPUserManager\\Stripe\\": "includes/integrations/stripe"}

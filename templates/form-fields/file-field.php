@@ -13,7 +13,7 @@
  * @version 1.0.0
  */
 
- // Exit if accessed directly
+// Exit if accessed directly
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
@@ -31,7 +31,7 @@ if ( ! empty( $data->ajax ) && wpum_user_can_upload_file_via_ajax() ) {
 ?>
 
 <div class="wpum-uploaded-files">
-  <?php
+	<?php
 	if ( ! empty( $data->value ) ) :
 		if ( is_array( $data->value ) ) :
 			if ( isset( $data->value['url'] ) ) :
@@ -52,7 +52,7 @@ if ( ! empty( $data->ajax ) && wpum_user_can_upload_file_via_ajax() ) {
 				'field' => array(),
 			) )->get_template_part( 'form-fields/file', 'uploaded' );
 		endif;
-  endif;
+	endif;
 	?>
 </div>
 
@@ -66,9 +66,9 @@ if ( ! empty( $data->multiple ) ) {
 <small class="description">
 <?php
 if ( ! empty( $data->description ) ) :
-		 echo esc_html( $data->description );
+		echo esc_html( $data->description );
 		endif;
 		// translators: %s Maximum file size
-	  echo sprintf( esc_html__( 'Maximum file size: %s.', 'wp-user-manager' ), esc_html( wpum_max_upload_size( isset( $data->key ) ? $data->key : '', $file_size ) ) );
+		printf( esc_html__( 'Maximum file size: %s.', 'wp-user-manager' ), esc_html( wpum_max_upload_size( isset( $data->key ) ? $data->key : '', $file_size ) ) );
 ?>
 </small>

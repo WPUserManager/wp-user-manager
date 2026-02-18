@@ -9,8 +9,8 @@
 
 namespace WPUserManager\Stripe;
 
-use \WPUM\Carbon\Carbon;
-use \WPUM\Stripe\InvoiceLineItem as StripeInvoiceLineItem;
+use WPUM\Carbon\Carbon;
+use WPUM\Stripe\InvoiceLineItem as StripeInvoiceLineItem;
 
 /**
  * InvoiceLineItem
@@ -50,6 +50,7 @@ class InvoiceLineItem {
 		if ( $this->isSubscription() ) {
 			return $this->startDateAsCarbon()->toFormattedDateString();
 		}
+		return '';
 	}
 
 	/**
@@ -61,6 +62,7 @@ class InvoiceLineItem {
 		if ( $this->isSubscription() ) {
 			return $this->endDateAsCarbon()->toFormattedDateString();
 		}
+		return '';
 	}
 
 	/**
@@ -72,6 +74,7 @@ class InvoiceLineItem {
 		if ( $this->isSubscription() ) {
 			return Carbon::createFromTimestampUTC( $this->item->period->start );
 		}
+		return Carbon::now();
 	}
 
 	/**
@@ -83,6 +86,7 @@ class InvoiceLineItem {
 		if ( $this->isSubscription() ) {
 			return Carbon::createFromTimestampUTC( $this->item->period->end );
 		}
+		return Carbon::now();
 	}
 
 	/**

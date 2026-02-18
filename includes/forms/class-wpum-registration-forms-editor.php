@@ -131,7 +131,6 @@ class WPUM_Registration_Forms_Editor {
 
 			wp_localize_script( 'wpum-registration-forms-editor', 'wpumRegistrationFormsEditor', $js_variables );
 		}
-
 	}
 
 	/**
@@ -220,7 +219,6 @@ class WPUM_Registration_Forms_Editor {
 		} else {
 			$this->send_json_error();
 		}
-
 	}
 
 	/**
@@ -305,7 +303,6 @@ class WPUM_Registration_Forms_Editor {
 			$this->send_json_error();
 
 		}
-
 	}
 
 	/**
@@ -354,7 +351,6 @@ class WPUM_Registration_Forms_Editor {
 		}
 
 		return $fields;
-
 	}
 
 	/**
@@ -453,7 +449,6 @@ class WPUM_Registration_Forms_Editor {
 			$this->send_json_error();
 
 		}
-
 	}
 
 	/**

@@ -27,7 +27,6 @@ class WPUM_Prevent_Password_Change {
 
 		add_action( 'carbon_fields_register_fields', array( $this, 'register_custom_field' ) );
 		add_filter( 'submit_wpum_form_validate_fields', array( $this, 'prevent_change' ), 10, 4 );
-
 	}
 
 	/**
@@ -65,9 +64,7 @@ class WPUM_Prevent_Password_Change {
 		}
 
 		return $pass;
-
 	}
-
 }
 
 new WPUM_Prevent_Password_Change();

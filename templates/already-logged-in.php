@@ -47,7 +47,7 @@ $counter = 0;
 		?>
 		<?php
 		foreach ( $links as $template_link ) :
-			$counter ++;
+			++$counter;
 			?>
 			<a href="<?php echo esc_url( $template_link['url'] ); ?>"><?php echo esc_html( $template_link['text'] ); ?></a> <?php echo $counter < $count ? '|' : ''; ?>
 		<?php endforeach; ?>

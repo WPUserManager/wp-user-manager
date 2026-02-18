@@ -47,7 +47,6 @@ class WPUM_Shortcode_Login_Link extends WPUM_Shortcode_Generator {
 			),
 		);
 	}
-
 }
 
 new WPUM_Shortcode_Login_Link();
