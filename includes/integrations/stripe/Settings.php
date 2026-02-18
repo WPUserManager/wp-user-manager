@@ -40,7 +40,7 @@ class Settings {
 	 * Init
 	 */
 	public function init() {
-		add_action( 'wpum_registered_settings', array( $this, 'register_settings' ) );
+		add_filter( 'wpum_registered_settings', array( $this, 'register_settings' ) );
 		add_filter( 'wpum_settings_tabs', array( $this, 'register_setting_tab' ) );
 		add_action( 'update_option_wpum_settings', array( $this, 'flush_product_cache' ) );
 		add_action( 'wp_ajax_wpum_stripe_connect_account_info', array( $this, 'stripe_connect_account_info_ajax_response' ) );

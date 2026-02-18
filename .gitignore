@@ -22,3 +22,9 @@ codereport.csv
 /tests/reports
 /tests/codeception.yml
 /tests/.env.local
+
+# Playwright
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/

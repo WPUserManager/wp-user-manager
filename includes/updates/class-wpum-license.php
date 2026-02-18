@@ -111,7 +111,6 @@ class WPUM_License {
 
 		$this->includes();
 		$this->hooks();
-
 	}
 
 	/**
@@ -122,7 +121,6 @@ class WPUM_License {
 		if ( ! class_exists( 'WPUM_EDD_SL_Plugin_Updater' ) ) {
 			require_once WPUM_PLUGIN_DIR . 'includes/updates/WPUM_EDD_SL_Plugin_Updater.php';
 		}
-
 	}
 
 	/**
@@ -163,7 +161,7 @@ class WPUM_License {
 
 		// translators: %1$s wpum addon name
 		$new_settings[] = Field::make( 'text', $this->item_shortname . '_license_key', sprintf( __( '%1$s License Key', 'wp-user-manager' ), $this->item_name ) )
-							   ->set_help_text( $this->get_status_notice( $status, $expires ) );
+								->set_help_text( $this->get_status_notice( $status, $expires ) );
 
 		return array_merge( $settings, $new_settings );
 	}
@@ -269,7 +267,6 @@ class WPUM_License {
 		}
 
 		return json_decode( wp_remote_retrieve_body( $response ) );
-
 	}
 
 	/**
@@ -428,7 +425,7 @@ class WPUM_License {
 	 * @param array  $plugin_data
 	 * @param string $status
 	 */
-	public function plugin_page_notices( $plugin_file, $plugin_data, $status ) {
+	public function plugin_page_notices( $plugin_file, $plugin_data, $status ) { // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.FoundAfterLastUsed -- Required by after_plugin_row hook.
 		$has_update = isset( $plugin_data['new_version'] ) && version_compare( $plugin_data['Version'], $plugin_data['new_version'] ) === -1;
 
 		$license_data   = $this->get_license_data();
@@ -503,7 +500,7 @@ class WPUM_License {
 	 * @param array $plugin_data
 	 * @param array $response
 	 */
-	public function in_plugin_update_message( $plugin_data, $response ) {
+	public function in_plugin_update_message( $plugin_data, $response ) { // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.FoundAfterLastUsed -- Required by in_plugin_update_message hook.
 		$message = '';
 		if ( empty( $this->license ) ) {
 			// translators: %1$s licenses page URL
@@ -650,5 +647,4 @@ class WPUM_License {
 
 		return $message;
 	}
-
 }

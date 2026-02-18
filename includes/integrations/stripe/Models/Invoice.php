@@ -63,5 +63,4 @@ class Invoice {
 
 		$this->customer = new User( $this->user_id );
 	}
-
 }

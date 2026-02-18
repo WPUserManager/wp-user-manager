@@ -25,7 +25,6 @@ class WPUM_Shortcode_My_Account extends WPUM_Shortcode_Generator {
 		$this->shortcode['label'] = esc_html__( 'Account page', 'wp-user-manager' );
 		parent::__construct( 'wpum_account' );
 	}
-
 }
 
 new WPUM_Shortcode_My_Account();
