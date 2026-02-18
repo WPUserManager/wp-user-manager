@@ -105,7 +105,7 @@ class WPUM_Collection {
 	 */
 	final public static function get_instance( $name = '' ) {
 		if ( ! isset( self::$instances[ $name ] ) ) {
-			self::$instances[ $name ] = new static();
+			self::$instances[ $name ] = new self();
 		}
 
 		return self::$instances[ $name ];

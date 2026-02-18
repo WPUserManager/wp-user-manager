@@ -195,7 +195,7 @@ jQuery( function( $ ) {
 					initSelect2( $( this ).find( 'select' ) );
 				}
 				if ( $(this).find('.field').hasClass('required-field') ) {
-					$( this ).find( "input" ).prop( "required", validRule );
+					$( this ).find( "input" ).not('.input-checkboxes').prop( "required", validRule );
 					$( this ).find( "select" ).prop( "required", validRule );
 					$( this ).find( "textarea" ).prop( "required", validRule );
 				}

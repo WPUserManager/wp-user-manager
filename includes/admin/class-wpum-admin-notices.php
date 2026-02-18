@@ -52,6 +52,7 @@ class WPUM_Admin_Notices {
 		if ( $this->field_groups_are_empty() && $this->fields_are_empty() && $this->registration_forms_are_empty() ) {
 
 			$url = add_query_arg( array( 'wpum_fix_installation_data' => true ), admin_url() );
+			$url = wp_nonce_url( $url, 'installation-data' );
 
 			$btn           = '<a href="' . esc_url( $url ) . '" class="button-primary">' . esc_html__( 'Fix data installation', 'wp-user-manager' ) . '</a>';
 			$error_message = esc_html__( 'It looks like WP User Manager failed to install it\'s default data. To fix the issue please click the button below.', 'wp-user-manager' ) . '</br><br/>' . $btn;
@@ -70,7 +71,6 @@ class WPUM_Admin_Notices {
 			}
 			WPUM()->notices->register_notice( 'wpum_permalinks', 'warning', $message, array( 'dismissible' => false ) );
 		}
-
 	}
 
 	/**
@@ -87,7 +87,6 @@ class WPUM_Admin_Notices {
 		}
 
 		return false;
-
 	}
 
 	/**
@@ -106,7 +105,6 @@ class WPUM_Admin_Notices {
 		}
 
 		return $empty;
-
 	}
 
 	/**
@@ -123,7 +121,6 @@ class WPUM_Admin_Notices {
 		}
 
 		return false;
-
 	}
 
 	/**
@@ -132,8 +129,7 @@ class WPUM_Admin_Notices {
 	 * @return void
 	 */
 	public function fix_data_installation() {
-
-		if ( current_user_can( 'manage_options' ) && isset( $_GET['wpum_fix_installation_data'] ) ) { // phpcs:ignore
+		if ( current_user_can( 'manage_options' ) && isset( $_GET['wpum_fix_installation_data'] ) && check_admin_referer( 'installation-data' ) ) { // phpcs:ignore
 			delete_option( 'wpum_setup_is_complete' );
 			delete_option( 'wpum_version_upgraded_from' );
 			delete_option( 'wpum_version_upgraded_from' );
@@ -159,7 +155,6 @@ class WPUM_Admin_Notices {
 			wp_die( wp_kses_post( $message ) );
 		}
 	}
-
 }
 
 new WPUM_Admin_Notices();

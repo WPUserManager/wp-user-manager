@@ -116,6 +116,7 @@ class WPUM_Fields_Editor {
 				'get_fields_nonce'          => wp_create_nonce( 'wpum_get_fields' ),
 				'create_field_nonce'        => wp_create_nonce( 'wpum_create_field' ),
 				'delete_field_nonce'        => wp_create_nonce( 'wpum_delete_field' ),
+				'check_field_nonce'         => wp_create_nonce( 'wpum_check_field' ),
 				'cf_addon_url'              => 'https://wpusermanager.com/addons/custom-fields?utm_source=WP%20User%20Manager&utm_medium=insideplugin&utm_campaign=WP%20User%20Manager&utm_content=custom-fields-editor',
 				'fields_types'              => wpum_get_registered_field_types(),
 				'edit_dialog_tabs'          => wpum_get_edit_field_dialog_tabs(),
@@ -124,7 +125,6 @@ class WPUM_Fields_Editor {
 			wp_localize_script( 'wpum-fields-editor', 'wpumFieldsEditor', $js_variables );
 
 		}
-
 	}
 
 	/**
@@ -205,7 +205,6 @@ class WPUM_Fields_Editor {
 			'repeater_fields_create'    => esc_html__( 'Add sub field', 'wp-user-manager' ),
 			'confirm_message'           => esc_html__( 'Are you sure you want to leave? You have unsaved field settings.', 'wp-user-manager' ),
 		);
-
 	}
 
 	/**
@@ -236,7 +235,6 @@ class WPUM_Fields_Editor {
 		}
 
 		return $registered_groups;
-
 	}
 
 	/**
@@ -266,7 +264,6 @@ class WPUM_Fields_Editor {
 		}
 		$this->delete_groups_cache();
 		wp_send_json_success( $groups );
-
 	}
 
 	/**
@@ -308,7 +305,6 @@ class WPUM_Fields_Editor {
 				'description' => $group_description,
 			)
 		);
-
 	}
 
 	/**
@@ -329,7 +325,7 @@ class WPUM_Fields_Editor {
 	 * @param int $group_id
 	 * @param int $parent
 	 */
-	protected function delete_group_fields_cache( $group_id, $parent = 0 ) {
+	protected function delete_group_fields_cache( $group_id, $parent = 0 ) { // phpcs:ignore Universal.NamingConventions.NoReservedKeywordParameterNames.parentFound -- Public API, cannot rename.
 		$args = array(
 			'group_id' => (int) $group_id,
 			'orderby'  => 'field_order',
@@ -400,7 +396,6 @@ class WPUM_Fields_Editor {
 				'group_id' => $group_id,
 			)
 		);
-
 	}
 
 	/**
@@ -433,7 +428,6 @@ class WPUM_Fields_Editor {
 
 		$this->delete_group_fields_cache( $group_id );
 		wp_send_json_success( $fields );
-
 	}
 
 	/**
@@ -491,7 +485,6 @@ class WPUM_Fields_Editor {
 		} else {
 			wp_send_json_error( null, 403 );
 		}
-
 	}
 
 	/**
@@ -527,7 +520,6 @@ class WPUM_Fields_Editor {
 		}
 
 		return apply_filters( 'wpum_fields_editor_deregister_settings', $settings, $wpum_field->get_primary_id(), $wpum_field );
-
 	}
 
 	/**
@@ -547,7 +539,6 @@ class WPUM_Fields_Editor {
 		}
 
 		return apply_filters( 'wpum_fields_editor_deregister_model', $model, $primary_field_id );
-
 	}
 
 	/**
@@ -580,7 +571,6 @@ class WPUM_Fields_Editor {
 		}
 
 		return $exists;
-
 	}
 
 	/**
@@ -628,19 +618,17 @@ class WPUM_Fields_Editor {
 				} else {
 					$value = $field->get_meta( $setting_id );
 				}
-			} else {
-				if ( 'checkbox' === $type ) {
+			} elseif ( 'checkbox' === $type ) {
 					$value = (bool) $field->get_meta( $setting_id );
-				} else {
-					$default_method = 'default_' . $setting_id;
-					if ( method_exists( $field->field_type, $default_method ) ) {
-						if ( ! $field->meta_exists( $setting_id ) ) {
-							return $field->field_type->{$default_method}();
-						}
+			} else {
+				$default_method = 'default_' . $setting_id;
+				if ( method_exists( $field->field_type, $default_method ) ) {
+					if ( ! $field->meta_exists( $setting_id ) ) {
+						return $field->field_type->{$default_method}();
 					}
-
-					$value = $field->get_meta( $setting_id );
 				}
+
+				$value = $field->get_meta( $setting_id );
 			}
 		}
 
@@ -784,9 +772,7 @@ class WPUM_Fields_Editor {
 		} else {
 			wp_send_json_error( null, 403 );
 		}
-
 	}
-
 }
 
 new WPUM_Fields_Editor();

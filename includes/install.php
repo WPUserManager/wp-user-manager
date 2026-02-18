@@ -34,7 +34,6 @@ function wp_user_manager_install( $network_wide = false ) {
 	} else {
 		wpum_run_install();
 	}
-
 }
 
 /**
@@ -156,7 +155,6 @@ function wpum_install_registration_form( $fields = array() ) {
 	}
 
 	$default_form->add_meta( 'fields', $default_fields );
-
 }
 
 /**
@@ -267,7 +265,6 @@ function wpum_run_install() {
 
 	// Add the transient to redirect.
 	set_transient( '_wpum_activation_redirect', true, 30 );
-
 }
 
 /**

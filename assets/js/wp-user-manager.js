@@ -1,6 +1,6 @@
-/*! WP User Manager - v2.9.5
+/*! WP User Manager - v2.9.9
  * https://wpusermanager.com
- * Copyright (c) 2023; * Licensed GPLv2+ */
+ * Copyright (c) 2024; * Licensed GPLv2+ */
 jQuery( function( $ ) {
 	function initFields() {
 		$( '.wpum-multiselect:not(.wpum-clone-field)' ).each( function() {
@@ -198,7 +198,7 @@ jQuery( function( $ ) {
 					initSelect2( $( this ).find( 'select' ) );
 				}
 				if ( $(this).find('.field').hasClass('required-field') ) {
-					$( this ).find( "input" ).prop( "required", validRule );
+					$( this ).find( "input" ).not('.input-checkboxes').prop( "required", validRule );
 					$( this ).find( "select" ).prop( "required", validRule );
 					$( this ).find( "textarea" ).prop( "required", validRule );
 				}

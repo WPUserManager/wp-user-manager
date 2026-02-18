@@ -53,7 +53,7 @@ class WPUM_Avatars {
 
 				return $defaults;
 			} );
-			add_filter( 'pre_option_avatar_default', function ( $default ) {
+			add_filter( 'pre_option_avatar_default', function ( $default ) { // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.Found, Universal.NamingConventions.NoReservedKeywordParameterNames.defaultFound -- Required by WordPress filter.
 				return 'wpum';
 			} );
 
@@ -225,7 +225,6 @@ class WPUM_Avatars {
 
 		return $url;
 	}
-
 }
 
 new WPUM_Avatars();

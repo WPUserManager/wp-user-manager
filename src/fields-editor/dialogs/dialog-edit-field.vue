@@ -369,6 +369,7 @@ export default {
 				return new Promise((resolve, reject) => {
 					axios.post( wpumFieldsEditor.ajax,
 						qs.stringify({
+							nonce: wpumFieldsEditor.check_field_nonce,
 							user_meta_key: value,
 							field_id: _this.field_id
 						}),

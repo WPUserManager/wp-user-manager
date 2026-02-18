@@ -13,7 +13,7 @@
  * @version 1.0.0
  */
 
- // Exit if accessed directly
+// Exit if accessed directly
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
@@ -33,7 +33,7 @@ $fields = WPUM()->fields->get_fields(array(
 
 $parent_key = $parent->get_key();
 
-echo sprintf(
+printf(
 	'<fieldset class="fieldset-%s"><legend>%s %s</legend>',
 	esc_attr( $parent_key ),
 	esc_html( $data->label ),
@@ -45,7 +45,7 @@ $max_rows     = $parent->get_meta( 'max_rows' );
 
 if ( count( $fields ) ) {
 
-	$field_keys = array_map( function( $field ) {
+	$field_keys = array_map( function ( $field ) {
 			return $field->get_key();
 	}, $fields );
 
@@ -71,7 +71,7 @@ if ( count( $fields ) ) {
 		$clone_row = (int) $index === (int) $clone_row_index;
 		echo '<div class="fieldset-wpum_field_group' . ( $clone_row ? ' fieldset-wpum_field_group-clone' : '' ) . '">';
 
-		echo sprintf(
+		printf(
 			'<a href="#" class="remove-repeater-row" title="%s">x</a>',
 			esc_html__( 'Remove', 'wp-user-manager' )
 		);
@@ -126,7 +126,7 @@ if ( count( $fields ) ) {
 
 		echo '</div>';
 
-		$index++;
+		++$index;
 
 	} while ( isset( $values[ $index ] ) );
 }
@@ -134,7 +134,7 @@ if ( count( $fields ) ) {
 $max_rows     = ! empty( $max_rows ) ? intval( $max_rows ) : 0;
 $button_label = ! empty( $button_label ) ? $button_label : __( 'Add row', 'wp-user-manager' );
 
-echo sprintf(
+printf(
 	'<button type="button" class="add-repeater-row" data-max-row="%d">%s</button>',
 	esc_attr( $max_rows ),
 	esc_html( $button_label )
