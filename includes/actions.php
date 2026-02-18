@@ -155,7 +155,7 @@ function wpum_restrict_wp_admin_dashboard_access() {
 		return;
 	}
 
-	if ( current_user_can( 'administrator' ) ) {
+	if ( current_user_can( 'manage_options' ) ) {
 		return;
 	}
 
@@ -220,7 +220,7 @@ function wpum_restrict_wp_profile() {
 
 	$profile_redirect = wpum_get_option( 'backend_profile_redirect' );
 
-	if ( ! current_user_can( 'administrator' ) && IS_PROFILE_PAGE && $profile_redirect ) {
+	if ( ! current_user_can( 'manage_options' ) && IS_PROFILE_PAGE && $profile_redirect ) {
 		wp_safe_redirect( esc_url( get_permalink( $profile_redirect[0] ) ) );
 		exit;
 	}
@@ -315,7 +315,7 @@ add_action( 'edit_user_profile_update', 'wpum_check_display_name' );
  *
  * @return void
  */
-function wpum_check_display_field( $errors, $update, $user ) {
+function wpum_check_display_field( $errors, $update, $user ) { // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.FoundAfterLastUsed -- Required by WordPress user_profile_update_errors hook.
 	$errors->add( 'display_name_error', esc_html__( 'This display name is already in use by someone else. Display names must be unique.', 'wp-user-manager' ) );
 }
 
@@ -328,7 +328,7 @@ function wpum_check_display_field( $errors, $update, $user ) {
  *
  * @return void
  */
-function wpum_check_nick_field( $errors, $update, $user ) {
+function wpum_check_nick_field( $errors, $update, $user ) { // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.FoundAfterLastUsed -- Required by WordPress user_profile_update_errors hook.
 	$errors->add( 'display_nick_error', esc_html__( 'This nickname is already in use by someone else. Nicknames must be unique.', 'wp-user-manager' ) );
 }
 
@@ -593,7 +593,7 @@ if ( is_multisite() ) {
 /**
  * @param \WP_User $user
  */
-function wpum_modify_multiple_roles_ui( $user ) {
+function wpum_modify_multiple_roles_ui( $user ) { // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.Found -- Required by WordPress hook signature.
 	$allow_multiple_roles = wpum_get_option( 'allow_multiple_user_roles' );
 	if ( ! $allow_multiple_roles ) {
 		return;

@@ -325,7 +325,7 @@ class WPUM_Fields_Editor {
 	 * @param int $group_id
 	 * @param int $parent
 	 */
-	protected function delete_group_fields_cache( $group_id, $parent = 0 ) {
+	protected function delete_group_fields_cache( $group_id, $parent = 0 ) { // phpcs:ignore Universal.NamingConventions.NoReservedKeywordParameterNames.parentFound -- Public API, cannot rename.
 		$args = array(
 			'group_id' => (int) $group_id,
 			'orderby'  => 'field_order',

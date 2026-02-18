@@ -425,7 +425,7 @@ class WPUM_License {
 	 * @param array  $plugin_data
 	 * @param string $status
 	 */
-	public function plugin_page_notices( $plugin_file, $plugin_data, $status ) {
+	public function plugin_page_notices( $plugin_file, $plugin_data, $status ) { // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.FoundAfterLastUsed -- Required by after_plugin_row hook.
 		$has_update = isset( $plugin_data['new_version'] ) && version_compare( $plugin_data['Version'], $plugin_data['new_version'] ) === -1;
 
 		$license_data   = $this->get_license_data();
@@ -500,7 +500,7 @@ class WPUM_License {
 	 * @param array $plugin_data
 	 * @param array $response
 	 */
-	public function in_plugin_update_message( $plugin_data, $response ) {
+	public function in_plugin_update_message( $plugin_data, $response ) { // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.FoundAfterLastUsed -- Required by in_plugin_update_message hook.
 		$message = '';
 		if ( empty( $this->license ) ) {
 			// translators: %1$s licenses page URL

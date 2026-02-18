@@ -163,7 +163,7 @@ class WPUM_Form_Password_Recovery extends WPUM_Form {
 
 		if ( 'password-recovery' === $form && isset( $values['user']['username_email'] ) ) {
 			$username = sanitize_text_field( $values['user']['username_email'] );
-			if ( is_email( $username ) && ! email_exists( $username ) || ! is_email( $username ) && ! username_exists( $username ) ) {
+			if ( ( is_email( $username ) && ! email_exists( $username ) ) || ( ! is_email( $username ) && ! username_exists( $username ) ) ) {
 				return new WP_Error( 'username-validation-error', esc_html__( 'A user with this username or email does not exist. Please check your entry and try again.', 'wp-user-manager' ) );
 			}
 		}

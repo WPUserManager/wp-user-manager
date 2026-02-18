@@ -76,7 +76,7 @@ class WPUM_Registration_Form {
 		$this->db = new WPUM_DB_Registration_Forms();
 
 		if ( empty( $_id_or_form ) ) {
-			return false;
+			return;
 		}
 
 		if ( is_a( $_id_or_form, 'WPUM_DB_Registration_Forms' ) ) {
@@ -89,7 +89,7 @@ class WPUM_Registration_Form {
 		if ( $form ) {
 			$this->setup_form( $form );
 		} else {
-			return false;
+			return;
 		}
 	}
 
@@ -334,7 +334,7 @@ class WPUM_Registration_Form {
 	 *
 	 * @return mixed
 	 */
-	public function get_setting( $key, $default = false ) {
+	public function get_setting( $key, $default = false ) { // phpcs:ignore Universal.NamingConventions.NoReservedKeywordParameterNames.defaultFound -- Public API, cannot rename.
 		$form_setting = $this->get_meta( $key );
 
 		if ( false !== $form_setting ) {
@@ -399,7 +399,7 @@ class WPUM_Registration_Form {
 	 * @access  public
 	 * @since   2.0
 	 */
-	public function delete_meta( $meta_key, $meta_value, $prev_value = '' ) {
+	public function delete_meta( $meta_key, $meta_value, $prev_value = '' ) { // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.FoundAfterLastUsed -- Matches WordPress meta API signature.
 		return WPUM()->registration_form_meta->delete_meta( $this->id, $meta_key, $meta_value );
 	}
 

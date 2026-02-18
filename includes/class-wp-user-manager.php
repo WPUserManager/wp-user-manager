@@ -229,7 +229,7 @@ if ( ! class_exists( 'WP_User_Manager' ) ) :
 		 *
 		 * @return void
 		 */
-		public function ensure_addon_class_alias( $class ) {
+		public function ensure_addon_class_alias( $class ) { // phpcs:ignore Universal.NamingConventions.NoReservedKeywordParameterNames.classFound -- Matches spl_autoload_register callback signature.
 			if ( strpos( $class, 'WPUM\\' ) === 0 ) {
 				// Class is already scoped
 				return;
@@ -276,7 +276,7 @@ if ( ! class_exists( 'WP_User_Manager' ) ) :
 		 *
 		 * @return void
 		 */
-		public function ensure_class_alias( $class ) {
+		public function ensure_class_alias( $class ) { // phpcs:ignore Universal.NamingConventions.NoReservedKeywordParameterNames.classFound -- Matches spl_autoload_register callback signature.
 			// If the namespace beings with the dependency class prefix, make an alias for regular class.
 			if ( strpos( $class, 'WPUM' ) !== 0 ) {
 				return;

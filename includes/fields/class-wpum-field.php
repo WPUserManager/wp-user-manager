@@ -143,7 +143,7 @@ class WPUM_Field {
 		$this->db = new WPUM_DB_Fields();
 
 		if ( empty( $_id_or_field ) ) {
-			return false;
+			return;
 		}
 
 		if ( is_a( $_id_or_field, 'WPUM_Field' ) ) {
@@ -156,7 +156,7 @@ class WPUM_Field {
 		if ( $field ) {
 			$this->setup_field( $field );
 		} else {
-			return false;
+			return;
 		}
 	}
 

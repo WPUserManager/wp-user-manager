@@ -513,7 +513,7 @@ function wpum_get_field_type() {
  * @param  string $class custom class to add to the field.
  * @return array        list of all classes.
  */
-function wpum_get_field_css_class( $class = false ) {
+function wpum_get_field_css_class( $class = false ) { // phpcs:ignore Universal.NamingConventions.NoReservedKeywordParameterNames.classFound -- Public API, cannot rename.
 
 	global $wpum_profile_fields;
 
@@ -542,7 +542,7 @@ function wpum_get_field_css_class( $class = false ) {
  * @param  string $class custom class to add to the fields.
  * @return void
  */
-function wpum_the_field_css_class( $class = false ) {
+function wpum_the_field_css_class( $class = false ) { // phpcs:ignore Universal.NamingConventions.NoReservedKeywordParameterNames.classFound -- Public API, cannot rename.
 	echo esc_attr( join( ' ', wpum_get_field_css_class( $class ) ) );
 }
 
