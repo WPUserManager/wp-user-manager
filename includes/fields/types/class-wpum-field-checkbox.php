@@ -39,6 +39,4 @@ class WPUM_Field_Checkbox extends WPUM_Field_Type {
 	public function get_formatted_output( $field, $value ) {
 		return esc_html__( 'Yes', 'wp-user-manager' );
 	}
-
 }
-

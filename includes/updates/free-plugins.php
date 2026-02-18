@@ -60,5 +60,4 @@ function wpum_free_plugins_auto_updater() {
 			'url'       => home_url(),
 		) );
 	}
-
 }

@@ -1,0 +1,78 @@
+name: Unit Tests
+
+on:
+  pull_request:
+  push:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  wpunit:
+    name: WPUnit Tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.2"
+          coverage: none
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Get Composer cache directory
+        id: composer-cache
+        run: echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
+
+      - name: Cache Composer dependencies
+        uses: actions/cache@v4
+        with:
+          path: ${{ steps.composer-cache.outputs.dir }}
+          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+          restore-keys: ${{ runner.os }}-composer-
+
+      - name: Build scoped vendor (vendor-dist)
+        run: |
+          mkdir -p release/ci
+          cp composer.json composer.lock scoper.inc.php release/ci/
+          # Use a unique autoloader suffix to avoid collision with dev vendor/
+          php -r "
+            \$j = json_decode(file_get_contents('release/ci/composer.json'), true);
+            \$j['config']['autoloader-suffix'] = 'WPUMScoped';
+            file_put_contents('release/ci/composer.json', json_encode(\$j, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
+          "
+          bash bin/prefix-dependencies.sh ci
+          mv release/ci/vendor-dist ./vendor-dist
+          rm -rf release/ci
+
+      - name: Install dev dependencies
+        run: composer install --prefer-dist --no-progress --ignore-platform-reqs
+
+      - name: Configure test environment
+        run: |
+          printf 'params:\n    - .env.local\n' > tests/codeception.yml
+          printf 'WP_ROOT_FOLDER=/var/www/html\n' > tests/.env.local
+          printf 'TEST_DB_NAME=tests-wordpress\n' >> tests/.env.local
+          printf 'TEST_DB_HOST=tests-mysql\n' >> tests/.env.local
+          printf 'TEST_DB_USER=root\n' >> tests/.env.local
+          printf 'TEST_DB_PASSWORD=password\n' >> tests/.env.local
+          printf 'TEST_TABLE_PREFIX=wp_\n' >> tests/.env.local
+          printf 'TEST_SITE_WP_DOMAIN=localhost:8889\n' >> tests/.env.local
+          printf 'TEST_SITE_ADMIN_EMAIL=admin@example.com\n' >> tests/.env.local
+          printf 'TEST_SITE_WP_URL=http://localhost:8889\n' >> tests/.env.local
+
+      - name: Start wp-env
+        run: npx @wordpress/env start
+
+      - name: Run WPUnit tests
+        run: |
+          npx @wordpress/env run tests-cli \
+            --env-cwd=/var/www/html/wp-content/plugins/wp-user-manager/tests \
+            bash -c "php ../vendor/bin/codecept run wpunit --no-colors 2>&1"

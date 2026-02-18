@@ -29,4 +29,3 @@ class WPUM_Field_Hidden extends WPUM_Field_Type {
 		$this->min_addon_version = '2.2.1';
 	}
 }
-

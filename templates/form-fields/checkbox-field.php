@@ -13,7 +13,7 @@
  * @version 1.0.0
  */
 
- // Exit if accessed directly
+// Exit if accessed directly
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
@@ -21,11 +21,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 ?>
 
 <input type="checkbox" class="input-checkbox" name="<?php echo esc_attr( isset( $data->name ) ? $data->name : $data->key ); ?>" id="<?php echo esc_attr( $data->key ); ?>" <?php checked( ! empty( $data->value ), true ); ?> value="1"
-															   <?php
+																<?php
 																if ( ! empty( $data->required ) ) {
 																	echo 'required';}
 																?>
- />
+/>
 <?php
 if ( ! empty( $data->description ) ) :
 	?>

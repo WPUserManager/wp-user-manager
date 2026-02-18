@@ -48,7 +48,6 @@ class WPUM_Emails_Customizer_Scripts {
 		);
 
 		wp_localize_script( 'wpum-email-customize-preview', 'wpumCustomizePreview', $js_variables );
-
 	}
 
 	/**
@@ -88,7 +87,6 @@ class WPUM_Emails_Customizer_Scripts {
 			do_action( 'admin_print_footer_scripts' );
 		}
 	}
-
 }
 
 new WPUM_Emails_Customizer_Scripts();

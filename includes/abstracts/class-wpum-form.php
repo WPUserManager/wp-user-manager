@@ -108,7 +108,6 @@ abstract class WPUM_Form {
 		if ( $next_step_key && $step_key !== $next_step_key && ! is_callable( $this->steps[ $next_step_key ]['view'] ) ) {
 			$this->process();
 		}
-
 	}
 
 	/**
@@ -213,14 +212,14 @@ abstract class WPUM_Form {
 	 * Increases step from outside of the class.
 	 */
 	public function next_step() {
-		$this->step ++;
+		++$this->step;
 	}
 
 	/**
 	 * Decreases step from outside of the class.
 	 */
 	public function previous_step() {
-		$this->step --;
+		--$this->step;
 	}
 
 	/**
@@ -325,7 +324,6 @@ abstract class WPUM_Form {
 	 * @param array $values
 	 *
 	 * @return bool|WP_Error True on success, WP_Error on failure
-	 * @throws Exception Uploaded file is not a valid mime-type or other validation error.
 	 */
 	protected function validate_fields( $values ) {
 		foreach ( $this->fields as $group_key => $group_fields ) {
@@ -371,7 +369,7 @@ abstract class WPUM_Form {
 							$file_info = wp_check_filetype( $file_url );
 							if ( ! is_numeric( $file_url ) && $file_info && ! in_array( $file_info['ext'], $allowed_exts, true ) ) {
 								// translators: %1s$ field label %2$s file extension %3$s allowed extensions
-								throw new Exception( sprintf( __( '"%1$s" (filetype %2$s) needs to be one of the following file types: %3$s', 'wp-user-manager' ), $field['label'], $file_info['ext'], $allowed_exts ) );
+								return new WP_Error( 'validation-error', sprintf( __( '"%1$s" (filetype %2$s) needs to be one of the following file types: %3$s', 'wp-user-manager' ), $field['label'], $file_info['ext'], $allowed_exts ) );
 							}
 						}
 					}
@@ -516,7 +514,6 @@ abstract class WPUM_Form {
 		}
 
 		return $options;
-
 	}
 
 	/**
@@ -576,5 +573,4 @@ abstract class WPUM_Form {
 
 		return apply_filters( 'wpum_form_custom_field_dropdown_options', $options, $field );
 	}
-
 }
