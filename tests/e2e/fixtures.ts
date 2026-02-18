@@ -35,12 +35,20 @@ export async function wpAdminLogin(
   username = 'admin',
   password = 'password'
 ): Promise<void> {
-  await page.goto('/wp-login.php');
-  await page.locator('#user_login').fill(username);
-  await page.locator('#user_pass').fill(password);
-  await page.locator('#wp-submit').click();
-  // Wait for navigation after login - subscribers may not land on wp-admin
-  await page.waitForLoadState('networkidle', { timeout: 10000 }).catch(() => {});
+  // Use Playwright's API request context to log in directly via HTTP POST.
+  // This is much faster and more reliable than rendering wp-login.php in the
+  // browser, which can time out on slow Docker containers.
+  // Cookies from the response are automatically stored in the browser context.
+  const response = await page.request.post('/wp-login.php', {
+    form: {
+      log: username,
+      pwd: password,
+      'wp-submit': 'Log In',
+      redirect_to: '/wp-admin/',
+      testcookie: '1',
+    },
+  });
+  await response.dispose();
 }
 
 /**
@@ -253,6 +261,56 @@ export function setupContentRestrictionPages(): void {
 }
 
 /**
+ * Create a wpum_directory CPT post and a page with the [wpum_user_directory] shortcode.
+ * The directory is configured with search form enabled.
+ */
+export function setupDirectoryPage(): void {
+  // Check if the directory CPT post already exists
+  let directoryId = '';
+  try {
+    directoryId = wpCli(
+      'post list --post_type=wpum_directory --post_status=publish --field=ID --posts_per_page=1'
+    );
+  } catch {
+    // ignore
+  }
+
+  if (!directoryId || !directoryId.match(/^\d+$/)) {
+    directoryId = wpCli(
+      'post create --post_type=wpum_directory --post_title="Test Directory" --post_status=publish --porcelain'
+    );
+  }
+
+  directoryId = directoryId.trim();
+
+  // Enable search form on the directory via Carbon Fields meta
+  if (directoryId && directoryId.match(/^\d+$/)) {
+    wpCli(
+      `post meta update ${directoryId} _directory_search_form "yes"`
+    );
+    wpCli(
+      `post meta update ${directoryId} _directory_display_sorter "yes"`
+    );
+  }
+
+  // Create the page with the directory shortcode
+  let pageId = '';
+  try {
+    pageId = wpCli(
+      'post list --post_type=page --name="wpum-directory" --post_status=publish --field=ID'
+    );
+  } catch {
+    // ignore
+  }
+
+  if (!pageId || !pageId.match(/^\d+$/)) {
+    wpCli(
+      `post create --post_type=page --post_title="User Directory" --post_name="wpum-directory" --post_status=publish --post_content='[wpum_user_directory id="${directoryId}"]'`
+    );
+  }
+}
+
+/**
  * Delete a user by username (for cleanup between test runs).
  */
 export function deleteUser(username: string): void {
@@ -290,6 +348,12 @@ type WpumFixtures = {
   passwordRecoveryPage: string;
   loggedInContentPage: string;
   loggedOutContentPage: string;
+  directoryPage: string;
+  profileCardPage: string;
+  recentUsersPage: string;
+  loginLinkPage: string;
+  logoutLinkPage: string;
+  roleRestrictedPage: string;
 };
 
 export const test = base.extend<WpumFixtures>({
@@ -300,6 +364,12 @@ export const test = base.extend<WpumFixtures>({
   passwordRecoveryPage: '/wpum-password-recovery/',
   loggedInContentPage: '/wpum-logged-in-content/',
   loggedOutContentPage: '/wpum-logged-out-content/',
+  directoryPage: '/wpum-directory/',
+  profileCardPage: '/wpum-profile-card/',
+  recentUsersPage: '/wpum-recent-users/',
+  loginLinkPage: '/wpum-login-link/',
+  logoutLinkPage: '/wpum-logout-link/',
+  roleRestrictedPage: '/wpum-role-restricted/',
 });
 
 export { expect };
