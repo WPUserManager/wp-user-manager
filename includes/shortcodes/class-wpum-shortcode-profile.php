@@ -25,7 +25,6 @@ class WPUM_Shortcode_Profile extends WPUM_Shortcode_Generator {
 		$this->shortcode['label'] = esc_html__( 'Profiles page', 'wp-user-manager' );
 		parent::__construct( 'wpum_profile' );
 	}
-
 }
 
 new WPUM_Shortcode_Profile();

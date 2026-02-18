@@ -98,4 +98,3 @@ class Product {
 		$this->when_paid = time();
 	}
 }
-

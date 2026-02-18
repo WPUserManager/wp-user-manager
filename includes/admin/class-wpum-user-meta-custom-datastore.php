@@ -20,7 +20,6 @@ class WPUM_User_Meta_Custom_Datastore extends Datastore {
 	 * Initialization tasks for concrete datastores.
 	 **/
 	public function init() {
-
 	}
 
 	/**

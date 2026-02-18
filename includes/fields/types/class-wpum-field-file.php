@@ -89,7 +89,7 @@ class WPUM_Field_File extends WPUM_Field_Type {
 	 * @return  string|array
 	 */
 	protected function upload_file( $field_key, $field ) {
-		if ( ! empty( $_FILES[ $field_key ] ) && ! empty( $_FILES[ $field_key ]['name'] ) ) {
+		if ( ! empty( $_FILES[ $field_key ] ) && ! empty( $_FILES[ $field_key ]['name'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce verified in parent form handler.
 			$allowed_mime_types = wpum_get_allowed_mime_types();
 			if ( ! empty( $field['allowed_mime_types'] ) ) {
 				$extensions         = explode( ',', $field['allowed_mime_types'] );
@@ -111,14 +111,14 @@ class WPUM_Field_File extends WPUM_Field_Type {
 				// translators: %s field label
 				$too_big_message = sprintf( esc_html__( 'The uploaded %s file is too big.', 'wp-user-manager' ), $field['label'] );
 				if ( defined( 'WPUM_MAX_AVATAR_SIZE' ) && 'user_avatar' === $field_key && $file_to_upload['size'] > WPUM_MAX_AVATAR_SIZE ) {
-					throw new Exception( $too_big_message );
+					throw new Exception( esc_html( $too_big_message ) );
 				}
 				if ( defined( 'WPUM_MAX_COVER_SIZE' ) && 'user_cover' === $field_key && $file_to_upload['size'] > WPUM_MAX_COVER_SIZE ) {
-					throw new Exception( $too_big_message );
+					throw new Exception( esc_html( $too_big_message ) );
 				}
 
 				if ( isset( $field['max_file_size'] ) && ! empty( $field['max_file_size'] ) && $file_to_upload['size'] > $field['max_file_size'] ) {
-					throw new Exception( $too_big_message );
+					throw new Exception( esc_html( $too_big_message ) );
 				}
 
 				$uploaded_file = wpum_upload_file( $file_to_upload, array(
@@ -128,7 +128,7 @@ class WPUM_Field_File extends WPUM_Field_Type {
 				) );
 
 				if ( is_wp_error( $uploaded_file ) ) {
-					throw new Exception( $uploaded_file->get_error_message() );
+					throw new Exception( esc_html( $uploaded_file->get_error_message() ) );
 				} else {
 					$file_urls[] = array(
 						'url'  => $uploaded_file->url,
@@ -155,7 +155,7 @@ class WPUM_Field_File extends WPUM_Field_Type {
 	 * @return string
 	 */
 	public function get_formatted_output( $field, $value ) {
-		$value = maybe_unserialize( $value );
+		$value = wpum_maybe_unserialize( $value );
 
 		if ( is_numeric( $value ) ) {
 			$image_src = wp_get_attachment_image_src( absint( $value ) );

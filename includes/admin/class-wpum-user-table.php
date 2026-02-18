@@ -157,7 +157,7 @@ class WPUM_User_Table {
 
 			if ( ! in_array( $role, $user->roles, true ) ) {
 				$user->add_role( $role );
-				$count ++;
+				++$count;
 			}
 		}
 		wp_safe_redirect( add_query_arg( array(
@@ -248,7 +248,7 @@ class WPUM_User_Table {
 
 			if ( in_array( $role, $user->roles, true ) ) {
 				$user->remove_role( $role );
-				$count ++;
+				++$count;
 			}
 		}
 		wp_safe_redirect( add_query_arg( array(
@@ -287,7 +287,6 @@ class WPUM_User_Table {
 
 		return $value;
 	}
-
 }
 
 new WPUM_User_Table();
