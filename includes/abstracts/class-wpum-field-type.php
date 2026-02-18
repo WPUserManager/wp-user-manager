@@ -112,14 +112,14 @@ abstract class WPUM_Field_Type {
 
 	/**
 	 * Set the name of the field.
-	 * 
+	 *
 	 * @return void
 	 */
 	public function set_name() {}
 
 	/**
 	 * Get the name of the field.
-	 * 
+	 *
 	 * @return string
 	 */
 	public function get_name() {
