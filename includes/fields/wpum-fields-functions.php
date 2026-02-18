@@ -158,7 +158,7 @@ function wpum_install_fields() {
 
 		foreach ( $fields as $field ) {
 
-			$order++;
+			++$order;
 			$field['field_order'] = $order;
 
 			$save_field = new WPUM_Field();
@@ -195,7 +195,6 @@ function wpum_install_cover_image_field() {
 	$save_field->add_meta( 'user_meta_key', 'user_cover' );
 	$save_field->add_meta( 'editing', 'public' );
 	$save_field->add_meta( 'visibility', 'public' );
-
 }
 
 /**
@@ -220,7 +219,6 @@ function wpum_get_primary_field_types() {
 	);
 
 	return apply_filters( 'wpum_get_primary_field_types', $types );
-
 }
 
 /**
@@ -258,7 +256,6 @@ function wpum_get_edit_field_dialog_tabs() {
 	);
 
 	return apply_filters( 'wpum_get_fields_editor_edit_tabs', $tabs );
-
 }
 
 /**
@@ -516,7 +513,7 @@ function wpum_get_field_type() {
  * @param  string $class custom class to add to the field.
  * @return array        list of all classes.
  */
-function wpum_get_field_css_class( $class = false ) {
+function wpum_get_field_css_class( $class = false ) { // phpcs:ignore Universal.NamingConventions.NoReservedKeywordParameterNames.classFound -- Public API, cannot rename.
 
 	global $wpum_profile_fields;
 
@@ -537,7 +534,6 @@ function wpum_get_field_css_class( $class = false ) {
 	$classes = array_map( 'esc_attr', $classes );
 
 	return apply_filters( 'wpum_field_css_class', $classes, $class );
-
 }
 
 /**
@@ -546,7 +542,7 @@ function wpum_get_field_css_class( $class = false ) {
  * @param  string $class custom class to add to the fields.
  * @return void
  */
-function wpum_the_field_css_class( $class = false ) {
+function wpum_the_field_css_class( $class = false ) { // phpcs:ignore Universal.NamingConventions.NoReservedKeywordParameterNames.classFound -- Public API, cannot rename.
 	echo esc_attr( join( ' ', wpum_get_field_css_class( $class ) ) );
 }
 
@@ -616,4 +612,34 @@ function wpum_max_upload_size( $field_name = '', $custom_size = false ) {
 function wpum_get_registered_parent_field_types() {
 
 	return apply_filters( 'wpum_registered_parent_field_types', array() );
+}
+
+/**
+ * Safe unserialization that doesn't allow classes
+ *
+ * @param mixed $data Data that might be unserialized.
+ *
+ * @return mixed Unserialized data can be any type.
+ */
+function wpum_maybe_unserialize( $data ) {
+	if ( is_serialized( $data ) ) { // Don't attempt to unserialize data that wasn't serialized going in.
+		return @unserialize( trim( $data ), array( 'allowed_classes' => false ) ); // phpcs:ignore
+	}
+
+	return $data;
+}
+
+/**
+ * Ensure a string is text not a serialized string
+ *
+ * @param string $data
+ *
+ * @return string
+ */
+function wpum_sanitize_text( $data ) {
+	if ( ! is_string( $data ) || is_serialized( $data ) ) {
+		return '';
+	}
+
+	return sanitize_text_field( $data );
 }

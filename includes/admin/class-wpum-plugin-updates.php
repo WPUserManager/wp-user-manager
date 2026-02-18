@@ -185,7 +185,6 @@ class WPUM_Plugin_Updates {
 
 		$message .= '<p><a href="' . $update_url . '" class="button-primary">' . esc_html__( 'Upgrade database', 'wp-user-manager' ) . '</a></p>';
 		WPUM()->notices->register_notice( 'wpumv2_upgrade_required_notice', 'warning', $message, array( 'dismissible' => false ) );
-
 	}
 
 	/**
@@ -262,7 +261,6 @@ class WPUM_Plugin_Updates {
 			$backend_profile_redirect = array( $backend_profile_redirect );
 			wpum_update_option( 'backend_profile_redirect', $backend_profile_redirect );
 		}
-
 	}
 
 	/**
@@ -288,7 +286,6 @@ class WPUM_Plugin_Updates {
 
 		$default_group = new WPUM_Field_Group( 1 );
 		$default_group->update( array( 'is_primary' => true ) );
-
 	}
 
 	/**
@@ -321,7 +318,6 @@ class WPUM_Plugin_Updates {
 				$wpdb->query( "DROP TABLE IF EXISTS {$wpdb->prefix}wpum_field_groups" ); // phpcs:ignore
 			}
 		}
-
 	}
 
 	/**
@@ -448,7 +444,6 @@ class WPUM_Plugin_Updates {
 				}
 			}
 		}
-
 	}
 
 	/**
@@ -479,7 +474,6 @@ class WPUM_Plugin_Updates {
 		if ( ! $cover_exists ) {
 			wpum_install_cover_image_field();
 		}
-
 	}
 
 	/**
@@ -527,7 +521,6 @@ class WPUM_Plugin_Updates {
 		if ( ! empty( $new_emails ) ) {
 			update_option( 'wpum_email', $new_emails );
 		}
-
 	}
 
 	/**
@@ -544,7 +537,6 @@ class WPUM_Plugin_Updates {
 		if ( is_array( $search_fields ) && empty( $search_fields ) ) {
 			wpum_setup_default_custom_search_fields();
 		}
-
 	}
 
 	/**
@@ -583,7 +575,6 @@ class WPUM_Plugin_Updates {
 			$default_form->add_meta( 'fields', $registration_fields );
 
 		}
-
 	}
 
 	/**
@@ -643,7 +634,6 @@ class WPUM_Plugin_Updates {
 			wp_reset_postdata();
 
 		}
-
 	}
 
 	/**
@@ -695,7 +685,5 @@ class WPUM_Plugin_Updates {
 
 			wp_die( wp_kses_post( $message ), 'WPUM DB Update' );
 		}
-
 	}
-
 }

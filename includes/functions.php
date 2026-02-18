@@ -169,7 +169,6 @@ function wpum_get_core_page_id( $page = null ) {
 	$id = is_array( $id ) ? $id[0] : false;
 
 	return $id;
-
 }
 
 /**
@@ -187,7 +186,7 @@ function wpum_get_core_page_id( $page = null ) {
  *               corresponding to `$index_key`. If `$index_key` is null, array keys from the original
  *               `$list` will be preserved in the results.
  */
-function wpum_list_pluck( $list, $field, $index_key = null ) {
+function wpum_list_pluck( $list, $field, $index_key = null ) { // phpcs:ignore Universal.NamingConventions.NoReservedKeywordParameterNames.listFound -- Public API, cannot rename.
 	if ( ! $index_key ) {
 		/**
 		 * This is simple. Could at some point wrap array_column()
@@ -198,10 +197,8 @@ function wpum_list_pluck( $list, $field, $index_key = null ) {
 				if ( isset( $value->$field ) ) {
 					$list[ $key ] = $value->$field;
 				}
-			} else {
-				if ( isset( $value[ $field ] ) ) {
+			} elseif ( isset( $value[ $field ] ) ) {
 					$list[ $key ] = $value[ $field ];
-				}
 			}
 		}
 
@@ -220,12 +217,10 @@ function wpum_list_pluck( $list, $field, $index_key = null ) {
 			} else {
 				$newlist[] = $value->$field;
 			}
-		} else {
-			if ( isset( $value[ $index_key ] ) ) {
+		} elseif ( isset( $value[ $index_key ] ) ) {
 				$newlist[ $value[ $index_key ] ] = $value[ $field ];
-			} else {
-				$newlist[] = $value[ $field ];
-			}
+		} else {
+			$newlist[] = $value[ $field ];
 		}
 	}
 	$list = $newlist;
@@ -250,7 +245,6 @@ function wpum_get_login_label() {
 	}
 
 	return $label;
-
 }
 
 /**
@@ -344,7 +338,6 @@ function wpum_mask_email_address( $email_address ) {
 	$d   = implode( '.', $d );
 
 	return wpum_starmid( $u ) . '@' . wpum_starmid( $d ) . ".$tld";
-
 }
 
 /**
@@ -400,7 +393,6 @@ function wpum_log_user_in( $email_or_id ) {
 	wp_set_current_user( $user_id, $username );
 	wp_set_auth_cookie( $user_id );
 	do_action( 'wp_login', $username, $user );
-
 }
 
 /**
@@ -723,7 +715,7 @@ function wpum_get_account_page_tabs() {
 			'priority' => 800,
 		),
 		'view'     => array(
-			'name'     => esc_html__( 'View profile', 'wp-user-manager' ),
+			'name'     => esc_html__( 'View Profile', 'wp-user-manager' ),
 			'priority' => 900,
 		),
 		'logout'   => array(
@@ -748,7 +740,6 @@ function wpum_get_account_page_tabs() {
 	uasort( $tabs, 'wpum_sort_array_by_priority' );
 
 	return $tabs;
-
 }
 
 /**
@@ -776,7 +767,6 @@ function wpum_get_full_page_hierarchy( $page_id ) {
 	}
 
 	return $return;
-
 }
 
 /**
@@ -820,7 +810,6 @@ function wpum_get_queried_user() {
 	$queried_user = get_query_var( 'profile', false );
 
 	return $queried_user;
-
 }
 
 /**
@@ -864,7 +853,6 @@ function wpum_get_queried_user_id() {
 	}
 
 	return $user_id;
-
 }
 
 /**
@@ -902,7 +890,6 @@ function wpum_get_profile_url( $user ) {
 	}
 
 	return $page_url;
-
 }
 
 /**
@@ -939,7 +926,6 @@ function wpum_get_registered_profile_tabs() {
 	uasort( $tabs, 'wpum_sort_array_by_priority' );
 
 	return $tabs;
-
 }
 
 /**
@@ -1044,7 +1030,6 @@ function wpum_get_comments_for_profile( $user_id ) {
 	$comments['items']   = get_comments( $args );
 
 	return $comments;
-
 }
 
 /**
@@ -1211,7 +1196,6 @@ function wpum_custom_admin_notice_inline_css() {
 		}
 	</style>
 	<?php
-
 }
 
 /**
@@ -1233,7 +1217,6 @@ function wpum_setup_default_custom_search_fields() {
 			'meta_key' => 'last_name',
 		)
 	);
-
 }
 
 /**
@@ -1279,7 +1262,6 @@ function wpum_get_mime_types_for_selection() {
 	}
 
 	return $types;
-
 }
 
 if ( ! function_exists( 'wp_new_user_notification' ) ) {
@@ -1291,7 +1273,7 @@ if ( ! function_exists( 'wp_new_user_notification' ) ) {
 	 *
 	 * @return void
 	 */
-	function wp_new_user_notification( $user_id, $plaintext_pass = '' ) {
+	function wp_new_user_notification( $user_id, $plaintext_pass = '' ) { // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.FoundAfterLastUsed -- Matches WordPress core function signature.
 
 		$password_set_by_admin = false;
 		if ( isset( $_POST['pass1-text'] ) ) { // phpcs:ignore

@@ -105,7 +105,6 @@ class WPUM_Emails {
 
 		add_action( 'wpum_email_send_before', array( $this, 'send_before' ) );
 		add_action( 'wpum_email_send_after', array( $this, 'send_after' ) );
-
 	}
 
 	/**
@@ -278,7 +277,6 @@ class WPUM_Emails {
 		do_action( 'wpum_email_send_after', $this );
 
 		return $sent;
-
 	}
 
 	/**
@@ -425,7 +423,6 @@ class WPUM_Emails {
 		);
 
 		return apply_filters( 'wpum_email_tags', $email_tags, $this );
-
 	}
 
 	/**
@@ -455,5 +452,4 @@ class WPUM_Emails {
 	public function email_tag_exists( $tag ) {
 		return array_key_exists( $tag, $this->tags );
 	}
-
 }

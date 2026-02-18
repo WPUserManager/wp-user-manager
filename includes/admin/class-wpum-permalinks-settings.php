@@ -126,7 +126,6 @@ class WPUM_Permalinks_Settings {
 			update_option( 'wpum_permalink', $user_permalink );
 		}
 	}
-
 }
 
 new WPUM_Permalinks_Settings();

@@ -43,5 +43,4 @@ class WPUM_DB_Table extends WPUM_WP_DB_Table {
 	 * @return void
 	 */
 	protected function upgrade() {}
-
 }

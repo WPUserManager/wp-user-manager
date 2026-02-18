@@ -89,7 +89,6 @@ class WPUM_Form_Password_Recovery extends WPUM_Form {
 		) );
 
 		$this->sort_set_steps();
-
 	}
 
 	/**
@@ -148,7 +147,6 @@ class WPUM_Form_Password_Recovery extends WPUM_Form {
 		if ( isset( $_GET['user_id'] ) && isset( $_GET['key'] ) && isset( $_GET['step'] ) && 'reset' === $_GET['step'] ) { // phpcs:ignore
 			unset( $this->fields['user'] );
 		}
-
 	}
 
 	/**
@@ -165,7 +163,7 @@ class WPUM_Form_Password_Recovery extends WPUM_Form {
 
 		if ( 'password-recovery' === $form && isset( $values['user']['username_email'] ) ) {
 			$username = sanitize_text_field( $values['user']['username_email'] );
-			if ( is_email( $username ) && ! email_exists( $username ) || ! is_email( $username ) && ! username_exists( $username ) ) {
+			if ( ( is_email( $username ) && ! email_exists( $username ) ) || ( ! is_email( $username ) && ! username_exists( $username ) ) ) {
 				return new WP_Error( 'username-validation-error', esc_html__( 'A user with this username or email does not exist. Please check your entry and try again.', 'wp-user-manager' ) );
 			}
 		}
@@ -199,7 +197,6 @@ class WPUM_Form_Password_Recovery extends WPUM_Form {
 		WPUM()->templates
 			->set_template_data( $atts )
 			->get_template_part( 'action-links' );
-
 	}
 
 	/**
@@ -267,7 +264,7 @@ class WPUM_Form_Password_Recovery extends WPUM_Form {
 			}
 
 			// Successful, show next step.
-			$this->step ++;
+			++$this->step;
 
 		} catch ( Exception $e ) {
 			$this->add_error( $e->getMessage(), 'password_recovery_submit' );
@@ -300,7 +297,6 @@ class WPUM_Form_Password_Recovery extends WPUM_Form {
 		WPUM()->templates
 			->set_template_data( $data )
 			->get_template_part( 'messages/password-reset', 'request-success' );
-
 	}
 
 	/**
@@ -357,7 +353,6 @@ class WPUM_Form_Password_Recovery extends WPUM_Form {
 				->get_template_part( 'messages/general', 'error' );
 
 		}
-
 	}
 
 	/**
@@ -459,13 +454,12 @@ class WPUM_Form_Password_Recovery extends WPUM_Form {
 			$sessions->destroy_all();
 
 			// Successful, show next step.
-			$this->step ++;
+			++$this->step;
 
 		} catch ( Exception $e ) {
 			$this->add_error( $e->getMessage(), 'password_recovery_reset' );
 			return;
 		}
-
 	}
 
 	/**
@@ -483,7 +477,5 @@ class WPUM_Form_Password_Recovery extends WPUM_Form {
 		WPUM()->templates
 			->set_template_data( $data )
 			->get_template_part( 'messages/general', 'success' );
-
 	}
-
 }

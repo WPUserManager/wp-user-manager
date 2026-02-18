@@ -87,7 +87,7 @@ class WPUM_Field_Group {
 		$this->db = new WPUM_DB_Fields_Groups();
 
 		if ( empty( $_id_or_group ) ) {
-			return false;
+			return;
 		}
 
 		if ( is_a( $_id_or_group, 'WPUM_Field_Group' ) ) {
@@ -100,9 +100,8 @@ class WPUM_Field_Group {
 		if ( $group ) {
 			$this->setup_field_group( $group );
 		} else {
-			return false;
+			return;
 		}
-
 	}
 
 	/**
@@ -166,7 +165,6 @@ class WPUM_Field_Group {
 		}
 
 		return false;
-
 	}
 
 	/**
@@ -283,7 +281,6 @@ class WPUM_Field_Group {
 		do_action( 'wpum_post_insert_field_group', $args, $this->id );
 
 		return $id;
-
 	}
 
 	/**
@@ -316,7 +313,6 @@ class WPUM_Field_Group {
 		do_action( 'wpum_post_update_field_group', $args, $this->id );
 
 		return $ret;
-
 	}
 
 	/**
@@ -360,7 +356,6 @@ class WPUM_Field_Group {
 		}
 
 		return $data;
-
 	}
 
 	/**
@@ -390,5 +385,4 @@ class WPUM_Field_Group {
 
 		return $count;
 	}
-
 }

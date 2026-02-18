@@ -61,7 +61,6 @@ class WPUM_Registration_Form_Widget extends \WPUM\WPH_Widget {
 
 		// create widget
 		$this->create_widget( $args );
-
 	}
 
 	/**
@@ -88,5 +87,4 @@ class WPUM_Registration_Form_Widget extends \WPUM\WPH_Widget {
 
 		echo wp_kses_post( $args['after_widget'] );
 	}
-
 }
