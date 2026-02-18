@@ -114,6 +114,9 @@ export default {
 				value.forEach(function(element) {
 					savedValue.push(element.value)
 				})
+				if (savedValue.length === 0) {
+					savedValue = "";
+				}
 			} else if( savedValue === null ) {
 				savedValue = null
 			} else {

@@ -1,0 +1,832 @@
+=== WP User Manager ===
+
+== Changelog ==
+
+= 2.9.9 (11th March 2024) =
+
+- Fix: Stripe subscriptions not connecting to user correctly
+- Fix: Password field not allowing special characters
+
+= 2.9.8 (19th November 2023) =
+
+- Fix: Unable to add new WPUM Blocks or edit existing ones
+- Fix: PHP 8.1 and 8.2 notices
+- Fix: Redirect loop when preventing access to the site unless logged in for sites installed in a subdirectory
+- Fix: Unable to submit WPUM forms as Elementor widgets
+- Fix: Displayed Stripe product prices incorrectly rounded to whole numbers
+- Fix: REST API endpoints not accessible when preventing access to the site unless logged in
+- Fix: Unable to remove all "Allowed Roles" in the custom field permissions tab
+- Fix: Unable to add blocks for the Likes, Private Content, and Social Login addons
+- Fix: Unable to delete custom role
+
+= 2.9.7 (23rd March 2023) =
+
+- Fix: WP User Manager custom blocks and block restriction settings now appear in the block editor
+
+= 2.9.6 (22nd March 2023) =
+
+- Improvement: Plugin now requires PHP 7.2+
+- Fix: PHP Fatal error: Cannot declare because the name is already in use in
+- Fix: Date picker on the account page now uses the correct display format
+
+= 2.9.5 (17th March 2023) =
+
+- Fix: PHP Fatal error:  Uncaught Error: Class 'WPUM\Walker_Nav_Menu_Edit' not found
+- Fix: Date picker not saving in correct format
+- Fix: Repeater fields not loading correctly
+
+= 2.9.4 (17th March 2023) =
+
+- Fix: Fatal error: Cannot declare because the name is already in use in errors
+
+= 2.9.3 (16th March 2023) =
+
+- Fix: Fatal errors on sites using Divi
+
+= 2.9.2 (16th March 2023) =
+
+- Fix: PHP 8 Fatal error: Uncaught TypeError: spl_autoload_unregister(): Argument #1 ($callback) must be a valid callback
+
+= 2.9.1 (16th March 2023) =
+
+- Fix: PHP Fatal error failed opening required /includes/functions-scoped.php
+
+= 2.9 (16th March 2023) =
+
+- New: Collect payment for site access with credit cards using our Stripe integration
+- New: Use native Elementor widgets instead of WP User Manager shortcodes
+- New: Choose an image as the default avatar for users who haven't uploaded one
+- New: Compatibility with the [Stripe Pro](https://wpusermanager.com/addons/stripe-pro/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager) addon
+- Improvement: Registration success notice now shows on after registration redirect pages
+- Improvement: Third-party dependency code is now prefixed to avoid clashes with other plugins
+- Improvement: Storage date format for the Date picker field updated to 'Y-m-d' for standardization
+- Improvement: Date format for the Date picker field can be altered with the 'wpum_field_datepicker_date_format' filter
+- Fix: PHP notice on form submit with Repeater field with conditional logic
+
+= 2.8.19 (3rd February 2023) =
+
+- Improvement: Pagination for comments on the profile, with comments per page setting
+- Fix: Email customizer now works with the OceanWP theme
+- Fix: Conditional logic support for Repeater subfields
+
+= 2.8.18 (23rd January 2023) =
+
+- Fix: Code fixes using PHPStan (props [szepeviktor](https://github.com/szepeviktor))
+- Fix: Renaming a registration form now works correctly
+- Fix: Abort loading plugin early if plugin doesn't meet PHP or WP requirements
+- Fix: Newsletter email form on welcome page updated
+- Fix: Formatting on the welcome page
+- Fix: Updated documentation URLs
+
+= 2.8.17 (18th January 2023) =
+
+- New: Setting to partially obfuscate email addresses used as the user display name
+- Improvement: 'wpum_authentication_method_admin_override' filter to enforce admin logins with the correct username/email method
+- Fix: Headers for field groups with only hidden fields now don't render on the profile
+- Fix: Searching in a directory for users with apostrophes in their names now returns result
+- Fix: Redirecting to a URL with query parameters now retains the parameters after login
+
+= 2.8.16 (2nd January 2023) =
+
+- New: Compatibility with [Likes](https://wpusermanager.com/addons/likes/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager) addon
+- New: Blocks for Social Login Buttons and Private Content
+- Improvement: Profile permission settings now in a different tab in the admin
+- Fix: User role editor now saving grant and deny capabilities correctly
+- Fix: Profile Card block settings now working correctly
+- Fix: Undefined offset: 0 in wp-user-manager/includes/actions.php on line 117
+- Fix: Error log messages now not showing if a profile is accessed for a user that does not exist
+
+= 2.8.15 (21st December 2022) =
+
+- New: Compatibility with [hCaptcha](https://wpusermanager.com/addons/hcaptcha/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager) addon
+- Fix: Warning: Undefined array key “action” now not showing
+- Fix: Undefined offset: 0 when excluding roles from showing the admin bar
+
+= 2.8.14 (6th December 2022) =
+
+- Improvement: Saving a custom field with same unique key is now not allowed
+- Improvement: 'wpum_prevent_entire_site_access_allowed_urls' filter for allowing URLs when site access is prevented
+- Fix: Multiple checkboxes field now saving correctly
+- Fix: Existing file fields data in a repeater field are now preserved correctly on save
+- Fix: Menu item user role restriction now works as expected
+- Fix: Switching back to a user with the User Switching plugin now works as expected
+- Fix: Plugin admin scripts now not loading on every admin page
+- Fix: Hypens now allowed in unique meta key for custom fields
+
+= 2.8.13 (19th October 2022) =
+
+- Fix: User, User Role, and User Taxonomy fields now saving multiple values correctly
+
+= 2.8.12 (16th September 2022) =
+
+- Fix: Forms in widgets now render correctly
+- Fix: Multi select fields now rendered correctly when hidden with conditional logic
+
+= 2.8.11 (15th September 2022) =
+
+- Improvement: Links on the Already Logged In template can be filtered using the 'wpum_already_logged_in_links' filter
+- Fix: Password reset success message now renders HTML correctly
+- Fix: File field now correctly saving uploads
+- Fix: Sub pages for the account and profile page now loading when using an Elementor template
+
+= 2.8.10 (14th September 2022) =
+
+- Fix: Conditional logic settings now correctly saving when editing a field
+- Fix: Custom field unique meta keys now converted to lowercase to stop fatal errors
+
+= 2.8.9 (12th September 2022) =
+
+- Improvement: Options for dropdown, multiselect, checkbox and radio buttons fields can be pasted in
+- Improvement: Plugin coding standards improved
+- Fix: Account and profile subpages now correctly styled like the parent page when using page builder plugins
+- Fix: PHP notices now not thrown when using conditional logic with empty multiselect fields
+
+= 2.8.8 (16th August 2022) =
+
+- Security: File uploads now checked for matching file extension and file type before attempting to upload
+- Fix: HTML in form error messages now showing correctly
+- Fix: 'Edit account' string on the profile page now localized for translation
+
+= 2.8.7 (8th August 2022) =
+
+- Fix: PHP Notice: Undefined index preventing form submission on some installs
+
+= 2.8.6 (7th August 2022) =
+
+- Improvement: Conditional logic for fields now supported for both the [Custom Fields](https://wpusermanager.com/addons/custom-fields/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager) and [ACF](https://wpusermanager.com/addons/acf/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager) addons
+- Fix: Change Password account form now loading correctly after save
+- Fix: Account and profile sub pages now inheriting the parent page template which was broken in WordPress 6.0
+- Fix: Saving Divi pages now not throwing fatal errors on some installs
+- Fix: Registration form error messages now using the general-error.php template
+
+= 2.8.5 (25th May 2022) =
+
+- Fix: Account and profile sub pages now working with WordPress 6.0
+
+= 2.8.4 (22nd May 2022) =
+
+- Tested with WordPress 6.0
+- Fix: Plugin now compatible with sites with object caching enabled
+
+= 2.8.3 (12th May 2022) =
+
+- Fix: Field names with apostrophes now don't have slashes added
+- Fix: Prevent site access now compatible with Social Login addon
+
+= 2.8.2 (1st May 2022) =
+
+- Improvement: Redirect URL after login can now be filtered with 'wpum_login_redirect_to_url' filter when restricting content
+- Fix: Password reset page now accessible when preventing access to the whole site
+- Fix: Email settings tab now only showing for File fields
+- Fix: File field help hint now includes jpeg in the example file extensions for clarity
+- Fix: WP User Manager addons now showing as tested up to the minor WordPress versions correctly
+
+= 2.8.1 (25th February 2022) =
+
+- Fix: User password now not regenerated when other plugins create users when using a 'password' field
+- Fix: WP CLI commands now working when the site is locked
+
+= 2.8 (24th February 2022) =
+
+- New: Sites can now be completely locked from access unless users are logged in
+- New: Email sent to the site administrator when a new user registers can now be customized like other emails from the email screen
+- New: File fields can now be attached to new user registration emails with the [Custom Fields addon](https://wpusermanager.com/addons/custom-fields/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager)
+- New: Emails can now be disabled from the email screen
+- New: Directory sorting option is now filterable with 'wpum_directory_sort_options' to allow setting custom sort field
+- Improvement: User is now alerted if they have unsaved field settings and try to change settings tabs
+- Fix: 'Username or email' string now used to match WordPress and leverage existing string translations
+
+= 2.7.2 (11th February 2022) =
+
+- New: Max character length setting now supported on text, textarea, email, password, url and number field types
+- New: Field wrapper settings of class, width, and ID for appearance on registration forms
+
+= 2.7.1 (10th January 2022) =
+
+- Fix: 'The link you followed has expired' message now doesn't show when deleting users from the admin user table
+
+= 2.7 (3rd January 2022) =
+
+- New: Compatibility with the [WooCommerce](https://wpusermanager.com/addons/woocommerce/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager) addon version 1.2, integrated checkout in registration forms
+- New: Users can now have multiple roles
+- New: Custom fields can now be conditionally visible by user role
+- Fix: Most WPUM blocks can now be restricted using the block settings
+- Fix: Block restriction now working for legacy widgets in the widget editor
+- Fix: PHP notice block_categories is <strong>deprecated</strong> since version 5.8.0!
+
+= 2.6.9 (24th November 2021) =
+
+- Improvement: Directory meta fields only registered when needed, improves performance
+- Improvement: Field types can now be set with the class as well as the filter
+- Fix: Text displayed on the profile when a user does not have any posts improved
+- Fix: Screenshots removed from the plugin directory
+
+= 2.6.8 (6th November 2021) =
+
+- New: Compatibility with the [Frontend Posting](https://wpusermanager.com/addons/frontend-posting/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager) addon version 2.1
+
+= 2.6.7 (26th October 2021) =
+
+- Fix: Notice: Undefined property: WPUM_Form_Registration::$form_id
+
+= 2.6.6 (19th October 2021) =
+
+- New: Frontend user profile pages can now be disabled for sites that don't require that functionality
+- Improvement: Administrators can now log in with email address or username regardless of setting
+- Fix: Calls to get registered field types now reduced to improve performance
+- Fix: Dropdown containing pages now updated when a page is deleted
+
+= 2.6.5 (16th September 2021) =
+
+- Improvement: 'wpum_registration_form_field_default' filter added for registration form fields with default values
+- Fix: Password reset flow not working for usernames with spaces in them
+- Fix: Registration forms list table has buttons overspilling at some widths
+- Fix: wp-admin redirect gets cached by the browser
+
+= 2.6.4 (24th August 2021) =
+
+- Fix: Some registration form settings not saving correctly
+- Fix: Admin notices breaking the styling of the plugin settings page
+- Fix: PHP Notice: Undefined property: WPUM_Emails::$user_login during user registration
+
+= 2.6.3 (20th August 2021) =
+
+- Security Fix: Use cookie based flow for password recovery process to match WordPress core (props @stiofansisland)
+- Fix: WP_DB_Table class could be loaded by other plugins
+- Improvement: 'wpum_profile_edit_account_text' filter added for 'Edit account' string
+
+= 2.6.2 (14th June 2021) =
+
+- Improvement: Added $args as the third parameter to the 'wpum_get_avatar_url' filter
+- Fix: Uncaught TypeError: wpum_blocks.blocks['post-form'] is undefined console error
+- Fix: Role editor not enabled by default on new installs
+
+= 2.6.1 (30th April 2021) =
+
+- New: Support for creating forms to capture data after registration with the [Registration Forms](https://wpusermanager.com/addons/registration-forms/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager) addon
+- New: Groups directory block for the [Groups](https://wpusermanager.com/addons/groups/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager) addon
+- New: Frontend Posting form block for the [Frontend Posting](https://wpusermanager.com/addons/frontend-posting/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager) addon
+- Fix: Content restriction block settings not working with some blocks
+- Fix: Fatal error when field user meta key contains special characters
+- Fix: Don't allow field types to be used if not supported by the installed version of the [Custom Fields](https://wpusermanager.com/addons/custom-fields/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager) addon
+
+= 2.6 (12th April 2021) =
+
+- New: [Frontend Posting](https://wpusermanager.com/addons/frontend-posting/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager) addon
+- New: Conditional logic for custom fields with the [Custom Fields addon](https://wpusermanager.com/addons/custom-fields/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager)
+- New: User field type
+- New: Allow using the {recovery_url} in the registration email
+- New: Filter 'wpum_send_registration_admin_email' to abort sending registration confirmation email to user
+- New: Always allow admins to view member profiles
+- New: Action 'wpum_before_registration_start' before registration
+- New: Add the ability to show the post thumbnails on the profile posts template with the 'wpum_profile_posts_display_thumbnail' filter, turned off by default
+- Improvement: Placeholder used in multiselect fields
+- Fix: Undefined function 'use_block_editor_for_post_type' on WordPress installs before 5.0
+- Fix: 'WP_DB_Table' class already exists on some installs
+- Fix: File extension validation not working if there are spaces after commas
+- Fix: Block restriction by logged in state not working for some blocks
+
+= 2.5 (25th January 2021) =
+
+- New: [Security](https://wpusermanager.com/addons/security/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager) addon: Add password security features and user login management features
+- New: Multi-step registration forms with the [Registration Forms addon](https://wpusermanager.com/addons/registration-forms/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager)
+- New: Allow users to set the privacy for their profile to hide from guests and/or other users
+- New: Taxonomy field with the [Custom Fields addon](https://wpusermanager.com/addons/custom-fields/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager)
+- New: Hidden field type
+- New: Default value for text, hidden, number, radio, dropdown, and textarea fields on registration forms
+- New: Support for setting default field values from a query string
+- Improvement: Add pattern validation to number and text fields
+- Improvement: Add privacy policy URL and blog name arguments to 'wpum_privacy_text' filter
+- Fix: Blocks restricted by user logged in before 2.4.2 not working
+- Fix: User meta field values set as false when creating a user from the wp-admin
+- Fix: Incorrect prefixes in filters for password recovery and change forms
+- Fix: Repeater add button not working if multiple forms on one page
+
+= 2.4.2 (23rd December 2020) =
+
+- New: Shortcode for restricting content to logged out users only
+- New: Restrict blocks content to logged out users only
+- New: Add block & shortcode argument to show or hide restricted message
+- Improvement: WPML addon compatibility improvements
+- Improvement: Other addon compatibility tweaks
+- Improvement: License checking for addons
+- Fix: PHP warning if no users/roles selected for block restriction
+- Fix: Menu item settings not showing if another plugin extends Walker_Nav_Menu_Edit
+
+= 2.4.1 (11th December 2020) =
+
+- New: Enable plugin auto-updates for WP User Manager addons
+- Fix: PHP Warning: array_map(): Expected parameter 2 to be an array when a viewing an empty repeater field
+- Fix: Undefined $ JavaScript notice on the WPUM Licenses page
+- Fix: Carbon Fields JavaScript notice on the WPUM Licenses page
+- Fix: Plugin table addon update notice rows styled differently to others
+
+= 2.4 (11th December 2020) =
+
+- New: Roles editor to add, edit and delete user roles, and customize role capabilities
+- New: Repeater field with the [Custom Fields addon](https://wpusermanager.com/addons/custom-fields/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager)
+- New: Setting to control the default display name for registered users
+- New: Setting to restrict the wp-admin dashboard for specific roles
+- New: Compatibility with WordPress 5.6 and PHP 8
+- New: Compatibility with WordPress Twenty Twenty-One theme
+- Improvement: Warning notice when the site permalinks are set as the plain default, which breaks profile and account pages
+- Improvement: Added 'wpum_admin_pages_capability' filter for the capability to show plugin admin pages
+- Improvement: Added filters to control the strong password requirements
+- Improvement: Datepicker field value now returned in the localized format
+- Improvement: Email and password fields added to the registration form by default on plugin install
+- Fix: PHP Notice: Undefined offset: 0 in registration form when no role selected
+- Fix: PHP Notice: Undefined index: priority (again)
+- Fix: Wrong text domain for 'current password' (props [apermo](https://profiles.wordpress.org/apermo/))
+
+= 2.3.13 (23rd November 2020) =
+
+- New: [WPML](https://wpusermanager.com/addons/wpml/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager) addon. Give your users to translate custom fields, field Groups, registrations forms, and emails using [WPML](https://wpml.org/)
+- Improvement: Add 'wpum_directory_users' and 'wpum_directory_users_total' filters to allow changing of users displayed in a directory
+- Improvement: Added hooks and filters for developers to use around login, and profile updates
+- Improvement: Profile page styling
+- Improvement: Directory responsive styling
+- Improvement: File URLs now linked on profile
+- Fix: Incorrect text domain and outdated .pot file
+- Fix: PHP Notice: Undefined index: priority
+- Fix: Warning: implode(): Invalid arguments passed on file upload
+- Fix: Incorrect terms page link in registration form if terms link is enabled but page not selected
+- Fix: Field group description styling
+- Fix: Delete field button styling issue
+
+= 2.3.12 (12th October 2020) =
+
+- New: [Groups](https://wpusermanager.com/addons/groups/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager) addon. Give your users the ability to create and join groups
+- New: [Private Content](https://wpusermanager.com/addons/private-content/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager) addon. Provide private content for all your users, as well as user specific content so you can tailor for each member
+- New: [Content Restriction Plus](https://wpusermanager.com/addons/content-restriction/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager) addon. One-click restriction to posts, pages and custom post types
+- Improvement: Add 'wpum_send_registration_admin_email' filter to allow disabling the admin emails on user register
+- Fix: Password protected posts redirecting to login after entering password, when wp-login.php is restricted in settings
+- Fix: Avatar overlapping name in user directory on some themes
+- Fix: User directory not full width on some themes
+
+= 2.3.11 (23rd September 2020) =
+
+- Addon compatibility fixes
+
+= 2.3.10 (18th September 2020) =
+
+- Improvement: Added field type icons to the fields in the edit registration form screen
+- Improvement: Validate email addresses on registration form submission in case HTML validation disabled
+- Fix: Settings not saved on installs that force a trailing slash to the URL
+- Fix: Fatal error if same page chosen for the profile and account pages
+- Fix: Change page title to 'Log In' instead of 'Login'
+- Fix: Images stretched on the addons page
+- Fix: Translation issue in terms text
+
+= 2.3.9 (28th August 2020) =
+
+- New: Compatibility with WordPress 5.5
+- Improvement: Add filter 'wpum_admin_registration_confirmation_email_attachments' for attachments for the new registration admin email
+- Improvement: Add filter 'wpum_registration_enabled' to override the users_can_register setting
+- Fix: Registration form checkbox settings not persisting after save
+- Fix: Registration form block showing register link instead of login link
+
+= 2.3.8 (26th June 2020) =
+
+- Fix: Fatal error if Personal Data or Delete Account addon activated but no premium addons
+
+= 2.3.7 (23th June 2020) =
+
+- New: Compatibility with [Registration Forms](https://wpusermanager.com/addons/registration-forms/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager) addon v1.1.0 - add custom HTML to your registration forms
+- Fix: Personal Data and Delete Account addons not receiving updates
+
+= 2.3.6 (9th June 2020) =
+
+- New: Newsletter addon which integrates with the [Newsletter plugin](https://wordpress.org/plugins/newsletter/)
+- Improvement: Simplified avatar image styling on the profile page
+- Fix: Fatal error at registration if user can select their role
+- Fix: Duplicated image file field if registration is prevented due to a validation error
+
+= 2.3.5 (1st June 2020) =
+
+- New: Directory search - dropdown to select which fields to search in (compatible with Custom Fields addon)
+- New: [Advanced Custom Fields](https://wpusermanager.com/addons/acf/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager) addon. Collect ACF user data at registration and allow users to see and edit the data on their profile
+- New: Compatibility with [Custom Fields](https://wpusermanager.com/addons/custom-fields/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager) addon v2.1.0 - new field types (Video, Audio, WYSIWYG, Telephone), directory search integration
+- Fix: Directory search returning incorrect results when directory limited by role
+- Fix: File upload size not validating on the registration form
+- Fix: File upload max size not displaying on the registration form
+- Fix: Password reset form not validating that both passwords are the same when the setting to not enforce strong passwords is enabled
+
+= 2.3.4 (7th May 2020) =
+
+- Improvement: Filters 'wpum_profile_display_cover_image' and 'wpum_profile_display_avatar' to control displaying the profile cover and avatar images
+- Improvement: Filter 'wpum_redirect_after_login' to customize the redirect URL after login for users
+- Improvement: Filter 'wpum_form_error_message' to allow filtering error messages, useful for translations
+- Fix: Custom fields and registration forms pages don't load when using the Site Kit by Google plugin
+- Fix: Addon emails being overwritten if plugin is deactivated and activated again
+
+= 2.3.3 (27th April 2020) =
+
+- Fix: Settings page doesn't load when using the Site Kit by Google plugin
+
+= 2.3.2 (26th March 2020) =
+
+- New: Compatibility with Registration Forms v1.0.4
+- Fix: Fatal error with when using the Avada theme and Fusion Builder
+- Fix: Directory search doesn't work when custom fields added to search keys
+- Fix: Emails not sending if wpum_email option doesn't exist
+- Fix: Delete registration form button appearing for default form
+
+= 2.3.1 (28th February 2020) =
+
+- Fix: PHP Fatal error: Uncaught Error: Call to undefined function is_user_logged_in() on some installs, especially ClassicPress sites
+
+= 2.3 (26th February 2020) =
+
+- New: Block Editor support! New WPUM blocks for login form, registration form, user directories, and more
+- Improvement: Add current password field as confirmation when changing the password on the Account page (enabled with the 'Require Current Password' account setting)
+- Fix: User not redirected to profile page after logging in, when logged out and clicking on the the link in the restricted content message
+
+= 2.2.3 (3rd February 2020) =
+
+- Fix: Directory dropdowns for 'Sort By' and 'Results per page' not working unless Search button clicked
+- Improvement: Filter 'wpum_get_profile_tab_url' to allow developers to customize the URL of a profile tab link
+
+= 2.2.2 (18th January 2020) =
+
+- New: Compatibility with Registration Forms v1.0.2 (Directories integration)
+
+= 2.2.1 (7th January 2020) =
+
+- Fix: Password not set correctly when creating users via wp-admin
+- Fix: Viewing addon plugin details not showing changelog when updates available
+
+= 2.2 (6th January 2020) =
+
+- New: Registration Forms addon. Create unlimited registration forms and have full control over form settings.
+- Improvement: Registration form settings moved from main settings page to the form itself
+- Fix: PHP 7.1 compatibility issues in wp-optionskit dependency
+- Improvement: Filter 'wpum_admin_registration_confirmation_email_recipient' to allow developers to customize the email recipient of the admin registration confirmation email
+- Improvement: Filter 'wpum_admin_registration_confirmation_email_headers' to  allow developers to customize the email headers of the admin registration confirmation email
+
+= 2.1.14 (12th November 2019) =
+
+- Improvement: Registration form fields automatically migrated when migrating to v2
+- Fix: Registration and password recovery email content lost during migration to v2
+- Fix: Settings not saved when DISABLE_FILE_MODS constant is defined true
+
+= 2.1.13 (7th November 2019) =
+
+- New: WooCommerce addon. Allow members to update their billing and shipping addresses, display product purchases, reviews and more!
+- Tweak: Added 'wpum_directory_search_query_args' filter for the directory query arguments
+- Fix: Checkbox padding style issue in the edit directory screen
+- Fix: PHP 7 compatibility warnings
+- Fix: Ensure the current user is set on login
+- Fix: Fatal error when viewing the plugin details for an addon that has an update
+
+= 2.1.12 (19th October 2019) =
+
+- New: reCaptcha paid addon with support for the Google reCAPTCHA API v3, and API v2 invisible and checkbox reCAPTCHAs.
+- Update wp-optionskit package
+
+= 2.1.11 (16th October 2019) =
+
+- Fix: User avatar not saved if changing an existing image on the edit account page
+- Fix: Select, dropdown and multiselect fields set as readonly can still be changed
+- Fix: Date fields set as readonly still have the date picker and can be changed
+- Fix: PHP Warning: Cannot use a scalar value as an array on first install
+
+= 2.1.10 (4th October 2019) =
+
+- Improvement: Allow the avatar and cover image fields to be added to the registration form
+- Fix: Premium Addons not receiving updates
+- Fix: Incorrect wording about login behaviour
+
+= 2.1.9 (27th September 2019) =
+
+- WP User Manager has been [acquired by Pole Vault Web](https://wpusermanager.com/news/acquired/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager)
+- Improvement: Added Homepage option for login, logout, and registration redirects for sites showing blog posts as the homepage
+- Improvement: Filter `wpum_directory_search_meta_keys` for user meta keys involved in directory search
+- Fix: Directory search not finding users when searching by first/last name
+- Fix: Excluded usernames check not performing case insensitive check
+
+= 2.1.8 (18th August 2019) =
+
+- Tweak: improved data escaping in some areas.
+- Tweak: added filters for developers to modify the profile and content restriction messages.
+- Fix: readonly attribute for textarea hiding placeholder.
+- Fix: redirect to login page when wp-login is locked instead of the homepage.
+- Fix: some characters not accepted into urls for account and profile page.
+
+= 2.1.7 (1st August 2019) =
+
+- Tweak: updated language files to use last version of all strings.
+- Tweak: added new filter for developers that allows to modify the subject and content of the registration confirmation email sent to administrators.
+
+= 2.1.6 (11th July 2019) =
+
+- Fix: issue with custom avatars not loading.
+
+= 2.1.5 (11th July 2019) =
+
+- Tweak: updated widgets generator dependency.
+- Tweak: updated admin notices generator dependency.
+- Tweak: updated templates loader dependency.
+- Tweak: added hook after the user changes his password from the account page.
+- Tweak: added hook after the user recovers his password from the forgotten password form.
+- Fix: cover field in the admin panel would disappear when custom avatars were disabled.
+
+= 2.1.4 (20th June 2019) =
+
+- Fix: admin role should be excluded from menu items unless selected
+- Tweak: added utility function for developers to fields groups class.
+- Tweak: reduced queries when loading fields in account form.
+- Tweak: lowered priority of certain menu items in the account form page.
+
+= 2.1.3 (24th May 2019) =
+
+- Tweak: show an alert to automatically fix missing data when default data hasn't installed.
+- Fixed: finish first time data installation after the whole plugin has booted.
+
+= 2.1.2 (13th May 2019) =
+
+- Added: option to disable profile cover image field.
+- Fixed: lock access to wp-login.php when enabled.
+- Fixed: make sure url is correctly formatted on account page.
+- Fixed: make sure pages are published before adding rewrite rules.
+
+= 2.1.1 (24th April 2019) =
+
+- Added: private pages can now be selected through the pages settings in the options panel.
+- Fixed: profile page not working when username has special characters.
+- Fixed: verify file before uploading - thanks to @kushsharma.
+- Fixed: max upload size description function not receiving field attributes properly - thanks to @kushsharma.
+- Fixed: edge case preventing options panel to save settings due to capability missing.
+- Fixed: custom password overwritten when creating a new user manually in the admin panel.
+
+= 2.1.0 (25th March 2019) =
+
+- Added: custom WPUM registration confirmation email is now sent when creating new users from the admin panel.
+
+= 2.0.9 (25th February 2019) =
+
+- Fix: prevent wp-login.php redirect when the setting is disabled
+- Fix: wrongly formatted urls in emails when using third party email providers
+- Fix: read only setting for fields not working
+- Fix: file max size setting not working
+- Fix: login fails when username is email and login method is set to username
+- Fix: login widget settings not working
+- Tweak: added automatic data installation fixer
+
+= 2.0.8 (22nd October 2018) =
+
+- Fix: when avatars disabled the avatar field would still be visible
+- Fix: when changing password, verification fails to detect if passwords do not match
+- Fix: when changing password, the form would redirect to the main account page instead of showing the success message
+- Tweak: added a toggle to [disable the built-in custom menus controller](https://wpusermanager.com/article/137-how-to-disable-the-built-in-custom-menu-controller/)
+
+= 2.0.7 (19th September 2018) =
+
+- Fix: profile tabs not correctly loading content in some cases.
+
+= 2.0.6 (10th September 2018) =
+
+- Fix: detection of multiple selected roles within menu visibility rules.
+- Fix: encode printing of profile urls.
+- Fix: allow spaces and email addresses as usernames when viewing profiles.
+
+= 2.0.5 (31st July 2018) =
+
+- Added: option to disable the built-in strong passwords verification - Users -> settings -> profiles
+- Fixed: password update confirmation notice not visible
+- Fixed: default emails content not installed during plugin's first installation
+- Fixed: profile picture sizing within the account page
+- Tweak: updated language files
+
+= 2.0.4 (23th July 2018) =
+
+- Tweak: make "username and email" default login method on plugin first install
+- Tweak: no longer show 404 error when accessing the profile page and not logged in
+- Fix: redirect loop with the account page when not logged in
+- Fix: pages disappearing in some instances when the profile page is not properly configured
+- Fix: avatar upload not working on some setups
+- Fix: fatal error on plugin activation when using Yoast SEO
+- Fix: settings page empty or showing error in some cases
+
+= 2.0.3 (10th July 2018) =
+- Fix: error when automatic login after registration is enabled which caused an issue with WooCommerce
+- Fix: password recovery broken on older php versions
+- Fix: licensing system looking for temporary url instead of live url
+- Fix: order of password customization fields on older php versions
+- Fix: updated language files
+- Fix: force hide avatar field if option not enabled
+- Feature: automatically hide "view profile" and disable routing system if no profile page is selected in the admin panel
+- Fix: addon license required message still showing when license successfully activated
+- Fix: search by fist name and last name in user directory
+
+= 2.0.2 (2nd July 2018) =
+
+- Fix: migration routine not working in some cases.
+- Fix: login redirect not working in some cases.
+- Fix: compatibility of some functionalities with older php versions.
+
+= 2.0.1 (29th June 2018) =
+- Fix: too many parameters sent to the menu editor hook
+- Fix: redirect loop when required pages aren't setup as they're supposed to
+
+= 2.0.0 (28th June 2018) =
+- Complete rewrite of the plugin read more here: [https://wpusermanager.com/wpum-2-0-0-release/](https://wpusermanager.com/wpum-2-0-0-release/)
+
+= 1.4.3 =
+- Feature: uploaded pdf files are now downloadable through the user's profile.
+
+= 1.4.2 =
+
+- Fix: registration email not sending at the correct time when random password generated.
+- Fix: hide datepicker field - was not meant to be there right now
+
+= 1.4.1 =
+
+- Fix: registration date in directory not translatable
+- Fix: can't update profile when avatar field is required and image already uploaded
+- Fix: {recovery_url} Generates Non-clickable Email Hyperlink on Yahoo and Hotmail
+- Fix: directory doesn't respect the role filter if you search by first/last name
+
+= 1.4.0 =
+
+- Added: Control visibility of menu items by user status and/or role.
+- Added: Ability to send test email.
+- Added: Post author url will now redirect to wpum user profile.
+- Fixed: User profile page document title, did not display site name.
+- Tweak: "View Profile" link in backend will now open in a new window.
+
+= 1.3.1 =
+
+- fixed: template loader failed to retrieve email templates when customized.
+- fixed: multiple duplicate results when searching for users within a directory.
+
+= 1.3.0 =
+
+Checkout an overview of the new features here [https://wpusermanager.com/?p=17930](https://wpusermanager.com/?p=17930)
+
+- added: single profile page document title will now include the user's display name.
+- added: password field will now show a "show password" checkbox.
+- added: login link shortcode is now hidden when user's logged in.
+- added: settings import and export will now include email settings.
+- added: role field will now automatically set WP's default role as default option into registration form.
+- added: login link in restriction shortcode message will now redirect to previously visited page.
+- added: some fields can now be set as read-only.
+- added: some fields can now be removed from the account editing page and set as available to admins only.
+- added: user directory can now search for first name and last name.
+- added: developers can now change the order of the tabs within the account page.
+- fixed: deprecated notice into a template file.
+- fixed: file upload functionality ignored max file size setting from custom fields addon.
+- fixed: checkbox field into backend user's editing page not showing saved options when updated from frontend.
+- removed: fields restore option no longer needed.
+- removed: referral login redirect option - caused too much confusion.
+
+= 1.2.10 =
+
+- fixed: registration email not sending when auto login + redirect was enabled.
+
+= 1.2.9 =
+
+- tweak: registration email is sent after successful registration hook ( for developers ).
+- fixed: password strength validation missing on password reset form.
+- fixed: undefined variable within psw reset form.
+- fixed: unable to register when using the nickname permalink structure.
+- addded: pt_pt language.
+
+= 1.2.8 =
+
+- fixed: Nickname field displays improperly formatted nickname.
+- fixed: emails are erased and re-created if plugin is disabled and activated again.
+- fixed: minor css enhancements to the fields editor.
+- fixed: profile won't load if username has spaces.
+- fixed: directory pagination not correctly offsetting when adjusting results per page.
+- fixed: directory searches only for currently paginated results if results per page were manually adjusted.
+- fixed: registration form would try to send an email when someone tries to register with an existing username.
+
+= 1.2.7 =
+
+- fixed: tool to fix missing fields from previous bug, did not actually fix fields.
+
+= 1.2.6 =
+
+- **Added**: tool to manually fix broken fields from previous bug.
+- **Added**: pt_BR translation.
+- fixed: slashes - escaping in fields names and descriptions.
+- fixed: slashes - escaping in field groups names and descriptions.
+- fixed: password reset shortcode expects parameters.
+
+= 1.2.5 =
+
+- **Updated**: German translation (thanks to Tobias)
+
+= 1.2.4 =
+- **Added**: License updater handler for addons.
+- **Added**: Dutch language support thanks to Patrick
+
+= 1.2.3 =
+
+- **Fixed**: issue with default required fields setting themselves as non required when saving the field settings.
+
+To fix the issue please press the upgrade button into the WP dashboard upon updating the plugin.c
+
+= 1.2.0 =
+
+Checkout an overview of all the new features here [https://wpusermanager.com/?p=16236](https://wpusermanager.com/?p=16236)
+
+- **Added**: you can now import and export the plugin's settings from a site to another.
+- **Added**: basic search form functionality into user directories.
+- **Added**: developers now have access to a whole new user fields query class similar to WP_Query.
+- **Added**: option to always force redirect after login and remove referral page redirect.
+- **Added**: password recovery link to wpum dynamic menu items in menu manager.
+- **Added**: you can now choose to hide/show fields into the user profile when editing a field.
+- **Added**: first name and last name fields can now display full name too into user profile page.
+- **Added**: profile page now displays fields group title and description.
+- **Added**: several new functions, filters and actions for developers for advanced customizations.
+- **Added**: language file updated with new strings.
+- **Added**: compatibility for custom fields addon.
+
+- Tweaked: removed admin redirect after plugin update.
+- Tweaked: removed unused options from options panel.
+- Tweaked: several improvements to fields classes and output.
+- Tweaked: user directory will display it's layout even when no users have been found.
+- Tweaked: several improvements to fields html output into forms.
+- Tweaked: restructured files upload functionality
+- Tweaked: fields in profile page have custom classes.
+- Tweaked: minor adjustments to profile layout.
+- Tweaked: admin role can now be selected for directories.
+- Tweaked: minor adjustments to fields list in user profile.
+- Tweaked: deleting a group will now also delete it's fields.
+- Tweaked: adjustments to fields validation in forms.
+- Tweaked: minor ux adjustments to the fields editor.
+
+- Fixed: display correct field type within fields table.
+- Fixed: Registration redirect not working when automatic login selected.
+- Fixed: typo into already logged in message.
+
+= 1.1.0 =
+
+Checkout an overview of all the new features here [https://wpusermanager.com/?p=16082](https://wpusermanager.com/?p=16082)
+
+- **Added**: Users Overview admin dashboard widget
+- **Added**: Improved WordPress menu manager with logged-in and logged-out user specific links
+- **Added**: Login link shortcode
+- **Added**: Visually highlight required fields
+- **Added**: "View Profile" link into admin users table
+- **Added**: Login form can now redirect to previously visited page
+- **Added**: Login form can now redirect to another page via url query string redirect_to
+- **Added**: You can now redirect users to a new page after successful Registration
+- **Added**: Password meter to password recovery form
+- **Added**: You can now upload a custom logo above html emails
+- **Added**: You can now redirect users to another page when they try to reset their password through the wp-login.php form
+- **Added**: Password strength meter will now show different colors based on password strength
+- **Added**: Simplified Chinese translation
+- Tweaked: adjusted widget field description alignment into admin panel
+- Tweaked: text spacing in plaintext emails
+- Tweaked: simplified description of options into plugin settings panel
+- Tweaked: removed duplicated code
+- Fixed: users unable to view their own profile pages when members not allowed to view other users profiles
+
+- Developers: introduced wpum_new_user_notification function to send registration email
+- Developers: introduced wpum_get_core_page_url filter
+- Developers: introduced wpum_login_redirect_url filters
+- Developers: added wpum_dashboard_widget_top and wpum_dashboard_widget_bottom actions
+- Developers: introduced wpum_registration_redirect_url function
+
+= 1.0.5 =
+- added: German language support. Thanks to Tobias
+- fixed: users unable to login under certain conditions
+- fixed: users unable to update their profile when using nickname permalink structure
+- fixed: wrong email being sent to the user if it was created manually via the admin panel
+- tweak: wpum_get_login_redirect_url() now uses wp_login_form() redirect parameter by default
+
+= 1.0.4 =
+- fixed: restrict file types that can be upload as avatar only to images
+- fixed: creation of additional folder on server when uploading avatars
+
+= 1.0.3 =
+- added: French language support. Thanks to Doxtra
+- fixed: wrong nonce name for emails restore
+- fixed: removed nonce validation from login form, this was a leftover from the plugin's beta
+- fixed: removed unused code in ajax handler Class
+- fixed: login via email and username or email not working
+- fixed: remove query string after login when redirecting to same page
+- fixed: malformed query string when using captcha + wrong login details
+- fixed: random password generation registration broken in wp4.3
+- updated: language files
+
+= 1.0.2 =
+- Added: added: better way to find and select pages within the admin panel
+- Added: allow developers to override the default css file by placing it into the theme
+- Fixed: custom template for directory not working
+- fixed: custom template loading for profile card shortcode
+- fixed: success message still displaying if an error occures when updating the account details - resulting in both success and error message showing up
+- fixed: fields not correctly ordered upon installation
+
+= 1.0.1 =
+- Added: Russian language file support. Thanks to Ctajleh
+- Adjusted: use WP core function when a user deletes the avatar
+- Adjusted: redirect to welcome screen only for major updates
+- Fixed: show correct success message upon registration when random password is generated
+- Fixed: install tables, fields and groups only if first install
+- Fixed: emails editor not saving emails correctly
+
+= 1.0.0 =
+ Just released ;)

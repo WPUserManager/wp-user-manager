@@ -20,11 +20,13 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 function wpum_admin_rate_us( $footer_text ) {
 	$screen = get_current_screen();
-	if ( $screen->base !== 'users_page_wpum-settings' ) {
+	if ( 'users_page_wpum-settings' !== $screen->base ) {
 		return;
 	}
-	$rate_text = sprintf(
-		__( 'Please support the future of <a href="%1$s" target="_blank">WP User Manager</a> by <a href="%2$s" target="_blank">rating us</a> on <a href="%2$s" target="_blank">WordPress.org</a>', 'wp-user-manager' ),
+
+	/* translators: %1$s: WP User Manager site URL %2$s: review URL */
+	$rate_text = __( 'Please support the future of <a href="%1$s" target="_blank">WP User Manager</a> by <a href="%2$s" target="_blank">rating us</a> on <a href="%2$s" target="_blank">WordPress.org</a>', 'wp-user-manager' );
+	$rate_text = sprintf( $rate_text,
 		'https://wpusermanager.com/?utm_source=WP%20User%20Manager&utm_medium=insideplugin&utm_campaign=WP%20User%20Manager&utm_content=settings-footer',
 		'http://wordpress.org/support/view/plugin-reviews/wp-user-manager?filter=5#new-post'
 	);
@@ -35,12 +37,13 @@ add_filter( 'admin_footer_text', 'wpum_admin_rate_us' );
 /**
  * Add new links to the plugin's action links list.
  *
- * @since 1.0.0
+ * @param array $links
+ *
  * @return array
  */
 function wpum_add_settings_link( $links ) {
 	$settings_link = '<a href="' . admin_url( 'users.php?page=wpum-settings' ) . '">' . __( 'Settings', 'wp-user-manager' ) . '</a>';
-	$docs_link     = '<a href="https://docs.wpusermanager.com/?utm_source=WP%20User%20Manager&utm_medium=insideplugin&utm_campaign=WP%20User%20Manager&utm_content=plugins-table" target="_blank">' . __( 'Documentation', 'wp-user-manager' ) . '</a>';
+	$docs_link     = '<a href="https://wpusermanager.com/docs/?utm_source=WP%20User%20Manager&utm_medium=insideplugin&utm_campaign=WP%20User%20Manager&utm_content=plugins-table" target="_blank">' . __( 'Documentation', 'wp-user-manager' ) . '</a>';
 	$addons_link   = '<a href="https://wpusermanager.com/addons?utm_source=WP%20User%20Manager&utm_medium=insideplugin&utm_campaign=WP%20User%20Manager&utm_content=plugins-table" target="_blank">' . __( 'Addons', 'wp-user-manager' ) . '</a>';
 	array_unshift( $links, $settings_link );
 	array_unshift( $links, $docs_link );
@@ -53,7 +56,8 @@ add_filter( 'plugin_action_links_' . WPUM_SLUG, 'wpum_add_settings_link' );
  * Modify the url retrieved with wp_registration_url().
  *
  * @param string $url
- * @return void
+ *
+ * @return string
  */
 function wpum_set_registration_url( $url ) {
 	$registration_page = wpum_get_core_page_id( 'register' );
@@ -70,9 +74,10 @@ add_filter( 'register_url', 'wpum_set_registration_url' );
  *
  * @param string $url
  * @param string $redirect
- * @return void
+ *
+ * @return string
  */
-function wpum_set_lostpassword_url( $url, $redirect ) {
+function wpum_set_lostpassword_url( $url, $redirect ) { // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.FoundAfterLastUsed -- Required by WordPress hook signature.
 
 	$password_page = wpum_get_core_page_id( 'password' );
 
@@ -81,7 +86,6 @@ function wpum_set_lostpassword_url( $url, $redirect ) {
 	} else {
 		return $url;
 	}
-
 }
 add_filter( 'lostpassword_url', 'wpum_set_lostpassword_url', 10, 2 );
 
@@ -96,10 +100,10 @@ function wpum_set_logout_url( $logout_url, $redirect ) {
 	$logout_redirect = wpum_get_logout_redirect();
 
 	if ( $logout_redirect && ! $redirect ) {
-		$args = [
+		$args = array(
 			'action'      => 'logout',
 			'redirect_to' => $logout_redirect,
-		];
+		);
 
 		$logout_url = add_query_arg( $args, site_url( 'wp-login.php', 'login' ) );
 		$logout_url = wp_nonce_url( $logout_url, 'log-out' );
@@ -115,19 +119,19 @@ add_filter( 'logout_url', 'wpum_set_logout_url', 20, 2 );
  * @param string  $login_url
  * @param string  $redirect
  * @param boolean $force_reauth
- * @return void
+ *
+ * @return string
  */
-function wpum_login_url( $login_url, $redirect, $force_reauth ) {
+function wpum_login_url( $login_url, $redirect, $force_reauth ) { // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.FoundAfterLastUsed -- Required by WordPress hook signature.
 
 	$wpum_login_page = wpum_get_core_page_id( 'login' );
 	$wpum_login_page = get_permalink( $wpum_login_page );
 
 	if ( $redirect ) {
-		$wpum_login_page = add_query_arg( [ 'redirect_to' => apply_filters( 'wpum_login_redirect_to_url', $redirect ) ], $wpum_login_page );
+		$wpum_login_page = add_query_arg( array( 'redirect_to' => apply_filters( 'wpum_login_redirect_to_url', rawurlencode( $redirect ) ) ), $wpum_login_page );
 	}
 
 	return $wpum_login_page;
-
 }
 if ( wpum_get_option( 'lock_wplogin' ) || wpum_get_option( 'lock_complete_site' ) ) {
 	add_filter( 'login_url', 'wpum_login_url', 10, 3 );
@@ -139,44 +143,42 @@ if ( wpum_get_option( 'lock_wplogin' ) || wpum_get_option( 'lock_complete_site' 
  * @param object $wp_user
  * @param string $username
  * @param string $password
- * @return void
+ *
+ * @return object|WP_Error|WP_User|null
  */
 function wpum_authentication( $wp_user, $username, $password ) {
 
 	// Skip authentication method for admin users
-	if ( ! is_wp_error( $wp_user ) && user_can( $wp_user, 'administrator' ) ) {
+	if ( ! is_wp_error( $wp_user ) && ( apply_filters( 'wpum_authentication_method_admin_override', true ) && user_can( $wp_user, 'manage_options' ) ) ) {
 		return $wp_user;
 	}
 
 	$authentication_method = wpum_get_option( 'login_method' );
 
-	if ( $authentication_method == 'username' ) {
+	if ( 'username' === $authentication_method ) {
 
 		$user = get_user_by( 'login', $username );
 
-		if ( isset( $user, $user->user_login, $user->user_status ) && 0 == (int) $user->user_status ) {
+		if ( isset( $user, $user->user_login, $user->user_status ) && 0 === (int) $user->user_status ) {
 			$username = $user->user_login;
 			return wp_authenticate_username_password( null, $username, $password );
 		}
-	} elseif ( $authentication_method == 'email' ) {
+	} elseif ( 'email' === $authentication_method ) {
 
 		if ( ! empty( $username ) && is_email( $username ) ) {
 
 			$user = get_user_by( 'email', $username );
 
-			if ( isset( $user, $user->user_login, $user->user_status ) && 0 == (int) $user->user_status ) {
+			if ( isset( $user, $user->user_login, $user->user_status ) && 0 === (int) $user->user_status ) {
 				$username = $user->user_login;
 				return wp_authenticate_username_password( null, $username, $password );
 			}
 		} else {
-
 			return new WP_Error( 'email_only', __( 'Invalid email address or incorrect password.', 'wp-user-manager' ) );
-
 		}
 	}
 
 	return $wp_user;
-
 }
 add_filter( 'authenticate', 'wpum_authentication', 20, 3 );
 
@@ -185,11 +187,12 @@ add_filter( 'authenticate', 'wpum_authentication', 20, 3 );
  *
  * @param array  $post_states
  * @param object $post
- * @return void
+ *
+ * @return array
  */
 function wpum_highlight_pages( $post_states, $post ) {
 
-	$mark    = '<img style="width:13px;" src="' . WPUM_PLUGIN_URL . '/assets/images/logo.svg" title="WP User Manager Page">';
+	$mark    = '<img style="width:13px;" src="' . WPUM_PLUGIN_URL . 'assets/images/logo.svg" title="WP User Manager Page">';
 	$post_id = $post->ID;
 
 	switch ( $post_id ) {
@@ -206,7 +209,6 @@ function wpum_highlight_pages( $post_states, $post ) {
 	}
 
 	return $post_states;
-
 }
 add_filter( 'display_post_states', 'wpum_highlight_pages', 10, 2 );
 
@@ -252,7 +254,7 @@ function wpum_registration_form_valid_fields( $fields ) {
 		$field          = new WPUM_Field( $field_id );
 		$is_valid_field = $field->exists() && class_exists( 'WPUM_Field_' . ucfirst( $field->get_type() ) );
 
-		if ( ! apply_filters( 'wpum_registration_form_valid_field', $is_valid_field, $field_id )  ) {
+		if ( ! apply_filters( 'wpum_registration_form_valid_field', $is_valid_field, $field_id ) ) {
 			unset( $fields[ $index ] );
 			continue;
 		}
@@ -263,6 +265,11 @@ function wpum_registration_form_valid_fields( $fields ) {
 
 add_filter( 'wpum_registration_form_fields', 'wpum_registration_form_valid_fields' );
 
+/**
+ * @param array $user_data
+ *
+ * @return array
+ */
 function wpum_set_displayname_on_registration( $user_data ) {
 	$display_name_format = wpum_get_option( 'default_display_name', array( 'display_username' ) );
 	$display_name_format = $display_name_format[0];
@@ -276,12 +283,12 @@ function wpum_set_displayname_on_registration( $user_data ) {
 
 	if ( 'display_firstname' === $display_name_format ) {
 		$user_data['display_name'] = $first;
-	} else if ( 'display_lastname' === $display_name_format ) {
+	} elseif ( 'display_lastname' === $display_name_format ) {
 		$user_data['display_name'] = $last;
-	} else if ( 'display_firstlast' === $display_name_format ) {
+	} elseif ( 'display_firstlast' === $display_name_format ) {
 		$display                   = $first . ' ' . $last;
 		$user_data['display_name'] = trim( $display );
-	} else if ( 'display_lastfirst' === $display_name_format ) {
+	} elseif ( 'display_lastfirst' === $display_name_format ) {
 		$display                   = $last . ' ' . $first;
 		$user_data['display_name'] = trim( $display );
 	}
@@ -301,7 +308,7 @@ add_filter( 'wpum_profile_display_field', 'wpum_maybe_display_field' );
 /**
  * Verify if the field has correct user role permission.
  *
- * @param bool $display
+ * @param bool       $display
  * @param WPUM_Field $field
  *
  * @return bool
@@ -330,9 +337,68 @@ function wpum_maybe_display_field( $display, $field = null ) {
 	return count( array_intersect( wp_get_current_user()->roles, $field_roles ) ) > 0;
 }
 
+/**
+ * @param string $field_name
+ *
+ * @return string
+ */
 function wpum_remove_slashes_from_field_data( $field_name ) {
 	return wpum_strip_slashes( $field_name );
 }
 
 add_filter( 'wpum_field_name', 'wpum_remove_slashes_from_field_data' );
 add_filter( 'wpum_field_description', 'wpum_remove_slashes_from_field_data' );
+
+/**
+ * Add unique key validator for user_meta_key field.
+ *
+ * @param array $settings
+ *
+ * @return array
+ */
+function wpum_fields_editor_field_settings( $settings ) {
+	foreach ( $settings as $key => $setting ) {
+		if ( 'user_meta_key' === $setting['model'] ) {
+			$settings[ $key ]['validator'][] = 'unique_user_meta_key';
+		}
+	}
+
+	return $settings;
+}
+
+add_filter( 'wpum_fields_editor_field_settings', 'wpum_fields_editor_field_settings' );
+
+/**
+ * Fix User Switching plugin not switching back correctly
+ */
+add_action( 'wp_die_handler', function ( $handler ) {
+	if ( ! isset( $_SERVER['QUERY_STRING'] ) ) {
+		return $handler;
+	}
+
+	parse_str( $_SERVER['QUERY_STRING'], $query ); // phpcs:ignore
+
+	if ( isset( $query['action'] ) && 'switch_to_olduser' === $query['action'] ) {
+		$request_uri = isset( $_SERVER['REQUEST_URI'] ) ? wp_unslash( filter_input( INPUT_SERVER, 'REQUEST_URI' ) ) : '';
+
+		wp_safe_redirect( get_bloginfo( 'wpurl' ) . $request_uri );
+		exit;
+	}
+
+	return $handler;
+} );
+
+if ( wpum_get_option( 'obfuscate_display_name_emails' ) ) {
+	add_filter( 'wpum_user_display_name', function ( $display_name, $user ) {
+		if ( ! is_email( $display_name ) ) {
+			return $display_name;
+		}
+
+		$current_user_id = get_current_user_id();
+		if ( $current_user_id && $current_user_id === $user->ID ) {
+			return $display_name;
+		}
+
+		return wpum_mask_email_address( $display_name );
+	}, 10, 2 );
+}

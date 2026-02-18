@@ -1,22 +1,28 @@
-/*! WP User Manager - v2.5
+/*! WP User Manager - v2.9.9
  * https://wpusermanager.com
- * Copyright (c) 2021; * Licensed GPLv2+ */
+ * Copyright (c) 2024; * Licensed GPLv2+ */
 jQuery( function( $ ) {
 	function initFields() {
 		$( '.wpum-multiselect:not(.wpum-clone-field)' ).each( function() {
-			var args = {
-				theme: 'default'
-			};
-			var placeholder = $( this ).attr( 'placeholder' );
-			if ( placeholder ) {
-				args[ 'placeholder' ] = placeholder;
-			}
-			$( this ).select2( args );
+			initSelect2( $( this ) );
 		} );
 
 		$( '.wpum-datepicker:not([readonly]):not(.wpum-clone-field)' ).flatpickr( {
-			dateFormat: wpumFrontend.dateFormat
+			altFormat : wpumFrontend.dateFormat,
+			altInput: true,
+			dateFormat: "Y-m-d"
 		} );
+	}
+
+	function initSelect2( field ) {
+		var args = {
+			theme: 'default'
+		};
+		var placeholder = field.attr( 'placeholder' );
+		if ( placeholder ) {
+			args[ 'placeholder' ] = placeholder;
+		}
+		field.select2( args );
 	}
 
 	var repeater = {
@@ -50,6 +56,7 @@ jQuery( function( $ ) {
 			self.form.on( 'click', '.add-repeater-row', function() {
 				var parent = $( this ).parents( 'fieldset' );
 				self.addNewInstance( parent.get( 0 ).classList[ 0 ] );
+				self.form.wpumConditionalFields({});
 			} );
 
 			self.form.on( 'click', '.remove-repeater-row', function(e) {
@@ -106,7 +113,7 @@ jQuery( function( $ ) {
 			self.resetInstance( name );
 
 			repeaterRow.each( function( i ) {
-
+				$( this ).find('fieldset').attr('data-index', i);
 				$( this ).find( ':input' ).each( function() {
 					var name = '';
 					if ( $( this ).attr( 'data-name' ) ) {
@@ -161,6 +168,123 @@ jQuery( function( $ ) {
 		}
 	}
 
+	$.wpumConditionalFields = function( element, options ){
+
+		var form = $(element),
+			self = this;
+
+		this.init = function(){
+
+			this.validateFields();
+
+			form.find(':input').on( 'input change', function(){
+				self.validateFields( $(this).parents('fieldset') );
+			});
+		}
+
+		this.validateField = function(element){
+			var rules = element.data('condition');
+			element.toggle( this.validateRules(rules) );
+		}
+
+		this.validateFields = function(){
+			form.find('fieldset[data-condition]').each(function(){
+				window.fieldsetIndex = $(this).data("index");
+				var rules = $(this).data('condition');
+				var validRule = self.validateRules(rules);
+				$(this).toggle( validRule );
+
+				if ( $( this ).find( 'select' ).hasClass( 'wpum-multiselect' ) ) {
+					initSelect2( $( this ).find( 'select' ) );
+				}
+				if ( $(this).find('.field').hasClass('required-field') ) {
+					$( this ).find( "input" ).not('.input-checkboxes').prop( "required", validRule );
+					$( this ).find( "select" ).prop( "required", validRule );
+					$( this ).find( "textarea" ).prop( "required", validRule );
+				}
+			});
+		}
+
+		this.validateRules = function(rules){
+			return rules.some(function(andRules){
+				return andRules.every(self.validateRule);
+			})
+		}
+
+		this.validateRule = function(rule){
+			return self.hasOwnProperty(self.ruleMethodName(rule.condition)) ? self[self.ruleMethodName(rule.condition)](rule) : false;
+		}
+
+		this.ruleMethodName = function(rule){
+			return rule.replace(/([-_][a-z])/ig, function($1){
+				return $1.toUpperCase()
+					.replace('-', '')
+					.replace('_', '');
+			});
+		}
+
+		this.getValue = function(rule){
+			var el = $('[name^="'+rule.field+'"]');
+			if (el.length === 0) { // Check repeater fields
+				var index = window.fieldsetIndex ? window.fieldsetIndex : 0;
+				el = $('[name^="'+rule.parent+'['+index+']['+rule.field+']"]');
+			}
+
+			if( el.length ){
+				if( el.is('[type="radio"]') ){
+					return el.filter(':checked').val();
+				}else if( el.is('[type="checkbox"]') ){
+					return el.filter(':checked').map(function(){
+						return $(this).val();
+					}).toArray();
+				}else{
+					return el.first().val();
+				}
+			}
+		}
+
+		this.hasValue = function(rule){
+			var value = this.getValue(rule);
+			return $.isArray(value) ? value.length : value && $.trim(value) !== '';
+		}
+
+		this.hasNoValue = function(rule){
+			var value = this.getValue(rule);
+			return $.isArray(value) ? !value.length : !value || value === '';
+		}
+
+		this.valueContains = function(rule){
+			var value = this.getValue(rule);
+			return $.isArray(value) ? value.includes(rule.value) : value && value.toLowerCase().indexOf(rule.value.toLowerCase())  > -1;
+		}
+
+		this.valueEquals = function(rule){
+			var value = this.getValue(rule);
+			return $.isArray(value) ? value.includes(rule.value) : value && value.toLowerCase() === rule.value.toLowerCase();
+		}
+
+		this.valueNotEquals = function(rule){
+			var value = this.getValue(rule);
+			return $.isArray(value) ? !value.includes(rule.value) : value && value.toLowerCase() !== rule.value.toLowerCase();
+		}
+
+		this.valueGreater = function(rule){
+			var value = this.getValue(rule);
+			return parseFloat(value) > parseFloat(rule.value);
+		}
+
+		this.valueLess = function(rule){
+			var value = this.getValue(rule);
+			return parseFloat(value) < parseFloat(rule.value);
+		}
+
+		this.init();
+	}
+
+	$.fn.wpumConditionalFields = function( options ) {
+		new $.wpumConditionalFields(this, options);
+	};
+
 
 	$( document ).ready( function() {
 		$( document.body ).on( 'click', '.wpum-remove-uploaded-file', function() {
@@ -168,6 +292,8 @@ jQuery( function( $ ) {
 			return false;
 		} );
 
+
+		$('.wpum-registration-form, .wpum-account-form, .wpum-custom-account-form').wpumConditionalFields({});
 
 		repeater.init();
 		initFields();

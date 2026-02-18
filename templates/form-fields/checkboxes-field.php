@@ -24,13 +24,19 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 	<label><input
 		type="checkbox"
-		class="input-checkbox"
+		class="input-checkbox input-checkboxes"
 		name="<?php echo esc_attr( isset( $data->name ) ? $data->name : $data->key ); ?>[]"
-		<?php if ( ! empty( $data->value ) && is_array( $data->value ) ) checked( in_array( $opt_key, $data->value ), true ); ?>
+		<?php
+		if ( ! empty( $data->value ) && is_array( $data->value ) ) {
+			checked( in_array( $opt_key, $data->value, true ), true );}
+		?>
 		value="<?php echo esc_attr( $opt_key ); ?>"
 	/>
 	<small class="description"><?php echo esc_html( $value ); ?></small></label>
 
 <?php endforeach; ?>
 
-<?php if ( ! empty( $data->description ) ) : ?><small class="description"><?php echo $data->description; ?></small><?php endif; ?>
+<?php
+if ( ! empty( $data->description ) ) :
+	?>
+	<small class="description"><?php echo wp_kses_post( $data->description ); ?></small><?php endif; ?>

@@ -14,7 +14,9 @@
  */
 
 // Exit if accessed directly
-if ( ! defined( 'ABSPATH' ) ) exit;
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 
 $first_key = key( $data->steps );
 
@@ -22,8 +24,16 @@ $first_key = key( $data->steps );
 <nav id="wpum-account-forms-tabs" class="wpum-template wpum-account-navigation">
 	<ul>
 		<?php foreach ( $data->steps as $step_key => $step ) : ?>
-			<li class="<?php if( wpum_is_account_tab_active( $step_key, $first_key ) ) : ?>active<?php endif; ?> tab-<?php echo esc_attr( $step_key ); ?>">
-				<a href="<?php echo esc_url( wpum_get_account_tab_url( $step_key ) ); ?>" class="<?php if( wpum_is_account_tab_active( $step_key, $first_key ) ) : ?>current-tab<?php endif; ?> tab-<?php echo esc_attr( $step_key ); ?>"><?php echo esc_html( $step['name'] ); ?></a>
+			<li class="
+			<?php
+			if ( wpum_is_account_tab_active( $step_key, $first_key ) ) :
+				?>
+				active<?php endif; ?> tab-<?php echo esc_attr( $step_key ); ?>">
+				<a href="<?php echo esc_url( wpum_get_account_tab_url( $step_key ) ); ?>" class="
+									<?php
+									if ( wpum_is_account_tab_active( $step_key, $first_key ) ) :
+										?>
+					current-tab<?php endif; ?> tab-<?php echo esc_attr( $step_key ); ?>"><?php echo esc_html( $step['name'] ); ?></a>
 			</li>
 		<?php endforeach; ?>
 	</ul>

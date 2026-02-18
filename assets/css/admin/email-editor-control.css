@@ -1,6 +1,7 @@
 #wpum-email-editor-btn span.dashicons {
   margin-top: 12px;
-  margin-right: 5px; }
+  margin-right: 5px;
+}
 
 .editor-window {
   border-top: solid 1px #ddd;
@@ -12,38 +13,48 @@
   background: #f1f1f1;
   display: block;
   bottom: -301px;
-  transition: all .2s; }
-  .editor-window.is-active {
-    bottom: 0; }
+  transition: all 0.2s;
+}
+.editor-window.is-active {
+  bottom: 0;
+}
 
 .slide-leave-active,
 .slide-enter-active {
-  transition: .2s; }
+  transition: 0.2s;
+}
 
 .slide-enter {
   transform: translate3d(0, 100%, 0);
-  visibility: visible; }
+  visibility: visible;
+}
 
 .slide-leave-to {
-  transform: translate3d(0, 0, 0); }
+  transform: translate3d(0, 0, 0);
+}
 
 #wpum-display-tags-btn {
   width: 100%;
   text-align: center;
   height: 32px;
-  line-height: 30px; }
-  #wpum-display-tags-btn span {
-    margin-top: 5px;
-    margin-right: 5px; }
+  line-height: 30px;
+}
+#wpum-display-tags-btn span {
+  margin-top: 5px;
+  margin-right: 5px;
+}
 
 .wpum-email-tags-list {
   display: none;
-  margin-top: 15px; }
-  .wpum-email-tags-list hr {
-    margin-top: 15px; }
+  margin-top: 15px;
+}
+.wpum-email-tags-list hr {
+  margin-top: 15px;
+}
 
 .scroll-frame iframe {
   overflow: visible;
-  height: calc( 100% - 275px ) !important; }
+  height: calc( 100% - 275px ) !important;
+}
 
 /*# sourceMappingURL=email-editor-control.css.map */

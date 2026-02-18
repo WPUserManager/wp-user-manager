@@ -14,7 +14,9 @@
  */
 
 // Exit if accessed directly
-if ( ! defined( 'ABSPATH' ) ) exit;
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 
 $cover_image = get_user_meta( $data->user->ID, 'user_cover', true );
 
@@ -22,7 +24,11 @@ $display_cover_image = apply_filters( 'wpum_profile_display_cover_image', true )
 $display_avatar      = apply_filters( 'wpum_profile_display_avatar', true );
 ?>
 
-<div id="header-cover-image" <?php if ( $display_cover_image && $cover_image ) : ?>style="background-image: url(<?php echo esc_url( $cover_image ); ?>);"<?php endif; ?>>
+<div id="header-cover-image" 
+<?php
+if ( $display_cover_image && $cover_image ) :
+	?>
+	style="background-image: url(<?php echo esc_url( $cover_image ); ?>);"<?php endif; ?>>
 	<?php if ( $display_avatar ) : ?>
 		<div id="header-avatar-container">
 			<a href="<?php echo esc_url( wpum_get_profile_url( $data->user ) ); ?>">

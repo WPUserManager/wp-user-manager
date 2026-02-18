@@ -8,11 +8,8 @@
 		<div class="optionskit-navigation-wrapper">
 			<div class="wp-filter" id="optionskit-navigation">
 				<ul class="filter-links">
-					<li>
-						<router-link :to="{ name: 'form', params: { id: this.formID }}">{{labels.table_fields}}</router-link>
-					</li>
-					<li>
-						<router-link :to="{ name: 'form-settings', params: { id: this.formID }}">{{labels.settings}}</router-link>
+					<li v-for="section in sections" :key="section.path">
+						<router-link :to="{ name: section.name, params: { id: formID }}">{{section.label}}</router-link>
 					</li>
 				</ul>
 			</div>
@@ -122,7 +119,8 @@ export default {
 			showMessageSettings: false,
 			messageStatus:       'success',
 			messageContent:      '',
-			fields:				 {}
+			fields:				 {},
+			sections:         []
 		}
 	},
 	computed: {
@@ -135,6 +133,15 @@ export default {
 		this.formID = this.$route.params.id
 		// Retrieve the selected form.
 		this.getForm()
+		this.$router.options.routes.forEach(route => {
+			if (route.meta && route.meta.label) {
+				this.sections.push({
+					name:  route.name,
+					path:  route.path,
+					label: route.meta.label
+				});
+			}
+		})
 	},
 	methods: {
 		/**

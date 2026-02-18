@@ -8,6 +8,7 @@ node_modules/
 *.tar.gz
 *.zip
 /vendor
+/vendor-dist
 yarn-error.log
 .sass-cache
 #dist
@@ -16,3 +17,14 @@ wp-user-manager
 languages/*
 !languages/wp-user-manager.pot
 release
+codereport.csv
+
+/tests/reports
+/tests/codeception.yml
+/tests/.env.local
+
+# Playwright
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/

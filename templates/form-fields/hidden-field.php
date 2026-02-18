@@ -13,15 +13,20 @@
  * @version 1.0.0
  */
 
- // Exit if accessed directly
-if ( ! defined( 'ABSPATH' ) ) exit;
+// Exit if accessed directly
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 
 ?>
 
 <input
 	type="hidden"
 	name="<?php echo esc_attr( isset( $data->name ) ? $data->name : $data->key ); ?>"
-	<?php if ( isset( $data->autocomplete ) && false === $data->autocomplete ) { echo ' autocomplete="off"'; } ?>
+	<?php
+	if ( isset( $data->autocomplete ) && false === $data->autocomplete ) {
+		echo ' autocomplete="off"'; }
+	?>
 	id="<?php echo esc_attr( $data->key ); ?>"
 	value="<?php echo isset( $data->value ) ? esc_attr( $data->value ) : ''; ?>"
 />

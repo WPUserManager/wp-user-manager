@@ -6,22 +6,44 @@ import RegistrationFormSettings from '../registration-form-settings'
 
 Vue.use(Router)
 
-export default new Router({
-	routes: [
-		{
-			path: '/',
-			name: 'registration-forms-list',
-			component: RegistrationFormsList
-		},
-		{
-			name: 'form',
-			path: '/form/:id',
-			component: RegistrationFormEditor
-		},
-		{
-			name: 'form-settings',
-			path: '/form/:id/settings',
-			component: RegistrationFormSettings
+const OptionsTabs = []
+
+// Default tabs
+OptionsTabs.push(
+	{
+		path: '/',
+		name: 'registration-forms-list',
+		component: RegistrationFormsList
+	},
+	{
+		path: '/form/:id',
+		name: 'form',
+		component: RegistrationFormEditor,
+		meta: {
+			label: 'Fields',
+			key: ''
 		}
-	]
+	}
+);
+
+Object.keys(wpumRegistrationFormsEditor.edit_form_sections).forEach(function (key) {
+	// Setup the starting path.
+	let path = '/form/:id';
+
+	// Create main route and child routes if any.
+	OptionsTabs.push(
+		{
+			path: path + '/' + key,
+			name: wpumRegistrationFormsEditor.edit_form_sections[key],
+			component: RegistrationFormSettings,
+			meta: {
+				label: wpumRegistrationFormsEditor.edit_form_sections[key],
+				key: key
+			}
+		}
+	)
+})
+
+export default new Router({
+	routes: OptionsTabs
 })
