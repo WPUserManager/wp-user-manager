@@ -88,7 +88,6 @@ class WPUM_Form_Profile extends WPUM_Form {
 		);
 
 		$this->sort_set_steps();
-
 	}
 
 	/**
@@ -105,7 +104,6 @@ class WPUM_Form_Profile extends WPUM_Form {
 				'account' => $this->get_account_fields(),
 			)
 		);
-
 	}
 
 	/**
@@ -136,7 +134,6 @@ class WPUM_Form_Profile extends WPUM_Form {
 		}
 
 		return $pass;
-
 	}
 
 	/**
@@ -160,7 +157,7 @@ class WPUM_Form_Profile extends WPUM_Form {
 
 		foreach ( $account_fields as $field ) {
 
-			$priority ++;
+			++$priority;
 
 			$field = new WPUM_Field( $field );
 
@@ -208,7 +205,6 @@ class WPUM_Form_Profile extends WPUM_Form {
 		}
 
 		return $fields;
-
 	}
 
 	/**
@@ -231,7 +227,22 @@ class WPUM_Form_Profile extends WPUM_Form {
 		WPUM()->templates
 			->set_template_data( $data )
 			->get_template_part( 'forms/form', 'account' );
+	}
 
+
+	/**
+	 * Validate the form fields.
+	 *
+	 * @param array $values
+	 *
+	 * @return bool|WP_Error
+	 */
+	protected function validate_fields( $values ) {
+		if ( ( isset( $_POST['current_user_avatar'] ) && is_array( $_POST['current_user_avatar'] ) ) || ( isset( $_POST['current_user_cover'] ) && is_array( $_POST['current_user_cover'] ) ) ) { // phpcs:ignore
+			return new WP_Error( 'validation-error', __( 'Invalid input: array values are not allowed for avatar or cover', 'wp-user-manager' ) );
+		}
+
+		return parent::validate_fields( $values );
 	}
 
 	/**
@@ -285,7 +296,6 @@ class WPUM_Form_Profile extends WPUM_Form {
 			$this->add_error( $e->getMessage(), 'account_handler' );
 			return;
 		}
-
 	}
 
 	/**
@@ -318,6 +328,5 @@ class WPUM_Form_Profile extends WPUM_Form {
 		}
 
 		return $name;
-
 	}
 }

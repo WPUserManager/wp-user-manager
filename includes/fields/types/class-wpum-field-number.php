@@ -78,5 +78,4 @@ class WPUM_Field_Number extends WPUM_Field_Type {
 			),
 		);
 	}
-
 }

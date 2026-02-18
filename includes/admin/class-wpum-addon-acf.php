@@ -125,8 +125,6 @@ class WPUM_Addon_ACF {
 		</script>
 		<?php
 	}
-
-
 }
 
 ( new WPUM_Addon_ACF() )->init();

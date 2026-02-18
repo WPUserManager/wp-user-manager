@@ -134,5 +134,4 @@ class WPUM_Addon_Check {
 		</div>
 		<?php
 	}
-
 }

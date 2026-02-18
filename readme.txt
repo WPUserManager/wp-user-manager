@@ -4,11 +4,11 @@ Plugin URI: https://wpusermanager.com
 Contributors: wpusermanager, polevaultweb, alessandro.tesoro
 Tags: members, membership, community, user profile, user registration
 Requires at least: 4.9
-Tested up to: 6.8
+Tested up to: 6.9
 Requires PHP: 7.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
-Stable Tag: 2.9.12
+Stable Tag: 2.9.13
 
 The most customizable profiles & community builder WordPress plugin with front-end login, registration, profile customization and content restriction.
 
@@ -26,7 +26,7 @@ Create a custom login page, have full control over the registration form, give y
 
 = Features included =
 
-- [Frontend forms](https://wpusermanager.com/features/front-end-forms/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager): Allow users to register and login from the front of the site. Customized the registration form
+- [Frontend forms](https://wpusermanager.com/features/front-end-forms/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager): Allow users to register and login from the front of the site. Customize the registration form with custom fields to collect data
 - [Stripe integration](https://wpusermanager.com/articles/332-stripe/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager): Customize the emails sent to users when the register, reset their password and more
 - [Custom email notifications](https://wpusermanager.com/features/custom-email-notifications/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager): Customize the emails sent to users when the register, reset their password and more
 - [Custom avatars](https://wpusermanager.com/features/custom-avatars/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager): Users can edit their site avatar by uploading an image from the account page
@@ -133,6 +133,11 @@ Please note that using WPUM and the mentioned add-ons does NOT guarantee complia
 13. Login form.
 
 == Changelog ==
+
+= 2.9.13 (16th Dec 2025) =
+
+- Security: Fixed authenticated arbitrary file deletion vulnerability in custom avatar and cover image handling (Thanks to YC_Infosec via Wordfence)
+- Security: Fixed a PHP Object Injection vulnerability in the user nickname profile field (Thanks to Nguyen Ngoc Quang Bach (maysbachs) via Patchstack)
 
 = 2.9.12 (21st Nov 2024) =
 
