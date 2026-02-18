@@ -57,9 +57,21 @@ class EmailTagsTest extends WPUMTestCase {
 	 * Test that {login_page_url} tag returns a URL.
 	 */
 	public function test_login_page_url_tag_replaced() {
+		$page_id = $this->factory()->post->create( array(
+			'post_type'   => 'page',
+			'post_title'  => 'Login Page',
+			'post_status' => 'publish',
+		) );
+
+		$filter = function () use ( $page_id ) {
+			return array( $page_id );
+		};
+		add_filter( 'wpum_get_option_login_page', $filter );
+
 		$result = wpum_email_tag_login_page_url( $this->test_user_id );
 
-		// The result should contain some URL string or link.
+		remove_filter( 'wpum_get_option_login_page', $filter );
+
 		$this->assertNotEmpty( $result, 'login_page_url tag should return a non-empty value.' );
 	}
 
