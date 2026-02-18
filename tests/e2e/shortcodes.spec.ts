@@ -108,8 +108,8 @@ test.describe('Logout Link Shortcode', () => {
 
     await page.goto(logoutLinkPage);
 
-    // The logout link should be visible
-    const logoutLink = page.locator('a[href*="action=logout"]');
+    // The logout link should be visible in the page content (not admin bar)
+    const logoutLink = page.locator('.entry-content a[href*="action=logout"], .post-content a[href*="action=logout"], .page-content a[href*="action=logout"], article a[href*="action=logout"]').first();
     await expect(logoutLink).toBeVisible({ timeout: 10000 });
     await expect(logoutLink).toContainText(/logout/i);
   });
@@ -151,13 +151,13 @@ test.describe('Logout Flow', () => {
     // Visit the logout link page
     await page.goto(logoutLinkPage);
 
-    // Click the logout link rendered by [wpum_logout]
-    const logoutLink = page.locator('a[href*="action=logout"]');
+    // Click the logout link rendered by [wpum_logout] in the page content (not admin bar)
+    const logoutLink = page.locator('.entry-content a[href*="action=logout"], .post-content a[href*="action=logout"], .page-content a[href*="action=logout"], article a[href*="action=logout"]').first();
     await expect(logoutLink).toBeVisible({ timeout: 10000 });
     await logoutLink.click();
 
     // WordPress may show a confirmation page — click through if so
-    const logoutConfirm = page.locator('a[href*="action=logout"]');
+    const logoutConfirm = page.locator('a[href*="action=logout"]').first();
     if (await logoutConfirm.isVisible({ timeout: 3000 }).catch(() => false)) {
       await logoutConfirm.click();
     }

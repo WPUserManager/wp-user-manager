@@ -36,8 +36,9 @@ test.describe('Registration Form', () => {
   });
 
   test('successful registration with valid data', async ({ page, registerPage }) => {
-    // Clean up the test user first
+    // Clean up the test user first (WPUM may use email as username when no username field)
     deleteUser('testuser_reg');
+    deleteUser('testuser_reg@example.com');
 
     await page.goto(registerPage);
 
@@ -195,8 +196,9 @@ test.describe('Registration Form', () => {
   });
 
   test('redirect after successful registration', async ({ page, registerPage }) => {
-    // Clean up
+    // Clean up (WPUM may use email as username when no username field)
     deleteUser('testuser_redirect');
+    deleteUser('testuser_redirect@example.com');
 
     await page.goto(registerPage);
 
@@ -231,5 +233,6 @@ test.describe('Registration Form', () => {
 
     // Clean up
     deleteUser('testuser_redirect');
+    deleteUser('testuser_redirect@example.com');
   });
 });

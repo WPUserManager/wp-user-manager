@@ -75,11 +75,14 @@ async function globalSetup(): Promise<void> {
     setupDirectoryPage();
 
     // Clean up any leftover test users from previous runs
+    // Note: When no username field is shown, WPUM uses the full email as the username
     console.log('[WPUM E2E] Cleaning up test users...');
     deleteUser('testuser_e2e');
     deleteUser('testuser_reg');
+    deleteUser('testuser_reg@example.com');
     deleteUser('testuser_login');
     deleteUser('testuser_redirect');
+    deleteUser('testuser_redirect@example.com');
     deleteUser('testuser_delete');
 
     // Create a test user for login tests

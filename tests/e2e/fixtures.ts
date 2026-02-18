@@ -35,12 +35,20 @@ export async function wpAdminLogin(
   username = 'admin',
   password = 'password'
 ): Promise<void> {
-  await page.goto('/wp-login.php');
-  await page.locator('#user_login').fill(username);
-  await page.locator('#user_pass').fill(password);
-  await page.locator('#wp-submit').click();
-  // Wait for navigation after login - subscribers may not land on wp-admin
-  await page.waitForLoadState('networkidle', { timeout: 10000 }).catch(() => {});
+  // Use Playwright's API request context to log in directly via HTTP POST.
+  // This is much faster and more reliable than rendering wp-login.php in the
+  // browser, which can time out on slow Docker containers.
+  // Cookies from the response are automatically stored in the browser context.
+  const response = await page.request.post('/wp-login.php', {
+    form: {
+      log: username,
+      pwd: password,
+      'wp-submit': 'Log In',
+      redirect_to: '/wp-admin/',
+      testcookie: '1',
+    },
+  });
+  await response.dispose();
 }
 
 /**
