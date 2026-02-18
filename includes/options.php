@@ -33,7 +33,7 @@ function wpum_get_settings() {
  *
  * @return mixed
  */
-function wpum_get_option( $key = '', $default = false ) {
+function wpum_get_option( $key = '', $default = false ) { // phpcs:ignore Universal.NamingConventions.NoReservedKeywordParameterNames.defaultFound -- Public API, cannot rename.
 	global $wpum_options;
 	$value = ! empty( $wpum_options[ $key ] ) ? $wpum_options[ $key ] : $default;
 	$value = apply_filters( 'wpum_get_option', $value, $key, $default );

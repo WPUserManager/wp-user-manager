@@ -48,7 +48,6 @@ class WPUM_Shortcode_Directory extends WPUM_Shortcode_Generator {
 			),
 		);
 	}
-
 }
 
 new WPUM_Shortcode_Directory();

@@ -87,7 +87,7 @@ class WPUM_Options_Panel {
 	 *
 	 * @return array
 	 */
-	public function setup_menu( $menu ) {
+	public function setup_menu( $menu ) { // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.Found -- Required by OptionsKit filter.
 		return array(
 			'parent'     => 'users.php',
 			'page_title' => __( 'WP User Manager Settings', 'wp-user-manager' ),
@@ -121,7 +121,7 @@ class WPUM_Options_Panel {
 	 *
 	 * @return array
 	 */
-	public function register_settings_subsections( $sections ) {
+	public function register_settings_subsections( $sections ) { // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.Found -- Required by OptionsKit filter.
 		return array(
 			'general'      => array(
 				'login' => __( 'Login Settings', 'wp-user-manager' ),
@@ -520,5 +520,4 @@ class WPUM_Options_Panel {
 
 		return array_merge( $settings, $plugin_settings );
 	}
-
 }

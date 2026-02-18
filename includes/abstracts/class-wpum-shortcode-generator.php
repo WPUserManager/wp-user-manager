@@ -104,7 +104,6 @@ abstract class WPUM_Shortcode_Generator {
 				WPUM_Shortcode_Button::$shortcodes[ $this->shortcode_tag ] = wp_parse_args( $this->shortcode, $defaults );
 			}
 		}
-
 	}
 
 	/**
@@ -153,7 +152,6 @@ abstract class WPUM_Shortcode_Generator {
 		}
 
 		return $fields;
-
 	}
 
 	/**
@@ -310,7 +308,7 @@ abstract class WPUM_Shortcode_Generator {
 
 				$this->errors[ $args['name'] ] = $this->generate_container( $error );
 			}
-			if ( ! ! $args['required'] || is_array( $args['required'] ) ) {
+			if ( (bool) $args['required'] || is_array( $args['required'] ) ) {
 				$alert = esc_html__( 'Some of the shortcode options are required.', 'wp-user-manager' );
 				if ( isset( $args['required']['alert'] ) ) {
 					$alert = $args['required']['alert'];
@@ -341,5 +339,4 @@ abstract class WPUM_Shortcode_Generator {
 			'no'  => esc_html__( 'No', 'wp-user-manager' ),
 		);
 	}
-
 }

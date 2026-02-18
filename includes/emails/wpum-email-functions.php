@@ -44,7 +44,7 @@ function wpum_get_emails_tags_list() {
  *
  * @return string
  */
-function wpum_email_tag_website( $user_id ) {
+function wpum_email_tag_website( $user_id ) { // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.Found -- Required by email tag callback signature.
 	return home_url();
 }
 
@@ -55,7 +55,7 @@ function wpum_email_tag_website( $user_id ) {
  *
  * @return string
  */
-function wpum_email_tag_sitename( $user_id ) {
+function wpum_email_tag_sitename( $user_id ) { // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.Found -- Required by email tag callback signature.
 	return esc_html( get_bloginfo( 'name' ) );
 }
 
@@ -131,7 +131,7 @@ function wpum_email_tag_lastname( $user_id ) {
  *
  * @return string
  */
-function wpum_email_tag_login_page_url( $user_id = false ) {
+function wpum_email_tag_login_page_url( $user_id = false ) { // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.Found -- Required by email tag callback signature.
 
 	$login_page_url = wpum_get_core_page_id( 'login' );
 	$login_page_url = get_permalink( $login_page_url );
@@ -221,7 +221,6 @@ function wpum_get_registered_emails() {
 	);
 
 	return apply_filters( 'wpum_registered_emails', $emails );
-
 }
 
 /**
@@ -249,7 +248,6 @@ function wpum_get_email_field( $email_id = false, $field_id = false ) {
 	}
 
 	return $output;
-
 }
 
 /**

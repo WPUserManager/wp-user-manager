@@ -226,11 +226,11 @@ class WPUM_Field_Repeater extends WPUM_Field_Type {
 
 		$posted = isset( $_POST[ $key ] ) ? $this->sanitize_posted_field( $_POST[ $key ], $field['sanitizer'] ) : array(); // phpcs:ignore
 
-		if ( ! isset( $_FILES[ $key ] ) ) {
+		if ( ! isset( $_FILES[ $key ] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce verified in parent form handler.
 			return $posted;
 		}
 
-		if ( isset( $_FILES[ $key ] ) && ! empty( $_FILES[ $key ] ) ) {
+		if ( isset( $_FILES[ $key ] ) && ! empty( $_FILES[ $key ] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce verified in parent form handler.
 			$files = $this->upload_file( $key, $field );
 		}
 
@@ -259,7 +259,7 @@ class WPUM_Field_Repeater extends WPUM_Field_Type {
 	 * @return  string|array
 	 */
 	protected function upload_file( $field_key, $field ) {
-		if ( isset( $_FILES[ $field_key ] ) && ! empty( $_FILES[ $field_key ] ) ) {
+		if ( isset( $_FILES[ $field_key ] ) && ! empty( $_FILES[ $field_key ] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce verified in parent form handler.
 			$allowed_mime_types = wpum_get_allowed_mime_types();
 			$files              = array();
 
@@ -306,7 +306,7 @@ class WPUM_Field_Repeater extends WPUM_Field_Type {
 					$too_big_message = sprintf( esc_html__( 'The uploaded %s file is too big.', 'wp-user-manager' ), $field_name );
 
 					if ( ! empty( $field_max_size ) && $file_to_upload['size'] > $field_max_size ) {
-						throw new Exception( $too_big_message );
+						throw new Exception( esc_html( $too_big_message ) );
 					}
 
 					$uploaded_file = wpum_upload_file( $file_to_upload, array(
@@ -316,7 +316,7 @@ class WPUM_Field_Repeater extends WPUM_Field_Type {
 					) );
 
 					if ( is_wp_error( $uploaded_file ) ) {
-						throw new Exception( $uploaded_file->get_error_message() );
+						throw new Exception( esc_html( $uploaded_file->get_error_message() ) );
 					} else {
 						$file_urls[ $cloned_keys[ $field_key ] ][ $primary_key ] = $uploaded_file->url;
 					}

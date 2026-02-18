@@ -67,7 +67,6 @@ class WPUM_Shortcode_Profile_Card extends WPUM_Shortcode_Generator {
 			),
 		);
 	}
-
 }
 
 new WPUM_Shortcode_Profile_Card();

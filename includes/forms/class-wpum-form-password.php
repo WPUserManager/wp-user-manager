@@ -83,7 +83,6 @@ class WPUM_Form_Password extends WPUM_Form {
 		);
 
 		$this->sort_set_steps();
-
 	}
 
 	/**
@@ -146,7 +145,6 @@ class WPUM_Form_Password extends WPUM_Form {
 		WPUM()->templates
 			->set_template_data( $data )
 			->get_template_part( 'forms/form', 'password' );
-
 	}
 
 	/**
@@ -184,7 +182,6 @@ class WPUM_Form_Password extends WPUM_Form {
 		}
 
 		return $pass;
-
 	}
 
 	/**
@@ -268,7 +265,5 @@ class WPUM_Form_Password extends WPUM_Form {
 			$this->add_error( $e->getMessage(), 'password_change_submit' );
 			return;
 		}
-
 	}
-
 }

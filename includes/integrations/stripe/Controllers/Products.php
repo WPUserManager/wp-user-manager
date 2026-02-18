@@ -148,11 +148,10 @@ class Products {
 		$products = $this->all();
 		foreach ( $products as $product ) {
 			if ( 'one_time' !== $product['type'] ) {
-				$total ++;
+				++$total;
 			}
 		}
 
 		return $total;
 	}
-
 }

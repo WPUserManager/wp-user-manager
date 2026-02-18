@@ -49,7 +49,6 @@ class WPUM_Shortcode_Content_Loggedout extends WPUM_Shortcode_Generator {
 			),
 		);
 	}
-
 }
 
 new WPUM_Shortcode_Content_Loggedout();

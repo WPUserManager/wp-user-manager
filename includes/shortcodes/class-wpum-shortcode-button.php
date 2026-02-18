@@ -105,8 +105,8 @@ final class WPUM_Shortcode_Button {
 
 		// Only run in admin post/page creation and edit screens
 		if ( in_array( $screen->parent_file, $shortcode_button_pages, true )
-			 && apply_filters( 'wpum_shortcode_button_condition', true )
-			 && ! empty( self::$shortcodes )
+			&& apply_filters( 'wpum_shortcode_button_condition', true )
+			&& ! empty( self::$shortcodes )
 		) {
 			$shortcodes = array();
 			foreach ( self::$shortcodes as $shortcode => $values ) {
@@ -176,7 +176,6 @@ final class WPUM_Shortcode_Button {
 		}
 		wp_send_json( $response );
 	}
-
 }
 
 new WPUM_Shortcode_Button();

@@ -13,7 +13,7 @@
  * @version 1.0.0
  */
 
- // Exit if accessed directly
+// Exit if accessed directly
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
@@ -21,18 +21,18 @@ if ( ! defined( 'ABSPATH' ) ) {
 ?>
 
 <select name="<?php echo esc_attr( isset( $data->name ) ? $data->name : $data->key ); ?>" id="<?php echo esc_attr( $data->key ); ?>"
-						 <?php
-							if ( ! empty( $data->required ) ) {
-								echo 'required';}
-							?>
- <?php
-	if ( ! empty( $data->read_only ) ) {
-		echo 'disabled';}
-	?>
+						<?php
+						if ( ! empty( $data->required ) ) {
+							echo 'required';}
+						?>
+<?php
+if ( ! empty( $data->read_only ) ) {
+	echo 'disabled';}
+?>
 >
 	<?php foreach ( $data->options as $key => $value ) : ?>
 		<option value="<?php echo esc_attr( $key ); ?>"
-								  <?php
+									<?php
 									if ( isset( $data->value ) || isset( $data->default ) ) {
 										selected( isset( $data->value ) ? $data->value : $data->default, $key );}
 									?>

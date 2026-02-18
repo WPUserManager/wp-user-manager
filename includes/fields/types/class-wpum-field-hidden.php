@@ -37,4 +37,3 @@ class WPUM_Field_Hidden extends WPUM_Field_Type {
 		$this->name = esc_html__( 'Hidden', 'wp-user-manager' );
 	}
 }
-

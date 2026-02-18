@@ -55,7 +55,6 @@ class WPUM_Shortcode_Content_Roles extends WPUM_Shortcode_Generator {
 			),
 		);
 	}
-
 }
 
 new WPUM_Shortcode_Content_Roles();

@@ -229,7 +229,7 @@ if ( ! class_exists( 'WP_User_Manager' ) ) :
 		 *
 		 * @return void
 		 */
-		public function ensure_addon_class_alias( $class ) {
+		public function ensure_addon_class_alias( $class ) { // phpcs:ignore Universal.NamingConventions.NoReservedKeywordParameterNames.classFound -- Matches spl_autoload_register callback signature.
 			if ( strpos( $class, 'WPUM\\' ) === 0 ) {
 				// Class is already scoped
 				return;
@@ -276,7 +276,7 @@ if ( ! class_exists( 'WP_User_Manager' ) ) :
 		 *
 		 * @return void
 		 */
-		public function ensure_class_alias( $class ) {
+		public function ensure_class_alias( $class ) { // phpcs:ignore Universal.NamingConventions.NoReservedKeywordParameterNames.classFound -- Matches spl_autoload_register callback signature.
 			// If the namespace beings with the dependency class prefix, make an alias for regular class.
 			if ( strpos( $class, 'WPUM' ) !== 0 ) {
 				return;
@@ -455,6 +455,7 @@ if ( ! class_exists( 'WP_User_Manager' ) ) :
 
 			( new WPUM_Plugin_Updates() )->init();
 
+			/** @phpstan-ignore-next-line Class is conditionally loaded when Elementor is active. */
 			( new WPUM_Elementor_Loader() )::get_instance();
 
 			$this->field_types = new WPUM_Fields();
@@ -491,6 +492,7 @@ if ( ! class_exists( 'WP_User_Manager' ) ) :
 			// Start carbon fields
 			$this->carbon_fields();
 
+			/** @phpstan-ignore-next-line Library docblock says void but actually returns instance. */
 			$this->notices                = \WPUM\TDP\WP_Notice::instance();
 			$this->forms                  = WPUM_Forms::instance();
 			$this->templates              = new WPUM_Template_Loader();
@@ -506,7 +508,6 @@ if ( ! class_exists( 'WP_User_Manager' ) ) :
 			require_once WPUM_PLUGIN_DIR . 'includes/shortcodes/shortcodes.php';
 
 			do_action( 'after_wpum_init' );
-
 		}
 
 		/**
@@ -582,7 +583,6 @@ if ( ! class_exists( 'WP_User_Manager' ) ) :
 			if ( ! defined( 'WPUM_SLUG' ) ) {
 				define( 'WPUM_SLUG', plugin_basename( $this->plugin_file ) );
 			}
-
 		}
 
 		/**
@@ -626,7 +626,6 @@ if ( ! class_exists( 'WP_User_Manager' ) ) :
 				( new WPUM_Addon_Check( $addon ) )->passes();
 			}
 		}
-
 	}
 
 endif; // End if class_exists check.

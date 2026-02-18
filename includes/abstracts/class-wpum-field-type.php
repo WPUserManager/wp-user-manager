@@ -307,7 +307,6 @@ abstract class WPUM_Field_Type {
 		}
 
 		return apply_filters( 'wpum_register_field_type_settings', $settings, $this->type );
-
 	}
 
 	/**
@@ -409,5 +408,4 @@ abstract class WPUM_Field_Type {
 	public function get_formatted_output( $field, $value ) {
 		return esc_html( $value );
 	}
-
 }

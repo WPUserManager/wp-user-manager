@@ -145,7 +145,7 @@ class WPUM_Field {
 		$this->db = new WPUM_DB_Fields();
 
 		if ( empty( $_id_or_field ) ) {
-			return false;
+			return;
 		}
 
 		if ( is_a( $_id_or_field, 'WPUM_Field' ) ) {
@@ -158,9 +158,8 @@ class WPUM_Field {
 		if ( $field ) {
 			$this->setup_field( $field );
 		} else {
-			return false;
+			return;
 		}
-
 	}
 
 	/**
@@ -233,7 +232,6 @@ class WPUM_Field {
 		}
 
 		return false;
-
 	}
 
 	/**
@@ -465,7 +463,6 @@ class WPUM_Field {
 		}
 
 		return $primary;
-
 	}
 
 	/**
@@ -528,7 +525,6 @@ class WPUM_Field {
 		do_action( 'wpum_post_insert_field', $args, $this->id );
 
 		return $id;
-
 	}
 
 	/**
@@ -561,7 +557,6 @@ class WPUM_Field {
 		do_action( 'wpum_post_update_field', $args, $this->id );
 
 		return $ret;
-
 	}
 
 	/**
@@ -605,7 +600,6 @@ class WPUM_Field {
 		}
 
 		return $data;
-
 	}
 
 	/**
@@ -657,7 +651,6 @@ class WPUM_Field {
 			$value       = $this->format_value( $value );
 			$this->value = $value;
 		}
-
 	}
 
 	/**

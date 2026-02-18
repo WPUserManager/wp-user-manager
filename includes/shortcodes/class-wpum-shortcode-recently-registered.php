@@ -54,7 +54,6 @@ class WPUM_Shortcode_Recently_Registered extends WPUM_Shortcode_Generator {
 			),
 		);
 	}
-
 }
 
 new WPUM_Shortcode_Recently_Registered();
