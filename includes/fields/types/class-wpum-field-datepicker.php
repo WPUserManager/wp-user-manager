@@ -25,12 +25,11 @@ class WPUM_Field_Datepicker extends WPUM_Field_Type {
 		$this->type  = 'datepicker';
 		$this->icon  = 'dashicons-calendar-alt';
 		$this->order = 3;
-
 	}
 
 	/**
 	 * Set the name of the field.
-	 * 
+	 *
 	 * @return void
 	 */
 	public function set_name() {

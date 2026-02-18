@@ -30,7 +30,7 @@ class WPUM_Field_Taxonomy extends WPUM_Field_Type {
 
 	/**
 	 * Set the name of the field.
-	 * 
+	 *
 	 * @return void
 	 */
 	public function set_name() {

@@ -31,7 +31,7 @@ class WPUM_Field_Audio extends WPUM_Field_File {
 
 	/**
 	 * Set the name of the field.
-	 * 
+	 *
 	 * @return void
 	 */
 	public function set_name() {
