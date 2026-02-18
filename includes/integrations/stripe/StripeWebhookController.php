@@ -17,7 +17,7 @@ use WPUserManager\Stripe\Controllers\Invoices;
 use WPUserManager\Stripe\Controllers\Subscriptions;
 use WPUserManager\Stripe\Models\Product;
 use WPUserManager\Stripe\Models\User;
-use WPUserManager\Stripe\Controllers\products;
+use WPUserManager\Stripe\Controllers\Products;
 
 /**
  * StripeWebhookController
@@ -336,7 +336,7 @@ class StripeWebhookController {
 		$products = new Products( $this->secret_key, $this->gateway_mode );
 		$products->all( true );
 
-		do_action( 'wpum_stripe_webhook_product_updated', $subscription );
+		do_action( 'wpum_stripe_webhook_product_updated', $payload );
 
 		return new \WP_REST_Response( 'Webhook handled', 200 );
 	}
@@ -353,7 +353,7 @@ class StripeWebhookController {
 		$products = new Products( $this->secret_key, $this->gateway_mode );
 		$products->all( true );
 
-		do_action( 'wpum_stripe_webhook_product_updated', $subscription );
+		do_action( 'wpum_stripe_webhook_product_updated', $payload );
 
 		return new \WP_REST_Response( 'Webhook handled', 200 );
 	}
@@ -370,7 +370,7 @@ class StripeWebhookController {
 		$products = new Products( $this->secret_key, $this->gateway_mode );
 		$products->all( true );
 
-		do_action( 'wpum_stripe_webhook_product_updated', $subscription );
+		do_action( 'wpum_stripe_webhook_product_updated', $payload );
 
 		return new \WP_REST_Response( 'Webhook handled', 200 );
 	}
