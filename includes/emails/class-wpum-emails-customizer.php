@@ -181,7 +181,6 @@ class WPUM_Emails_Customizer {
 
 			}
 		}
-
 	}
 
 	/**
@@ -242,7 +241,6 @@ class WPUM_Emails_Customizer {
 			'description' => esc_html__( 'Click the button to open the content customization editor.', 'wp-user-manager' ),
 			'section'     => $email_id . '_settings',
 		) ) );
-
 	}
 
 	/**
@@ -279,7 +277,6 @@ class WPUM_Emails_Customizer {
 		}
 
 		return $default;
-
 	}
 
 	/**
@@ -302,9 +299,7 @@ class WPUM_Emails_Customizer {
 				->get_template_part( 'email-customizer-preview' );
 			exit;
 		}
-
 	}
-
 }
 
 new WPUM_Emails_Customizer();

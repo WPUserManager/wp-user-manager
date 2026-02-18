@@ -5,7 +5,7 @@
 actor: WpunitTester
 modules:
     enabled:
-        # - WPLoader
+        - WPLoader
         - \Helper\Wpunit
     config:
         WPLoader:
@@ -18,5 +18,7 @@ modules:
             domain: "%TEST_SITE_WP_DOMAIN%"
             adminEmail: "%TEST_SITE_ADMIN_EMAIL%"
             title: "WP Test"
-            plugins: ['']
-            activatePlugins: ['']
+            plugins:
+                - wp-user-manager/wp-user-manager.php
+            wpDebug: false
+            isolatedInstall: false

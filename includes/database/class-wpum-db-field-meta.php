@@ -145,5 +145,4 @@ class WPUM_DB_Field_Meta extends WPUM_DB {
 		}
 		return absint( $field_id );
 	}
-
 }

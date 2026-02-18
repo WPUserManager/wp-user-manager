@@ -58,5 +58,4 @@ final class WPUM_DB_Table_Fields_Groups extends WPUM_DB_Table {
 	 * @return void
 	 */
 	protected function upgrade() {}
-
 }

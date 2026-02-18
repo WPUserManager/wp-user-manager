@@ -36,5 +36,4 @@ class WPUM_Field_Video extends WPUM_Field_File {
 	public function default_allowed_mime_types() {
 		return 'mp4,m4v,mov,wmv,avi,mpg';
 	}
-
 }
