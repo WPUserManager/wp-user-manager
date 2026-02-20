@@ -21,12 +21,20 @@ class WPUM_Field_User extends WPUM_Field_Type {
 	 * Construct
 	 */
 	public function __construct() {
-		$this->name              = esc_html__( 'User', 'wp-user-manager' );
 		$this->type              = 'user';
 		$this->icon              = 'dashicons-admin-users';
 		$this->group             = 'advanced';
 		$this->allow_default     = false;
 		$this->min_addon_version = '2.3';
+	}
+
+	/**
+	 * Set the name of the field.
+	 *
+	 * @return void
+	 */
+	public function set_name() {
+		$this->name = esc_html__( 'User', 'wp-user-manager' );
 	}
 
 	/**
