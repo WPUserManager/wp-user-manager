@@ -262,7 +262,12 @@ module.exports = function( grunt ) {
 					'!phpcs.xml.dist',
 					'!README.md',
 					'!yarn.lock',
-					'!phpstan.neon.dist'
+					'!phpstan.neon.dist',
+					'!playwright.config.ts',
+					'!tsconfig.json',
+					'!.wp-env.json',
+					'!.wp-env.override.json',
+					'!test-results/**'
 				],
 				dest: 'release/<%= pkg.version %>/'
 			}
