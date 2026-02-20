@@ -9,55 +9,9 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  release:
-    name: Build & Deploy
-    runs-on: ubuntu-latest
-    permissions:
-      contents: write
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: "14"
-          cache: yarn
-
-      - name: Setup PHP
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: "8.1"
-          tools: composer:v2
-
-      - name: Extract version from tag
-        id: version
-        run: echo "version=${GITHUB_REF_NAME#v}" >> $GITHUB_OUTPUT
-
-      - name: Install Node dependencies
-        run: yarn install --frozen-lockfile
-
-      - name: Build plugin
-        run: npx grunt build
-
-      - name: Verify build artifacts
-        run: |
-          VERSION=${{ steps.version.outputs.version }}
-          test -d "release/${VERSION}" || { echo "::error::Build directory release/${VERSION} not found — does package.json version match the tag?"; exit 1; }
-          test -f "release/wp-user-manager.${VERSION}.zip" || { echo "::error::Release zip not found"; exit 1; }
-          echo "Build OK — release/${VERSION}/ and zip exist"
-
-      - name: Deploy to WordPress.org
-        uses: 10up/action-wordpress-plugin-deploy@stable
-        env:
-          SVN_USERNAME: ${{ secrets.SVN_USERNAME }}
-          SVN_PASSWORD: ${{ secrets.SVN_PASSWORD }}
-          SLUG: wp-user-manager
-          VERSION: ${{ steps.version.outputs.version }}
-          BUILD_DIR: release/${{ steps.version.outputs.version }}
-
-      - name: Create GitHub Release
-        uses: softprops/action-gh-release@v2
-        with:
-          files: release/wp-user-manager.${{ steps.version.outputs.version }}.zip
-          generate_release_notes: true
+  deploy:
+    uses: WPUserManager/.github/.github/workflows/deploy.yml@master
+    with:
+      plugin-slug: wp-user-manager
+      node-version: "14"
+    secrets: inherit

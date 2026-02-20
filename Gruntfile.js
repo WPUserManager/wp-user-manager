@@ -267,7 +267,8 @@ module.exports = function( grunt ) {
 					'!tsconfig.json',
 					'!.wp-env.json',
 					'!.wp-env.override.json',
-					'!test-results/**'
+					'!test-results/**',
+					'!release.json'
 				],
 				dest: 'release/<%= pkg.version %>/'
 			}
