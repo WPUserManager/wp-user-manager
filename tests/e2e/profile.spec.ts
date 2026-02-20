@@ -77,6 +77,71 @@ test.describe('Profile Page', () => {
     }
   });
 
+  test('profile tab navigation', async ({ page, profilePage }) => {
+    await wpAdminLogin(page, 'testuser_login', 'TestPass123!');
+    await page.goto(profilePage + 'testuser_login/');
+
+    const profileContainer = page.locator('.wpum-profile-page, #wpum-profile');
+    await expect(profileContainer).toBeVisible({ timeout: 5000 });
+
+    // Find all profile tab links (WPUM uses nav.profile-navbar > a)
+    const tabLinks = page.locator('.profile-navbar a');
+    const tabCount = await tabLinks.count();
+
+    // WPUM profiles typically have About, Posts, Comments tabs
+    expect(tabCount).toBeGreaterThanOrEqual(1);
+
+    // Click through each tab and verify it renders content
+    for (let i = 0; i < tabCount; i++) {
+      const href = await tabLinks.nth(i).getAttribute('href');
+
+      if (href) {
+        await page.goto(href);
+        await page.waitForLoadState('networkidle', { timeout: 10000 }).catch(() => {});
+
+        // The profile page should still render (no PHP fatal / white screen)
+        const container = page.locator('.wpum-profile-page, #wpum-profile');
+        await expect(container).toBeVisible({ timeout: 5000 });
+
+        // Tab content area should be present
+        const tabContent = page.locator('#profile-tab-content');
+        await expect(tabContent).toBeVisible();
+      }
+    }
+  });
+
+  test('profile pagination does not cause fatal error', async ({ page, profilePage }) => {
+    await wpAdminLogin(page, 'testuser_login', 'TestPass123!');
+
+    // Visit a paginated profile URL — even if page 2 has no content,
+    // the page should not produce a PHP fatal or routing error
+    const response = await page.goto(profilePage + 'testuser_login/posts/page/2/');
+
+    // Should not be a 500 error
+    expect(response?.status()).not.toBe(500);
+
+    // The page should render something — not a blank white screen (PHP fatal)
+    const body = page.locator('body');
+    await expect(body).toBeVisible();
+    const bodyText = await body.textContent();
+    expect(bodyText?.trim().length).toBeGreaterThan(0);
+  });
+
+  test('non-existent profile shows 404 or graceful error', async ({ page, profilePage }) => {
+    await wpAdminLogin(page, 'testuser_login', 'TestPass123!');
+
+    const response = await page.goto(profilePage + 'nonexistentuser12345/');
+
+    // Should not be a 500 (PHP fatal)
+    expect(response?.status()).not.toBe(500);
+
+    // Either a 404 or a 200 with an error/not-found message — not a blank page
+    const body = page.locator('body');
+    await expect(body).toBeVisible();
+    const bodyText = await body.textContent();
+    expect(bodyText?.trim().length).toBeGreaterThan(0);
+  });
+
   test('account page renders for logged-in user', async ({ page, accountPage }) => {
     // Log in
     await wpAdminLogin(page, 'testuser_login', 'TestPass123!');
