@@ -510,7 +510,7 @@ function wpum_register_profile_privacy_fields() {
 			->set_help_text( esc_html__( 'Hide this profile from members. Overrides the global profile options.', 'wp-user-manager' ) ),
 	);
 
-	if ( $allow_multiple_roles && ( $profileuser || 'user-new.php' === $pagenow ) && ! is_network_admin() ) {
+	if ( $allow_multiple_roles && ( $profileuser || in_array( $pagenow, array( 'user-new.php', 'user-edit.php' ) ) ) && ! is_network_admin() ) {
 		$fields[] = Field::make( 'multiselect', 'wpum_user_roles', '' )
 		->add_options( $roles )
 		->set_default_value( $existing_roles )
