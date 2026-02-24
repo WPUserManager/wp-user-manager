@@ -139,6 +139,8 @@ class WPUM_Field {
 	 * @param mixed $_id_or_field
 	 */
 	public function __construct( $_id_or_field = false ) {
+		// Set the type nicename on init to avoid early translation issues
+		add_action( 'init', array( $this, 'set_type_nicename' ) );
 
 		$this->db = new WPUM_DB_Fields();
 
@@ -158,6 +160,15 @@ class WPUM_Field {
 		} else {
 			return;
 		}
+	}
+
+	/**
+	 * Set the type nicename.
+	 *
+	 * @return void
+	 */
+	public function set_type_nicename() {
+		$this->type_nicename = $this->get_field_type_name( $this->type );
 	}
 
 	/**
@@ -207,7 +218,6 @@ class WPUM_Field {
 
 		if ( ! empty( $this->id ) ) {
 
-			$this->type_nicename = $this->get_field_type_name( $this->type );
 			$this->is_primary    = $this->set_as_primary_field( $this->type );
 			$this->required      = $this->get_meta( 'required' );
 			$this->visibility    = $this->get_meta( 'visibility' );
@@ -337,7 +347,7 @@ class WPUM_Field {
 	 *
 	 * @return string
 	 */
-	private function get_field_type_name( $type ) {
+	public function get_field_type_name( $type ) {
 
 		$registered_types = WPUM()->field_types->get_registered_field_types_names();
 		$type_name        = '';

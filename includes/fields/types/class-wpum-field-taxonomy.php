@@ -21,12 +21,20 @@ class WPUM_Field_Taxonomy extends WPUM_Field_Type {
 	 * Construct
 	 */
 	public function __construct() {
-		$this->name              = esc_html__( 'Taxonomy', 'wp-user-manager' );
 		$this->type              = 'taxonomy';
 		$this->icon              = 'dashicons-tag';
 		$this->group             = 'advanced';
 		$this->allow_default     = true;
 		$this->min_addon_version = '2.2.1';
+	}
+
+	/**
+	 * Set the name of the field.
+	 *
+	 * @return void
+	 */
+	public function set_name() {
+		$this->name = esc_html__( 'Taxonomy', 'wp-user-manager' );
 	}
 
 	/**
