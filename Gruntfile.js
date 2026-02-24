@@ -256,6 +256,8 @@ module.exports = function( grunt ) {
 					'!img/src/**',
 					'!Gruntfile.js',
 					'!package.json',
+					'!package-lock.json',
+					'!.yarnrc',
 					'!.gitignore',
 					'!.gitmodules',
 					'!.github',
