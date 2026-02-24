@@ -4,7 +4,7 @@
  * Plugin URI:  https://wpusermanager.com
  * Description: Beautifully simple user profile directories with frontend login, registration and account customization. WP User Manager is the best solution to manage your community and your users for WordPress.
  * Version:     2.9.13
- * Requires PHP: 7.2
+ * Requires PHP: 7.4
  * Author:      WP User Manager
  * Author URI:  https://wpusermanager.com
  * License:     GPLv3+
