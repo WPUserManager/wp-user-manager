@@ -8,7 +8,7 @@ Tested up to: 6.9
 Requires PHP: 7.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
-Stable Tag: 2.9.13
+Stable Tag: 2.9.14
 
 The most customizable profiles & community builder WordPress plugin with front-end login, registration, profile customization and content restriction.
 
@@ -134,7 +134,7 @@ Please note that using WPUM and the mentioned add-ons does NOT guarantee complia
 
 == Changelog ==
 
-= 2.9.14 (20th Feb 2026) =
+= 2.9.14 (24th Feb 2026) =
 
 - Improvement: Updated Brain\Cortex routing library for PHP 8.3 compatibility
 - Improvement: Upgraded Carbon Fields to a version compatible with PHP 8.1-8.3
