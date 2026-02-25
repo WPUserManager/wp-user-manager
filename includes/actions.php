@@ -488,41 +488,55 @@ add_action( 'after_wpum_init', 'wpum_finish_db_setup_after_plugin_init' );
  * Register user profile privacy fields
  */
 function wpum_register_profile_privacy_fields() {
+	Container::make( 'user_meta', esc_html__( 'Profile Privacy', 'wp-user-manager' ) )
+		->add_fields( array(
+			Field::make( 'checkbox', 'hide_profile_guests', esc_html__( 'Hide profile from guests', 'wp-user-manager' ) )
+				->set_help_text( esc_html__( 'Hide this profile from guests. Overrides the global profile options.', 'wp-user-manager' ) ),
+			Field::make( 'checkbox', 'hide_profile_members', esc_html__( 'Hide profile from members', 'wp-user-manager' ) )
+				->set_help_text( esc_html__( 'Hide this profile from members. Overrides the global profile options.', 'wp-user-manager' ) ),
+		) );
+}
+
+add_action( 'carbon_fields_register_fields', 'wpum_register_profile_privacy_fields' );
+
+/**
+ * Register the multiple user roles field in its own CF container.
+ *
+ * A dedicated container is required so that the entire React root can be
+ * relocated next to the WP role dropdown without breaking the component tree.
+ */
+function wpum_register_multiple_roles_field() {
 	global $pagenow;
 
-	$roles = array();
+	$allow_multiple_roles = wpum_get_option( 'allow_multiple_user_roles' );
+	if ( ! $allow_multiple_roles || is_network_admin() ) {
+		return;
+	}
 
+	$user_id     = filter_input( INPUT_GET, 'user_id', FILTER_VALIDATE_INT );
+	$profileuser = isset( $user_id ) ? get_user_by( 'id', $user_id ) : false;
+
+	if ( ! $profileuser && 'user-new.php' !== $pagenow ) {
+		return;
+	}
+
+	$existing_roles = $profileuser ? $profileuser->roles : array();
+
+	$roles = array();
 	foreach ( wpum_get_roles( true, true ) as $role ) {
 		$roles[ $role['value'] ] = $role['label'];
 	}
 
-	$allow_multiple_roles = wpum_get_option( 'allow_multiple_user_roles' );
-
-	$user_id = filter_input( INPUT_GET, 'user_id', FILTER_VALIDATE_INT );
-
-	$profileuser    = isset( $user_id ) ? get_user_by( 'id', $user_id ) : false;
-	$existing_roles = ( $profileuser ) ? $profileuser->roles : array();
-
-	$fields = array(
-		Field::make( 'checkbox', 'hide_profile_guests', esc_html__( 'Hide profile from guests', 'wp-user-manager' ) )
-			->set_help_text( esc_html__( 'Hide this profile from guests. Overrides the global profile options.', 'wp-user-manager' ) ),
-		Field::make( 'checkbox', 'hide_profile_members', esc_html__( 'Hide profile from members', 'wp-user-manager' ) )
-			->set_help_text( esc_html__( 'Hide this profile from members. Overrides the global profile options.', 'wp-user-manager' ) ),
-	);
-
-	if ( $allow_multiple_roles && ( $profileuser || 'user-new.php' === $pagenow ) && ! is_network_admin() ) {
-		$fields[] = Field::make( 'multiselect', 'wpum_user_roles', '' )
-		->add_options( $roles )
-		->set_default_value( $existing_roles )
-		->set_classes( 'wpum-multiple-user-roles' )
-		->set_help_text( esc_html__( 'Select one or more roles for this user.', 'wp-user-manager' ) );
-	}
-
-	Container::make( 'user_meta', esc_html__( 'Profile Privacy', 'wp-user-manager' ) )
-			->add_fields( $fields );
+	Container::make( 'user_meta', esc_html__( 'User Roles', 'wp-user-manager' ) )
+		->add_fields( array(
+			Field::make( 'multiselect', 'wpum_user_roles', '' )
+				->add_options( $roles )
+				->set_default_value( $existing_roles )
+				->set_classes( 'wpum-multiple-user-roles' )
+				->set_help_text( esc_html__( 'Select one or more roles for this user.', 'wp-user-manager' ) ),
+		) );
 }
-
-add_action( 'carbon_fields_register_fields', 'wpum_register_profile_privacy_fields' );
+add_action( 'carbon_fields_register_fields', 'wpum_register_multiple_roles_field' );
 
 add_action( 'template_redirect', 'wpum_reset_password_redirect' );
 
@@ -591,6 +605,10 @@ if ( is_multisite() ) {
 }
 
 /**
+ * Relocate the CF "User Roles" container next to the WP role dropdown and hide
+ * the default dropdown. The entire CF container (h2 + table with React root) is
+ * moved so the React component tree stays intact.
+ *
  * @param \WP_User $user
  */
 function wpum_modify_multiple_roles_ui( $user ) { // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.Found -- Required by WordPress hook signature.
@@ -598,23 +616,62 @@ function wpum_modify_multiple_roles_ui( $user ) { // phpcs:ignore Generic.CodeAn
 	if ( ! $allow_multiple_roles ) {
 		return;
 	}
-
-	// Hide the default WordPress role dropdown via CSS.
-	// Carbon Fields 3.x renders the multiselect via React — moving the DOM node
-	// with jQuery (insertAfter/appendTo) breaks the React component tree, making
-	// the field non-interactive. Instead, hide the WP dropdown and let Carbon Fields
-	// render the multiselect in its natural position within the Profile Privacy section.
 	?>
-	<style>
-		.user-role-wrap { display: none !important; }
-		#createuser .form-field.form-required select#role { display: none !important; }
-		#createuser .form-field.form-required label[for="role"] { display: none !important; }
-	</style>
 	<script>
-		jQuery( function( $ ) {
-			$( '.user-role-wrap' ).hide();
-			$( '#createuser select#role' ).closest( '.form-field' ).hide();
+	( function() {
+		function relocateRolesField() {
+			var field = document.querySelector( '.wpum-multiple-user-roles' );
+			if ( ! field ) return false;
+
+			// Traverse up to the CF container table.
+			var table = field.closest( 'table.form-table' );
+			if ( ! table ) return false;
+
+			// The CF container heading is the <h2> immediately before the table.
+			var heading = table.previousElementSibling;
+			if ( heading && heading.tagName === 'H2' ) {
+				heading.style.display = 'none';
+			}
+
+			// user-edit.php: move after the table containing .user-role-wrap
+			var wpRoleWrap = document.querySelector( '.user-role-wrap' );
+			if ( wpRoleWrap ) {
+				var parent = wpRoleWrap.closest( 'table.form-table' );
+				if ( parent && parent.parentNode ) {
+					parent.parentNode.insertBefore( table, parent.nextElementSibling );
+				}
+				wpRoleWrap.style.display = 'none';
+				return true;
+			}
+
+			// user-new.php: move after the role select field
+			var newUserRole = document.querySelector( '#createuser select#role' );
+			if ( newUserRole ) {
+				var formField = newUserRole.closest( '.form-field' ) || newUserRole.closest( 'tr' );
+				if ( formField && formField.parentNode ) {
+					formField.parentNode.insertBefore( table, formField.nextElementSibling );
+					formField.style.display = 'none';
+				}
+				return true;
+			}
+
+			return false;
+		}
+
+		// Try immediately (in case React already rendered).
+		if ( relocateRolesField() ) return;
+
+		// Otherwise, observe for CF React rendering.
+		var observer = new MutationObserver( function() {
+			if ( relocateRolesField() ) {
+				observer.disconnect();
+			}
 		} );
+		observer.observe( document.body, { childList: true, subtree: true } );
+
+		// Safety timeout: stop observing after 10s.
+		setTimeout( function() { observer.disconnect(); }, 10000 );
+	} )();
 	</script>
 	<?php
 }

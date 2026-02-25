@@ -16,70 +16,146 @@ test.describe('User Roles Multiselect', () => {
     }
   });
 
-  test('multiselect role field is interactive on user edit page', async ({ page }) => {
-    // Create a test user to edit (editing own profile redirects to profile.php)
+  test('multiselect role field is visible near the role area', async ({ page }) => {
+    // Create a test user to edit
     let userId = '';
     try {
-      userId = wpCli('user get testuser_login --field=ID').trim();
+      userId = wpCli('user get testuser_roles --field=ID').trim();
     } catch {
-      // Create if doesn't exist
-      wpCli('user create testuser_login testuser@example.com --user_pass=password123 --role=subscriber');
-      userId = wpCli('user get testuser_login --field=ID').trim();
+      wpCli('user create testuser_roles testuser_roles@example.com --user_pass=password123 --role=subscriber');
+      userId = wpCli('user get testuser_roles --field=ID').trim();
     }
 
     await page.goto(`/wp-admin/user-edit.php?user_id=${userId}`);
     await page.waitForLoadState('networkidle', { timeout: 15000 }).catch(() => {});
 
     // Wait for Carbon Fields to render (React-based, needs time)
-    await page.waitForTimeout(2000);
+    await page.waitForTimeout(3000);
 
     // The WPUM multiple roles multiselect should be present
     const multiselect = page.locator('.wpum-multiple-user-roles');
     await expect(multiselect).toBeVisible({ timeout: 10000 });
 
-    // The multiselect should be interactive — the Carbon Fields React select
-    // component should respond to clicks. Find the select input within the
-    // Carbon Fields container.
-    const cfSelect = multiselect.locator('.cf-select__control, .cf-multiselect__control, select, [class*="select"]').first();
-    await expect(cfSelect).toBeVisible({ timeout: 5000 });
+    // The CF container heading ("User Roles") should be hidden
+    const table = multiselect.locator('xpath=ancestor::table[contains(@class,"form-table")]');
+    const heading = table.locator('xpath=preceding-sibling::h2[1]');
+    if (await heading.count() > 0) {
+      await expect(heading).toBeHidden();
+    }
 
-    // Click on the select to open the dropdown — this is the critical test.
-    // If the React component was broken by jQuery DOM manipulation, this click
-    // will NOT open the dropdown (the component is "disabled"/unresponsive).
+    // The WordPress default role dropdown should be hidden
+    const wpRoleWrap = page.locator('.user-role-wrap');
+    if (await wpRoleWrap.count() > 0) {
+      await expect(wpRoleWrap).toBeHidden();
+    }
+  });
+
+  test('multiselect role field is interactive', async ({ page }) => {
+    let userId = '';
+    try {
+      userId = wpCli('user get testuser_roles --field=ID').trim();
+    } catch {
+      wpCli('user create testuser_roles testuser_roles@example.com --user_pass=password123 --role=subscriber');
+      userId = wpCli('user get testuser_roles --field=ID').trim();
+    }
+
+    await page.goto(`/wp-admin/user-edit.php?user_id=${userId}`);
+    await page.waitForLoadState('networkidle', { timeout: 15000 }).catch(() => {});
+    await page.waitForTimeout(3000);
+
+    const multiselect = page.locator('.wpum-multiple-user-roles');
+    await expect(multiselect).toBeVisible({ timeout: 10000 });
+
+    // Find the CF react-select control and click it
+    const cfSelect = multiselect.locator('.cf-select__control, .cf-multiselect__control, [class*="select__control"]').first();
+    await expect(cfSelect).toBeVisible({ timeout: 5000 });
     await cfSelect.click();
 
-    // After clicking, a dropdown menu or options list should appear.
-    // Carbon Fields uses react-select which renders options in a menu.
+    // After clicking, a dropdown menu should appear (react-select renders a menu)
     const dropdownMenu = page.locator(
       '.cf-select__menu, .cf-multiselect__menu, ' +
-      '[class*="select__menu"], [class*="menu-list"], ' +
-      '.wpum-multiple-user-roles [role="listbox"], ' +
-      '.wpum-multiple-user-roles option'
+      '[class*="select__menu"], [class*="menu-list"]'
     );
     const menuVisible = await dropdownMenu.first().isVisible({ timeout: 3000 }).catch(() => false);
 
-    // If the dropdown didn't open, try clicking the container itself
+    // If the dropdown didn't open via the control, try clicking the container
     if (!menuVisible) {
       await multiselect.click();
       await page.waitForTimeout(500);
     }
 
-    // Verify the field is not disabled/frozen — we should be able to find
-    // role options (Administrator, Editor, Subscriber, etc.) somewhere in
-    // the multiselect or its dropdown
+    // Verify the field contains role text (not empty/broken)
     const fieldContent = await multiselect.textContent();
     const hasRoleText = fieldContent?.toLowerCase().includes('subscriber') ||
                         fieldContent?.toLowerCase().includes('administrator') ||
                         fieldContent?.toLowerCase().includes('editor');
 
-    // The multiselect must contain role names — if it's empty or broken,
-    // the Carbon Fields React component failed to render properly
     expect(hasRoleText).toBeTruthy();
+  });
 
-    // The WordPress default role dropdown should be hidden
-    const wpRoleSelect = page.locator('.user-role-wrap select#role');
-    if (await wpRoleSelect.count() > 0) {
-      await expect(wpRoleSelect).toBeHidden();
+  test('role changes save correctly', async ({ page }) => {
+    let userId = '';
+    try {
+      userId = wpCli('user get testuser_roles --field=ID').trim();
+    } catch {
+      wpCli('user create testuser_roles testuser_roles@example.com --user_pass=password123 --role=subscriber');
+      userId = wpCli('user get testuser_roles --field=ID').trim();
     }
+
+    await page.goto(`/wp-admin/user-edit.php?user_id=${userId}`);
+    await page.waitForLoadState('networkidle', { timeout: 15000 }).catch(() => {});
+    await page.waitForTimeout(3000);
+
+    const multiselect = page.locator('.wpum-multiple-user-roles');
+    await expect(multiselect).toBeVisible({ timeout: 10000 });
+
+    // Open the select and pick "Editor" if available
+    const cfSelect = multiselect.locator('.cf-select__control, .cf-multiselect__control, [class*="select__control"]').first();
+    await cfSelect.click();
+    await page.waitForTimeout(500);
+
+    // Type to filter for "editor"
+    await page.keyboard.type('editor');
+    await page.waitForTimeout(500);
+
+    // Click the first matching option
+    const option = page.locator('[class*="select__option"]').first();
+    if (await option.isVisible({ timeout: 2000 }).catch(() => false)) {
+      await option.click();
+      await page.waitForTimeout(500);
+
+      // Submit the form
+      await page.locator('#submit').click();
+      await page.waitForLoadState('networkidle', { timeout: 15000 }).catch(() => {});
+
+      // Verify the role was saved
+      const roles = wpCli(`user get testuser_roles --field=roles`).trim();
+      expect(roles.toLowerCase()).toContain('editor');
+    }
+  });
+
+  test('WP role dropdown shows normally when multiple roles disabled', async ({ page }) => {
+    wpCli('eval \'wpum_update_option("allow_multiple_user_roles", false);\'');
+
+    let userId = '';
+    try {
+      userId = wpCli('user get testuser_roles --field=ID').trim();
+    } catch {
+      wpCli('user create testuser_roles testuser_roles@example.com --user_pass=password123 --role=subscriber');
+      userId = wpCli('user get testuser_roles --field=ID').trim();
+    }
+
+    await page.goto(`/wp-admin/user-edit.php?user_id=${userId}`);
+    await page.waitForLoadState('networkidle', { timeout: 15000 }).catch(() => {});
+
+    // The default WP role dropdown should be visible
+    const wpRoleWrap = page.locator('.user-role-wrap');
+    if (await wpRoleWrap.count() > 0) {
+      await expect(wpRoleWrap).toBeVisible();
+    }
+
+    // The WPUM multiselect should NOT be present
+    const multiselect = page.locator('.wpum-multiple-user-roles');
+    await expect(multiselect).toHaveCount(0, { timeout: 3000 });
   });
 });

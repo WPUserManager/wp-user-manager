@@ -5,11 +5,11 @@ require_once dirname( __DIR__ ) . '/WPUMTestCase.php';
 /**
  * Test the multiple user roles UI on the admin user edit page.
  *
- * Carbon Fields 3.x renders fields via React. The jQuery code that repositions
- * the multiselect field must NOT move DOM elements (insertAfter/appendTo/etc.)
- * as this breaks React's component tree, making the field non-interactive.
+ * Carbon Fields 3.x renders fields via React. The UI function uses a
+ * MutationObserver to relocate the entire CF container (preserving the
+ * React root) next to the WP role dropdown, then hides the WP dropdown.
  *
- * @see https://wordpress.org/support/topic/user-rose-disabled-into-profile/
+ * @see https://github.com/WPUserManager/wp-user-manager/issues/431
  */
 class MultipleRolesUiTest extends WPUMTestCase {
 
@@ -24,27 +24,22 @@ class MultipleRolesUiTest extends WPUMTestCase {
 	}
 
 	/**
-	 * The role multiselect UI script must not use jQuery DOM manipulation
-	 * methods that move elements (insertAfter, appendTo, prependTo, insertBefore).
-	 * Moving React-rendered DOM nodes breaks the component.
+	 * The UI script should use a MutationObserver to wait for the CF React
+	 * field (.wpum-multiple-user-roles) and then relocate the container.
 	 */
-	public function test_roles_ui_script_does_not_move_dom_elements() {
+	public function test_roles_ui_script_uses_mutation_observer() {
 		$user = $this->factory()->user->create_and_get( array( 'role' => 'subscriber' ) );
 
 		ob_start();
 		wpum_modify_multiple_roles_ui( $user );
 		$output = ob_get_clean();
 
-		// The script must NOT use jQuery DOM-moving methods.
-		$this->assertStringNotContainsString( 'insertAfter', $output, 'Script must not use insertAfter — it breaks Carbon Fields 3.x React components.' );
-		$this->assertStringNotContainsString( 'appendTo', $output, 'Script must not use appendTo — it breaks Carbon Fields 3.x React components.' );
-		$this->assertStringNotContainsString( 'prependTo', $output, 'Script must not use prependTo — it breaks Carbon Fields 3.x React components.' );
-		$this->assertStringNotContainsString( 'insertBefore', $output, 'Script must not use insertBefore — it breaks Carbon Fields 3.x React components.' );
+		$this->assertStringContainsString( 'MutationObserver', $output, 'Script should use MutationObserver to detect CF rendering.' );
+		$this->assertStringContainsString( '.wpum-multiple-user-roles', $output, 'Script should target the .wpum-multiple-user-roles class.' );
 	}
 
 	/**
-	 * The role multiselect UI should hide the default WordPress role dropdown
-	 * using CSS (not DOM removal) so that Carbon Fields renders in its natural position.
+	 * The UI script should hide the default WordPress role dropdown.
 	 */
 	public function test_roles_ui_hides_wp_default_role_dropdown() {
 		$user = $this->factory()->user->create_and_get( array( 'role' => 'subscriber' ) );
@@ -53,11 +48,11 @@ class MultipleRolesUiTest extends WPUMTestCase {
 		wpum_modify_multiple_roles_ui( $user );
 		$output = ob_get_clean();
 
-		// The output should contain CSS or JS that hides the WP role dropdown.
+		$this->assertStringContainsString( 'user-role-wrap', $output, 'Script should reference .user-role-wrap to hide the WP role dropdown.' );
 		$this->assertMatchesRegularExpression(
-			'/(display\s*:\s*none|\.hide\(\)|visibility\s*:\s*hidden)/',
+			'/display\s*=\s*.*none/',
 			$output,
-			'Script should hide the WordPress default role dropdown.'
+			'Script should set display to none to hide elements.'
 		);
 	}
 
@@ -77,15 +72,14 @@ class MultipleRolesUiTest extends WPUMTestCase {
 	}
 
 	/**
-	 * The profile privacy fields should include the multiselect when enabled.
+	 * The multiple roles field registration function should exist.
 	 */
 	public function test_multiselect_field_registered_when_multiple_roles_enabled() {
-		// Simulate being on user-edit.php with a user_id.
-		$user = $this->factory()->user->create_and_get( array( 'role' => 'subscriber' ) );
-		$_GET['user_id'] = $user->ID;
+		$this->assertTrue(
+			function_exists( 'wpum_register_multiple_roles_field' ),
+			'wpum_register_multiple_roles_field() should be defined.'
+		);
 
-		// The function uses filter_input which reads from the actual request,
-		// so we can only verify the option check works correctly.
 		$this->assertTrue(
 			(bool) wpum_get_option( 'allow_multiple_user_roles' ),
 			'Multiple roles option should be enabled for this test.'
