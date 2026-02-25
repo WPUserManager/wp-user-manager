@@ -1,5 +1,7 @@
 <?php
 
+require_once dirname( __DIR__ ) . '/WPUMTestCase.php';
+
 /**
  * Test the multiple user roles UI on the admin user edit page.
  *
