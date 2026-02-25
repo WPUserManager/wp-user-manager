@@ -599,15 +599,21 @@ function wpum_modify_multiple_roles_ui( $user ) { // phpcs:ignore Generic.CodeAn
 		return;
 	}
 
+	// Hide the default WordPress role dropdown via CSS.
+	// Carbon Fields 3.x renders the multiselect via React — moving the DOM node
+	// with jQuery (insertAfter/appendTo) breaks the React component tree, making
+	// the field non-interactive. Instead, hide the WP dropdown and let Carbon Fields
+	// render the multiselect in its natural position within the Profile Privacy section.
 	?>
+	<style>
+		.user-role-wrap { display: none !important; }
+		#createuser .form-field.form-required select#role { display: none !important; }
+		#createuser .form-field.form-required label[for="role"] { display: none !important; }
+	</style>
 	<script>
 		jQuery( function( $ ) {
-			if ( !$( '.user-role-wrap select#role, #createuser select#role' ).length ) {
-				return;
-			}
-			var el_userrole = $( '.user-role-wrap select#role, #createuser select#role' );
-			$( $( '.wpum-multiple-user-roles' ) ).insertAfter( el_userrole ).css( 'padding', 0 );
-			$( el_userrole ).hide();
+			$( '.user-role-wrap' ).hide();
+			$( '#createuser select#role' ).closest( '.form-field' ).hide();
 		} );
 	</script>
 	<?php
