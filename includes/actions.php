@@ -529,7 +529,7 @@ function wpum_register_multiple_roles_field() {
 
 	Container::make( 'user_meta', esc_html__( 'User Roles', 'wp-user-manager' ) )
 		->add_fields( array(
-			Field::make( 'multiselect', 'wpum_user_roles', '' )
+			Field::make( 'multiselect', 'wpum_user_roles', esc_html__( 'Role', 'wp-user-manager' ) )
 				->add_options( $roles )
 				->set_default_value( $existing_roles )
 				->set_classes( 'wpum-multiple-user-roles' )
