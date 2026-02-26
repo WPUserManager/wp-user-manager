@@ -8,7 +8,7 @@ Tested up to: 6.9
 Requires PHP: 7.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
-Stable Tag: 2.9.14
+Stable Tag: 2.9.15
 
 The most customizable profiles & community builder WordPress plugin with front-end login, registration, profile customization and content restriction.
 
@@ -133,6 +133,10 @@ Please note that using WPUM and the mentioned add-ons does NOT guarantee complia
 13. Login form.
 
 == Changelog ==
+
+= 2.9.15 (26th Feb 2026) =
+
+- Fix: User role multiselect was disabled on the admin user profile after Carbon Fields upgrade
 
 = 2.9.14 (24th Feb 2026) =
 
