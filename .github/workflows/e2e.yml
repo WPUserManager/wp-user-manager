@@ -23,6 +23,10 @@ jobs:
       fail-fast: false
       matrix:
         php: ['7.4', '8.1', '8.2', '8.3']
+    env:
+      STRIPE_SECRET_KEY: ${{ secrets.STRIPE_SECRET_KEY }}
+      STRIPE_PUBLISHABLE_KEY: ${{ secrets.STRIPE_PUBLISHABLE_KEY }}
+      WPUM_BILLING_OVERRIDE_KEY: ${{ secrets.WPUM_BILLING_OVERRIDE_KEY }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -77,8 +81,23 @@ jobs:
       - name: Set wp-env PHP version
         run: echo '{"phpVersion":"${{ matrix.php }}"}' > .wp-env.override.json
 
+      - name: Install Stripe CLI
+        if: env.STRIPE_SECRET_KEY != ''
+        run: |
+          curl -s https://packages.stripe.dev/api/security/keypair/stripe-cli-gpg/public | gpg --dearmor | sudo tee /usr/share/keyrings/stripe.gpg
+          echo "deb [signed-by=/usr/share/keyrings/stripe.gpg] https://packages.stripe.dev/stripe-cli-debian-local stable main" | sudo tee /etc/apt/sources.list.d/stripe.list
+          sudo apt update && sudo apt install stripe
+
       - name: Start wp-env
         run: npx @wordpress/env start
+
+      - name: Start Stripe webhook listener
+        if: env.STRIPE_SECRET_KEY != ''
+        run: |
+          stripe listen --forward-to http://localhost:8889/wp-json/wpum/v1/stripe --api-key $STRIPE_SECRET_KEY > /tmp/stripe-listen.log 2>&1 &
+          sleep 5
+          WEBHOOK_SECRET=$(grep -o 'whsec_[a-zA-Z0-9]*' /tmp/stripe-listen.log | head -1)
+          echo "STRIPE_WEBHOOK_SECRET=$WEBHOOK_SECRET" >> $GITHUB_ENV
 
       - name: Run E2E tests
         run: npx playwright test
