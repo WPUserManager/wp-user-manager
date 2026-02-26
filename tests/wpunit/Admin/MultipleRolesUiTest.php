@@ -49,11 +49,7 @@ class MultipleRolesUiTest extends WPUMTestCase {
 		$output = ob_get_clean();
 
 		$this->assertStringContainsString( 'user-role-wrap', $output, 'Script should reference .user-role-wrap to hide the WP role dropdown.' );
-		$this->assertMatchesRegularExpression(
-			'/display\s*=\s*.*none/',
-			$output,
-			'Script should set display to none to hide elements.'
-		);
+		$this->assertStringContainsString( '.hide()', $output, 'Script should use jQuery .hide() to hide the WP role dropdown.' );
 	}
 
 	/**

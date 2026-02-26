@@ -605,9 +605,9 @@ if ( is_multisite() ) {
 }
 
 /**
- * Relocate the CF "User Roles" container next to the WP role dropdown and hide
- * the default dropdown. The entire CF container (h2 + table with React root) is
- * moved so the React component tree stays intact.
+ * Relocate the CF "User Roles" multiselect row after the username field and
+ * hide the default WP role dropdown. Moving the <tr> (which wraps the React
+ * root <fieldset>) preserves the CF 3.x component tree.
  *
  * @param \WP_User $user
  */
@@ -618,50 +618,45 @@ function wpum_modify_multiple_roles_ui( $user ) { // phpcs:ignore Generic.CodeAn
 	}
 	?>
 	<script>
-	( function() {
+	jQuery( function( $ ) {
 		function relocateRolesField() {
-			var field = document.querySelector( '.wpum-multiple-user-roles' );
-			if ( ! field ) return false;
+			var $field = $( '.wpum-multiple-user-roles' );
+			if ( ! $field.length ) return false;
 
-			// Traverse up to the CF container table.
-			var table = field.closest( 'table.form-table' );
-			if ( ! table ) return false;
+			var $row = $field.closest( 'tr' );
+			if ( ! $row.length ) return false;
 
-			// The CF container heading is the <h2> immediately before the table.
-			var heading = table.previousElementSibling;
-			if ( heading && heading.tagName === 'H2' ) {
-				heading.style.display = 'none';
+			// Hide the now-empty CF container heading and table.
+			var $table = $field.closest( 'table.form-table' );
+			if ( $table.length ) {
+				$table.prev( 'h2' ).hide();
+				$table.hide();
 			}
 
-			// user-edit.php: move after the table containing .user-role-wrap
-			var wpRoleWrap = document.querySelector( '.user-role-wrap' );
-			if ( wpRoleWrap ) {
-				var parent = wpRoleWrap.closest( 'table.form-table' );
-				if ( parent && parent.parentNode ) {
-					parent.parentNode.insertBefore( table, parent.nextElementSibling );
-				}
-				wpRoleWrap.style.display = 'none';
+			// user-edit.php: insert after the username row.
+			var $userLogin = $( '.user-user-login-wrap' );
+			if ( $userLogin.length ) {
+				$row.insertAfter( $userLogin );
+				$( '.user-role-wrap' ).hide();
 				return true;
 			}
 
-			// user-new.php: move after the role select field
-			var newUserRole = document.querySelector( '#createuser select#role' );
-			if ( newUserRole ) {
-				var formField = newUserRole.closest( '.form-field' ) || newUserRole.closest( 'tr' );
-				if ( formField && formField.parentNode ) {
-					formField.parentNode.insertBefore( table, formField.nextElementSibling );
-					formField.style.display = 'none';
-				}
+			// user-new.php: replace the role select row.
+			var $newUserRole = $( '#createuser select#role' );
+			if ( $newUserRole.length ) {
+				var $formField = $newUserRole.closest( '.form-field, tr' ).first();
+				$row.insertAfter( $formField );
+				$formField.hide();
 				return true;
 			}
 
 			return false;
 		}
 
-		// Try immediately (in case React already rendered).
+		// Try immediately.
 		if ( relocateRolesField() ) return;
 
-		// Otherwise, observe for CF React rendering.
+		// Observe for CF React rendering.
 		var observer = new MutationObserver( function() {
 			if ( relocateRolesField() ) {
 				observer.disconnect();
@@ -669,9 +664,9 @@ function wpum_modify_multiple_roles_ui( $user ) { // phpcs:ignore Generic.CodeAn
 		} );
 		observer.observe( document.body, { childList: true, subtree: true } );
 
-		// Safety timeout: stop observing after 10s.
+		// Safety timeout.
 		setTimeout( function() { observer.disconnect(); }, 10000 );
-	} )();
+	} );
 	</script>
 	<?php
 }
