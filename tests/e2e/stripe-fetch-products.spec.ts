@@ -57,8 +57,8 @@ test.describe('Stripe Fetch Products', () => {
       await page.waitForTimeout(1000);
     }
 
-    // The Fetch Stripe Products button should be visible
-    const fetchButton = page.locator('a.button.button-secondary', { hasText: 'Fetch Stripe Products' });
+    // The Fetch Stripe Products button should be visible (appears in both test & live sections)
+    const fetchButton = page.locator('a.button.button-secondary', { hasText: 'Fetch Stripe Products' }).first();
     await expect(fetchButton).toBeVisible({ timeout: 10000 });
   });
 
@@ -74,8 +74,8 @@ test.describe('Stripe Fetch Products', () => {
       await page.waitForTimeout(1000);
     }
 
-    // Click the Fetch button
-    const fetchButton = page.locator('a.button.button-secondary', { hasText: 'Fetch Stripe Products' });
+    // Click the Fetch button (appears in both test & live sections — use first)
+    const fetchButton = page.locator('a.button.button-secondary', { hasText: 'Fetch Stripe Products' }).first();
     await fetchButton.click();
 
     // Should redirect back to the settings page (nonce and fetch-products params removed)

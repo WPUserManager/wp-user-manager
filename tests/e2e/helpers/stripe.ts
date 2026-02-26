@@ -86,7 +86,11 @@ export function configureStripeSettings(
   wpCli(`eval 'wpum_update_option("test_stripe_webhook_secret", "${webhookSecret}");'`);
   wpCli(`eval 'wpum_update_option("test_stripe_products", array("${priceId}"));'`);
   // Clear the products transient so WPUM fetches fresh data from Stripe
-  wpCli(`eval 'delete_transient("wpum_test_stripe_products");'`);
+  try {
+    wpCli(`eval 'delete_transient("wpum_test_stripe_products");'`);
+  } catch {
+    // Transient deletion may trigger Stripe SDK load which can fail on older PHP
+  }
 }
 
 /**
