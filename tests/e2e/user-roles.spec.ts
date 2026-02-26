@@ -46,6 +46,12 @@ test.describe('User Roles Multiselect', () => {
       await expect(rolesInMainTable).toBeVisible({ timeout: 5000 });
     }
 
+    // The Role label should be visible in the <th> of the multiselect row.
+    const roleRow = multiselect.locator('xpath=ancestor::tr');
+    const roleLabel = roleRow.locator('th label');
+    await expect(roleLabel).toBeVisible({ timeout: 5000 });
+    await expect(roleLabel).toHaveText('Role');
+
     // The WordPress default role dropdown should be hidden
     const wpRoleWrap = page.locator('.user-role-wrap');
     if (await wpRoleWrap.count() > 0) {

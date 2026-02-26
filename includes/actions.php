@@ -529,7 +529,7 @@ function wpum_register_multiple_roles_field() {
 
 	Container::make( 'user_meta', esc_html__( 'User Roles', 'wp-user-manager' ) )
 		->add_fields( array(
-			Field::make( 'multiselect', 'wpum_user_roles', esc_html__( 'Role', 'wp-user-manager' ) )
+			Field::make( 'multiselect', 'wpum_user_roles', '' )
 				->add_options( $roles )
 				->set_default_value( $existing_roles )
 				->set_classes( 'wpum-multiple-user-roles' )
@@ -625,6 +625,12 @@ function wpum_modify_multiple_roles_ui( $user ) { // phpcs:ignore Generic.CodeAn
 
 			var $row = $field.closest( 'tr' );
 			if ( ! $row.length ) return false;
+
+			// CF user_meta template leaves the <th> empty — add the Role label.
+			var $th = $row.find( 'th' );
+			if ( $th.length && ! $th.text().trim() ) {
+				$th.html( '<label for="role">Role</label>' );
+			}
 
 			// Hide the now-empty CF container heading and table.
 			var $table = $field.closest( 'table.form-table' );
