@@ -21,12 +21,20 @@ class WPUM_Field_Textarea extends WPUM_Field_Type {
 	 * Construct
 	 */
 	public function __construct() {
-		$this->name          = esc_html__( 'Textarea', 'wp-user-manager' );
 		$this->type          = 'textarea';
 		$this->icon          = 'dashicons-editor-paragraph';
 		$this->order         = 3;
 		$this->allow_default = true;
 		$this->default_type  = 'textArea';
+	}
+
+	/**
+	 * Set the name of the field.
+	 *
+	 * @return void
+	 */
+	public function set_name() {
+		$this->name = esc_html__( 'Textarea', 'wp-user-manager' );
 	}
 
 	/**

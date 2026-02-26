@@ -21,11 +21,19 @@ class WPUM_Field_Number extends WPUM_Field_Type {
 	 * Construct
 	 */
 	public function __construct() {
-		$this->name          = esc_html__( 'Number', 'wp-user-manager' );
 		$this->type          = 'number';
 		$this->icon          = 'dashicons-leftright';
 		$this->order         = 3;
 		$this->allow_default = true;
+	}
+
+	/**
+	 * Set the name of the field.
+	 *
+	 * @return void
+	 */
+	public function set_name() {
+		$this->name = esc_html__( 'Number', 'wp-user-manager' );
 	}
 
 	/**

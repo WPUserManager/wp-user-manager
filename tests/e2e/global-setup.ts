@@ -1,3 +1,4 @@
+import { execSync } from 'child_process';
 import {
   activatePlugin,
   enableRegistration,
@@ -84,6 +85,12 @@ async function globalSetup(): Promise<void> {
     deleteUser('testuser_redirect');
     deleteUser('testuser_redirect@example.com');
     deleteUser('testuser_delete');
+    deleteUser('stripe_e2e_checkout');
+    deleteUser('stripe_e2e_checkout@example.com');
+    deleteUser('stripe_e2e_redirect');
+    deleteUser('stripe_e2e_redirect@example.com');
+    deleteUser('stripe_e2e_noplan');
+    deleteUser('stripe_e2e_noplan@example.com');
 
     // Create a test user for login tests
     console.log('[WPUM E2E] Creating test user for login tests...');
@@ -92,6 +99,20 @@ async function globalSetup(): Promise<void> {
     // Flush rewrite rules after page creation
     console.log('[WPUM E2E] Flushing rewrite rules...');
     wpCli('rewrite flush');
+
+    // Stripe environment check (non-blocking)
+    if (process.env.STRIPE_SECRET_KEY) {
+      console.log('[WPUM E2E] Stripe secret key detected - Stripe tests will run');
+      try {
+        execSync('curl -sf http://localhost:12111 >/dev/null 2>&1', { timeout: 3000 });
+        console.log('[WPUM E2E] Stripe CLI webhook listener is running on port 12111');
+      } catch {
+        console.log('[WPUM E2E] Warning: Stripe CLI webhook listener not detected on port 12111');
+        console.log('[WPUM E2E]   Run: stripe listen --forward-to http://localhost:8889/wp-json/wpum/v1/stripe');
+      }
+    } else {
+      console.log('[WPUM E2E] No STRIPE_SECRET_KEY - Stripe tests will be skipped');
+    }
 
     console.log('[WPUM E2E] Global setup complete!\n');
   } catch (error) {

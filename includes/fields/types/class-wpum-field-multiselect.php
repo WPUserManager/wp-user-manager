@@ -21,10 +21,18 @@ class WPUM_Field_Multiselect extends WPUM_Field_Type {
 	 * Construct
 	 */
 	public function __construct() {
-		$this->name  = esc_html__( 'Multi Select', 'wp-user-manager' );
 		$this->type  = 'multiselect';
 		$this->icon  = 'dashicons-editor-alignleft';
 		$this->order = 3;
+	}
+
+	/**
+	 * Set the name of the field.
+	 *
+	 * @return void
+	 */
+	public function set_name() {
+		$this->name = esc_html__( 'Multi Select', 'wp-user-manager' );
 	}
 
 	/**
