@@ -208,9 +208,8 @@ class WPUM_Field {
 			return false;
 		}
 
-		$known_columns = array_keys( $this->db->get_columns() );
 		foreach ( $field as $key => $value ) {
-			if ( in_array( $key, $known_columns, true ) ) {
+			if ( property_exists( $this, $key ) ) {
 				$this->$key = $value;
 			}
 		}
