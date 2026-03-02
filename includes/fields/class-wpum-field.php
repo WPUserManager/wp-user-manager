@@ -208,11 +208,10 @@ class WPUM_Field {
 			return false;
 		}
 
+		$known_columns = array_keys( $this->db->get_columns() );
 		foreach ( $field as $key => $value ) {
-			switch ( $key ) {
-				default:
-					$this->$key = $value;
-					break;
+			if ( in_array( $key, $known_columns, true ) ) {
+				$this->$key = $value;
 			}
 		}
 
