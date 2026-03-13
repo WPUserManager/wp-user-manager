@@ -1,4 +1,4 @@
-import { test, expect, wpAdminLogin } from './fixtures';
+import { test, expect, wpAdminLogin, wpCli } from './fixtures';
 
 test.describe('Profile Page', () => {
   test('profile page shows restriction message for logged-out user', async ({
@@ -160,5 +160,34 @@ test.describe('Profile Page', () => {
     // Account page should have content area
     const contentContainer = page.locator('.wpum_two_third');
     await expect(contentContainer).toBeVisible();
+  });
+
+  test('profile renders without error when multicheckbox field has no saved value', async ({
+    page,
+    profilePage,
+  }) => {
+    // Regression test for #178: a multicheckbox field with a null/unset user meta
+    // value must not cause a PHP warning or break the profile page.
+
+    // Create a multicheckbox field with two options via WPUM's DB API.
+    const fieldId = wpCli(
+      `eval '$db = new WPUM_DB_Fields(); $id = $db->insert(["group_id" => 1, "type" => "multicheckbox", "name" => "E2E Test Checkboxes", "field_order" => 99, "is_primary" => 0, "is_required" => 0, "show_on_register" => 0, "can_delete" => 1]); $meta = new WPUM_DB_Field_Meta(); $meta->add($id, "dropdown_options", json_encode([["value"=>"a","label"=>"Alpha"],["value"=>"b","label"=>"Beta"]])); echo $id;'`
+    ).trim();
+
+    // Log in as testuser_login, who has no value stored for this field (null meta).
+    await wpAdminLogin(page, 'testuser_login', 'TestPass123!');
+    const response = await page.goto(profilePage + 'testuser_login/');
+
+    // Page must not 500.
+    expect(response?.status()).not.toBe(500);
+
+    // Profile container must still render.
+    const profileContainer = page.locator('.wpum-profile-page, #wpum-profile');
+    await expect(profileContainer).toBeVisible({ timeout: 5000 });
+
+    // Clean up the test field.
+    if (fieldId && /^\d+$/.test(fieldId)) {
+      wpCli(`eval '(new WPUM_DB_Fields())->delete(${fieldId});'`);
+    }
   });
 });
