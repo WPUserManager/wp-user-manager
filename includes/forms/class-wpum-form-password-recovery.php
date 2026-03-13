@@ -161,11 +161,13 @@ class WPUM_Form_Password_Recovery extends WPUM_Form {
 	 */
 	public function validate_username_or_email( $pass, $fields, $values, $form ) {
 
-		if ( 'password-recovery' === $form && isset( $values['user']['username_email'] ) ) {
-			$username = sanitize_text_field( $values['user']['username_email'] );
-			if ( ( is_email( $username ) && ! email_exists( $username ) ) || ( ! is_email( $username ) && ! username_exists( $username ) ) ) {
-				return new WP_Error( 'username-validation-error', esc_html__( 'A user with this username or email does not exist. Please check your entry and try again.', 'wp-user-manager' ) );
-			}
+		if ( $form !== 'password-recovery' || ! isset( $values['user']['username_email'] ) ) {
+			return $pass;
+		}
+
+		$username = sanitize_text_field( $values['user']['username_email'] );
+		if ( ! email_exists( $values['user']['username_email'] ) && ! username_exists( $values['user']['username_email'] ) ) {
+			return new WP_Error( 'username-validation-error', esc_html__( 'A user with this username or email does not exist. Please check your entry and try again.', 'wp-user-manager' ) );
 		}
 
 		return $pass;
@@ -229,10 +231,10 @@ class WPUM_Form_Password_Recovery extends WPUM_Form {
 			$username = $values['user']['username_email'];
 			$user     = false;
 
-			// Retrieve the user from the DB.
-			if ( is_email( $username ) ) {
-				$user = get_user_by( 'email', $username );
-			} else {
+			// Retrieve the user from the DB. Try email first, then fall back to username.
+			$user = get_user_by( 'email', $username );
+
+			if ( ! $user instanceof WP_User ) {
 				$user = get_user_by( 'login', $username );
 			}
 
@@ -283,9 +285,10 @@ class WPUM_Form_Password_Recovery extends WPUM_Form {
 
 		$username = $values['user']['username_email'];
 
-		if ( is_email( $username ) ) {
-			$user = get_user_by( 'email', $username );
-		} else {
+		// Retrieve the user from the DB. Try email first, then fall back to username.
+		$user = get_user_by( 'email', $username );
+
+		if ( ! $user instanceof WP_User ) {
 			$user = get_user_by( 'login', $username );
 		}
 
