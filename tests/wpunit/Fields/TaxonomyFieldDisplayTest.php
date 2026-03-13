@@ -36,25 +36,31 @@ class TaxonomyFieldDisplayTest extends FieldsTestCase {
 		parent::_setUp();
 
 		// Get or create a field group.
-		$groups = $this->groups_db->get_groups( array(
-			'primary' => true,
-		) );
+		$groups = $this->groups_db->get_groups(
+			array(
+				'primary' => true,
+			)
+		);
 
 		if ( ! empty( $groups ) ) {
 			$this->test_group_id = $groups[0]->get_ID();
 		} else {
-			$this->test_group_id = $this->groups_db->insert( array(
-				'name'       => 'Test Group',
-				'is_primary' => 1,
-			) );
+			$this->test_group_id = $this->groups_db->insert(
+				array(
+					'name'       => 'Test Group',
+					'is_primary' => 1,
+				)
+			);
 		}
 
 		// Create a test user.
-		$this->user_id = $this->factory()->user->create( array(
-			'user_login' => 'taxonomy_test_user_' . wp_rand(),
-			'user_email' => 'taxonomy_test_' . wp_rand() . '@example.com',
-			'role'       => 'subscriber',
-		) );
+		$this->user_id = $this->factory()->user->create(
+			array(
+				'user_login' => 'taxonomy_test_user_' . wp_rand(),
+				'user_email' => 'taxonomy_test_' . wp_rand() . '@example.com',
+				'role'       => 'subscriber',
+			)
+		);
 	}
 
 	public function _tearDown() {
@@ -75,12 +81,14 @@ class TaxonomyFieldDisplayTest extends FieldsTestCase {
 	 * @return \WPUM_Field
 	 */
 	private function create_field( $type, $name, $meta_key ) {
-		$field_id = $this->fields_db->insert( array(
-			'group_id'    => $this->test_group_id,
-			'type'        => $type,
-			'name'        => $name,
-			'field_order' => 99,
-		) );
+		$field_id = $this->fields_db->insert(
+			array(
+				'group_id'    => $this->test_group_id,
+				'type'        => $type,
+				'name'        => $name,
+				'field_order' => 99,
+			)
+		);
 
 		$this->assertGreaterThan( 0, $field_id, "Field '{$name}' should be inserted." );
 
@@ -126,7 +134,7 @@ class TaxonomyFieldDisplayTest extends FieldsTestCase {
 		$type     = $field->get_type();
 
 		// This is the exact condition from set_user_meta() elseif branch:
-		$would_use_carbon = ( strpos( $meta_key, 'wpum_' ) === 0 && $type !== 'taxonomy' );
+		$would_use_carbon = ( 0 === strpos( $meta_key, 'wpum_' ) && 'taxonomy' !== $type );
 
 		$this->assertFalse(
 			$would_use_carbon,
@@ -143,7 +151,7 @@ class TaxonomyFieldDisplayTest extends FieldsTestCase {
 		$meta_key = $field->get_meta( 'user_meta_key' );
 		$type     = $field->get_type();
 
-		$would_use_carbon = ( strpos( $meta_key, 'wpum_' ) === 0 && $type !== 'taxonomy' );
+		$would_use_carbon = ( 0 === strpos( $meta_key, 'wpum_' ) && 'taxonomy' !== $type );
 
 		$this->assertTrue(
 			$would_use_carbon,
@@ -161,7 +169,7 @@ class TaxonomyFieldDisplayTest extends FieldsTestCase {
 		$type     = $field->get_type();
 
 		$is_primary       = false; // custom field, not primary
-		$would_use_carbon = ( strpos( $meta_key, 'wpum_' ) === 0 && $type !== 'taxonomy' );
+		$would_use_carbon = ( 0 === strpos( $meta_key, 'wpum_' ) && 'taxonomy' !== $type );
 
 		$this->assertFalse( $is_primary );
 		$this->assertFalse( $would_use_carbon );
@@ -209,7 +217,7 @@ class TaxonomyFieldDisplayTest extends FieldsTestCase {
 		update_user_meta( $this->user_id, $meta_key, 'term_data_here' );
 
 		// Provide a passthrough formatter since field_type is null for taxonomy in core.
-		$passthrough = function ( $func, $field_obj, $value ) {
+		$passthrough = function ( $func, $field_obj, $value ) { // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.FoundAfterLastUsed -- Required by filter callback signature.
 			if ( 'taxonomy' === $field_obj->get_type() ) {
 				return 'wpum_passthrough_formatter';
 			}
@@ -247,19 +255,13 @@ class TaxonomyFieldDisplayTest extends FieldsTestCase {
 		update_user_meta( $this->user_id, $meta_key, $term_ids );
 
 		// Passthrough formatter for taxonomy fields.
-		$passthrough = function ( $func, $field_obj, $value ) {
+		$passthrough = function ( $func, $field_obj, $value ) { // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.FoundAfterLastUsed -- Required by filter callback signature.
 			if ( 'taxonomy' === $field_obj->get_type() ) {
 				return 'wpum_passthrough_formatter';
 			}
 			return $func;
 		};
 		add_filter( 'wpum_field_ouput_callback_function', $passthrough, 10, 3 );
-
-		if ( ! function_exists( 'wpum_passthrough_formatter' ) ) {
-			function wpum_passthrough_formatter( $field, $value ) {
-				return $value;
-			}
-		}
 
 		$field->set_user_meta( $this->user_id );
 		$value = $field->get_value();
@@ -285,13 +287,13 @@ class TaxonomyFieldDisplayTest extends FieldsTestCase {
 		$this->assertStringStartsWith( 'wpum_', $text_field->get_meta( 'user_meta_key' ) );
 
 		// But they take different paths.
-		$tax_uses_carbon = (
-			strpos( $tax_field->get_meta( 'user_meta_key' ), 'wpum_' ) === 0
-			&& $tax_field->get_type() !== 'taxonomy'
+		$tax_uses_carbon  = (
+			0 === strpos( $tax_field->get_meta( 'user_meta_key' ), 'wpum_' )
+			&& 'taxonomy' !== $tax_field->get_type()
 		);
 		$text_uses_carbon = (
-			strpos( $text_field->get_meta( 'user_meta_key' ), 'wpum_' ) === 0
-			&& $text_field->get_type() !== 'taxonomy'
+			0 === strpos( $text_field->get_meta( 'user_meta_key' ), 'wpum_' )
+			&& 'taxonomy' !== $text_field->get_type()
 		);
 
 		$this->assertFalse( $tax_uses_carbon, 'Taxonomy field should NOT use Carbon path.' );
