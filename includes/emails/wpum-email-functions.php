@@ -125,7 +125,7 @@ function wpum_email_tag_lastname( $user_id ) {
 }
 
 /**
- * Parse the {login_page_link} tag into the email to display the site login page url.
+ * Parse the {login_page_url} tag into the email to display the site login page url.
  *
  * @param string $user_id
  *
@@ -140,13 +140,13 @@ function wpum_email_tag_login_page_url( $user_id = false ) { // phpcs:ignore Gen
 }
 
 /**
- * Parse the {login_page_url} tag into the email to display the site login page url.
+ * Parse the {login_page_link} tag into the email to display the site login page url as a link.
  *
  * @param string $user_id
  *
  * @return string
  */
-function wpum_email_tag_login_page_link( $user_id = false ) {
+function wpum_email_tag_login_page_link( $user_id = false ) { // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.Found -- Required by email tag callback signature.
 
 	$login_page_url = wpum_get_core_page_id( 'login' );
 	$login_page_url = get_permalink( $login_page_url );
@@ -172,7 +172,7 @@ function wpum_email_tag_password( $user_id = false, $password_reset_key = false,
 }
 
 /**
- * Parse the {recovery_link} tag into the email to display personalized password recovery url.
+ * Parse the {recovery_url} tag into the email to display personalized password recovery url.
  *
  * @param int    $user_id
  * @param string $password_reset_key
@@ -196,7 +196,7 @@ function wpum_email_tag_password_recovery_url( $user_id, $password_reset_key, $p
 }
 
 /**
- * Parse the {recovery_url} tag into the email to display personalized password recovery url.
+ * Parse the {recovery_link} tag into the email to display personalized password recovery url as a link.
  *
  * @param int    $user_id
  * @param string $password_reset_key

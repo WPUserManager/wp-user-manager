@@ -76,6 +76,127 @@ class EmailTagsTest extends WPUMTestCase {
 	}
 
 	/**
+	 * Test that {login_page_link} tag returns an anchor tag when email_template is set.
+	 */
+	public function test_login_page_link_tag_returns_anchor() {
+		$page_id = $this->factory()->post->create( array(
+			'post_type'   => 'page',
+			'post_title'  => 'Login Page',
+			'post_status' => 'publish',
+		) );
+
+		$page_filter = function () use ( $page_id ) {
+			return array( $page_id );
+		};
+		add_filter( 'wpum_get_option_login_page', $page_filter );
+
+		$template_filter = function () {
+			return 'default';
+		};
+		add_filter( 'wpum_get_option_email_template', $template_filter );
+
+		$result = wpum_email_tag_login_page_link( $this->test_user_id );
+
+		remove_filter( 'wpum_get_option_login_page', $page_filter );
+		remove_filter( 'wpum_get_option_email_template', $template_filter );
+
+		$this->assertStringContainsString( '<a href=', $result, 'login_page_link tag should return an HTML anchor tag.' );
+	}
+
+	/**
+	 * Test that {login_page_link} tag returns a plain URL when email_template is none.
+	 */
+	public function test_login_page_link_tag_returns_plain_url_for_none_template() {
+		$page_id = $this->factory()->post->create( array(
+			'post_type'   => 'page',
+			'post_title'  => 'Login Page',
+			'post_status' => 'publish',
+		) );
+
+		$page_filter = function () use ( $page_id ) {
+			return array( $page_id );
+		};
+		add_filter( 'wpum_get_option_login_page', $page_filter );
+
+		$template_filter = function () {
+			return 'none';
+		};
+		add_filter( 'wpum_get_option_email_template', $template_filter );
+
+		$result = wpum_email_tag_login_page_link( $this->test_user_id );
+
+		remove_filter( 'wpum_get_option_login_page', $page_filter );
+		remove_filter( 'wpum_get_option_email_template', $template_filter );
+
+		$this->assertStringNotContainsString( '<a href=', $result, 'login_page_link tag should return a plain URL when template is none.' );
+		$this->assertNotEmpty( $result );
+	}
+
+	/**
+	 * Test that {recovery_link} tag returns an anchor tag when email_template is set.
+	 */
+	public function test_recovery_link_tag_returns_anchor() {
+		$page_id = $this->factory()->post->create( array(
+			'post_type'   => 'page',
+			'post_title'  => 'Password Reset Page',
+			'post_status' => 'publish',
+		) );
+
+		$page_filter = function () use ( $page_id ) {
+			return array( $page_id );
+		};
+		add_filter( 'wpum_get_option_password_recovery_page', $page_filter );
+
+		$template_filter = function () {
+			return 'default';
+		};
+		add_filter( 'wpum_get_option_email_template', $template_filter );
+
+		$user  = get_user_by( 'id', $this->test_user_id );
+		$email = (object) array( 'user_login' => $user->user_login );
+
+		$result = wpum_email_tag_password_recovery_link( $this->test_user_id, 'test-key', '', 'recovery_link', $email );
+
+		remove_filter( 'wpum_get_option_password_recovery_page', $page_filter );
+		remove_filter( 'wpum_get_option_email_template', $template_filter );
+
+		$this->assertStringContainsString( '<a href=', $result, 'recovery_link tag should return an HTML anchor tag.' );
+		$this->assertStringContainsString( 'test-key', $result, 'recovery_link tag should include the reset key in the URL.' );
+	}
+
+	/**
+	 * Test that {recovery_link} tag returns a plain URL when email_template is none.
+	 */
+	public function test_recovery_link_tag_returns_plain_url_for_none_template() {
+		$page_id = $this->factory()->post->create( array(
+			'post_type'   => 'page',
+			'post_title'  => 'Password Reset Page',
+			'post_status' => 'publish',
+		) );
+
+		$page_filter = function () use ( $page_id ) {
+			return array( $page_id );
+		};
+		add_filter( 'wpum_get_option_password_recovery_page', $page_filter );
+
+		$template_filter = function () {
+			return 'none';
+		};
+		add_filter( 'wpum_get_option_email_template', $template_filter );
+
+		$user  = get_user_by( 'id', $this->test_user_id );
+		$email = (object) array( 'user_login' => $user->user_login );
+
+		$result = wpum_email_tag_password_recovery_link( $this->test_user_id, 'test-key', '', 'recovery_link', $email );
+
+		remove_filter( 'wpum_get_option_password_recovery_page', $page_filter );
+		remove_filter( 'wpum_get_option_email_template', $template_filter );
+
+		$this->assertStringNotContainsString( '<a href=', $result, 'recovery_link tag should return a plain URL when template is none.' );
+		$this->assertNotEmpty( $result );
+	}
+
+	/**
 	 * Test that {firstname} tag is replaced.
 	 */
 	public function test_firstname_tag_replaced() {
