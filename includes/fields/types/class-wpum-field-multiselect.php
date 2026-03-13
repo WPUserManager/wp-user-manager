@@ -65,7 +65,7 @@ class WPUM_Field_Multiselect extends WPUM_Field_Type {
 
 		$values = array();
 
-		foreach ( $value as $user_stored_value ) {
+		foreach ( (array) $value as $user_stored_value ) {
 			$values[] = $stored_options[ $user_stored_value ];
 		}
 
