@@ -161,7 +161,7 @@ class WPUM_Form_Password_Recovery extends WPUM_Form {
 	 */
 	public function validate_username_or_email( $pass, $fields, $values, $form ) {
 
-		if ( $form !== 'password-recovery' || ! isset( $values['user']['username_email'] ) ) {
+		if ( 'password-recovery' !== $form || ! isset( $values['user']['username_email'] ) ) {
 			return $pass;
 		}
 

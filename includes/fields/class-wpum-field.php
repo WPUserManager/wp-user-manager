@@ -218,11 +218,11 @@ class WPUM_Field {
 
 		if ( ! empty( $this->id ) ) {
 
-			$this->is_primary    = $this->set_as_primary_field( $this->type );
-			$this->required      = $this->get_meta( 'required' );
-			$this->visibility    = $this->get_meta( 'visibility' );
-			$this->editable      = $this->get_meta( 'editing' );
-			$this->parent_id     = max( 0, (int) $this->get_meta( 'parent_id' ) );
+			$this->is_primary = $this->set_as_primary_field( $this->type );
+			$this->required   = $this->get_meta( 'required' );
+			$this->visibility = $this->get_meta( 'visibility' );
+			$this->editable   = $this->get_meta( 'editing' );
+			$this->parent_id  = max( 0, (int) $this->get_meta( 'parent_id' ) );
 
 			$class = 'WPUM_Field_' . ucfirst( $this->get_type() );
 			if ( class_exists( $class ) ) {
