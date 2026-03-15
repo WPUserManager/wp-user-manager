@@ -136,6 +136,21 @@ function wpum_email_tag_login_page_url( $user_id = false ) { // phpcs:ignore Gen
 	$login_page_url = wpum_get_core_page_id( 'login' );
 	$login_page_url = get_permalink( $login_page_url );
 
+	return $login_page_url;
+}
+
+/**
+ * Parse the {login_page_link} tag into the email to display the site login page url as a link.
+ *
+ * @param string $user_id
+ *
+ * @return string
+ */
+function wpum_email_tag_login_page_link( $user_id = false ) { // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.Found -- Required by email tag callback signature.
+
+	$login_page_url = wpum_get_core_page_id( 'login' );
+	$login_page_url = get_permalink( $login_page_url );
+
 	$url = $login_page_url;
 
 	if ( wpum_get_option( 'email_template' ) !== 'none' ) {
@@ -168,6 +183,30 @@ function wpum_email_tag_password( $user_id = false, $password_reset_key = false,
  * @return string
  */
 function wpum_email_tag_password_recovery_url( $user_id, $password_reset_key, $plain_text_password, $tag, $email ) {
+
+	$reset_page = wpum_get_core_page_id( 'password' );
+	$reset_page = get_permalink( $reset_page );
+	$reset_page = add_query_arg( array(
+		'login'  => rawurlencode( $email->user_login ),
+		'key'    => $password_reset_key,
+		'action' => 'wpum-reset',
+	), $reset_page );
+
+	return $reset_page;
+}
+
+/**
+ * Parse the {recovery_link} tag into the email to display personalized password recovery url as a link.
+ *
+ * @param int    $user_id
+ * @param string $password_reset_key
+ * @param string $plain_text_password
+ * @param string $tag
+ * @param string $email
+ *
+ * @return string
+ */
+function wpum_email_tag_password_recovery_link( $user_id, $password_reset_key, $plain_text_password, $tag, $email ) {
 
 	$reset_page = wpum_get_core_page_id( 'password' );
 	$reset_page = get_permalink( $reset_page );
