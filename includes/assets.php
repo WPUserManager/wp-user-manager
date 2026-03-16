@@ -65,9 +65,12 @@ function wpum_enqueue_scripts() {
 	wp_enqueue_script( 'wpum-select2', WPUM_PLUGIN_URL . 'assets/js/vendor/select2.min.js', array( 'jquery' ), WPUM_VERSION, true );
 	wp_enqueue_script( 'wpum-datepicker', WPUM_PLUGIN_URL . 'assets/js/vendor/flatpickr.min.js', array( 'jquery' ), WPUM_VERSION, true );
 	wp_enqueue_style( 'wpum-datepicker-style', WPUM_PLUGIN_URL . 'assets/css/vendor/flatpickr.min.css', false, WPUM_VERSION );
+	wp_enqueue_style( 'filepond-style', WPUM_PLUGIN_URL . 'assets/css/vendor/filepond.css', false, WPUM_VERSION );
+	wp_enqueue_script( 'filepond-js', WPUM_PLUGIN_URL . 'assets/js/vendor/filepond-bundle.min.js', array( 'jquery' ), WPUM_VERSION, true );
 
 	$suffix = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
 	wp_enqueue_script( 'wpum-frontend-js', WPUM_PLUGIN_URL . 'assets/js/wp-user-manager' . $suffix . '.js', array( 'jquery' ), WPUM_VERSION, true );
+	wp_enqueue_script( 'wpum-filepond-js', WPUM_PLUGIN_URL . 'assets/js/wpum-filepond' . $suffix . '.js', array( 'jquery', 'filepond-js' ), WPUM_VERSION, true );
 
 	$js_variables = [
 		'dateFormat' => apply_filters( 'wpum_field_datepicker_date_format', get_option( 'date_format' ) ),
