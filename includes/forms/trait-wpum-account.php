@@ -74,7 +74,7 @@ trait WPUM_Form_Account {
 			$currently_uploaded_file   = $current_uploaded_avatar ? esc_url_raw( $current_uploaded_avatar ) : false;
 			$existing_avatar_file_path = get_user_meta( $updated_user_id, '_current_user_avatar_path', true );
 
-			if ( $existing_avatar_file_path && strpos( realpath( $existing_avatar_file_path ), $upload_dir ) !== 0 ) {
+			if ( $existing_avatar_file_path && file_exists( $existing_avatar_file_path ) && strpos( realpath( $existing_avatar_file_path ), $upload_dir ) !== 0 ) {
 				throw new Exception( esc_html__( 'Path error with existing avatar', 'wp-user-manager' ) );
 			}
 
@@ -103,7 +103,7 @@ trait WPUM_Form_Account {
 		$currently_uploaded_cover = $current_uploaded_cover ? esc_url_raw( $current_uploaded_cover ) : false;
 		$existing_cover_file_path = get_user_meta( $updated_user_id, '_user_cover_path', true );
 
-		if ( $existing_cover_file_path && strpos( realpath( $existing_cover_file_path ), $upload_dir ) !== 0 ) {
+		if ( $existing_cover_file_path && file_exists( $existing_cover_file_path ) && strpos( realpath( $existing_cover_file_path ), $upload_dir ) !== 0 ) {
 			throw new Exception( esc_html__( 'Path error with existing cover', 'wp-user-manager' ) );
 		}
 
