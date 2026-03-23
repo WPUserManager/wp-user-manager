@@ -60,12 +60,15 @@
 
 		$(imageFields).each(function () {
 			const $input = $(this);
-			const fileTypes = parseFileTypes($input.data('file_types'));
 
 			// Prevent double initialization.
-			if ($input.hasClass('filepond--root') || $input.data('filepond-initialized')) {
+			if ($input.hasClass('filepond--root')) {
 				return;
 			}
+
+			const fileTypes = parseFileTypes($input.data('file_types'));
+			const wrapper = $input.closest('fieldset');
+			const fileUrl = $(wrapper).find('input[name="' + 'current_' + $input.attr('name') + '"]').val();
 
 			$input.filepond({
 				acceptedFileTypes: fileTypes,
@@ -76,10 +79,18 @@
 				credits: false,
 				maxFileSize: $input.data('file_size'),
 				required: $input.prop('required'),
-				storeAsFile: true
+				storeAsFile: true,
+
+				// Remove the current image when it is removed from the FilePond UI.
+				onremovefile: function () {
+					$(wrapper).find('.wpum-uploaded-image').html('');
+				}
 			});
 
-			$input.data('filepond-initialized', true);
+			// Set existing file.
+			if (fileUrl) {
+				$input.filepond('addFile', fileUrl);
+			}
 		});
 	}
 

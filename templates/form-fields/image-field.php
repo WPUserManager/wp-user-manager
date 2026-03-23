@@ -21,37 +21,22 @@ $allowed_mime_types = ! empty( $data->allowed_mime_types ) ? explode( ',', $data
 $field_name         = isset( $data->name ) ? $data->name : $data->key;
 $file_size          = isset( $data->max_file_size ) ? $data->max_file_size : false;
 $max_file_size      = wpum_max_upload_size( isset( $data->key ) ? $data->key : '', $file_size );
-?>
+$current_image      = '';
 
-<div class="wpum-uploaded-images">
-	<?php
-	if ( ! empty( $data->value ) ) :
-		if ( is_array( $data->value ) ) :
-			if ( isset( $data->value['url'] ) ) :
-				WPUM()->templates->set_template_data(
-					array(
-						'key'   => $data->key,
-						'name'  => 'current_' . $field_name,
-						'value' => $data->value['url'],
-						'type'  => $data->type,
-						'field' => array(),
-					)
-				)->get_template_part( 'form-fields/image', 'uploaded' );
-			endif;
-		elseif ( $data->value ) :
-			WPUM()->templates->set_template_data(
-				array(
-					'key'   => $data->key,
-					'name'  => 'current_' . $field_name,
-					'value' => $data->value,
-					'type'  => $data->type,
-					'field' => array(),
-				)
-			)->get_template_part( 'form-fields/image', 'uploaded' );
-		endif;
-	endif;
-	?>
+if ( is_numeric( $data->value ) ) {
+	$current_image = wp_get_attachment_image_src( absint( $data->value ) )[0] ?? '';
+} elseif ( is_array( $data->value ) ) {
+	$current_image = $data->value['url'] ?? '';
+} else {
+	$current_image = $data->value ?: '';
+}
+?>
+<div class="wpum-uploaded-image">
+	<?php if ( ! empty( $current_image ) ): ?>
+		<input type="hidden" class="input-text" name="<?php echo esc_attr( 'current_' . $field_name ); ?>" value="<?php echo esc_attr( $current_image ); ?>" />
+	<?php endif; ?>
 </div>
+
 <input type="file" placeholder="<?php echo empty( $data->placeholder ) ? '' : esc_attr( $data->placeholder ); ?>" id="<?php echo esc_attr( $data->key ); ?>" name="<?php echo esc_attr( $field_name ); ?>" class="<?php echo esc_attr( implode( ' ', $classes ) ); ?>" data-file_types="<?php echo esc_attr( implode( '|', $allowed_mime_types ) ); ?>" data-file_size="<?php echo esc_attr( str_replace( ' ', '', $max_file_size ) ); ?>" />
 <small class="description">
 <?php
