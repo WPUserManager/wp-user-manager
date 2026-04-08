@@ -171,7 +171,7 @@ test.describe('Profile Page', () => {
 
     // Create a multicheckbox field with two options via WPUM's DB API.
     const fieldId = wpCli(
-      `eval '$db = new WPUM_DB_Fields(); $id = $db->insert(["group_id" => 1, "type" => "multicheckbox", "name" => "E2E Test Checkboxes", "field_order" => 99, "is_primary" => 0, "is_required" => 0, "show_on_register" => 0, "can_delete" => 1]); $meta = new WPUM_DB_Field_Meta(); $meta->add_meta($id, "dropdown_options", json_encode([["value"=>"a","label"=>"Alpha"],["value"=>"b","label"=>"Beta"]])); echo $id;'`
+      `eval '$db = new WPUM_DB_Fields(); $id = $db->insert(["group_id" => 1, "type" => "multicheckbox", "name" => "E2E Test Checkboxes", "field_order" => 99, "is_primary" => 0, "is_required" => 0, "show_on_register" => 0, "can_delete" => 1]); $meta = new WPUM_DB_Field_Meta(); $meta->add_meta($id, "dropdown_options", array(array("value"=>"a","label"=>"Alpha"),array("value"=>"b","label"=>"Beta"))); echo $id;'`
     ).trim();
 
     // Log in as testuser_login, who has no value stored for this field (null meta).
