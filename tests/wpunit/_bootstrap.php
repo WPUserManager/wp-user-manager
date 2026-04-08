@@ -11,3 +11,4 @@ require_once __DIR__ . '/PasswordRecovery/PasswordRecoveryTestCase.php';
 require_once __DIR__ . '/PasswordChange/PasswordChangeTestCase.php';
 require_once __DIR__ . '/Privacy/PrivacyTestCase.php';
 require_once __DIR__ . '/Fields/FieldsTestCase.php';
+require_once __DIR__ . '/Account/AccountTestCase.php';
