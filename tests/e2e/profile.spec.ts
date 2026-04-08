@@ -178,6 +178,14 @@ test.describe('Profile Page', () => {
     await wpAdminLogin(page, 'testuser_login', 'TestPass123!');
     const response = await page.goto(profilePage + 'testuser_login/');
 
+    // Dump debug.log if 500 to diagnose PHP 8+ errors.
+    if (response?.status() === 500) {
+      try {
+        const debugLog = wpCli('eval "echo file_get_contents(ABSPATH . \'wp-content/debug.log\');"').trim();
+        console.log('=== debug.log ===\n' + debugLog.slice(-2000));
+      } catch { /* no debug.log */ }
+    }
+
     // Page must not 500.
     expect(response?.status()).not.toBe(500);
 
