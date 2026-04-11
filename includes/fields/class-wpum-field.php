@@ -209,10 +209,8 @@ class WPUM_Field {
 		}
 
 		foreach ( $field as $key => $value ) {
-			switch ( $key ) {
-				default:
-					$this->$key = $value;
-					break;
+			if ( property_exists( $this, $key ) ) {
+				$this->$key = $value;
 			}
 		}
 

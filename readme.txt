@@ -8,7 +8,7 @@ Tested up to: 6.9
 Requires PHP: 7.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
-Stable Tag: 2.9.15
+Stable Tag: 2.9.16
 
 The most customizable profiles & community builder WordPress plugin with front-end login, registration, profile customization and content restriction.
 
@@ -133,6 +133,13 @@ Please note that using WPUM and the mentioned add-ons does NOT guarantee complia
 13. Login form.
 
 == Changelog ==
+
+= 2.9.16 (11th Apr 2026) =
+
+- Fix: PHP 8.2+ dynamic property deprecation warnings in WPUM_Field
+- Fix: Account update no longer fails when avatar or cover image file is missing from disk
+- Fix: Password recovery now works when the username is an email address different from the stored email
+- Fix: Multicheckbox and multiselect fields no longer cause errors when the stored value is not an array
 
 = 2.9.15 (26th Feb 2026) =
 
