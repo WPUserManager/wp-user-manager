@@ -30,14 +30,18 @@ jQuery( function( $ ) {
 		init: function() {
 			var self = this;
 
-			$( '.add-repeater-row' ).each( function() {
-				var parent = $( this ).parents( 'fieldset' );
-				var repeater = parent.find( '.fieldset-wpum_field_group' ).not('.fieldset-wpum_field_group-clone' );
+			// Setup instances to first level repeaters
+			$('form > fieldset > .add-repeater-row').each(function () {
+				var fieldSet = $(this).closest( 'fieldset' );
+				var fieldGroup = $(fieldSet).find( ' > .fieldset-wpum_field_group' ).not('.fieldset-wpum_field_group-clone' );
+				
+				if ( fieldGroup.length ) {
+					self.setupInstances(fieldSet, null);
 
-				if ( repeater.length ) {
-					var name = parent.get( 0 ).classList[ 0 ];
-					self.increaseInstance( name );
-					self.validateMaxRows( name );
+					var repeaterKey = self.getRepeaterKey(fieldSet);
+
+					self.increaseInstance( repeaterKey );
+					self.validateMaxRows( fieldSet );
 				}
 			} );
 
@@ -51,17 +55,21 @@ jQuery( function( $ ) {
 			} );
 
 			self.form.on( 'click', '.add-repeater-row', function() {
-				var parent = $( this ).parents( 'fieldset' );
-				self.addNewInstance( parent.get( 0 ).classList[ 0 ] );
+				var fieldSet = $(this).parent('fieldset');
+				// Setup new instance based on the parent fieldset
+				self.addNewInstance( fieldSet );
 				self.form.wpumConditionalFields({});
 			} );
 
 			self.form.on( 'click', '.remove-repeater-row', function(e) {
 				e.preventDefault();
-				var parent = $( this ).parents( 'fieldset' );
-				var $row = $( this ).parents( '.fieldset-wpum_field_group' );
+				var fieldSet = $(this).closest('fieldset');
+				var parentBase = $(fieldSet).attr('data-parent-base');
+				var $row = $( this ).parent( '.fieldset-wpum_field_group' );
 				$row.remove();
-				self.setupInstances( parent.get( 0 ).classList[ 0 ] );
+
+				self.setupInstances( fieldSet, parentBase );
+				self.validateMaxRows( fieldSet );
 			} );
 		},
 
@@ -73,9 +81,12 @@ jQuery( function( $ ) {
 			this.repeaters[ name ]++;
 		},
 
-		addNewInstance: function( name ) {
-			this.addNewRepeaterRow( name );
-			this.setupInstances( name );
+		addNewInstance: function( fieldSet ) {
+			this.addNewRepeaterRow(fieldSet);
+			
+			var parentBase = $(fieldSet).attr('data-parent-base');
+			this.setupInstances(fieldSet, parentBase);
+
 			initFields();
 		},
 
@@ -83,13 +94,14 @@ jQuery( function( $ ) {
 			this.repeaters[ name ] = 0;
 		},
 
-		addNewRepeaterRow: function( name ) {
-			var repeater = $( '.' + name ).find( '.fieldset-wpum_field_group-clone' ).last();
+		addNewRepeaterRow: function (fieldSet) {
+			// Get repeater from the immediate child
+			var repeater = $(fieldSet).find(' > .fieldset-wpum_field_group-clone').last();
 			if ( !repeater.length ) {
 				return;
 			}
 
-			if ( !this.validateMaxRows( name ) ) {
+			if ( !this.validateMaxRows( fieldSet ) ) {
 				return;
 			}
 
@@ -99,58 +111,87 @@ jQuery( function( $ ) {
 			newRepeater.insertBefore( repeater );
 		},
 
-		setupInstances: function( name ) {
-			var repeaterRow = $( '.' + name ).find( '.fieldset-wpum_field_group' ).not( '.fieldset-wpum_field_group-clone' );
+		getRepeaterKey: function(fieldSet) {
+			var parentBase = $(fieldSet).attr('data-parent-base');
+			var repeaterKey = $(fieldSet).get(0).classList[0];
+			repeaterKey = repeaterKey.replace('fieldset-', '');
+
+			if (parentBase) {
+				repeaterKey = parentBase + '[' + repeaterKey + ']';
+			}
+
+			return repeaterKey;
+		},
+
+		setupInstances: function (fieldSet, parentBase) {
+			if (typeof parentBase === 'undefined' || parentBase === null) {
+				parentBase = null;
+			}
+
+			var repeaterRow = $( fieldSet ).find( ' > .fieldset-wpum_field_group' ).not( '.fieldset-wpum_field_group-clone' );
 			var self = this;
 
 			if ( !repeaterRow.length ) {
 				return;
 			}
 
-			self.resetInstance( name );
+			// Apply parentBase to the fieldset to make it available later
+			if (parentBase) {
+				$(fieldSet).attr('data-parent-base', parentBase);
+			}
 
-			repeaterRow.each( function( i ) {
-				$( this ).find('fieldset').attr('data-index', i);
-				$( this ).find( ':input' ).each( function() {
-					var name = '';
-					if ( $( this ).attr( 'data-name' ) ) {
-						name = $( this ).attr( 'data-name' );
-					} else {
-						name = $( this ).prop( 'name' );
-					}
+			var repeaterKey = self.getRepeaterKey(fieldSet);
+			self.resetInstance(repeaterKey);
 
-					$( this ).attr(
-						'name',
-						name.replace(
-							new RegExp( /\[(.*?)\]/ ),
-							function() {
-								return '[' + i + ']';
-							}
-						)
-					);
+			repeaterRow.each(function (i) {
+				$(fieldSet).attr('data-index', i);
+				$(this)
+					.find('> fieldset > .field :input')
+					// Exclude sub repeater fields
+					.not($(this).find('> fieldset > .fieldset-wpum_field_group :input'))
+					.each(function() {
+						var fieldName = $(this).attr('data-name') || $(this).prop('name');
+						fieldName = fieldName.replace(/\[(.*?)\]/, '[' + i + ']');
 
-					if ( i > 0 ) {
-						var clone_id = '';
-						if ( $( this ).attr( 'data-clone' ) ) {
-							clone_id = $( this ).attr( 'data-clone' );
-						} else {
-							clone_id = $(this).prop( 'id' );
+						// Prepend parentBase if available and does not already have a parentBase
+						if (parentBase && !fieldName.includes(parentBase)) {
+							// Wrap the base key (before the first "[") in brackets
+							fieldName = fieldName.replace(/^([^[]+)/, '[$1]');
+							fieldName = parentBase + fieldName;
 						}
 
-						var id = clone_id + '_' + i;
-						$( this ).attr( 'id', id );
-						$( this ).closest( 'fieldset' ).find( 'label' ).attr( 'for', id );
-					}
-				} );
-				self.increaseInstance( name );
-			} );
-		},
+						$(this).attr(
+							'name',
+							fieldName
+						);
 
-		validateMaxRows: function( name ) {
-			var parent = $( '.' + name );
-			var repeater = parent.find( '.fieldset-wpum_field_group' ).not( '.fieldset-wpum_field_group-clone' );
-			var addBtn = parent.find( '.add-repeater-row' );
-			var maxRows = addBtn.data( 'max-row' );
+						if (i > 0) {
+							var clone_id = $(this).attr('data-clone') || $(this).prop('id');
+							var id = clone_id + '_' + i;
+							$(this).attr('id', id);
+							$(this).closest('fieldset').find('label').attr('for', id);
+						}
+				});
+
+				self.increaseInstance(repeaterKey);
+
+				// Recurse into subrepeaters
+				$(this)
+					.find('> fieldset > .add-repeater-row')
+					.each(function () {
+						var fieldSet = $(this).closest('fieldset');
+						var currentParentBase = repeaterKey + '[' + i + ']';
+
+						self.setupInstances(fieldSet, currentParentBase);
+						self.validateMaxRows(fieldSet);
+				});
+			});
+		},
+		validateMaxRows: function( fieldSet ) {
+			var repeater = $(fieldSet).find( ' > .fieldset-wpum_field_group' ).not( '.fieldset-wpum_field_group-clone' );
+			var addBtn = $(fieldSet).find( ' > .add-repeater-row' );
+			var maxRows = addBtn.data('max-row');
+
 			if ( !maxRows || parseInt( maxRows ) < 1 ) {
 				return true;
 			}
