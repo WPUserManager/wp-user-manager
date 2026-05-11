@@ -82,8 +82,20 @@ class WPUM_Field_File extends WPUM_Field_Type {
 		$file = $this->upload_file( $key, $field );
 		if ( ! $file ) {
 			$file = parent::get_posted_field( 'current_' . $key, $field );
+			// Reject array values from POST — only scalar (string URL) is valid.
+			if ( is_array( $file ) ) {
+				$file = '';
+			}
 		} elseif ( is_array( $file ) ) {
-			$file = array_filter( array_merge( $file, (array) parent::get_posted_field( 'current_' . $key, $field ) ) );
+			$current = parent::get_posted_field( 'current_' . $key, $field );
+			// Only merge scalar (string) current values. Array values from POST
+			// could inject arbitrary paths — reject them silently.
+			if ( is_array( $current ) ) {
+				$current = '';
+			}
+			if ( $current ) {
+				$file = array_filter( array_merge( $file, array( 'url' => $current ) ) );
+			}
 		}
 		return $file;
 	}
