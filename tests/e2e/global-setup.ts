@@ -96,6 +96,29 @@ async function globalSetup(): Promise<void> {
     console.log('[WPUM E2E] Creating test user for login tests...');
     createUser('testuser_login', 'testuser_login@example.com', 'TestPass123!', 'subscriber');
 
+    // Enable custom avatars and add avatar to registration form
+    console.log('[WPUM E2E] Enabling custom avatars...');
+    wpCli(`eval 'wpum_update_option("custom_avatars", true);'`);
+    wpCli(
+      `eval '
+        $forms = WPUM()->registration_forms->get_forms();
+        if (!empty($forms)) {
+          $form = $forms[0];
+          $fields = $form->get_meta("fields");
+          // Find the avatar field by type
+          $all_fields = WPUM()->fields->get_fields(array("type" => "user_avatar"));
+          if (!empty($all_fields)) {
+            $avatar_id = $all_fields[0]->id;
+            if (!in_array($avatar_id, $fields)) {
+              $fields[] = $avatar_id;
+              $form->update_meta("fields", $fields);
+              echo "Added avatar field $avatar_id to form";
+            }
+          }
+        }
+      '`
+    );
+
     // Flush rewrite rules after page creation
     console.log('[WPUM E2E] Flushing rewrite rules...');
     wpCli('rewrite flush');
