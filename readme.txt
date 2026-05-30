@@ -8,7 +8,7 @@ Tested up to: 6.9
 Requires PHP: 7.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
-Stable Tag: 2.9.17
+Stable Tag: 2.9.18
 
 The most customizable profiles & community builder WordPress plugin with front-end login, registration, profile customization and content restriction.
 
@@ -133,6 +133,13 @@ Please note that using WPUM and the mentioned add-ons does NOT guarantee complia
 13. Login form.
 
 == Changelog ==
+
+= 2.9.18 (30th May 2026) =
+
+- Security: Hardened profile tab input validation (thanks to Yat via Wordfence for responsible disclosure)
+- Fix: Custom avatar not shown when a default avatar is also configured
+- Fix: Multiple roles not saving on the admin edit user page
+- Fix: Email content editor for 'Delete Inactive Accounts' not working with block themes
 
 = 2.9.17 (11th May 2026) =
 
