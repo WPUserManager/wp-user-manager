@@ -262,10 +262,11 @@ add_action( 'template_redirect', 'wpum_restrict_account_page' );
  */
 function wpum_display_account_page_content() {
 
-	$active_tab = get_query_var( 'tab' );
 	$tabs       = wpum_get_account_page_tabs();
+	$active_tab = get_query_var( 'tab' );
 
-	if ( empty( $active_tab ) ) {
+	// Validate against registered tabs to prevent path traversal / LFI.
+	if ( empty( $active_tab ) || ! isset( $tabs[ $active_tab ] ) ) {
 		$active_tab = key( $tabs );
 	}
 
@@ -516,7 +517,7 @@ function wpum_register_multiple_roles_field() {
 	$user_id     = filter_input( INPUT_GET, 'user_id', FILTER_VALIDATE_INT );
 	$profileuser = isset( $user_id ) ? get_user_by( 'id', $user_id ) : false;
 
-	if ( ! $profileuser && 'user-new.php' !== $pagenow ) {
+	if ( ! $profileuser && ! in_array( $pagenow, array( 'user-new.php', 'user-edit.php' ), true ) ) {
 		return;
 	}
 
