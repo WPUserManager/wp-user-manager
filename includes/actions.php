@@ -516,7 +516,7 @@ function wpum_register_multiple_roles_field() {
 	$user_id     = filter_input( INPUT_GET, 'user_id', FILTER_VALIDATE_INT );
 	$profileuser = isset( $user_id ) ? get_user_by( 'id', $user_id ) : false;
 
-	if ( ! $profileuser && 'user-new.php' !== $pagenow ) {
+	if ( ! $profileuser && ! in_array( $pagenow, array( 'user-new.php', 'user-edit.php' ), true ) ) {
 		return;
 	}
 
