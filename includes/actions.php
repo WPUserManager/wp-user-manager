@@ -262,10 +262,11 @@ add_action( 'template_redirect', 'wpum_restrict_account_page' );
  */
 function wpum_display_account_page_content() {
 
-	$active_tab = get_query_var( 'tab' );
 	$tabs       = wpum_get_account_page_tabs();
+	$active_tab = get_query_var( 'tab' );
 
-	if ( empty( $active_tab ) ) {
+	// Validate against registered tabs to prevent path traversal / LFI.
+	if ( empty( $active_tab ) || ! isset( $tabs[ $active_tab ] ) ) {
 		$active_tab = key( $tabs );
 	}
 
