@@ -256,13 +256,21 @@ module.exports = function( grunt ) {
 					'!img/src/**',
 					'!Gruntfile.js',
 					'!package.json',
+					'!package-lock.json',
+					'!.yarnrc',
 					'!.gitignore',
 					'!.gitmodules',
 					'!.github',
 					'!phpcs.xml.dist',
 					'!README.md',
 					'!yarn.lock',
-					'!phpstan.neon.dist'
+					'!phpstan.neon.dist',
+					'!playwright.config.ts',
+					'!tsconfig.json',
+					'!.wp-env.json',
+					'!.wp-env.override.json',
+					'!test-results/**',
+					'!release.json'
 				],
 				dest: 'release/<%= pkg.version %>/'
 			}

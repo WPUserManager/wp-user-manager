@@ -42,10 +42,21 @@ class WPUM_Emails_Customizer {
 	 * Get things started.
 	 */
 	public function __construct() {
-		$this->emails              = wpum_get_registered_emails();
+		// Set the registered emails during 'init' to avoid early translation issues.
+		add_action( 'init', array( $this, 'set_registered_emails' ) );
+
 		$this->panel_id            = 'wpum_email_customization';
 		$this->settings_section_id = 'wpum_email_settings';
 		$this->init();
+	}
+
+	/**
+	 * Set the registered emails.
+	 *
+	 * @return void
+	 */
+	public function set_registered_emails() {
+		$this->emails = wpum_get_registered_emails();
 	}
 
 	/**

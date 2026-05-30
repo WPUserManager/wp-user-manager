@@ -1,4 +1,4 @@
-import { test, expect } from './fixtures';
+import { test, expect, wpCli } from './fixtures';
 
 test.describe('Password Recovery Form', () => {
   test.beforeEach(async ({ page }) => {
@@ -80,5 +80,33 @@ test.describe('Password Recovery Form', () => {
     // The form should still be visible for the user to try again
     const form = page.locator('.wpum-password-recovery-form');
     await expect(form).toBeVisible();
+  });
+
+  test('submitting login-style username that looks like an email shows success', async ({
+    page,
+    passwordRecoveryPage,
+  }) => {
+    // Regression test for #188: user whose login is an email-format string but
+    // differs from their stored email address should be able to recover password.
+    const suffix = Date.now();
+    const userLogin = `rectest${suffix}@olddomain.com`;
+    const userEmail = `rectest${suffix}@newdomain.com`;
+
+    wpCli(`user create "${userLogin}" "${userEmail}" --user_pass="StrongP@ss1!" --role="subscriber"`);
+
+    await page.goto(passwordRecoveryPage);
+
+    // Submit the login (which looks like an email) — NOT the stored email address.
+    await page.locator('#username_email').fill(userLogin);
+    await page.locator('input[name="submit_password_recovery"]').click();
+    await page.waitForLoadState('networkidle', { timeout: 10000 }).catch(() => {});
+
+    // Should show success, not an error saying the user doesn't exist.
+    const successMessage = page.locator('.wpum-password-reset-request-success');
+    await expect(successMessage).toBeVisible({ timeout: 10000 });
+    await expect(successMessage).toContainText('sent an email');
+
+    // Cleanup.
+    wpCli(`user delete "${userLogin}" --yes`);
   });
 });

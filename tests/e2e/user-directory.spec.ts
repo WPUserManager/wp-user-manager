@@ -1,4 +1,4 @@
-import { test, expect } from './fixtures';
+import { test, expect, wpCli } from './fixtures';
 
 test.describe('User Directory Shortcode', () => {
   test('directory page renders the directory container', async ({
@@ -139,5 +139,25 @@ test.describe('User Directory Shortcode', () => {
     // Each user card should also have an avatar section
     const avatar = firstUserCard.locator('#directory-avatar');
     await expect(avatar).toBeVisible();
+  });
+
+  test('plugin deactivation and reactivation', async ({
+    page,
+    directoryPage,
+  }) => {
+    // Deactivate the plugin
+    wpCli('plugin deactivate wp-user-manager');
+
+    // Reactivate the plugin
+    wpCli('plugin activate wp-user-manager');
+
+    // Verify the directory page still renders after reactivation
+    await page.goto(directoryPage);
+
+    const directoryContainer = page.locator('#wpum-user-directory');
+    await expect(directoryContainer).toBeVisible({ timeout: 10000 });
+
+    const usersList = page.locator('#wpum-directory-users-list');
+    await expect(usersList).toBeVisible();
   });
 });

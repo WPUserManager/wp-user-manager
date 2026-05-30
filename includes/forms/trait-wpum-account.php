@@ -66,20 +66,13 @@ trait WPUM_Form_Account {
 			throw new Exception( esc_html( $updated_user_id->get_error_message() ) );
 		}
 
-		$upload_dir = wp_upload_dir();
-		$upload_dir = $upload_dir['basedir'];
-
 		if ( wpum_get_option( 'custom_avatars' ) ) {
 			$current_uploaded_avatar   = filter_input( INPUT_POST, 'current_user_avatar' );
 			$currently_uploaded_file   = $current_uploaded_avatar ? esc_url_raw( $current_uploaded_avatar ) : false;
 			$existing_avatar_file_path = get_user_meta( $updated_user_id, '_current_user_avatar_path', true );
 
-			if ( $existing_avatar_file_path && strpos( realpath( $existing_avatar_file_path ), $upload_dir ) !== 0 ) {
-				throw new Exception( esc_html__( 'Path error with existing avatar', 'wp-user-manager' ) );
-			}
-
 			// Delete previous avatar if a new one has been uploaded.
-			if ( $currently_uploaded_file && $existing_avatar_file_path && isset( $values['account']['user_avatar']['url'] ) && $values['account']['user_avatar']['url'] !== $currently_uploaded_file ) {
+			if ( $currently_uploaded_file && $existing_avatar_file_path && file_exists( $existing_avatar_file_path ) && isset( $values['account']['user_avatar']['url'] ) && $values['account']['user_avatar']['url'] !== $currently_uploaded_file ) {
 				wp_delete_file( $existing_avatar_file_path );
 			}
 
@@ -103,12 +96,8 @@ trait WPUM_Form_Account {
 		$currently_uploaded_cover = $current_uploaded_cover ? esc_url_raw( $current_uploaded_cover ) : false;
 		$existing_cover_file_path = get_user_meta( $updated_user_id, '_user_cover_path', true );
 
-		if ( $existing_cover_file_path && strpos( realpath( $existing_cover_file_path ), $upload_dir ) !== 0 ) {
-			throw new Exception( esc_html__( 'Path error with existing cover', 'wp-user-manager' ) );
-		}
-
 		if ( isset( $values['account']['user_cover']['url'] ) ) {
-			if ( $currently_uploaded_cover && $existing_cover_file_path && isset( $values['account']['user_cover']['url'] ) && $values['account']['user_cover']['url'] !== $currently_uploaded_cover ) {
+			if ( $currently_uploaded_cover && $existing_cover_file_path && file_exists( $existing_cover_file_path ) && isset( $values['account']['user_cover']['url'] ) && $values['account']['user_cover']['url'] !== $currently_uploaded_cover ) {
 				wp_delete_file( $existing_cover_file_path );
 			}
 			if ( $currently_uploaded_cover !== $values['account']['user_cover']['url'] ) {

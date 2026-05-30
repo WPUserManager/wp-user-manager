@@ -1,0 +1,7 @@
+{
+  "type": "core",
+  "channels": { "wordpress_org": true, "edd": false },
+  "main_file": "wp-user-manager.php",
+  "version_locations": ["header", "constant", "package_json"],
+  "constant_name": "WPUM_VERSION"
+}

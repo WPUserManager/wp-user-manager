@@ -54,13 +54,24 @@ abstract class WPUM_Shortcode_Generator {
 	protected $required;
 
 	/**
+	 * Set the label of the shortcode.
+	 *
+	 * @return void
+	 */
+	public function set_labels() {}
+
+	/**
 	 * Get things started.
 	 *
 	 * @param string $shortcode
 	 */
 	public function __construct( $shortcode ) {
 		$this->shortcode_tag = $shortcode;
+
 		add_action( 'admin_init', array( $this, 'init' ) );
+
+		// Set the labels during 'init' to avoid early translation issues.
+		add_action( 'init', array( $this, 'set_labels' ) );
 	}
 
 	/**

@@ -21,10 +21,18 @@ class WPUM_Field_Multicheckbox extends WPUM_Field_Type {
 	 * Construct
 	 */
 	public function __construct() {
-		$this->name  = esc_html__( 'Checkboxes', 'wp-user-manager' );
 		$this->type  = 'multicheckbox';
 		$this->icon  = 'dashicons-editor-ol';
 		$this->order = 3;
+	}
+
+	/**
+	 * Set the name of the field.
+	 *
+	 * @return void
+	 */
+	public function set_name() {
+		$this->name = esc_html__( 'Checkboxes', 'wp-user-manager' );
 	}
 
 	/**
@@ -40,14 +48,20 @@ class WPUM_Field_Multicheckbox extends WPUM_Field_Type {
 		$stored_options       = array();
 		$found_options_labels = array();
 
+		if ( ! is_array( $stored_field_options ) ) {
+			return '';
+		}
+
 		foreach ( $stored_field_options as $key => $stored_option ) {
 			$stored_options[ $stored_option['value'] ] = $stored_option['label'];
 		}
 
 		$values = array();
 
-		foreach ( $value as $user_stored_value ) {
-			$values[] = $stored_options[ $user_stored_value ];
+		foreach ( (array) $value as $user_stored_value ) {
+			if ( isset( $stored_options[ $user_stored_value ] ) ) {
+				$values[] = $stored_options[ $user_stored_value ];
+			}
 		}
 
 		return implode( ', ', $values );

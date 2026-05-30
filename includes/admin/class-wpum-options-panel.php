@@ -28,17 +28,14 @@ class WPUM_Options_Panel {
 	 * Get things started.
 	 */
 	public function init() {
-		// Setup labels for the options panel.
-		add_filter( 'wpum_labels', array( $this, 'register_labels' ) );
+		// Set the option panel labels during 'init' to avoid early translation issues.
+		add_action( 'init', array( $this, 'init_option_panel_labels' ) );
 
 		$this->panel = new \WPUM\TDP\OptionsKit( 'wpum' );
 		$this->panel->set_page_title( 'WP User Manager Settings' );
 
 		// Add a logo to the options panel.
 		$this->panel->add_image( WPUM_PLUGIN_URL . 'assets/images/logo.svg' );
-
-		// Register action buttons for the header.
-		$this->register_action_buttons();
 
 		// Setup the options panel menu.
 		add_filter( 'wpum_menu', array( $this, 'setup_menu' ) );
@@ -49,6 +46,19 @@ class WPUM_Options_Panel {
 
 		// Register settings fields for the options panel.
 		add_filter( 'wpum_registered_settings', array( $this, 'register_settings' ) );
+	}
+
+	/**
+	 * Initialize the option panel labels.
+	 *
+	 * @return void
+	 */
+	public function init_option_panel_labels() {
+			// Setup labels for the options panel.
+			add_filter( 'wpum_labels', array( $this, 'register_labels' ) );
+
+			// Register action buttons for the header.
+			$this->register_action_buttons();
 	}
 
 	/**

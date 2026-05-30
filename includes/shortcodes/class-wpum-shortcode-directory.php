@@ -21,9 +21,17 @@ class WPUM_Shortcode_Directory extends WPUM_Shortcode_Generator {
 	 * Inject the editor for this shortcode.
 	 */
 	public function __construct() {
+		parent::__construct( 'wpum_user_directory' );
+	}
+
+	/**
+	 * Set the label and title of the shortcode.
+	 *
+	 * @return void
+	 */
+	public function set_labels() {
 		$this->shortcode['title'] = esc_html__( 'Directory', 'wp-user-manager' );
 		$this->shortcode['label'] = esc_html__( 'Directory', 'wp-user-manager' );
-		parent::__construct( 'wpum_user_directory' );
 	}
 
 	/**

@@ -5,10 +5,10 @@ Contributors: wpusermanager, polevaultweb, alessandro.tesoro
 Tags: members, membership, community, user profile, user registration
 Requires at least: 4.9
 Tested up to: 6.9
-Requires PHP: 7.2
+Requires PHP: 7.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
-Stable Tag: 2.9.13
+Stable Tag: 2.9.17
 
 The most customizable profiles & community builder WordPress plugin with front-end login, registration, profile customization and content restriction.
 
@@ -133,6 +133,28 @@ Please note that using WPUM and the mentioned add-ons does NOT guarantee complia
 13. Login form.
 
 == Changelog ==
+
+= 2.9.17 (11th May 2026) =
+
+- Security: Hardened file field input validation during registration (thanks to endy via Patchstack for responsible disclosure)
+
+= 2.9.16 (11th Apr 2026) =
+
+- Fix: PHP 8.2+ dynamic property deprecation warnings in WPUM_Field
+- Fix: Account update no longer fails when avatar or cover image file is missing from disk
+- Fix: Password recovery now works when the username is an email address different from the stored email
+- Fix: Multicheckbox and multiselect fields no longer cause errors when the stored value is not an array
+
+= 2.9.15 (26th Feb 2026) =
+
+- Fix: User role multiselect was disabled on the admin user profile after Carbon Fields upgrade
+
+= 2.9.14 (24th Feb 2026) =
+
+- Improvement: Updated Brain\Cortex routing library for PHP 8.3 compatibility
+- Improvement: Upgraded Carbon Fields to a version compatible with PHP 8.1-8.3
+- Fix: Translation loading now uses the correct hook for WordPress 6.7+ compatibility
+- Improvement: Minimum PHP version raised from 7.2 to 7.4
 
 = 2.9.13 (16th Dec 2025) =
 

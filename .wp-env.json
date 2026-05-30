@@ -1,6 +1,6 @@
 {
 	"core": null,
-	"phpVersion": "8.2",
+	"phpVersion": "8.3",
 	"plugins": ["."],
 	"config": {
 		"WP_DEBUG": true,

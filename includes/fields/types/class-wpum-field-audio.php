@@ -22,12 +22,20 @@ class WPUM_Field_Audio extends WPUM_Field_File {
 	 */
 	public function __construct() {
 		$this->group             = 'advanced';
-		$this->name              = esc_html__( 'Audio', 'wp-user-manager' );
 		$this->type              = 'audio';
 		$this->template          = 'file';
 		$this->icon              = 'dashicons-format-audio';
 		$this->order             = 3;
 		$this->min_addon_version = '2.1';
+	}
+
+	/**
+	 * Set the name of the field.
+	 *
+	 * @return void
+	 */
+	public function set_name() {
+		$this->name = esc_html__( 'Audio', 'wp-user-manager' );
 	}
 
 	/**
