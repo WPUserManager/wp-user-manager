@@ -17,6 +17,7 @@ use WPUserManager\Stripe\Controllers\Invoices;
 use WPUserManager\Stripe\Controllers\Subscriptions;
 use WPUserManager\Stripe\Models\Product;
 use WPUserManager\Stripe\Models\User;
+use WPUserManager\Stripe\Controllers\Products;
 
 /**
  * StripeWebhookController
@@ -39,6 +40,16 @@ class StripeWebhookController {
 	protected $invoices;
 
 	/**
+	 * @var string
+	 */
+	protected $gateway_mode;
+
+	/**
+	 * @var string
+	 */
+	protected $secret_key;
+
+	/**
 	 * StripeWebhookController constructor.
 	 *
 	 * @param string $secret_key
@@ -53,6 +64,8 @@ class StripeWebhookController {
 		$this->subscriptions  = new Subscriptions( $gateway_mode );
 		$this->invoices       = new Invoices( $gateway_mode );
 		$this->webhook_secret = $webhook_secret;
+		$this->gateway_mode   = $gateway_mode;
+		$this->secret_key     = $secret_key;
 	}
 
 	/**
@@ -307,6 +320,57 @@ class StripeWebhookController {
 		}
 
 		do_action( 'wpum_stripe_webhook_invoice_created', $subscription );
+
+		return new \WP_REST_Response( 'Webhook handled', 200 );
+	}
+
+	/**
+	 * Handle the product.created webhook to update the cached Stripe products.
+	 *
+	 * @param array $payload
+	 *
+	 * @return \WP_REST_Response
+	 * @throws \Exception
+	 */
+	protected function handleProductCreated( $payload ) {
+		$products = new Products( $this->secret_key, $this->gateway_mode );
+		$products->all( true );
+
+		do_action( 'wpum_stripe_webhook_product_updated', $payload );
+
+		return new \WP_REST_Response( 'Webhook handled', 200 );
+	}
+
+	/**
+	 * Handle the product.deleted webhook to update the cached Stripe products.
+	 *
+	 * @param array $payload
+	 *
+	 * @return \WP_REST_Response
+	 * @throws \Exception
+	 */
+	protected function handleProductDeleted( $payload ) {
+		$products = new Products( $this->secret_key, $this->gateway_mode );
+		$products->all( true );
+
+		do_action( 'wpum_stripe_webhook_product_updated', $payload );
+
+		return new \WP_REST_Response( 'Webhook handled', 200 );
+	}
+
+	/**
+	 * Handle the product.updated webhook to update the cached Stripe products.
+	 *
+	 * @param array $payload
+	 *
+	 * @return \WP_REST_Response
+	 * @throws \Exception
+	 */
+	protected function handleProductUpdated( $payload ) {
+		$products = new Products( $this->secret_key, $this->gateway_mode );
+		$products->all( true );
+
+		do_action( 'wpum_stripe_webhook_product_updated', $payload );
 
 		return new \WP_REST_Response( 'Webhook handled', 200 );
 	}
