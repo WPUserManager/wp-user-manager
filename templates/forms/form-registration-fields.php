@@ -20,6 +20,19 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 $field = $data->field;
 $key   = $data->key;
+
+// Parent field should handle the child field rendering
+if ( in_array( $field['type'], wpum_get_registered_parent_field_types(), true ) ) {
+
+	$field['key'] = $key;
+	$template     = isset( $field['template'] ) ? $field['template'] : $field['type'];
+
+	WPUM()->templates
+		->set_template_data( $field )
+		->get_template_part( 'form-fields/' . $template, 'field' );
+	return;
+}
+
 if ( ! empty( $field['default_value'] ) ) {
 	$field['value'] = $field['default_value'];
 
