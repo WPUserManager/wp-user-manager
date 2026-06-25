@@ -244,6 +244,12 @@ class WPUM_Options_Panel {
 						'value' => true,
 					),
 				),
+				array(
+					'id'   => 'generic_login_errors',
+					'name' => __( 'Generic Login Errors', 'wp-user-manager' ),
+					'desc' => __( 'Replace specific login error messages with a generic message to prevent username enumeration.', 'wp-user-manager' ),
+					'type' => 'checkbox',
+				),
 			),
 			'misc'                 => array(
 				array(
