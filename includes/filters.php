@@ -213,7 +213,7 @@ function wpum_generic_login_errors( $user, $username, $password ) {
 	if ( in_array( $code, $enumeration_codes, true ) ) {
 		return new WP_Error(
 			'authentication_failed',
-			__( '<strong>Error:</strong> The username or password you entered is incorrect.', 'wp-user-manager' )
+			apply_filters( 'wpum_generic_login_error_message', __( '<strong>Error:</strong> The username or password you entered is incorrect.', 'wp-user-manager' ) )
 		);
 	}
 
