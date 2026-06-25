@@ -204,7 +204,20 @@ class WPUM_Avatars {
 			return $url;
 		}
 
-		$cache_key = 'wpum_default_avatar_' . $id_or_email;
+		if ( is_object( $id_or_email ) ) {
+			if ( ! empty( $id_or_email->comment_ID ) ) {
+				$key_part = 'c' . $id_or_email->comment_ID;
+			} elseif ( ! empty( $id_or_email->ID ) ) {
+				$key_part = 'u' . $id_or_email->ID;
+			} elseif ( ! empty( $id_or_email->user_email ) ) {
+				$key_part = md5( $id_or_email->user_email );
+			} else {
+				$key_part = md5( wp_json_encode( $id_or_email ) );
+			}
+		} else {
+			$key_part = (string) $id_or_email;
+		}
+		$cache_key = 'wpum_default_avatar_' . $key_part;
 
 		$default_url = wpum_get_option( 'default_avatar_url' );
 		if ( empty( $default_url ) ) {
