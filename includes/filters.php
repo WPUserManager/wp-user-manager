@@ -183,6 +183,45 @@ function wpum_authentication( $wp_user, $username, $password ) {
 add_filter( 'authenticate', 'wpum_authentication', 20, 3 );
 
 /**
+ * Replace specific login error messages with a generic message
+ * to prevent username enumeration when the setting is enabled.
+ *
+ * @param WP_User|WP_Error $user
+ * @param string           $username
+ * @param string           $password
+ *
+ * @return WP_User|WP_Error
+ */
+function wpum_generic_login_errors( $user, $username, $password ) {
+	if ( ! is_wp_error( $user ) || empty( $username ) ) {
+		return $user;
+	}
+
+	if ( ! wpum_get_option( 'generic_login_errors' ) ) {
+		return $user;
+	}
+
+	$code = $user->get_error_code();
+
+	$enumeration_codes = array(
+		'invalid_username',
+		'invalid_email',
+		'incorrect_password',
+		'email_only',
+	);
+
+	if ( in_array( $code, $enumeration_codes, true ) ) {
+		return new WP_Error(
+			'authentication_failed',
+			__( '<strong>Error:</strong> The username or password you entered is incorrect.', 'wp-user-manager' )
+		);
+	}
+
+	return $user;
+}
+add_filter( 'authenticate', 'wpum_generic_login_errors', 50, 3 );
+
+/**
  * Highlight all pages used by WPUM.
  *
  * @param array  $post_states
