@@ -1,4 +1,4 @@
-import { test, expect } from './fixtures';
+import { test, expect, wpCli } from './fixtures';
 
 test.describe('Login Form', () => {
   test.beforeEach(async ({ page }) => {
@@ -106,6 +106,37 @@ test.describe('Login Form', () => {
     // Verify we are NOT logged in
     await page.goto('/wp-admin/');
     await expect(page).toHaveURL(/wp-login\.php/);
+  });
+
+  test('generic login errors hides username enumeration', async ({ page, loginPage }) => {
+    wpCli(`eval 'wpum_update_option("generic_login_errors", true);'`);
+
+    await page.goto(loginPage);
+    await page.locator('#username').fill('nonexistent_user_12345');
+    await page.locator('#password').fill('WrongPassword123!');
+    await page.locator('input[name="submit_login"]').click();
+    await page.waitForLoadState('networkidle', { timeout: 10000 }).catch(() => {});
+
+    const errorMessage = page.locator('.wpum-message.error');
+    await expect(errorMessage).toBeVisible({ timeout: 5000 });
+    const errorText = await errorMessage.textContent();
+    expect(errorText).toContain('username or password you entered is incorrect');
+    expect(errorText).not.toContain('not registered');
+    expect(errorText).not.toContain('Unknown');
+
+    await page.goto(loginPage);
+    await page.locator('#username').fill('testuser_login');
+    await page.locator('#password').fill('WrongPassword123!');
+    await page.locator('input[name="submit_login"]').click();
+    await page.waitForLoadState('networkidle', { timeout: 10000 }).catch(() => {});
+
+    const errorMessage2 = page.locator('.wpum-message.error');
+    await expect(errorMessage2).toBeVisible({ timeout: 5000 });
+    const errorText2 = await errorMessage2.textContent();
+    expect(errorText2).toContain('username or password you entered is incorrect');
+    expect(errorText2).not.toContain('incorrect password');
+
+    wpCli(`eval 'wpum_update_option("generic_login_errors", false);'`);
   });
 
   test('redirect after login', async ({ page, loginPage }) => {
