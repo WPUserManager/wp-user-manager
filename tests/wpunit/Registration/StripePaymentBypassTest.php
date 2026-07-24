@@ -95,6 +95,67 @@ class StripePaymentBypassTest extends RegistrationTestCase {
 	}
 
 	/**
+	 * Test that the plan field is required with a single Stripe product.
+	 */
+	public function test_stripe_plan_field_required_single_product() {
+		$fields = array();
+
+		$form = $this->create_mock_registration_form_with_stripe( array( 'price_single_1' ) );
+
+		$registration = $this->create_stripe_registration( array(
+			array( 'value' => 'price_single_1', 'label' => 'Single Plan ($5)' ),
+		) );
+
+		$result = $registration->inject_registration_fields( $fields, $form );
+
+		$this->assertArrayHasKey( 'wpum_stripe_plan', $result );
+		$this->assertTrue( $result['wpum_stripe_plan']['required'] );
+		$this->assertCount( 1, $result['wpum_stripe_plan']['options'], 'Should have exactly one option' );
+	}
+
+	/**
+	 * Test that the plan field is required with multiple Stripe products.
+	 */
+	public function test_stripe_plan_field_required_multiple_products() {
+		$fields = array();
+
+		$form = $this->create_mock_registration_form_with_stripe( array( 'price_multi_1', 'price_multi_2', 'price_multi_3' ) );
+
+		$registration = $this->create_stripe_registration( array(
+			array( 'value' => 'price_multi_1', 'label' => 'Basic ($5/mo)' ),
+			array( 'value' => 'price_multi_2', 'label' => 'Pro ($15/mo)' ),
+			array( 'value' => 'price_multi_3', 'label' => 'Enterprise ($50/mo)' ),
+		) );
+
+		$result = $registration->inject_registration_fields( $fields, $form );
+
+		$this->assertArrayHasKey( 'wpum_stripe_plan', $result );
+		$this->assertTrue( $result['wpum_stripe_plan']['required'] );
+		$this->assertCount( 3, $result['wpum_stripe_plan']['options'], 'Should have all three options' );
+	}
+
+	/**
+	 * Test that only configured products appear in the options (not all available plans).
+	 */
+	public function test_stripe_plan_options_filtered_to_form_config() {
+		$fields = array();
+
+		// Form only has one product configured, but three exist.
+		$form = $this->create_mock_registration_form_with_stripe( array( 'price_multi_2' ) );
+
+		$registration = $this->create_stripe_registration( array(
+			array( 'value' => 'price_multi_1', 'label' => 'Basic ($5/mo)' ),
+			array( 'value' => 'price_multi_2', 'label' => 'Pro ($15/mo)' ),
+			array( 'value' => 'price_multi_3', 'label' => 'Enterprise ($50/mo)' ),
+		) );
+
+		$result = $registration->inject_registration_fields( $fields, $form );
+
+		$this->assertCount( 1, $result['wpum_stripe_plan']['options'] );
+		$this->assertArrayHasKey( 'price_multi_2', $result['wpum_stripe_plan']['options'] );
+	}
+
+	/**
 	 * Test that save_plan() does not store metadata when wpum_stripe_plan is absent.
 	 *
 	 * This confirms the mechanism of the bypass: if the POST field is missing,
@@ -119,14 +180,15 @@ class StripePaymentBypassTest extends RegistrationTestCase {
 	/**
 	 * Create a mock registration form that has Stripe products configured.
 	 *
+	 * @param array $price_ids Stripe price IDs to configure.
 	 * @return \WPUM_Registration_Form|\PHPUnit\Framework\MockObject\MockObject
 	 */
-	protected function create_mock_registration_form_with_stripe() {
+	protected function create_mock_registration_form_with_stripe( $price_ids = array( 'price_test_123' ) ) {
 		$form = $this->createMock( \WPUM_Registration_Form::class );
 		$form->method( 'get_setting' )
-			->willReturnCallback( function ( $key ) {
+			->willReturnCallback( function ( $key ) use ( $price_ids ) {
 				if ( 'stripe_plan_id' === $key ) {
-					return array( 'price_test_123' );
+					return $price_ids;
 				}
 				return null;
 			} );
@@ -155,17 +217,19 @@ class StripePaymentBypassTest extends RegistrationTestCase {
 	/**
 	 * Create a Stripe Registration instance with mock dependencies.
 	 *
+	 * @param array|null $plans Available plans. Defaults to a single test plan.
 	 * @return \WPUserManager\Stripe\Registration
 	 */
-	protected function create_stripe_registration() {
+	protected function create_stripe_registration( $plans = null ) {
+		if ( null === $plans ) {
+			$plans = array(
+				array( 'value' => 'price_test_123', 'label' => 'Test Plan ($10/mo)' ),
+			);
+		}
+
 		$products = $this->createMock( \WPUserManager\Stripe\Controllers\Products::class );
 		$products->method( 'get_plans' )
-			->willReturn( array(
-				array(
-					'value' => 'price_test_123',
-					'label' => 'Test Plan ($10/mo)',
-				),
-			) );
+			->willReturn( $plans );
 
 		$billing = $this->createMock( \WPUserManager\Stripe\Billing::class );
 
