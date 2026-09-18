@@ -186,13 +186,13 @@ add_filter( 'authenticate', 'wpum_authentication', 20, 3 );
  * Replace specific login error messages with a generic message
  * to prevent username enumeration when the setting is enabled.
  *
- * @param WP_User|WP_Error $user
- * @param string           $username
- * @param string           $password
+ * @param null|WP_User|WP_Error $user
+ * @param string                $username
+ * @param string                $password // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.FoundAfterLastUsed
  *
- * @return WP_User|WP_Error
+ * @return null|WP_User|WP_Error
  */
-function wpum_generic_login_errors( $user, $username, $password ) {
+function wpum_generic_login_errors( $user, $username, $password ) { // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.FoundAfterLastUsed
 	if ( ! is_wp_error( $user ) || empty( $username ) ) {
 		return $user;
 	}
