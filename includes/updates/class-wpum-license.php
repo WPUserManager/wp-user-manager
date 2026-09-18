@@ -134,7 +134,7 @@ class WPUM_License {
 		add_filter( 'wpum_licenses_register_addon_settings', array( $this, 'settings' ), 1 );
 
 		// Activate license.
-		add_action( 'carbon_fields_theme_options_container_saved', array( $this, 'handle_activate_license' ) );
+		add_action( 'carbon_fields_theme_options_container_saved', array( $this, 'handle_activate_license' ), 10, 2 );
 
 		// Deactivate license key.
 		add_action( 'admin_init', array( $this, 'handle_deactivate_license' ) );
@@ -169,42 +169,49 @@ class WPUM_License {
 	/**
 	 * Activate a license.
 	 *
+	 * @param mixed                                   $user_data Unused.
+	 * @param \WPUM\Carbon_Fields\Container\Container $container The container that was saved.
+	 *
 	 * @return void
 	 */
-	public function handle_activate_license() {
+	public function handle_activate_license( $user_data = null, $container = null ) {
 
-		// Detect if license submission.
-		if ( isset( $_POST['_wpum_license_submission'] ) ) { // phpcs:ignore
+		// This hook fires for every Carbon Fields options page, only act on the licenses page.
+		if ( ! $container || ! method_exists( $container, 'get_page_file' ) || 'wpum-licenses' !== $container->get_page_file() ) {
+			return;
+		}
 
-			if ( ! current_user_can( 'manage_options' ) ) {
+		if ( ! current_user_can( 'manage_options' ) ) {
+			return;
+		}
+
+		if ( $this->is_valid() ) {
+			return;
+		}
+
+		// Carbon Fields 3 posts compacted input, so the key is no longer at $_POST['_{shortname}_license_key'].
+		// The field has already been saved by the time this runs, so read it back from the DB.
+		$license = sanitize_text_field( trim( get_option( '_' . $this->item_shortname . '_license_key', '' ) ) );
+
+		if ( empty( $license ) ) {
+			return;
+		}
+
+		$this->license = $license;
+
+		$response = $this->activate_license( $license, home_url() );
+
+		if ( ! is_wp_error( $response ) ) {
+			// Tell WordPress to look for updates.
+			set_site_transient( 'update_plugins', null );
+
+			$data = $this->prepare_license_data( $response );
+
+			if ( isset( $data['error'] ) ) {
 				return;
 			}
 
-			if ( $this->is_valid() ) {
-				return;
-			}
-
-			$license = filter_input( INPUT_POST, '_' . $this->item_shortname . '_license_key', FILTER_UNSAFE_RAW );
-			$license = sanitize_text_field( $license );
-
-			if ( empty( $license ) ) {
-				return;
-			}
-
-			$response = $this->activate_license( $license, home_url() );
-
-			if ( ! is_wp_error( $response ) ) {
-				// Tell WordPress to look for updates.
-				set_site_transient( 'update_plugins', null );
-
-				$data = $this->prepare_license_data( $response );
-
-				if ( isset( $data['error'] ) ) {
-					return;
-				}
-
-				$this->set_license_data( $data );
-			}
+			$this->set_license_data( $data );
 		}
 	}
 
