@@ -188,7 +188,7 @@ add_filter( 'authenticate', 'wpum_authentication', 20, 3 );
  *
  * @param null|WP_User|WP_Error $user
  * @param string                $username
- * @param string                $password // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.FoundAfterLastUsed
+ * @param string                $password
  *
  * @return null|WP_User|WP_Error
  */

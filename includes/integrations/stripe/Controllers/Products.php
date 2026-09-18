@@ -60,7 +60,12 @@ class Products {
 
 		$products = array();
 		foreach ( $all_products as $product ) {
-			$all_prices = \WPUM\Stripe\Price::all( array( 'product' => $product->id, 'active' => true ) );
+			$all_prices = \WPUM\Stripe\Price::all(
+				array(
+					'product' => $product->id,
+					'active'  => true,
+				)
+			);
 
 			$save_product = $product->toArray();
 			$prices       = array();

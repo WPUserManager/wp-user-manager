@@ -212,7 +212,7 @@ class WPUM_Avatars {
 			} elseif ( ! empty( $id_or_email->user_email ) ) {
 				$key_part = md5( $id_or_email->user_email );
 			} else {
-				$encoded = wp_json_encode( $id_or_email );
+				$encoded  = wp_json_encode( $id_or_email );
 				$key_part = md5( $encoded ? $encoded : 'unknown' );
 			}
 		} else {
