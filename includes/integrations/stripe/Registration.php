@@ -232,6 +232,10 @@ class Registration {
 			$this->json_error();
 		}
 
+		if ( ! $this->is_plan_allowed_for_form( sanitize_text_field( $_POST['wpum_stripe_plan'] ), $form ) ) { // phpcs:ignore
+			$this->json_error();
+		}
+
 		$user_id = $form->submit_handler();
 
 		ob_start();
@@ -259,6 +263,29 @@ class Registration {
 		}
 
 		wp_send_json_success( array( 'id' => $checkout_id ) );
+	}
+
+	/**
+	 * Check the submitted price ID is one of the plans configured on the registration form.
+	 *
+	 * @param string     $plan_id
+	 * @param \WPUM_Form $form
+	 *
+	 * @return bool
+	 */
+	protected function is_plan_allowed_for_form( $plan_id, $form ) {
+		if ( ! method_exists( $form, 'get_registration_form' ) ) {
+			return false;
+		}
+
+		$registration_form = $form->get_registration_form();
+		if ( ! $registration_form ) {
+			return false;
+		}
+
+		$price_ids = (array) $registration_form->get_setting( 'stripe_plan_id' );
+
+		return in_array( $plan_id, $price_ids, true );
 	}
 
 	/**

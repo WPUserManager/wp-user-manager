@@ -149,6 +149,15 @@ return [
 
 		    if ( false !== strrpos( $filePath, 'htmlburger/carbon-fields/core/Libraries/Sidebar_Manager/Sidebar_Manager.php' ) ) {
 			    $contents = str_replace(  '\\' . $prefix . '\\WP_Error', '\\WP_Error', $contents );
+
+			    // Require a capability and nonce for the custom sidebar AJAX actions.
+			    // WPUM unhooks these at runtime, this hardens the bundled copy too.
+			    $contents = preg_replace(
+				    '/(public function action_handler\(\)\s*\{)/',
+				    "$1\n        if (!\\current_user_can('edit_theme_options') || !\\check_ajax_referer('carbon_fields_sidebar', '_wpnonce', \\false)) {\n            \\wp_send_json(array('success' => \\false, 'error' => 'forbidden', 'errorCode' => 'forbidden', 'data' => null), 403);\n        }",
+				    $contents,
+				    1
+			    );
 		    }
 
 			if ( false !== strrpos( $filePath, 'htmlburger/carbon-fields/core/Walker/Nav_Menu_Item_Edit_Walker.php' ) ) {

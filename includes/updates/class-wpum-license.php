@@ -251,9 +251,8 @@ class WPUM_License {
 		);
 
 		$response = wp_remote_post( $this->api_url, array(
-			'timeout'   => 15,
-			'sslverify' => false,
-			'body'      => $api_params,
+			'timeout' => 15,
+			'body'    => $api_params,
 		) );
 
 		if ( is_wp_error( $response ) || 200 !== wp_remote_retrieve_response_code( $response ) ) {
