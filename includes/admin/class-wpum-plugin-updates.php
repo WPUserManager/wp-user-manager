@@ -66,6 +66,10 @@ class WPUM_Plugin_Updates {
 			$this->upgrade_v2_9();
 		}
 
+		if ( version_compare( $installed_version, '2.9.14', '>=' ) && version_compare( $installed_version, '2.9.20', '<' ) ) {
+			$this->upgrade_v2_9_20();
+		}
+
 		update_option( 'wpum_version', $latest_version );
 	}
 
@@ -166,6 +170,18 @@ class WPUM_Plugin_Updates {
 				$value = gmdate( 'Y-m-d', strtotime( $result->meta_value ) );
 				update_user_meta( $result->user_id, $meta_key, $value );
 			}
+		}
+	}
+
+	/**
+	 * Upgrade 2.9.20
+	 *
+	 * Addon licenses saved on 2.9.14 - 2.9.19 were never activated with EDD.
+	 * Activate them in the background, so the remote calls don't block this admin request.
+	 */
+	protected function upgrade_v2_9_20() {
+		if ( ! wp_next_scheduled( 'wpum_reactivate_inactive_licenses' ) ) {
+			wp_schedule_single_event( time(), 'wpum_reactivate_inactive_licenses' );
 		}
 	}
 

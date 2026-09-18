@@ -136,6 +136,9 @@ class WPUM_License {
 		// Activate license.
 		add_action( 'carbon_fields_theme_options_container_saved', array( $this, 'handle_activate_license' ), 10, 2 );
 
+		// Activate licenses that were saved but never activated (2.9.14 - 2.9.19).
+		add_action( 'wpum_reactivate_inactive_licenses', array( $this, 'maybe_activate_site_inactive_license' ) );
+
 		// Deactivate license key.
 		add_action( 'admin_init', array( $this, 'handle_deactivate_license' ) );
 
@@ -213,6 +216,41 @@ class WPUM_License {
 
 			$this->set_license_data( $data );
 		}
+	}
+
+	/**
+	 * Activate the stored license if EDD reports it as not active for this site.
+	 *
+	 * Licenses saved on 2.9.14 - 2.9.19 were stored but never activated, because
+	 * handle_activate_license() couldn't see the Carbon Fields 3 compacted input.
+	 * Only `site_inactive` is touched, so expired, disabled or invalid licenses are left alone.
+	 *
+	 * @return void
+	 */
+	public function maybe_activate_site_inactive_license() {
+		// Uses the cached status when there is one, otherwise checks with EDD.
+		$data = $this->get_license_data();
+
+		if ( ! isset( $data['status'] ) || 'site_inactive' !== $data['status'] ) {
+			return;
+		}
+
+		$response = $this->activate_license( $this->license, home_url() );
+
+		if ( is_wp_error( $response ) ) {
+			return;
+		}
+
+		$data = $this->prepare_license_data( $response );
+
+		if ( isset( $data['error'] ) ) {
+			return;
+		}
+
+		$this->set_license_data( $data );
+
+		// Tell WordPress to look for updates.
+		set_site_transient( 'update_plugins', null );
 	}
 
 	/**
