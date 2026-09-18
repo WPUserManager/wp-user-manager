@@ -16,11 +16,9 @@ let testProductId: string;
 let testPriceId: string;
 
 test.describe('Stripe Registration', () => {
+  test.skip(() => !isStripeConfigured(), 'Stripe not configured');
+
   test.beforeAll(async () => {
-    if (!isStripeConfigured()) {
-      test.skip();
-      return;
-    }
 
     // Install the billing override mu-plugin (calls Stripe SDK directly)
     installTestBillingOverride();
