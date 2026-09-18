@@ -53,14 +53,24 @@ class Products {
 		Stripe::setApiKey( $this->secret_key );
 
 		try {
-			$all_products = \WPUM\Stripe\Product::all();
+			$all_products = \WPUM\Stripe\Product::all(
+				array(
+					'active' => true,
+					'limit'  => 100,
+				)
+			);
 		} catch ( \Stripe\Exception\ApiErrorException $exception ) {
 			$all_products = array();
 		}
 
 		$products = array();
 		foreach ( $all_products as $product ) {
-			$all_prices = \WPUM\Stripe\Price::all( array( 'product' => $product->id ) );
+			$all_prices = \WPUM\Stripe\Price::all(
+				array(
+					'product' => $product->id,
+					'active'  => true,
+				)
+			);
 
 			$save_product = $product->toArray();
 			$prices       = array();

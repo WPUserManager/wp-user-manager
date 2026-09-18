@@ -4,11 +4,11 @@ Plugin URI: https://wpusermanager.com
 Contributors: wpusermanager, polevaultweb, alessandro.tesoro
 Tags: members, membership, community, user profile, user registration
 Requires at least: 4.9
-Tested up to: 6.9
+Tested up to: 7.0
 Requires PHP: 7.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
-Stable Tag: 2.9.18
+Stable Tag: 2.9.19
 
 The most customizable profiles & community builder WordPress plugin with front-end login, registration, profile customization and content restriction.
 
@@ -133,6 +133,16 @@ Please note that using WPUM and the mentioned add-ons does NOT guarantee complia
 13. Login form.
 
 == Changelog ==
+
+= 2.9.19 (18th September 2026) =
+
+- Security: Enforced server-side Stripe plan validation on registration (thanks to Ananda Dhakal via Patchstack for responsible disclosure)
+- Security: Added authorization check to Stripe Connect callback (thanks to Wordfence PRISM for responsible disclosure)
+- Enhancement: Added "Fetch Stripe Products" button to Stripe settings
+- Enhancement: Stripe product webhook handlers to auto-sync product cache
+- Enhancement: Filter Stripe API queries to active products and prices only
+- Enhancement: Generic login error messages setting to prevent username enumeration
+- Fix: PHP 8 fatal in avatar cache key when $id_or_email is an object
 
 = 2.9.18 (30th May 2026) =
 

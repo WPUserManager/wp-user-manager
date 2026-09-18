@@ -174,6 +174,10 @@ class Connect {
 			return;
 		}
 
+		if ( ! current_user_can( 'manage_options' ) ) {
+			return;
+		}
+
 		$state = filter_input( INPUT_GET, 'state', FILTER_UNSAFE_RAW );
 		$state = sanitize_text_field( $state );
 		if ( empty( $state ) ) {
