@@ -138,7 +138,7 @@ class Registration {
 		$fields['wpum_stripe_plan'] = array(
 			'label'       => apply_filters( 'wpum_stripe_registration_label', '', $registration_form ),
 			'type'        => 'radio',
-			'required'    => false,
+			'required'    => true,
 			'options'     => $options,
 			'description' => $this->test_mode ? 'Stripe is connected in Test Mode' : '',
 			'priority'    => 9998,
@@ -228,6 +228,10 @@ class Registration {
 			$this->json_error( __( 'Missing form', 'wp-user-manager' ) );
 		}
 
+		if ( empty( $_POST['wpum_stripe_plan'] ) ) { // phpcs:ignore
+			$this->json_error();
+		}
+
 		$user_id = $form->submit_handler();
 
 		ob_start();
@@ -239,10 +243,6 @@ class Registration {
 		}
 
 		if ( empty( $user_id ) ) {
-			$this->json_error();
-		}
-
-		if ( empty( $_POST['wpum_stripe_plan'] ) ) { // phpcs:ignore
 			$this->json_error();
 		}
 
