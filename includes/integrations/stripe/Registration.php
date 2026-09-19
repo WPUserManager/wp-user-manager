@@ -334,7 +334,7 @@ class Registration {
 		}
 
 		if ( ! $this->is_plan_allowed_for_form( sanitize_text_field( $_POST['wpum_stripe_plan'] ), $form ) ) { // phpcs:ignore
-			$this->json_error();
+			$this->json_error( __( 'Please select a valid plan.', 'wp-user-manager' ) );
 		}
 
 		$user_id = $form->submit_handler();
