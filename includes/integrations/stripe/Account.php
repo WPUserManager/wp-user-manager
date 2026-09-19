@@ -123,7 +123,9 @@ class Account {
 	 */
 	public function register_account_tab( $tabs ) {
 		$user = new User( get_current_user_id() );
-		if ( ! $user->shouldBeSubscribed() || $user->isPaid() ) {
+
+		// Subscribers manage billing here, and unpaid one-time buyers pay here.
+		if ( ! $user->shouldBeSubscribed() && $user->isPaid() ) {
 			return $tabs;
 		}
 
