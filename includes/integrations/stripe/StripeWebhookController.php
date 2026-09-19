@@ -145,21 +145,71 @@ class StripeWebhookController {
 			$user_id = $subscription->user_id;
 		}
 
-		// For one time payments, mark as paid
+		// For one time payments, mark as paid once Stripe confirms the funds.
+		// Delayed payment methods complete the session as unpaid and are
+		// handled by checkout.session.async_payment_succeeded instead.
 		if ( ! isset( $payload['data']['object']['subscription'] ) ) {
-			$user = new User( $user_id );
-			$data = $user->getPlanMeta();
+			if ( ! $this->sessionIsPaid( $payload ) ) {
+				return new \WP_REST_Response( 'Payment not yet complete', 200 );
+			}
 
-			$product = new Product();
-			$product->hydrate( $data );
-			$product->setPaid();
-
-			$user->setPlanMeta( $product->to_array() );
+			$this->markOneTimePlanPaid( $user_id );
 
 			return new \WP_REST_Response( 'Webhook handled', 200 );
 		}
 
 		return $this->createSubscription( $user_id, $payload );
+	}
+
+	/**
+	 * Handle the checkout.session.async_payment_succeeded webhook.
+	 * Fired when a delayed payment method (e.g. bank debit) settles.
+	 *
+	 * @param array $payload
+	 *
+	 * @return \WP_REST_Response
+	 */
+	protected function handleCheckoutSessionAsyncPaymentSucceeded( $payload ) {
+		if ( isset( $payload['data']['object']['subscription'] ) || ! $this->sessionIsPaid( $payload ) ) {
+			return new \WP_REST_Response( 'Webhook handled', 200 );
+		}
+
+		$email = isset( $payload['data']['object']['customer_email'] ) ? $payload['data']['object']['customer_email'] : '';
+		$user  = $email ? get_user_by( 'email', $email ) : false;
+		if ( ! $user ) {
+			return new \WP_REST_Response( 'User not found', 200 );
+		}
+
+		$this->markOneTimePlanPaid( $user->ID );
+
+		return new \WP_REST_Response( 'Webhook handled', 200 );
+	}
+
+	/**
+	 * Whether a Checkout Session payload reports a successful payment.
+	 *
+	 * @param array $payload
+	 *
+	 * @return bool
+	 */
+	protected function sessionIsPaid( $payload ) {
+		return isset( $payload['data']['object']['payment_status'] ) && 'paid' === $payload['data']['object']['payment_status'];
+	}
+
+	/**
+	 * Mark a user's one time plan as paid.
+	 *
+	 * @param int $user_id
+	 */
+	protected function markOneTimePlanPaid( $user_id ) {
+		$user = new User( $user_id );
+		$data = $user->getPlanMeta();
+
+		$product = new Product();
+		$product->hydrate( $data );
+		$product->setPaid();
+
+		$user->setPlanMeta( $product->to_array() );
 	}
 
 	/**

@@ -188,13 +188,13 @@ class WPUM_Field_File extends WPUM_Field_Type {
 		$extension = substr( strrchr( $image_src, '.' ), 1 );
 		$file_type = wp_ext2type( $extension );
 		if ( 'image' === $file_type ) {
-			$value = '<span class="wpum-uploaded-file-name"><img src="' . $image_src . '"></span>';
+			$value = '<span class="wpum-uploaded-file-name"><img src="' . esc_url( $image_src ) . '"></span>';
 		} elseif ( 'video' === $file_type && $field->get_type() === 'video' ) {
 			$value = '<span class="wpum-uploaded-file-name">' . wp_video_shortcode( array( 'src' => $image_src ) ) . '</span>';
 		} elseif ( 'audio' === $file_type && $field->get_type() === 'audio' ) {
 			$value = '<span class="wpum-uploaded-file-name">' . wp_audio_shortcode( array( 'src' => $image_src ) ) . '</span>';
 		} else {
-			$value = '<span class="wpum-uploaded-file-name"><a href="' . $image_src . '" target="_blank" rel="noopener noreferrer">' . esc_html( $image_src ) . '</a></span>';
+			$value = '<span class="wpum-uploaded-file-name"><a href="' . esc_url( $image_src ) . '" target="_blank" rel="noopener noreferrer">' . esc_html( $image_src ) . '</a></span>';
 		}
 
 		return $value;

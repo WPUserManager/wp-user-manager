@@ -149,6 +149,15 @@ return [
 
 		    if ( false !== strrpos( $filePath, 'htmlburger/carbon-fields/core/Libraries/Sidebar_Manager/Sidebar_Manager.php' ) ) {
 			    $contents = str_replace(  '\\' . $prefix . '\\WP_Error', '\\WP_Error', $contents );
+
+			    // Require a capability and nonce for the custom sidebar AJAX actions.
+			    // WPUM unhooks these at runtime, this hardens the bundled copy too.
+			    $contents = preg_replace(
+				    '/(public function action_handler\(\)\s*\{)/',
+				    "$1\n        if (!\\current_user_can('edit_theme_options') || !\\check_ajax_referer('carbon_fields_sidebar', '_wpnonce', \\false)) {\n            \\wp_send_json(array('success' => \\false, 'error' => 'forbidden', 'errorCode' => 'forbidden', 'data' => null), 403);\n        }",
+				    $contents,
+				    1
+			    );
 		    }
 
 			if ( false !== strrpos( $filePath, 'htmlburger/carbon-fields/core/Walker/Nav_Menu_Item_Edit_Walker.php' ) ) {
@@ -180,6 +189,22 @@ return [
 
 			if ( false !== strrpos( $filePath, 'brain/cortex' ) ) {
 			    $contents = str_replace( '\\' . $prefix . '\\WP', '\\WP', $contents );
+		    }
+
+		    // dompdf builds class names from strings, which php-scoper can't prefix.
+		    if ( false !== strrpos( $filePath, 'dompdf/dompdf/src/Frame/Factory.php' ) ) {
+			    $contents = str_replace( '"Dompdf\\\\FrameDecorator\\\\', '"' . $prefix . '\\\\Dompdf\\\\FrameDecorator\\\\', $contents );
+			    $contents = str_replace( '"Dompdf\\\\FrameReflower\\\\', '"' . $prefix . '\\\\Dompdf\\\\FrameReflower\\\\', $contents );
+			    $contents = str_replace( "'\\\\Dompdf\\\\Positioner\\\\'", "'\\\\" . $prefix . "\\\\Dompdf\\\\Positioner\\\\'", $contents );
+		    }
+
+		    // php-font-lib does the same, and php-scoper wrongly prefixes the
+		    // relative names ("TrueType\\File") it later appends to "FontLib\\".
+		    if ( false !== strrpos( $filePath, 'phenx/php-font-lib/src/FontLib/' ) ) {
+			    foreach ( array( 'TrueType', 'OpenType', 'WOFF', 'EOT' ) as $font_type ) {
+				    $contents = str_replace( '"' . $prefix . '\\\\' . $font_type . '\\\\', '"' . $font_type . '\\\\', $contents );
+			    }
+			    $contents = str_replace( '"FontLib\\\\', '"' . $prefix . '\\\\FontLib\\\\', $contents );
 		    }
 
 		    if ( false !== strrpos( $filePath, 'wp-user-manager/wp-optionskit/includes/class-wpok-rest-server.php' ) ) {

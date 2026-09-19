@@ -117,6 +117,10 @@ class WPUM_Addon_Check {
 	 * Deactivates the plugin again.
 	 */
 	public function deactivate() {
+		if ( ! current_user_can( 'activate_plugins' ) ) {
+			return;
+		}
+
 		if ( null !== $this->file ) {
 			deactivate_plugins( plugin_basename( $this->file ) );
 		}
