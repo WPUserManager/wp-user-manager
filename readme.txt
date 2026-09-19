@@ -8,7 +8,7 @@ Tested up to: 7.0
 Requires PHP: 7.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
-Stable Tag: 2.9.19
+Stable Tag: 2.9.20
 
 The most customizable profiles & community builder WordPress plugin with front-end login, registration, profile customization and content restriction.
 
@@ -133,6 +133,18 @@ Please note that using WPUM and the mentioned add-ons does NOT guarantee complia
 13. Login form.
 
 == Changelog ==
+
+= 2.9.20 (19th September 2026) =
+
+- Security: Stripe registration only accepts the plans configured on the registration form (thanks to Patchstack for the follow-up review)
+- Security: Stripe Connect callback is now tied to the administrator who started the connection
+- Security: One-time Stripe plans are only marked as paid once Stripe confirms the payment
+- Security: Hardened addon version check, license requests, file field output and bundled Carbon Fields AJAX actions
+- Fix: One-time Stripe payments not being marked as paid
+- Fix: Fatal error when downloading Stripe invoices
+- Fix: Customers who abandoned a one-time Stripe checkout had no way to pay
+- Fix: Addon licenses entered since 2.9.14 not activating
+- Tweak: Removed unused Carbon Fields source files from the plugin package
 
 = 2.9.19 (18th September 2026) =
 
