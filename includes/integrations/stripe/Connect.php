@@ -120,7 +120,66 @@ class Connect {
 			'site_url'  => $this->get_site_url(),
 		);
 
-		return base64_encode( serialize( $state ) ); // phpcs:ignore
+		$state = base64_encode( serialize( $state ) ); // phpcs:ignore
+
+		$this->remember_state( $state );
+
+		return $state;
+	}
+
+	/**
+	 * Transient key holding the connection states issued to the current user.
+	 *
+	 * @return string
+	 */
+	protected function get_states_transient_key() {
+		return 'wpum_stripe_connect_states_' . get_current_user_id();
+	}
+
+	/**
+	 * Record a state issued to the current user so the callback can be tied to it.
+	 *
+	 * @param string $state
+	 */
+	protected function remember_state( $state ) {
+		if ( ! get_current_user_id() ) {
+			return;
+		}
+
+		$states = get_transient( $this->get_states_transient_key() );
+		$states = is_array( $states ) ? $states : array();
+
+		$states[] = $state;
+		$states   = array_slice( $states, -10 );
+
+		set_transient( $this->get_states_transient_key(), $states, DAY_IN_SECONDS );
+	}
+
+	/**
+	 * Check a callback state was issued to the current user, and consume it.
+	 *
+	 * @param string $state
+	 *
+	 * @return bool
+	 */
+	protected function consume_state( $state ) {
+		$states = get_transient( $this->get_states_transient_key() );
+		if ( ! is_array( $states ) ) {
+			return false;
+		}
+
+		// A '+' in the base64 state can arrive as a space once URL-decoded.
+		$state = str_replace( ' ', '+', $state );
+
+		foreach ( $states as $issued ) {
+			if ( is_string( $issued ) && hash_equals( $issued, $state ) ) {
+				delete_transient( $this->get_states_transient_key() );
+
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 	/**
@@ -186,6 +245,12 @@ class Connect {
 
 		if ( headers_sent() ) {
 			return;
+		}
+
+		if ( ! $this->consume_state( $state ) ) {
+			/* translators: %1$s Opening anchor tag, do not translate. %2$s Closing anchor tag, do not translate. */
+			$message = '<p>' . sprintf( __( 'This Stripe connection request has expired or was not started from this site. Please %1$sconnect again%2$s.', 'wp-user-manager' ), '<a href="' . esc_url( $this->get_site_url() . '#/stripe' ) . '">', '</a>' ) . '</p>';
+			wp_die( $message );  // phpcs:ignore
 		}
 
 		$wpum_credentials_url = add_query_arg( array(
