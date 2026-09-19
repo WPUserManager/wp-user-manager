@@ -188,10 +188,6 @@ class WPUM_License {
 			return;
 		}
 
-		if ( $this->is_valid() ) {
-			return;
-		}
-
 		// Carbon Fields 3 posts compacted input, so the key is no longer at $_POST['_{shortname}_license_key'].
 		// The field has already been saved by the time this runs, so read it back from the DB.
 		$license = sanitize_text_field( trim( get_option( '_' . $this->item_shortname . '_license_key', '' ) ) );
@@ -200,7 +196,16 @@ class WPUM_License {
 			return;
 		}
 
-		$this->license = $license;
+		// $this->license was loaded before the save. If the key was replaced, drop the old key's cached
+		// status so is_valid() checks the new key rather than returning early on the old one.
+		if ( $license !== $this->license ) {
+			$this->license = $license;
+			delete_site_transient( $this->item_shortname . '_license_data' );
+		}
+
+		if ( $this->is_valid() ) {
+			return;
+		}
 
 		$response = $this->activate_license( $license, home_url() );
 
