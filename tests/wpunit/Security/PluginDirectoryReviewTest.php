@@ -184,6 +184,56 @@ class PluginDirectoryReviewTest extends WPUMTestCase {
 	}
 
 	/*
+	 * Subscriptions::where() with an empty value must not match another user's subscription.
+	 */
+
+	protected function create_unrelated_subscription( $mode = 'test' ) {
+		global $wpdb;
+
+		$subscriptions = new \WPUserManager\Stripe\Controllers\Subscriptions( $mode );
+		$table         = $wpdb->prefix . 'wpum_stripe_subscriptions';
+		if ( $table !== $wpdb->get_var( $wpdb->prepare( 'SHOW TABLES LIKE %s', $table ) ) ) {
+			$this->markTestSkipped( 'Stripe subscriptions table is not installed.' );
+		}
+
+		$subscriptions->insert( array(
+			'user_id'         => $this->factory()->user->create(),
+			'customer_id'     => 'cus_someone_else',
+			'subscription_id' => 'sub_someone_else',
+			'plan_id'         => 'price_monthly',
+		) );
+
+		return $subscriptions;
+	}
+
+	public function test_subscription_where_with_empty_value_matches_nothing() {
+		$subscriptions = $this->create_unrelated_subscription();
+
+		$this->assertNull( $subscriptions->where( 'subscription_id', null ) );
+		$this->assertNull( $subscriptions->where( 'customer_id', '' ) );
+		$this->assertNotNull( $subscriptions->where( 'subscription_id', 'sub_someone_else' ), 'A real ID still matches' );
+	}
+
+	public function test_one_time_payment_marked_paid_when_other_subscriptions_exist() {
+		if ( ! class_exists( 'WPUserManager\Stripe\StripeWebhookController' ) ) {
+			$this->markTestSkipped( 'Stripe integration is not available.' );
+		}
+
+		$subscriptions = $this->create_unrelated_subscription();
+
+		$ref        = new \ReflectionClass( \WPUserManager\Stripe\StripeWebhookController::class );
+		$controller = $ref->newInstanceWithoutConstructor();
+		$this->set_protected( $controller, 'subscriptions', $subscriptions );
+
+		$user    = $this->create_user_with_unpaid_plan();
+		$payload = $this->session_payload( 'checkout.session.completed', $user->user_email, 'paid' );
+
+		$this->call_protected( $controller, 'handleCheckoutSessionCompleted', array( $payload ) );
+
+		$this->assertTrue( $this->plan_is_paid( $user->ID ), 'Another user\'s subscription must not stop a one-time payment being recorded' );
+	}
+
+	/*
 	 * Stripe registration: submitted price IDs must be configured on the form.
 	 */
 
