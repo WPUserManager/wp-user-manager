@@ -657,9 +657,17 @@ class WPUM_Registration_Forms_Editor {
 	 * Delete forms cache
 	 */
 	public function delete_registration_forms_cache() {
-		$cache_key = WPUM()->registration_forms->get_cache_key_from_args();
+		// Both the default query and the unlimited query used by the forms list are cached.
+		$cache_keys = array(
+			WPUM()->registration_forms->get_cache_key_from_args(),
+			WPUM()->registration_forms->get_cache_key_from_args( array(
+				'number' => -1,
+			) ),
+		);
 
-		wp_cache_delete( $cache_key, WPUM()->registration_forms->cache_group );
+		foreach ( $cache_keys as $cache_key ) {
+			wp_cache_delete( $cache_key, WPUM()->registration_forms->cache_group );
+		}
 	}
 
 	/**

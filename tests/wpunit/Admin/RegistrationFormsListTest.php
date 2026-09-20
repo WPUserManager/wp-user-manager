@@ -89,15 +89,67 @@ class RegistrationFormsListTest extends \Codeception\TestCase\WPAjaxTestCase {
 	 * the first 20.
 	 */
 	public function test_issue_451_ajax_returns_all_forms() {
+		$editor   = $this->get_editor();
+		$response = $this->request_forms( $editor );
+
+		$this->assertTrue( $response->success, 'The ajax request should succeed.' );
+		$this->assertGreaterThanOrEqual( self::EXTRA_FORMS, count( $response->data ), 'Every form should be returned, not just the first 20.' );
+
+		$returned_ids = array_map( 'intval', wp_list_pluck( $response->data, 'id' ) );
+
+		foreach ( $this->form_ids as $form_id ) {
+			$this->assertContains( (int) $form_id, $returned_ids, 'Form ' . $form_id . ' should be in the list.' );
+		}
+	}
+
+	/**
+	 * The list now uses the unlimited query, so its cache key has to be
+	 * invalidated when a form changes, or the admin serves a stale list.
+	 */
+	public function test_issue_451_cache_is_invalidated_for_the_unlimited_query() {
+		$editor = $this->get_editor();
+
+		// Prime the cache.
+		$this->request_forms( $editor );
+
+		$new_form_id      = WPUM()->registration_forms->insert( array(
+			'name' => 'Issue 451 Form Added After Cache',
+		), 'registration_form' );
+		$this->form_ids[] = $new_form_id;
+
+		$editor->delete_registration_forms_cache();
+
+		$response     = $this->request_forms( $editor );
+		$returned_ids = array_map( 'intval', wp_list_pluck( $response->data, 'id' ) );
+
+		$this->assertContains( (int) $new_form_id, $returned_ids, 'A form added after the list was cached should appear once the cache is cleared.' );
+	}
+
+	/**
+	 * Load the forms editor, which is only included during admin requests.
+	 *
+	 * @return WPUM_Registration_Forms_Editor
+	 */
+	protected function get_editor() {
 		wp_set_current_user( $this->factory()->user->create( array( 'role' => 'administrator' ) ) );
 
-		// The editor is only loaded in an admin request, so it is not available during the test bootstrap.
 		require_once WPUM_PLUGIN_DIR . 'includes/forms/class-wpum-registration-forms-editor.php';
 
-		$editor = new WPUM_Registration_Forms_Editor();
+		return new WPUM_Registration_Forms_Editor();
+	}
 
+	/**
+	 * Run the forms list ajax request and return the decoded response.
+	 *
+	 * @param WPUM_Registration_Forms_Editor $editor
+	 *
+	 * @return object
+	 */
+	protected function request_forms( $editor ) {
 		$_POST['nonce']    = wp_create_nonce( 'wpum_get_registration_forms' );
 		$_REQUEST['nonce'] = $_POST['nonce'];
+
+		$this->_last_response = '';
 
 		ob_start();
 
@@ -107,15 +159,6 @@ class RegistrationFormsListTest extends \Codeception\TestCase\WPAjaxTestCase {
 			// Expected: wp_send_json_success() ends the request.
 		}
 
-		$response = json_decode( $this->_last_response );
-
-		$this->assertTrue( $response->success, 'The ajax request should succeed.' );
-		$this->assertGreaterThanOrEqual( self::EXTRA_FORMS, count( $response->data ), 'Every form should be returned, not just the first 20.' );
-
-		$returned_ids = wp_list_pluck( $response->data, 'id' );
-
-		foreach ( $this->form_ids as $form_id ) {
-			$this->assertContains( (int) $form_id, array_map( 'intval', $returned_ids ), 'Form ' . $form_id . ' should be in the list.' );
-		}
+		return json_decode( $this->_last_response );
 	}
 }
