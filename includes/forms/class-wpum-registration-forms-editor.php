@@ -196,8 +196,12 @@ class WPUM_Registration_Forms_Editor {
 
 		if ( current_user_can( $this->capability ) && is_admin() ) {
 
-			$registration_forms = WPUM()->registration_forms->get_forms();
-			$forms              = array();
+			// The forms list table is not paginated, so retrieve every form instead of the default first 20.
+			$registration_forms = WPUM()->registration_forms->get_forms( array(
+				'number' => -1,
+			) );
+
+			$forms = array();
 
 			foreach ( $registration_forms as $form ) {
 				$form_data = array(
