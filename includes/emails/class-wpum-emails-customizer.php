@@ -266,15 +266,21 @@ class WPUM_Emails_Customizer {
 
 		$default = false;
 
-		$defaults = array();
-
-		foreach ( wpum_get_default_emails() as $default_email_id => $default_email ) {
-			foreach ( $default_email as $default_field => $value ) {
-				$defaults[ $default_email_id . '_' . $default_field ] = $value;
-			}
-		}
-
-		$defaults = apply_filters( 'wpum_email_customizer_settings_defaults', $defaults );
+		$defaults = apply_filters( 'wpum_email_customizer_settings_defaults', array(
+			'registration_confirmation_title'   => esc_html__( 'Welcome to {sitename}!', 'wp-user-manager' ),
+			'registration_confirmation_subject' => esc_html__( 'Welcome to {sitename}!', 'wp-user-manager' ),
+			'registration_confirmation_content' => "<p>Hello {username}, and welcome to {sitename}. We’re thrilled to have you on board.</p>
+<p>For reference, here\'s your login information:</p>
+<p>Username: {username}<br />Login page: {login_page_url}</p>
+<p>Thanks,<br />{sitename}</p>",
+			'password_recovery_request_subject' => esc_html__( 'Reset your {sitename} password', 'wp-user-manager' ),
+			'password_recovery_request_title'   => esc_html__( 'Reset your {sitename} password', 'wp-user-manager' ),
+			'password_recovery_request_content' => '<p>Hello {username},</p>
+<p>You are receiving this message because you or somebody else has attempted to reset your password on {sitename}.</p>
+<p>If this was a mistake, just ignore this email and nothing will happen.</p>
+<p>To reset your password, visit the following address:</p>
+<p>{recovery_url}</p>',
+		) );
 
 		if ( $email_id && $field ) {
 			$key     = esc_html( "{$email_id}_{$field}" );

@@ -158,6 +158,25 @@ class EmailSubjectFallbackTest extends WPUMTestCase {
 	}
 
 	/**
+	 * A partial option must not hide the emails it has no entry for at all.
+	 */
+	public function test_partial_option_still_exposes_the_other_default_emails() {
+		$this->store_partial_registration_email( array(
+			'content' => '<p>Custom content</p>',
+		) );
+
+		$defaults = wpum_get_default_emails();
+
+		$recovery = wpum_get_email( 'password_recovery_request' );
+		$admin    = wpum_get_email( 'registration_admin_notification' );
+
+		$this->assertIsArray( $recovery, 'The password recovery email should still be retrievable.' );
+		$this->assertSame( $defaults['password_recovery_request']['subject'], $recovery['subject'] );
+		$this->assertIsArray( $admin, 'The admin notification email should still be retrievable.' );
+		$this->assertSame( $defaults['registration_admin_notification']['subject'], $admin['subject'] );
+	}
+
+	/**
 	 * The registration confirmation email still sends, with a subject, when the
 	 * stored email has no subject key.
 	 */

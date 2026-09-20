@@ -377,8 +377,11 @@ function wpum_get_emails() {
 		$emails = wpum_install_emails();
 	}
 
-	// A stored email can be partial, e.g. when only its content was ever saved,
-	// so fill the missing fields back in for every consumer of the option.
+	// A stored option can be partial, e.g. when only one email's content was
+	// ever saved, so restore any missing email and any missing field for every
+	// consumer of the option. Stored values always override the defaults.
+	$emails = array_merge( wpum_get_default_emails(), $emails );
+
 	foreach ( $emails as $email_id => $email ) {
 		if ( is_array( $email ) ) {
 			$emails[ $email_id ] = wpum_fill_email_defaults( $email, $email_id );
