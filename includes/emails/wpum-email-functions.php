@@ -251,6 +251,89 @@ function wpum_get_email_field( $email_id = false, $field_id = false ) {
 }
 
 /**
+ * Retrieve the default content of the emails shipped with the plugin.
+ *
+ * Used both when installing the emails into the database and as a fallback
+ * for stored emails that are missing one of the fields.
+ *
+ * @return array
+ */
+function wpum_get_default_emails() {
+	$emails = array(
+		'registration_confirmation'       => array(
+			'title'   => 'Welcome to {sitename}',
+			'footer'  => '<a href="{siteurl}">{sitename}</a>',
+			'content' => '<p>Hello {username}, and welcome to {sitename}. We’re thrilled to have you on board. </p>
+<p>For reference, here\'s your login information:</p>
+<p>Username: {username}<br />Login page: {login_page_url}<br />Password: {password}</p>
+<p>Thanks,<br />{sitename}</p>',
+			'subject' => 'Welcome to {sitename}',
+		),
+		'registration_admin_notification' => array(
+			'title'   => 'New User Registration',
+			'content' => '<p>New user registration on your site {sitename}:<br></p>
+<p>Username: {username}</p>
+<p>E-mail: {email}</p>',
+			'subject' => '[{sitename}] New User Registration',
+		),
+		'password_recovery_request'       => array(
+			'subject' => 'Reset your {sitename} password',
+			'title'   => 'Reset your {sitename} password',
+			'content' => '<p>Hello {username},</p>
+<p>You are receiving this message because you or somebody else has attempted to reset your password on {sitename}.</p>
+<p>If this was a mistake, just ignore this email and nothing will happen.</p>
+<p>To reset your password, visit the following address:</p>
+<p>{recovery_url}</p>',
+			'footer'  => '<a href="{siteurl}">{sitename}</a>',
+		),
+	);
+
+	return apply_filters( 'wpum_default_emails', $emails );
+}
+
+/**
+ * Fill in the fields an email stored in the database is missing.
+ *
+ * The email customizer only saves the fields that were changed, so an email
+ * that was edited before its defaults were installed can be stored without a
+ * subject. Missing fields fall back to the default, and an empty subject does
+ * too, since an email without a subject line is routinely rejected or filtered.
+ *
+ * @param array  $email    Stored email data.
+ * @param string $email_id Email identifier, e.g. registration_confirmation.
+ *
+ * @return array
+ */
+function wpum_fill_email_defaults( $email, $email_id ) {
+	if ( ! is_array( $email ) ) {
+		return $email;
+	}
+
+	$defaults = wpum_get_default_emails();
+
+	if ( isset( $defaults[ $email_id ] ) ) {
+		foreach ( $defaults[ $email_id ] as $field => $default ) {
+			if ( ! isset( $email[ $field ] ) ) {
+				$email[ $field ] = $default;
+				continue;
+			}
+
+			if ( 'subject' === $field && is_string( $email[ $field ] ) && '' === trim( $email[ $field ] ) ) {
+				$email[ $field ] = $default;
+			}
+		}
+	}
+
+	// Emails registered by addons have no defaults here, so fall back to the
+	// email heading and then to the site name rather than sending no subject.
+	if ( ! isset( $email['subject'] ) || ! is_string( $email['subject'] ) || '' === trim( $email['subject'] ) ) {
+		$email['subject'] = ! empty( $email['title'] ) ? $email['title'] : '{sitename}';
+	}
+
+	return $email;
+}
+
+/**
  * Retrieve details about emails stored into the database.
  *
  * @param bool     $email_id
@@ -268,7 +351,7 @@ function wpum_get_email( $email_id = false, $user_id = null ) {
 	$emails = wpum_get_emails();
 
 	if ( array_key_exists( $email_id, $emails ) && is_array( $emails[ $email_id ] ) ) {
-		$email = $emails[ $email_id ];
+		$email = wpum_fill_email_defaults( $emails[ $email_id ], $email_id );
 	} else {
 		return false;
 	}
