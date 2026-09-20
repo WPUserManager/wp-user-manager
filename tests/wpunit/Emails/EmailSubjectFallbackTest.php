@@ -124,6 +124,40 @@ class EmailSubjectFallbackTest extends WPUMTestCase {
 	}
 
 	/**
+	 * A whitespace only heading is not a usable subject either.
+	 */
+	public function test_unknown_email_with_blank_title_falls_back_to_sitename() {
+		update_option( 'wpum_email', array(
+			'addon_email' => array(
+				'title'   => '   ',
+				'content' => '<p>Addon content</p>',
+			),
+		) );
+
+		$email = wpum_get_email( 'addon_email' );
+
+		$this->assertSame( '{sitename}', $email['subject'] );
+	}
+
+	/**
+	 * The other readers of the stored emails see the filled in fields too.
+	 */
+	public function test_partial_email_is_filled_for_all_readers() {
+		$this->store_partial_registration_email( array(
+			'content' => '<p>Custom content</p>',
+		) );
+
+		$defaults = wpum_get_default_emails();
+		$emails   = wpum_get_emails();
+
+		$this->assertSame( $defaults['registration_confirmation']['subject'], $emails['registration_confirmation']['subject'] );
+		$this->assertSame(
+			$defaults['registration_confirmation']['subject'],
+			wpum_get_email_field( 'registration_confirmation', 'subject' )
+		);
+	}
+
+	/**
 	 * The registration confirmation email still sends, with a subject, when the
 	 * stored email has no subject key.
 	 */

@@ -129,13 +129,10 @@ class WPUM_Plugin_Updates {
 	 * Upgrade 2.8
 	 */
 	protected function upgrade_v2_8() {
-		$existing_emails = get_option( 'wpum_email', array() );
-		$emails          = wpum_install_emails();
-
-		if ( ! isset( $existing_emails['registration_admin_notification'] ) ) {
-			$existing_emails['registration_admin_notification'] = $emails['registration_admin_notification'];
-			update_option( 'wpum_email', $existing_emails );
-		}
+		// Merges the stored emails over the defaults, which adds the admin
+		// notification email and fills in any field a stored email is missing,
+		// then saves the result.
+		wpum_install_emails();
 	}
 
 	/**

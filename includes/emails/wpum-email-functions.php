@@ -327,7 +327,9 @@ function wpum_fill_email_defaults( $email, $email_id ) {
 	// Emails registered by addons have no defaults here, so fall back to the
 	// email heading and then to the site name rather than sending no subject.
 	if ( ! isset( $email['subject'] ) || ! is_string( $email['subject'] ) || '' === trim( $email['subject'] ) ) {
-		$email['subject'] = ! empty( $email['title'] ) ? $email['title'] : '{sitename}';
+		$title = isset( $email['title'] ) && is_string( $email['title'] ) ? trim( $email['title'] ) : '';
+
+		$email['subject'] = '' !== $title ? $title : '{sitename}';
 	}
 
 	return $email;
@@ -351,7 +353,7 @@ function wpum_get_email( $email_id = false, $user_id = null ) {
 	$emails = wpum_get_emails();
 
 	if ( array_key_exists( $email_id, $emails ) && is_array( $emails[ $email_id ] ) ) {
-		$email = wpum_fill_email_defaults( $emails[ $email_id ], $email_id );
+		$email = $emails[ $email_id ];
 	} else {
 		return false;
 	}
@@ -373,6 +375,14 @@ function wpum_get_emails() {
 
 	if ( empty( $emails ) ) {
 		$emails = wpum_install_emails();
+	}
+
+	// A stored email can be partial, e.g. when only its content was ever saved,
+	// so fill the missing fields back in for every consumer of the option.
+	foreach ( $emails as $email_id => $email ) {
+		if ( is_array( $email ) ) {
+			$emails[ $email_id ] = wpum_fill_email_defaults( $email, $email_id );
+		}
 	}
 
 	return $emails;
