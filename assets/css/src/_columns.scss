@@ -139,9 +139,14 @@
 	--container-lg: calc(var(--lg-min) + var(--gutter-width));
 }
 
-@custom-media --sm-viewport only screen and (min-width: 48em);
-@custom-media --md-viewport only screen and (min-width: 64em);
-@custom-media --lg-viewport only screen and (min-width: 75em);
+// Breakpoints. These were previously declared with PostCSS `@custom-media`,
+// but the CSS build is Sass only (`grunt css` = sass -> cssmin), so the
+// at-rules and every `@media (--*-viewport)` that referenced them were emitted
+// verbatim into wpum.css and silently ignored by browsers. Sass variables
+// compile to real media queries.
+$sm-viewport: "only screen and (min-width: 48em)";
+$md-viewport: "only screen and (min-width: 64em)";
+$lg-viewport: "only screen and (min-width: 75em)";
 .wpum-container-fluid,
 .wpum-container {
 	margin-right: auto;
@@ -360,7 +365,7 @@
 	order: 1;
 }
 
-@media (--sm-viewport) {
+@media #{$sm-viewport} {
 	.wpum-container {
 		width: var(--container-sm, 46rem);
 	}
@@ -519,7 +524,7 @@
 	}
 }
 
-@media (--md-viewport) {
+@media #{$md-viewport} {
 	.wpum-container {
 		width: var(--container-md, 61rem);
 	}
@@ -678,7 +683,7 @@
 	}
 }
 
-@media (--lg-viewport) {
+@media #{$lg-viewport} {
 	.wpum-container {
 		width: var(--container-lg, 71rem);
 	}
