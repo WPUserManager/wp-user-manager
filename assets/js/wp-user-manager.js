@@ -1,6 +1,6 @@
-/*! WP User Manager - v2.9.9
+/*! WP User Manager - v2.9.20
  * https://wpusermanager.com
- * Copyright (c) 2024; * Licensed GPLv2+ */
+ * Copyright (c) 2026; * Licensed GPLv2+ */
 jQuery( function( $ ) {
 	function initFields() {
 		$( '.wpum-multiselect:not(.wpum-clone-field)' ).each( function() {
