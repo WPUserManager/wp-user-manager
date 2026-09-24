@@ -12,6 +12,7 @@ class FrontendJsVariablesTest extends WPUMTestCase {
 	public function _tearDown() {
 		remove_all_filters( 'wpum_field_datepicker_disable_mobile' );
 		remove_all_filters( 'wpum_field_datepicker_date_format' );
+		remove_all_filters( 'pre_option_date_format' );
 
 		parent::_tearDown();
 	}
@@ -54,7 +55,14 @@ class FrontendJsVariablesTest extends WPUMTestCase {
 	 * The existing date format variable is unchanged.
 	 */
 	public function test_date_format_uses_the_site_date_format() {
-		update_option( 'date_format', 'd/m/Y' );
+		// A filter rather than update_option(), so the site setting can't leak
+		// into later tests even if the database isn't rolled back.
+		add_filter(
+			'pre_option_date_format',
+			function () {
+				return 'd/m/Y';
+			}
+		);
 
 		$variables = wpum_get_frontend_js_variables();
 
