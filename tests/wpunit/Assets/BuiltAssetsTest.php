@@ -3,7 +3,9 @@
  * Guards against unresolved at-rules shipping in the built CSS.
  */
 
-class BuiltAssetsTest extends \Codeception\Test\Unit {
+require_once dirname( __DIR__ ) . '/WPUMTestCase.php';
+
+class BuiltAssetsTest extends WPUMTestCase {
 
 	/**
 	 * Built stylesheets that ship to the browser.
@@ -29,7 +31,7 @@ class BuiltAssetsTest extends \Codeception\Test\Unit {
 	 * @param string $relative_path Path to the stylesheet, relative to the plugin root.
 	 */
 	public function test_built_css_has_no_unresolved_at_rules( $relative_path ) {
-		$path = dirname( dirname( __DIR__ ) ) . '/' . $relative_path;
+		$path = dirname( __DIR__, 3 ) . '/' . $relative_path;
 
 		$this->assertFileExists( $path, "Built stylesheet {$relative_path} is missing." );
 
