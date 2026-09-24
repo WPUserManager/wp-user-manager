@@ -1,4 +1,4 @@
-import { test, expect, wpLogout, deleteUser } from './fixtures';
+import { test, expect, wpLogout, deleteUser, createUser } from './fixtures';
 
 test.describe('Registration Form', () => {
   test.beforeEach(async ({ page, registerPage }) => {
@@ -152,47 +152,49 @@ test.describe('Registration Form', () => {
   });
 
   test('shows validation error for duplicate email', async ({ page, registerPage }) => {
-    await page.goto(registerPage);
+    // Create the user whose email we reuse. This used to assume admin@example.com
+    // existed, but wp-env installs the admin as wordpress@example.com, so on a
+    // fresh site the first attempt registered successfully and only the retry
+    // (which then found the account it had just created) passed.
+    // Leftovers from an earlier run are removed in global setup.
+    const existingEmail = 'e2e_existing_email@example.com';
+    createUser('e2e_existing_email', existingEmail, 'StrongP@ss123!');
 
-    const usernameField = page.locator('#username');
-    const emailField = page.locator('#user_email');
-    const passwordField = page.locator('#user_password');
+    try {
+      await page.goto(registerPage);
 
-    // Use the admin email which already exists
-    if (await usernameField.isVisible({ timeout: 2000 }).catch(() => false)) {
-      await usernameField.fill('duplicatetest');
+      const usernameField = page.locator('#username');
+      const emailField = page.locator('#user_email');
+      const passwordField = page.locator('#user_password');
+
+      if (await usernameField.isVisible({ timeout: 2000 }).catch(() => false)) {
+        await usernameField.fill('duplicatetest');
+      }
+
+      await emailField.fill(existingEmail);
+
+      if (await passwordField.isVisible({ timeout: 2000 }).catch(() => false)) {
+        await passwordField.fill('StrongP@ss123!');
+      }
+
+      // Handle privacy checkbox
+      const privacyCheckbox = page.locator('#privacy');
+      if (await privacyCheckbox.isVisible({ timeout: 1000 }).catch(() => false)) {
+        await privacyCheckbox.check();
+      }
+
+      await page.locator('input[name="submit_registration"]').click();
+
+      // The duplicate must be rejected with an error about the email.
+      const errorMessage = page.locator('.wpum-message.error');
+      await expect(errorMessage).toBeVisible({ timeout: 10000 });
+      await expect(errorMessage).toContainText(/email/i);
+
+      // Should NOT redirect to success
+      expect(page.url()).not.toContain('registration=success');
+    } finally {
+      deleteUser('e2e_existing_email');
     }
-
-    if (await emailField.isVisible({ timeout: 2000 }).catch(() => false)) {
-      await emailField.fill('admin@example.com');
-    }
-
-    if (await passwordField.isVisible({ timeout: 2000 }).catch(() => false)) {
-      await passwordField.fill('StrongP@ss123!');
-    }
-
-    // Handle privacy checkbox
-    const privacyCheckbox = page.locator('#privacy');
-    if (await privacyCheckbox.isVisible({ timeout: 1000 }).catch(() => false)) {
-      await privacyCheckbox.check();
-    }
-
-    await page.locator('input[name="submit_registration"]').click();
-
-    // Wait for response
-    await page.waitForTimeout(2000);
-
-    // Should show error about existing email
-    const errorMessage = page.locator('.wpum-message.error');
-    const hasError = await errorMessage.isVisible({ timeout: 5000 }).catch(() => false);
-
-    if (hasError) {
-      const errorText = await errorMessage.textContent();
-      expect(errorText).toBeTruthy();
-    }
-
-    // Should NOT redirect to success
-    expect(page.url()).not.toContain('registration=success');
   });
 
   test('redirect after successful registration', async ({ page, registerPage }) => {
