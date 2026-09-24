@@ -133,7 +133,18 @@ test.describe('Datepicker on mobile', () => {
     await expect(page.locator(VALUE_INPUT).first()).toHaveValue(
       /^\d{4}-\d{2}-\d{2}$/
     );
-    await expect(altInput).not.toHaveValue('');
+    // The visible input shows the date in the site's configured format
+    // (altFormat), not the device locale format the native fallback used.
+    const expected = await page.evaluate((selector) => {
+      const input = document.querySelector(selector) as any;
+      const fp = input._flatpickr;
+      return fp.formatDate(
+        fp.selectedDates[0],
+        (window as any).wpumFrontend.dateFormat
+      );
+    }, VALUE_INPUT);
+    expect(expected).not.toBe('');
+    await expect(altInput).toHaveValue(expected);
     await expect(calendar).toBeHidden();
   });
 });
