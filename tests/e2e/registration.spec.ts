@@ -193,7 +193,13 @@ test.describe('Registration Form', () => {
       // Should NOT redirect to success
       expect(page.url()).not.toContain('registration=success');
     } finally {
-      deleteUser('e2e_existing_email');
+      // Remove every account this test could have created, not just the
+      // fixture: retries don't re-run global setup, so a leftover account
+      // would make a retry pass and hide a regression. wp user delete accepts
+      // an email, which covers the fixture user and an account registered with
+      // the email as its login (the default form has no username field).
+      deleteUser(existingEmail);
+      deleteUser('duplicatetest');
     }
   });
 
