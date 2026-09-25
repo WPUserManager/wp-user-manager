@@ -125,18 +125,97 @@ function wpum_email_tag_lastname( $user_id ) {
 }
 
 /**
+ * Whether email tags should output HTML, i.e. an email template is in use.
+ *
+ * With the "none" template emails are sent as plain text, so tags must not
+ * output markup or HTML entities.
+ *
+ * @return bool
+ */
+function wpum_email_tags_output_html() {
+	return 'none' !== wpum_get_option( 'email_template' );
+}
+
+/**
+ * Escape a URL for output by an email tag.
+ *
+ * HTML emails get esc_url(), which encodes ampersands, so the URL is safe as
+ * both text and an href attribute. Plain text emails get esc_url_raw(), so the
+ * URL stays copyable and clickable.
+ *
+ * @param string $url
+ *
+ * @return string
+ */
+function wpum_email_tag_escape_url( $url ) {
+	return wpum_email_tags_output_html() ? esc_url( $url ) : esc_url_raw( $url );
+}
+
+/**
+ * Build an email tag link: an anchor for HTML emails, the plain URL for plain text emails.
+ *
+ * @param string $url   Unescaped URL.
+ * @param string $style Optional inline style for the anchor.
+ *
+ * @return string
+ */
+function wpum_email_tag_link( $url, $style = '' ) {
+	if ( ! wpum_email_tags_output_html() ) {
+		return esc_url_raw( $url );
+	}
+
+	$style = $style ? ' style="' . esc_attr( $style ) . '"' : '';
+
+	return '<a href="' . esc_url( $url ) . '"' . $style . '>' . esc_html( $url ) . '</a>';
+}
+
+/**
+ * Get the unescaped URL of the login page.
+ *
+ * @return string|false
+ */
+function wpum_get_email_login_page_url() {
+	return get_permalink( wpum_get_core_page_id( 'login' ) );
+}
+
+/**
+ * Get the unescaped personalized password reset URL.
+ *
+ * @param WPUM_Emails|object $email              The email being sent.
+ * @param int                $user_id            ID of the user the email is about.
+ * @param string             $password_reset_key Reset key, only set for emails that generate one.
+ *
+ * @return string
+ */
+function wpum_get_email_password_recovery_url( $email, $user_id, $password_reset_key ) {
+	$user_login = isset( $email->user_login ) ? $email->user_login : '';
+
+	if ( ! $user_login && $user_id ) {
+		$user       = get_userdata( $user_id );
+		$user_login = $user ? $user->user_login : '';
+	}
+
+	$reset_page = wpum_get_core_page_id( 'password' );
+	$reset_page = get_permalink( $reset_page );
+
+	return add_query_arg( array(
+		'login'  => rawurlencode( $user_login ),
+		'key'    => $password_reset_key,
+		'action' => 'wpum-reset',
+	), $reset_page );
+}
+
+/**
  * Parse the {login_page_url} tag into the email to display the site login page url.
+ *
+ * Outputs the URL only, so it can be used inside an href attribute.
  *
  * @param string $user_id
  *
  * @return string
  */
 function wpum_email_tag_login_page_url( $user_id = false ) { // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.Found -- Required by email tag callback signature.
-
-	$login_page_url = wpum_get_core_page_id( 'login' );
-	$login_page_url = get_permalink( $login_page_url );
-
-	return $login_page_url;
+	return wpum_email_tag_escape_url( wpum_get_email_login_page_url() );
 }
 
 /**
@@ -147,17 +226,7 @@ function wpum_email_tag_login_page_url( $user_id = false ) { // phpcs:ignore Gen
  * @return string
  */
 function wpum_email_tag_login_page_link( $user_id = false ) { // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.Found -- Required by email tag callback signature.
-
-	$login_page_url = wpum_get_core_page_id( 'login' );
-	$login_page_url = get_permalink( $login_page_url );
-
-	$url = $login_page_url;
-
-	if ( wpum_get_option( 'email_template' ) !== 'none' ) {
-		$url = '<a href="' . htmlspecialchars( $login_page_url ) . '">' . esc_html( $login_page_url ) . '</a>';
-	}
-
-	return $url;
+	return wpum_email_tag_link( wpum_get_email_login_page_url() );
 }
 
 /**
@@ -174,57 +243,35 @@ function wpum_email_tag_password( $user_id = false, $password_reset_key = false,
 /**
  * Parse the {recovery_url} tag into the email to display personalized password recovery url.
  *
- * @param int    $user_id
- * @param string $password_reset_key
- * @param string $plain_text_password
- * @param string $tag
- * @param string $email
+ * Outputs the URL only, so it can be used inside an href attribute.
+ *
+ * @param int         $user_id
+ * @param string      $password_reset_key
+ * @param string      $plain_text_password
+ * @param string      $tag
+ * @param WPUM_Emails $email
  *
  * @return string
  */
 function wpum_email_tag_password_recovery_url( $user_id, $password_reset_key, $plain_text_password, $tag, $email ) {
-
-	$reset_page = wpum_get_core_page_id( 'password' );
-	$reset_page = get_permalink( $reset_page );
-	$reset_page = add_query_arg( array(
-		'login'  => rawurlencode( $email->user_login ),
-		'key'    => $password_reset_key,
-		'action' => 'wpum-reset',
-	), $reset_page );
-
-	return $reset_page;
+	return wpum_email_tag_escape_url( wpum_get_email_password_recovery_url( $email, $user_id, $password_reset_key ) );
 }
 
 /**
  * Parse the {recovery_link} tag into the email to display personalized password recovery url as a link.
  *
- * @param int    $user_id
- * @param string $password_reset_key
- * @param string $plain_text_password
- * @param string $tag
- * @param string $email
+ * @param int         $user_id
+ * @param string      $password_reset_key
+ * @param string      $plain_text_password
+ * @param string      $tag
+ * @param WPUM_Emails $email
  *
  * @return string
  */
 function wpum_email_tag_password_recovery_link( $user_id, $password_reset_key, $plain_text_password, $tag, $email ) {
-
-	$reset_page = wpum_get_core_page_id( 'password' );
-	$reset_page = get_permalink( $reset_page );
-	$reset_page = add_query_arg( array(
-		'login'  => rawurlencode( $email->user_login ),
-		'key'    => $password_reset_key,
-		'action' => 'wpum-reset',
-	), $reset_page );
-
 	$link_color = apply_filters( 'wpum_email_tag_password_recovery_url_color', '#000' );
 
-	$output = $reset_page;
-
-	if ( wpum_get_option( 'email_template' ) !== 'none' ) {
-		$output = '<a href="' . htmlspecialchars( $reset_page ) . '" style="color:' . $link_color . '">' . esc_html( $reset_page ) . '</a>';
-	}
-
-	return $output;
+	return wpum_email_tag_link( wpum_get_email_password_recovery_url( $email, $user_id, $password_reset_key ), 'color:' . $link_color );
 }
 
 /**
@@ -304,7 +351,7 @@ function wpum_get_default_emails() {
 			'footer'  => '<a href="{siteurl}">{sitename}</a>',
 			'content' => '<p>Hello {username}, and welcome to {sitename}. We’re thrilled to have you on board. </p>
 <p>For reference, here\'s your login information:</p>
-<p>Username: {username}<br />Login page: {login_page_url}<br />Password: {password}</p>
+<p>Username: {username}<br />Login page: {login_page_link}<br />Password: {password}</p>
 <p>Thanks,<br />{sitename}</p>',
 			'subject' => 'Welcome to {sitename}',
 		),
@@ -322,7 +369,7 @@ function wpum_get_default_emails() {
 <p>You are receiving this message because you or somebody else has attempted to reset your password on {sitename}.</p>
 <p>If this was a mistake, just ignore this email and nothing will happen.</p>
 <p>To reset your password, visit the following address:</p>
-<p>{recovery_url}</p>',
+<p>{recovery_link}</p>',
 			'footer'  => '<a href="{siteurl}">{sitename}</a>',
 		),
 	);
