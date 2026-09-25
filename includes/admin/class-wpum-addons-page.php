@@ -64,7 +64,7 @@ class WPUM_Addons_Page {
 			if ( $cached_feed ) {
 				$addons = $cached_feed;
 			} else {
-				$feed = wp_remote_get( $this->api, array( 'sslverify' => false ) );
+				$feed = wp_remote_get( $this->api );
 				if ( ! is_wp_error( $feed ) ) {
 					$feed_content = wp_remote_retrieve_body( $feed );
 					$addons       = json_decode( $feed_content );

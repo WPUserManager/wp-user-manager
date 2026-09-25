@@ -17,6 +17,7 @@ use WPUserManager\Stripe\Controllers\Invoices;
 use WPUserManager\Stripe\Controllers\Subscriptions;
 use WPUserManager\Stripe\Models\Product;
 use WPUserManager\Stripe\Models\User;
+use WPUserManager\Stripe\Controllers\Products;
 
 /**
  * StripeWebhookController
@@ -39,6 +40,16 @@ class StripeWebhookController {
 	protected $invoices;
 
 	/**
+	 * @var string
+	 */
+	protected $gateway_mode;
+
+	/**
+	 * @var string
+	 */
+	protected $secret_key;
+
+	/**
 	 * StripeWebhookController constructor.
 	 *
 	 * @param string $secret_key
@@ -53,6 +64,8 @@ class StripeWebhookController {
 		$this->subscriptions  = new Subscriptions( $gateway_mode );
 		$this->invoices       = new Invoices( $gateway_mode );
 		$this->webhook_secret = $webhook_secret;
+		$this->gateway_mode   = $gateway_mode;
+		$this->secret_key     = $secret_key;
 	}
 
 	/**
@@ -132,21 +145,71 @@ class StripeWebhookController {
 			$user_id = $subscription->user_id;
 		}
 
-		// For one time payments, mark as paid
+		// For one time payments, mark as paid once Stripe confirms the funds.
+		// Delayed payment methods complete the session as unpaid and are
+		// handled by checkout.session.async_payment_succeeded instead.
 		if ( ! isset( $payload['data']['object']['subscription'] ) ) {
-			$user = new User( $user_id );
-			$data = $user->getPlanMeta();
+			if ( ! $this->sessionIsPaid( $payload ) ) {
+				return new \WP_REST_Response( 'Payment not yet complete', 200 );
+			}
 
-			$product = new Product();
-			$product->hydrate( $data );
-			$product->setPaid();
-
-			$user->setPlanMeta( $product->to_array() );
+			$this->markOneTimePlanPaid( $user_id );
 
 			return new \WP_REST_Response( 'Webhook handled', 200 );
 		}
 
 		return $this->createSubscription( $user_id, $payload );
+	}
+
+	/**
+	 * Handle the checkout.session.async_payment_succeeded webhook.
+	 * Fired when a delayed payment method (e.g. bank debit) settles.
+	 *
+	 * @param array $payload
+	 *
+	 * @return \WP_REST_Response
+	 */
+	protected function handleCheckoutSessionAsyncPaymentSucceeded( $payload ) {
+		if ( isset( $payload['data']['object']['subscription'] ) || ! $this->sessionIsPaid( $payload ) ) {
+			return new \WP_REST_Response( 'Webhook handled', 200 );
+		}
+
+		$email = isset( $payload['data']['object']['customer_email'] ) ? $payload['data']['object']['customer_email'] : '';
+		$user  = $email ? get_user_by( 'email', $email ) : false;
+		if ( ! $user ) {
+			return new \WP_REST_Response( 'User not found', 200 );
+		}
+
+		$this->markOneTimePlanPaid( $user->ID );
+
+		return new \WP_REST_Response( 'Webhook handled', 200 );
+	}
+
+	/**
+	 * Whether a Checkout Session payload reports a successful payment.
+	 *
+	 * @param array $payload
+	 *
+	 * @return bool
+	 */
+	protected function sessionIsPaid( $payload ) {
+		return isset( $payload['data']['object']['payment_status'] ) && 'paid' === $payload['data']['object']['payment_status'];
+	}
+
+	/**
+	 * Mark a user's one time plan as paid.
+	 *
+	 * @param int $user_id
+	 */
+	protected function markOneTimePlanPaid( $user_id ) {
+		$user = new User( $user_id );
+		$data = $user->getPlanMeta();
+
+		$product = new Product();
+		$product->hydrate( $data );
+		$product->setPaid();
+
+		$user->setPlanMeta( $product->to_array() );
 	}
 
 	/**
@@ -307,6 +370,57 @@ class StripeWebhookController {
 		}
 
 		do_action( 'wpum_stripe_webhook_invoice_created', $subscription );
+
+		return new \WP_REST_Response( 'Webhook handled', 200 );
+	}
+
+	/**
+	 * Handle the product.created webhook to update the cached Stripe products.
+	 *
+	 * @param array $payload
+	 *
+	 * @return \WP_REST_Response
+	 * @throws \Exception
+	 */
+	protected function handleProductCreated( $payload ) {
+		$products = new Products( $this->secret_key, $this->gateway_mode );
+		$products->all( true );
+
+		do_action( 'wpum_stripe_webhook_product_updated', $payload );
+
+		return new \WP_REST_Response( 'Webhook handled', 200 );
+	}
+
+	/**
+	 * Handle the product.deleted webhook to update the cached Stripe products.
+	 *
+	 * @param array $payload
+	 *
+	 * @return \WP_REST_Response
+	 * @throws \Exception
+	 */
+	protected function handleProductDeleted( $payload ) {
+		$products = new Products( $this->secret_key, $this->gateway_mode );
+		$products->all( true );
+
+		do_action( 'wpum_stripe_webhook_product_updated', $payload );
+
+		return new \WP_REST_Response( 'Webhook handled', 200 );
+	}
+
+	/**
+	 * Handle the product.updated webhook to update the cached Stripe products.
+	 *
+	 * @param array $payload
+	 *
+	 * @return \WP_REST_Response
+	 * @throws \Exception
+	 */
+	protected function handleProductUpdated( $payload ) {
+		$products = new Products( $this->secret_key, $this->gateway_mode );
+		$products->all( true );
+
+		do_action( 'wpum_stripe_webhook_product_updated', $payload );
 
 		return new \WP_REST_Response( 'Webhook handled', 200 );
 	}

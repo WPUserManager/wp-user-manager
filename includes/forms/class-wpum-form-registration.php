@@ -514,6 +514,11 @@ class WPUM_Form_Registration extends WPUM_Form {
 				return false;
 			}
 
+			// Security: reject array values for avatar/cover POST fields to prevent path injection.
+			if ( ( isset( $_POST['current_user_avatar'] ) && is_array( $_POST['current_user_avatar'] ) ) || ( isset( $_POST['current_user_cover'] ) && is_array( $_POST['current_user_cover'] ) ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce already verified above.
+				throw new Exception( esc_html__( 'Invalid input.', 'wp-user-manager' ) );
+			}
+
 			$return = $this->validate_fields( $values );
 			if ( is_wp_error( $return ) ) {
 				throw new Exception( $return->get_error_message() );
@@ -572,14 +577,24 @@ class WPUM_Form_Registration extends WPUM_Form {
 				$user->set_role( $this->role );
 			}
 
+			$upload_dir = wp_upload_dir()['basedir'];
+
 			if ( isset( $values['register']['user_cover']['url'] ) ) {
-				carbon_set_user_meta( $user->ID, 'user_cover', $values['register']['user_cover']['url'] );
-				update_user_meta( $user->ID, '_user_cover_path', $values['register']['user_cover']['path'] );
+				$cover_path = $values['register']['user_cover']['path'] ?? '';
+				// Only store path if it is within the uploads directory and contains no traversal.
+				if ( $cover_path && false === strpos( $cover_path, '..' ) && 0 === strpos( $cover_path, $upload_dir ) ) {
+					carbon_set_user_meta( $user->ID, 'user_cover', esc_url_raw( $values['register']['user_cover']['url'] ) );
+					update_user_meta( $user->ID, '_user_cover_path', $cover_path );
+				}
 			}
 
 			if ( isset( $values['register']['user_avatar']['url'] ) ) {
-				carbon_set_user_meta( $user->ID, 'current_user_avatar', $values['register']['user_avatar']['url'] );
-				update_user_meta( $user->ID, '_current_user_avatar_path', $values['register']['user_avatar']['path'] );
+				$avatar_path = $values['register']['user_avatar']['path'] ?? '';
+				// Only store path if it is within the uploads directory and contains no traversal.
+				if ( $avatar_path && false === strpos( $avatar_path, '..' ) && 0 === strpos( $avatar_path, $upload_dir ) ) {
+					carbon_set_user_meta( $user->ID, 'current_user_avatar', esc_url_raw( $values['register']['user_avatar']['url'] ) );
+					update_user_meta( $user->ID, '_current_user_avatar_path', $avatar_path );
+				}
 			}
 
 			// Allow developers to extend signup process.

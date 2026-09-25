@@ -186,6 +186,24 @@ test.describe('Profile Editing', () => {
     await emailField.fill(originalEmail);
   });
 
+  test('account password tab via URL', async ({ page, accountPage }) => {
+    // Visit the password tab directly via URL
+    await page.goto(accountPage + 'password/');
+
+    // The account page container should be visible
+    const accountContainer = page.locator('.wpum-account-page');
+    await expect(accountContainer).toBeVisible({ timeout: 5000 });
+
+    // The password form should render
+    const passwordForm = page.locator('#wpum-submit-password-form');
+    await expect(passwordForm).toBeVisible({ timeout: 5000 });
+
+    // The form should have password input fields
+    const passwordInput = page.locator('input[type="password"]');
+    const passwordFieldCount = await passwordInput.count();
+    expect(passwordFieldCount).toBeGreaterThanOrEqual(2);
+  });
+
   test('account tabs navigation', async ({ page, accountPage }) => {
     await page.goto(accountPage);
 

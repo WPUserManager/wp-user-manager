@@ -1,4 +1,4 @@
-import { test, expect } from './fixtures';
+import { test, expect, wpCli } from './fixtures';
 
 test.describe('Login Form', () => {
   test.beforeEach(async ({ page }) => {
@@ -106,6 +106,37 @@ test.describe('Login Form', () => {
     // Verify we are NOT logged in
     await page.goto('/wp-admin/');
     await expect(page).toHaveURL(/wp-login\.php/);
+  });
+
+  test('generic login errors hides username enumeration', async ({ page, loginPage }) => {
+    wpCli(`eval 'wpum_update_option("generic_login_errors", true);'`);
+
+    try {
+      await page.goto(loginPage);
+      await page.locator('#username').fill('nonexistent_user_12345');
+      await page.locator('#password').fill('WrongPassword123!');
+      await page.locator('input[name="submit_login"]').click();
+      await page.waitForLoadState('networkidle', { timeout: 10000 }).catch(() => {});
+
+      const errorMessage = page.locator('.wpum-message.error');
+      await expect(errorMessage).toBeVisible({ timeout: 5000 });
+      await expect(errorMessage).toContainText('username or password you entered is incorrect');
+      await expect(errorMessage).not.toContainText('not registered');
+      await expect(errorMessage).not.toContainText('Unknown');
+
+      await page.goto(loginPage);
+      await page.locator('#username').fill('testuser_login');
+      await page.locator('#password').fill('WrongPassword123!');
+      await page.locator('input[name="submit_login"]').click();
+      await page.waitForLoadState('networkidle', { timeout: 10000 }).catch(() => {});
+
+      const errorMessage2 = page.locator('.wpum-message.error');
+      await expect(errorMessage2).toBeVisible({ timeout: 5000 });
+      await expect(errorMessage2).toContainText('username or password you entered is incorrect');
+      await expect(errorMessage2).not.toContainText('incorrect password');
+    } finally {
+      wpCli(`eval 'wpum_update_option("generic_login_errors", false);'`);
+    }
   });
 
   test('redirect after login', async ({ page, loginPage }) => {

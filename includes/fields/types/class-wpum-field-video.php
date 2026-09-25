@@ -22,12 +22,20 @@ class WPUM_Field_Video extends WPUM_Field_File {
 	 */
 	public function __construct() {
 		$this->group             = 'advanced';
-		$this->name              = esc_html__( 'Video', 'wp-user-manager' );
 		$this->type              = 'video';
 		$this->template          = 'file';
 		$this->icon              = 'dashicons-video-alt2';
 		$this->order             = 3;
 		$this->min_addon_version = '2.1';
+	}
+
+	/**
+	 * Set the name of the field.
+	 *
+	 * @return void
+	 */
+	public function set_name() {
+		$this->name = esc_html__( 'Video', 'wp-user-manager' );
 	}
 
 	/**

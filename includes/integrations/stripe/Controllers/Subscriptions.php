@@ -187,6 +187,12 @@ class Subscriptions extends \WPUM_DB {
 	 */
 	public function where( $key, $value ) {
 		global $wpdb;
+
+		// An empty value would drop the condition and match any subscription.
+		if ( null === $value || '' === (string) $value ) {
+			return null;
+		}
+
 		$where = $this->parse_where( array( $key => $value ) );
 
 		return $wpdb->get_row( "SELECT * FROM $this->table_name $where ORDER BY created_at DESC LIMIT 1;" ); // phpcs:ignore
@@ -200,29 +206,17 @@ class Subscriptions extends \WPUM_DB {
 	 * @return string
 	 */
 	private function parse_where( $args ) {
+		global $wpdb;
+
 		$where = '';
 
-		if ( ! empty( $args['customer_id'] ) ) {
-			$customer_id = $args['customer_id'];
-			$where      .= " AND customer_id = '$customer_id' ";
+		foreach ( array( 'customer_id', 'user_id', 'subscription_id', 'plan_id' ) as $column ) {
+			if ( ! empty( $args[ $column ] ) ) {
+				$where .= $wpdb->prepare( " AND {$column} = %s", $args[ $column ] ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- Column name is from a fixed list.
+			}
 		}
 
-		if ( ! empty( $args['user_id'] ) ) {
-			$customer_id = $args['user_id'];
-			$where      .= " AND user_id = '$customer_id' ";
-		}
-
-		if ( ! empty( $args['subscription_id'] ) ) {
-			$subscription_id = $args['subscription_id'];
-			$where          .= " AND subscription_id = '$subscription_id'";
-		}
-
-		if ( ! empty( $args['plan_id'] ) ) {
-			$plan_id = $args['plan_id'];
-			$where  .= " AND plan_id = '$plan_id' ";
-		}
-
-		$where .= " AND gateway_mode = '$this->gateway_mode' ";
+		$where .= $wpdb->prepare( ' AND gateway_mode = %s', $this->gateway_mode );
 
 		return ' WHERE 1=1 ' . $where;
 	}

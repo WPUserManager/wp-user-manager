@@ -163,36 +163,17 @@ function wpum_install_registration_form( $fields = array() ) {
  * @return array
  */
 function wpum_install_emails() {
-	$emails = array(
-		'registration_confirmation'       => array(
-			'title'   => 'Welcome to {sitename}',
-			'footer'  => '<a href="{siteurl}">{sitename}</a>',
-			'content' => '<p>Hello {username}, and welcome to {sitename}. We’re thrilled to have you on board. </p>
-<p>For reference, here\'s your login information:</p>
-<p>Username: {username}<br />Login page: {login_page_url}<br />Password: {password}</p>
-<p>Thanks,<br />{sitename}</p>',
-			'subject' => 'Welcome to {sitename}',
-		),
-		'registration_admin_notification' => array(
-			'title'   => 'New User Registration',
-			'content' => '<p>New user registration on your site {sitename}:<br></p>
-<p>Username: {username}</p>
-<p>E-mail: {email}</p>',
-			'subject' => '[{sitename}] New User Registration',
-		),
-		'password_recovery_request'       => array(
-			'subject' => 'Reset your {sitename} password',
-			'title'   => 'Reset your {sitename} password',
-			'content' => '<p>Hello {username},</p>
-<p>You are receiving this message because you or somebody else has attempted to reset your password on {sitename}.</p>
-<p>If this was a mistake, just ignore this email and nothing will happen.</p>
-<p>To reset your password, visit the following address:</p>
-<p>{recovery_url}</p>',
-			'footer'  => '<a href="{siteurl}">{sitename}</a>',
-		),
-	);
+	$emails = wpum_get_default_emails();
 
 	$emails = array_merge( $emails, get_option( 'wpum_email', array() ) );
+
+	// A stored email can be partial, e.g. when only its content was ever saved,
+	// so a top level merge alone would leave it without a subject.
+	foreach ( $emails as $email_id => $email ) {
+		if ( is_array( $email ) ) {
+			$emails[ $email_id ] = wpum_fill_email_defaults( $email, $email_id );
+		}
+	}
 
 	update_option( 'wpum_email', $emails );
 
