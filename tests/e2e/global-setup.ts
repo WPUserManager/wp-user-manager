@@ -85,6 +85,8 @@ async function globalSetup(): Promise<void> {
     deleteUser('testuser_redirect');
     deleteUser('testuser_redirect@example.com');
     deleteUser('testuser_delete');
+    deleteUser('duplicatetest');
+    deleteUser('e2e_existing_email');
     deleteUser('stripe_e2e_checkout');
     deleteUser('stripe_e2e_checkout@example.com');
     deleteUser('stripe_e2e_redirect');
