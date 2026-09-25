@@ -78,7 +78,7 @@ class WPUM_Plugin_Updates {
 	 */
 	protected function upgrade_v2_2() {
 		// Get default registration form
-		$registration_forms = WPUM()->registration_forms->get_forms();
+		$registration_forms = WPUM()->registration_forms->get_forms( array( 'number' => -1 ) );
 		$form               = false;
 		foreach ( $registration_forms as $registration_form ) {
 			if ( $registration_form->is_default() ) {
