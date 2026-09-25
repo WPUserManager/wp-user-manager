@@ -288,7 +288,7 @@ function wpum_get_default_emails() {
 		),
 	);
 
-	return apply_filters( 'wpum_default_emails', $emails );
+	return $emails;
 }
 
 /**
