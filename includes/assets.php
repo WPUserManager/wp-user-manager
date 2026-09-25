@@ -53,6 +53,13 @@ function wpum_load_scripts() {
 	wp_enqueue_script( 'jquery' );
 	wp_register_script( 'wpum-directories', WPUM_PLUGIN_URL . 'assets/js/wpum-directories.min.js', array( 'jquery' ), WPUM_VERSION, true );
 
+	// FilePond for the image field. Enqueued by the image field template, so it only loads on pages that show one.
+	// The vendor bundle is the upstream minified files concatenated, with their MIT licence headers kept.
+	$suffix = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
+	wp_register_style( 'wpum-filepond', WPUM_PLUGIN_URL . 'assets/css/vendor/filepond.css', array(), WPUM_VERSION );
+	wp_register_script( 'wpum-filepond', WPUM_PLUGIN_URL . 'assets/js/vendor/filepond-bundle.js', array( 'jquery' ), WPUM_VERSION, true );
+	wp_register_script( 'wpum-filepond-init', WPUM_PLUGIN_URL . 'assets/js/wpum-filepond' . $suffix . '.js', array( 'jquery', 'wpum-filepond' ), WPUM_VERSION, true );
+
 	if ( is_page( wpum_get_core_page_id( 'account' ) ) || is_page( wpum_get_core_page_id( 'register' ) ) ) {
 		wpum_enqueue_scripts();
 	}
@@ -89,12 +96,9 @@ function wpum_enqueue_scripts() {
 	wp_enqueue_script( 'wpum-select2', WPUM_PLUGIN_URL . 'assets/js/vendor/select2.min.js', array( 'jquery' ), WPUM_VERSION, true );
 	wp_enqueue_script( 'wpum-datepicker', WPUM_PLUGIN_URL . 'assets/js/vendor/flatpickr.min.js', array( 'jquery' ), WPUM_VERSION, true );
 	wp_enqueue_style( 'wpum-datepicker-style', WPUM_PLUGIN_URL . 'assets/css/vendor/flatpickr.min.css', false, WPUM_VERSION );
-	wp_enqueue_style( 'filepond-style', WPUM_PLUGIN_URL . 'assets/css/vendor/filepond.css', false, WPUM_VERSION );
-	wp_enqueue_script( 'filepond-js', WPUM_PLUGIN_URL . 'assets/js/vendor/filepond-bundle.min.js', array( 'jquery' ), WPUM_VERSION, true );
 
 	$suffix = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
 	wp_enqueue_script( 'wpum-frontend-js', WPUM_PLUGIN_URL . 'assets/js/wp-user-manager' . $suffix . '.js', array( 'jquery' ), WPUM_VERSION, true );
-	wp_enqueue_script( 'wpum-filepond-js', WPUM_PLUGIN_URL . 'assets/js/wpum-filepond' . $suffix . '.js', array( 'jquery', 'filepond-js' ), WPUM_VERSION, true );
 
 	wp_localize_script( 'wpum-frontend-js', 'wpumFrontend', wpum_get_frontend_js_variables() );
 

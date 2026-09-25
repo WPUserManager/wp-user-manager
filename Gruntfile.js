@@ -33,8 +33,15 @@ module.exports = function( grunt ) {
 				],
 				dest: 'assets/js/wpum-stripe.js'
 			},
-			// Combine all filepond related scripts into a single file
+			// Combine the upstream minified FilePond files into a single file. No WPUM
+			// banner and no uglify: the files are already minified and keep their MIT
+			// licence headers.
 			filepond_scripts: {
+				options: {
+					banner: '',
+					stripBanners: false,
+					separator: ';\n'
+				},
 				src: [
 					'assets/js/vendor/filepond/filepond.min.js',
 					'assets/js/vendor/filepond/filepond.jquery.js',
@@ -46,6 +53,10 @@ module.exports = function( grunt ) {
 			},
 			// Combine all filepond related styles into a single file
 			filepond_styles: {
+				options: {
+					banner: '',
+					stripBanners: false
+				},
 				src: [
 					'assets/css/vendor/filepond/filepond.min.css',
 					'assets/css/vendor/filepond/filepond-plugin-image-preview.min.css'
@@ -102,8 +113,7 @@ module.exports = function( grunt ) {
 					'assets/js/wp-user-manager.min.js': ['assets/js/src/wp-user-manager.js'],
 					'assets/js/wpum-directories.min.js': ['assets/js/src/wpum-directories.js'],
 					'assets/js/wpum-stripe.min.js': ['assets/js/src/wpum-stripe.js'],
-					'assets/js/wpum-filepond.min.js': ['assets/js/src/wpum-filepond.js'],
-					'assets/js/vendor/filepond-bundle.min.js': ['assets/js/vendor/filepond-bundle.js']
+					'assets/js/wpum-filepond.min.js': ['assets/js/src/wpum-filepond.js']
 				},
 				options: {
 					banner: '/*! <%= pkg.title %> - v<%= pkg.version %>\n' +

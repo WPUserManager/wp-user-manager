@@ -579,10 +579,12 @@ function wpum_upload_file( $file, $args = array() ) {
 		return new WP_Error( 'upload', __( 'Sorry, you are not allowed to upload this file type.' ) );
 	}
 
-	if ( ! in_array( $file['type'], $allowed_mime_types, true ) ) {
+	// Check the type WordPress detected from the file, not the browser-supplied $file['type'],
+	// which the client controls and could claim to be an allowed type.
+	if ( ! in_array( $check['type'], $allowed_mime_types, true ) ) {
 		if ( $args['file_label'] ) {
 			/* translators: %1$s: file label %2$s: file type  %3$s: allowed types */
-			return new WP_Error( 'upload', sprintf( __( '"%1$s" (filetype %2$s) needs to be one of the following file types: %3$s', 'wp-user-manager' ), $args['file_label'], $file['type'], implode( ', ', array_keys( $allowed_mime_types ) ) ) );
+			return new WP_Error( 'upload', sprintf( __( '"%1$s" (filetype %2$s) needs to be one of the following file types: %3$s', 'wp-user-manager' ), $args['file_label'], $check['type'], implode( ', ', array_keys( $allowed_mime_types ) ) ) );
 		} else {
 			/* translators: %s: allowed file types */
 			return new WP_Error( 'upload', sprintf( __( 'Uploaded files need to be one of the following file types: %s', 'wp-user-manager' ), implode( ', ', array_keys( $allowed_mime_types ) ) ) );

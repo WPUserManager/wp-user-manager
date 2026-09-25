@@ -1,3 +1,8 @@
+/*!
+ * jquery-filepond 1.0.0
+ * Licensed under MIT, https://opensource.org/licenses/MIT/
+ * https://github.com/pqina/jquery-filepond
+ */
 (function($, FilePond){
     'use strict';
 
