@@ -22,7 +22,6 @@ class WPUM_Field_Audio extends WPUM_Field_File {
 	 */
 	public function __construct() {
 		$this->group             = 'advanced';
-		$this->name              = esc_html__( 'Audio', 'wp-user-manager' );
 		$this->type              = 'audio';
 		$this->template          = 'file';
 		$this->icon              = 'dashicons-format-audio';
@@ -31,10 +30,18 @@ class WPUM_Field_Audio extends WPUM_Field_File {
 	}
 
 	/**
+	 * Set the name of the field.
+	 *
+	 * @return void
+	 */
+	public function set_name() {
+		$this->name = esc_html__( 'Audio', 'wp-user-manager' );
+	}
+
+	/**
 	 * @return string
 	 */
 	public function default_allowed_mime_types() {
 		return 'mp3,m4a,ogg,wav';
 	}
-
 }

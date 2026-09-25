@@ -56,7 +56,5 @@ class WPUM_Emails_Customizer_Editor_Control extends WP_Customize_Control {
 		<br/>
 
 		<?php
-
 	}
-
 }

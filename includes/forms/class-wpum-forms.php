@@ -41,7 +41,16 @@ class WPUM_Forms {
 	 * Constructor.
 	 */
 	public function __construct() {
-		add_action( 'init', array( $this, 'load_posted_form' ) );
+		add_action( 'init', array( $this, 'load_posted_form_action' ) );
+	}
+
+	/**
+	 * Action callback for init hook.
+	 *
+	 * @return void
+	 */
+	public function load_posted_form_action() {
+		$this->load_posted_form();
 	}
 
 	/**

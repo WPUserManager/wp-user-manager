@@ -270,7 +270,6 @@ class WPUM_DB_Fields extends WPUM_DB {
 		}
 
 		return $fields;
-
 	}
 
 	/**
@@ -309,5 +308,4 @@ class WPUM_DB_Fields extends WPUM_DB {
 
 		return $where;
 	}
-
 }

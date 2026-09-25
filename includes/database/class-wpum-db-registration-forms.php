@@ -259,5 +259,4 @@ class WPUM_DB_Registration_Forms extends WPUM_DB {
 
 		return $where;
 	}
-
 }

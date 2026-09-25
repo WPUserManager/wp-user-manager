@@ -28,17 +28,14 @@ class WPUM_Options_Panel {
 	 * Get things started.
 	 */
 	public function init() {
-		// Setup labels for the options panel.
-		add_filter( 'wpum_labels', array( $this, 'register_labels' ) );
+		// Set the option panel labels during 'init' to avoid early translation issues.
+		add_action( 'init', array( $this, 'init_option_panel_labels' ) );
 
 		$this->panel = new \WPUM\TDP\OptionsKit( 'wpum' );
 		$this->panel->set_page_title( 'WP User Manager Settings' );
 
 		// Add a logo to the options panel.
 		$this->panel->add_image( WPUM_PLUGIN_URL . 'assets/images/logo.svg' );
-
-		// Register action buttons for the header.
-		$this->register_action_buttons();
 
 		// Setup the options panel menu.
 		add_filter( 'wpum_menu', array( $this, 'setup_menu' ) );
@@ -49,6 +46,19 @@ class WPUM_Options_Panel {
 
 		// Register settings fields for the options panel.
 		add_filter( 'wpum_registered_settings', array( $this, 'register_settings' ) );
+	}
+
+	/**
+	 * Initialize the option panel labels.
+	 *
+	 * @return void
+	 */
+	public function init_option_panel_labels() {
+			// Setup labels for the options panel.
+			add_filter( 'wpum_labels', array( $this, 'register_labels' ) );
+
+			// Register action buttons for the header.
+			$this->register_action_buttons();
 	}
 
 	/**
@@ -77,7 +87,7 @@ class WPUM_Options_Panel {
 	 *
 	 * @return array
 	 */
-	public function setup_menu( $menu ) {
+	public function setup_menu( $menu ) { // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.Found -- Required by OptionsKit filter.
 		return array(
 			'parent'     => 'users.php',
 			'page_title' => __( 'WP User Manager Settings', 'wp-user-manager' ),
@@ -111,7 +121,7 @@ class WPUM_Options_Panel {
 	 *
 	 * @return array
 	 */
-	public function register_settings_subsections( $sections ) {
+	public function register_settings_subsections( $sections ) { // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.Found -- Required by OptionsKit filter.
 		return array(
 			'general'      => array(
 				'login' => __( 'Login Settings', 'wp-user-manager' ),
@@ -233,6 +243,12 @@ class WPUM_Options_Panel {
 						'key'   => 'lock_complete_site',
 						'value' => true,
 					),
+				),
+				array(
+					'id'   => 'generic_login_errors',
+					'name' => __( 'Generic Login Error', 'wp-user-manager' ),
+					'desc' => __( 'Replace specific login error messages with a generic message to prevent username enumeration.', 'wp-user-manager' ),
+					'type' => 'checkbox',
 				),
 			),
 			'misc'                 => array(
@@ -510,5 +526,4 @@ class WPUM_Options_Panel {
 
 		return array_merge( $settings, $plugin_settings );
 	}
-
 }

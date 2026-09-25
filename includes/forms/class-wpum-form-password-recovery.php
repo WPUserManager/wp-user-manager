@@ -89,7 +89,6 @@ class WPUM_Form_Password_Recovery extends WPUM_Form {
 		) );
 
 		$this->sort_set_steps();
-
 	}
 
 	/**
@@ -148,7 +147,6 @@ class WPUM_Form_Password_Recovery extends WPUM_Form {
 		if ( isset( $_GET['user_id'] ) && isset( $_GET['key'] ) && isset( $_GET['step'] ) && 'reset' === $_GET['step'] ) { // phpcs:ignore
 			unset( $this->fields['user'] );
 		}
-
 	}
 
 	/**
@@ -163,11 +161,13 @@ class WPUM_Form_Password_Recovery extends WPUM_Form {
 	 */
 	public function validate_username_or_email( $pass, $fields, $values, $form ) {
 
-		if ( 'password-recovery' === $form && isset( $values['user']['username_email'] ) ) {
-			$username = sanitize_text_field( $values['user']['username_email'] );
-			if ( is_email( $username ) && ! email_exists( $username ) || ! is_email( $username ) && ! username_exists( $username ) ) {
-				return new WP_Error( 'username-validation-error', esc_html__( 'A user with this username or email does not exist. Please check your entry and try again.', 'wp-user-manager' ) );
-			}
+		if ( 'password-recovery' !== $form || ! isset( $values['user']['username_email'] ) ) {
+			return $pass;
+		}
+
+		$username = sanitize_text_field( $values['user']['username_email'] );
+		if ( ! email_exists( $values['user']['username_email'] ) && ! username_exists( $values['user']['username_email'] ) ) {
+			return new WP_Error( 'username-validation-error', esc_html__( 'A user with this username or email does not exist. Please check your entry and try again.', 'wp-user-manager' ) );
 		}
 
 		return $pass;
@@ -199,7 +199,6 @@ class WPUM_Form_Password_Recovery extends WPUM_Form {
 		WPUM()->templates
 			->set_template_data( $atts )
 			->get_template_part( 'action-links' );
-
 	}
 
 	/**
@@ -232,10 +231,10 @@ class WPUM_Form_Password_Recovery extends WPUM_Form {
 			$username = $values['user']['username_email'];
 			$user     = false;
 
-			// Retrieve the user from the DB.
-			if ( is_email( $username ) ) {
-				$user = get_user_by( 'email', $username );
-			} else {
+			// Retrieve the user from the DB. Try email first, then fall back to username.
+			$user = get_user_by( 'email', $username );
+
+			if ( ! $user instanceof WP_User ) {
 				$user = get_user_by( 'login', $username );
 			}
 
@@ -267,7 +266,7 @@ class WPUM_Form_Password_Recovery extends WPUM_Form {
 			}
 
 			// Successful, show next step.
-			$this->step ++;
+			++$this->step;
 
 		} catch ( Exception $e ) {
 			$this->add_error( $e->getMessage(), 'password_recovery_submit' );
@@ -286,9 +285,10 @@ class WPUM_Form_Password_Recovery extends WPUM_Form {
 
 		$username = $values['user']['username_email'];
 
-		if ( is_email( $username ) ) {
-			$user = get_user_by( 'email', $username );
-		} else {
+		// Retrieve the user from the DB. Try email first, then fall back to username.
+		$user = get_user_by( 'email', $username );
+
+		if ( ! $user instanceof WP_User ) {
 			$user = get_user_by( 'login', $username );
 		}
 
@@ -300,7 +300,6 @@ class WPUM_Form_Password_Recovery extends WPUM_Form {
 		WPUM()->templates
 			->set_template_data( $data )
 			->get_template_part( 'messages/password-reset', 'request-success' );
-
 	}
 
 	/**
@@ -357,7 +356,6 @@ class WPUM_Form_Password_Recovery extends WPUM_Form {
 				->get_template_part( 'messages/general', 'error' );
 
 		}
-
 	}
 
 	/**
@@ -459,13 +457,12 @@ class WPUM_Form_Password_Recovery extends WPUM_Form {
 			$sessions->destroy_all();
 
 			// Successful, show next step.
-			$this->step ++;
+			++$this->step;
 
 		} catch ( Exception $e ) {
 			$this->add_error( $e->getMessage(), 'password_recovery_reset' );
 			return;
 		}
-
 	}
 
 	/**
@@ -483,7 +480,5 @@ class WPUM_Form_Password_Recovery extends WPUM_Form {
 		WPUM()->templates
 			->set_template_data( $data )
 			->get_template_part( 'messages/general', 'success' );
-
 	}
-
 }

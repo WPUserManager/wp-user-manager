@@ -77,7 +77,7 @@ add_filter( 'register_url', 'wpum_set_registration_url' );
  *
  * @return string
  */
-function wpum_set_lostpassword_url( $url, $redirect ) {
+function wpum_set_lostpassword_url( $url, $redirect ) { // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.FoundAfterLastUsed -- Required by WordPress hook signature.
 
 	$password_page = wpum_get_core_page_id( 'password' );
 
@@ -86,7 +86,6 @@ function wpum_set_lostpassword_url( $url, $redirect ) {
 	} else {
 		return $url;
 	}
-
 }
 add_filter( 'lostpassword_url', 'wpum_set_lostpassword_url', 10, 2 );
 
@@ -123,7 +122,7 @@ add_filter( 'logout_url', 'wpum_set_logout_url', 20, 2 );
  *
  * @return string
  */
-function wpum_login_url( $login_url, $redirect, $force_reauth ) {
+function wpum_login_url( $login_url, $redirect, $force_reauth ) { // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.FoundAfterLastUsed -- Required by WordPress hook signature.
 
 	$wpum_login_page = wpum_get_core_page_id( 'login' );
 	$wpum_login_page = get_permalink( $wpum_login_page );
@@ -133,7 +132,6 @@ function wpum_login_url( $login_url, $redirect, $force_reauth ) {
 	}
 
 	return $wpum_login_page;
-
 }
 if ( wpum_get_option( 'lock_wplogin' ) || wpum_get_option( 'lock_complete_site' ) ) {
 	add_filter( 'login_url', 'wpum_login_url', 10, 3 );
@@ -151,7 +149,7 @@ if ( wpum_get_option( 'lock_wplogin' ) || wpum_get_option( 'lock_complete_site' 
 function wpum_authentication( $wp_user, $username, $password ) {
 
 	// Skip authentication method for admin users
-	if ( ! is_wp_error( $wp_user ) && ( apply_filters( 'wpum_authentication_method_admin_override', true ) && user_can( $wp_user, 'administrator' ) ) ) {
+	if ( ! is_wp_error( $wp_user ) && ( apply_filters( 'wpum_authentication_method_admin_override', true ) && user_can( $wp_user, 'manage_options' ) ) ) {
 		return $wp_user;
 	}
 
@@ -181,9 +179,47 @@ function wpum_authentication( $wp_user, $username, $password ) {
 	}
 
 	return $wp_user;
-
 }
 add_filter( 'authenticate', 'wpum_authentication', 20, 3 );
+
+/**
+ * Replace specific login error messages with a generic message
+ * to prevent username enumeration when the setting is enabled.
+ *
+ * @param null|WP_User|WP_Error $user
+ * @param string                $username
+ * @param string                $password
+ *
+ * @return null|WP_User|WP_Error
+ */
+function wpum_generic_login_errors( $user, $username, $password ) { // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.FoundAfterLastUsed
+	if ( ! is_wp_error( $user ) || empty( $username ) ) {
+		return $user;
+	}
+
+	if ( ! wpum_get_option( 'generic_login_errors' ) ) {
+		return $user;
+	}
+
+	$code = $user->get_error_code();
+
+	$enumeration_codes = array(
+		'invalid_username',
+		'invalid_email',
+		'incorrect_password',
+		'email_only',
+	);
+
+	if ( in_array( $code, $enumeration_codes, true ) ) {
+		return new WP_Error(
+			'authentication_failed',
+			apply_filters( 'wpum_generic_login_error_message', __( '<strong>Error:</strong> The username or password you entered is incorrect.', 'wp-user-manager' ) )
+		);
+	}
+
+	return $user;
+}
+add_filter( 'authenticate', 'wpum_generic_login_errors', 50, 3 );
 
 /**
  * Highlight all pages used by WPUM.
@@ -212,7 +248,6 @@ function wpum_highlight_pages( $post_states, $post ) {
 	}
 
 	return $post_states;
-
 }
 add_filter( 'display_post_states', 'wpum_highlight_pages', 10, 2 );
 
@@ -406,4 +441,3 @@ if ( wpum_get_option( 'obfuscate_display_name_emails' ) ) {
 		return wpum_mask_email_address( $display_name );
 	}, 10, 2 );
 }
-

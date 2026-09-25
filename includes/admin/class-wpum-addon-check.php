@@ -86,7 +86,10 @@ class WPUM_Addon_Check {
 			return true;
 		}
 
-		$plugin_data = get_plugin_data( $this->file );
+		// Only the version is needed. Translating the header would load the
+		// addon's text domain while core is still loading, well before init,
+		// which WordPress 6.7+ reports as translations loaded too early.
+		$plugin_data = get_plugin_data( $this->file, false, false );
 		if ( empty( $plugin_data ) || ! isset( $plugin_data['Version'] ) || empty( $plugin_data['Version'] ) ) {
 			// Can't get addon version
 			return true;
@@ -117,6 +120,10 @@ class WPUM_Addon_Check {
 	 * Deactivates the plugin again.
 	 */
 	public function deactivate() {
+		if ( ! current_user_can( 'activate_plugins' ) ) {
+			return;
+		}
+
 		if ( null !== $this->file ) {
 			deactivate_plugins( plugin_basename( $this->file ) );
 		}
@@ -134,5 +141,4 @@ class WPUM_Addon_Check {
 		</div>
 		<?php
 	}
-
 }

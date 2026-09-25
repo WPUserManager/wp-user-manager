@@ -71,7 +71,6 @@ class WPUM_Admin_Notices {
 			}
 			WPUM()->notices->register_notice( 'wpum_permalinks', 'warning', $message, array( 'dismissible' => false ) );
 		}
-
 	}
 
 	/**
@@ -88,7 +87,6 @@ class WPUM_Admin_Notices {
 		}
 
 		return false;
-
 	}
 
 	/**
@@ -107,7 +105,6 @@ class WPUM_Admin_Notices {
 		}
 
 		return $empty;
-
 	}
 
 	/**
@@ -124,7 +121,6 @@ class WPUM_Admin_Notices {
 		}
 
 		return false;
-
 	}
 
 	/**
@@ -159,7 +155,6 @@ class WPUM_Admin_Notices {
 			wp_die( wp_kses_post( $message ) );
 		}
 	}
-
 }
 
 new WPUM_Admin_Notices();

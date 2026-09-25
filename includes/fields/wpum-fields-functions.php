@@ -158,7 +158,7 @@ function wpum_install_fields() {
 
 		foreach ( $fields as $field ) {
 
-			$order++;
+			++$order;
 			$field['field_order'] = $order;
 
 			$save_field = new WPUM_Field();
@@ -195,7 +195,6 @@ function wpum_install_cover_image_field() {
 	$save_field->add_meta( 'user_meta_key', 'user_cover' );
 	$save_field->add_meta( 'editing', 'public' );
 	$save_field->add_meta( 'visibility', 'public' );
-
 }
 
 /**
@@ -220,7 +219,6 @@ function wpum_get_primary_field_types() {
 	);
 
 	return apply_filters( 'wpum_get_primary_field_types', $types );
-
 }
 
 /**
@@ -258,7 +256,6 @@ function wpum_get_edit_field_dialog_tabs() {
 	);
 
 	return apply_filters( 'wpum_get_fields_editor_edit_tabs', $tabs );
-
 }
 
 /**
@@ -516,7 +513,7 @@ function wpum_get_field_type() {
  * @param  string $class custom class to add to the field.
  * @return array        list of all classes.
  */
-function wpum_get_field_css_class( $class = false ) {
+function wpum_get_field_css_class( $class = false ) { // phpcs:ignore Universal.NamingConventions.NoReservedKeywordParameterNames.classFound -- Public API, cannot rename.
 
 	global $wpum_profile_fields;
 
@@ -537,7 +534,6 @@ function wpum_get_field_css_class( $class = false ) {
 	$classes = array_map( 'esc_attr', $classes );
 
 	return apply_filters( 'wpum_field_css_class', $classes, $class );
-
 }
 
 /**
@@ -546,7 +542,7 @@ function wpum_get_field_css_class( $class = false ) {
  * @param  string $class custom class to add to the fields.
  * @return void
  */
-function wpum_the_field_css_class( $class = false ) {
+function wpum_the_field_css_class( $class = false ) { // phpcs:ignore Universal.NamingConventions.NoReservedKeywordParameterNames.classFound -- Public API, cannot rename.
 	echo esc_attr( join( ' ', wpum_get_field_css_class( $class ) ) );
 }
 

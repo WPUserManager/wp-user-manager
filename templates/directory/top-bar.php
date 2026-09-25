@@ -27,7 +27,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<div class="wpum-col-xs">
 			<?php
 			// translators: %s count of users
-			echo sprintf( esc_html__( 'Found %s users.', 'wp-user-manager' ), absint( $data->total ) );
+			printf( esc_html__( 'Found %s users.', 'wp-user-manager' ), absint( $data->total ) );
 			?>
 		</div>
 

@@ -148,5 +148,4 @@ class WPUM_DB_Search_Fields extends WPUM_DB {
 
 		return $last_changed;
 	}
-
 }

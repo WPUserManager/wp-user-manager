@@ -77,7 +77,7 @@ class Subscription {
 	 * @return bool
 	 */
 	public function onTrial() {
-		 return $this->trial_ends_at && $this->trial_ends_at > current_time( 'mysql' );
+		return $this->trial_ends_at && $this->trial_ends_at > current_time( 'mysql' );
 	}
 
 	/**
@@ -100,7 +100,7 @@ class Subscription {
 	 * @return bool
 	 */
 	public function expired() {
-		 return $this->cancelled() && ! $this->onGracePeriod();
+		return $this->cancelled() && ! $this->onGracePeriod();
 	}
 
 	/**

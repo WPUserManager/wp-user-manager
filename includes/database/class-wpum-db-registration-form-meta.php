@@ -137,5 +137,4 @@ class WPUM_DB_Registration_Form_Meta extends WPUM_DB {
 
 		return absint( $form_id );
 	}
-
 }

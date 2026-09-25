@@ -83,7 +83,6 @@ class WPUM_Form_Privacy extends WPUM_Form {
 		);
 
 		$this->sort_set_steps();
-
 	}
 
 	/**
@@ -136,7 +135,6 @@ class WPUM_Form_Privacy extends WPUM_Form {
 		WPUM()->templates
 			->set_template_data( $data )
 			->get_template_part( 'forms/form', 'privacy' );
-
 	}
 
 	/**
@@ -209,7 +207,5 @@ class WPUM_Form_Privacy extends WPUM_Form {
 			$this->add_error( $e->getMessage(), 'privacy_submit' );
 			return;
 		}
-
 	}
-
 }

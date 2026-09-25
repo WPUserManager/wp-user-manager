@@ -107,7 +107,6 @@ class WPUM_Emails_List {
 			wp_localize_script( 'wpum-emails-editor', 'wpumEmailsEditor', $js_variables );
 
 		}
-
 	}
 
 	/**
@@ -146,7 +145,6 @@ class WPUM_Emails_List {
 		}
 
 		wp_send_json_success();
-
 	}
 
 	/**
@@ -173,7 +171,6 @@ class WPUM_Emails_List {
 		}
 
 		wp_send_json_success();
-
 	}
 }
 

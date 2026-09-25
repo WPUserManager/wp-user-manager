@@ -13,25 +13,25 @@
  * @version 1.0.0
  */
 
- // Exit if accessed directly
+// Exit if accessed directly
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
 ?>
 <select multiple="multiple" name="<?php echo esc_attr( isset( $data->name ) ? $data->name : $data->key ); ?>[]" id="<?php echo esc_attr( $data->key ); ?>" class="wpum-multiselect"
-											 <?php
-												if ( ! empty( $data->required ) ) {
-													echo 'required';}
-												?>
- <?php
-	if ( ! empty( $data->read_only ) ) {
-		echo 'disabled';}
-	?>
- placeholder="<?php echo empty( $data->placeholder ) ? '' : esc_attr( $data->placeholder ); ?>">
+											<?php
+											if ( ! empty( $data->required ) ) {
+												echo 'required';}
+											?>
+<?php
+if ( ! empty( $data->read_only ) ) {
+	echo 'disabled';}
+?>
+placeholder="<?php echo empty( $data->placeholder ) ? '' : esc_attr( $data->placeholder ); ?>">
 	<?php foreach ( $data->options as $key => $value ) : ?>
 		<option value="<?php echo esc_attr( $key ); ?>"
-								  <?php
+									<?php
 									if ( ! empty( $data->value ) && is_array( $data->value ) ) {
 										selected( in_array( $key, $data->value, true ), true );}
 									?>

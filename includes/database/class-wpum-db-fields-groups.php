@@ -317,5 +317,4 @@ class WPUM_DB_Fields_Groups extends WPUM_DB {
 
 		return absint( $count );
 	}
-
 }

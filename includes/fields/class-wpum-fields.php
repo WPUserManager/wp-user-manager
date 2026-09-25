@@ -83,7 +83,6 @@ class WPUM_Fields {
 				( new $class() )->register();
 			}
 		}
-
 	}
 
 	/**
@@ -147,5 +146,4 @@ class WPUM_Fields {
 
 		return $this->field_type_names;
 	}
-
 }

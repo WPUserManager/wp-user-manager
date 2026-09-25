@@ -1,0 +1,149 @@
+import { execSync } from 'child_process';
+import {
+  activatePlugin,
+  enableRegistration,
+  ensureHtaccess,
+  ensurePageWithShortcode,
+  setupWpumPages,
+  setupContentRestrictionPages,
+  setupDirectoryPage,
+  createUser,
+  deleteUser,
+  wpCli,
+} from './fixtures';
+
+/**
+ * Global setup for Playwright E2E tests.
+ *
+ * This runs once before all tests. It:
+ * 1. Ensures pretty permalinks work (.htaccess)
+ * 2. Activates the WPUM plugin
+ * 3. Enables WordPress user registration
+ * 4. Creates the required WPUM pages with shortcodes
+ * 5. Creates test users
+ * 6. Sets up content-restriction test pages
+ */
+async function globalSetup(): Promise<void> {
+  console.log('\n[WPUM E2E] Running global setup...');
+
+  try {
+    // Ensure .htaccess exists for pretty permalinks (wp-env containers may not have it)
+    console.log('[WPUM E2E] Setting up pretty permalinks...');
+    wpCli('rewrite structure "/%postname%/"');
+    ensureHtaccess();
+
+    // Activate the plugin
+    console.log('[WPUM E2E] Activating wp-user-manager plugin...');
+    activatePlugin();
+
+    // Activate the delete-account addon
+    console.log('[WPUM E2E] Activating wpum-delete-account addon...');
+    try {
+      wpCli('plugin activate wpum-delete-account');
+    } catch {
+      console.log('[WPUM E2E] wpum-delete-account addon not available, skipping...');
+    }
+
+    // Enable user registration
+    console.log('[WPUM E2E] Enabling user registration...');
+    enableRegistration();
+
+    // Create WPUM pages
+    console.log('[WPUM E2E] Setting up WPUM pages...');
+    setupWpumPages();
+
+    // Create content restriction test pages
+    console.log('[WPUM E2E] Setting up content restriction pages...');
+    setupContentRestrictionPages();
+
+    // Create shortcode test pages
+    console.log('[WPUM E2E] Setting up shortcode test pages...');
+    ensurePageWithShortcode('wpum-profile-card', 'Profile Card', '[wpum_profile_card]');
+    ensurePageWithShortcode('wpum-recent-users', 'Recent Users', '[wpum_recently_registered]');
+    ensurePageWithShortcode('wpum-login-link', 'Login Link', '[wpum_login]');
+    ensurePageWithShortcode('wpum-logout-link', 'Logout Link', '[wpum_logout]');
+
+    // Create role-restricted page for role restriction tests
+    console.log('[WPUM E2E] Setting up role-restricted page...');
+    ensurePageWithShortcode(
+      'wpum-role-restricted',
+      'Role Restricted',
+      '[wpum_restrict_to_user_roles roles="administrator"]Only admins can see this.[/wpum_restrict_to_user_roles]'
+    );
+
+    // Create user directory page with wpum_directory CPT
+    console.log('[WPUM E2E] Setting up user directory page...');
+    setupDirectoryPage();
+
+    // Clean up any leftover test users from previous runs
+    // Note: When no username field is shown, WPUM uses the full email as the username
+    console.log('[WPUM E2E] Cleaning up test users...');
+    deleteUser('testuser_e2e');
+    deleteUser('testuser_reg');
+    deleteUser('testuser_reg@example.com');
+    deleteUser('testuser_login');
+    deleteUser('testuser_redirect');
+    deleteUser('testuser_redirect@example.com');
+    deleteUser('testuser_delete');
+    deleteUser('duplicatetest');
+    deleteUser('e2e_existing_email');
+    deleteUser('stripe_e2e_checkout');
+    deleteUser('stripe_e2e_checkout@example.com');
+    deleteUser('stripe_e2e_redirect');
+    deleteUser('stripe_e2e_redirect@example.com');
+    deleteUser('stripe_e2e_noplan');
+    deleteUser('stripe_e2e_noplan@example.com');
+
+    // Create a test user for login tests
+    console.log('[WPUM E2E] Creating test user for login tests...');
+    createUser('testuser_login', 'testuser_login@example.com', 'TestPass123!', 'subscriber');
+
+    // Enable custom avatars and add avatar to registration form
+    console.log('[WPUM E2E] Enabling custom avatars...');
+    wpCli(`eval 'wpum_update_option("custom_avatars", true);'`);
+    wpCli(
+      `eval '
+        $forms = WPUM()->registration_forms->get_forms();
+        if (!empty($forms)) {
+          $form = $forms[0];
+          $fields = $form->get_meta("fields");
+          // Find the avatar field by type
+          $all_fields = WPUM()->fields->get_fields(array("type" => "user_avatar"));
+          if (!empty($all_fields)) {
+            $avatar_id = $all_fields[0]->id;
+            if (!in_array($avatar_id, $fields)) {
+              $fields[] = $avatar_id;
+              $form->update_meta("fields", $fields);
+              echo "Added avatar field $avatar_id to form";
+            }
+          }
+        }
+      '`
+    );
+
+    // Flush rewrite rules after page creation
+    console.log('[WPUM E2E] Flushing rewrite rules...');
+    wpCli('rewrite flush');
+
+    // Stripe environment check (non-blocking)
+    if (process.env.STRIPE_SECRET_KEY) {
+      console.log('[WPUM E2E] Stripe secret key detected - Stripe tests will run');
+      try {
+        execSync('curl -sf http://localhost:12111 >/dev/null 2>&1', { timeout: 3000 });
+        console.log('[WPUM E2E] Stripe CLI webhook listener is running on port 12111');
+      } catch {
+        console.log('[WPUM E2E] Warning: Stripe CLI webhook listener not detected on port 12111');
+        console.log('[WPUM E2E]   Run: stripe listen --forward-to http://localhost:8889/wp-json/wpum/v1/stripe');
+      }
+    } else {
+      console.log('[WPUM E2E] No STRIPE_SECRET_KEY - Stripe tests will be skipped');
+    }
+
+    console.log('[WPUM E2E] Global setup complete!\n');
+  } catch (error) {
+    console.error('[WPUM E2E] Global setup failed:', error);
+    throw error;
+  }
+}
+
+export default globalSetup;

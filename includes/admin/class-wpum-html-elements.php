@@ -105,5 +105,4 @@ class WPUM_HTML_Elements {
 		$output .= '</select>';
 		return $output;
 	}
-
 }

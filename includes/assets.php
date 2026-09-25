@@ -60,6 +60,30 @@ function wpum_load_scripts() {
 }
 add_action( 'wp_enqueue_scripts', 'wpum_load_scripts' );
 
+/**
+ * Get the variables made available to the frontend script as `wpumFrontend`.
+ *
+ * @return array
+ */
+function wpum_get_frontend_js_variables() {
+	/**
+	 * Filter: whether the flatpickr calendar is used on mobile devices.
+	 *
+	 * Flatpickr replaces itself with a native date input on touch devices unless
+	 * its `disableMobile` option is set. The native input ignores the site date
+	 * format and does not render a picker on some mobile browsers, so WPUM keeps
+	 * the flatpickr calendar everywhere. Return false to restore the native input.
+	 *
+	 * @param bool $disable_mobile Whether to disable flatpickr's native mobile fallback.
+	 */
+	$disable_mobile = apply_filters( 'wpum_field_datepicker_disable_mobile', true );
+
+	return array(
+		'dateFormat'    => apply_filters( 'wpum_field_datepicker_date_format', get_option( 'date_format' ) ),
+		'disableMobile' => $disable_mobile ? '1' : '',
+	);
+}
+
 function wpum_enqueue_scripts() {
 	wp_enqueue_style( 'wpum-select2-style', WPUM_PLUGIN_URL . 'assets/css/vendor/select2.min.css', false, WPUM_VERSION );
 	wp_enqueue_script( 'wpum-select2', WPUM_PLUGIN_URL . 'assets/js/vendor/select2.min.js', array( 'jquery' ), WPUM_VERSION, true );
@@ -72,11 +96,7 @@ function wpum_enqueue_scripts() {
 	wp_enqueue_script( 'wpum-frontend-js', WPUM_PLUGIN_URL . 'assets/js/wp-user-manager' . $suffix . '.js', array( 'jquery' ), WPUM_VERSION, true );
 	wp_enqueue_script( 'wpum-filepond-js', WPUM_PLUGIN_URL . 'assets/js/wpum-filepond' . $suffix . '.js', array( 'jquery', 'filepond-js' ), WPUM_VERSION, true );
 
-	$js_variables = [
-		'dateFormat' => apply_filters( 'wpum_field_datepicker_date_format', get_option( 'date_format' ) ),
-	];
-
-	wp_localize_script( 'wpum-frontend-js', 'wpumFrontend', $js_variables );
+	wp_localize_script( 'wpum-frontend-js', 'wpumFrontend', wpum_get_frontend_js_variables() );
 
 	do_action( 'wpum_enqueue_frontend_scripts', $suffix );
 }

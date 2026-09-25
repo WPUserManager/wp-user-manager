@@ -111,7 +111,6 @@ class WPUM_License {
 
 		$this->includes();
 		$this->hooks();
-
 	}
 
 	/**
@@ -122,7 +121,6 @@ class WPUM_License {
 		if ( ! class_exists( 'WPUM_EDD_SL_Plugin_Updater' ) ) {
 			require_once WPUM_PLUGIN_DIR . 'includes/updates/WPUM_EDD_SL_Plugin_Updater.php';
 		}
-
 	}
 
 	/**
@@ -136,7 +134,10 @@ class WPUM_License {
 		add_filter( 'wpum_licenses_register_addon_settings', array( $this, 'settings' ), 1 );
 
 		// Activate license.
-		add_action( 'carbon_fields_theme_options_container_saved', array( $this, 'handle_activate_license' ) );
+		add_action( 'carbon_fields_theme_options_container_saved', array( $this, 'handle_activate_license' ), 10, 2 );
+
+		// Activate licenses that were saved but never activated (2.9.14 - 2.9.19).
+		add_action( 'wpum_reactivate_inactive_licenses', array( $this, 'maybe_activate_site_inactive_license' ) );
 
 		// Deactivate license key.
 		add_action( 'admin_init', array( $this, 'handle_deactivate_license' ) );
@@ -163,7 +164,7 @@ class WPUM_License {
 
 		// translators: %1$s wpum addon name
 		$new_settings[] = Field::make( 'text', $this->item_shortname . '_license_key', sprintf( __( '%1$s License Key', 'wp-user-manager' ), $this->item_name ) )
-							   ->set_help_text( $this->get_status_notice( $status, $expires ) );
+								->set_help_text( $this->get_status_notice( $status, $expires ) );
 
 		return array_merge( $settings, $new_settings );
 	}
@@ -171,43 +172,90 @@ class WPUM_License {
 	/**
 	 * Activate a license.
 	 *
+	 * @param mixed                                   $user_data Unused.
+	 * @param \WPUM\Carbon_Fields\Container\Container $container The container that was saved.
+	 *
 	 * @return void
 	 */
-	public function handle_activate_license() {
+	public function handle_activate_license( $user_data = null, $container = null ) {
 
-		// Detect if license submission.
-		if ( isset( $_POST['_wpum_license_submission'] ) ) { // phpcs:ignore
-
-			if ( ! current_user_can( 'manage_options' ) ) {
-				return;
-			}
-
-			if ( $this->is_valid() ) {
-				return;
-			}
-
-			$license = filter_input( INPUT_POST, '_' . $this->item_shortname . '_license_key', FILTER_UNSAFE_RAW );
-			$license = sanitize_text_field( $license );
-
-			if ( empty( $license ) ) {
-				return;
-			}
-
-			$response = $this->activate_license( $license, home_url() );
-
-			if ( ! is_wp_error( $response ) ) {
-				// Tell WordPress to look for updates.
-				set_site_transient( 'update_plugins', null );
-
-				$data = $this->prepare_license_data( $response );
-
-				if ( isset( $data['error'] ) ) {
-					return;
-				}
-
-				$this->set_license_data( $data );
-			}
+		// This hook fires for every Carbon Fields options page, only act on the licenses page.
+		if ( ! $container || ! method_exists( $container, 'get_page_file' ) || 'wpum-licenses' !== $container->get_page_file() ) {
+			return;
 		}
+
+		if ( ! current_user_can( 'manage_options' ) ) {
+			return;
+		}
+
+		// Carbon Fields 3 posts compacted input, so the key is no longer at $_POST['_{shortname}_license_key'].
+		// The field has already been saved by the time this runs, so read it back from the DB.
+		$license = sanitize_text_field( trim( get_option( '_' . $this->item_shortname . '_license_key', '' ) ) );
+
+		if ( empty( $license ) ) {
+			return;
+		}
+
+		// $this->license was loaded before the save. If the key was replaced, drop the old key's cached
+		// status so is_valid() checks the new key rather than returning early on the old one.
+		if ( $license !== $this->license ) {
+			$this->license = $license;
+			delete_site_transient( $this->item_shortname . '_license_data' );
+		}
+
+		if ( $this->is_valid() ) {
+			return;
+		}
+
+		$response = $this->activate_license( $license, home_url() );
+
+		if ( ! is_wp_error( $response ) ) {
+			// Tell WordPress to look for updates.
+			set_site_transient( 'update_plugins', null );
+
+			$data = $this->prepare_license_data( $response );
+
+			if ( isset( $data['error'] ) ) {
+				return;
+			}
+
+			$this->set_license_data( $data );
+		}
+	}
+
+	/**
+	 * Activate the stored license if EDD reports it as not active for this site.
+	 *
+	 * Licenses saved on 2.9.14 - 2.9.19 were stored but never activated, because
+	 * handle_activate_license() couldn't see the Carbon Fields 3 compacted input.
+	 * Only `site_inactive` is touched, so expired, disabled or invalid licenses are left alone.
+	 *
+	 * @return void
+	 */
+	public function maybe_activate_site_inactive_license() {
+		// Uses the cached status when there is one, otherwise checks with EDD.
+		$data = $this->get_license_data();
+
+		if ( ! isset( $data['status'] ) || 'site_inactive' !== $data['status'] ) {
+			return;
+		}
+
+		$response = $this->activate_license( $this->license, home_url() );
+
+		if ( is_wp_error( $response ) ) {
+			return;
+		}
+
+		$data = $this->prepare_license_data( $response );
+
+		if ( isset( $data['error'] ) ) {
+			return;
+		}
+
+		$this->set_license_data( $data );
+
+		// Tell WordPress to look for updates.
+		set_site_transient( 'update_plugins', null );
 	}
 
 	/**
@@ -253,9 +301,8 @@ class WPUM_License {
 		);
 
 		$response = wp_remote_post( $this->api_url, array(
-			'timeout'   => 15,
-			'sslverify' => false,
-			'body'      => $api_params,
+			'timeout' => 15,
+			'body'    => $api_params,
 		) );
 
 		if ( is_wp_error( $response ) || 200 !== wp_remote_retrieve_response_code( $response ) ) {
@@ -269,7 +316,6 @@ class WPUM_License {
 		}
 
 		return json_decode( wp_remote_retrieve_body( $response ) );
-
 	}
 
 	/**
@@ -428,7 +474,7 @@ class WPUM_License {
 	 * @param array  $plugin_data
 	 * @param string $status
 	 */
-	public function plugin_page_notices( $plugin_file, $plugin_data, $status ) {
+	public function plugin_page_notices( $plugin_file, $plugin_data, $status ) { // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.FoundAfterLastUsed -- Required by after_plugin_row hook.
 		$has_update = isset( $plugin_data['new_version'] ) && version_compare( $plugin_data['Version'], $plugin_data['new_version'] ) === -1;
 
 		$license_data   = $this->get_license_data();
@@ -503,7 +549,7 @@ class WPUM_License {
 	 * @param array $plugin_data
 	 * @param array $response
 	 */
-	public function in_plugin_update_message( $plugin_data, $response ) {
+	public function in_plugin_update_message( $plugin_data, $response ) { // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.FoundAfterLastUsed -- Required by in_plugin_update_message hook.
 		$message = '';
 		if ( empty( $this->license ) ) {
 			// translators: %1$s licenses page URL
@@ -650,5 +696,4 @@ class WPUM_License {
 
 		return $message;
 	}
-
 }

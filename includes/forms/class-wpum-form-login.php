@@ -72,7 +72,6 @@ class WPUM_Form_Login extends WPUM_Form {
 		) );
 
 		$this->sort_set_steps();
-
 	}
 
 	/**
@@ -107,7 +106,6 @@ class WPUM_Form_Login extends WPUM_Form {
 				),
 			),
 		) );
-
 	}
 
 	/**
@@ -129,7 +127,6 @@ class WPUM_Form_Login extends WPUM_Form {
 		WPUM()->templates
 			->set_template_data( $data )
 			->get_template_part( 'forms/form', 'login' );
-
 	}
 
 	/**
@@ -170,7 +167,7 @@ class WPUM_Form_Login extends WPUM_Form {
 			}
 
 			// Successful, show next step.
-			$this->step ++;
+			++$this->step;
 
 		} catch ( Exception $e ) {
 			$this->add_error( $e->getMessage(), 'login_submit' );
@@ -230,7 +227,5 @@ class WPUM_Form_Login extends WPUM_Form {
 			$this->add_error( $e->getMessage(), 'login_done' );
 			return;
 		}
-
 	}
-
 }

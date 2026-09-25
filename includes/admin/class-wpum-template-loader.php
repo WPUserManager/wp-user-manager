@@ -44,5 +44,4 @@ class WPUM_Template_Loader extends WPUM\Gamajo_Template_Loader {
 	 * @var string
 	 */
 	protected $plugin_template_directory = 'templates';
-
 }

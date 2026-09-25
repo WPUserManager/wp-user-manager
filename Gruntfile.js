@@ -283,13 +283,21 @@ module.exports = function( grunt ) {
 					'!img/src/**',
 					'!Gruntfile.js',
 					'!package.json',
+					'!package-lock.json',
+					'!.yarnrc',
 					'!.gitignore',
 					'!.gitmodules',
 					'!.github',
 					'!phpcs.xml.dist',
 					'!README.md',
 					'!yarn.lock',
-					'!phpstan.neon.dist'
+					'!phpstan.neon.dist',
+					'!playwright.config.ts',
+					'!tsconfig.json',
+					'!.wp-env.json',
+					'!.wp-env.override.json',
+					'!test-results/**',
+					'!release.json'
 				],
 				dest: 'release/<%= pkg.version %>/'
 			}
@@ -331,35 +339,23 @@ module.exports = function( grunt ) {
 				src: [ 'readme.txt' ],
 				overwrite: true,
 				replacements: [{
-					from: /Stable tag: (.*)/,
-					to: "Stable tag: <%= pkg.version %>"
+					from: /Stable tag: (.*)/i,
+					to: "Stable Tag: <%= pkg.version %>"
 				}]
 			},
 			init_php: {
 				src: [ 'wp-user-manager.php' ],
 				overwrite: true,
 				replacements: [{
-					from: /Version:\s*(.*)/,
-					to: "Version: <%= pkg.version %>"
+					from: /^(\s*\*\s*Version:\s*).*$/m,
+					to: "$1<%= pkg.version %>"
 				}, {
-					from: /define\(\s*'WPUM_VERSION',\s*'(.*)'\s*\);/,
-					to: "define( 'WPUM_VERSION', '<%= pkg.version %>' );"
+					from: /WP_User_Manager::instance\(\s*__FILE__,\s*'[^']*'\s*\)/,
+					to: "WP_User_Manager::instance( __FILE__, '<%= pkg.version %>' )"
 				}]
 			}
-		},
-		git_changelog: {
-		    extended: {
-		      options: {
-		        app_name : 'WP User Manager Changelog',
-		        file : 'changelog.md',
-		        grep_commits: '^fix|^feat|^docs|^refactor|^chore|BREAKING|^updated|^adjusted',
-        		tag : '1.2.3' //False for commits since the beggining
-		      }
-		    }
-		  }
+		}
 	} );
-
-	grunt.loadNpmTasks('git-changelog');
 
 	// Default task.
 	grunt.registerTask( 'css', [ 'sass', 'cssmin'] );
@@ -367,7 +363,6 @@ module.exports = function( grunt ) {
 	grunt.registerTask( 'default', ['js', 'css'] );
 	grunt.registerTask( 'textdomain', ['addtextdomain'] );
 	grunt.registerTask( 'do_pot', ['makepot'] );
-	grunt.registerTask( 'do_changelog', ['git_changelog'] );
 	grunt.registerTask( 'version_number', [ 'replace:readme_txt', 'replace:init_php' ] );
 	grunt.registerTask( 'pre_vcs', [ 'version_number' ] );
 	grunt.registerTask( 'do_svn', [ 'svn_checkout', 'copy:svn_trunk', 'copy:svn_tag', 'push_svn' ] );

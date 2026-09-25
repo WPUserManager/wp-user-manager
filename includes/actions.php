@@ -29,7 +29,6 @@ function wpum_delete_pages_transient( $post_id ) {
 	}
 
 	delete_transient( 'wpum_get_pages' );
-
 }
 add_action( 'save_post_page', 'wpum_delete_pages_transient' );
 
@@ -101,7 +100,6 @@ function wpum_admin_bar_menu( $wp_admin_bar ) {
 		'parent' => 'wpum_node',
 	);
 	$wp_admin_bar->add_node( $args );
-
 }
 add_action( 'admin_bar_menu', 'wpum_admin_bar_menu', 100 );
 
@@ -157,7 +155,7 @@ function wpum_restrict_wp_admin_dashboard_access() {
 		return;
 	}
 
-	if ( current_user_can( 'administrator' ) ) {
+	if ( current_user_can( 'manage_options' ) ) {
 		return;
 	}
 
@@ -194,7 +192,6 @@ function wpum_restrict_wp_registration() {
 		wp_safe_redirect( esc_url( get_permalink( $registration_redirect[0] ) ) );
 		exit;
 	}
-
 }
 add_action( 'login_form_register', 'wpum_restrict_wp_registration' );
 
@@ -211,7 +208,6 @@ function wpum_restrict_wp_lostpassword() {
 		wp_safe_redirect( esc_url( get_permalink( $password_redirect[0] ) ) );
 		exit;
 	}
-
 }
 add_action( 'login_form_lostpassword', 'wpum_restrict_wp_lostpassword' );
 
@@ -224,11 +220,10 @@ function wpum_restrict_wp_profile() {
 
 	$profile_redirect = wpum_get_option( 'backend_profile_redirect' );
 
-	if ( ! current_user_can( 'administrator' ) && IS_PROFILE_PAGE && $profile_redirect ) {
+	if ( ! current_user_can( 'manage_options' ) && IS_PROFILE_PAGE && $profile_redirect ) {
 		wp_safe_redirect( esc_url( get_permalink( $profile_redirect[0] ) ) );
 		exit;
 	}
-
 }
 add_action( 'load-profile.php', 'wpum_restrict_wp_profile' );
 
@@ -257,7 +252,6 @@ function wpum_restrict_account_page() {
 		exit;
 
 	}
-
 }
 add_action( 'template_redirect', 'wpum_restrict_account_page' );
 
@@ -268,10 +262,11 @@ add_action( 'template_redirect', 'wpum_restrict_account_page' );
  */
 function wpum_display_account_page_content() {
 
-	$active_tab = get_query_var( 'tab' );
 	$tabs       = wpum_get_account_page_tabs();
+	$active_tab = get_query_var( 'tab' );
 
-	if ( empty( $active_tab ) ) {
+	// Validate against registered tabs to prevent path traversal / LFI.
+	if ( empty( $active_tab ) || ! isset( $tabs[ $active_tab ] ) ) {
 		$active_tab = key( $tabs );
 	}
 
@@ -283,7 +278,6 @@ function wpum_display_account_page_content() {
 	} else {
 		do_action( 'wpum_account_page_content_' . $active_tab );
 	}
-
 }
 add_action( 'wpum_account_page_content', 'wpum_display_account_page_content' );
 
@@ -322,7 +316,7 @@ add_action( 'edit_user_profile_update', 'wpum_check_display_name' );
  *
  * @return void
  */
-function wpum_check_display_field( $errors, $update, $user ) {
+function wpum_check_display_field( $errors, $update, $user ) { // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.FoundAfterLastUsed -- Required by WordPress user_profile_update_errors hook.
 	$errors->add( 'display_name_error', esc_html__( 'This display name is already in use by someone else. Display names must be unique.', 'wp-user-manager' ) );
 }
 
@@ -335,7 +329,7 @@ function wpum_check_display_field( $errors, $update, $user ) {
  *
  * @return void
  */
-function wpum_check_nick_field( $errors, $update, $user ) {
+function wpum_check_nick_field( $errors, $update, $user ) { // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.FoundAfterLastUsed -- Required by WordPress user_profile_update_errors hook.
 	$errors->add( 'display_nick_error', esc_html__( 'This nickname is already in use by someone else. Nicknames must be unique.', 'wp-user-manager' ) );
 }
 
@@ -488,7 +482,6 @@ function wpum_finish_db_setup_after_plugin_init() {
 	if ( ! $upgrade ) {
 		wpum_complete_setup();
 	}
-
 }
 add_action( 'after_wpum_init', 'wpum_finish_db_setup_after_plugin_init' );
 
@@ -496,41 +489,55 @@ add_action( 'after_wpum_init', 'wpum_finish_db_setup_after_plugin_init' );
  * Register user profile privacy fields
  */
 function wpum_register_profile_privacy_fields() {
+	Container::make( 'user_meta', esc_html__( 'Profile Privacy', 'wp-user-manager' ) )
+		->add_fields( array(
+			Field::make( 'checkbox', 'hide_profile_guests', esc_html__( 'Hide profile from guests', 'wp-user-manager' ) )
+				->set_help_text( esc_html__( 'Hide this profile from guests. Overrides the global profile options.', 'wp-user-manager' ) ),
+			Field::make( 'checkbox', 'hide_profile_members', esc_html__( 'Hide profile from members', 'wp-user-manager' ) )
+				->set_help_text( esc_html__( 'Hide this profile from members. Overrides the global profile options.', 'wp-user-manager' ) ),
+		) );
+}
+
+add_action( 'carbon_fields_register_fields', 'wpum_register_profile_privacy_fields' );
+
+/**
+ * Register the multiple user roles field in its own CF container.
+ *
+ * A dedicated container is required so that the entire React root can be
+ * relocated next to the WP role dropdown without breaking the component tree.
+ */
+function wpum_register_multiple_roles_field() {
 	global $pagenow;
 
-	$roles = array();
+	$allow_multiple_roles = wpum_get_option( 'allow_multiple_user_roles' );
+	if ( ! $allow_multiple_roles || is_network_admin() ) {
+		return;
+	}
 
+	$user_id     = filter_input( INPUT_GET, 'user_id', FILTER_VALIDATE_INT );
+	$profileuser = isset( $user_id ) ? get_user_by( 'id', $user_id ) : false;
+
+	if ( ! $profileuser && ! in_array( $pagenow, array( 'user-new.php', 'user-edit.php' ), true ) ) {
+		return;
+	}
+
+	$existing_roles = $profileuser ? $profileuser->roles : array();
+
+	$roles = array();
 	foreach ( wpum_get_roles( true, true ) as $role ) {
 		$roles[ $role['value'] ] = $role['label'];
 	}
 
-	$allow_multiple_roles = wpum_get_option( 'allow_multiple_user_roles' );
-
-	$user_id = filter_input( INPUT_GET, 'user_id', FILTER_VALIDATE_INT );
-
-	$profileuser    = isset( $user_id ) ? get_user_by( 'id', $user_id ) : false;
-	$existing_roles = ( $profileuser ) ? $profileuser->roles : array();
-
-	$fields = array(
-		Field::make( 'checkbox', 'hide_profile_guests', esc_html__( 'Hide profile from guests', 'wp-user-manager' ) )
-			->set_help_text( esc_html__( 'Hide this profile from guests. Overrides the global profile options.', 'wp-user-manager' ) ),
-		Field::make( 'checkbox', 'hide_profile_members', esc_html__( 'Hide profile from members', 'wp-user-manager' ) )
-			->set_help_text( esc_html__( 'Hide this profile from members. Overrides the global profile options.', 'wp-user-manager' ) ),
-	);
-
-	if ( $allow_multiple_roles && ( $profileuser || 'user-new.php' === $pagenow ) && ! is_network_admin() ) {
-		$fields[] = Field::make( 'multiselect', 'wpum_user_roles', '' )
-		->add_options( $roles )
-		->set_default_value( $existing_roles )
-		->set_classes( 'wpum-multiple-user-roles' )
-		->set_help_text( esc_html__( 'Select one or more roles for this user.', 'wp-user-manager' ) );
-	}
-
-	Container::make( 'user_meta', esc_html__( 'Profile Privacy', 'wp-user-manager' ) )
-			->add_fields( $fields );
+	Container::make( 'user_meta', esc_html__( 'User Roles', 'wp-user-manager' ) )
+		->add_fields( array(
+			Field::make( 'multiselect', 'wpum_user_roles', '' )
+				->add_options( $roles )
+				->set_default_value( $existing_roles )
+				->set_classes( 'wpum-multiple-user-roles' )
+				->set_help_text( esc_html__( 'Select one or more roles for this user.', 'wp-user-manager' ) ),
+		) );
 }
-
-add_action( 'carbon_fields_register_fields', 'wpum_register_profile_privacy_fields' );
+add_action( 'carbon_fields_register_fields', 'wpum_register_multiple_roles_field' );
 
 add_action( 'template_redirect', 'wpum_reset_password_redirect' );
 
@@ -599,24 +606,74 @@ if ( is_multisite() ) {
 }
 
 /**
+ * Relocate the CF "User Roles" multiselect row after the username field and
+ * hide the default WP role dropdown. Moving the <tr> (which wraps the React
+ * root <fieldset>) preserves the CF 3.x component tree.
+ *
  * @param \WP_User $user
  */
-function wpum_modify_multiple_roles_ui( $user ) {
+function wpum_modify_multiple_roles_ui( $user ) { // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.Found -- Required by WordPress hook signature.
 	$allow_multiple_roles = wpum_get_option( 'allow_multiple_user_roles' );
 	if ( ! $allow_multiple_roles ) {
 		return;
 	}
-
 	?>
 	<script>
-		jQuery( function( $ ) {
-			if ( !$( '.user-role-wrap select#role, #createuser select#role' ).length ) {
-				return;
+	jQuery( function( $ ) {
+		function relocateRolesField() {
+			var $field = $( '.wpum-multiple-user-roles' );
+			if ( ! $field.length ) return false;
+
+			var $row = $field.closest( 'tr' );
+			if ( ! $row.length ) return false;
+
+			// CF user_meta template leaves the <th> empty — add the Role label.
+			var $th = $row.find( 'th' );
+			if ( $th.length && ! $th.text().trim() ) {
+				$th.html( '<label for="role">Role</label>' );
 			}
-			var el_userrole = $( '.user-role-wrap select#role, #createuser select#role' );
-			$( $( '.wpum-multiple-user-roles' ) ).insertAfter( el_userrole ).css( 'padding', 0 );
-			$( el_userrole ).hide();
+
+			// Hide the now-empty CF container heading and table.
+			var $table = $field.closest( 'table.form-table' );
+			if ( $table.length ) {
+				$table.prev( 'h2' ).hide();
+				$table.hide();
+			}
+
+			// user-edit.php: insert after the username row.
+			var $userLogin = $( '.user-user-login-wrap' );
+			if ( $userLogin.length ) {
+				$row.insertAfter( $userLogin );
+				$( '.user-role-wrap' ).hide();
+				return true;
+			}
+
+			// user-new.php: replace the role select row.
+			var $newUserRole = $( '#createuser select#role' );
+			if ( $newUserRole.length ) {
+				var $formField = $newUserRole.closest( '.form-field, tr' ).first();
+				$row.insertAfter( $formField );
+				$formField.hide();
+				return true;
+			}
+
+			return false;
+		}
+
+		// Try immediately.
+		if ( relocateRolesField() ) return;
+
+		// Observe for CF React rendering.
+		var observer = new MutationObserver( function() {
+			if ( relocateRolesField() ) {
+				observer.disconnect();
+			}
 		} );
+		observer.observe( document.body, { childList: true, subtree: true } );
+
+		// Safety timeout.
+		setTimeout( function() { observer.disconnect(); }, 10000 );
+	} );
 	</script>
 	<?php
 }
@@ -971,7 +1028,7 @@ function validate_user_meta_key() {
 add_action( 'wp_ajax_validate_user_meta_key', 'validate_user_meta_key' );
 
 
-add_action( 'the_content', function( $content ) {
+add_action( 'the_content', function ( $content ) {
 	$registration = filter_input( INPUT_GET, 'registration', FILTER_UNSAFE_RAW );
 	$registration = sanitize_text_field( $registration );
 	if ( empty( $registration ) || 'success' !== $registration ) {

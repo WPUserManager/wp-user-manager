@@ -182,7 +182,6 @@ class WPUM_Form_Registration extends WPUM_Form {
 		}
 
 		return $pass;
-
 	}
 
 	/**
@@ -203,7 +202,6 @@ class WPUM_Form_Registration extends WPUM_Form {
 		}
 
 		return $pass;
-
 	}
 
 	/**
@@ -292,7 +290,6 @@ class WPUM_Form_Registration extends WPUM_Form {
 		}
 
 		$this->fields = array( 'register' => $this->get_registration_fields() );
-
 	}
 
 	/**
@@ -446,7 +443,6 @@ class WPUM_Form_Registration extends WPUM_Form {
 		}
 
 		return $by;
-
 	}
 
 	/**
@@ -492,7 +488,6 @@ class WPUM_Form_Registration extends WPUM_Form {
 			WPUM()->templates->set_template_data( array( 'message' => sprintf( __( 'The registration form cannot be used because either a username or email field is required to process registrations. Please edit the form and add at least the email field. <a href="%1$s">%2$s</a>', 'wp-user-manager' ), esc_url_raw( $admin_url ), $admin_url ) ) )->get_template_part( 'messages/general', 'error' );
 
 		}
-
 	}
 
 	/**
@@ -517,6 +512,11 @@ class WPUM_Form_Registration extends WPUM_Form {
 
 			if ( empty( $_POST['submit_registration'] ) ) {
 				return false;
+			}
+
+			// Security: reject array values for avatar/cover POST fields to prevent path injection.
+			if ( ( isset( $_POST['current_user_avatar'] ) && is_array( $_POST['current_user_avatar'] ) ) || ( isset( $_POST['current_user_cover'] ) && is_array( $_POST['current_user_cover'] ) ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce already verified above.
+				throw new Exception( esc_html__( 'Invalid input.', 'wp-user-manager' ) );
 			}
 
 			$return = $this->validate_fields( $values );
@@ -577,14 +577,24 @@ class WPUM_Form_Registration extends WPUM_Form {
 				$user->set_role( $this->role );
 			}
 
+			$upload_dir = wp_upload_dir()['basedir'];
+
 			if ( isset( $values['register']['user_cover']['url'] ) ) {
-				carbon_set_user_meta( $user->ID, 'user_cover', $values['register']['user_cover']['url'] );
-				update_user_meta( $user->ID, '_user_cover_path', $values['register']['user_cover']['path'] );
+				$cover_path = $values['register']['user_cover']['path'] ?? '';
+				// Only store path if it is within the uploads directory and contains no traversal.
+				if ( $cover_path && false === strpos( $cover_path, '..' ) && 0 === strpos( $cover_path, $upload_dir ) ) {
+					carbon_set_user_meta( $user->ID, 'user_cover', esc_url_raw( $values['register']['user_cover']['url'] ) );
+					update_user_meta( $user->ID, '_user_cover_path', $cover_path );
+				}
 			}
 
 			if ( isset( $values['register']['user_avatar']['url'] ) ) {
-				carbon_set_user_meta( $user->ID, 'current_user_avatar', $values['register']['user_avatar']['url'] );
-				update_user_meta( $user->ID, '_current_user_avatar_path', $values['register']['user_avatar']['path'] );
+				$avatar_path = $values['register']['user_avatar']['path'] ?? '';
+				// Only store path if it is within the uploads directory and contains no traversal.
+				if ( $avatar_path && false === strpos( $avatar_path, '..' ) && 0 === strpos( $avatar_path, $upload_dir ) ) {
+					carbon_set_user_meta( $user->ID, 'current_user_avatar', esc_url_raw( $values['register']['user_avatar']['url'] ) );
+					update_user_meta( $user->ID, '_current_user_avatar_path', $avatar_path );
+				}
 			}
 
 			// Allow developers to extend signup process.
@@ -607,7 +617,7 @@ class WPUM_Form_Registration extends WPUM_Form {
 			}
 
 			// Successful, show next step.
-			$this->step ++;
+			++$this->step;
 
 		} catch ( Exception $e ) {
 			$this->add_error( $e->getMessage(), 'registration_submit' );
@@ -666,7 +676,7 @@ class WPUM_Form_Registration extends WPUM_Form {
 				$template     = isset( $field['template'] ) ? $field['template'] : $field['type'];
 
 				WPUM()->templates->set_template_data( $field )
-								 ->get_template_part( 'form-fields/' . $template, 'field' );
+								->get_template_part( 'form-fields/' . $template, 'field' );
 
 				return;
 			}
@@ -676,8 +686,7 @@ class WPUM_Form_Registration extends WPUM_Form {
 				'key'     => $key,
 				'form_id' => $this->form_id,
 			) )
-							 ->get_template_part( 'forms/form-registration-fields', 'field' );
+							->get_template_part( 'forms/form-registration-fields', 'field' );
 		}
 	}
-
 }

@@ -22,10 +22,18 @@ class WPUM_Field_File extends WPUM_Field_Type {
 	 */
 	public function __construct() {
 		$this->group = 'advanced';
-		$this->name  = esc_html__( 'File', 'wp-user-manager' );
 		$this->type  = 'file';
 		$this->icon  = 'dashicons-paperclip';
 		$this->order = 3;
+	}
+
+	/**
+	 * Set the name of the field.
+	 *
+	 * @return void
+	 */
+	public function set_name() {
+		$this->name = esc_html__( 'File', 'wp-user-manager' );
 	}
 
 	/**
@@ -74,8 +82,20 @@ class WPUM_Field_File extends WPUM_Field_Type {
 		$file = $this->upload_file( $key, $field );
 		if ( ! $file ) {
 			$file = parent::get_posted_field( 'current_' . $key, $field );
+			// Reject array values from POST — only scalar (string URL) is valid.
+			if ( is_array( $file ) ) {
+				$file = '';
+			}
 		} elseif ( is_array( $file ) ) {
-			$file = array_filter( array_merge( $file, (array) parent::get_posted_field( 'current_' . $key, $field ) ) );
+			$current = parent::get_posted_field( 'current_' . $key, $field );
+			// Only merge scalar (string) current values. Array values from POST
+			// could inject arbitrary paths — reject them silently.
+			if ( is_array( $current ) ) {
+				$current = '';
+			}
+			if ( $current ) {
+				$file = array_filter( array_merge( $file, array( 'url' => $current ) ) );
+			}
 		}
 		return $file;
 	}
@@ -89,7 +109,7 @@ class WPUM_Field_File extends WPUM_Field_Type {
 	 * @return  string|array
 	 */
 	protected function upload_file( $field_key, $field ) {
-		if ( ! empty( $_FILES[ $field_key ] ) && ! empty( $_FILES[ $field_key ]['name'] ) ) {
+		if ( ! empty( $_FILES[ $field_key ] ) && ! empty( $_FILES[ $field_key ]['name'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce verified in parent form handler.
 			$allowed_mime_types = wpum_get_allowed_mime_types();
 			if ( ! empty( $field['allowed_mime_types'] ) ) {
 				$extensions         = explode( ',', $field['allowed_mime_types'] );
@@ -111,14 +131,14 @@ class WPUM_Field_File extends WPUM_Field_Type {
 				// translators: %s field label
 				$too_big_message = sprintf( esc_html__( 'The uploaded %s file is too big.', 'wp-user-manager' ), $field['label'] );
 				if ( defined( 'WPUM_MAX_AVATAR_SIZE' ) && 'user_avatar' === $field_key && $file_to_upload['size'] > WPUM_MAX_AVATAR_SIZE ) {
-					throw new Exception( $too_big_message );
+					throw new Exception( esc_html( $too_big_message ) );
 				}
 				if ( defined( 'WPUM_MAX_COVER_SIZE' ) && 'user_cover' === $field_key && $file_to_upload['size'] > WPUM_MAX_COVER_SIZE ) {
-					throw new Exception( $too_big_message );
+					throw new Exception( esc_html( $too_big_message ) );
 				}
 
 				if ( isset( $field['max_file_size'] ) && ! empty( $field['max_file_size'] ) && $file_to_upload['size'] > $field['max_file_size'] ) {
-					throw new Exception( $too_big_message );
+					throw new Exception( esc_html( $too_big_message ) );
 				}
 
 				$uploaded_file = wpum_upload_file( $file_to_upload, array(
@@ -128,7 +148,7 @@ class WPUM_Field_File extends WPUM_Field_Type {
 				) );
 
 				if ( is_wp_error( $uploaded_file ) ) {
-					throw new Exception( $uploaded_file->get_error_message() );
+					throw new Exception( esc_html( $uploaded_file->get_error_message() ) );
 				} else {
 					$file_urls[] = array(
 						'url'  => $uploaded_file->url,
@@ -168,13 +188,13 @@ class WPUM_Field_File extends WPUM_Field_Type {
 		$extension = substr( strrchr( $image_src, '.' ), 1 );
 		$file_type = wp_ext2type( $extension );
 		if ( 'image' === $file_type ) {
-			$value = '<span class="wpum-uploaded-file-name"><img src="' . $image_src . '"></span>';
+			$value = '<span class="wpum-uploaded-file-name"><img src="' . esc_url( $image_src ) . '"></span>';
 		} elseif ( 'video' === $file_type && $field->get_type() === 'video' ) {
 			$value = '<span class="wpum-uploaded-file-name">' . wp_video_shortcode( array( 'src' => $image_src ) ) . '</span>';
 		} elseif ( 'audio' === $file_type && $field->get_type() === 'audio' ) {
 			$value = '<span class="wpum-uploaded-file-name">' . wp_audio_shortcode( array( 'src' => $image_src ) ) . '</span>';
 		} else {
-			$value = '<span class="wpum-uploaded-file-name"><a href="' . $image_src . '" target="_blank" rel="noopener noreferrer">' . esc_html( $image_src ) . '</a></span>';
+			$value = '<span class="wpum-uploaded-file-name"><a href="' . esc_url( $image_src ) . '" target="_blank" rel="noopener noreferrer">' . esc_html( $image_src ) . '</a></span>';
 		}
 
 		return $value;

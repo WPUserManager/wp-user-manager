@@ -4,11 +4,11 @@ Plugin URI: https://wpusermanager.com
 Contributors: wpusermanager, polevaultweb, alessandro.tesoro
 Tags: members, membership, community, user profile, user registration
 Requires at least: 4.9
-Tested up to: 6.9
-Requires PHP: 7.2
+Tested up to: 7.1
+Requires PHP: 7.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
-Stable Tag: 2.9.13
+Stable Tag: 2.9.20
 
 The most customizable profiles & community builder WordPress plugin with front-end login, registration, profile customization and content restriction.
 
@@ -26,7 +26,7 @@ Create a custom login page, have full control over the registration form, give y
 
 = Features included =
 
-- [Frontend forms](https://wpusermanager.com/features/front-end-forms/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager): Allow users to register and login from the front of the site. Customized the registration form
+- [Frontend forms](https://wpusermanager.com/features/front-end-forms/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager): Allow users to register and login from the front of the site. Customize the registration form with custom fields to collect data
 - [Stripe integration](https://wpusermanager.com/articles/332-stripe/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager): Customize the emails sent to users when the register, reset their password and more
 - [Custom email notifications](https://wpusermanager.com/features/custom-email-notifications/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager): Customize the emails sent to users when the register, reset their password and more
 - [Custom avatars](https://wpusermanager.com/features/custom-avatars/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager): Users can edit their site avatar by uploading an image from the account page
@@ -106,7 +106,7 @@ Please refer to the [official documentation](https://docs.wpusermanager.com/arti
 
 = Where do I report security bugs found in this plugin? =
 
-Please report security bugs found in the source code of the WP User Manager plugin through the [Patchstack Vulnerability Disclosure Program](https://patchstack.com/database/vdp/wp-user-manager/). The Patchstack team will assist you with verification, CVE assignment, and notify the developers of this plugin.
+Please report security bugs found in the source code of the WP User Manager plugin through the [Patchstack Vulnerability Disclosure Program](https://patchstack.com/database/vdp/wp-user-manager/). The Patchstack team will assist you with verification, CVE assignment, and notify the developers of this plugin. For further details, see our [security policy](https://github.com/WPUserManager/wp-user-manager/blob/develop/.github/SECURITY.md).
 
 = Is WP User Manager GDPR compliant? =
 
@@ -133,6 +133,57 @@ Please note that using WPUM and the mentioned add-ons does NOT guarantee complia
 13. Login form.
 
 == Changelog ==
+
+= 2.9.20 (19th September 2026) =
+
+- Security: Stripe registration only accepts the plans configured on the registration form (thanks to Patchstack for the follow-up review)
+- Security: Stripe Connect callback is now tied to the administrator who started the connection
+- Security: One-time Stripe plans are only marked as paid once Stripe confirms the payment
+- Security: Hardened addon version check, license requests, file field output and bundled Carbon Fields AJAX actions
+- Fix: One-time Stripe payments not being marked as paid
+- Fix: Fatal error when downloading Stripe invoices
+- Fix: Customers who abandoned a one-time Stripe checkout had no way to pay
+- Fix: Addon licenses entered since 2.9.14 not activating
+- Tweak: Removed unused Carbon Fields source files from the plugin package
+
+= 2.9.19 (18th September 2026) =
+
+- Security: Enforced server-side Stripe plan validation on registration (thanks to Ananda Dhakal via Patchstack for responsible disclosure)
+- Security: Added authorization check to Stripe Connect callback (thanks to Wordfence PRISM for responsible disclosure)
+- Enhancement: Added "Fetch Stripe Products" button to Stripe settings
+- Enhancement: Stripe product webhook handlers to auto-sync product cache
+- Enhancement: Filter Stripe API queries to active products and prices only
+- Enhancement: Generic login error messages setting to prevent username enumeration
+- Fix: PHP 8 fatal in avatar cache key when $id_or_email is an object
+
+= 2.9.18 (30th May 2026) =
+
+- Security: Hardened profile tab input validation (thanks to Yat via Wordfence for responsible disclosure)
+- Fix: Custom avatar not shown when a default avatar is also configured
+- Fix: Multiple roles not saving on the admin edit user page
+- Fix: Email content editor for 'Delete Inactive Accounts' not working with block themes
+
+= 2.9.17 (11th May 2026) =
+
+- Security: Hardened file field input validation during registration (thanks to endy via Patchstack for responsible disclosure)
+
+= 2.9.16 (11th Apr 2026) =
+
+- Fix: PHP 8.2+ dynamic property deprecation warnings in WPUM_Field
+- Fix: Account update no longer fails when avatar or cover image file is missing from disk
+- Fix: Password recovery now works when the username is an email address different from the stored email
+- Fix: Multicheckbox and multiselect fields no longer cause errors when the stored value is not an array
+
+= 2.9.15 (26th Feb 2026) =
+
+- Fix: User role multiselect was disabled on the admin user profile after Carbon Fields upgrade
+
+= 2.9.14 (24th Feb 2026) =
+
+- Improvement: Updated Brain\Cortex routing library for PHP 8.3 compatibility
+- Improvement: Upgraded Carbon Fields to a version compatible with PHP 8.1-8.3
+- Fix: Translation loading now uses the correct hook for WordPress 6.7+ compatibility
+- Improvement: Minimum PHP version raised from 7.2 to 7.4
 
 = 2.9.13 (16th Dec 2025) =
 

@@ -75,14 +75,13 @@ class Account {
 
 		add_action( 'template_redirect', array( $this, 'handle_download_invoice' ) );
 		add_action( 'wpum_account_page_content', array( $this, 'render_payment_message' ), 9 );
-
 	}
 
 	/**
 	 * Redirect users who aren't subscribed or paid
 	 */
 	public function unsubscribed_redirect() {
-		if ( ! is_user_logged_in() || current_user_can( 'administrator' ) ) {
+		if ( ! is_user_logged_in() || current_user_can( 'manage_options' ) ) {
 			return;
 		}
 
@@ -124,7 +123,9 @@ class Account {
 	 */
 	public function register_account_tab( $tabs ) {
 		$user = new User( get_current_user_id() );
-		if ( ! $user->shouldBeSubscribed() || $user->isPaid() ) {
+
+		// Subscribers manage billing here, and unpaid one-time buyers pay here.
+		if ( ! $user->shouldBeSubscribed() && $user->isPaid() ) {
 			return $tabs;
 		}
 
@@ -212,7 +213,7 @@ class Account {
 	}
 
 	/**
-	 * @return mixed|void
+	 * @return void
 	 * @throws \Stripe\Exception\ApiErrorException
 	 */
 	public function handle_download_invoice() {
@@ -244,7 +245,7 @@ class Account {
 			return;
 		}
 
-		return ( new Invoice(
+		( new Invoice(
 			$stripe_invoice,
 			$invoice
 		) )->download();

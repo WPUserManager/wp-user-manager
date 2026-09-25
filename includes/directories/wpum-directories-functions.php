@@ -27,7 +27,6 @@ function wpum_get_directory_sort_by_methods() {
 	);
 
 	return apply_filters( 'wpum_get_directory_sort_by_methods', $options );
-
 }
 
 /**
@@ -46,7 +45,6 @@ function wpum_get_directory_amount_modifier() {
 	);
 
 	return apply_filters( 'wpum_get_directory_amount_modifier', $amounts );
-
 }
 
 /**
@@ -61,7 +59,6 @@ function wpum_get_directory_templates() {
 	);
 
 	return apply_filters( 'wpum_get_directory_templates', $templates );
-
 }
 
 /**
@@ -76,7 +73,6 @@ function wpum_get_directory_user_templates() {
 	);
 
 	return apply_filters( 'wpum_get_directory_user_templates', $templates );
-
 }
 
 /**
@@ -102,5 +98,4 @@ function wpum_user_directory_pagination( $data ) {
 	) ) );
 
 	echo '</div>';
-
 }

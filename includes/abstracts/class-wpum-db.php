@@ -251,5 +251,4 @@ abstract class WPUM_DB {
 	public function installed() {
 		return $this->table_exists( $this->table_name );
 	}
-
 }

@@ -308,9 +308,7 @@ class WPUM_Getting_Started {
 			wp_safe_redirect( admin_url( 'index.php?page=wpum-getting-started' ) );
 			exit;
 		}
-
 	}
-
 }
 
 new WPUM_Getting_Started();

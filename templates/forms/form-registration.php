@@ -50,7 +50,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		$label = isset( $data->submit_label ) ? $data->submit_label : esc_html__( 'Register', 'wp-user-manager' );
 		?>
 		<input type="submit" name="submit_registration" class="button"
-			   value="<?php echo esc_html( apply_filters( 'wpum_registration_form_submit_label', $label ) ); ?>"/>
+				value="<?php echo esc_html( apply_filters( 'wpum_registration_form_submit_label', $label ) ); ?>"/>
 
 	</form>
 

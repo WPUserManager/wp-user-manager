@@ -31,7 +31,6 @@ class WPUM_Addons_Page {
 
 		$this->api = 'https://wpusermanager.com/wp-json/wp/v2/edd-addons';
 		$this->hooks();
-
 	}
 
 	/**
@@ -65,7 +64,7 @@ class WPUM_Addons_Page {
 			if ( $cached_feed ) {
 				$addons = $cached_feed;
 			} else {
-				$feed = wp_remote_get( $this->api, array( 'sslverify' => false ) );
+				$feed = wp_remote_get( $this->api );
 				if ( ! is_wp_error( $feed ) ) {
 					$feed_content = wp_remote_retrieve_body( $feed );
 					$addons       = json_decode( $feed_content );
@@ -88,7 +87,7 @@ class WPUM_Addons_Page {
 
 		$tab = filter_input( INPUT_GET, 'tab' );
 
-		if ( 'users_page_wpum-addons' === $screen->base || 'plugin-install' === $screen->base && 'wpum_addons' === $tab ) {
+		if ( 'users_page_wpum-addons' === $screen->base || ( 'plugin-install' === $screen->base && 'wpum_addons' === $tab ) ) {
 			wp_enqueue_style( 'wpum-addons', WPUM_PLUGIN_URL . 'assets/css/admin/addons.css', false, WPUM_VERSION );
 		}
 	}
@@ -110,7 +109,6 @@ class WPUM_Addons_Page {
 	public function view_addons() {
 
 		include WPUM_PLUGIN_DIR . 'includes/admin/views/addons.php';
-
 	}
 
 	/**
@@ -125,7 +123,6 @@ class WPUM_Addons_Page {
 
 		return $tabs;
 	}
-
 }
 
 new WPUM_Addons_Page();

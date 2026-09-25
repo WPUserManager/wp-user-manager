@@ -13,7 +13,7 @@
  * @version 1.0.0
  */
 
- // Exit if accessed directly
+// Exit if accessed directly
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
@@ -25,12 +25,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 if ( isset( $data->autocomplete ) && false === $data->autocomplete ) {
 	echo ' autocomplete="off"'; }
 ?>
- name="<?php echo esc_attr( isset( $data->name ) ? $data->name : $data->key ); ?>" id="<?php echo esc_attr( $data->key ); ?>" placeholder="<?php echo empty( $data->placeholder ) ? '' : esc_attr( $data->placeholder ); ?>" value="<?php echo isset( $data->value ) ? esc_attr( $data->value ) : ''; ?>" maxlength="<?php echo ! empty( $data->maxlength ) ? esc_attr( $data->maxlength ) : ''; ?>"
-				  <?php
+name="<?php echo esc_attr( isset( $data->name ) ? $data->name : $data->key ); ?>" id="<?php echo esc_attr( $data->key ); ?>" placeholder="<?php echo empty( $data->placeholder ) ? '' : esc_attr( $data->placeholder ); ?>" value="<?php echo isset( $data->value ) ? esc_attr( $data->value ) : ''; ?>" maxlength="<?php echo ! empty( $data->maxlength ) ? esc_attr( $data->maxlength ) : ''; ?>"
+					<?php
 					if ( ! empty( $data->required ) ) {
 						echo 'required';}
 					?>
-	 />
+	/>
 <?php
 if ( ! empty( $data->description ) ) :
 	?>

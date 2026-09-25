@@ -55,7 +55,6 @@ class WPUM_Updater_Settings {
 			->set_page_file( 'wpum-licenses' )
 			->add_fields( $settings );
 		}
-
 	}
 
 	/**
@@ -72,7 +71,6 @@ class WPUM_Updater_Settings {
 		}
 
 		return $settings;
-
 	}
 
 	/**
@@ -104,7 +102,6 @@ class WPUM_Updater_Settings {
 			<?php
 
 		}
-
 	}
 
 	/**
@@ -155,9 +152,7 @@ class WPUM_Updater_Settings {
 			window.wpum_removeArguments();
 		</script>
 		<?php
-
 	}
-
 }
 
 new WPUM_Updater_Settings();

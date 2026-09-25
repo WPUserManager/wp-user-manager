@@ -116,7 +116,6 @@ class WPUM_Roles_Editor {
 
 			wp_localize_script( 'wpum-roles-editor', 'wpumRolesEditor', $js_variables );
 		}
-
 	}
 
 	/**
@@ -396,7 +395,6 @@ class WPUM_Roles_Editor {
 		do_action( 'wpum_role_delete', $role_id );
 
 		wp_send_json_success( (string) $role_id );
-
 	}
 
 	/**
@@ -467,7 +465,6 @@ class WPUM_Roles_Editor {
 		} else {
 			wp_die( esc_html__( 'Something went wrong: could not create new role.', 'wp-user-manager' ), 403 );
 		}
-
 	}
 
 	/**
@@ -489,7 +486,6 @@ class WPUM_Roles_Editor {
 	private function send_json_error() {
 		wp_send_json_error( null, 403 );
 	}
-
 }
 
 $wpum_roles_editor = new WPUM_Roles_Editor();

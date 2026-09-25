@@ -77,7 +77,7 @@ class WPUM_Elementor_Loader {
 	 * @param Widgets_Manager $widgets
 	 */
 	public function wpum_register_elementor_widets( $widgets ) {
-		spl_autoload_register( function ( $class ) {
+		spl_autoload_register( function ( $class ) { // phpcs:ignore Universal.NamingConventions.NoReservedKeywordParameterNames.classFound -- Matches spl_autoload_register signature.
 			$file = 'extensions/class-' . str_replace( '_', '-', strtolower( $class ) ) . '.php';
 			if ( file_exists( WPUM_PLUGIN_DIR . 'includes/integrations/elementor/' . $file ) ) {
 				include $file;
@@ -86,7 +86,7 @@ class WPUM_Elementor_Loader {
 
 		( new WPUM_RestrictionControls() )::get_instance();
 
-		spl_autoload_register( function ( $class ) {
+		spl_autoload_register( function ( $class ) { // phpcs:ignore Universal.NamingConventions.NoReservedKeywordParameterNames.classFound -- Matches spl_autoload_register signature.
 			$file = 'widgets/class-' . str_replace( '_', '-', strtolower( $class ) ) . '.php';
 			if ( file_exists( WPUM_PLUGIN_DIR . 'includes/integrations/elementor/' . $file ) ) {
 				include $file;

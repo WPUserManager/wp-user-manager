@@ -338,7 +338,8 @@ msgstr ""
 msgid "This nickname is already in use by someone else. Nicknames must be unique."
 msgstr ""
 
-#: includes/actions.php:351 templates/profile-card.php:44
+#: includes/actions.php:351 includes/functions.php:726
+#: templates/profile-card.php:44
 msgid "View Profile"
 msgstr ""
 
@@ -4035,6 +4036,10 @@ msgstr ""
 #: templates/already-logged-in.php:46
 #. translators: %s user display name
 msgid "You are currently logged in as %s."
+msgstr ""
+
+#: templates/already-logged-in.php:30 templates/directory/single-user.php:40
+msgid "View profile"
 msgstr ""
 
 #: templates/directory/search-form.php:34
