@@ -65,6 +65,7 @@ class FieldUserMetaValueTest extends FieldsTestCase {
 		}
 
 		unregister_taxonomy( self::TAXONOMY );
+		set_query_var( 'profile', false );
 		wp_set_current_user( 0 );
 
 		parent::_tearDown();
@@ -214,6 +215,47 @@ class FieldUserMetaValueTest extends FieldsTestCase {
 		$field->set_user_meta( $this->user_id );
 
 		$this->assertSame( 'Developer, Tester', $field->get_value() );
+	}
+
+	/**
+	 * A visitor viewing another user's profile sees the profile owner's
+	 * terms, not their own, even though Carbon returns an empty value.
+	 *
+	 * Loads the fields the way the profile "About" tab does
+	 * (WPUM_Fields_Query -> get_groups -> get_fields for the queried user),
+	 * scoped to this test's group so fields left behind by other tests
+	 * don't affect it.
+	 */
+	public function test_profile_shows_owners_terms_to_another_user() {
+		$field    = $this->create_taxonomy_field();
+		$owner    = $this->user_id;
+		$visitor  = $this->factory()->user->create( array( 'role' => 'subscriber' ) );
+		$term_ids = $this->create_terms( array( 'Designer', 'Developer', 'Tester' ) );
+		$this->hook_taxonomy_value_callback();
+		$this->register_carbon_set_field( $field, array() );
+
+		wp_set_object_terms( $owner, array( $term_ids[0], $term_ids[1] ), self::TAXONOMY );
+		\WPUM\carbon_set_user_meta( $owner, $field->get_meta( 'user_meta_key' ), array_map( 'strval', array( $term_ids[0], $term_ids[1] ) ) );
+		wp_set_object_terms( $visitor, array( $term_ids[2] ), self::TAXONOMY );
+
+		// The visitor views the owner's profile (default user_id permalink structure).
+		update_option( 'wpum_permalink', 'user_id' );
+		wp_set_current_user( $visitor );
+		set_query_var( 'profile', (string) $owner );
+
+		$this->assertSame( $owner, wpum_get_queried_user_id(), 'Precondition: the owner is the queried profile.' );
+
+		$fields = WPUM()->fields->get_fields(
+			array(
+				'group_id' => $this->group_id,
+				'order'    => 'ASC',
+				'orderby'  => 'field_order',
+				'user_id'  => wpum_get_queried_user_id(),
+			)
+		);
+
+		$this->assertCount( 1, $fields );
+		$this->assertSame( 'Designer, Developer', $fields[0]->get_value() );
 	}
 
 	/**
