@@ -28,9 +28,20 @@ class WPUM_Emails_Customizer_Scripts {
 	 * Get things started.
 	 */
 	public function __construct() {
-		$this->registered_emails = wpum_get_registered_emails();
+		// Set the registered emails during 'init' to avoid early translation issues.
+		add_action( 'init', array( $this, 'set_registered_emails' ) );
+
 		add_action( 'customize_preview_init', array( $this, 'customize_preview' ) );
 		add_action( 'customize_controls_enqueue_scripts', array( $this, 'customize_controls' ), 90 );
+	}
+
+	/**
+	 * Initialize the registered emails.
+	 *
+	 * @return void
+	 */
+	public function set_registered_emails() {
+		$this->registered_emails = wpum_get_registered_emails();
 	}
 
 	/**
@@ -81,6 +92,11 @@ class WPUM_Emails_Customizer_Scripts {
 			'sections'          => $sections,
 		);
 		wp_localize_script( 'wpum-email-customize-controls', 'wpumCustomizeControls', $js_variables );
+
+		// This is a workaround to ensure that the tinymce editor is initialized in a block theme.
+		if ( function_exists( 'wp_is_block_theme' ) && wp_is_block_theme() ) {
+			do_action( 'admin_print_footer_scripts' );
+		}
 	}
 }
 

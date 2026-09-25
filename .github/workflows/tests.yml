@@ -10,8 +10,12 @@ concurrency:
 
 jobs:
   wpunit:
-    name: WPUnit Tests
+    name: WPUnit Tests (PHP ${{ matrix.php }})
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        php: ['7.4', '8.1', '8.2', '8.3']
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -67,6 +71,9 @@ jobs:
           printf 'TEST_SITE_WP_DOMAIN=localhost:8889\n' >> tests/.env.local
           printf 'TEST_SITE_ADMIN_EMAIL=admin@example.com\n' >> tests/.env.local
           printf 'TEST_SITE_WP_URL=http://localhost:8889\n' >> tests/.env.local
+
+      - name: Set wp-env PHP version
+        run: echo '{"phpVersion":"${{ matrix.php }}"}' > .wp-env.override.json
 
       - name: Start wp-env
         run: npx @wordpress/env start

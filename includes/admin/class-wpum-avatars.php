@@ -36,7 +36,9 @@ class WPUM_Avatars {
 
 		if ( wpum_get_option( 'custom_avatars' ) ) {
 			add_action( 'carbon_fields_register_fields', array( $this, 'avatar_field' ) );
-			add_filter( 'get_avatar_url', array( $this, 'set_avatar_url' ), 10, 3 );
+
+			// Set user uploaded avatar a higher priority than the default avatar.
+			add_filter( 'get_avatar_url', array( $this, 'set_avatar_url' ), 11, 3 );
 		}
 
 		if ( ! wpum_get_option( 'disable_profile_cover' ) ) {
@@ -202,7 +204,21 @@ class WPUM_Avatars {
 			return $url;
 		}
 
-		$cache_key = 'wpum_default_avatar_' . $id_or_email;
+		if ( is_object( $id_or_email ) ) {
+			if ( ! empty( $id_or_email->comment_ID ) ) {
+				$key_part = 'c' . $id_or_email->comment_ID;
+			} elseif ( ! empty( $id_or_email->ID ) ) {
+				$key_part = 'u' . $id_or_email->ID;
+			} elseif ( ! empty( $id_or_email->user_email ) ) {
+				$key_part = md5( $id_or_email->user_email );
+			} else {
+				$encoded  = wp_json_encode( $id_or_email );
+				$key_part = md5( $encoded ? $encoded : 'unknown' );
+			}
+		} else {
+			$key_part = (string) $id_or_email;
+		}
+		$cache_key = 'wpum_default_avatar_' . $key_part;
 
 		$default_url = wpum_get_option( 'default_avatar_url' );
 		if ( empty( $default_url ) ) {

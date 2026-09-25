@@ -156,4 +156,77 @@ class PasswordRecoverySubmitTest extends PasswordRecoveryTestCase {
 
 		$this->assertArrayHasKey( 'username_email', $fields, 'Should have username_email field.' );
 	}
+
+	/**
+	 * Regression test for #188: user whose login looks like an email but differs
+	 * from their stored email should still pass validate_username_or_email().
+	 */
+	public function test_email_as_username_passes_when_differs_from_stored_email() {
+		$this->factory()->user->create( array(
+			'user_login' => 'john_' . wp_rand() . '@olddomain.com',
+			'user_pass'  => 'StrongP@ss1!',
+			'user_email' => 'john_' . wp_rand() . '@newdomain.com',
+		) );
+
+		// We need a deterministic login/email pair - recreate with fixed values via a unique suffix.
+		$suffix     = wp_rand( 1000, 9999 );
+		$user_login = 'user' . $suffix . '@olddomain.com';
+		$user_email = 'user' . $suffix . '@newdomain.com';
+
+		$this->factory()->user->create( array(
+			'user_login' => $user_login,
+			'user_pass'  => 'StrongP@ss1!',
+			'user_email' => $user_email,
+		) );
+
+		$form = \WPUM_Form_Password_Recovery::instance();
+
+		// Submit the login (which looks like an email) — NOT the stored email.
+		$result = $form->validate_username_or_email(
+			true,
+			array(),
+			array(
+				'user' => array(
+					'username_email' => $user_login,
+				),
+			),
+			'password-recovery'
+		);
+
+		$this->assertTrue(
+			$result,
+			'Validation should pass when the submitted value is a username that looks like an email, even if it differs from the stored email.'
+		);
+	}
+
+	/**
+	 * Regression test for #188: submitting the stored email (not the login) should also pass.
+	 */
+	public function test_stored_email_passes_when_login_is_different_email_format() {
+		$suffix     = wp_rand( 1000, 9999 );
+		$user_login = 'loginuser' . $suffix . '@olddomain.com';
+		$user_email = 'loginuser' . $suffix . '@newdomain.com';
+
+		$this->factory()->user->create( array(
+			'user_login' => $user_login,
+			'user_pass'  => 'StrongP@ss1!',
+			'user_email' => $user_email,
+		) );
+
+		$form = \WPUM_Form_Password_Recovery::instance();
+
+		// Submit the stored email address.
+		$result = $form->validate_username_or_email(
+			true,
+			array(),
+			array(
+				'user' => array(
+					'username_email' => $user_email,
+				),
+			),
+			'password-recovery'
+		);
+
+		$this->assertTrue( $result, 'Validation should pass when the submitted value is the stored email address.' );
+	}
 }

@@ -374,7 +374,7 @@ class WPUM_Fields_Editor {
 					'group_id'      => $field->get_group_id(),
 					'field_order'   => $field->get_field_order(),
 					'type'          => $field->get_type(),
-					'type_nicename' => $field->get_type_nicename(),
+					'type_nicename' => $field->get_field_type_name( $field->get_type() ),
 					'name'          => $field->get_name(),
 					'description'   => $field->get_description(),
 					'visibility'    => $field->get_visibility(),

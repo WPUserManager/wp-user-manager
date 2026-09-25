@@ -1,6 +1,6 @@
-/*! WP User Manager - v2.9.9
+/*! WP User Manager - v2.9.20
  * https://wpusermanager.com
- * Copyright (c) 2024; * Licensed GPLv2+ */
+ * Copyright (c) 2026; * Licensed GPLv2+ */
 jQuery( function( $ ) {
 	function initFields() {
 		$( '.wpum-multiselect:not(.wpum-clone-field)' ).each( function() {
@@ -10,7 +10,11 @@ jQuery( function( $ ) {
 		$( '.wpum-datepicker:not([readonly]):not(.wpum-clone-field)' ).flatpickr( {
 			altFormat : wpumFrontend.dateFormat,
 			altInput: true,
-			dateFormat: "Y-m-d"
+			dateFormat: "Y-m-d",
+			// Flatpickr swaps itself for a native date input on touch devices unless
+			// this is set, which ignores the site date format and leaves the field
+			// inert on some mobile browsers. See issue #202.
+			disableMobile: 'undefined' === typeof wpumFrontend.disableMobile ? true : !! wpumFrontend.disableMobile
 		} );
 	}
 

@@ -66,6 +66,10 @@ class WPUM_Plugin_Updates {
 			$this->upgrade_v2_9();
 		}
 
+		if ( version_compare( $installed_version, '2.9.14', '>=' ) && version_compare( $installed_version, '2.9.20', '<' ) ) {
+			$this->upgrade_v2_9_20();
+		}
+
 		update_option( 'wpum_version', $latest_version );
 	}
 
@@ -74,7 +78,7 @@ class WPUM_Plugin_Updates {
 	 */
 	protected function upgrade_v2_2() {
 		// Get default registration form
-		$registration_forms = WPUM()->registration_forms->get_forms();
+		$registration_forms = WPUM()->registration_forms->get_forms( array( 'number' => -1 ) );
 		$form               = false;
 		foreach ( $registration_forms as $registration_form ) {
 			if ( $registration_form->is_default() ) {
@@ -125,13 +129,10 @@ class WPUM_Plugin_Updates {
 	 * Upgrade 2.8
 	 */
 	protected function upgrade_v2_8() {
-		$existing_emails = get_option( 'wpum_email', array() );
-		$emails          = wpum_install_emails();
-
-		if ( ! isset( $existing_emails['registration_admin_notification'] ) ) {
-			$existing_emails['registration_admin_notification'] = $emails['registration_admin_notification'];
-			update_option( 'wpum_email', $existing_emails );
-		}
+		// Merges the stored emails over the defaults, which adds the admin
+		// notification email and fills in any field a stored email is missing,
+		// then saves the result.
+		wpum_install_emails();
 	}
 
 	/**
@@ -166,6 +167,18 @@ class WPUM_Plugin_Updates {
 				$value = gmdate( 'Y-m-d', strtotime( $result->meta_value ) );
 				update_user_meta( $result->user_id, $meta_key, $value );
 			}
+		}
+	}
+
+	/**
+	 * Upgrade 2.9.20
+	 *
+	 * Addon licenses saved on 2.9.14 - 2.9.19 were never activated with EDD.
+	 * Activate them in the background, so the remote calls don't block this admin request.
+	 */
+	protected function upgrade_v2_9_20() {
+		if ( ! wp_next_scheduled( 'wpum_reactivate_inactive_licenses' ) ) {
+			wp_schedule_single_event( time(), 'wpum_reactivate_inactive_licenses' );
 		}
 	}
 

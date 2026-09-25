@@ -53,14 +53,24 @@ class Products {
 		Stripe::setApiKey( $this->secret_key );
 
 		try {
-			$all_products = \WPUM\Stripe\Product::all();
+			$all_products = \WPUM\Stripe\Product::all(
+				array(
+					'active' => true,
+					'limit'  => 100,
+				)
+			);
 		} catch ( \Stripe\Exception\ApiErrorException $exception ) {
 			$all_products = array();
 		}
 
 		$products = array();
 		foreach ( $all_products as $product ) {
-			$all_prices = \WPUM\Stripe\Price::all( array( 'product' => $product->id ) );
+			$all_prices = \WPUM\Stripe\Price::all(
+				array(
+					'product' => $product->id,
+					'active'  => true,
+				)
+			);
 
 			$save_product = $product->toArray();
 			$prices       = array();
@@ -96,11 +106,16 @@ class Products {
 	}
 
 	/**
-	 * @param string $plan_id
+	 * @param string     $plan_id
+	 * @param array|null $allowed_plan_ids Only resolve these price IDs. Null allows any.
 	 *
 	 * @return false|mixed
 	 */
-	public function get_by_plan( $plan_id ) {
+	public function get_by_plan( $plan_id, $allowed_plan_ids = null ) {
+		if ( is_array( $allowed_plan_ids ) && ! in_array( $plan_id, $allowed_plan_ids, true ) ) {
+			return false;
+		}
+
 		foreach ( $this->products as $product ) {
 			if ( ! isset( $product['prices'] ) ) {
 				continue;

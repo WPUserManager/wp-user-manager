@@ -148,7 +148,9 @@ class User extends \WP_User {
 
 		$product_data = $this->getProductData();
 		if ( ! $product_data ) {
-			return true;
+			// Registered through a paid form but no plan was recorded: fail closed.
+			// Members without the marker predate this check and keep their access.
+			return ! get_user_meta( $this->ID, 'wpum_stripe_payment_required', true );
 		}
 
 		return $product_data['paid'];

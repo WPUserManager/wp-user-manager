@@ -21,9 +21,17 @@ class WPUM_Shortcode_Content_Loggedout extends WPUM_Shortcode_Generator {
 	 * Inject the editor for this shortcode.
 	 */
 	public function __construct() {
+		parent::__construct( 'wpum_restrict_logged_out' );
+	}
+
+	/**
+	 * Set the label and title of the shortcode.
+	 *
+	 * @return void
+	 */
+	public function set_labels() {
 		$this->shortcode['title'] = esc_html__( 'Logged out only user content', 'wp-user-manager' );
 		$this->shortcode['label'] = esc_html__( 'Logged out only user content', 'wp-user-manager' );
-		parent::__construct( 'wpum_restrict_logged_out' );
 	}
 
 	/**

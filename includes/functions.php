@@ -951,8 +951,14 @@ function wpum_get_profile_tab_url( $user, $tab ) {
  * @return string
  */
 function wpum_get_active_profile_tab() {
-	$first_tab   = key( wpum_get_registered_profile_tabs() );
+	$registered  = wpum_get_registered_profile_tabs();
+	$first_tab   = key( $registered );
 	$profile_tab = get_query_var( 'tab', $first_tab );
+
+	// Validate against registered tabs to prevent path traversal / LFI.
+	if ( ! isset( $registered[ $profile_tab ] ) ) {
+		$profile_tab = $first_tab;
+	}
 
 	return $profile_tab;
 }
