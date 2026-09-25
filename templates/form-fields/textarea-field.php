@@ -14,7 +14,9 @@
  */
 
 // Exit if accessed directly
-if ( ! defined( 'ABSPATH' ) ) exit;
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 
 ?>
 
@@ -26,8 +28,17 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 	id="<?php echo esc_attr( $data->key ); ?>"
 	placeholder="<?php echo empty( $data->placeholder ) ? '' : esc_attr( $data->placeholder ); ?>"
 	maxlength="<?php echo ! empty( $data->maxlength ) ? esc_attr( $data->maxlength ) : ''; ?>"
-	<?php if ( ! empty( $data->required ) ) echo 'required'; ?>
-	<?php if ( ! empty( $data->read_only ) ) echo 'readonly'; ?>
+	<?php
+	if ( ! empty( $data->required ) ) {
+		echo 'required';}
+	?>
+	<?php
+	if ( ! empty( $data->read_only ) ) {
+		echo 'readonly';}
+	?>
 	><?php echo isset( $data->value ) ? esc_textarea( html_entity_decode( $data->value ) ) : ''; ?>
 </textarea>
-<?php if ( ! empty( $data->description ) ) : ?><small class="description"><?php echo wp_kses_post( $data->description ); ?></small><?php endif; ?>
+<?php
+if ( ! empty( $data->description ) ) :
+	?>
+	<small class="description"><?php echo wp_kses_post( $data->description ); ?></small><?php endif; ?>

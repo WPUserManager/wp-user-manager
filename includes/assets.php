@@ -29,21 +29,12 @@ function wpum_load_admin_scripts() {
 	wp_register_script( 'wpum-vue-vendor', WPUM_PLUGIN_URL . 'dist/static/js/vendor.js', array(), WPUM_VERSION, true );
 
 	if ( in_array( $screen->base, $allowed_screens ) ) {
+		wp_enqueue_script( 'wpum-settings', WPUM_PLUGIN_URL . 'assets/js/admin/settings.min.js', array(), WPUM_VERSION, true );
 		wp_enqueue_style( 'wpum-logo', WPUM_PLUGIN_URL . 'assets/css/admin/wpum-logo.css', array(), WPUM_VERSION );
+		wp_localize_script( 'wpum-settings', 'wpum_settings', array(
+			'ajaxurl' => admin_url( 'admin-ajax.php' ),
+		) );
 	}
-
-	wp_enqueue_script( 'wpum-upgrades', WPUM_PLUGIN_URL . 'assets/js/admin/admin-upgrades.min.js', array(), WPUM_VERSION, true );
-	wp_enqueue_style( 'wpum-upgrades-style', WPUM_PLUGIN_URL . 'assets/css/admin/upgrades.css', array(), WPUM_VERSION );
-
-	$js_vars = [
-		'updates'                           => array(
-			'ajax_error' => __( 'Please reload this page and try again', 'wp-user-manager' ),
-		),
-		'db_update_confirmation_msg_button' => __( 'Run Updates', 'wp-user-manager' ),
-		'db_update_confirmation_msg'        => __( 'The following process will make updates to your site\'s database. Please create a database backup before proceeding with updates.', 'wp-user-manager' ),
-		'error_message'                     => __( 'Something went wrong kindly try again!', 'wp-user-manager' ),
-	];
-	wp_localize_script( 'wpum-upgrades', 'wpum_vars', $js_vars );
 
 }
 add_action( 'admin_enqueue_scripts', 'wpum_load_admin_scripts' );
@@ -69,20 +60,40 @@ function wpum_load_scripts() {
 }
 add_action( 'wp_enqueue_scripts', 'wpum_load_scripts' );
 
+/**
+ * Get the variables made available to the frontend script as `wpumFrontend`.
+ *
+ * @return array
+ */
+function wpum_get_frontend_js_variables() {
+	/**
+	 * Filter: whether the flatpickr calendar is used on mobile devices.
+	 *
+	 * Flatpickr replaces itself with a native date input on touch devices unless
+	 * its `disableMobile` option is set. The native input ignores the site date
+	 * format and does not render a picker on some mobile browsers, so WPUM keeps
+	 * the flatpickr calendar everywhere. Return false to restore the native input.
+	 *
+	 * @param bool $disable_mobile Whether to disable flatpickr's native mobile fallback.
+	 */
+	$disable_mobile = apply_filters( 'wpum_field_datepicker_disable_mobile', true );
+
+	return array(
+		'dateFormat'    => apply_filters( 'wpum_field_datepicker_date_format', get_option( 'date_format' ) ),
+		'disableMobile' => $disable_mobile ? '1' : '',
+	);
+}
+
 function wpum_enqueue_scripts() {
-	wp_enqueue_style( 'wpum-select2-style', 'https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css', false, WPUM_VERSION );
-	wp_enqueue_script( 'wpum-select2', 'https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js', array( 'jquery' ), WPUM_VERSION, true );
-	wp_enqueue_script( 'wpum-datepicker', 'https://cdn.jsdelivr.net/npm/flatpickr', array( 'jquery' ), WPUM_VERSION, true );
-	wp_enqueue_style( 'wpum-datepicker-style', 'https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css', false, WPUM_VERSION );
+	wp_enqueue_style( 'wpum-select2-style', WPUM_PLUGIN_URL . 'assets/css/vendor/select2.min.css', false, WPUM_VERSION );
+	wp_enqueue_script( 'wpum-select2', WPUM_PLUGIN_URL . 'assets/js/vendor/select2.min.js', array( 'jquery' ), WPUM_VERSION, true );
+	wp_enqueue_script( 'wpum-datepicker', WPUM_PLUGIN_URL . 'assets/js/vendor/flatpickr.min.js', array( 'jquery' ), WPUM_VERSION, true );
+	wp_enqueue_style( 'wpum-datepicker-style', WPUM_PLUGIN_URL . 'assets/css/vendor/flatpickr.min.css', false, WPUM_VERSION );
 
 	$suffix = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
 	wp_enqueue_script( 'wpum-frontend-js', WPUM_PLUGIN_URL . 'assets/js/wp-user-manager' . $suffix . '.js', array( 'jquery' ), WPUM_VERSION, true );
 
-	$js_variables = [
-		'dateFormat' => get_option( 'date_format' ),
-	];
-
-	wp_localize_script( 'wpum-frontend-js', 'wpumFrontend', $js_variables );
+	wp_localize_script( 'wpum-frontend-js', 'wpumFrontend', wpum_get_frontend_js_variables() );
 
 	do_action( 'wpum_enqueue_frontend_scripts', $suffix );
 }

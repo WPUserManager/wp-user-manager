@@ -30,6 +30,7 @@
 					<th scope="col" class="column-primary" v-text="sanitized(labels.email)"></th>
 					<th scope="col" v-text="sanitized(labels.description)"></th>
 					<th scope="col" v-text="sanitized(labels.recipients)"></th>
+					<th scope="col" v-text="sanitized(labels.active)"></th>
 					<th scope="col"></th>
 				</tr>
 			</thead>
@@ -43,7 +44,9 @@
 					<td><a :href="getCustomizationURL( index )" v-text="sanitized(email.name)"></a></td>
 					<td v-text="sanitized(email.description)"></td>
 					<td v-text="sanitized(email.recipient)"></td>
+					<td><toggle-button :disabled="email.disabled" v-model="email.enabled" color="#00be28" @change="emailEnabledChange( index, $event )" /> <div class="spinner is-active" v-if="emailkey === index" ></div></td>
 					<td><a :href="getCustomizationURL( index )" class="button"><span class="dashicons dashicons-edit"></span> <span v-text="sanitized(labels.customize)"></span></a></td>
+
 				</tr>
 			</tbody>
 			<tfoot>
@@ -52,6 +55,7 @@
 					<th scope="col" class="column-primary" v-text="sanitized(labels.email)"></th>
 					<th scope="col" v-text="sanitized(labels.description)"></th>
 					<th scope="col" v-text="sanitized(labels.recipients)"></th>
+					<th scope="col" v-text="sanitized(labels.active)"></th>
 					<th scope="col"></th>
 				</tr>
 			</tfoot>
@@ -76,7 +80,8 @@ export default {
 			test_email: wpumEmailsEditor.default_email,
 			emails: wpumEmailsEditor.emails,
 			labels: wpumEmailsEditor.labels,
-			url: wpumEmailsEditor.pluginURL
+			url: wpumEmailsEditor.pluginURL,
+			emailkey: '',
 		}
 	},
 	methods: {
@@ -158,7 +163,30 @@ export default {
 				this.success = false
 			});
 
-		}
+		},
+		emailEnabledChange: function ( key, event ) {
+			this.emailkey = key
+			axios.post( wpumEmailsEditor.ajax,
+				qs.stringify({
+					key: key,
+					nonce: wpumEmailsEditor.nonce,
+					enabled: event.value,
+				}),
+				{
+					params: {
+						action: 'wpum_enabled_email'
+					},
+				}
+			)
+			.then( response => {
+				if( response.data.success === true ) {
+					this.emailkey = ''
+				}
+			})
+			.catch( response => {
+				this.emailkey = ''
+			});
+		},
 	}
 }
 </script>

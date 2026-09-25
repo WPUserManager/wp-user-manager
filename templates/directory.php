@@ -14,7 +14,9 @@
  */
 
 // Exit if accessed directly
-if ( ! defined( 'ABSPATH' ) ) exit;
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 
 ?>
 
@@ -35,12 +37,12 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 	<!-- start directory -->
 	<div id="wpum-directory-users-list">
 
-		<?php if( is_array( $data->results ) && ! empty( $data->results ) ) : ?>
+		<?php if ( is_array( $data->results ) && ! empty( $data->results ) ) : ?>
 
-			<?php foreach( $data->results as $user ) : ?>
+			<?php foreach ( $data->results as $user ) : ?>
 				<?php
 
-					$user_template = ( $data->user_template !== 'default' || ! $data->user_template ) ? $data->user_template : 'user';
+					$user_template = ( 'default' !== $data->user_template || ! $data->user_template ) ? $data->user_template : 'user';
 
 					WPUM()->templates
 						->set_template_data( $user )
@@ -54,9 +56,9 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 			<?php
 
 				WPUM()->templates
-					->set_template_data( [
+					->set_template_data( array(
 						'message' => esc_html__( 'No users have been found.', 'wp-user-manager' ),
-					] )
+					) )
 					->get_template_part( 'messages/general', 'warning' );
 
 			?>

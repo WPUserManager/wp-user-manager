@@ -9,6 +9,7 @@ import VueFormitFields from 'vue-formit-fields'
 import WPUMFields from './components/field-types'
 import MultiselectField from './components/fields/multiselect'
 import FieldRepeater from './../fields-editor/settings/field-type-repeater'
+import MultiSelect from './../fields-editor/components/fields/multiselect'
 import {Bootstrap} from './../bootstrap'
 
 Vue.use(VueFormitFields)
@@ -16,6 +17,7 @@ Vue.use(WPNotice)
 Vue.use(VModal, { dialog: true, dynamic: true })
 
 Vue.component('formit-multiselect', MultiselectField)
+Vue.component('field-multiselect', MultiSelect)
 Vue.component('field-repeater', FieldRepeater)
 
 // register wpum fields

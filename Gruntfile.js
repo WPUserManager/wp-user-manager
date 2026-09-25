@@ -20,6 +20,26 @@ module.exports = function( grunt ) {
 					'assets/js/src/wp-user-manager.js'
 				],
 				dest: 'assets/js/wp-user-manager.js'
+			},
+			wpum_directories: {
+				src: [
+					'assets/js/src/wpum-directories.js'
+				],
+				dest: 'assets/js/wpum-directories.js'
+			},
+			wpum_stripe: {
+				src: [
+					'assets/js/src/wpum-stripe.js'
+				],
+				dest: 'assets/js/wpum-stripe.js'
+			}
+		},
+		shell: {
+			prefixComposerDependencies: {
+				command: 'sh bin/prefix-dependencies.sh <%= pkg.version %>'
+			},
+			symlinkScopedVendor: {
+				command: 'rm -rf ./vendor-dist; rsync -avz ./release/<%= pkg.version %>/vendor-dist ./'
 			}
 		},
 		jshint: {
@@ -50,13 +70,13 @@ module.exports = function( grunt ) {
 				files: {
 					'assets/js/admin/tinymce/mce-plugin.min.js': ['assets/js/src/admin/tinymce/mce-plugin.js'],
 					'assets/js/admin/admin-shortcodes.min.js': ['assets/js/src/admin/admin-shortcodes.js'],
+					'assets/js/admin/settings.min.js': ['assets/js/src/admin/settings.js'],
 					'assets/js/admin/admin-email-customizer-preview.min.js': ['assets/js/src/admin/admin-email-customizer-preview.js'],
 					'assets/js/admin/admin-email-customizer-controls.min.js': ['assets/js/src/admin/admin-email-customizer-controls.js'],
-					'assets/js/admin/admin-email-customizer.min.js': ['assets/js/src/admin/admin-email-customizer.js'],
 					'assets/js/admin/admin-menus.min.js': ['assets/js/src/admin/admin-menus.js'],
-					'assets/js/admin/admin-upgrades.min.js': ['assets/js/src/admin/admin-upgrades.js'],
 					'assets/js/wp-user-manager.min.js': ['assets/js/src/wp-user-manager.js'],
-					'assets/js/wpum-directories.min.js': ['assets/js/src/wpum-directories.js']
+					'assets/js/wpum-directories.min.js': ['assets/js/src/wpum-directories.js'],
+					'assets/js/wpum-stripe.min.js': ['assets/js/src/wpum-stripe.js']
 				},
 				options: {
 					banner: '/*! <%= pkg.title %> - v<%= pkg.version %>\n' +
@@ -73,7 +93,14 @@ module.exports = function( grunt ) {
 		test:   {
 			files: ['assets/js/test/**/*.js']
 		},
-
+		composer : {
+			options : {
+				usePhp: true,
+				flags: ['arg'],
+				cwd: 'release/<%= pkg.version %>/',
+				composerLocation: '/usr/local/bin/composer'
+			},
+		},
 		sass:   {
 			all: {
 				files: {
@@ -84,7 +111,6 @@ module.exports = function( grunt ) {
 					'assets/css/admin/wpum-logo.css': 'assets/css/src/admin/wpum-logo.scss',
 					'assets/css/admin/logo-font.css': 'assets/css/src/admin/logo-font.scss',
 					'assets/css/admin/addons.css': 'assets/css/src/admin/addons.scss',
-					'assets/css/admin/upgrades.css': 'assets/css/src/admin/upgrades.scss',
 					'assets/css/admin/licensing.css': 'assets/css/src/admin/licensing.scss',
 					'assets/css/wpum.css': 'assets/css/src/wpum.scss',
 				}
@@ -162,7 +188,25 @@ module.exports = function( grunt ) {
 			}
 		},
 		clean: {
-			main: ['release']
+			main: ['release'],
+			build: [
+				'release/<%= pkg.version %>/build',
+				'release/<%= pkg.version %>/scoped',
+				'release/<%= pkg.version %>/php-scoper.phar',
+				'release/<%= pkg.version %>/vendor-dist/nikic/fast-route/test',
+				'release/<%= pkg.version %>/vendor-dist/typisttech/imposter',
+				'release/<%= pkg.version %>/vendor-dist/typisttech/imposter-plugin',
+				'release/<%= pkg.version %>/vendor-dist/dompdf/dompdf/lib/fonts/*.html',
+				'release/<%= pkg.version %>/vendor-dist/dompdf/dompdf/lib/fonts/*.afm',
+				'!release/<%= pkg.version %>/vendor-dist/dompdf/dompdf/lib/fonts/Helvetica.afm',
+				'!release/<%= pkg.version %>/vendor-dist/dompdf/dompdf/lib/fonts/Helvetica-Bold.afm',
+				'release/<%= pkg.version %>/vendor-dist/dompdf/dompdf/lib/fonts/*.ufm',
+				'release/<%= pkg.version %>/vendor-dist/dompdf/dompdf/lib/fonts/*.ttf',
+				'release/<%= pkg.version %>/vendor-dist/nesbot/carbon/src/Carbon/Lang',
+				'release/<%= pkg.version %>/vendor-dist/htmlburger/carbon-fields/assets/dist/carbon.vendor.js',
+				'release/<%= pkg.version %>/vendor-dist/htmlburger/carbon-fields/assets/dist/carbon.core.js',
+				'release/<%= pkg.version %>/vendor-dist/htmlburger/carbon-fields/yarn.lock',
+			]
 		},
 		gittag: {
            addtag: {
@@ -199,7 +243,11 @@ module.exports = function( grunt ) {
 			main: {
 				src:  [
 					'**',
+					'!vendor/**',
+					'!vendor-dist/**',
+					'!bin/**',
 					'!node_modules/**',
+					'!tests/**',
 					'!release/**',
 					'!.git/**',
 					'!.sass-cache/**',
@@ -208,10 +256,21 @@ module.exports = function( grunt ) {
 					'!img/src/**',
 					'!Gruntfile.js',
 					'!package.json',
+					'!package-lock.json',
+					'!.yarnrc',
 					'!.gitignore',
 					'!.gitmodules',
-					'!distributewp.json',
-					'!yarn.lock'
+					'!.github',
+					'!phpcs.xml.dist',
+					'!README.md',
+					'!yarn.lock',
+					'!phpstan.neon.dist',
+					'!playwright.config.ts',
+					'!tsconfig.json',
+					'!.wp-env.json',
+					'!.wp-env.override.json',
+					'!test-results/**',
+					'!release.json'
 				],
 				dest: 'release/<%= pkg.version %>/'
 			}
@@ -253,35 +312,23 @@ module.exports = function( grunt ) {
 				src: [ 'readme.txt' ],
 				overwrite: true,
 				replacements: [{
-					from: /Stable tag: (.*)/,
-					to: "Stable tag: <%= pkg.version %>"
+					from: /Stable tag: (.*)/i,
+					to: "Stable Tag: <%= pkg.version %>"
 				}]
 			},
 			init_php: {
 				src: [ 'wp-user-manager.php' ],
 				overwrite: true,
 				replacements: [{
-					from: /Version:\s*(.*)/,
-					to: "Version: <%= pkg.version %>"
+					from: /^(\s*\*\s*Version:\s*).*$/m,
+					to: "$1<%= pkg.version %>"
 				}, {
-					from: /define\(\s*'WPUM_VERSION',\s*'(.*)'\s*\);/,
-					to: "define( 'WPUM_VERSION', '<%= pkg.version %>' );"
+					from: /WP_User_Manager::instance\(\s*__FILE__,\s*'[^']*'\s*\)/,
+					to: "WP_User_Manager::instance( __FILE__, '<%= pkg.version %>' )"
 				}]
 			}
-		},
-		git_changelog: {
-		    extended: {
-		      options: {
-		        app_name : 'WP User Manager Changelog',
-		        file : 'changelog.md',
-		        grep_commits: '^fix|^feat|^docs|^refactor|^chore|BREAKING|^updated|^adjusted',
-        		tag : '1.2.3' //False for commits since the beggining
-		      }
-		    }
-		  }
+		}
 	} );
-
-	grunt.loadNpmTasks('git-changelog');
 
 	// Default task.
 	grunt.registerTask( 'css', [ 'sass', 'cssmin'] );
@@ -289,14 +336,15 @@ module.exports = function( grunt ) {
 	grunt.registerTask( 'default', ['js', 'css'] );
 	grunt.registerTask( 'textdomain', ['addtextdomain'] );
 	grunt.registerTask( 'do_pot', ['makepot'] );
-	grunt.registerTask( 'do_changelog', ['git_changelog'] );
 	grunt.registerTask( 'version_number', [ 'replace:readme_txt', 'replace:init_php' ] );
 	grunt.registerTask( 'pre_vcs', [ 'version_number' ] );
 	grunt.registerTask( 'do_svn', [ 'svn_checkout', 'copy:svn_trunk', 'copy:svn_tag', 'push_svn' ] );
 	grunt.registerTask( 'do_git', [  'gitcommit', 'gittag', 'gitpush' ] );
 	grunt.registerTask( 'release', [ 'pre_vcs', 'do_svn', 'do_git'  ] );
+	grunt.registerTask( 'test', ['clean:main', 'copy'] );
 
-	grunt.registerTask( 'build', ['clean', 'copy', 'compress'] );
+	grunt.registerTask( 'build', ['clean:main', 'copy', 'shell:prefixComposerDependencies', 'clean:build', 'compress', 'shell:symlinkScopedVendor'] );
+	grunt.registerTask( 'symlink-vendor', [ 'shell:symlinkScopedVendor'] );
 
 	grunt.util.linefeed = '\n';
 };

@@ -8,8 +8,8 @@
  * @since       1.0.0
  */
 
-use Carbon_Fields\Container;
-use Carbon_Fields\Field;
+use WPUM\Carbon_Fields\Container;
+use WPUM\Carbon_Fields\Field;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
@@ -29,9 +29,26 @@ function wpum_delete_pages_transient( $post_id ) {
 	}
 
 	delete_transient( 'wpum_get_pages' );
-
 }
 add_action( 'save_post_page', 'wpum_delete_pages_transient' );
+
+/**
+ * Delete cached list of pages when a page is deleted.
+ *
+ * @param int     $post_id
+ * @param WP_Post $post
+ *
+ * @return void
+ */
+function wpum_delete_pages_transient_on_delete( $post_id, $post ) {
+	if ( wp_is_post_revision( $post_id ) || 'page' !== $post->post_type ) {
+		return;
+	}
+
+	delete_transient( 'wpum_get_pages' );
+}
+
+add_action( 'delete_post', 'wpum_delete_pages_transient_on_delete', 99, 2 );
 
 /**
  * Add WPUM specific admin bar links.
@@ -83,7 +100,6 @@ function wpum_admin_bar_menu( $wp_admin_bar ) {
 		'parent' => 'wpum_node',
 	);
 	$wp_admin_bar->add_node( $args );
-
 }
 add_action( 'admin_bar_menu', 'wpum_admin_bar_menu', 100 );
 
@@ -94,16 +110,38 @@ add_action( 'admin_bar_menu', 'wpum_admin_bar_menu', 100 );
  */
 function wpum_remove_admin_bar() {
 	$excluded_roles = wpum_get_option( 'adminbar_roles' );
-	$user           = wp_get_current_user();
 
-	if ( ! empty( $excluded_roles ) && is_user_logged_in() && in_array( $user->roles[0], $excluded_roles ) && ! is_admin() ) {
-		if ( current_user_can( $user->roles[0] ) ) {
+	if ( empty( $excluded_roles ) ) {
+		return;
+	}
+
+	if ( ! is_user_logged_in() ) {
+		return;
+	}
+
+	if ( is_admin() ) {
+		return;
+	}
+
+	$user = wp_get_current_user();
+
+	if ( empty( $user->roles ) || ! is_array( $user->roles ) ) {
+		return;
+	}
+
+	foreach ( $user->roles as $user_role ) {
+		if ( in_array( $user_role, $excluded_roles, true ) ) {
 			show_admin_bar( false );
+
+			return;
 		}
 	}
 }
 add_action( 'after_setup_theme', 'wpum_remove_admin_bar' );
 
+/**
+ * Handle redirecting users away from the wp-admin unless in allowed role.
+ */
 function wpum_restrict_wp_admin_dashboard_access() {
 	if ( ! is_admin() ) {
 		return;
@@ -117,7 +155,7 @@ function wpum_restrict_wp_admin_dashboard_access() {
 		return;
 	}
 
-	if ( current_user_can( 'administrator' ) ) {
+	if ( current_user_can( 'manage_options' ) ) {
 		return;
 	}
 
@@ -127,13 +165,14 @@ function wpum_restrict_wp_admin_dashboard_access() {
 	}
 
 	$user = wp_get_current_user();
-	if ( ! in_array( $user->roles[0], $excluded_roles ) ) {
+	if ( ! in_array( $user->roles[0], $excluded_roles, true ) ) {
 		return;
 	}
 
 	$redirect = apply_filters( 'wpum_restrict_wp_admin_dashboard_access_redirect', home_url() );
 
-	wp_redirect( $redirect );
+	nocache_headers();
+	wp_safe_redirect( $redirect );
 	exit;
 }
 
@@ -153,7 +192,6 @@ function wpum_restrict_wp_registration() {
 		wp_safe_redirect( esc_url( get_permalink( $registration_redirect[0] ) ) );
 		exit;
 	}
-
 }
 add_action( 'login_form_register', 'wpum_restrict_wp_registration' );
 
@@ -170,7 +208,6 @@ function wpum_restrict_wp_lostpassword() {
 		wp_safe_redirect( esc_url( get_permalink( $password_redirect[0] ) ) );
 		exit;
 	}
-
 }
 add_action( 'login_form_lostpassword', 'wpum_restrict_wp_lostpassword' );
 
@@ -183,11 +220,10 @@ function wpum_restrict_wp_profile() {
 
 	$profile_redirect = wpum_get_option( 'backend_profile_redirect' );
 
-	if ( ! current_user_can( 'administrator' ) && IS_PROFILE_PAGE && $profile_redirect ) {
+	if ( ! current_user_can( 'manage_options' ) && IS_PROFILE_PAGE && $profile_redirect ) {
 		wp_safe_redirect( esc_url( get_permalink( $profile_redirect[0] ) ) );
 		exit;
 	}
-
 }
 add_action( 'load-profile.php', 'wpum_restrict_wp_profile' );
 
@@ -206,9 +242,9 @@ function wpum_restrict_account_page() {
 
 		$redirect = get_permalink( $login_page );
 		$redirect = add_query_arg(
-			[
-				'redirect_to' => get_permalink(),
-			],
+			array(
+				'redirect_to' => apply_filters( 'wpum_login_redirect_to_url', get_permalink() ),
+			),
 			$redirect
 		);
 
@@ -216,7 +252,6 @@ function wpum_restrict_account_page() {
 		exit;
 
 	}
-
 }
 add_action( 'template_redirect', 'wpum_restrict_account_page' );
 
@@ -227,22 +262,22 @@ add_action( 'template_redirect', 'wpum_restrict_account_page' );
  */
 function wpum_display_account_page_content() {
 
-	$active_tab = get_query_var( 'tab' );
 	$tabs       = wpum_get_account_page_tabs();
+	$active_tab = get_query_var( 'tab' );
 
-	if ( empty( $active_tab ) ) {
+	// Validate against registered tabs to prevent path traversal / LFI.
+	if ( empty( $active_tab ) || ! isset( $tabs[ $active_tab ] ) ) {
 		$active_tab = key( $tabs );
 	}
 
-	if ( in_array( $active_tab, array( 'settings', 'password', 'privacy' ) ) ) {
-		if ( $active_tab == 'settings' ) {
+	if ( in_array( $active_tab, array( 'settings', 'password', 'privacy' ), true ) ) {
+		if ( 'settings' === $active_tab ) {
 			$active_tab = 'profile';
 		}
-		echo WPUM()->forms->get_form( $active_tab );
+		echo WPUM()->forms->get_form( $active_tab ); // phpcs:ignore
 	} else {
 		do_action( 'wpum_account_page_content_' . $active_tab );
 	}
-
 }
 add_action( 'wpum_account_page_content', 'wpum_display_account_page_content' );
 
@@ -256,9 +291,12 @@ function wpum_check_display_name( $user_id ) {
 
 	global $wpdb;
 
+	$display_name = filter_input( INPUT_POST, 'display_name' );
+	$nickname     = filter_input( INPUT_POST, 'nickname' );
+
 	// Getting user data and user meta data.
-	$err['display'] = $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(ID) FROM $wpdb->users WHERE display_name = %s AND ID <> %d", $_POST['display_name'], $_POST['user_id'] ) );
-	$err['nick']    = $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(ID) FROM $wpdb->users as users, $wpdb->usermeta as meta WHERE users.ID = meta.user_id AND meta.meta_key = 'nickname' AND meta.meta_value = %s AND users.ID <> %d", $_POST['nickname'], $_POST['user_id'] ) );
+	$err['display'] = $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(ID) FROM $wpdb->users WHERE display_name = %s AND ID <> %d", $display_name, $user_id ) ); // phpcs:ignore
+	$err['nick']    = $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(ID) FROM $wpdb->users as users, $wpdb->usermeta as meta WHERE users.ID = meta.user_id AND meta.meta_key = 'nickname' AND meta.meta_value = %s AND users.ID <> %d", $nickname, $user_id ) );  // phpcs:ignore
 
 	foreach ( $err as $key => $e ) {
 		if ( $e >= 1 ) {
@@ -272,18 +310,26 @@ add_action( 'edit_user_profile_update', 'wpum_check_display_name' );
 /**
  * Trigger the unique error for the display field.
  *
+ * @param WP_Error $errors
+ * @param bool     $update
+ * @param stdClass $user
+ *
  * @return void
  */
-function wpum_check_display_field( $errors, $update, $user ) {
+function wpum_check_display_field( $errors, $update, $user ) { // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.FoundAfterLastUsed -- Required by WordPress user_profile_update_errors hook.
 	$errors->add( 'display_name_error', esc_html__( 'This display name is already in use by someone else. Display names must be unique.', 'wp-user-manager' ) );
 }
 
 /**
  * Trigger the unique error for the nickname field.
  *
+ * @param WP_Error $errors
+ * @param bool     $update
+ * @param stdClass $user
+ *
  * @return void
  */
-function wpum_check_nick_field( $errors, $update, $user ) {
+function wpum_check_nick_field( $errors, $update, $user ) { // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.FoundAfterLastUsed -- Required by WordPress user_profile_update_errors hook.
 	$errors->add( 'display_nick_error', esc_html__( 'This nickname is already in use by someone else. Nicknames must be unique.', 'wp-user-manager' ) );
 }
 
@@ -331,19 +377,98 @@ function wpum_complete_setup() {
  * @return void
  */
 function wpum_prevent_wp_login() {
-
 	global $pagenow;
 
-	$action = ( isset( $_GET['action'] ) ) ? $_GET['action'] : '';
+	$action = filter_input( INPUT_GET, 'action', FILTER_UNSAFE_RAW );
+	$action = sanitize_text_field( $action );
 
-	if ( $pagenow == 'wp-login.php' && ( ! $action || ( $action && ! in_array( $action, array( 'logout', 'lostpassword', 'rp', 'resetpass', 'postpass' ) ) ) ) ) {
+	$wpum_override = filter_input( INPUT_GET, 'wpum_override', FILTER_UNSAFE_RAW );
+	$wpum_override = sanitize_text_field( $wpum_override );
+
+	if ( $pagenow && 'wp-login.php' === $pagenow && ! $wpum_override && ( ! $action || ( ! in_array( $action, array( 'logout', 'lostpassword', 'rp', 'resetpass', 'postpass' ), true ) ) ) ) {
 		$page = wp_login_url();
 		wp_safe_redirect( $page );
 		exit();
 	}
 }
+
 if ( wpum_get_option( 'lock_wplogin' ) ) {
 	add_action( 'init', 'wpum_prevent_wp_login' );
+}
+
+/**
+ * Prevent access to site unless logged in
+ *
+ * @return void
+ */
+function wpum_prevent_entire_site() {
+	if ( wp_doing_cron() || wp_doing_ajax() ) {
+		return;
+	}
+
+	if ( wpum_is_rest_api_request() ) {
+		return;
+	}
+
+	if ( defined( 'WP_CLI' ) && WP_CLI ) {
+		return;
+	}
+
+	if ( is_user_logged_in() ) {
+		return;
+	}
+
+	global $pagenow;
+
+	$login_page      = wp_login_url();
+	$wp_login_locked = wpum_get_option( 'lock_wplogin' );
+	$is_wp_login     = $pagenow && 'wp-login.php' === $pagenow;
+
+	$requested_url = ( is_ssl() ? 'https://' : 'http://' ) . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']; // phpcs:ignore
+
+	if ( $requested_url === $login_page || ( $is_wp_login && ( ! empty( $_GET['wpum_override'] ) || ! $wp_login_locked ) ) ) { // phpcs:ignore
+		return;
+	}
+
+	if ( isset( $_POST['wp-submit'] ) && isset( $_POST['log'] ) ) { // phpcs:ignore
+		return;
+	}
+
+	$password_reset_page_id = wpum_get_core_page_id( 'password' );
+	if ( ! empty( $password_reset_page_id ) ) {
+		$password_reset_page = get_permalink( $password_reset_page_id );
+		if ( 0 === strpos( $requested_url, $password_reset_page ) ) {
+			return;
+		}
+	}
+
+	if ( wpum_get_option( 'lock_complete_site_allow_register' ) ) {
+		$registration_pages   = array();
+		$registration_pages[] = get_permalink( wpum_get_core_page_id( 'register' ) );
+
+		foreach ( apply_filters( 'wpum_registration_pages', $registration_pages ) as $registration_page ) {
+			if ( $requested_url === $registration_page ) {
+				return;
+			}
+		}
+	}
+
+	foreach ( apply_filters( 'wpum_prevent_entire_site_access_allowed_urls', array() ) as $allowed_url ) {
+		if ( $requested_url === $allowed_url ) {
+			return;
+		}
+	}
+
+	if ( ! apply_filters( 'wpum_prevent_entire_site_access', true ) ) {
+		return;
+	}
+
+	wp_safe_redirect( $login_page );
+	exit();
+}
+
+if ( wpum_get_option( 'lock_complete_site' ) ) {
+	add_action( 'init', 'wpum_prevent_entire_site', 9 );
 }
 
 /**
@@ -357,17 +482,579 @@ function wpum_finish_db_setup_after_plugin_init() {
 	if ( ! $upgrade ) {
 		wpum_complete_setup();
 	}
-
 }
 add_action( 'after_wpum_init', 'wpum_finish_db_setup_after_plugin_init' );
 
+/**
+ * Register user profile privacy fields
+ */
 function wpum_register_profile_privacy_fields() {
 	Container::make( 'user_meta', esc_html__( 'Profile Privacy', 'wp-user-manager' ) )
-	         ->add_fields( array(
-		         Field::make( 'checkbox', 'hide_profile_guests', esc_html__( 'Hide profile from guests', 'wp-user-manager' ) )
-		              ->set_help_text( esc_html__( 'Hide this profile from guests. Overrides the global profile options.', 'wp-user-manager' ) ),
-		         Field::make( 'checkbox', 'hide_profile_members', esc_html__( 'Hide profile from members', 'wp-user-manager' ) )
-		              ->set_help_text( esc_html__( 'Hide this profile from members. Overrides the global profile options.', 'wp-user-manager' ) )
-	         ) );
+		->add_fields( array(
+			Field::make( 'checkbox', 'hide_profile_guests', esc_html__( 'Hide profile from guests', 'wp-user-manager' ) )
+				->set_help_text( esc_html__( 'Hide this profile from guests. Overrides the global profile options.', 'wp-user-manager' ) ),
+			Field::make( 'checkbox', 'hide_profile_members', esc_html__( 'Hide profile from members', 'wp-user-manager' ) )
+				->set_help_text( esc_html__( 'Hide this profile from members. Overrides the global profile options.', 'wp-user-manager' ) ),
+		) );
 }
+
 add_action( 'carbon_fields_register_fields', 'wpum_register_profile_privacy_fields' );
+
+/**
+ * Register the multiple user roles field in its own CF container.
+ *
+ * A dedicated container is required so that the entire React root can be
+ * relocated next to the WP role dropdown without breaking the component tree.
+ */
+function wpum_register_multiple_roles_field() {
+	global $pagenow;
+
+	$allow_multiple_roles = wpum_get_option( 'allow_multiple_user_roles' );
+	if ( ! $allow_multiple_roles || is_network_admin() ) {
+		return;
+	}
+
+	$user_id     = filter_input( INPUT_GET, 'user_id', FILTER_VALIDATE_INT );
+	$profileuser = isset( $user_id ) ? get_user_by( 'id', $user_id ) : false;
+
+	if ( ! $profileuser && ! in_array( $pagenow, array( 'user-new.php', 'user-edit.php' ), true ) ) {
+		return;
+	}
+
+	$existing_roles = $profileuser ? $profileuser->roles : array();
+
+	$roles = array();
+	foreach ( wpum_get_roles( true, true ) as $role ) {
+		$roles[ $role['value'] ] = $role['label'];
+	}
+
+	Container::make( 'user_meta', esc_html__( 'User Roles', 'wp-user-manager' ) )
+		->add_fields( array(
+			Field::make( 'multiselect', 'wpum_user_roles', '' )
+				->add_options( $roles )
+				->set_default_value( $existing_roles )
+				->set_classes( 'wpum-multiple-user-roles' )
+				->set_help_text( esc_html__( 'Select one or more roles for this user.', 'wp-user-manager' ) ),
+		) );
+}
+add_action( 'carbon_fields_register_fields', 'wpum_register_multiple_roles_field' );
+
+add_action( 'template_redirect', 'wpum_reset_password_redirect' );
+
+/**
+ * Handle redirecting after user clicks on password reset email link
+ */
+function wpum_reset_password_redirect() {
+	$action = filter_input( INPUT_GET, 'action' );
+
+	if ( ! $action || 'wpum-reset' !== $action ) {
+		return;
+	}
+
+	if ( is_user_logged_in() ) {
+		return;
+	}
+
+	if ( ! isset( $_GET['login'] ) || ! isset( $_GET['key'] ) ) { // phpcs:ignore
+		return;
+	}
+
+	if ( ! isset( $_SERVER['REQUEST_URI'] ) ) {
+		return;
+	}
+
+	list( $rp_path ) = explode( '?', wp_unslash( filter_input( INPUT_SERVER, 'REQUEST_URI' ) ) );
+
+	$login = wp_unslash( filter_input( INPUT_GET, 'login' ) );
+	$key   = wp_unslash( filter_input( INPUT_GET, 'key' ) );
+
+	$value = sprintf( '%s:%s', $login, $key );
+	setcookie( 'wpum-resetpass-' . COOKIEHASH, $value, 0, $rp_path, COOKIE_DOMAIN, is_ssl(), true );
+
+	$url = remove_query_arg( array( 'key', 'login', 'action' ) );
+	$url = add_query_arg( 'step', 'reset', $url );
+
+	wp_safe_redirect( $url );
+	exit;
+}
+
+/**
+ * @param int $user_id
+ */
+function wpum_action_profile_update( $user_id ) {
+	$allow_multiple_roles = wpum_get_option( 'allow_multiple_user_roles' );
+	if ( ! $allow_multiple_roles ) {
+		return;
+	}
+
+	if ( isset( $_POST['_wpum_user_roles'] ) && current_user_can( 'promote_user' ) ) { // phpcs:ignore
+
+		$user = get_user_by( 'ID', $user_id );
+
+		$roles = filter_input( INPUT_POST, '_wpum_user_roles' );
+
+		$wpum_roles = explode( '|', $roles );
+		wpum_update_roles( $wpum_roles, $user );
+	}
+}
+
+add_action( 'profile_update', 'wpum_action_profile_update', 99 );
+if ( is_multisite() ) {
+	add_action( 'add_user_to_blog', 'wpum_action_profile_update', 99 );
+} else {
+	add_action( 'user_register', 'wpum_action_profile_update', 99 );
+}
+
+/**
+ * Relocate the CF "User Roles" multiselect row after the username field and
+ * hide the default WP role dropdown. Moving the <tr> (which wraps the React
+ * root <fieldset>) preserves the CF 3.x component tree.
+ *
+ * @param \WP_User $user
+ */
+function wpum_modify_multiple_roles_ui( $user ) { // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.Found -- Required by WordPress hook signature.
+	$allow_multiple_roles = wpum_get_option( 'allow_multiple_user_roles' );
+	if ( ! $allow_multiple_roles ) {
+		return;
+	}
+	?>
+	<script>
+	jQuery( function( $ ) {
+		function relocateRolesField() {
+			var $field = $( '.wpum-multiple-user-roles' );
+			if ( ! $field.length ) return false;
+
+			var $row = $field.closest( 'tr' );
+			if ( ! $row.length ) return false;
+
+			// CF user_meta template leaves the <th> empty — add the Role label.
+			var $th = $row.find( 'th' );
+			if ( $th.length && ! $th.text().trim() ) {
+				$th.html( '<label for="role">Role</label>' );
+			}
+
+			// Hide the now-empty CF container heading and table.
+			var $table = $field.closest( 'table.form-table' );
+			if ( $table.length ) {
+				$table.prev( 'h2' ).hide();
+				$table.hide();
+			}
+
+			// user-edit.php: insert after the username row.
+			var $userLogin = $( '.user-user-login-wrap' );
+			if ( $userLogin.length ) {
+				$row.insertAfter( $userLogin );
+				$( '.user-role-wrap' ).hide();
+				return true;
+			}
+
+			// user-new.php: replace the role select row.
+			var $newUserRole = $( '#createuser select#role' );
+			if ( $newUserRole.length ) {
+				var $formField = $newUserRole.closest( '.form-field, tr' ).first();
+				$row.insertAfter( $formField );
+				$formField.hide();
+				return true;
+			}
+
+			return false;
+		}
+
+		// Try immediately.
+		if ( relocateRolesField() ) return;
+
+		// Observe for CF React rendering.
+		var observer = new MutationObserver( function() {
+			if ( relocateRolesField() ) {
+				observer.disconnect();
+			}
+		} );
+		observer.observe( document.body, { childList: true, subtree: true } );
+
+		// Safety timeout.
+		setTimeout( function() { observer.disconnect(); }, 10000 );
+	} );
+	</script>
+	<?php
+}
+
+add_action( 'user_new_form', 'wpum_modify_multiple_roles_ui', 0 );
+add_action( 'show_user_profile', 'wpum_modify_multiple_roles_ui', 0 );
+add_action( 'edit_user_profile', 'wpum_modify_multiple_roles_ui', 0 );
+
+/**
+ * Restrict profile page when disabled.
+ *
+ * @return void
+ */
+function wpum_restrict_profile_page() {
+	$profile_page = wpum_get_core_page_id( 'profile' );
+
+	if ( $profile_page && is_page( $profile_page ) && true === boolval( wpum_get_option( 'disable_profiles' ) ) ) {
+		wp_safe_redirect( home_url() );
+		die();
+	}
+}
+
+add_action( 'template_redirect', 'wpum_restrict_profile_page' );
+
+/**
+ * @param WPUM_Form $form
+ * @param array     $values
+ * @param int       $updated_user_id
+ */
+function wpum_flush_user_object_cache( $form, $values, $updated_user_id ) {
+	wp_cache_delete( $updated_user_id, 'user_meta' );
+}
+add_action( 'wpum_after_custom_user_update', 'wpum_flush_user_object_cache', 100, 3 );
+add_action( 'wpum_after_user_update', 'wpum_flush_user_object_cache', 100, 3 );
+
+/**
+ * @param object $data
+ */
+function wpum_field_conditional_logic_rules( $data ) {
+	$rulesets = apply_filters( 'wpum_field_conditional_logic_rules', array(), $data );
+
+	if ( empty( $rulesets ) ) {
+		return;
+	}
+	?>
+	<script type="text/javascript">
+		(function() {
+			var ruleset = <?php echo wp_json_encode( $rulesets ); ?>;
+			Object.keys( ruleset ).forEach( function( fieldName ) {
+				var fields = document.querySelectorAll( '.fieldset-' + fieldName );
+				if ( fields.length > 0 ) {
+					fields.forEach(function(field){
+						field.style.display = 'none';
+						field.dataset.condition = JSON.stringify( ruleset[ fieldName ] );
+					});
+				}
+			} );
+		})();
+	</script>
+	<?php
+}
+
+add_action( 'wpum_after_registration_form', 'wpum_field_conditional_logic_rules', 1 );
+add_action( 'wpum_after_account_form', 'wpum_field_conditional_logic_rules', 1 );
+add_action( 'wpum_after_custom_account_form', 'wpum_field_conditional_logic_rules', 1 );
+
+/**
+ * @param bool   $skip
+ * @param string $field_key
+ * @param array  $values
+ * @param array  $fields
+ *
+ * @return bool
+ */
+function wpum_conditional_fields_maybe_skip_validation( $skip, $field_key, $values, $fields ) {
+	$form_data         = (object) array();
+	$form_data->fields = $fields;
+
+	$rulesets = apply_filters( 'wpum_field_conditional_logic_rules', array(), $form_data );
+
+	if ( empty( $rulesets ) || ! isset( $rulesets[ $field_key ] ) ) {
+		return false;
+	}
+
+	$field_rules = $rulesets[ $field_key ];
+
+	if ( ! $field_rules ) {
+		return false;
+	}
+
+	foreach ( $field_rules as $rules ) {
+		foreach ( $rules as $rule ) {
+			$valid_rule = apply_filters( "wpum_conditional_field_validate_rule_{$rule['condition']}", true, $rule, $values );
+			if ( ! $valid_rule ) {
+				return true;
+			}
+		}
+	}
+
+	return false;
+}
+
+add_filter( 'wpum_form_skip_field_validation', 'wpum_conditional_fields_maybe_skip_validation', 10, 4 );
+
+/**
+ * @param bool  $valid
+ * @param array $rule
+ * @param array $values
+ *
+ * @return bool
+ */
+function wpum_validate_rule_value_not_equals( $valid, $rule, $values ) {
+	if ( isset( $rule['parent'] ) && isset( $values[ $rule['parent'] ] ) && is_array( $values[ $rule['parent'] ] ) ) {
+		foreach ( $values[ $rule['parent'] ] as $child ) {
+			if ( isset( $child[ $rule['field'] ] ) ) {
+				if ( $child[ $rule['field'] ] !== $rule['value'] ) {
+					return true;
+				}
+			}
+		}
+
+		return false;
+	}
+
+	return $values[ $rule['field'] ] !== $rule['value'];
+}
+
+add_filter( 'wpum_conditional_field_validate_rule_value_not_equals', 'wpum_validate_rule_value_not_equals', 10, 3 );
+
+/**
+ * @param bool  $valid
+ * @param array $rule
+ * @param array $values
+ *
+ * @return bool
+ */
+function wpum_validate_rule_value_equals( $valid, $rule, $values ) {
+	if ( isset( $rule['parent'] ) && isset( $values[ $rule['parent'] ] ) && is_array( $values[ $rule['parent'] ] ) ) {
+		foreach ( $values[ $rule['parent'] ] as $child ) {
+			if ( isset( $child[ $rule['field'] ] ) ) {
+				if ( $child[ $rule['field'] ] === $rule['value'] ) {
+					return true;
+				}
+			}
+		}
+
+		return false;
+	}
+
+	return $values[ $rule['field'] ] === $rule['value'];
+}
+
+add_filter( 'wpum_conditional_field_validate_rule_value_equals', 'wpum_validate_rule_value_equals', 10, 3 );
+
+/**
+ * @param bool  $valid
+ * @param array $rule
+ * @param array $values
+ *
+ * @return bool
+ */
+function wpum_validate_rule_value_contains( $valid, $rule, $values ) {
+	if ( isset( $values[ $rule['field'] ] ) && is_array( $values[ $rule['field'] ] ) ) {
+		return in_array( $rule['value'], $values[ $rule['field'] ], true );
+	}
+
+	if ( isset( $rule['parent'] ) && isset( $values[ $rule['parent'] ] ) && is_array( $values[ $rule['parent'] ] ) ) {
+		foreach ( $values[ $rule['parent'] ] as $child ) {
+			if ( isset( $child[ $rule['field'] ] ) ) {
+				if ( strpos( $child[ $rule['field'] ], $rule['value'] ) ) {
+					return true;
+				}
+			}
+		}
+
+		return false;
+	}
+
+	return strpos( $values[ $rule['field'] ], $rule['value'] );
+}
+
+add_filter( 'wpum_conditional_field_validate_rule_value_contains', 'wpum_validate_rule_value_contains', 10, 3 );
+
+/**
+ * @param bool  $valid
+ * @param array $rule
+ * @param array $values
+ *
+ * @return bool
+ */
+function wpum_validate_rule_has_value( $valid, $rule, $values ) {
+	if ( isset( $values[ $rule['field'] ] ) && is_array( $values[ $rule['field'] ] ) ) {
+		return ! empty( $values[ $rule['field'] ] );
+	}
+
+	if ( isset( $rule['parent'] ) && isset( $values[ $rule['parent'] ] ) && is_array( $values[ $rule['parent'] ] ) ) {
+		foreach ( $values[ $rule['parent'] ] as $child ) {
+			if ( isset( $child[ $rule['field'] ] ) ) {
+				if ( '' !== $child[ $rule['field'] ] ) {
+					return true;
+				}
+			}
+		}
+
+		return false;
+	}
+
+	return '' !== $values[ $rule['field'] ];
+}
+
+add_filter( 'wpum_conditional_field_validate_rule_has_value', 'wpum_validate_rule_has_value', 10, 3 );
+
+/**
+ * @param bool  $valid
+ * @param array $rule
+ * @param array $values
+ *
+ * @return bool
+ */
+function wpum_validate_rule_has_no_value( $valid, $rule, $values ) {
+	if ( isset( $values[ $rule['field'] ] ) && is_array( $values[ $rule['field'] ] ) ) {
+		return empty( $values[ $rule['field'] ] );
+	}
+
+	if ( isset( $rule['parent'] ) && isset( $values[ $rule['parent'] ] ) && is_array( $values[ $rule['parent'] ] ) ) {
+		foreach ( $values[ $rule['parent'] ] as $child ) {
+			if ( isset( $child[ $rule['field'] ] ) ) {
+				if ( '' === $child[ $rule['field'] ] ) {
+					return true;
+				}
+			}
+		}
+
+		return false;
+	}
+
+	return '' === $values[ $rule['field'] ];
+}
+
+add_filter( 'wpum_conditional_field_validate_rule_has_no_value', 'wpum_validate_rule_has_no_value', 10, 3 );
+
+/**
+ * @param bool  $valid
+ * @param array $rule
+ * @param array $values
+ *
+ * @return bool
+ */
+function wpum_validate_rule_value_greater( $valid, $rule, $values ) {
+	if ( isset( $rule['parent'] ) && isset( $values[ $rule['parent'] ] ) && is_array( $values[ $rule['parent'] ] ) ) {
+		foreach ( $values[ $rule['parent'] ] as $child ) {
+			if ( isset( $child[ $rule['field'] ] ) ) {
+				if ( $child[ $rule['field'] ] > $rule['value'] ) {
+					return true;
+				}
+			}
+		}
+
+		return false;
+	}
+
+	return $values[ $rule['field'] ] > $rule['value'];
+}
+
+add_filter( 'wpum_conditional_field_validate_rule_value_greater', 'wpum_validate_rule_value_greater', 10, 3 );
+
+/**
+ * @param bool  $valid
+ * @param array $rule
+ * @param array $values
+ *
+ * @return bool
+ */
+function wpum_validate_rule_value_less( $valid, $rule, $values ) {
+	if ( isset( $rule['parent'] ) && isset( $values[ $rule['parent'] ] ) && is_array( $values[ $rule['parent'] ] ) ) {
+		foreach ( $values[ $rule['parent'] ] as $child ) {
+			if ( isset( $child[ $rule['field'] ] ) ) {
+				if ( $child[ $rule['field'] ] < $rule['value'] ) {
+					return true;
+				}
+			}
+		}
+
+		return false;
+	}
+
+	return $values[ $rule['field'] ] < $rule['value'];
+}
+
+add_filter( 'wpum_conditional_field_validate_rule_value_less', 'wpum_validate_rule_value_less', 10, 3 );
+
+// Ensure the global post is set for account/profile subpage§
+add_action( 'wp', function () {
+	global $post;
+
+	if ( ! empty( $post ) ) {
+		return;
+	}
+
+	global $wp;
+
+	if ( ! isset( $wp->query_vars['page_id'] ) ) {
+		return;
+	}
+
+	$account_id = wpum_get_core_page_id( 'account' );
+	$profile_id = wpum_get_core_page_id( 'profile' );
+
+	if ( $wp->query_vars['page_id'] === $account_id ) {
+		$post = get_post( $account_id ); // phpcs:ignore
+
+		return;
+	}
+
+	if ( $wp->query_vars['page_id'] === $profile_id ) {
+		$post = get_post( $profile_id ); // phpcs:ignore
+	}
+}, 9 );
+
+/**
+ * AJAX handler to validate meta key for fields are unique
+ */
+function validate_user_meta_key() {
+	global $wpdb;
+
+	$field_id = filter_input( INPUT_POST, 'field_id', FILTER_VALIDATE_INT );
+
+	if ( empty( $field_id ) ) {
+		return;
+	}
+
+	if ( ! check_ajax_referer( 'wpum_check_field', 'nonce' ) ) {
+		return;
+	}
+
+	if ( ! current_user_can( apply_filters( 'wpum_admin_pages_capability', 'manage_options' ) ) ) {
+		return;
+	}
+
+	$user_meta_key = sanitize_text_field( filter_input( INPUT_POST, 'user_meta_key' ) );
+	$user_meta_key = 'wpum_' . $user_meta_key;
+
+	$meta_count = $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(meta_id) FROM {$wpdb->prefix}wpum_fieldmeta WHERE meta_key = 'user_meta_key' AND meta_value = %s AND wpum_field_id != %d", $user_meta_key, $field_id ) ); // phpcs:ignore
+
+	$response['error'] = array();
+	if ( intval( $meta_count ) > 0 ) {
+		$response['error'][] = 'The user meta key must be unique for each field';
+	}
+
+	wp_send_json_success( $response );
+}
+add_action( 'wp_ajax_validate_user_meta_key', 'validate_user_meta_key' );
+
+
+add_action( 'the_content', function ( $content ) {
+	$registration = filter_input( INPUT_GET, 'registration', FILTER_UNSAFE_RAW );
+	$registration = sanitize_text_field( $registration );
+	if ( empty( $registration ) || 'success' !== $registration ) {
+		return $content;
+	}
+
+	if ( is_page( wpum_get_core_page_id( 'register' ) ) ) {
+		return $content;
+	}
+
+	global $post;
+
+	if ( isset( $post ) && ( has_shortcode( $post->post_content, 'wpum_register' ) || has_block( 'wpum/registration-form', $post ) ) ) {
+		return $content;
+	}
+
+	$success_message = apply_filters( 'wpum_registration_success_message', esc_html__( 'Registration complete. We have sent you a confirmation email with your details.', 'wp-user-manager' ) );
+
+	ob_start();
+	WPUM()->templates
+		->set_template_data(
+			array(
+				'message' => $success_message,
+			)
+		)
+		->get_template_part( 'messages/general', 'success' );
+
+	return ob_get_clean() . $content;
+} );

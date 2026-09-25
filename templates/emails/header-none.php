@@ -6,7 +6,9 @@
  */
 
 // Exit if accessed directly
-if ( ! defined( 'ABSPATH' ) ) exit;
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 
 $heading = $data->heading;
 
@@ -16,7 +18,7 @@ $heading = $data->heading;
 <html>
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-		<title><?php echo get_bloginfo( 'name' ); ?></title>
+		<title><?php echo esc_html( get_bloginfo( 'name' ) ); ?></title>
 	</head>
 	<body>
-		<h1><?php echo $heading; ?></h1>
+		<h1><?php echo esc_html( $heading ); ?></h1>

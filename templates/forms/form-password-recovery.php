@@ -14,7 +14,9 @@
  */
 
 // Exit if accessed directly
-if ( ! defined( 'ABSPATH' ) ) exit;
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 
 ?>
 
@@ -31,20 +33,20 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 		<?php foreach ( $data->fields as $key => $field ) : ?>
 			<fieldset class="fieldset-<?php echo esc_attr( $key ); ?>">
 
-				<?php if( $field['type'] == 'checkbox' ) : ?>
+				<?php if ( 'checkbox' === $field['type'] ) : ?>
 
 					<label for="<?php echo esc_attr( $key ); ?>">
 						<span class="field <?php echo $field['required'] ? 'required-field' : ''; ?>">
 							<?php
 							// Add the key to field.
-							$field[ 'key' ] = $key;
+							$field['key'] = $key;
 							WPUM()->templates
 								->set_template_data( $field )
 								->get_template_part( 'form-fields/' . $field['type'], 'field' );
 							?>
 						</span>
 						<?php echo esc_html( $field['label'] ); ?>
-						<?php if( isset( $field['required'] ) && $field['required'] ) : ?>
+						<?php if ( isset( $field['required'] ) && $field['required'] ) : ?>
 							<span class="wpum-required">*</span>
 						<?php endif; ?>
 					</label>
@@ -53,14 +55,14 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 
 					<label for="<?php echo esc_attr( $key ); ?>">
 						<?php echo esc_html( $field['label'] ); ?>
-						<?php if( isset( $field['required'] ) && $field['required'] ) : ?>
+						<?php if ( isset( $field['required'] ) && $field['required'] ) : ?>
 							<span class="wpum-required">*</span>
 						<?php endif; ?>
 					</label>
 					<div class="field <?php echo $field['required'] ? 'required-field' : ''; ?>">
 						<?php
 						// Add the key to field.
-						$field[ 'key' ] = $key;
+						$field['key'] = $key;
 						WPUM()->templates
 							->set_template_data( $field )
 							->get_template_part( 'form-fields/' . $field['type'], 'field' );
@@ -72,7 +74,7 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 			</fieldset>
 		<?php endforeach; ?>
 
-		<input type="hidden" name="wpum_form" value="<?php echo $data->form; ?>" />
+		<input type="hidden" name="wpum_form" value="<?php echo esc_attr( $data->form ); ?>" />
 		<input type="hidden" name="step" value="<?php echo esc_attr( $data->step ); ?>" />
 		<?php wp_nonce_field( 'verify_password_recovery_form', 'password_recovery_nonce' ); ?>
 

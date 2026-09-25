@@ -1,13 +1,15 @@
-#wpum-addons-page {
+#wpum-addons-page h1 {
 	a.button-primary {
 		margin-left: 10px;
 		position: relative;
 		top: -3px;
+	}
+	a {
 		span {
 			width: 16px;
 			height: 16px;
 			font-size: 14px;
-			margin: 6px 0 0 6px;
+			margin: 7px 0 0 6px;
 		}
 	}
 }
@@ -51,6 +53,7 @@
 
 .type-download>.featured-img {
 	padding: 15px;
+	background: #016afe
 }
 
 .type-download .addon-content {

@@ -26,6 +26,7 @@
 				<div class="vue-form-generator" v-if="activeTab == 'general' && !loadingFields && needsOptions( field_type ) && ! primary_id">
 					<div class="form-group field-input">
 						<label for="placeholder">{{labels.field_options}}</label>
+						<div class="hint"><p v-html="labels.field_options_hint"></p></div>
 						<div class="field-wrap">
 							<div class="wrapper">
 								<draggable v-model="dropdownOptions" :options="{draggable:'.dragme', handle:'.option-sort', animation:150}">
@@ -35,7 +36,7 @@
 											<button type="button" class="button delete-btn" @click="deleteOption( index )"><span class="dashicons dashicons-trash"></span></button>
 										</div>
 										<div class="option-label wpum_two_fifth">
-											<input type="text" :placeholder="labels.field_option_value" name="option[value][]" v-model="dropdownOptions[index].value">
+											<input @paste="onPaste($event, index)" type="text" :placeholder="labels.field_option_value" name="option[value][]" v-model="dropdownOptions[index].value">
 										</div>
 										<div class="option-label wpum_two_fifth last">
 											<input type="text" :placeholder="labels.field_option_label" name="option[label][]" v-model="dropdownOptions[index].label">
@@ -120,6 +121,8 @@ export default {
 			// Current field data.
 			model: {},
 
+			originalModel: {},
+
 			// Setup the settings fields for the current field.
 			schema: {
       			fields: []
@@ -128,7 +131,9 @@ export default {
 			// Setup the options for the form.
 			formOptions: {
 				validateAfterLoad: true,
-				validateAfterChanged: true
+				validateAfterChanged: true,
+				validateDebounceTime: 500,
+				validateAsync: true
 			},
 
 			dropdownOptions: []
@@ -136,7 +141,6 @@ export default {
 		}
 	},
 	created() {
-
 		//setup tabs
 		this.setupTabs();
 
@@ -152,8 +156,22 @@ export default {
 		let res                        = VueFormGenerator.validators.resources;
 			res.fieldIsRequired        = this.labels.field_error_required
 			res.invalidTextContainSpec = this.labels.field_error_special
+
+		this.UserMetaKeyValidator();
 	},
 	methods: {
+		confirmLeave() {
+			return window.confirm(this.labels.confirm_message)
+		},
+
+		confirmStayInDirtyForm() {
+			return this.isFormDirty() && !this.confirmLeave()
+		},
+
+		isFormDirty() {
+			return JSON.stringify( this.model ) !== JSON.stringify( this.originalModel );
+		},
+
 		/**
 		 * Lookup the settings for this field.
 		 */
@@ -187,6 +205,7 @@ export default {
 					// Load the setting fields into the app.
 					this.schema.fields   = response.data.data.settings
 					this.model           = response.data.data.model
+					this.originalModel   = {...this.model}
 					this.dropdownOptions = response.data.data.dropdownOptions
 
 				}
@@ -200,6 +219,10 @@ export default {
 		 * Activate the selected tab and load the appropriate fields via ajax.
 		 */
 		activateTab( tab_id ) {
+			if (this.confirmStayInDirtyForm()) {
+				return;
+			}
+
 			this.activeTab = tab_id
 			this.getSettings()
 		},
@@ -238,16 +261,16 @@ export default {
 		/**
 		 * Process the settings and update the database.
 		 */
-		editField() {
-			let valid = this.$refs.vfg.validate();
+		async editField() {
+			let errors = await this.$refs.vfg.validate();
 
 			// If there's validation errors - show another message within the editor.
-			if( valid === false ) {
+			if ( errors.length > 0 ) {
 
 				this.error = true
 				this.errorMessage = this.labels.field_error_nosave
 
-			} else if( valid === true ) {
+			} else {
 
 				this.loading = true
 
@@ -315,7 +338,53 @@ export default {
 				this.tabs = this.tabs.filter( tab => tab.id !== 'fields' )
 			}
 
+			if(this.field_type !== 'file'){
+				this.tabs = this.tabs.filter( tab => tab.id !== 'emails' )
+			}
+
 			this.activeTab = this.tabs && this.tabs[0].id
+		},
+		onPaste(event, index){
+			var _this = this;
+			const items = event.clipboardData.getData("text/plain").split(/\r?\n/);
+			event.preventDefault();
+
+			// First item always goes to the pasted element
+			const item = items[0].split(",");
+			this.dropdownOptions[index].value = item[0];
+			this.dropdownOptions[index].label = item[1];
+
+			items.slice(1).forEach(function(item) {
+				item = item.split(",");
+				_this.dropdownOptions.push( { value: item[0], label: item[1] } );
+			});
+		},
+		UserMetaKeyValidator() {
+			var _this = this;
+			VueFormGenerator.validators.unique_user_meta_key = (value, field, model) => {
+				if (value === "") {
+					return [];
+				}
+
+				return new Promise((resolve, reject) => {
+					axios.post( wpumFieldsEditor.ajax,
+						qs.stringify({
+							nonce: wpumFieldsEditor.check_field_nonce,
+							user_meta_key: value,
+							field_id: _this.field_id
+						}),
+						{
+							params: {
+								action: "validate_user_meta_key"
+							},
+						}
+					)
+					.then(response => {
+						resolve(response.data.data.error);
+					})
+					.catch(err => reject(err))
+				});
+			}
 		}
 	}
 }

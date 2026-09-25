@@ -1,0 +1,17 @@
+name: Release
+
+on:
+  push:
+    tags: ["v[0-9]+.[0-9]+.[0-9]+"]
+
+concurrency:
+  group: release
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    uses: WPUserManager/.github/.github/workflows/deploy.yml@master
+    with:
+      plugin-slug: wp-user-manager
+      node-version: "14"
+    secrets: inherit

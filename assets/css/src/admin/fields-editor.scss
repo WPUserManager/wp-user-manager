@@ -59,6 +59,11 @@ body.users_page_wpum-roles {
 		.delete-btn {
 			margin-top: 5px;
 		}
+		.row-actions > span:not(:first-child) {
+			padding-left: 3px;
+			margin-left: 3px;
+			border-left: 2px solid currentColor;
+		}
 	}
 
 	.wpum-fields-groups-table, .wpum-registration-forms-table, .wpum-roles-table {
@@ -72,6 +77,10 @@ body.users_page_wpum-roles {
 
 		.button {
 			margin: 3px 5px 3px 0;
+			max-width: 100%;
+			overflow: hidden;
+			white-space: nowrap;
+			text-overflow: ellipsis;
 
 			&:last-child {
 				margin-right: 0;

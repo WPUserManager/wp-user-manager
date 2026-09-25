@@ -7,7 +7,9 @@
  */
 
 // Exit if accessed directly
-if ( ! defined( 'ABSPATH' ) ) exit;
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 
 WPUM()->templates
 	->set_template_data( $data )
@@ -23,4 +25,5 @@ WPUM()->templates
 
 ?>
 
-<?php wp_footer(); ?>
+<?php
+wp_footer();

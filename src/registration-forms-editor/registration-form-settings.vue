@@ -9,11 +9,8 @@
 		<div class="optionskit-navigation-wrapper">
 			<div class="wp-filter" id="optionskit-navigation">
 				<ul class="filter-links">
-					<li>
-						<router-link :to="{ name: 'form', params: { id: this.formID }}">{{labels.table_fields}}</router-link>
-					</li>
-					<li>
-						<router-link :to="{ name: 'form-settings', params: { id: this.formID }}">{{labels.settings}}</router-link>
+					<li v-for="section in sections" :key="section.path">
+						<router-link :to="{ name: section.name, params: { id: formID }}">{{section.label}}</router-link>
 					</li>
 				</ul>
 			</div>
@@ -44,10 +41,9 @@
 <script>
 	import axios from 'axios'
 	import qs from 'qs'
-
 	export default {
 		name: 'registration-form-settings',
-		components: {},
+		components: { },
 		data() {
 			return {
 				labels: wpumRegistrationFormsEditor.labels,
@@ -61,12 +57,23 @@
 				showMessage: false,
 				showMessageSettings: false,
 				messageStatus: 'success',
-				messageContent: ''
+				messageContent: '',
+				sections:		[]
 			}
 		},
 		created() {
 			// Grab the form id from the router.
-			this.formID = this.$route.params.id
+			this.formID = this.$route.params.id			
+			this.$router.options.routes.forEach(route => {
+				if (route.meta && route.meta.label) {
+					this.sections.push({
+						name:  route.name,
+						path:  route.path,
+						label: route.meta.label
+					});
+				}
+			})
+
 			// Retrieve the selected form.
 			this.getForm()
 		},
@@ -91,7 +98,6 @@
 			 */
 			getForm() {
 				this.loading = true
-
 				axios.get( wpumRegistrationFormsEditor.ajax, {
 					params: {
 						nonce: wpumRegistrationFormsEditor.getFormNonce,
@@ -102,8 +108,8 @@
 					.then( response => {
 						this.loading = false
 						this.formName = response.data.data.name
-						this.settings = response.data.data.settings,
-							this.settingsModel = response.data.data.settings_model
+						this.settings = response.data.data.settings[this.$route.meta.key],
+						this.settingsModel = response.data.data.settings_model
 					} )
 					.catch( error => {
 						this.loading = false

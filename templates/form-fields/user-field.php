@@ -13,8 +13,10 @@
  * @version 1.0.0
  */
 
- // Exit if accessed directly
-if ( ! defined( 'ABSPATH' ) ) exit;
+// Exit if accessed directly
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 
 $field_type = empty( $data->allow_multiple ) ? 'select' : 'multiselect';
 
