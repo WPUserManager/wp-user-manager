@@ -63,8 +63,13 @@ let customFieldsAddon = false;
 test.beforeAll(() => {
   fieldId = createImageField();
 
-  const activated = wpCli('plugin activate wpum-custom-fields 2>&1 || true');
-  customFieldsAddon = wpCli('plugin is-active wpum-custom-fields && echo ACTIVE || true').includes('ACTIVE') || /activated|already active/i.test(activated);
+  // Only trust the active plugin list: a failed activate prints "No plugins activated".
+  try {
+    wpCli('plugin activate wpum-custom-fields');
+  } catch {
+    // Not installed here: the save tests are skipped.
+  }
+  customFieldsAddon = wpCli('plugin list --status=active --field=name').split(/\s+/).includes('wpum-custom-fields');
 });
 
 test.afterAll(() => {
