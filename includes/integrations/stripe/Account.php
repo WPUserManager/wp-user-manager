@@ -84,6 +84,7 @@ class Account {
 		add_action( 'wpum_account_page_content_billing', array( $this, 'account_tab_content' ) );
 		add_action( 'template_redirect', array( $this, 'unsubscribed_redirect' ) );
 		add_filter( 'user_has_cap', array( $this, 'restrict_unpaid_capabilities' ), 10, 4 );
+		add_filter( 'wpum_user_access_roles', array( $this, 'withhold_unpaid_access_roles' ), 10, 2 );
 		add_action( 'added_user_meta', array( $this, 'flush_payment_status' ), 10, 2 );
 		add_action( 'updated_user_meta', array( $this, 'flush_payment_status' ), 10, 2 );
 		add_action( 'deleted_user_meta', array( $this, 'flush_payment_status' ), 10, 2 );
@@ -179,6 +180,27 @@ class Account {
 		}
 
 		return array_intersect_key( $allcaps, array_flip( array( 'exist', 'read' ) ) );
+	}
+
+	/**
+	 * Role-restricted content checks role membership, not capabilities, so
+	 * withhold the roles too while a payment is outstanding.
+	 *
+	 * @param array    $roles
+	 * @param \WP_User $user
+	 *
+	 * @return array
+	 */
+	public function withhold_unpaid_access_roles( $roles, $user ) {
+		if ( empty( $user->ID ) || user_can( $user, 'manage_options' ) ) {
+			return $roles;
+		}
+
+		if ( ! apply_filters( 'wpum_stripe_restrict_unpaid_capabilities', true, $user ) ) {
+			return $roles;
+		}
+
+		return $this->owes_payment( $user->ID ) ? array() : $roles;
 	}
 
 	/**

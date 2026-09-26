@@ -28,12 +28,14 @@ class UnpaidCapabilitiesTest extends WPUMTestCase {
 		$this->account = $ref->newInstanceWithoutConstructor();
 
 		add_filter( 'user_has_cap', array( $this->account, 'restrict_unpaid_capabilities' ), 10, 4 );
+		add_filter( 'wpum_user_access_roles', array( $this->account, 'withhold_unpaid_access_roles' ), 10, 2 );
 		add_action( 'added_user_meta', array( $this->account, 'flush_payment_status' ), 10, 2 );
 		add_action( 'updated_user_meta', array( $this->account, 'flush_payment_status' ), 10, 2 );
 	}
 
 	public function _tearDown() {
 		remove_filter( 'user_has_cap', array( $this->account, 'restrict_unpaid_capabilities' ), 10 );
+		remove_filter( 'wpum_user_access_roles', array( $this->account, 'withhold_unpaid_access_roles' ), 10 );
 		remove_action( 'added_user_meta', array( $this->account, 'flush_payment_status' ), 10 );
 		remove_action( 'updated_user_meta', array( $this->account, 'flush_payment_status' ), 10 );
 
@@ -113,5 +115,23 @@ class UnpaidCapabilitiesTest extends WPUMTestCase {
 		$this->assertTrue( user_can( $user_id, 'edit_posts' ) );
 
 		remove_filter( 'wpum_stripe_restrict_unpaid_capabilities', '__return_false' );
+	}
+
+	public function test_unpaid_author_cannot_see_role_restricted_content() {
+		wp_set_current_user( $this->user_with_plan( 'author', 'one_time', false ) );
+
+		$output = do_shortcode( '[wpum_restrict_to_user_roles roles="author"]Members only[/wpum_restrict_to_user_roles]' );
+
+		$this->assertStringNotContainsString( 'Members only', $output, 'Role-restricted content must not render while payment is outstanding, e.g. via the REST API' );
+		$this->assertSame( array(), wpum_get_user_access_roles() );
+	}
+
+	public function test_paid_author_sees_role_restricted_content() {
+		wp_set_current_user( $this->user_with_plan( 'author', 'one_time', true ) );
+
+		$output = do_shortcode( '[wpum_restrict_to_user_roles roles="author"]Members only[/wpum_restrict_to_user_roles]' );
+
+		$this->assertStringContainsString( 'Members only', $output );
+		$this->assertSame( array( 'author' ), wpum_get_user_access_roles() );
 	}
 }

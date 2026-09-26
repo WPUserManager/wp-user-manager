@@ -452,6 +452,21 @@ function wpum_send_registration_confirmation_email( $user_id, $psw = false, $pas
 }
 
 /**
+ * The roles to use when deciding what content a user can see. Integrations can
+ * withhold roles, e.g. while a payment is outstanding.
+ *
+ * @param WP_User|null $user Defaults to the current user.
+ *
+ * @return array
+ */
+function wpum_get_user_access_roles( $user = null ) {
+	$user  = $user ? $user : wp_get_current_user();
+	$roles = ( $user && $user->exists() ) ? (array) $user->roles : array();
+
+	return (array) apply_filters( 'wpum_user_access_roles', $roles, $user );
+}
+
+/**
  * @param array   $roles
  * @param WP_User $user
  * @param array   $remove_whitelist

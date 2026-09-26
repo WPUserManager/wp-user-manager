@@ -157,7 +157,7 @@ class WPUM_Elementor_Loader {
 			$allowed_roles = empty( $settings['wpum_restrict_roles'] ) || ! is_array( $settings['wpum_restrict_roles'] ) ? array() : $settings['wpum_restrict_roles'];
 			$allowed_roles = array_map( 'trim', $allowed_roles );
 			$current_user  = wp_get_current_user();
-			if ( is_user_logged_in() && array_intersect( $current_user->roles, $allowed_roles ) ) {
+			if ( is_user_logged_in() && array_intersect( wpum_get_user_access_roles( $current_user ), $allowed_roles ) ) {
 				return $widget_content;
 			}
 		}
