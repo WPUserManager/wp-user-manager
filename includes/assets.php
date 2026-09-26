@@ -53,6 +53,13 @@ function wpum_load_scripts() {
 	wp_enqueue_script( 'jquery' );
 	wp_register_script( 'wpum-directories', WPUM_PLUGIN_URL . 'assets/js/wpum-directories.min.js', array( 'jquery' ), WPUM_VERSION, true );
 
+	// FilePond for the image field. Enqueued by the image field template, so it only loads on pages that show one.
+	// The vendor bundle is the upstream minified files concatenated, with their MIT licence headers kept.
+	$suffix = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
+	wp_register_style( 'wpum-filepond', WPUM_PLUGIN_URL . 'assets/css/vendor/filepond.css', array(), WPUM_VERSION );
+	wp_register_script( 'wpum-filepond', WPUM_PLUGIN_URL . 'assets/js/vendor/filepond-bundle.js', array( 'jquery' ), WPUM_VERSION, true );
+	wp_register_script( 'wpum-filepond-init', WPUM_PLUGIN_URL . 'assets/js/wpum-filepond' . $suffix . '.js', array( 'jquery', 'wpum-filepond' ), WPUM_VERSION, true );
+
 	if ( is_page( wpum_get_core_page_id( 'account' ) ) || is_page( wpum_get_core_page_id( 'register' ) ) ) {
 		wpum_enqueue_scripts();
 	}
