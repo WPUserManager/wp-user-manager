@@ -8,6 +8,11 @@
 
 require_once __DIR__ . '/FieldsTestCase.php';
 
+// WPUM_Form is only loaded on demand by WPUM_Forms, so load it before extending it.
+if ( ! class_exists( 'WPUM_Form' ) ) {
+	require_once WPUM_PLUGIN_DIR . 'includes/abstracts/class-wpum-form.php';
+}
+
 /**
  * Concrete form so the protected validate_fields() can be exercised.
  */
