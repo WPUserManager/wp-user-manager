@@ -234,11 +234,18 @@ class WPUM_Field_Repeater extends WPUM_Field_Type {
 			$files = $this->upload_file( $key, $field );
 		}
 
-		$current_repeater = isset( $_POST[ 'current_' . $key ] ) ? $this->sanitize_posted_field( $_POST[ 'current_' . $key ], $field['sanitizer'] ) : array(); // phpcs:ignore
+		$current_repeater     = isset( $_POST[ 'current_' . $key ] ) ? $this->sanitize_posted_field( $_POST[ 'current_' . $key ], $field['sanitizer'] ) : array(); // phpcs:ignore
+		$nested_repeater_keys = $this->get_nested_repeater_keys( $field );
 
 		foreach ( $_FILES[ $key ]['name'] as $index => $post ) { // phpcs:ignore
 			$post_keys = array_keys( $post );
 			foreach ( $post_keys as $key ) {
+				// A file input inside a nested repeater puts that repeater in $_FILES too.
+				// Its posted rows are already in $posted, so don't overwrite them.
+				if ( in_array( $key, $nested_repeater_keys, true ) ) {
+					continue;
+				}
+
 				$file = isset( $files[ $index ][ $key ] ) ? $files[ $index ][ $key ] : '';
 				if ( empty( $file ) ) {
 					$file = isset( $current_repeater[ $index ][ $key ] ) ? $current_repeater[ $index ][ $key ] : '';
@@ -248,6 +255,38 @@ class WPUM_Field_Repeater extends WPUM_Field_Type {
 		}
 
 		return $posted;
+	}
+
+	/**
+	 * Keys of the repeater fields nested directly inside this repeater.
+	 *
+	 * @param array $field
+	 *
+	 * @return array
+	 */
+	protected function get_nested_repeater_keys( $field ) {
+		if ( empty( $field['id'] ) ) {
+			return array();
+		}
+
+		$parent = new WPUM_Field( $field['id'] );
+		if ( ! $parent->exists() ) {
+			return array();
+		}
+
+		$children = WPUM()->fields->get_fields( array(
+			'group_id' => $parent->get_group_id(),
+			'parent'   => $parent->get_ID(),
+		) );
+
+		$keys = array();
+		foreach ( (array) $children as $child ) {
+			if ( $this->type === $child->get_type() ) {
+				$keys[] = $child->get_key();
+			}
+		}
+
+		return $keys;
 	}
 
 	/**

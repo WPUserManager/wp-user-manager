@@ -34,45 +34,48 @@ jQuery( function( $ ) {
 		init: function() {
 			var self = this;
 
-			// Setup instances to first level repeaters
-			$('form > fieldset > .add-repeater-row').each(function () {
-				var fieldSet = $(this).closest( 'fieldset' );
-				var fieldGroup = $(fieldSet).find( ' > .fieldset-wpum_field_group' ).not('.fieldset-wpum_field_group-clone' );
-				
+			// Setup instances of the top level repeaters. Nested repeaters are
+			// set up recursively by setupInstances().
+			$( '.add-repeater-row' ).each( function() {
+				var fieldSet = $( this ).parent( 'fieldset' );
+				if ( !fieldSet.length || fieldSet.parents( '.fieldset-wpum_field_group' ).length ) {
+					return;
+				}
+
+				var fieldGroup = fieldSet.find( '> .fieldset-wpum_field_group' ).not( '.fieldset-wpum_field_group-clone' );
+
 				if ( fieldGroup.length ) {
-					self.setupInstances(fieldSet, null);
-
-					var repeaterKey = self.getRepeaterKey(fieldSet);
-
-					self.increaseInstance( repeaterKey );
+					self.setupInstances( fieldSet, null );
 					self.validateMaxRows( fieldSet );
 				}
 			} );
 
 			$( '.fieldset-wpum_field_group-clone :input' ).not( ':button, :submit, :reset' ).each( function() {
 				$( this ).addClass( 'wpum-clone-field' );
-				$( this ).attr( 'data-clone', $( this ).attr( 'id' ) );
-				$( this ).attr( 'data-name', $( this ).attr( 'name' ) );
+				if ( !$( this ).attr( 'data-clone' ) ) {
+					$( this ).attr( 'data-clone', $( this ).attr( 'id' ) );
+				}
+				if ( !$( this ).attr( 'data-name' ) ) {
+					$( this ).attr( 'data-name', $( this ).attr( 'name' ) );
+				}
 				$( this ).attr( 'id', '' )
 				$( this ).attr( 'name', '' )
 				$( this ).removeAttr( 'required' )
 			} );
 
 			self.form.on( 'click', '.add-repeater-row', function() {
-				var fieldSet = $(this).parent('fieldset');
-				// Setup new instance based on the parent fieldset
+				var fieldSet = $( this ).parent( 'fieldset' );
 				self.addNewInstance( fieldSet );
 				self.form.wpumConditionalFields({});
 			} );
 
 			self.form.on( 'click', '.remove-repeater-row', function(e) {
 				e.preventDefault();
-				var fieldSet = $(this).closest('fieldset');
-				var parentBase = $(fieldSet).attr('data-parent-base');
 				var $row = $( this ).parent( '.fieldset-wpum_field_group' );
+				var fieldSet = $row.parent( 'fieldset' );
 				$row.remove();
 
-				self.setupInstances( fieldSet, parentBase );
+				self.setupInstances( fieldSet, fieldSet.attr( 'data-parent-base' ) );
 				self.validateMaxRows( fieldSet );
 			} );
 		},
@@ -86,10 +89,9 @@ jQuery( function( $ ) {
 		},
 
 		addNewInstance: function( fieldSet ) {
-			this.addNewRepeaterRow(fieldSet);
-			
-			var parentBase = $(fieldSet).attr('data-parent-base');
-			this.setupInstances(fieldSet, parentBase);
+			this.addNewRepeaterRow( fieldSet );
+			this.setupInstances( fieldSet, $( fieldSet ).attr( 'data-parent-base' ) );
+			this.validateMaxRows( fieldSet );
 
 			initFields();
 		},
@@ -98,9 +100,9 @@ jQuery( function( $ ) {
 			this.repeaters[ name ] = 0;
 		},
 
-		addNewRepeaterRow: function (fieldSet) {
-			// Get repeater from the immediate child
-			var repeater = $(fieldSet).find(' > .fieldset-wpum_field_group-clone').last();
+		addNewRepeaterRow: function( fieldSet ) {
+			// Only the clone row that belongs to this repeater, not to a nested one.
+			var repeater = $( fieldSet ).find( '> .fieldset-wpum_field_group-clone' ).last();
 			if ( !repeater.length ) {
 				return;
 			}
@@ -110,103 +112,131 @@ jQuery( function( $ ) {
 			}
 
 			var newRepeater = repeater.clone();
-			newRepeater.removeClass('fieldset-wpum_field_group-clone');
+			newRepeater.removeClass( 'fieldset-wpum_field_group-clone' );
 			newRepeater.find( ':input' ).not( ':button, :submit, :reset' ).val( '' ).prop( 'checked', false ).prop( 'selected', false ).removeClass( 'wpum-clone-field' ).trigger( 'change' );
+			// Clone rows of nested repeaters inside the new row stay templates.
+			newRepeater.find( '.fieldset-wpum_field_group-clone :input' ).not( ':button, :submit, :reset' ).addClass( 'wpum-clone-field' );
+			// A nested repeater in the new row may have been disabled by the template.
+			newRepeater.find( '.add-repeater-row' ).prop( 'disabled', false );
 			newRepeater.insertBefore( repeater );
 		},
 
-		getRepeaterKey: function(fieldSet) {
-			var parentBase = $(fieldSet).attr('data-parent-base');
-			var repeaterKey = $(fieldSet).get(0).classList[0];
-			repeaterKey = repeaterKey.replace('fieldset-', '');
+		getRepeaterKey: function( fieldSet ) {
+			var parentBase = $( fieldSet ).attr( 'data-parent-base' );
+			var repeaterKey = $( fieldSet ).get( 0 ).classList[ 0 ].replace( 'fieldset-', '' );
 
-			if (parentBase) {
+			if ( parentBase ) {
 				repeaterKey = parentBase + '[' + repeaterKey + ']';
 			}
 
 			return repeaterKey;
 		},
 
-		setupInstances: function (fieldSet, parentBase) {
-			if (typeof parentBase === 'undefined' || parentBase === null) {
+		/**
+		 * Rename the inputs of every row of a repeater, then recurse into any
+		 * repeater nested in a row.
+		 *
+		 * Each input keeps its name relative to its own repeater in data-name
+		 * (e.g. "inner[0][city]") and its original id in data-clone, so the full
+		 * name (e.g. "outer[1][inner][0][city]") can be rebuilt from scratch
+		 * every time rows are added or removed at any level.
+		 */
+		setupInstances: function( fieldSet, parentBase ) {
+			var self = this;
+			fieldSet = $( fieldSet );
+
+			if ( parentBase ) {
+				fieldSet.attr( 'data-parent-base', parentBase );
+			} else {
 				parentBase = null;
 			}
 
-			var repeaterRow = $( fieldSet ).find( ' > .fieldset-wpum_field_group' ).not( '.fieldset-wpum_field_group-clone' );
-			var self = this;
+			var repeaterRow = fieldSet.find( '> .fieldset-wpum_field_group' ).not( '.fieldset-wpum_field_group-clone' );
 
 			if ( !repeaterRow.length ) {
 				return;
 			}
 
-			// Apply parentBase to the fieldset to make it available later
-			if (parentBase) {
-				$(fieldSet).attr('data-parent-base', parentBase);
-			}
+			var repeaterKey = self.getRepeaterKey( fieldSet );
+			self.resetInstance( repeaterKey );
 
-			var repeaterKey = self.getRepeaterKey(fieldSet);
-			self.resetInstance(repeaterKey);
+			repeaterRow.each( function( i ) {
+				var row = $( this );
 
-			repeaterRow.each(function (i) {
-				$(fieldSet).attr('data-index', i);
-				$(this)
-					.find('> fieldset > .field :input')
-					// Exclude sub repeater fields
-					.not($(this).find('> fieldset > .fieldset-wpum_field_group :input'))
-					.each(function() {
-						var fieldName = $(this).attr('data-name') || $(this).prop('name');
-						fieldName = fieldName.replace(/\[(.*?)\]/, '[' + i + ']');
+				// Conditional logic reads the row index from the child fieldsets.
+				row.find( '> fieldset' ).attr( 'data-index', i );
 
-						// Prepend parentBase if available and does not already have a parentBase
-						if (parentBase && !fieldName.includes(parentBase)) {
-							// Wrap the base key (before the first "[") in brackets
-							fieldName = fieldName.replace(/^([^[]+)/, '[$1]');
-							fieldName = parentBase + fieldName;
+				row.find( '> fieldset :input' )
+					.not( row.find( '> fieldset > .fieldset-wpum_field_group :input' ) )
+					.not( ':button, :submit, :reset' )
+					.each( function() {
+						var input = $( this );
+
+						if ( !input.attr( 'data-name' ) ) {
+							if ( !input.prop( 'name' ) ) {
+								// Helper inputs such as the flatpickr alt input have no name.
+								return;
+							}
+							input.attr( 'data-name', input.prop( 'name' ) );
+						}
+						if ( !input.attr( 'data-clone' ) && input.prop( 'id' ) ) {
+							input.attr( 'data-clone', input.prop( 'id' ) );
 						}
 
-						$(this).attr(
-							'name',
-							fieldName
-						);
+						var fieldName = input.attr( 'data-name' ).replace( /\[(.*?)\]/, '[' + i + ']' );
 
-						if (i > 0) {
-							var clone_id = $(this).attr('data-clone') || $(this).prop('id');
-							var id = clone_id + '_' + i;
-							$(this).attr('id', id);
-							$(this).closest('fieldset').find('label').attr('for', id);
+						if ( parentBase ) {
+							// "inner[0][city]" becomes "outer[1][inner][0][city]".
+							fieldName = parentBase + fieldName.replace( /^([^[]+)/, '[$1]' );
 						}
-				});
 
-				self.increaseInstance(repeaterKey);
+						input.attr( 'name', fieldName );
 
-				// Recurse into subrepeaters
-				$(this)
-					.find('> fieldset > .add-repeater-row')
-					.each(function () {
-						var fieldSet = $(this).closest('fieldset');
-						var currentParentBase = repeaterKey + '[' + i + ']';
+						var originalId = input.attr( 'data-clone' );
+						if ( originalId ) {
+							var indexes = ( fieldName.match( /\[\d+\]/g ) || [] ).map( function( index ) {
+								return index.replace( /\D/g, '' );
+							} );
+							var nonZero = indexes.some( function( index ) {
+								return '0' !== index;
+							} );
+							// Single level rows keep their old ids: "field", "field_1", "field_2".
+							var id = nonZero ? originalId + '_' + indexes.join( '_' ) : originalId;
 
-						self.setupInstances(fieldSet, currentParentBase);
-						self.validateMaxRows(fieldSet);
-				});
-			});
+							input.attr( 'id', id );
+							input.closest( 'fieldset' ).find( 'label' ).attr( 'for', id );
+						}
+					} );
+
+				self.increaseInstance( repeaterKey );
+
+				// Recurse into nested repeaters in this row.
+				row.find( '> fieldset > .add-repeater-row' ).each( function() {
+					var nestedFieldSet = $( this ).parent( 'fieldset' );
+
+					self.setupInstances( nestedFieldSet, repeaterKey + '[' + i + ']' );
+					self.validateMaxRows( nestedFieldSet );
+				} );
+			} );
 		},
+
+		/**
+		 * Whether another row can be added. Also disables the add button when
+		 * the maximum is reached, and enables it again after a row is removed.
+		 */
 		validateMaxRows: function( fieldSet ) {
-			var repeater = $(fieldSet).find( ' > .fieldset-wpum_field_group' ).not( '.fieldset-wpum_field_group-clone' );
-			var addBtn = $(fieldSet).find( ' > .add-repeater-row' );
-			var maxRows = addBtn.data('max-row');
+			var repeater = $( fieldSet ).find( '> .fieldset-wpum_field_group' ).not( '.fieldset-wpum_field_group-clone' );
+			var addBtn = $( fieldSet ).find( '> .add-repeater-row' );
+			var maxRows = parseInt( addBtn.data( 'max-row' ), 10 );
 
-			if ( !maxRows || parseInt( maxRows ) < 1 ) {
+			if ( !maxRows || maxRows < 1 ) {
 				return true;
 			}
 
-			if ( repeater.length < parseInt( maxRows ) ) {
-				return true;
-			}
+			var canAdd = repeater.length < maxRows;
+			addBtn.prop( 'disabled', !canAdd );
 
-			addBtn.attr( 'disabled', true );
-
-			return repeater.length < parseInt( maxRows );
+			return canAdd;
 		}
 	}
 

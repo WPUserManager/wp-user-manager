@@ -253,31 +253,84 @@ class WPUM_Form_Registration extends WPUM_Form {
 			}
 
 			$wpum_field = new WPUM_Field( $field['id'] );
-			$min_rows   = $wpum_field->get_meta( 'min_rows' ) ? $wpum_field->get_meta( 'min_rows' ) : 0;
-			$max_rows   = $wpum_field->get_meta( 'max_rows' ) ? $wpum_field->get_meta( 'max_rows' ) : 0;
 			$values     = isset( $field['value'] ) && is_array( $field['value'] ) ? $field['value'] : array();
 
-			if ( count( $values ) < $min_rows ) {
-				// translators: %1$s field label %2$s min rows
-				return new WP_Error( 'repeater-validation-error', esc_html( apply_filters( 'wpum_repeater_validation_min_rows_error_message', sprintf( __( '%1$s requires at least %2$d rows', 'wp-user-manager' ), $field['label'], intval( $min_rows ) ), $field, $min_rows ) ) );
-			}
-
-			if ( $max_rows > 0 && count( $values ) > $max_rows ) {
-				// translators: %1$s field label %2$s max rows
-				return new WP_Error( 'repeater-validation-error', esc_html( apply_filters( 'wpum_repeater_validation_max_rows_error_message', sprintf( __( '%1$s accepts maximum %2$d rows', 'wp-user-manager' ), $field['label'], intval( $max_rows ) ), $field, $max_rows ) ) );
-			}
-
-			if ( $field['required'] ) {
-				$first_row = isset( $values[0] ) && is_array( $values[0] ) ? $values[0] : array();
-
-				if ( ! count( $first_row ) || count( array_filter( $first_row ) ) !== count( $first_row ) ) {
-					// translators: %s field label
-					return new WP_Error( 'repeater-validation-error', esc_html( apply_filters( 'wpum_repeater_validation_required_error_message', sprintf( __( 'Please fill out %s data', 'wp-user-manager' ), $field['label'] ), $field ) ) );
-				}
+			$error = $this->validate_repeater_rows( $wpum_field, $field, $values );
+			if ( is_wp_error( $error ) ) {
+				return $error;
 			}
 		}
 
 		return $pass;
+	}
+
+	/**
+	 * Check a repeater's rows against its min rows, max rows and required
+	 * settings, then do the same for any repeater nested in each row.
+	 *
+	 * @param WPUM_Field $wpum_field The repeater field.
+	 * @param array      $field      Field data passed to the error message filters.
+	 * @param array      $values     Posted rows for this repeater.
+	 * @param int        $depth      Nesting depth, to stop a parent loop in the field data.
+	 *
+	 * @return true|WP_Error
+	 */
+	protected function validate_repeater_rows( $wpum_field, $field, $values, $depth = 0 ) {
+		$min_rows = $wpum_field->get_meta( 'min_rows' ) ? $wpum_field->get_meta( 'min_rows' ) : 0;
+		$max_rows = $wpum_field->get_meta( 'max_rows' ) ? $wpum_field->get_meta( 'max_rows' ) : 0;
+
+		if ( count( $values ) < $min_rows ) {
+			// translators: %1$s field label %2$s min rows
+			return new WP_Error( 'repeater-validation-error', esc_html( apply_filters( 'wpum_repeater_validation_min_rows_error_message', sprintf( __( '%1$s requires at least %2$d rows', 'wp-user-manager' ), $field['label'], intval( $min_rows ) ), $field, $min_rows ) ) );
+		}
+
+		if ( $max_rows > 0 && count( $values ) > $max_rows ) {
+			// translators: %1$s field label %2$s max rows
+			return new WP_Error( 'repeater-validation-error', esc_html( apply_filters( 'wpum_repeater_validation_max_rows_error_message', sprintf( __( '%1$s accepts maximum %2$d rows', 'wp-user-manager' ), $field['label'], intval( $max_rows ) ), $field, $max_rows ) ) );
+		}
+
+		if ( ! empty( $field['required'] ) ) {
+			$first_row = isset( $values[0] ) && is_array( $values[0] ) ? $values[0] : array();
+
+			if ( ! count( $first_row ) || count( array_filter( $first_row ) ) !== count( $first_row ) ) {
+				// translators: %s field label
+				return new WP_Error( 'repeater-validation-error', esc_html( apply_filters( 'wpum_repeater_validation_required_error_message', sprintf( __( 'Please fill out %s data', 'wp-user-manager' ), $field['label'] ), $field ) ) );
+			}
+		}
+
+		if ( $depth >= 10 ) {
+			return true;
+		}
+
+		$children = WPUM()->fields->get_fields( array(
+			'group_id' => $wpum_field->get_group_id(),
+			'parent'   => $wpum_field->get_ID(),
+			'order'    => 'ASC',
+		) );
+
+		foreach ( (array) $children as $child ) {
+			if ( 'repeater' !== $child->get_type() ) {
+				continue;
+			}
+
+			$child_field = array(
+				'id'       => $child->get_ID(),
+				'label'    => $child->get_name(),
+				'type'     => $child->get_type(),
+				'required' => $child->get_meta( 'required' ),
+			);
+
+			foreach ( $values as $row ) {
+				$rows = is_array( $row ) && isset( $row[ $child->get_key() ] ) && is_array( $row[ $child->get_key() ] ) ? $row[ $child->get_key() ] : array();
+
+				$error = $this->validate_repeater_rows( $child, $child_field, $rows, $depth + 1 );
+				if ( is_wp_error( $error ) ) {
+					return $error;
+				}
+			}
+		}
+
+		return true;
 	}
 
 
