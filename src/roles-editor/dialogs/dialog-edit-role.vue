@@ -7,7 +7,7 @@
 			</div>
 			<div class="media-frame-content">
 				<form action="#" method="post" class="dialog-form">
-					<label for="role-name" :data-balloon="labels.tooltip_form_name" data-balloon-pos="right"><span>{{labels.table_name}}</span> <span class="dashicons dashicons-editor-help"></span></label>
+					<label for="role-name" :data-balloon="labels.tooltip_role_name" data-balloon-pos="right"><span>{{labels.table_name}}</span> <span class="dashicons dashicons-editor-help"></span></label>
 					<input type="text" name="role-name" id="role-name" value="" v-model="roleName">
 				</form>
 			</div>
@@ -52,8 +52,8 @@ export default {
 			axios.post( wpumRolesEditor.ajax,
 				qs.stringify({
 					nonce: wpumRolesEditor.nonce,
-					role_id: this.form_id,
-					role_name: this.role_name,
+					role_id: this.role_id,
+					role_name: this.roleName,
 				}),
 				{
 					params: {
