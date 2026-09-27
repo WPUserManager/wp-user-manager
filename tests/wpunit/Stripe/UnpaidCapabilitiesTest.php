@@ -134,4 +134,41 @@ class UnpaidCapabilitiesTest extends WPUMTestCase {
 		$this->assertStringContainsString( 'Members only', $output );
 		$this->assertSame( array( 'author' ), wpum_get_user_access_roles() );
 	}
+
+	public function test_unpaid_custom_role_with_manage_options_is_restricted() {
+		add_role( 'wpum_test_manager', 'Manager', array( 'read' => true, 'manage_options' => true, 'edit_posts' => true, 'publish_posts' => true ) );
+		$user_id = $this->user_with_plan( 'wpum_test_manager', 'one_time', false );
+
+		$this->assertTrue( user_can( $user_id, 'read' ) );
+		$this->assertFalse( user_can( $user_id, 'manage_options' ), 'A role sold at registration must not skip payment by carrying manage_options' );
+		$this->assertFalse( user_can( $user_id, 'publish_posts' ) );
+
+		wp_set_current_user( $user_id );
+		$this->assertSame( array(), wpum_get_user_access_roles() );
+
+		remove_role( 'wpum_test_manager' );
+	}
+
+	public function test_paid_custom_role_with_manage_options_keeps_capabilities() {
+		add_role( 'wpum_test_manager', 'Manager', array( 'read' => true, 'manage_options' => true ) );
+		$user_id = $this->user_with_plan( 'wpum_test_manager', 'one_time', true );
+
+		$this->assertTrue( user_can( $user_id, 'manage_options' ) );
+
+		remove_role( 'wpum_test_manager' );
+	}
+
+	public function test_unpaid_user_does_not_get_role_restricted_fields() {
+		$field = new class() {
+			public function get_meta( $key ) {
+				return 'roles' === $key ? array( 'author' ) : null;
+			}
+		};
+
+		wp_set_current_user( $this->user_with_plan( 'author', 'one_time', false ) );
+		$this->assertFalse( wpum_maybe_display_field( true, $field ), 'Fields for a role must stay hidden while payment is outstanding' );
+
+		wp_set_current_user( $this->user_with_plan( 'author', 'one_time', true ) );
+		$this->assertTrue( wpum_maybe_display_field( true, $field ) );
+	}
 }

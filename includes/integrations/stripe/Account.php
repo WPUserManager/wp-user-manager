@@ -100,7 +100,7 @@ class Account {
 	 * Redirect users who aren't subscribed or paid
 	 */
 	public function unsubscribed_redirect() {
-		if ( ! is_user_logged_in() || current_user_can( 'manage_options' ) ) {
+		if ( ! is_user_logged_in() ) {
 			return;
 		}
 
@@ -167,7 +167,9 @@ class Account {
 	 * @return array
 	 */
 	public function restrict_unpaid_capabilities( $allcaps, $caps, $args, $user ) { // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.FoundInExtendedClassBeforeLastUsed -- Matches the user_has_cap filter signature.
-		if ( self::$checking_payment || empty( $user->ID ) || ! empty( $allcaps['manage_options'] ) ) {
+		// Administrators count as paid in owes_payment(). Don't exempt by capability
+		// here: a custom role sold at registration can carry manage_options.
+		if ( self::$checking_payment || empty( $user->ID ) ) {
 			return $allcaps;
 		}
 
@@ -192,7 +194,7 @@ class Account {
 	 * @return array
 	 */
 	public function withhold_unpaid_access_roles( $roles, $user ) {
-		if ( empty( $user->ID ) || user_can( $user, 'manage_options' ) ) {
+		if ( empty( $user->ID ) ) {
 			return $roles;
 		}
 
