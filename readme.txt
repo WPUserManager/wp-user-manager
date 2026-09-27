@@ -112,7 +112,7 @@ Add the `[wpum_register]` shortcode to a page, then choose which user fields the
 
 = How do I create a member directory? =
 
-Create a directory under Users → Users Directories, choose which roles to include and whether to show a search form, then add its `[wpum_user_directory id="123"]` shortcode to a page.
+Create a directory under Users → Directories, choose which roles to include and whether to show a search form, then add its `[wpum_user_directory id="123"]` shortcode to a page.
 
 = Can I charge for registration? =
 
