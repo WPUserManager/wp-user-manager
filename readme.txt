@@ -1,8 +1,8 @@
-=== WP User Manager - User Profile Builder & Membership ===
+=== WP User Manager - Registration Form, Login Form, User Profile & Member Directory ===
 Author URI: https://wpusermanager.com
 Plugin URI: https://wpusermanager.com
 Contributors: wpusermanager, polevaultweb, alessandro.tesoro
-Tags: members, membership, community, user profile, user registration
+Tags: registration form, login form, user profile, member directory, membership
 Requires at least: 4.9
 Tested up to: 7.1
 Requires PHP: 7.4
@@ -10,24 +10,33 @@ License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Stable Tag: 2.9.20
 
-The most customizable profiles & community builder WordPress plugin with front-end login, registration, profile customization and content restriction.
+Registration forms, a frontend login form, user profiles and a member directory for WordPress. Add Stripe payments and content restriction.
 
 == Description ==
 
-= The most customizable profiles & community builder WordPress plugin =
+= User registration, login, profiles and member directories for WordPress =
 
-[WP User Manager](https://wpusermanager.com?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager) lets you create highly customizable user profiles together with custom user registration, login, password recovery and account customization forms to your WordPress website.
+[WP User Manager](https://wpusermanager.com?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager) replaces the default WordPress login and registration with forms that live on your own pages and match your theme. Members get a public user profile and an account page to edit their details, and you can list them in a searchable member directory.
 
-[WP User Manager](https://wpusermanager.com?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager) is the best solution to manage your community. Powerful and flexible, yet easy to setup and use. With WP User Manager you can create almost any type of WordPress membership website where your visitors can join and become members.
+Use it to build a membership site, a community, a client portal, or simply a better registration form and login page than WordPress gives you out of the box.
 
-Create a custom login page, have full control over the registration form, give your site a member area, let the users manage their user data.
+**What you can build with the free plugin:**
+
+- **A custom registration form** on any page, with your own user fields, terms and privacy checkboxes, and automatic login after signup
+- **A frontend login form** and login page, with password recovery, so users never see wp-login.php
+- **User profile pages** with custom avatars, cover images and tabs for each member's posts and comments
+- **A member directory** with search, sorting and filtering by role, displayed anywhere with a block or shortcode
+- **An account page** where members update their details and change their password
+- **Paid registration with Stripe**, collecting a one-off or recurring payment when someone signs up
+- **Content restriction** by role or logged-in status, on whole pages or on any individual block, plus custom redirects after login, logout and registration
+- **Blocks and Elementor widgets** for every form and page: login, registration, password recovery, account, profile, profile card, user directory, recently registered users, and login and logout links. Shortcodes work everywhere else
 
 [Website](https://wpusermanager.com?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager) | [Addons](https://wpusermanager.com/addons?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager) | [Documentation](http://docs.wpusermanager.com/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager) | [Support](https://wpusermanager.com/support/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager)
 
 = Features included =
 
 - [Frontend forms](https://wpusermanager.com/features/front-end-forms/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager): Allow users to register and login from the front of the site. Customize the registration form with custom fields to collect data
-- [Stripe integration](https://wpusermanager.com/articles/332-stripe/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager): Customize the emails sent to users when the register, reset their password and more
+- [Stripe integration](https://wpusermanager.com/articles/332-stripe/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager): Take one-off or recurring payments on the registration form, using Stripe Connect
 - [Custom email notifications](https://wpusermanager.com/features/custom-email-notifications/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager): Customize the emails sent to users when the register, reset their password and more
 - [Custom avatars](https://wpusermanager.com/features/custom-avatars/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager): Users can edit their site avatar by uploading an image from the account page
 - [Elegant user profiles](https://wpusermanager.com/features/elegant-user-profiles/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager): All users have a public profile page to display their data
@@ -60,7 +69,7 @@ For more advanced functionality check out the [pricing page](https://wpusermanag
 - [Registration Forms](https://wpusermanager.com/addons/registration-forms/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager): Create unlimited registration forms, create multi-step forms, customize forms with HTML, and have full control over form settings
 - [Frontend Posting](https://wpusermanager.com/addons/frontend-posting/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager): Allow your users to submit posts and other content from the frontend
 - [Advanced Custom Fields](https://wpusermanager.com/addons/acf/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager): Collect [ACF](https://wordpress.org/plugins/advanced-custom-fields/) user data at registration and allow users to see and edit the data on their profile
-- [Social Login & Registration](https://wpusermanager.com/addons/social-login/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager): Allow your users to quickly login and register with their favorite social network account, Facebook, Twitter, Instagram, LinkedIn & Instagram
+- [Social Login & Registration](https://wpusermanager.com/addons/social-login/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager): Allow your users to quickly login and register with their favorite social network account, Facebook, Twitter, Instagram & LinkedIn
 - [Private Content](https://wpusermanager.com/addons/private-content/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager): Provide private content for all your users, as well as user specific content so you can tailor for each member
 - [Mailchimp](https://wpusermanager.com/addons/mailchimp/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager): Sync users with Mailchimp upon registration & more
 - [Google reCAPTCHA](https://wpusermanager.com/addons/recaptcha?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager): Stop spam registrations on your website for free
@@ -93,6 +102,30 @@ Support for premium addons is provided exclusively [through the premium support 
 Please read our detailed documentation here [https://docs.wpusermanager.com/category/13-installation](https://docs.wpusermanager.com/category/13-installation)
 
 == Frequently Asked Questions ==
+
+= How do I add a login form to a page? =
+
+Add the **Login Form** block (or Elementor widget) to any page, or use the `[wpum_login_form]` shortcode. WP User Manager creates a login page for you on activation, and you can redirect wp-login.php to it so users never see the default WordPress login screen. See the [login form shortcode guide](https://wpusermanager.com/article/170-login-form-shortcode/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager).
+
+= How do I create a custom registration form? =
+
+Add the **Registration Form** block, Elementor widget or `[wpum_register]` shortcode to a page, then choose which user fields the form shows under Users → Registration Forms. The free plugin includes one registration form. The [Registration Forms](https://wpusermanager.com/addons/registration-forms/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager) addon adds unlimited forms and multi-step forms.
+
+= How do I create a member directory? =
+
+Create a directory under Users → Directories, choose which roles to include and whether to show a search form, then add it to a page with the **User Directory** block, the Elementor widget or its `[wpum_user_directory id="123"]` shortcode.
+
+= Can I charge for registration? =
+
+Yes. The free plugin connects to Stripe so you can take a one-off or recurring payment on the registration form. [Stripe Pro](https://wpusermanager.com/addons/stripe-pro/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager) uses your own Stripe keys and removes the platform fee. See [how to accept recurring payments with Stripe](https://wpusermanager.com/tutorials/how-to-accept-recurring-payments-with-stripe-in-wordpress/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager).
+
+= Does it work with the block editor and Elementor? =
+
+Yes. Every form and page has a block and a native Elementor widget: login, registration, password recovery, account, profile, profile card, user directory, recently registered users, and login and logout links. In the block editor you can also show or hide any block by logged-in status, user role or specific users.
+
+= Which shortcodes are available? =
+
+Login, registration, password recovery, account, profile, profile card, user directory, recently registered users, logout and content restriction shortcodes, for classic themes, widgets and page builders. See the [full list of pages and shortcodes](https://wpusermanager.com/article/173-pages-shortcodes/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager).
 
 = Install instructions =
 
