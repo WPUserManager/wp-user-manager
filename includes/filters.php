@@ -373,7 +373,7 @@ function wpum_maybe_display_field( $display, $field = null ) {
 		return false;
 	}
 
-	return count( array_intersect( wp_get_current_user()->roles, $field_roles ) ) > 0;
+	return count( array_intersect( wpum_get_user_access_roles(), $field_roles ) ) > 0;
 }
 
 /**

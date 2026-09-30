@@ -46,6 +46,20 @@ class Account {
 	protected $products;
 
 	/**
+	 * Whether each user still owes a payment, by user ID, for this request.
+	 *
+	 * @var array
+	 */
+	protected static $owes_payment = array();
+
+	/**
+	 * Set while checking payment status, since the check itself tests capabilities.
+	 *
+	 * @var bool
+	 */
+	protected static $checking_payment = false;
+
+	/**
 	 * Registration constructor.
 	 *
 	 * @param string   $public_key
@@ -69,6 +83,11 @@ class Account {
 		add_filter( 'wpum_get_account_page_tabs', array( $this, 'register_account_tab' ) );
 		add_action( 'wpum_account_page_content_billing', array( $this, 'account_tab_content' ) );
 		add_action( 'template_redirect', array( $this, 'unsubscribed_redirect' ) );
+		add_filter( 'user_has_cap', array( $this, 'restrict_unpaid_capabilities' ), 10, 4 );
+		add_filter( 'wpum_user_access_roles', array( $this, 'withhold_unpaid_access_roles' ), 10, 2 );
+		add_action( 'added_user_meta', array( $this, 'flush_payment_status' ), 10, 2 );
+		add_action( 'updated_user_meta', array( $this, 'flush_payment_status' ), 10, 2 );
+		add_action( 'deleted_user_meta', array( $this, 'flush_payment_status' ), 10, 2 );
 
 		add_action( 'wp_ajax_wpum_stripe_manage_billing', array( $this, 'handle_manage_billing' ) );
 		add_action( 'wp_ajax_wpum_stripe_checkout', array( $this, 'handle_checkout' ) );
@@ -81,7 +100,7 @@ class Account {
 	 * Redirect users who aren't subscribed or paid
 	 */
 	public function unsubscribed_redirect() {
-		if ( ! is_user_logged_in() || current_user_can( 'manage_options' ) ) {
+		if ( ! is_user_logged_in() ) {
 			return;
 		}
 
@@ -101,19 +120,99 @@ class Account {
 			return;
 		}
 
-		$user = new User( get_current_user_id() );
-
-		$shouldBeSubscribed = $user->shouldBeSubscribed();
-		if ( $shouldBeSubscribed && $user->isSubscribed() ) {
-			return;
-		}
-
-		if ( ! $shouldBeSubscribed && $user->isPaid() ) {
+		if ( ! $this->owes_payment( get_current_user_id() ) ) {
 			return;
 		}
 
 		wp_safe_redirect( $this->billing->getBillingURL() );
 		exit;
+	}
+
+	/**
+	 * Does the user still owe a payment: an inactive subscription, or an unpaid one-time plan?
+	 *
+	 * @param int $user_id
+	 *
+	 * @return bool
+	 */
+	public function owes_payment( $user_id ) {
+		$user_id = (int) $user_id;
+		if ( ! $user_id ) {
+			return false;
+		}
+
+		if ( ! isset( self::$owes_payment[ $user_id ] ) ) {
+			self::$checking_payment = true;
+
+			$user = new User( $user_id );
+			$owes = $user->shouldBeSubscribed() ? ! $user->isSubscribed() : ! $user->isPaid();
+
+			self::$checking_payment = false;
+
+			self::$owes_payment[ $user_id ] = $owes;
+		}
+
+		return self::$owes_payment[ $user_id ];
+	}
+
+	/**
+	 * Limit users who still owe a payment to reading, everywhere on the site.
+	 * The front-end redirect only covers theme pages, not wp-admin, REST or AJAX.
+	 *
+	 * @param array    $allcaps
+	 * @param array    $caps
+	 * @param array    $args
+	 * @param \WP_User $user
+	 *
+	 * @return array
+	 */
+	public function restrict_unpaid_capabilities( $allcaps, $caps, $args, $user ) { // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.FoundInExtendedClassBeforeLastUsed -- Matches the user_has_cap filter signature.
+		// Administrators count as paid in owes_payment(). Don't exempt by capability
+		// here: a custom role sold at registration can carry manage_options.
+		if ( self::$checking_payment || empty( $user->ID ) ) {
+			return $allcaps;
+		}
+
+		if ( ! apply_filters( 'wpum_stripe_restrict_unpaid_capabilities', true, $user ) ) {
+			return $allcaps;
+		}
+
+		if ( ! $this->owes_payment( $user->ID ) ) {
+			return $allcaps;
+		}
+
+		return array_intersect_key( $allcaps, array_flip( array( 'exist', 'read' ) ) );
+	}
+
+	/**
+	 * Role-restricted content checks role membership, not capabilities, so
+	 * withhold the roles too while a payment is outstanding.
+	 *
+	 * @param array    $roles
+	 * @param \WP_User $user
+	 *
+	 * @return array
+	 */
+	public function withhold_unpaid_access_roles( $roles, $user ) {
+		if ( empty( $user->ID ) ) {
+			return $roles;
+		}
+
+		if ( ! apply_filters( 'wpum_stripe_restrict_unpaid_capabilities', true, $user ) ) {
+			return $roles;
+		}
+
+		return $this->owes_payment( $user->ID ) ? array() : $roles;
+	}
+
+	/**
+	 * Forget a user's cached payment status when their meta changes, e.g. a plan is paid.
+	 *
+	 * @param int|array $meta_id
+	 * @param int       $user_id
+	 */
+	public function flush_payment_status( $meta_id, $user_id ) {
+		unset( self::$owes_payment[ (int) $user_id ] );
 	}
 
 	/**
