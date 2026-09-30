@@ -8,7 +8,7 @@ Tested up to: 7.1
 Requires PHP: 7.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
-Stable Tag: 2.9.20
+Stable Tag: 2.9.21
 
 Registration forms, a frontend login form, user profiles and a member directory for WordPress. Add Stripe payments and content restriction.
 
@@ -166,6 +166,12 @@ Please note that using WPUM and the mentioned add-ons does NOT guarantee complia
 13. Login form.
 
 == Changelog ==
+
+= 2.9.21 (30th September 2026) =
+
+- Security: Accounts with an outstanding Stripe payment are limited to read access across the site, including wp-admin, the REST API and admin-ajax (thanks to Pedro Delgado via Patchstack for responsible disclosure)
+- Security: Role-restricted content, Elementor widgets and profile fields treat accounts with an outstanding Stripe payment as having no role
+- Tweak: Members whose Stripe subscription has lapsed also lose their role's capabilities until they pay. Use the wpum_stripe_restrict_unpaid_capabilities filter to keep the previous behaviour
 
 = 2.9.20 (19th September 2026) =
 
