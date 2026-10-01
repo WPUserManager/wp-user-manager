@@ -1,4 +1,4 @@
-=== WP User Manager - Registration Form, Login Form, User Profile & Member Directory ===
+=== WP User Manager - Registration Form, Login Form, User Profile Builder & Member Directory ===
 Author URI: https://wpusermanager.com
 Plugin URI: https://wpusermanager.com
 Contributors: wpusermanager, polevaultweb, alessandro.tesoro
@@ -23,7 +23,7 @@ Use it to build a membership site, a community, a client portal, or simply a bet
 **What you can build with the free plugin:**
 
 - **A custom registration form** on any page, with your own user fields, terms and privacy checkboxes, and automatic login after signup
-- **A frontend login form** and login page, with password recovery, so users never see wp-login.php
+- **A front-end login form** and login page, with password recovery, so users never see wp-login.php
 - **User profile pages** with custom avatars, cover images and tabs for each member's posts and comments
 - **A member directory** with search, sorting and filtering by role, displayed anywhere with a block or shortcode
 - **An account page** where members update their details and change their password
