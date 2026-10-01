@@ -31,7 +31,7 @@ Use it to build a membership site, a community, a client portal, or simply a bet
 - **Content restriction** by role or logged-in status, on whole pages or on any individual block, plus custom redirects after login, logout and registration
 - **Blocks and Elementor widgets** for every form and page: login, registration, password recovery, account, profile, profile card, user directory, recently registered users, and login and logout links. Shortcodes work everywhere else
 
-[Website](https://wpusermanager.com?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager) | [Addons](https://wpusermanager.com/addons?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager) | [Documentation](http://docs.wpusermanager.com/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager) | [Support](https://wpusermanager.com/support/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager)
+[Website](https://wpusermanager.com?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager) | [Addons](https://wpusermanager.com/addons?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager) | [Documentation](http://docs.wpusermanager.com/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager) | [Support](https://wordpress.org/support/plugin/wp-user-manager/)
 
 = Features included =
 
