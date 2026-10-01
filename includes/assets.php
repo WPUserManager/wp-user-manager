@@ -49,6 +49,10 @@ function wpum_load_scripts() {
 	// Load frontend styles.
 	wp_enqueue_style( 'wpum-frontend', WPUM_PLUGIN_URL . 'assets/css/wpum.min.css', array(), WPUM_VERSION );
 
+	if ( wpum_get_option( 'form_styles' ) ) {
+		wp_enqueue_style( 'wpum-form-styles', WPUM_PLUGIN_URL . 'assets/css/wpum-form-styles.min.css', array( 'wpum-frontend' ), WPUM_VERSION );
+	}
+
 	// Load frontend js.
 	wp_enqueue_script( 'jquery' );
 	wp_register_script( 'wpum-directories', WPUM_PLUGIN_URL . 'assets/js/wpum-directories.min.js', array( 'jquery' ), WPUM_VERSION, true );
