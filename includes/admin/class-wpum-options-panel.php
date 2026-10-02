@@ -288,6 +288,12 @@ class WPUM_Options_Panel {
 					'desc' => __( 'Users can be assigned multiple roles.', 'wp-user-manager' ),
 					'type' => 'checkbox',
 				),
+				array(
+					'id'   => 'form_styles',
+					'name' => __( 'Form Styles', 'wp-user-manager' ),
+					'desc' => __( 'Add basic styles to the login, registration, account and password forms: full-width fields and a styled submit button. Turn off if your theme already styles forms.', 'wp-user-manager' ),
+					'type' => 'checkbox',
+				),
 			),
 			'registration'         => array(
 				array(

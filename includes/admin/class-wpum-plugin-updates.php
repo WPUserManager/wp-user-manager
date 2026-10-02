@@ -70,7 +70,21 @@ class WPUM_Plugin_Updates {
 			$this->upgrade_v2_9_20();
 		}
 
+		if ( version_compare( $installed_version, '2.9.22', '<' ) ) {
+			$this->upgrade_v2_9_22();
+		}
+
 		update_option( 'wpum_version', $latest_version );
+	}
+
+	/**
+	 * Turn on form styles for existing sites on a block theme, which leave
+	 * form fields unstyled. Classic theme sites keep their current look.
+	 */
+	protected function upgrade_v2_9_22() {
+		if ( function_exists( 'wp_is_block_theme' ) && wp_is_block_theme() ) {
+			wpum_update_option( 'form_styles', true );
+		}
 	}
 
 	/**
