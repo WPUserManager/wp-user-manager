@@ -8,7 +8,7 @@ Tested up to: 7.1
 Requires PHP: 7.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
-Stable Tag: 2.9.21
+Stable Tag: 2.9.22
 
 Registration forms, a frontend login form, user profiles and a member directory for WordPress. Add Stripe payments and content restriction.
 
@@ -166,6 +166,20 @@ Please note that using WPUM and the mentioned add-ons does NOT guarantee complia
 13. Login form.
 
 == Changelog ==
+
+= 2.9.22 (2nd October 2026) =
+
+- New: Form Styles setting (Users > Settings > General > Misc Settings) adds basic styles to WP User Manager forms. On by default for new installs and for sites using a block theme
+- New: Support link on the Plugins screen
+- New: wpum_field_datepicker_disable_mobile filter, to use the device's native date input on mobile instead of the calendar
+- Fix: With "Prevent site access to visitors" on, logged-out visitors can no longer read content through the REST API. Use the wpum_prevent_entire_site_rest_allowed_routes filter to open specific routes
+- Fix: Emails with no saved subject are no longer sent with a blank subject line
+- Fix: Emails missing from saved settings (including password recovery and the admin new registration notice) now send using the defaults
+- Fix: Responsive column classes (wpum-col-sm-*, wpum-col-md-* and wpum-col-lg-*) now apply. If you added CSS to work around them, check your layouts
+- Fix: Date fields open the calendar on mobile devices and show the site's date format
+- Fix: The registration forms admin screen lists every form, not just the first 20
+- Fix: The ACF settings metabox and the Elementor registration form widget list every registration form
+- Fix: "Translation loading triggered too early" notices for Groups and Social Login caused by the addon version check
 
 = 2.9.21 (30th September 2026) =
 
