@@ -88,7 +88,7 @@ class WPUM_RegistrationForm extends WPUM_Elementor_Widget {
 	 * @return array
 	 */
 	protected function get_registration_forms() {
-		$forms              = WPUM()->registration_forms->get_forms();
+		$forms              = WPUM()->registration_forms->get_forms( array( 'number' => -1 ) );
 		$registration_forms = array();
 
 		foreach ( $forms as $key => $form ) {

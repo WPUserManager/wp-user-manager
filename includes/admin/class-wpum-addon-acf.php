@@ -46,7 +46,7 @@ class WPUM_Addon_ACF {
 	 * Add metabox
 	 */
 	public function setting_metabox() {
-		$registration_forms = WPUM()->registration_forms->get_forms();
+		$registration_forms = WPUM()->registration_forms->get_forms( array( 'number' => -1 ) );
 		?>
 		<table class="form-table disabled">
 			<tbody>

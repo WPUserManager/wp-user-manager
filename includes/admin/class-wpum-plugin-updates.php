@@ -70,7 +70,21 @@ class WPUM_Plugin_Updates {
 			$this->upgrade_v2_9_20();
 		}
 
+		if ( version_compare( $installed_version, '2.9.22', '<' ) ) {
+			$this->upgrade_v2_9_22();
+		}
+
 		update_option( 'wpum_version', $latest_version );
+	}
+
+	/**
+	 * Turn on form styles for existing sites on a block theme, which leave
+	 * form fields unstyled. Classic theme sites keep their current look.
+	 */
+	protected function upgrade_v2_9_22() {
+		if ( function_exists( 'wp_is_block_theme' ) && wp_is_block_theme() ) {
+			wpum_update_option( 'form_styles', true );
+		}
 	}
 
 	/**
@@ -78,7 +92,7 @@ class WPUM_Plugin_Updates {
 	 */
 	protected function upgrade_v2_2() {
 		// Get default registration form
-		$registration_forms = WPUM()->registration_forms->get_forms();
+		$registration_forms = WPUM()->registration_forms->get_forms( array( 'number' => -1 ) );
 		$form               = false;
 		foreach ( $registration_forms as $registration_form ) {
 			if ( $registration_form->is_default() ) {
@@ -129,13 +143,10 @@ class WPUM_Plugin_Updates {
 	 * Upgrade 2.8
 	 */
 	protected function upgrade_v2_8() {
-		$existing_emails = get_option( 'wpum_email', array() );
-		$emails          = wpum_install_emails();
-
-		if ( ! isset( $existing_emails['registration_admin_notification'] ) ) {
-			$existing_emails['registration_admin_notification'] = $emails['registration_admin_notification'];
-			update_option( 'wpum_email', $existing_emails );
-		}
+		// Merges the stored emails over the defaults, which adds the admin
+		// notification email and fills in any field a stored email is missing,
+		// then saves the result.
+		wpum_install_emails();
 	}
 
 	/**

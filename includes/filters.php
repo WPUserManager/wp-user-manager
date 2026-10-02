@@ -45,7 +45,9 @@ function wpum_add_settings_link( $links ) {
 	$settings_link = '<a href="' . admin_url( 'users.php?page=wpum-settings' ) . '">' . __( 'Settings', 'wp-user-manager' ) . '</a>';
 	$docs_link     = '<a href="https://wpusermanager.com/docs/?utm_source=WP%20User%20Manager&utm_medium=insideplugin&utm_campaign=WP%20User%20Manager&utm_content=plugins-table" target="_blank">' . __( 'Documentation', 'wp-user-manager' ) . '</a>';
 	$addons_link   = '<a href="https://wpusermanager.com/addons?utm_source=WP%20User%20Manager&utm_medium=insideplugin&utm_campaign=WP%20User%20Manager&utm_content=plugins-table" target="_blank">' . __( 'Addons', 'wp-user-manager' ) . '</a>';
+	$support_link  = '<a href="https://wordpress.org/support/plugin/wp-user-manager/" target="_blank">' . __( 'Support', 'wp-user-manager' ) . '</a>';
 	array_unshift( $links, $settings_link );
+	array_unshift( $links, $support_link );
 	array_unshift( $links, $docs_link );
 	array_unshift( $links, $addons_link );
 	return $links;

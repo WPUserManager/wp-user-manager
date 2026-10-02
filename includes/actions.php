@@ -472,6 +472,32 @@ if ( wpum_get_option( 'lock_complete_site' ) ) {
 }
 
 /**
+ * Require login for REST API requests when site access is prevented.
+ *
+ * The init redirect in wpum_prevent_entire_site() skips REST requests, which
+ * are authenticated later. This runs at dispatch, once the current user is known.
+ *
+ * @param mixed            $result  Response to replace the requested version with.
+ * @param \WP_REST_Server  $server  Server instance.
+ * @param \WP_REST_Request $request Request used to generate the response.
+ *
+ * @return mixed
+ */
+function wpum_prevent_entire_site_rest( $result, $server, $request ) {
+	if ( null !== $result || ! wpum_get_option( 'lock_complete_site' ) || is_user_logged_in() ) {
+		return $result;
+	}
+
+	$allowed_routes = apply_filters( 'wpum_prevent_entire_site_rest_allowed_routes', array( '/wpum/v1/stripe' ) );
+	if ( in_array( untrailingslashit( $request->get_route() ), $allowed_routes, true ) ) {
+		return $result;
+	}
+
+	return new WP_Error( 'rest_not_logged_in', esc_html__( 'You must be logged in to access this site.', 'wp-user-manager' ), array( 'status' => rest_authorization_required_code() ) );
+}
+add_filter( 'rest_pre_dispatch', 'wpum_prevent_entire_site_rest', 10, 3 );
+
+/**
  * Finish data installation after the whole plugin has booted.
  *
  * @return void

@@ -196,8 +196,12 @@ class WPUM_Registration_Forms_Editor {
 
 		if ( current_user_can( $this->capability ) && is_admin() ) {
 
-			$registration_forms = WPUM()->registration_forms->get_forms();
-			$forms              = array();
+			// The forms list table is not paginated, so retrieve every form instead of the default first 20.
+			$registration_forms = WPUM()->registration_forms->get_forms( array(
+				'number' => -1,
+			) );
+
+			$forms = array();
 
 			foreach ( $registration_forms as $form ) {
 				$form_data = array(
@@ -653,9 +657,17 @@ class WPUM_Registration_Forms_Editor {
 	 * Delete forms cache
 	 */
 	public function delete_registration_forms_cache() {
-		$cache_key = WPUM()->registration_forms->get_cache_key_from_args();
+		// Both the default query and the unlimited query used by the forms list are cached.
+		$cache_keys = array(
+			WPUM()->registration_forms->get_cache_key_from_args(),
+			WPUM()->registration_forms->get_cache_key_from_args( array(
+				'number' => -1,
+			) ),
+		);
 
-		wp_cache_delete( $cache_key, WPUM()->registration_forms->cache_group );
+		foreach ( $cache_keys as $cache_key ) {
+			wp_cache_delete( $cache_key, WPUM()->registration_forms->cache_group );
+		}
 	}
 
 	/**
