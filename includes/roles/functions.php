@@ -109,6 +109,49 @@ function wpum_role_exists( $name ) {
 }
 
 /**
+ * Change the display name of a role. The role slug is never changed.
+ *
+ * @param string $role_id  Role slug.
+ * @param string $new_name New display name.
+ *
+ * @return true|WP_Error
+ */
+function wpum_rename_role( $role_id, $new_name ) {
+	$wp_roles = wp_roles();
+	$new_name = trim( sanitize_text_field( $new_name ) );
+
+	if ( ! isset( $wp_roles->roles[ $role_id ] ) ) {
+		return new WP_Error( 'wpum_role_not_found', esc_html__( 'The role could not be found.', 'wp-user-manager' ) );
+	}
+
+	if ( '' === $new_name ) {
+		return new WP_Error( 'wpum_role_name_empty', esc_html__( 'The role name cannot be empty.', 'wp-user-manager' ) );
+	}
+
+	foreach ( $wp_roles->roles as $id => $role ) {
+		if ( $id !== $role_id && 0 === strcasecmp( $role['name'], $new_name ) ) {
+			return new WP_Error( 'wpum_role_name_exists', esc_html__( 'Another role already uses this name.', 'wp-user-manager' ) );
+		}
+	}
+
+	$wp_roles->roles[ $role_id ]['name'] = $new_name;
+	$wp_roles->role_names[ $role_id ]    = $new_name;
+
+	if ( $wp_roles->use_db ) {
+		update_option( $wp_roles->role_key, $wp_roles->roles );
+	}
+
+	$role = wpum_get_role( $role_id );
+	if ( $role ) {
+		$role->label = $new_name;
+	}
+
+	do_action( 'wpum_role_renamed', $role_id, $new_name );
+
+	return true;
+}
+
+/**
  * Returns an array of editable roles.
  *
  * @return array
