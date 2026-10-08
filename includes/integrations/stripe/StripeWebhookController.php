@@ -209,7 +209,7 @@ class StripeWebhookController {
 	 * @param string $session_id
 	 *
 	 * @return \WPUM\Stripe\StripeObject|null
-	 * @throws \Stripe\Exception\ApiErrorException
+	 * @throws \WPUM\Stripe\Exception\ApiErrorException
 	 */
 	protected function retrieveSessionLineItem( $session_id ) {
 		$session = Session::retrieve( array(
@@ -305,7 +305,7 @@ class StripeWebhookController {
 	 * @param bool  $checkout
 	 *
 	 * @return \WP_REST_Response
-	 * @throws \Stripe\Exception\ApiErrorException
+	 * @throws \WPUM\Stripe\Exception\ApiErrorException
 	 */
 	protected function createSubscription( $user_id, $payload, $checkout = true ) {
 		if ( $checkout ) {
