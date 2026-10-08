@@ -8,7 +8,7 @@ Tested up to: 7.1
 Requires PHP: 7.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
-Stable Tag: 2.9.22
+Stable Tag: 2.9.23
 
 Registration forms, a frontend login form, user profiles and a member directory for WordPress. Add Stripe payments and content restriction.
 
@@ -166,6 +166,14 @@ Please note that using WPUM and the mentioned add-ons does NOT guarantee complia
 13. Login form.
 
 == Changelog ==
+
+= 2.9.23 (8th October 2026) =
+
+- Security: Stripe payments only count towards the plans a customer registered for. The Billing tab and checkout offer only those plans, and a payment for any other price no longer marks the customer's plan as paid (thanks to Atia Avela via Patchstack for responsible disclosure)
+- Security: Content restricted to a Stripe product is only shown once that product is paid for, or its subscription is active
+- Fix: New Stripe subscriptions are active straight away, instead of only after a later update from Stripe
+- Fix: Connecting to Stripe could fail with "This Stripe connection request has expired" if the site made other requests while you were on Stripe
+- Fix: The Stripe Billing plans template now hides prices that aren't offered
 
 = 2.9.22 (2nd October 2026) =
 

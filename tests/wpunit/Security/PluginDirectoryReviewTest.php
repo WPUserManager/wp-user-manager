@@ -91,12 +91,23 @@ class PluginDirectoryReviewTest extends WPUMTestCase {
 	 * Stripe webhook: one time plans are only marked paid once Stripe confirms payment.
 	 */
 
-	protected function create_webhook_controller() {
-		$ref        = new \ReflectionClass( \WPUserManager\Stripe\StripeWebhookController::class );
-		$controller = $ref->newInstanceWithoutConstructor();
+	protected function create_webhook_controller( $subscriptions = null ) {
+		// Stands in for the Stripe API: the Checkout Session paid for price_test.
+		$controller = new class() extends \WPUserManager\Stripe\StripeWebhookController {
+			public function __construct() {}
 
-		$subscriptions = $this->createMock( \WPUserManager\Stripe\Controllers\Subscriptions::class );
-		$subscriptions->method( 'where' )->willReturn( null );
+			protected function retrieveSessionLineItem( $session_id ) {
+				return array(
+					'description' => 'Plan',
+					'price'       => array( 'id' => 'price_test', 'type' => 'one_time', 'unit_amount' => 1000 ),
+				);
+			}
+		};
+
+		if ( ! $subscriptions ) {
+			$subscriptions = $this->createMock( \WPUserManager\Stripe\Controllers\Subscriptions::class );
+			$subscriptions->method( 'where' )->willReturn( null );
+		}
 		$this->set_protected( $controller, 'subscriptions', $subscriptions );
 
 		return $controller;
@@ -106,7 +117,7 @@ class PluginDirectoryReviewTest extends WPUMTestCase {
 		$user_id = $this->factory()->user->create( array( 'user_email' => 'buyer' . wp_rand() . '@example.com' ) );
 
 		$user = new \WPUserManager\Stripe\Models\User( $user_id );
-		$user->setPlanMeta( ( new \WPUserManager\Stripe\Models\Product() )->to_array() );
+		$user->setPlanMeta( ( new \WPUserManager\Stripe\Models\Product( 'price_test', array( 'name' => 'Plan' ), array( 'type' => 'one_time', 'unit_amount' => 1000 ) ) )->to_array() );
 
 		return get_userdata( $user_id );
 	}
@@ -116,6 +127,7 @@ class PluginDirectoryReviewTest extends WPUMTestCase {
 			'type' => $type,
 			'data' => array(
 				'object' => array(
+					'id'             => 'cs_test',
 					'customer_email' => $email,
 					'customer'       => 'cus_test',
 					'subscription'   => null,
@@ -221,9 +233,7 @@ class PluginDirectoryReviewTest extends WPUMTestCase {
 
 		$subscriptions = $this->create_unrelated_subscription();
 
-		$ref        = new \ReflectionClass( \WPUserManager\Stripe\StripeWebhookController::class );
-		$controller = $ref->newInstanceWithoutConstructor();
-		$this->set_protected( $controller, 'subscriptions', $subscriptions );
+		$controller = $this->create_webhook_controller( $subscriptions );
 
 		$user    = $this->create_user_with_unpaid_plan();
 		$payload = $this->session_payload( 'checkout.session.completed', $user->user_email, 'paid' );
@@ -331,6 +341,61 @@ class PluginDirectoryReviewTest extends WPUMTestCase {
 		$this->assertFalse( $this->call_protected( $connect, 'consume_state', array( $forged ) ) );
 	}
 
+	public function test_connect_state_survives_repeated_settings_builds() {
+		$this->create_admin();
+		$connect = new \WPUserManager\Stripe\Connect();
+		$state   = $this->call_protected( $connect, 'get_state', array( true ) );
+
+		// Every REST request builds the settings, and with them both Connect buttons.
+		for ( $i = 0; $i < 20; $i++ ) {
+			$this->call_protected( $connect, 'get_state', array( true ) );
+			$this->call_protected( $connect, 'get_state', array( false ) );
+		}
+
+		$this->assertTrue( $this->call_protected( $connect, 'consume_state', array( $state ) ), 'The state the admin clicked must still be accepted when they return from Stripe' );
+	}
+
+	public function test_connect_state_is_reused_until_consumed() {
+		$this->create_admin();
+		$connect = new \WPUserManager\Stripe\Connect();
+		$test    = $this->call_protected( $connect, 'get_state', array( true ) );
+		$live    = $this->call_protected( $connect, 'get_state', array( false ) );
+
+		$this->assertSame( $test, $this->call_protected( $connect, 'get_state', array( true ) ) );
+		$this->assertNotSame( $test, $live );
+
+		$this->call_protected( $connect, 'consume_state', array( $test ) );
+
+		$this->assertNotSame( $test, $this->call_protected( $connect, 'get_state', array( true ) ), 'A used state must not be issued again' );
+	}
+
+	public function test_connect_accepts_state_issued_before_upgrade() {
+		$admin_id = $this->create_admin();
+		$state    = base64_encode( serialize( array( 'test_mode' => 1, 'site_id' => '42', 'site_url' => 'https://example.test' ) ) ); // phpcs:ignore
+		set_transient( 'wpum_stripe_connect_states_' . $admin_id, array( $state ), DAY_IN_SECONDS );
+
+		$this->assertTrue( $this->call_protected( new \WPUserManager\Stripe\Connect(), 'consume_state', array( $state ) ) );
+	}
+
+	public function test_connect_accepts_state_from_the_connect_url() {
+		$this->create_admin();
+		$connect = new \WPUserManager\Stripe\Connect();
+
+		// Try a few site URLs, so the base64 state ends with each amount of padding.
+		foreach ( array( '', 'a', 'ab' ) as $suffix ) {
+			add_filter( 'wpum_stripe_connect_return_url', $filter = function ( $url ) use ( $suffix ) {
+				return $url . $suffix;
+			} );
+
+			$url = $connect->connect_url( true );
+			wp_parse_str( wp_parse_url( $url, PHP_URL_QUERY ), $query );
+
+			remove_filter( 'wpum_stripe_connect_return_url', $filter );
+
+			$this->assertTrue( $this->call_protected( $connect, 'consume_state', array( $query['state'] ) ), 'The state in the Connect button URL must be accepted on return' );
+		}
+	}
+
 	public function test_connect_rejects_state_issued_to_another_admin() {
 		$this->create_admin();
 		$connect = new \WPUserManager\Stripe\Connect();
@@ -345,7 +410,7 @@ class PluginDirectoryReviewTest extends WPUMTestCase {
 		$this->create_admin();
 		$connect = new \WPUserManager\Stripe\Connect();
 		$state   = 'abc+def+ghi=';
-		$this->call_protected( $connect, 'remember_state', array( $state ) );
+		$this->call_protected( $connect, 'remember_state', array( 'test', $state ) );
 
 		$this->assertTrue( $this->call_protected( $connect, 'consume_state', array( 'abc def ghi=' ) ) );
 	}

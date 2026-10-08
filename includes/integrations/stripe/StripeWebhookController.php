@@ -135,7 +135,10 @@ class StripeWebhookController {
 		}
 
 		if ( $payload['data']['object']['customer_email'] ) {
-			$user    = get_user_by( 'email', $payload['data']['object']['customer_email'] );
+			$user = get_user_by( 'email', $payload['data']['object']['customer_email'] );
+			if ( ! $user ) {
+				return new \WP_REST_Response( 'User not found', 200 );
+			}
 			$user_id = $user->ID;
 		} else {
 			$subscription = $this->subscriptions->where( 'customer_id', $payload['data']['object']['customer'] );
@@ -153,7 +156,9 @@ class StripeWebhookController {
 				return new \WP_REST_Response( 'Payment not yet complete', 200 );
 			}
 
-			$this->markOneTimePlanPaid( $user_id );
+			if ( ! $this->markOneTimePlanPaid( $user_id, $this->retrieveSessionLineItem( $payload['data']['object']['id'] ) ) ) {
+				return new \WP_REST_Response( 'Plan not allowed for user', 200 );
+			}
 
 			return new \WP_REST_Response( 'Webhook handled', 200 );
 		}
@@ -180,7 +185,9 @@ class StripeWebhookController {
 			return new \WP_REST_Response( 'User not found', 200 );
 		}
 
-		$this->markOneTimePlanPaid( $user->ID );
+		if ( ! $this->markOneTimePlanPaid( $user->ID, $this->retrieveSessionLineItem( $payload['data']['object']['id'] ) ) ) {
+			return new \WP_REST_Response( 'Plan not allowed for user', 200 );
+		}
 
 		return new \WP_REST_Response( 'Webhook handled', 200 );
 	}
@@ -197,19 +204,67 @@ class StripeWebhookController {
 	}
 
 	/**
-	 * Mark a user's one time plan as paid.
+	 * The first line item of a Checkout Session, with the price that was paid.
 	 *
-	 * @param int $user_id
+	 * @param string $session_id
+	 *
+	 * @return \WPUM\Stripe\StripeObject|null
+	 * @throws \Stripe\Exception\ApiErrorException
 	 */
-	protected function markOneTimePlanPaid( $user_id ) {
+	protected function retrieveSessionLineItem( $session_id ) {
+		$session = Session::retrieve( array(
+			'id'     => $session_id,
+			'expand' => array( 'line_items' ),
+		) );
+
+		if ( empty( $session->line_items->data[0] ) ) {
+			return null;
+		}
+
+		return $session->line_items->data[0];
+	}
+
+	/**
+	 * Mark a user's one time plan as paid, if the price paid is one of the plans they may pay for.
+	 * Paying for any other price, such as a cheaper plan, must not unlock the plan they signed up for.
+	 *
+	 * @param int                                  $user_id
+	 * @param \WPUM\Stripe\StripeObject|array|null $line_item
+	 *
+	 * @return bool
+	 */
+	protected function markOneTimePlanPaid( $user_id, $line_item ) {
+		$price_id = isset( $line_item['price']['id'] ) ? (string) $line_item['price']['id'] : '';
+
 		$user = new User( $user_id );
+		if ( '' === $price_id || ! $user->isPlanAllowed( $price_id ) ) {
+			do_action( 'wpum_stripe_webhook_plan_not_allowed', $user_id, $price_id );
+
+			return false;
+		}
+
 		$data = $user->getPlanMeta();
 
 		$product = new Product();
-		$product->hydrate( $data );
+		if ( is_array( $data ) && isset( $data['id'] ) && $price_id === $data['id'] ) {
+			$product->hydrate( $data );
+		} else {
+			// They paid for another plan from their registration form, so that's now their plan.
+			$product = new Product(
+				$price_id,
+				array( 'name' => isset( $line_item['description'] ) ? $line_item['description'] : '' ),
+				array(
+					'type'        => isset( $line_item['price']['type'] ) ? $line_item['price']['type'] : 'one_time',
+					'unit_amount' => isset( $line_item['price']['unit_amount'] ) ? $line_item['price']['unit_amount'] : 0,
+				)
+			);
+		}
+
 		$product->setPaid();
 
 		$user->setPlanMeta( $product->to_array() );
+
+		return true;
 	}
 
 	/**
@@ -254,17 +309,21 @@ class StripeWebhookController {
 	 */
 	protected function createSubscription( $user_id, $payload, $checkout = true ) {
 		if ( $checkout ) {
-			$session = Session::retrieve( array(
-				'id'     => $payload['data']['object']['id'],
-				'expand' => array( 'line_items' ),
-			) );
-
-			$stripePlan = $session->line_items->data[0]->price;
+			$line_item  = $this->retrieveSessionLineItem( $payload['data']['object']['id'] );
+			$stripePlan = $line_item ? $line_item['price'] : null;
 
 			$subscription_id = $payload['data']['object']['subscription'];
 		} else {
 			$stripePlan      = $payload['data']['object']['items']['data'][0]['plan'];
 			$subscription_id = $payload['data']['object']['id'];
+		}
+
+		// A subscription to a plan the user didn't sign up for, such as a cheaper one, doesn't count.
+		$plan_id = isset( $stripePlan['id'] ) ? (string) $stripePlan['id'] : '';
+		if ( '' === $plan_id || ! ( new User( $user_id ) )->isPlanAllowed( $plan_id ) ) {
+			do_action( 'wpum_stripe_webhook_plan_not_allowed', $user_id, $plan_id );
+
+			return new \WP_REST_Response( 'Plan not allowed for user', 200 );
 		}
 
 		$subscription_data = array(
@@ -273,6 +332,7 @@ class StripeWebhookController {
 			'plan_id'         => $stripePlan['id'],
 			'subscription_id' => $subscription_id,
 			'trial_ends_at'   => null,
+			'ends_at'         => null, // The column default would store a zero date, which reads as ended.
 		);
 
 		$this->subscriptions->insert( apply_filters( 'wpum_stripe_webhook_create_subscription_data', $subscription_data, $subscription_id, $stripePlan, $user_id, $payload ) );
