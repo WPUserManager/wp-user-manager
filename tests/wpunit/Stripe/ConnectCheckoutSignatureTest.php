@@ -162,10 +162,12 @@ class ConnectCheckoutSignatureTest extends WPUMTestCase {
 			\WPUserManager\Stripe\Billing::canonicalConnectRequest( $reversed )
 		);
 
-		$this->assertSame(
-			\WPUserManager\Stripe\Billing::signConnectRequest( $params, self::SECRET, 1700000000 ),
-			\WPUserManager\Stripe\Billing::signConnectRequest( $reversed, self::SECRET, 1700000000 )
-		);
+		$signed          = \WPUserManager\Stripe\Billing::signConnectRequest( $params, self::SECRET, 1700000000 );
+		$signed_reversed = \WPUserManager\Stripe\Billing::signConnectRequest( $reversed, self::SECRET, 1700000000 );
+
+		// The parameters keep the order they were given in; only the signature must match.
+		$this->assertSame( $signed['signature'], $signed_reversed['signature'] );
+		$this->assertEquals( $signed, $signed_reversed );
 	}
 
 	public function test_signature_is_hmac_sha256_of_the_canonical_string() {
