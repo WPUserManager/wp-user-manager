@@ -100,6 +100,93 @@ class Connect {
 	}
 
 	/**
+	 * Errors the Connect service gives when it can't verify a checkout request, by code.
+	 *
+	 * @return array
+	 */
+	public function get_checkout_error_messages() {
+		return array(
+			'invalid_signature'  => __( 'Stripe Connect could not verify checkout requests from this site, because the Stripe key saved here does not match your Stripe connection. Please disconnect and connect Stripe again.', 'wp-user-manager' ),
+			'signature_expired'  => __( 'Stripe Connect could not verify checkout requests from this site, because the server clock is more than 5 minutes out. Please ask your host to correct the server time.', 'wp-user-manager' ),
+			'signature_required' => __( 'Stripe Connect refused an unsigned checkout request from this site. Please disconnect and connect Stripe again.', 'wp-user-manager' ),
+		);
+	}
+
+	/**
+	 * Record the result of the last checkout request to the Connect service.
+	 *
+	 * @param string $mode 'test' or 'live'.
+	 * @param string $code Error code from the Connect service, or empty if the request was verified.
+	 */
+	public function record_checkout_error( $mode, $code ) {
+		$errors = get_option( 'wpum_stripe_connect_checkout_errors', array() );
+		$errors = is_array( $errors ) ? $errors : array();
+
+		if ( ! isset( $this->get_checkout_error_messages()[ $code ] ) ) {
+			if ( isset( $errors[ $mode ] ) ) {
+				$this->clear_checkout_error( $mode );
+			}
+
+			return;
+		}
+
+		$errors[ $mode ] = array(
+			'code' => $code,
+			'time' => time(),
+		);
+
+		update_option( 'wpum_stripe_connect_checkout_errors', $errors, false );
+
+		/**
+		 * Fires when the Connect service can't verify a checkout request from this site.
+		 *
+		 * @param string $code 'invalid_signature', 'signature_expired' or 'signature_required'.
+		 * @param string $mode 'test' or 'live'.
+		 */
+		do_action( 'wpum_stripe_connect_checkout_error', $code, $mode );
+	}
+
+	/**
+	 * Forget the Connect service checkout error for a mode.
+	 *
+	 * @param string $mode 'test' or 'live'.
+	 */
+	public function clear_checkout_error( $mode ) {
+		$errors = get_option( 'wpum_stripe_connect_checkout_errors', array() );
+		if ( ! is_array( $errors ) || ! isset( $errors[ $mode ] ) ) {
+			return;
+		}
+
+		unset( $errors[ $mode ] );
+
+		if ( empty( $errors ) ) {
+			delete_option( 'wpum_stripe_connect_checkout_errors' );
+
+			return;
+		}
+
+		update_option( 'wpum_stripe_connect_checkout_errors', $errors, false );
+	}
+
+	/**
+	 * The message for the last Connect service checkout error, if the last request failed verification.
+	 *
+	 * @param string $mode 'test' or 'live'.
+	 *
+	 * @return string
+	 */
+	public function get_checkout_error_message( $mode ) {
+		$errors = get_option( 'wpum_stripe_connect_checkout_errors', array() );
+		if ( ! is_array( $errors ) || empty( $errors[ $mode ]['code'] ) ) {
+			return '';
+		}
+
+		$messages = $this->get_checkout_error_messages();
+
+		return isset( $messages[ $errors[ $mode ]['code'] ] ) ? $messages[ $errors[ $mode ]['code'] ] : '';
+	}
+
+	/**
 	 * @return string
 	 */
 	protected function get_site_url() {
@@ -310,6 +397,9 @@ class Connect {
 		}
 
 		wpum_update_option( 'stripe_gateway_mode', $gateway_mode );
+
+		// A new connection has new keys, so an earlier checkout error no longer applies.
+		$this->clear_checkout_error( $gateway_mode );
 
 		Products::forget( $gateway_mode );
 
