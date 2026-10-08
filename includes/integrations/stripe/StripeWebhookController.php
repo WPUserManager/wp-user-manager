@@ -332,6 +332,7 @@ class StripeWebhookController {
 			'plan_id'         => $stripePlan['id'],
 			'subscription_id' => $subscription_id,
 			'trial_ends_at'   => null,
+			'ends_at'         => null, // The column default would store a zero date, which reads as ended.
 		);
 
 		$this->subscriptions->insert( apply_filters( 'wpum_stripe_webhook_create_subscription_data', $subscription_data, $subscription_id, $stripePlan, $user_id, $payload ) );
