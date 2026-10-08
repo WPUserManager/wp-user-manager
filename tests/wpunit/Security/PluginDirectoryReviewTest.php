@@ -377,6 +377,25 @@ class PluginDirectoryReviewTest extends WPUMTestCase {
 		$this->assertTrue( $this->call_protected( new \WPUserManager\Stripe\Connect(), 'consume_state', array( $state ) ) );
 	}
 
+	public function test_connect_accepts_state_from_the_connect_url() {
+		$this->create_admin();
+		$connect = new \WPUserManager\Stripe\Connect();
+
+		// Try a few site URLs, so the base64 state ends with each amount of padding.
+		foreach ( array( '', 'a', 'ab' ) as $suffix ) {
+			add_filter( 'wpum_stripe_connect_return_url', $filter = function ( $url ) use ( $suffix ) {
+				return $url . $suffix;
+			} );
+
+			$url = $connect->connect_url( true );
+			wp_parse_str( wp_parse_url( $url, PHP_URL_QUERY ), $query );
+
+			remove_filter( 'wpum_stripe_connect_return_url', $filter );
+
+			$this->assertTrue( $this->call_protected( $connect, 'consume_state', array( $query['state'] ) ), 'The state in the Connect button URL must be accepted on return' );
+		}
+	}
+
 	public function test_connect_rejects_state_issued_to_another_admin() {
 		$this->create_admin();
 		$connect = new \WPUserManager\Stripe\Connect();

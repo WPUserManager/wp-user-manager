@@ -194,14 +194,15 @@ class Connect {
 			return false;
 		}
 
-		// A '+' in the base64 state can arrive as a space once URL-decoded.
-		$state = str_replace( ' ', '+', $state );
+		// A '+' in the base64 state can arrive as a space once URL-decoded, and
+		// add_query_arg() strips a trailing '=' from the Connect URL, so ignore padding.
+		$state = rtrim( str_replace( ' ', '+', $state ), '=' );
 
 		foreach ( $states as $issued ) {
 			// Before 2.9.23 each entry was the state itself.
 			$issued = is_array( $issued ) && isset( $issued['state'] ) ? $issued['state'] : $issued;
 
-			if ( is_string( $issued ) && hash_equals( $issued, $state ) ) {
+			if ( is_string( $issued ) && hash_equals( rtrim( $issued, '=' ), $state ) ) {
 				delete_transient( $this->get_states_transient_key() );
 
 				return true;
