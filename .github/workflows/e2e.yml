@@ -24,9 +24,12 @@ jobs:
       matrix:
         php: ['7.4', '8.1', '8.2', '8.3']
     env:
-      STRIPE_SECRET_KEY: ${{ secrets.STRIPE_SECRET_KEY }}
-      STRIPE_PUBLISHABLE_KEY: ${{ secrets.STRIPE_PUBLISHABLE_KEY }}
-      WPUM_BILLING_OVERRIDE_KEY: ${{ secrets.WPUM_BILLING_OVERRIDE_KEY }}
+      # Real Stripe test payments run on one PHP version only: the jobs share one
+      # Stripe account, and in parallel they hit its rate limit and receive each
+      # other's webhooks. The other versions skip the Stripe payment specs.
+      STRIPE_SECRET_KEY: ${{ matrix.php == '8.3' && secrets.STRIPE_SECRET_KEY || '' }}
+      STRIPE_PUBLISHABLE_KEY: ${{ matrix.php == '8.3' && secrets.STRIPE_PUBLISHABLE_KEY || '' }}
+      WPUM_BILLING_OVERRIDE_KEY: ${{ matrix.php == '8.3' && secrets.WPUM_BILLING_OVERRIDE_KEY || '' }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4

@@ -51,12 +51,12 @@ function wpum_e2e_create_unpaid_customer( $login, $email, $password, $price_id, 
 /**
  * The user's Stripe plan and access, as JSON.
  *
- * @param string $login
+ * @param string $login Username, or email for users made by the registration form.
  *
  * @return string
  */
 function wpum_e2e_plan_state( $login ) {
-	$wp_user = get_user_by( 'login', $login );
+	$wp_user = is_email( $login ) ? get_user_by( 'email', $login ) : get_user_by( 'login', $login );
 	if ( ! $wp_user ) {
 		return wp_json_encode( array( 'exists' => false ) );
 	}

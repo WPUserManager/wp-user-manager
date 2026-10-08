@@ -73,8 +73,7 @@ test.describe('Stripe Registration', () => {
     }
 
     for (const login of ['stripe_e2e_redirect', 'stripe_e2e_noplan', `stripe_e2e_sub_${runId}`, `stripe_e2e_cheap_${runId}`, `stripe_e2e_billing_${runId}`]) {
-      cleanupStripeCustomer(`${login}@example.com`);
-      deleteUser(login);
+      deleteRegisteredUser(login);
     }
   });
 
@@ -87,6 +86,13 @@ test.describe('Stripe Registration', () => {
     }
     await page.context().clearCookies();
   });
+
+  // The registration form may have no username field, in which case the email is the login.
+  function deleteRegisteredUser(login: string) {
+    cleanupStripeCustomer(`${login}@example.com`);
+    deleteUser(login);
+    deleteUser(`${login}@example.com`);
+  }
 
   async function fillRegistrationForm(page: Page, registerPage: string, login: string) {
     await page.goto(registerPage);
@@ -122,7 +128,7 @@ test.describe('Stripe Registration', () => {
   });
 
   test('registration redirects to Stripe checkout', async ({ page, registerPage }) => {
-    deleteUser('stripe_e2e_redirect');
+    deleteRegisteredUser('stripe_e2e_redirect');
 
     await fillRegistrationForm(page, registerPage, 'stripe_e2e_redirect');
     await page.locator(`input[name="wpum_stripe_plan"][value="${prices.premium}"]`).check();
@@ -132,7 +138,7 @@ test.describe('Stripe Registration', () => {
     await expect(page.getByLabel('Card number')).toBeVisible({ timeout: 15000 });
 
     // Registering doesn't pay: the account is created with its plan unpaid and no role capabilities.
-    const state = getPlanState('stripe_e2e_redirect');
+    const state = getPlanState('stripe_e2e_redirect@example.com');
     expect(state.plan).toBe(prices.premium);
     expect(state.paid).toBe(false);
   });
@@ -155,7 +161,7 @@ test.describe('Stripe Registration', () => {
     ).toBeTruthy();
 
     // The subscription row used to be stored with a zero end date, which reads as ended.
-    const state = await waitForPlanState(login, (s) => !!s.subscription_plan);
+    const state = await waitForPlanState(`${login}@example.com`, (s) => !!s.subscription_plan);
     expect(state.subscription_plan).toBe(prices.subscription);
     expect(state.subscribed).toBe(true);
   });
@@ -199,7 +205,7 @@ test.describe('Stripe Registration', () => {
   });
 
   test('registration without plan skips Stripe', async ({ page, registerPage }) => {
-    deleteUser('stripe_e2e_noplan');
+    deleteRegisteredUser('stripe_e2e_noplan');
 
     // Remove the Stripe plans from the registration form so the plan radio
     // doesn't appear. When present, the radio auto-selects the first option
