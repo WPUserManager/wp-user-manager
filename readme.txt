@@ -8,7 +8,7 @@ Tested up to: 7.1
 Requires PHP: 7.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
-Stable Tag: 2.9.23
+Stable Tag: 2.9.24
 
 Registration forms, a frontend login form, user profiles and a member directory for WordPress. Add Stripe payments and content restriction.
 
@@ -166,6 +166,12 @@ Please note that using WPUM and the mentioned add-ons does NOT guarantee complia
 13. Login form.
 
 == Changelog ==
+
+= 2.9.24 (8th October 2026) =
+
+- Fix: A Stripe API error, such as a rate limit or outage, no longer causes a critical error. The last product list fetched from Stripe is used until Stripe responds again
+- Fix: Connecting or disconnecting a Stripe account clears the previous account's products
+- Enhancement: Stripe Connect checkout requests are signed with your connected account's key. If the Connect service can't verify them, the Stripe settings explain what to do
 
 = 2.9.23 (8th October 2026) =
 
