@@ -91,12 +91,23 @@ class PluginDirectoryReviewTest extends WPUMTestCase {
 	 * Stripe webhook: one time plans are only marked paid once Stripe confirms payment.
 	 */
 
-	protected function create_webhook_controller() {
-		$ref        = new \ReflectionClass( \WPUserManager\Stripe\StripeWebhookController::class );
-		$controller = $ref->newInstanceWithoutConstructor();
+	protected function create_webhook_controller( $subscriptions = null ) {
+		// Stands in for the Stripe API: the Checkout Session paid for price_test.
+		$controller = new class() extends \WPUserManager\Stripe\StripeWebhookController {
+			public function __construct() {}
 
-		$subscriptions = $this->createMock( \WPUserManager\Stripe\Controllers\Subscriptions::class );
-		$subscriptions->method( 'where' )->willReturn( null );
+			protected function retrieveSessionLineItem( $session_id ) {
+				return array(
+					'description' => 'Plan',
+					'price'       => array( 'id' => 'price_test', 'type' => 'one_time', 'unit_amount' => 1000 ),
+				);
+			}
+		};
+
+		if ( ! $subscriptions ) {
+			$subscriptions = $this->createMock( \WPUserManager\Stripe\Controllers\Subscriptions::class );
+			$subscriptions->method( 'where' )->willReturn( null );
+		}
 		$this->set_protected( $controller, 'subscriptions', $subscriptions );
 
 		return $controller;
@@ -106,7 +117,7 @@ class PluginDirectoryReviewTest extends WPUMTestCase {
 		$user_id = $this->factory()->user->create( array( 'user_email' => 'buyer' . wp_rand() . '@example.com' ) );
 
 		$user = new \WPUserManager\Stripe\Models\User( $user_id );
-		$user->setPlanMeta( ( new \WPUserManager\Stripe\Models\Product() )->to_array() );
+		$user->setPlanMeta( ( new \WPUserManager\Stripe\Models\Product( 'price_test', array( 'name' => 'Plan' ), array( 'type' => 'one_time', 'unit_amount' => 1000 ) ) )->to_array() );
 
 		return get_userdata( $user_id );
 	}
@@ -116,6 +127,7 @@ class PluginDirectoryReviewTest extends WPUMTestCase {
 			'type' => $type,
 			'data' => array(
 				'object' => array(
+					'id'             => 'cs_test',
 					'customer_email' => $email,
 					'customer'       => 'cus_test',
 					'subscription'   => null,
@@ -221,9 +233,7 @@ class PluginDirectoryReviewTest extends WPUMTestCase {
 
 		$subscriptions = $this->create_unrelated_subscription();
 
-		$ref        = new \ReflectionClass( \WPUserManager\Stripe\StripeWebhookController::class );
-		$controller = $ref->newInstanceWithoutConstructor();
-		$this->set_protected( $controller, 'subscriptions', $subscriptions );
+		$controller = $this->create_webhook_controller( $subscriptions );
 
 		$user    = $this->create_user_with_unpaid_plan();
 		$payload = $this->session_payload( 'checkout.session.completed', $user->user_email, 'paid' );

@@ -157,18 +157,61 @@ class User extends \WP_User {
 	}
 
 	/**
+	 * The Stripe price IDs this user may pay for: their stored plan, their
+	 * subscription's plan, and the plans on the registration form they used.
+	 *
+	 * @return array
+	 */
+	public function getAllowedPlanIds() {
+		$plan_ids = array();
+
+		$product_data = $this->getProductData();
+		if ( is_array( $product_data ) && ! empty( $product_data['id'] ) ) {
+			$plan_ids[] = (string) $product_data['id'];
+		}
+
+		if ( $this->subscription && $this->subscription->plan_id ) {
+			$plan_ids[] = (string) $this->subscription->plan_id;
+		}
+
+		$form = $this->getFormRegisteredWith();
+		if ( $form && $form->exists() ) {
+			$plan_ids = array_merge( $plan_ids, array_map( 'strval', array_filter( (array) $form->get_setting( 'stripe_plan_id' ) ) ) );
+		}
+
+		return apply_filters( 'wpum_stripe_user_allowed_plan_ids', array_values( array_unique( $plan_ids ) ), $this );
+	}
+
+	/**
+	 * Can a payment for this price count towards the user's plan?
+	 * Users with no plan to pay for aren't limited.
+	 *
+	 * @param string $plan_id
+	 *
+	 * @return bool
+	 */
+	public function isPlanAllowed( $plan_id ) {
+		$allowed = $this->getAllowedPlanIds();
+		if ( empty( $allowed ) ) {
+			return ! get_user_meta( $this->ID, 'wpum_stripe_payment_required', true );
+		}
+
+		return in_array( (string) $plan_id, $allowed, true );
+	}
+
+	/**
 	 * @param string $plan
 	 *
 	 * @return bool
 	 */
 	public function hasPaidByPlan( $plan ) {
-		if ( $this->subscription && $plan === $this->subscription->plan_id ) {
+		if ( $this->subscription && $plan === $this->subscription->plan_id && $this->subscription->active() ) {
 			return true;
 		}
 
 		$purchased = $this->getProductData();
 
-		if ( is_array( $purchased ) && $plan === $purchased['id'] ) {
+		if ( is_array( $purchased ) && isset( $purchased['id'] ) && $plan === $purchased['id'] && ! empty( $purchased['paid'] ) ) {
 			return true;
 		}
 

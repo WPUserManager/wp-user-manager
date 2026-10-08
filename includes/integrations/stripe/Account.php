@@ -278,9 +278,11 @@ class Account {
 		do_action( 'wpum_stripe_account_after_notices', $user );
 
 		if ( ( $shouldBeSubscribed && ( ! $user->subscription || ! $user->subscription->active() ) ) || ( ! $shouldBeSubscribed && ! $user->isPaid() ) ) {
+			$allowed_prices = $user->getAllowedPlanIds();
+
 			$plans_data = array(
-				'products'       => $this->products->all(),
-				'allowed_prices' => wpum_get_option( $this->gateway_mode . '_stripe_products', array() ),
+				'products'       => $this->get_products_for_prices( $allowed_prices ),
+				'allowed_prices' => $allowed_prices,
 			);
 			WPUM()->templates
 				->set_template_data( $plans_data )
@@ -309,6 +311,37 @@ class Account {
 			->get_template_part( 'stripe/account/invoices' );
 
 		echo ob_get_clean(); // phpcs:ignore
+	}
+
+	/**
+	 * The Stripe products, with only the given prices, and without products that have none of them.
+	 * Filtered here rather than in the template, so overridden templates can't list other plans.
+	 *
+	 * @param array $price_ids
+	 *
+	 * @return array
+	 * @throws \Stripe\Exception\ApiErrorException
+	 */
+	public function get_products_for_prices( $price_ids ) {
+		$products = array();
+		if ( empty( $price_ids ) ) {
+			return $products;
+		}
+
+		foreach ( (array) $this->products->all() as $key => $product ) {
+			if ( empty( $product['prices'] ) ) {
+				continue;
+			}
+
+			$product['prices'] = array_intersect_key( $product['prices'], array_flip( $price_ids ) );
+			if ( empty( $product['prices'] ) ) {
+				continue;
+			}
+
+			$products[ $key ] = $product;
+		}
+
+		return $products;
 	}
 
 	/**
@@ -395,6 +428,11 @@ class Account {
 		}
 
 		$user = new User( get_current_user_id() );
+
+		// Only the plans this customer signed up for, not every plan on the site.
+		if ( ! in_array( $plan_id, $user->getAllowedPlanIds(), true ) ) {
+			wp_send_json_error( __( 'Unknown plan', 'wp-user-manager' ) );
+		}
 
 		$form = $user->getFormRegisteredWith();
 
