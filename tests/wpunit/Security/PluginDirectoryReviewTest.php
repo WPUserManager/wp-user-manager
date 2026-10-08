@@ -341,6 +341,42 @@ class PluginDirectoryReviewTest extends WPUMTestCase {
 		$this->assertFalse( $this->call_protected( $connect, 'consume_state', array( $forged ) ) );
 	}
 
+	public function test_connect_state_survives_repeated_settings_builds() {
+		$this->create_admin();
+		$connect = new \WPUserManager\Stripe\Connect();
+		$state   = $this->call_protected( $connect, 'get_state', array( true ) );
+
+		// Every REST request builds the settings, and with them both Connect buttons.
+		for ( $i = 0; $i < 20; $i++ ) {
+			$this->call_protected( $connect, 'get_state', array( true ) );
+			$this->call_protected( $connect, 'get_state', array( false ) );
+		}
+
+		$this->assertTrue( $this->call_protected( $connect, 'consume_state', array( $state ) ), 'The state the admin clicked must still be accepted when they return from Stripe' );
+	}
+
+	public function test_connect_state_is_reused_until_consumed() {
+		$this->create_admin();
+		$connect = new \WPUserManager\Stripe\Connect();
+		$test    = $this->call_protected( $connect, 'get_state', array( true ) );
+		$live    = $this->call_protected( $connect, 'get_state', array( false ) );
+
+		$this->assertSame( $test, $this->call_protected( $connect, 'get_state', array( true ) ) );
+		$this->assertNotSame( $test, $live );
+
+		$this->call_protected( $connect, 'consume_state', array( $test ) );
+
+		$this->assertNotSame( $test, $this->call_protected( $connect, 'get_state', array( true ) ), 'A used state must not be issued again' );
+	}
+
+	public function test_connect_accepts_state_issued_before_upgrade() {
+		$admin_id = $this->create_admin();
+		$state    = base64_encode( serialize( array( 'test_mode' => 1, 'site_id' => '42', 'site_url' => 'https://example.test' ) ) ); // phpcs:ignore
+		set_transient( 'wpum_stripe_connect_states_' . $admin_id, array( $state ), DAY_IN_SECONDS );
+
+		$this->assertTrue( $this->call_protected( new \WPUserManager\Stripe\Connect(), 'consume_state', array( $state ) ) );
+	}
+
 	public function test_connect_rejects_state_issued_to_another_admin() {
 		$this->create_admin();
 		$connect = new \WPUserManager\Stripe\Connect();
@@ -355,7 +391,7 @@ class PluginDirectoryReviewTest extends WPUMTestCase {
 		$this->create_admin();
 		$connect = new \WPUserManager\Stripe\Connect();
 		$state   = 'abc+def+ghi=';
-		$this->call_protected( $connect, 'remember_state', array( $state ) );
+		$this->call_protected( $connect, 'remember_state', array( 'test', $state ) );
 
 		$this->assertTrue( $this->call_protected( $connect, 'consume_state', array( 'abc def ghi=' ) ) );
 	}

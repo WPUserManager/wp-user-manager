@@ -109,11 +109,21 @@ class Connect {
 	}
 
 	/**
+	 * The state for a Connect button. The current user's unused state for this
+	 * mode is reused, since the buttons are built on every settings load,
+	 * including every REST request.
+	 *
 	 * @param false $test_mode
 	 *
 	 * @return string
 	 */
 	protected function get_state( $test_mode = false ) {
+		$mode   = $test_mode ? 'test' : 'live';
+		$issued = $this->get_issued_states();
+		if ( isset( $issued[ $mode ]['state'], $issued[ $mode ]['time'] ) && $issued[ $mode ]['time'] > time() - 12 * HOUR_IN_SECONDS ) {
+			return $issued[ $mode ]['state'];
+		}
+
 		$state = array(
 			'test_mode' => (int) $test_mode,
 			'site_id'   => str_pad( wp_rand( wp_rand(), PHP_INT_MAX ), 10, wp_rand(), STR_PAD_BOTH ),
@@ -122,7 +132,7 @@ class Connect {
 
 		$state = base64_encode( serialize( $state ) ); // phpcs:ignore
 
-		$this->remember_state( $state );
+		$this->remember_state( $mode, $state );
 
 		return $state;
 	}
@@ -137,20 +147,36 @@ class Connect {
 	}
 
 	/**
+	 * The states issued to the current user, by mode.
+	 *
+	 * @return array
+	 */
+	protected function get_issued_states() {
+		$states = get_transient( $this->get_states_transient_key() );
+		if ( ! is_array( $states ) ) {
+			return array();
+		}
+
+		// Before 2.9.23 this held a list of states; only the by-mode entries are reused.
+		return array_intersect_key( $states, array_flip( array( 'test', 'live' ) ) );
+	}
+
+	/**
 	 * Record a state issued to the current user so the callback can be tied to it.
 	 *
+	 * @param string $mode  'test' or 'live'.
 	 * @param string $state
 	 */
-	protected function remember_state( $state ) {
+	protected function remember_state( $mode, $state ) {
 		if ( ! get_current_user_id() ) {
 			return;
 		}
 
-		$states = get_transient( $this->get_states_transient_key() );
-		$states = is_array( $states ) ? $states : array();
-
-		$states[] = $state;
-		$states   = array_slice( $states, -10 );
+		$states          = $this->get_issued_states();
+		$states[ $mode ] = array(
+			'state' => $state,
+			'time'  => time(),
+		);
 
 		set_transient( $this->get_states_transient_key(), $states, DAY_IN_SECONDS );
 	}
@@ -172,6 +198,9 @@ class Connect {
 		$state = str_replace( ' ', '+', $state );
 
 		foreach ( $states as $issued ) {
+			// Before 2.9.23 each entry was the state itself.
+			$issued = is_array( $issued ) && isset( $issued['state'] ) ? $issued['state'] : $issued;
+
 			if ( is_string( $issued ) && hash_equals( $issued, $state ) ) {
 				delete_transient( $this->get_states_transient_key() );
 
