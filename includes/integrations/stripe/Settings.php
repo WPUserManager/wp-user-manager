@@ -61,7 +61,7 @@ class Settings {
 	 * @param array $settings
 	 *
 	 * @return array
-	 * @throws \Stripe\Exception\ApiErrorException
+	 * @throws \WPUM\Stripe\Exception\ApiErrorException
 	 */
 	public function register_settings( $settings ) {
 		$settings['stripe'][] = array(
@@ -612,7 +612,7 @@ class Settings {
 			wpum_delete_option( $option );
 		}
 
-		delete_transient( 'wpum_' . $prefix . '_stripe_products' );
+		Products::forget( $prefix );
 
 		$redirect = remove_query_arg(
 			array(

@@ -241,7 +241,7 @@ class Billing {
 	 * @param null|string $returnUrl
 	 *
 	 * @return PortalSession|false
-	 * @throws \Stripe\Exception\ApiErrorException
+	 * @throws \WPUM\Stripe\Exception\ApiErrorException
 	 */
 	public function createStripePortalSession( $secret, $customer_id, $returnUrl = null ) {
 		Stripe::setApiKey( $secret );
@@ -255,7 +255,7 @@ class Billing {
 				'customer'   => $customer_id,
 				'return_url' => $returnUrl,
 			) );
-		} catch ( \Stripe\Exception\ApiErrorException $exception ) {
+		} catch ( \WPUM\Stripe\Exception\ApiErrorException $exception ) {
 			return false;
 		}
 	}

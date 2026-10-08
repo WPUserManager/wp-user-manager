@@ -9,6 +9,8 @@
 
 namespace WPUserManager\Stripe;
 
+use WPUserManager\Stripe\Controllers\Products;
+
 /**
  * Connect
  */
@@ -399,7 +401,7 @@ class Connect {
 		// A new connection has new keys, so an earlier checkout error no longer applies.
 		$this->clear_checkout_error( $gateway_mode );
 
-		delete_transient( 'wpum_' . $gateway_mode . '_stripe_products' );
+		Products::forget( $gateway_mode );
 
 		wpum_update_option( 'stripe_connect_account_id', sanitize_text_field( $data['stripe_user_id'] ) );
 		wp_safe_redirect( $this->get_site_url() . '/#stripe' );

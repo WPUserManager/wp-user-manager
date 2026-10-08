@@ -239,7 +239,7 @@ class Account {
 	/**
 	 * Account content
 	 *
-	 * @throws \Stripe\Exception\ApiErrorException
+	 * @throws \WPUM\Stripe\Exception\ApiErrorException
 	 */
 	public function account_tab_content() {
 		ob_start();
@@ -320,7 +320,7 @@ class Account {
 	 * @param array $price_ids
 	 *
 	 * @return array
-	 * @throws \Stripe\Exception\ApiErrorException
+	 * @throws \WPUM\Stripe\Exception\ApiErrorException
 	 */
 	public function get_products_for_prices( $price_ids ) {
 		$products = array();
@@ -346,7 +346,7 @@ class Account {
 
 	/**
 	 * @return void
-	 * @throws \Stripe\Exception\ApiErrorException
+	 * @throws \WPUM\Stripe\Exception\ApiErrorException
 	 */
 	public function handle_download_invoice() {
 		$id = filter_input( INPUT_GET, 'invoice_id', FILTER_VALIDATE_INT );
@@ -384,7 +384,7 @@ class Account {
 	}
 
 	/**
-	 * @throws \Stripe\Exception\ApiErrorException
+	 * @throws \WPUM\Stripe\Exception\ApiErrorException
 	 */
 	public function handle_manage_billing() {
 		$nonce = filter_input( INPUT_POST, 'nonce', FILTER_UNSAFE_RAW );

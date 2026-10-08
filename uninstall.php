@@ -51,6 +51,8 @@ $options_to_delete = array(
 	'wpum_version_upgraded_from',
 	'wpum_completed_upgrades',
 	'wpum_setup_is_complete',
+	'wpum_test_stripe_products_last_good',
+	'wpum_live_stripe_products_last_good',
 );
 
 foreach ( $options_to_delete as $option ) {
