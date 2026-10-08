@@ -1,6 +1,8 @@
 import { type Page } from '@playwright/test';
 import { execSync } from 'child_process';
 import { createHash, createDecipheriv } from 'crypto';
+import * as fs from 'fs';
+import * as path from 'path';
 import { wpCli } from '../fixtures';
 
 /**
@@ -78,13 +80,13 @@ export function configureStripeSettings(
   publishableKey: string,
   secretKey: string,
   webhookSecret: string,
-  priceId: string
+  priceIds: string | string[]
 ): void {
   wpCli(`eval 'wpum_update_option("stripe_gateway_mode", "test");'`);
   wpCli(`eval 'wpum_update_option("test_stripe_publishable_key", "${publishableKey}");'`);
   wpCli(`eval 'wpum_update_option("test_stripe_secret_key", "${secretKey}");'`);
   wpCli(`eval 'wpum_update_option("test_stripe_webhook_secret", "${webhookSecret}");'`);
-  wpCli(`eval 'wpum_update_option("test_stripe_products", array("${priceId}"));'`);
+  wpCli(`eval 'wpum_update_option("test_stripe_products", array(${phpStringList(priceIds)}));'`);
   // Clear the products transient so WPUM fetches fresh data from Stripe
   wpCli(`eval 'delete_transient("wpum_test_stripe_products");'`);
 }
@@ -93,17 +95,22 @@ export function configureStripeSettings(
  * Create a Stripe test product and price via the Stripe CLI.
  * Returns the product ID and price ID.
  */
-export function createStripeTestProduct(): { productId: string; priceId: string } {
+export function createStripeTestProduct(
+  name = 'WPUM E2E Test Plan',
+  unitAmount = 999,
+  recurring = true
+): { productId: string; priceId: string } {
   const secretKey = process.env.STRIPE_SECRET_KEY!;
 
   const productJson = execSync(
-    `stripe products create --name="WPUM E2E Test Plan" --api-key="${secretKey}"`,
+    `stripe products create --name="${name}" --api-key="${secretKey}"`,
     { encoding: 'utf-8', stdio: ['pipe', 'pipe', 'pipe'] }
   );
   const product = JSON.parse(productJson);
 
+  const interval = recurring ? ' -d "recurring[interval]=month"' : '';
   const priceJson = execSync(
-    `stripe prices create -d product="${product.id}" -d unit_amount=999 -d currency=usd -d "recurring[interval]=month" --api-key="${secretKey}"`,
+    `stripe prices create -d product="${product.id}" -d unit_amount=${unitAmount} -d currency=usd${interval} --api-key="${secretKey}"`,
     { encoding: 'utf-8', stdio: ['pipe', 'pipe', 'pipe'] }
   );
   const price = JSON.parse(priceJson);
@@ -185,13 +192,13 @@ export function cleanupStripeCustomer(email: string): void {
  * Configure the default WPUM registration form to include a Stripe plan.
  * Registration forms are stored in a custom DB table (not a CPT).
  */
-export function configureRegistrationFormWithStripe(priceId: string): void {
+export function configureRegistrationFormWithStripe(priceIds: string | string[]): void {
   wpCli(
     `eval '
       $forms = WPUM()->registration_forms->get_forms();
       if (empty($forms)) { WP_CLI::error("No WPUM registration forms found"); }
       $form = new WPUM_Registration_Form($forms[0]->id);
-      $form->update_meta("stripe_plan_id", array("${priceId}"));
+      $form->update_meta("stripe_plan_id", array(${phpStringList(priceIds)}));
     '`
   );
 }
@@ -212,4 +219,132 @@ export function removeStripeFromRegistrationForm(): void {
   } catch {
     // Form may not exist
   }
+}
+
+/**
+ * A PHP array body of double-quoted strings, for wp eval.
+ */
+function phpStringList(values: string | string[]): string {
+  return (Array.isArray(values) ? values : [values]).map((v) => `"${v}"`).join(', ');
+}
+
+/**
+ * Copy one of the helper mu-plugins in tests/e2e/helpers/mu-plugins into the
+ * test site. tests/mu-plugins is mapped to wp-content/mu-plugins by .wp-env.json.
+ */
+export function installE2eMuPlugin(file: string): void {
+  const root = process.env.WPUM_PLUGIN_DIR || process.cwd();
+  const target = path.join(root, 'tests', 'mu-plugins');
+  fs.mkdirSync(target, { recursive: true });
+  fs.copyFileSync(path.join(__dirname, 'mu-plugins', file), path.join(target, file));
+}
+
+export function removeE2eMuPlugin(file: string): void {
+  const root = process.env.WPUM_PLUGIN_DIR || process.cwd();
+  fs.rmSync(path.join(root, 'tests', 'mu-plugins', file), { force: true });
+}
+
+/**
+ * A Contributor who registered on the default form for a one-time plan and
+ * hasn't paid. Needs wpum-e2e-stripe.php installed.
+ */
+export function createUnpaidCustomer(
+  login: string,
+  email: string,
+  password: string,
+  priceId: string,
+  amount: number
+): void {
+  const id = wpCli(
+    `eval 'echo wpum_e2e_create_unpaid_customer("${login}", "${email}", "${password}", "${priceId}", ${amount});'`
+  );
+  if (!id.match(/^\d+$/) || id === '0') {
+    throw new Error(`Could not create unpaid customer ${login}: ${id}`);
+  }
+}
+
+export type PlanState = {
+  exists: boolean;
+  plan?: string | null;
+  paid?: boolean;
+  subscribed?: boolean;
+  subscription_plan?: string | null;
+  can_edit_posts?: boolean;
+  rejected?: string;
+};
+
+/**
+ * The user's stored Stripe plan and access. Needs wpum-e2e-stripe.php installed.
+ */
+export function getPlanState(login: string): PlanState {
+  const out = wpCli(`eval 'echo wpum_e2e_plan_state("${login}");'`);
+  const json = out.slice(out.indexOf('{'));
+  return JSON.parse(json);
+}
+
+/**
+ * Poll the user's plan state until the condition holds, for webhooks forwarded by stripe listen.
+ */
+export async function waitForPlanState(
+  login: string,
+  condition: (state: PlanState) => boolean,
+  timeout = 90_000
+): Promise<PlanState> {
+  const start = Date.now();
+  let state = getPlanState(login);
+  while (!condition(state)) {
+    if (Date.now() - start > timeout) {
+      throw new Error(`Plan state for ${login} did not change in time: ${JSON.stringify(state)}`);
+    }
+    await new Promise((r) => setTimeout(r, 3_000));
+    state = getPlanState(login);
+  }
+  return state;
+}
+
+/**
+ * Create a Checkout Session for any price straight from the Stripe API, as a direct call to
+ * the Connect server's /checkout endpoint can, without going through the site. Returns its URL.
+ */
+export function createDirectCheckoutSession(priceId: string, email: string): string {
+  const secretKey = process.env.STRIPE_SECRET_KEY!;
+  const json = execSync(
+    `stripe checkout sessions create -d mode=payment -d "line_items[0][price]=${priceId}" -d "line_items[0][quantity]=1" -d "payment_method_types[0]=card" -d success_url=http://localhost:8889/ -d customer_email="${email}" --api-key="${secretKey}"`,
+    { encoding: 'utf-8', stdio: ['pipe', 'pipe', 'pipe'] }
+  );
+  return JSON.parse(json).url;
+}
+
+/**
+ * Pay on a Stripe hosted Checkout page with a test card and wait to come back to the site.
+ */
+export async function payOnStripeCheckout(page: Page): Promise<void> {
+  await page.waitForURL(/checkout\.stripe\.com/, { timeout: 30000 });
+
+  // Accessibility selectors work reliably with Stripe's hosted checkout.
+  await page.getByLabel('Card number').waitFor({ timeout: 15000 });
+  await page.getByLabel('Card number').fill('4242424242424242');
+  await page.getByLabel('Expiration').fill('12 / 30');
+  await page.getByRole('textbox', { name: 'CVC' }).fill('123');
+
+  const cardholderName = page.getByLabel('Cardholder name');
+  if (await cardholderName.isVisible({ timeout: 2000 }).catch(() => false)) {
+    await cardholderName.fill('E2E Test User');
+  }
+
+  // The label is "ZIP" when US is selected, "Postal code" for other countries.
+  const zipField = page.getByRole('textbox', { name: /ZIP|Postal code/i });
+  if (await zipField.isVisible({ timeout: 2000 }).catch(() => false)) {
+    await zipField.fill('10001');
+  }
+
+  // Unchecking "Save my information" avoids the phone number requirement.
+  const saveInfoCheckbox = page.getByLabel('Save my information for faster checkout');
+  if (await saveInfoCheckbox.isChecked({ timeout: 2000 }).catch(() => false)) {
+    await saveInfoCheckbox.uncheck();
+  }
+
+  await page.getByRole('button', { name: /subscribe|pay/i }).click();
+
+  await page.waitForURL((url) => !url.hostname.includes('stripe.com'), { timeout: 60000 });
 }

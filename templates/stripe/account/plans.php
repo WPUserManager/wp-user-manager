@@ -4,7 +4,7 @@
  *
  * This template can be overridden by copying it to yourtheme/wpum/stripe/account/plans.php
  *
- * @version 2.9.0
+ * @version 2.9.23
  */
 
 ?>
@@ -26,7 +26,7 @@ foreach ( $data->products as $product ) :
 		<div class="wpum-col-xs-3">
 			<?php
 			foreach ( $product['prices'] as $price_id => $price ) :
-				if ( ! empty( $allowed_prices ) && ! in_array( $price_id, $data->allowed_prices, true ) ) {
+				if ( ! empty( $data->allowed_prices ) && ! in_array( $price_id, $data->allowed_prices, true ) ) {
 					continue;
 				}
 				?>
