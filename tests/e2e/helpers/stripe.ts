@@ -338,8 +338,9 @@ export async function payOnStripeCheckout(page: Page): Promise<void> {
     await zipField.fill('10001');
   }
 
-  // Unchecking "Save my information" avoids the phone number requirement.
-  const saveInfoCheckbox = page.getByLabel('Save my information for faster checkout');
+  // Unchecking "Save my information" avoids the phone number requirement. Since Oct 2026
+  // the label is "Save my information with Link for faster checkout", ticked by default.
+  const saveInfoCheckbox = page.getByLabel(/Save my information/i);
   if (await saveInfoCheckbox.isChecked({ timeout: 2000 }).catch(() => false)) {
     await saveInfoCheckbox.uncheck();
   }
