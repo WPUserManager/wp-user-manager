@@ -101,6 +101,32 @@ class WPUM_Field_File extends WPUM_Field_Type {
 	}
 
 	/**
+	 * Get the mime types an upload to this field may have, keyed by extension pattern.
+	 *
+	 * @param array $field
+	 *
+	 * @return array
+	 */
+	public function get_allowed_upload_mime_types( $field ) {
+		$allowed_mime_types = wpum_get_allowed_mime_types();
+		if ( ! empty( $field['allowed_mime_types'] ) ) {
+			$extensions         = explode( ',', $field['allowed_mime_types'] );
+			$allowed_mime_types = array();
+			foreach ( $extensions as $extension ) {
+				$extension = strtolower( trim( str_replace( '.', '', $extension ) ) );
+				foreach ( get_allowed_mime_types() as $allowed_ext => $allowed_mime_type ) {
+					if ( in_array( $extension, explode( '|', $allowed_ext ), true ) ) {
+						$allowed_mime_types[ $allowed_ext ] = $allowed_mime_type;
+						break;
+					}
+				}
+			}
+		}
+
+		return $allowed_mime_types;
+	}
+
+	/**
 	 * Handles the uploading of files.
 	 *
 	 * @param string $field_key
@@ -110,21 +136,8 @@ class WPUM_Field_File extends WPUM_Field_Type {
 	 */
 	protected function upload_file( $field_key, $field ) {
 		if ( ! empty( $_FILES[ $field_key ] ) && ! empty( $_FILES[ $field_key ]['name'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce verified in parent form handler.
-			$allowed_mime_types = wpum_get_allowed_mime_types();
-			if ( ! empty( $field['allowed_mime_types'] ) ) {
-				$extensions         = explode( ',', $field['allowed_mime_types'] );
-				$allowed_mime_types = array();
-				foreach ( $extensions as $extension ) {
-					$extension = strtolower( trim( str_replace( '.', '', $extension ) ) );
-					foreach ( get_allowed_mime_types() as $allowed_ext => $allowed_mime_type ) {
-						if ( in_array( $extension, explode( '|', $allowed_ext ), true ) ) {
-							$allowed_mime_types[ $allowed_ext ] = $allowed_mime_type;
-							break;
-						}
-					}
-				}
-			}
-			$file_urls       = array();
+			$allowed_mime_types = $this->get_allowed_upload_mime_types( $field );
+			$file_urls          = array();
 			$files_to_upload = wpum_prepare_uploaded_files( $_FILES[ $field_key ] ); // phpcs:ignore
 			foreach ( $files_to_upload as $file_to_upload ) {
 				// Determine max file size for the avatar field.

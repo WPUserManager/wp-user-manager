@@ -70,6 +70,7 @@ class WPUM_Fields {
 			'taxonomy',
 			'user',
 			'userrole',
+			'image',
 		) );
 
 		foreach ( $fields as $field ) {
