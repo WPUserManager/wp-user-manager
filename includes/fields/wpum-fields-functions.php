@@ -643,3 +643,69 @@ function wpum_sanitize_text( $data ) {
 
 	return sanitize_text_field( $data );
 }
+
+/**
+ * Retrieve the list of US states used by the US States field type.
+ *
+ * The 50 states plus the District of Columbia, keyed by their two letter USPS code.
+ * Territories can be added with the `wpum_us_states` filter.
+ *
+ * @return array
+ */
+function wpum_get_us_states() {
+	$states = array(
+		'AL' => __( 'Alabama', 'wp-user-manager' ),
+		'AK' => __( 'Alaska', 'wp-user-manager' ),
+		'AZ' => __( 'Arizona', 'wp-user-manager' ),
+		'AR' => __( 'Arkansas', 'wp-user-manager' ),
+		'CA' => __( 'California', 'wp-user-manager' ),
+		'CO' => __( 'Colorado', 'wp-user-manager' ),
+		'CT' => __( 'Connecticut', 'wp-user-manager' ),
+		'DE' => __( 'Delaware', 'wp-user-manager' ),
+		'DC' => __( 'District of Columbia', 'wp-user-manager' ),
+		'FL' => __( 'Florida', 'wp-user-manager' ),
+		'GA' => __( 'Georgia', 'wp-user-manager' ),
+		'HI' => __( 'Hawaii', 'wp-user-manager' ),
+		'ID' => __( 'Idaho', 'wp-user-manager' ),
+		'IL' => __( 'Illinois', 'wp-user-manager' ),
+		'IN' => __( 'Indiana', 'wp-user-manager' ),
+		'IA' => __( 'Iowa', 'wp-user-manager' ),
+		'KS' => __( 'Kansas', 'wp-user-manager' ),
+		'KY' => __( 'Kentucky', 'wp-user-manager' ),
+		'LA' => __( 'Louisiana', 'wp-user-manager' ),
+		'ME' => __( 'Maine', 'wp-user-manager' ),
+		'MD' => __( 'Maryland', 'wp-user-manager' ),
+		'MA' => __( 'Massachusetts', 'wp-user-manager' ),
+		'MI' => __( 'Michigan', 'wp-user-manager' ),
+		'MN' => __( 'Minnesota', 'wp-user-manager' ),
+		'MS' => __( 'Mississippi', 'wp-user-manager' ),
+		'MO' => __( 'Missouri', 'wp-user-manager' ),
+		'MT' => __( 'Montana', 'wp-user-manager' ),
+		'NE' => __( 'Nebraska', 'wp-user-manager' ),
+		'NV' => __( 'Nevada', 'wp-user-manager' ),
+		'NH' => __( 'New Hampshire', 'wp-user-manager' ),
+		'NJ' => __( 'New Jersey', 'wp-user-manager' ),
+		'NM' => __( 'New Mexico', 'wp-user-manager' ),
+		'NY' => __( 'New York', 'wp-user-manager' ),
+		'NC' => __( 'North Carolina', 'wp-user-manager' ),
+		'ND' => __( 'North Dakota', 'wp-user-manager' ),
+		'OH' => __( 'Ohio', 'wp-user-manager' ),
+		'OK' => __( 'Oklahoma', 'wp-user-manager' ),
+		'OR' => __( 'Oregon', 'wp-user-manager' ),
+		'PA' => __( 'Pennsylvania', 'wp-user-manager' ),
+		'RI' => __( 'Rhode Island', 'wp-user-manager' ),
+		'SC' => __( 'South Carolina', 'wp-user-manager' ),
+		'SD' => __( 'South Dakota', 'wp-user-manager' ),
+		'TN' => __( 'Tennessee', 'wp-user-manager' ),
+		'TX' => __( 'Texas', 'wp-user-manager' ),
+		'UT' => __( 'Utah', 'wp-user-manager' ),
+		'VT' => __( 'Vermont', 'wp-user-manager' ),
+		'VA' => __( 'Virginia', 'wp-user-manager' ),
+		'WA' => __( 'Washington', 'wp-user-manager' ),
+		'WV' => __( 'West Virginia', 'wp-user-manager' ),
+		'WI' => __( 'Wisconsin', 'wp-user-manager' ),
+		'WY' => __( 'Wyoming', 'wp-user-manager' ),
+	);
+
+	return apply_filters( 'wpum_us_states', $states );
+}
