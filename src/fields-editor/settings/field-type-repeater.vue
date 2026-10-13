@@ -158,17 +158,9 @@ export default {
 		this.labels.fields_create = this.labels.repeater_fields_create;
 	},
 	created(){
-		this.repeater = wpumFieldsEditor.fields_types.advanced.fields.find((field) => field.type === 'repeater')
-		if(this.repeater){
-			wpumFieldsEditor.fields_types.advanced.fields = wpumFieldsEditor.fields_types.advanced.fields.filter((field) => field.type !== 'repeater')
-		}
-
 		this.getFields()
 	},
 	destroyed(){
-		if(this.repeater){
-			wpumFieldsEditor.fields_types.advanced.fields.push(this.repeater)
-		}
 		this.labels.fields_add_new = this.clonedLabels.fields_add_new;
 		this.labels.fields_create  = this.clonedLabels.fields_create;
 	}
