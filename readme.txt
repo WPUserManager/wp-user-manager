@@ -8,7 +8,7 @@ Tested up to: 7.1
 Requires PHP: 7.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
-Stable Tag: 2.9.24
+Stable Tag: 2.9.25
 
 Registration forms, a frontend login form, user profiles and a member directory for WordPress. Add Stripe payments and content restriction.
 
@@ -166,6 +166,12 @@ Please note that using WPUM and the mentioned add-ons does NOT guarantee complia
 13. Login form.
 
 == Changelog ==
+
+= 2.9.25 (13th October 2026) =
+
+- Security: "Prevent site access to visitors" can no longer be bypassed with a URL that only looks like a REST API request (thanks to Truebird via Patchstack for responsible disclosure)
+- Security: With site access prevented, the password reset page's child pages are no longer open to visitors
+- Fix: With plain permalinks and site access prevented, REST API requests such as the Stripe webhook are no longer redirected to the login page
 
 = 2.9.24 (8th October 2026) =
 
