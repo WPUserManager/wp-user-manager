@@ -678,9 +678,75 @@ function wpum_reset_password_redirect() {
 	$url = remove_query_arg( array( 'key', 'login', 'action' ) );
 	$url = add_query_arg( 'step', 'reset', $url );
 
+	nocache_headers();
 	wp_safe_redirect( $url );
 	exit;
 }
+
+/**
+ * Should the current request be kept out of page and browser caches?
+ *
+ * True for the login, registration, password recovery and account pages, and
+ * for any page that holds one of their shortcodes. Their output depends on
+ * nonces, cookies or the visitor, so a cached copy breaks the forms, e.g. a
+ * stale password reset error until the page is refreshed (#304).
+ *
+ * @return bool
+ */
+function wpum_is_uncacheable_request() {
+	$uncacheable = false;
+
+	foreach ( array( 'login', 'register', 'password', 'account' ) as $core_page ) {
+		$page_id = wpum_get_core_page_id( $core_page );
+
+		if ( $page_id && is_page( $page_id ) ) {
+			$uncacheable = true;
+			break;
+		}
+	}
+
+	if ( ! $uncacheable && is_singular() ) {
+		$post = get_post();
+
+		if ( $post ) {
+			foreach ( array( 'wpum_login_form', 'wpum_register', 'wpum_password_recovery', 'wpum_account' ) as $shortcode ) {
+				if ( has_shortcode( $post->post_content, $shortcode ) ) {
+					$uncacheable = true;
+					break;
+				}
+			}
+		}
+	}
+
+	/**
+	 * Filter whether the current request is kept out of page and browser caches.
+	 *
+	 * @param bool $uncacheable
+	 */
+	return (bool) apply_filters( 'wpum_is_uncacheable_request', $uncacheable );
+}
+
+/**
+ * Keep WPUM form pages out of page caches and browser caches (#117).
+ *
+ * DONOTCACHEPAGE is honoured by the common page cache plugins.
+ *
+ * @return void
+ */
+function wpum_prevent_caching_form_pages() {
+	if ( ! wpum_is_uncacheable_request() ) {
+		return;
+	}
+
+	if ( ! defined( 'DONOTCACHEPAGE' ) ) {
+		define( 'DONOTCACHEPAGE', true );
+	}
+
+	if ( ! headers_sent() ) {
+		nocache_headers();
+	}
+}
+add_action( 'template_redirect', 'wpum_prevent_caching_form_pages', 0 );
 
 /**
  * @param int $user_id
