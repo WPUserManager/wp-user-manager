@@ -167,7 +167,7 @@ Please note that using WPUM and the mentioned add-ons does NOT guarantee complia
 
 == Changelog ==
 
-= 2.9.25 (13th October 2026) =
+= 2.9.25 (14th October 2026) =
 
 - Security: "Prevent site access to visitors" can no longer be bypassed with a URL that only looks like a REST API request (thanks to Truebird via Patchstack for responsible disclosure)
 - Security: With site access prevented, the password reset page's child pages are no longer open to visitors
