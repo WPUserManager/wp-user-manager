@@ -106,6 +106,14 @@ abstract class WPUM_Field_Type {
 	protected $default_type = 'input';
 
 	/**
+	 * Does the field's template show a placeholder? If not, the editor hides
+	 * the Placeholder setting.
+	 *
+	 * @var bool
+	 */
+	protected $supports_placeholder = true;
+
+	/**
 	 * @var bool|string
 	 */
 	public $min_addon_version = false;
@@ -304,6 +312,10 @@ abstract class WPUM_Field_Type {
 				'label'     => esc_html__( 'Default Value', 'wp-user-manager' ),
 				'model'     => 'default_value',
 			);
+		}
+
+		if ( ! $this->supports_placeholder ) {
+			unset( $settings['general']['placeholder'] );
 		}
 
 		return apply_filters( 'wpum_register_field_type_settings', $settings, $this->type );
