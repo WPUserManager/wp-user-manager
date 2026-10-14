@@ -406,7 +406,11 @@ function wpum_prevent_entire_site() {
 		return;
 	}
 
-	if ( wpum_is_rest_api_request() ) {
+	// A real REST request is served on parse_request (priority 10) and checked by
+	// wpum_prevent_entire_site_rest(). Check anything that only looks like one again
+	// straight after, so text in the URL can't skip the lock.
+	if ( ! doing_action( 'parse_request' ) && wpum_is_rest_api_request() ) {
+		add_action( 'parse_request', 'wpum_prevent_entire_site', 11 );
 		return;
 	}
 
@@ -436,8 +440,13 @@ function wpum_prevent_entire_site() {
 
 	$password_reset_page_id = wpum_get_core_page_id( 'password' );
 	if ( ! empty( $password_reset_page_id ) ) {
-		$password_reset_page = get_permalink( $password_reset_page_id );
-		if ( 0 === strpos( $requested_url, $password_reset_page ) ) {
+		if ( doing_action( 'wp' ) ) {
+			if ( is_page( $password_reset_page_id ) ) {
+				return;
+			}
+		} elseif ( wpum_is_request_for_url( get_permalink( $password_reset_page_id ) ) ) {
+			// Query arguments can change which page is served, so check once the query has run.
+			add_action( 'wp', 'wpum_prevent_entire_site', 0 );
 			return;
 		}
 	}

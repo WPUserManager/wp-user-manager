@@ -1393,11 +1393,58 @@ function wpum_strip_slashes( $content ) {
  * @return bool
  */
 function wpum_is_rest_api_request() {
-	if ( empty( $_SERVER['REQUEST_URI'] ) ) {
+	if ( defined( 'REST_REQUEST' ) && REST_REQUEST ) {
+		return true;
+	}
+
+	if ( ! empty( $_GET['rest_route'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		return true;
+	}
+
+	if ( empty( $_SERVER['REQUEST_URI'] ) || ! get_option( 'permalink_structure' ) ) {
 		return false;
 	}
 
-	$rest_prefix = trailingslashit( rest_get_url_prefix() );
+	// Only the path counts: the query string can contain anything.
+	$request_path = wp_parse_url( wp_unslash( $_SERVER['REQUEST_URI'] ), PHP_URL_PATH ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+	$rest_path    = wp_parse_url( trailingslashit( get_rest_url() ), PHP_URL_PATH );
 
-	return ( false !== strpos( $_SERVER['REQUEST_URI'], $rest_prefix ) ); // phpcs:ignore
+	if ( ! is_string( $request_path ) || ! is_string( $rest_path ) ) {
+		return false;
+	}
+
+	return 0 === strpos( trailingslashit( $request_path ), $rest_path );
+}
+
+/**
+ * Returns true if the request's path is the URL's path and the request has every
+ * query argument the URL has (for plain permalinks). Extra query arguments are
+ * allowed, so this can't say which post WordPress will serve: once the query has
+ * run, check the queried object.
+ *
+ * @param string $url
+ *
+ * @return bool
+ */
+function wpum_is_request_for_url( $url ) {
+	if ( empty( $_SERVER['REQUEST_URI'] ) || empty( $url ) ) {
+		return false;
+	}
+
+	$request_path = wp_parse_url( wp_unslash( $_SERVER['REQUEST_URI'] ), PHP_URL_PATH ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+	$url_path     = wp_parse_url( $url, PHP_URL_PATH );
+
+	if ( ! is_string( $request_path ) || untrailingslashit( rawurldecode( $request_path ) ) !== untrailingslashit( rawurldecode( (string) $url_path ) ) ) {
+		return false;
+	}
+
+	wp_parse_str( (string) wp_parse_url( $url, PHP_URL_QUERY ), $url_args );
+
+	foreach ( $url_args as $key => $value ) {
+		if ( ! isset( $_GET[ $key ] ) || ! is_string( $_GET[ $key ] ) || wp_unslash( $_GET[ $key ] ) !== (string) $value ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+			return false;
+		}
+	}
+
+	return true;
 }
