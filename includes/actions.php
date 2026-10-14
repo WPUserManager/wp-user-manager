@@ -356,6 +356,19 @@ add_filter( 'user_row_actions', 'wpum_admin_user_action_link', 10, 2 );
 function wpum_complete_setup() {
 	if ( ! get_option( 'wpum_setup_is_complete' ) && ! get_option( 'wpum_version_upgraded_from' ) ) {
 
+		// Overlapping requests right after activation can all get here, so only one
+		// may run the setup. Otherwise the default data is installed twice (#136).
+		if ( ! wpum_create_setup_lock() ) {
+			return;
+		}
+
+		// Another request may have finished the setup after this one loaded its options.
+		if ( wpum_setup_is_complete_in_db() ) {
+			wpum_release_setup_lock();
+
+			return;
+		}
+
 		wpum_install_default_field_group();
 
 		$fields = wpum_install_fields();
@@ -368,7 +381,63 @@ function wpum_complete_setup() {
 
 		update_option( 'wpum_setup_is_complete', true );
 
+		wpum_release_setup_lock();
 	}
+}
+
+/**
+ * Take the lock for the first-run setup. Uses INSERT IGNORE so only one request
+ * can win, the same approach as WP_Upgrader::create_lock(). A lock older than
+ * the timeout is treated as left behind by a failed request and replaced.
+ *
+ * @param int $timeout Seconds before an existing lock is considered stale.
+ *
+ * @return bool True if this request holds the lock.
+ */
+function wpum_create_setup_lock( $timeout = 300 ) {
+	global $wpdb;
+
+	$lock_option = 'wpum_setup_lock';
+
+	$created = $wpdb->query( $wpdb->prepare( "INSERT IGNORE INTO `$wpdb->options` ( `option_name`, `option_value`, `autoload` ) VALUES ( %s, %s, 'no' )", $lock_option, time() ) ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery
+
+	if ( $created ) {
+		return true;
+	}
+
+	$locked_at = (int) $wpdb->get_var( $wpdb->prepare( "SELECT option_value FROM `$wpdb->options` WHERE option_name = %s", $lock_option ) ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery
+
+	if ( $locked_at > time() - $timeout ) {
+		return false;
+	}
+
+	// Stale lock: take it over only if no other request did so first.
+	$updated = $wpdb->query( $wpdb->prepare( "UPDATE `$wpdb->options` SET option_value = %s WHERE option_name = %s AND option_value = %s", time(), $lock_option, $locked_at ) ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery
+
+	return (bool) $updated;
+}
+
+/**
+ * Release the first-run setup lock.
+ *
+ * @return void
+ */
+function wpum_release_setup_lock() {
+	global $wpdb;
+
+	$wpdb->delete( $wpdb->options, array( 'option_name' => 'wpum_setup_lock' ) ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery
+}
+
+/**
+ * Check the setup flag in the database, bypassing the options cache, which can
+ * be stale when another request finished the setup during this one.
+ *
+ * @return bool
+ */
+function wpum_setup_is_complete_in_db() {
+	global $wpdb;
+
+	return (bool) $wpdb->get_var( $wpdb->prepare( "SELECT option_value FROM `$wpdb->options` WHERE option_name = %s", 'wpum_setup_is_complete' ) ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery
 }
 
 /**
