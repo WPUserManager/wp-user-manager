@@ -186,4 +186,22 @@ class StripePlanAllowlistTest extends RegistrationTestCase {
 		$stripe_user = new \WPUserManager\Stripe\Models\User( $user_id );
 		$this->assertEmpty( $stripe_user->getPlanMeta() );
 	}
+
+	public function test_plan_field_has_a_label() {
+		$fields = $this->stripe_registration->inject_registration_fields( array(), $this->registration_form );
+
+		$this->assertSame( 'Plan', $fields['wpum_stripe_plan']['label'], 'The plan choice showed only a required asterisk' );
+	}
+
+	public function test_plan_field_label_can_be_filtered() {
+		$label = function () {
+			return 'Membership';
+		};
+		add_filter( 'wpum_stripe_registration_label', $label );
+
+		$fields = $this->stripe_registration->inject_registration_fields( array(), $this->registration_form );
+		remove_filter( 'wpum_stripe_registration_label', $label );
+
+		$this->assertSame( 'Membership', $fields['wpum_stripe_plan']['label'] );
+	}
 }

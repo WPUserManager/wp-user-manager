@@ -152,7 +152,7 @@ class Registration {
 		}
 
 		$fields['wpum_stripe_plan'] = array(
-			'label'       => apply_filters( 'wpum_stripe_registration_label', '', $registration_form ),
+			'label'       => apply_filters( 'wpum_stripe_registration_label', __( 'Plan', 'wp-user-manager' ), $registration_form ),
 			'type'        => 'radio',
 			'required'    => true,
 			'options'     => $options,
