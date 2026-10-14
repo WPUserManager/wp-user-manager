@@ -187,6 +187,8 @@ if ( ! class_exists( 'WP_User_Manager' ) ) :
 				return;
 			}
 
+			add_action( 'admin_notices', array( $this, 'missing_php_extensions_notice' ) );
+
 			$this->setup_constants();
 
 			$this->autoload_options();
@@ -594,13 +596,53 @@ if ( ! class_exists( 'WP_User_Manager' ) ) :
 			$requirements_check = new \WPUM\WP_Requirements_Check(
 				array(
 					'title' => 'WP User Manager',
-					'php'   => '5.5',
-					'wp'    => '4.7',
+					'php'   => '7.4',
+					'wp'    => '4.9',
 					'file'  => $this->plugin_file,
 				)
 			);
 
 			return $requirements_check->passes();
+		}
+
+		/**
+		 * PHP extensions that are missing from this server but needed by the
+		 * plugin or its bundled libraries, such as stripe-php.
+		 *
+		 * @return array
+		 */
+		public static function get_missing_php_extensions() {
+			$required = apply_filters( 'wpum_required_php_extensions', array( 'mbstring' ) );
+
+			return array_values( array_filter( (array) $required, function ( $extension ) {
+				return ! extension_loaded( $extension );
+			} ) );
+		}
+
+		/**
+		 * Warn admins when a required PHP extension is missing. The plugin keeps
+		 * running, because only some features depend on it.
+		 *
+		 * @return void
+		 */
+		public function missing_php_extensions_notice() {
+			if ( ! current_user_can( 'manage_options' ) ) {
+				return;
+			}
+
+			$missing = self::get_missing_php_extensions();
+
+			if ( empty( $missing ) ) {
+				return;
+			}
+
+			$message = sprintf(
+				/* translators: %s: comma separated list of PHP extension names */
+				esc_html__( 'WP User Manager needs the PHP %s extension, which is not enabled on this server. Stripe payments and some other features may not work until it is. Please ask your host to enable it.', 'wp-user-manager' ),
+				'<code>' . implode( '</code>, <code>', array_map( 'esc_html', $missing ) ) . '</code>'
+			);
+
+			echo '<div class="notice notice-error"><p>' . wp_kses_post( $message ) . '</p></div>';
 		}
 
 		/**
