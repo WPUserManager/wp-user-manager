@@ -343,7 +343,7 @@ class WPUM_Roles_Editor {
 		$role_name = filter_input( INPUT_POST, 'role_name', FILTER_UNSAFE_RAW );
 		$role_name = sanitize_text_field( $role_name );
 
-		if ( ! $role_id || ! $role_name ) {
+		if ( '' === $role_id || '' === $role_name ) {
 			wp_send_json_error( esc_html__( 'Something went wrong: could not update the role details.', 'wp-user-manager' ), 403 );
 		}
 

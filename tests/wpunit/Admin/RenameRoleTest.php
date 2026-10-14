@@ -82,6 +82,21 @@ class RenameRoleTest extends WPUMTestCase {
 		$this->assertSame( 'Test Role', wp_roles()->roles['wpum_test_role']['name'] );
 	}
 
+	public function test_rejects_name_differing_only_by_non_ascii_case() {
+		add_role( 'wpum_test_role_utf8', 'Ärzte', array( 'read' => true ) );
+
+		$result = wpum_rename_role( 'wpum_test_role', 'ärzte' );
+		remove_role( 'wpum_test_role_utf8' );
+
+		$this->assertWPError( $result );
+		$this->assertSame( 'wpum_role_name_exists', $result->get_error_code() );
+	}
+
+	public function test_allows_the_name_zero() {
+		$this->assertTrue( wpum_rename_role( 'wpum_test_role', '0' ) );
+		$this->assertSame( '0', wp_roles()->roles['wpum_test_role']['name'] );
+	}
+
 	public function test_allows_changing_case_of_own_name() {
 		$this->assertTrue( wpum_rename_role( 'wpum_test_role', 'test role' ) );
 		$this->assertSame( 'test role', wp_roles()->roles['wpum_test_role']['name'] );

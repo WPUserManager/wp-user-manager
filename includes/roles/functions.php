@@ -128,8 +128,12 @@ function wpum_rename_role( $role_id, $new_name ) {
 		return new WP_Error( 'wpum_role_name_empty', esc_html__( 'The role name cannot be empty.', 'wp-user-manager' ) );
 	}
 
+	$fold = function ( $name ) {
+		return function_exists( 'mb_strtolower' ) ? mb_strtolower( $name, 'UTF-8' ) : strtolower( $name );
+	};
+
 	foreach ( $wp_roles->roles as $id => $role ) {
-		if ( $id !== $role_id && 0 === strcasecmp( $role['name'], $new_name ) ) {
+		if ( $id !== $role_id && $fold( $role['name'] ) === $fold( $new_name ) ) {
 			return new WP_Error( 'wpum_role_name_exists', esc_html__( 'Another role already uses this name.', 'wp-user-manager' ) );
 		}
 	}
