@@ -20,7 +20,7 @@ class BillingAmountsTest extends WPUMTestCase {
 		ob_start();
 		WPUM()->templates->set_template_data( $data )->get_template_part( $template );
 
-		return ob_get_clean();
+		return html_entity_decode( ob_get_clean() );
 	}
 
 	public function test_invoice_total_keeps_cents() {
