@@ -10,7 +10,7 @@
  * happen. When this occurs the version of the template file will be bumped and
  * the readme will list any important changes.
  *
- * @version 1.0.0
+ * @version 1.1.0
  */
 
 // Exit if accessed directly
@@ -18,8 +18,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-$data->default = empty( $data->default ) ? current( array_keys( $data->options ) ) : $data->default;
-$default       = ! empty( $data->value ) ? $data->value : $data->default;
+// Only pre-select an option when the field has a default. Pre-selecting the first
+// option chose an answer for the user (#153); the filter restores that behaviour.
+if ( empty( $data->default ) && apply_filters( 'wpum_radio_field_select_first_option', false, $data ) ) {
+	$data->default = current( array_keys( $data->options ) );
+}
+
+$default = ! empty( $data->value ) ? $data->value : ( isset( $data->default ) ? $data->default : '' );
 
 foreach ( $data->options as $option_key => $value ) : ?>
 
