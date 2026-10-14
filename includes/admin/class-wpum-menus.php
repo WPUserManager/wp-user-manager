@@ -21,6 +21,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 class WPUM_Menus {
 
 	/**
+	 * Menu item settings already loaded in this request, keyed by item ID.
+	 *
+	 * @var array
+	 */
+	protected $item_settings = array();
+
+	/**
 	 * Get things started.
 	 */
 	public function __construct() {
@@ -122,7 +129,74 @@ class WPUM_Menus {
 			return false;
 		}
 
-		return \WPUM\carbon_get_nav_menu_item_meta( $item->ID, 'convert_to_logout' );
+		$settings = $this->get_item_settings( $item );
+
+		return $settings['convert_to_logout'];
+	}
+
+	/**
+	 * Get the WPUM settings of a menu item, loading them at most once per request.
+	 *
+	 * Items added by other plugins can have IDs that are not post IDs, such as
+	 * Polylang's language switcher ("16511-es"), which break the Carbon Fields
+	 * query (#355). Items with no WPUM settings are detected from the post meta
+	 * cache that WordPress fills when it loads a menu, so they cost no queries (#255).
+	 *
+	 * @param object $item Menu item.
+	 *
+	 * @return array
+	 */
+	protected function get_item_settings( $item ) {
+		$defaults = array(
+			'convert_to_logout' => false,
+			'link_visibility'   => '',
+			'link_roles'        => array(),
+		);
+
+		if ( ! isset( $item->ID ) || ! is_numeric( $item->ID ) || (int) $item->ID < 1 ) {
+			return $defaults;
+		}
+
+		$item_id = (int) $item->ID;
+
+		if ( isset( $this->item_settings[ $item_id ] ) ) {
+			return $this->item_settings[ $item_id ];
+		}
+
+		$settings = $defaults;
+
+		if ( $this->item_has_settings( $item_id ) ) {
+			foreach ( array_keys( $defaults ) as $key ) {
+				$settings[ $key ] = \WPUM\carbon_get_nav_menu_item_meta( $item_id, $key );
+			}
+		}
+
+		$this->item_settings[ $item_id ] = $settings;
+
+		return $settings;
+	}
+
+	/**
+	 * Does a menu item have any WPUM settings saved?
+	 *
+	 * @param int $item_id Menu item ID.
+	 *
+	 * @return bool
+	 */
+	protected function item_has_settings( $item_id ) {
+		$meta = get_post_meta( $item_id );
+
+		if ( ! is_array( $meta ) ) {
+			return false;
+		}
+
+		foreach ( array_keys( $meta ) as $meta_key ) {
+			if ( 0 === strpos( $meta_key, '_convert_to_logout' ) || 0 === strpos( $meta_key, '_link_visibility' ) || 0 === strpos( $meta_key, '_link_roles' ) ) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 	/**
@@ -157,8 +231,9 @@ class WPUM_Menus {
 
 		foreach ( $items as $key => $item ) {
 
-			$status    = \WPUM\carbon_get_nav_menu_item_meta( $item->ID, 'link_visibility' );
-			$roles     = \WPUM\carbon_get_nav_menu_item_meta( $item->ID, 'link_roles' );
+			$settings  = $this->get_item_settings( $item );
+			$status    = $settings['link_visibility'];
+			$roles     = $settings['link_roles'];
 			$is_logout = $this->is_nav_item_logout( $item );
 			$visible   = true;
 
