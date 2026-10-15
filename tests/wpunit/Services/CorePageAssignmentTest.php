@@ -73,6 +73,35 @@ class CorePageAssignmentTest extends WPUMTestCase {
 		$this->assertFalse( wpum_get_core_page_id( 'profile' ) );
 	}
 
+	public function test_assigning_the_same_page_again_succeeds() {
+		$page_id = $this->create_page();
+
+		wpum_assign_core_page( 'login', $page_id );
+
+		$this->assertTrue( wpum_assign_core_page( 'login', $page_id ) );
+		$this->assertTrue( wpum_assign_core_page( 'profile', 0 ) );
+		$this->assertTrue( wpum_assign_core_page( 'profile', 0 ), 'Unassigning twice is still a success.' );
+	}
+
+	public function test_failed_save_returns_error() {
+		$old_page = $this->create_page();
+		wpum_assign_core_page( 'login', $old_page );
+
+		// Block the write.
+		$block = function ( $value, $old_value ) {
+			return $old_value;
+		};
+		add_filter( 'pre_update_option_wpum_settings', $block, 10, 2 );
+
+		$result = wpum_assign_core_page( 'login', $this->create_page() );
+
+		remove_filter( 'pre_update_option_wpum_settings', $block, 10 );
+
+		$this->assertWPError( $result );
+		$this->assertSame( 'wpum_core_page_not_saved', $result->get_error_code() );
+		$this->assertSame( $old_page, wpum_get_core_page_id( 'login' ) );
+	}
+
 	public function test_unknown_core_page_is_rejected() {
 		$result = wpum_assign_core_page( 'members', $this->create_page() );
 

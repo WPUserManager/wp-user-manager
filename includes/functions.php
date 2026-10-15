@@ -185,7 +185,7 @@ function wpum_assign_core_page( $page, $page_id ) {
 	if ( ! $page_id ) {
 		wpum_update_option( $options[ $page ], false );
 
-		return true;
+		return wpum_check_core_page_saved( $page, false );
 	}
 
 	$post = get_post( $page_id );
@@ -196,6 +196,26 @@ function wpum_assign_core_page( $page, $page_id ) {
 
 	// Page settings are stored as a list, as the settings panel saves them.
 	wpum_update_option( $options[ $page ], array( $page_id ) );
+
+	return wpum_check_core_page_saved( $page, $page_id );
+}
+
+/**
+ * Check that a core page assignment was saved. Saving reports failure both when
+ * it fails and when the value was already stored, so read the value back.
+ *
+ * @param string    $page
+ * @param int|false $page_id The page that should be assigned, or false for none.
+ *
+ * @return true|WP_Error
+ */
+function wpum_check_core_page_saved( $page, $page_id ) {
+	$saved = wpum_get_core_page_id( $page );
+	$saved = $saved ? (int) $saved : false;
+
+	if ( $saved !== $page_id ) {
+		return new WP_Error( 'wpum_core_page_not_saved', esc_html__( 'The page could not be saved.', 'wp-user-manager' ), array( 'status' => 500 ) );
+	}
 
 	return true;
 }
