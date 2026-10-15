@@ -125,6 +125,24 @@ function wpum_get_roles( $force = false, $admin = false ) {
 }
 
 /**
+ * Retrieve the setting that stores each WPUM core page.
+ *
+ * @return array Page => setting key.
+ */
+function wpum_get_core_page_options() {
+	return array(
+		'login'                     => 'login_page',
+		'register'                  => 'registration_page',
+		'password'                  => 'password_recovery_page',
+		'account'                   => 'account_page',
+		'profile'                   => 'profile_page',
+		'registration-confirmation' => 'registration_redirect',
+		'login-redirect'            => 'login_redirect',
+		'logout-redirect'           => 'logout_redirect',
+	);
+}
+
+/**
  * Retrieve the ID of a WPUM core page.
  *
  * @param string $page Available core pages are login, register, password, account, profile.
@@ -137,38 +155,49 @@ function wpum_get_core_page_id( $page = null ) {
 		return;
 	}
 
-	$id = null;
-
-	switch ( $page ) {
-		case 'login':
-			$id = wpum_get_option( 'login_page' );
-			break;
-		case 'register':
-			$id = wpum_get_option( 'registration_page' );
-			break;
-		case 'password':
-			$id = wpum_get_option( 'password_recovery_page' );
-			break;
-		case 'account':
-			$id = wpum_get_option( 'account_page' );
-			break;
-		case 'profile':
-			$id = wpum_get_option( 'profile_page' );
-			break;
-		case 'registration-confirmation':
-			$id = wpum_get_option( 'registration_redirect' );
-			break;
-		case 'login-redirect':
-			$id = wpum_get_option( 'login_redirect' );
-			break;
-		case 'logout-redirect':
-			$id = wpum_get_option( 'logout_redirect' );
-			break;
-	}
+	$options = wpum_get_core_page_options();
+	$id      = is_string( $page ) && isset( $options[ $page ] ) ? wpum_get_option( $options[ $page ] ) : null;
 
 	$id = is_array( $id ) ? $id[0] : false;
 
 	return $id;
+}
+
+/**
+ * Assign a page to a WPUM core page, such as the login or account page.
+ *
+ * @param string $page    A key from wpum_get_core_page_options(): login, register, password,
+ *                        account, profile, registration-confirmation, login-redirect or logout-redirect.
+ * @param int    $page_id A published or private page. 0 to unassign it.
+ *
+ * @return true|WP_Error
+ */
+function wpum_assign_core_page( $page, $page_id ) {
+	$options = wpum_get_core_page_options();
+
+	if ( ! is_string( $page ) || ! isset( $options[ $page ] ) ) {
+		// translators: %s list of core pages
+		return new WP_Error( 'wpum_unknown_core_page', sprintf( esc_html__( 'Unknown page. Use one of: %s', 'wp-user-manager' ), esc_html( implode( ', ', array_keys( $options ) ) ) ), array( 'status' => 400 ) );
+	}
+
+	$page_id = absint( $page_id );
+
+	if ( ! $page_id ) {
+		wpum_update_option( $options[ $page ], false );
+
+		return true;
+	}
+
+	$post = get_post( $page_id );
+
+	if ( ! $post || 'page' !== $post->post_type || ! in_array( $post->post_status, array( 'publish', 'private' ), true ) ) {
+		return new WP_Error( 'wpum_invalid_core_page', esc_html__( 'The page must be a published or private page.', 'wp-user-manager' ), array( 'status' => 400 ) );
+	}
+
+	// Page settings are stored as a list, as the settings panel saves them.
+	wpum_update_option( $options[ $page ], array( $page_id ) );
+
+	return true;
 }
 
 /**
