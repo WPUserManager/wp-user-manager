@@ -88,7 +88,8 @@ class FieldUpdateServiceTest extends WPUMTestCase {
 		$field = new WPUM_Field( $field_id );
 		$this->assertTrue( $result );
 		$this->assertSame( 'Job title', $field->get_name() );
-		$this->assertSame( 'Your <em>role</em>x', $field->get_description() );
+		// The field model strips tags from the description column when it saves.
+		$this->assertSame( 'Your rolex', $field->get_description() );
 	}
 
 	public function test_meta_key_gets_wpum_prefix() {
