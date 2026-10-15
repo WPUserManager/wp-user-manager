@@ -265,6 +265,32 @@ class RegistrationFormServiceTest extends WPUMTestCase {
 		$this->assertSame( array( 'subscriber' ), $this->form()->get_setting( 'register_roles' ) );
 	}
 
+	public function test_update_settings_strict_rejects_value_when_options_are_empty() {
+		$add_setting = function ( $settings ) {
+			$settings[] = array(
+				'id'      => 'empty_options_setting',
+				'name'    => 'Empty options',
+				'type'    => 'multiselect',
+				'options' => array(),
+			);
+
+			return $settings;
+		};
+		add_filter( 'wpum_registration_form_settings_options', $add_setting );
+
+		$result = wpum_update_registration_form_settings( $this->form_id, array( 'empty_options_setting' => array( 'anything' ) ), array( 'strict' => true ) );
+		$empty  = wpum_update_registration_form_settings( $this->form_id, array( 'empty_options_setting' => array() ), array(
+			'strict'  => true,
+			'partial' => true,
+		) );
+
+		remove_filter( 'wpum_registration_form_settings_options', $add_setting );
+
+		$this->assertWPError( $result );
+		$this->assertSame( 'wpum_registration_form_invalid_option', $result->get_error_code() );
+		$this->assertTrue( $empty, 'An empty selection is still valid.' );
+	}
+
 	public function test_full_update_deletes_settings_not_sent() {
 		wpum_update_registration_form_settings( $this->form_id, array(
 			'role'                     => array( 'editor' ),

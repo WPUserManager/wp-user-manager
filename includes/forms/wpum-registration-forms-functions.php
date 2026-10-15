@@ -312,7 +312,8 @@ function wpum_validate_registration_form_setting( $setting, $value ) {
 		}
 	}
 
-	$has_options = in_array( $setting['type'], array( 'select', 'multiselect', 'radio', 'multicheckbox' ), true ) && ! empty( $setting['options'] ) && is_array( $setting['options'] );
+	// An empty options list allows no value, e.g. Stripe products before any are fetched.
+	$has_options = in_array( $setting['type'], array( 'select', 'multiselect', 'radio', 'multicheckbox' ), true ) && isset( $setting['options'] ) && is_array( $setting['options'] );
 
 	if ( ! $has_options ) {
 		return true;
