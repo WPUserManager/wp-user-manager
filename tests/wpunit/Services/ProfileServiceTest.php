@@ -95,6 +95,35 @@ class ProfileServiceTest extends WPUMTestCase {
 		$this->assertSame( 'Lovelace Ada', get_userdata( $this->user_id )->display_name );
 	}
 
+	public function test_display_name_uses_stored_names_not_given() {
+		wp_update_user( array(
+			'ID'        => $this->user_id,
+			'last_name' => 'Hopper',
+		) );
+
+		wpum_update_profile_values( $this->user_id, array(
+			'user_firstname'   => 'Grace',
+			'user_displayname' => 'display_firstlast',
+		) );
+
+		$this->assertSame( 'Grace Hopper', get_userdata( $this->user_id )->display_name );
+	}
+
+	public function test_display_name_keeps_names_given_as_empty() {
+		wp_update_user( array(
+			'ID'        => $this->user_id,
+			'last_name' => 'Hopper',
+		) );
+
+		wpum_update_profile_values( $this->user_id, array(
+			'user_firstname'   => 'Grace',
+			'user_lastname'    => '',
+			'user_displayname' => 'display_firstlast',
+		) );
+
+		$this->assertSame( 'Grace', get_userdata( $this->user_id )->display_name );
+	}
+
 	public function test_display_name_argument_is_used_as_given() {
 		wpum_update_profile_values( $this->user_id, array( 'user_displayname' => 'display_firstname' ), array( 'display_name' => 'The Countess' ) );
 
@@ -140,6 +169,35 @@ class ProfileServiceTest extends WPUMTestCase {
 
 		$this->assertFileExists( $path );
 		$this->assertSame( $path, get_user_meta( $this->user_id, '_user_cover_path', true ) );
+
+		wp_delete_file( $path );
+	}
+
+	public function test_without_form_state_new_cover_replaces_stored_file() {
+		$old_path = $this->give_user_a_cover();
+		$new_path = wp_upload_dir()['basedir'] . '/profile-service-cover-new.jpg';
+		file_put_contents( $new_path, 'new cover' ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_file_put_contents
+
+		wpum_update_profile_values( $this->user_id, array(
+			'user_cover' => array(
+				'url'  => 'http://example.com/profile-service-cover-new.jpg',
+				'path' => $new_path,
+			),
+		) );
+
+		$this->assertFileDoesNotExist( $old_path );
+		$this->assertFileExists( $new_path );
+		$this->assertSame( $new_path, get_user_meta( $this->user_id, '_user_cover_path', true ) );
+
+		wp_delete_file( $new_path );
+	}
+
+	public function test_replaced_file_check() {
+		$path = $this->give_user_a_cover();
+
+		$this->assertTrue( wpum_is_replaced_profile_file( $path, array( 'path' => '/elsewhere.jpg' ) ) );
+		$this->assertFalse( wpum_is_replaced_profile_file( $path, array( 'path' => $path ) ), 'The same file is not replaced.' );
+		$this->assertFalse( wpum_is_replaced_profile_file( '/missing.jpg', array( 'path' => '/elsewhere.jpg' ) ) );
 
 		wp_delete_file( $path );
 	}

@@ -173,7 +173,18 @@ function wpum_update_profile_values( $user, $values, $args = array() ) {
 
 	// Update displayed name.
 	if ( isset( $values['user_displayname'] ) ) {
-		$display_name              = null !== $args['display_name'] ? $args['display_name'] : wpum_get_display_name_from_choice( $user, $values, $values['user_displayname'] );
+		if ( null !== $args['display_name'] ) {
+			$display_name = $args['display_name'];
+		} else {
+			// Names not given keep the user's stored ones.
+			$name_values  = array_merge( array(
+				'user_firstname' => $user->first_name,
+				'user_lastname'  => $user->last_name,
+				'user_nickname'  => $user->nickname,
+			), $values );
+			$display_name = wpum_get_display_name_from_choice( $user, $name_values, $values['user_displayname'] );
+		}
+
 		$user_data['display_name'] = wpum_sanitize_text( $display_name );
 	}
 
@@ -190,6 +201,11 @@ function wpum_update_profile_values( $user, $values, $args = array() ) {
 
 		// Delete previous avatar if a new one has been uploaded.
 		if ( $currently_uploaded_file && $existing_avatar_file_path && file_exists( $existing_avatar_file_path ) && isset( $values['user_avatar']['url'] ) && $values['user_avatar']['url'] !== $currently_uploaded_file ) {
+			wp_delete_file( $existing_avatar_file_path );
+		}
+
+		// Without the form's state, a new avatar replaces the stored file.
+		if ( null === $args['current_avatar'] && isset( $values['user_avatar']['url'] ) && wpum_is_replaced_profile_file( $existing_avatar_file_path, $values['user_avatar'] ) ) {
 			wp_delete_file( $existing_avatar_file_path );
 		}
 
@@ -216,6 +232,10 @@ function wpum_update_profile_values( $user, $values, $args = array() ) {
 		if ( $currently_uploaded_cover && $existing_cover_file_path && file_exists( $existing_cover_file_path ) && isset( $values['user_cover']['url'] ) && $values['user_cover']['url'] !== $currently_uploaded_cover ) {
 			wp_delete_file( $existing_cover_file_path );
 		}
+		// Without the form's state, a new cover replaces the stored file.
+		if ( null === $args['current_cover'] && wpum_is_replaced_profile_file( $existing_cover_file_path, $values['user_cover'] ) ) {
+			wp_delete_file( $existing_cover_file_path );
+		}
 		if ( $currently_uploaded_cover !== $values['user_cover']['url'] ) {
 			carbon_set_user_meta( $updated_user_id, 'user_cover', $values['user_cover']['url'] );
 			update_user_meta( $updated_user_id, '_user_cover_path', $values['user_cover']['path'] );
@@ -233,4 +253,20 @@ function wpum_update_profile_values( $user, $values, $args = array() ) {
 	}
 
 	return $updated_user_id;
+}
+
+/**
+ * Check whether a newly given avatar or cover replaces a stored file that exists.
+ *
+ * @param string $existing_path The stored file path.
+ * @param array  $new_file      The new file, with `url` and `path`.
+ *
+ * @return bool
+ */
+function wpum_is_replaced_profile_file( $existing_path, $new_file ) {
+	if ( ! $existing_path || ! file_exists( $existing_path ) ) {
+		return false;
+	}
+
+	return ! isset( $new_file['path'] ) || $new_file['path'] !== $existing_path;
 }
