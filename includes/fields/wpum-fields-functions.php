@@ -876,9 +876,14 @@ function wpum_validate_field_settings( $field, $data, $settings ) {
 
 		$setting_type = isset( $settings[ $setting_id ]['type'] ) ? $settings[ $setting_id ]['type'] : '';
 
-		// A multiselect takes a list; the editor's single-value controls would turn a list into nothing.
-		$wrong_shape = ( 'multiselect' === $setting_type && ! is_array( $setting_data ) && ! in_array( $setting_data, array( '', null ), true ) )
-			|| ( in_array( $setting_type, array( 'input', 'radios', 'textarea', 'checkbox', 'select' ), true ) && is_array( $setting_data ) );
+		// A multiselect takes a list. Every other setting is saved as a single value, so
+		// a list would be lost, unless an addon's sanitize method accepts one.
+		$single_value = 'multiselect' !== $setting_type && (
+			in_array( $setting_type, array( 'input', 'radios', 'textarea', 'textArea', 'checkbox' ), true )
+			|| 'sanitize_text_field' === apply_filters( 'wpum_update_fields_sanitize_method', 'sanitize_text_field', $setting_type, $setting_data )
+		);
+		$wrong_shape  = ( 'multiselect' === $setting_type && ! is_array( $setting_data ) && ! in_array( $setting_data, array( '', null ), true ) )
+			|| ( $single_value && is_array( $setting_data ) );
 
 		if ( $wrong_shape ) {
 			// translators: %s setting key

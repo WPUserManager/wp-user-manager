@@ -320,6 +320,28 @@ class FieldUpdateServiceTest extends WPUMTestCase {
 		$this->assertSame( 'public', $field->get_meta( 'visibility' ) );
 	}
 
+	public function test_strict_rejects_list_for_textarea_setting_and_saves_nothing() {
+		$field_id = $this->create_field( 'textarea', array( 'default_value' => 'Original' ) );
+
+		$result = wpum_update_field_settings( $field_id, array(
+			'field_title'   => 'Changed',
+			'default_value' => array( 'replacement' ),
+		), array( 'strict' => true ) );
+
+		$field = new WPUM_Field( $field_id );
+		$this->assertWPError( $result );
+		$this->assertSame( 'wpum_field_invalid_value', $result->get_error_code() );
+		$this->assertSame( 'Service Test Field', $field->get_name() );
+		$this->assertSame( 'Original', $field->get_meta( 'default_value' ) );
+	}
+
+	public function test_strict_rejects_list_for_description() {
+		$result = wpum_update_field_settings( $this->create_field(), array( 'field_description' => array( 'x' ) ), array( 'strict' => true ) );
+
+		$this->assertWPError( $result );
+		$this->assertSame( 'wpum_field_invalid_value', $result->get_error_code() );
+	}
+
 	public function test_strict_allows_field_to_keep_its_own_meta_key() {
 		$field_id = $this->create_field( 'text', array( 'user_meta_key' => 'wpum_company' ) );
 
