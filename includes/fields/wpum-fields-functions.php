@@ -874,6 +874,17 @@ function wpum_validate_field_settings( $field, $data, $settings ) {
 			continue;
 		}
 
+		$setting_type = isset( $settings[ $setting_id ]['type'] ) ? $settings[ $setting_id ]['type'] : '';
+
+		// A multiselect takes a list; the editor's single-value controls would turn a list into nothing.
+		$wrong_shape = ( 'multiselect' === $setting_type && ! is_array( $setting_data ) && ! in_array( $setting_data, array( '', null ), true ) )
+			|| ( in_array( $setting_type, array( 'input', 'radios', 'textarea', 'checkbox', 'select' ), true ) && is_array( $setting_data ) );
+
+		if ( $wrong_shape ) {
+			// translators: %s setting key
+			return new WP_Error( 'wpum_field_invalid_value', sprintf( esc_html__( 'The %s setting takes a different kind of value.', 'wp-user-manager' ), esc_html( $setting_id ) ), array( 'status' => 400 ) );
+		}
+
 		$allowed = isset( $settings[ $setting_id ] ) ? wpum_get_field_setting_allowed_values( $settings[ $setting_id ] ) : false;
 
 		if ( false === $allowed ) {

@@ -290,6 +290,36 @@ class FieldUpdateServiceTest extends WPUMTestCase {
 		$this->assertTrue( wpum_update_field_settings( $field_id, array( 'field_type' => 'select' ), array( 'strict' => true ) ) );
 	}
 
+	public function test_strict_rejects_single_value_for_multiselect_and_saves_nothing() {
+		$field_id = $this->create_field();
+
+		$result = wpum_update_field_settings( $field_id, array(
+			'field_title' => 'Changed',
+			'roles'       => 'subscriber',
+		), array( 'strict' => true ) );
+
+		$field = new WPUM_Field( $field_id );
+		$this->assertWPError( $result );
+		$this->assertSame( 'wpum_field_invalid_value', $result->get_error_code() );
+		$this->assertSame( 'Service Test Field', $field->get_name() );
+		$this->assertEmpty( $field->get_meta( 'roles' ) );
+	}
+
+	public function test_strict_rejects_list_for_single_value_setting_and_saves_nothing() {
+		$field_id = $this->create_field( 'text', array( 'visibility' => 'public' ) );
+
+		$result = wpum_update_field_settings( $field_id, array(
+			'field_title' => 'Changed',
+			'visibility'  => array( 'hidden' ),
+		), array( 'strict' => true ) );
+
+		$field = new WPUM_Field( $field_id );
+		$this->assertWPError( $result );
+		$this->assertSame( 'wpum_field_invalid_value', $result->get_error_code() );
+		$this->assertSame( 'Service Test Field', $field->get_name() );
+		$this->assertSame( 'public', $field->get_meta( 'visibility' ) );
+	}
+
 	public function test_strict_allows_field_to_keep_its_own_meta_key() {
 		$field_id = $this->create_field( 'text', array( 'user_meta_key' => 'wpum_company' ) );
 
