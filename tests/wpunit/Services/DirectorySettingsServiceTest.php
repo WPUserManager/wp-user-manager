@@ -67,6 +67,29 @@ class DirectorySettingsServiceTest extends WPUMTestCase {
 		$this->assertSame( array( 'first_name', 'last_name' ), $settings['directory_search_fields'] );
 	}
 
+	public function test_create_keeps_backslashes_in_title() {
+		$directory_id = wpum_create_directory( 'Team\\Engineering' );
+
+		$this->assertSame( 'Team\\Engineering', get_post( $directory_id )->post_title );
+	}
+
+	public function test_zero_id_does_not_fall_back_to_the_current_post() {
+		global $post;
+
+		$directory_id = wpum_create_directory( 'Current', array( 'directory_sorting_method' => 'oldest' ) );
+		$post         = get_post( $directory_id ); // phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited
+
+		foreach ( array( 0, '', 'abc' ) as $id ) {
+			$result = wpum_update_directory_settings( $id, array( 'directory_sorting_method' => 'name' ) );
+			$this->assertWPError( $result );
+			$this->assertSame( 'wpum_directory_not_found', $result->get_error_code() );
+			$this->assertWPError( wpum_get_directory_settings( $id ) );
+		}
+
+		$post = null; // phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited
+		$this->assertSame( 'oldest', wpum_get_directory_settings( $directory_id )['directory_sorting_method'] );
+	}
+
 	public function test_create_rejects_empty_title() {
 		$result = wpum_create_directory( '  ' );
 

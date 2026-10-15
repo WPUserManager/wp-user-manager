@@ -120,6 +120,20 @@ function wpum_get_directory_settings_fields() {
 }
 
 /**
+ * Check that Carbon Fields has registered its fields, so directory settings can
+ * be built, read and saved.
+ *
+ * @return true|WP_Error
+ */
+function wpum_check_directory_settings_ready() {
+	if ( ! did_action( 'carbon_fields_fields_registered' ) ) {
+		return new WP_Error( 'wpum_directory_settings_not_ready', esc_html__( 'Directory settings cannot be read or saved before WordPress has loaded.', 'wp-user-manager' ), array( 'status' => 500 ) );
+	}
+
+	return true;
+}
+
+/**
  * Make sure the directory settings are registered with Carbon Fields, which only
  * happens on the directory edit screen and when a directory is displayed.
  *
@@ -128,8 +142,10 @@ function wpum_get_directory_settings_fields() {
  * @return true|WP_Error
  */
 function wpum_ensure_directory_settings_registered( $setting_names ) {
-	if ( ! did_action( 'carbon_fields_fields_registered' ) ) {
-		return new WP_Error( 'wpum_directory_settings_not_ready', esc_html__( 'Directory settings cannot be read or saved before WordPress has loaded.', 'wp-user-manager' ), array( 'status' => 500 ) );
+	$ready = wpum_check_directory_settings_ready();
+
+	if ( is_wp_error( $ready ) ) {
+		return $ready;
 	}
 
 	$registered = true;
@@ -163,6 +179,13 @@ function wpum_ensure_directory_settings_registered( $setting_names ) {
 function wpum_prepare_directory_settings( $settings ) {
 	if ( ! is_array( $settings ) ) {
 		return new WP_Error( 'wpum_directory_invalid_settings', esc_html__( 'Directory settings must be an array.', 'wp-user-manager' ), array( 'status' => 400 ) );
+	}
+
+	// Building the fields needs Carbon Fields to be ready.
+	$ready = wpum_check_directory_settings_ready();
+
+	if ( is_wp_error( $ready ) ) {
+		return $ready;
 	}
 
 	$fields   = wpum_get_directory_settings_fields();
@@ -266,7 +289,10 @@ function wpum_prepare_directory_settings( $settings ) {
  * @return WP_Post|WP_Error
  */
 function wpum_get_directory_or_error( $directory_id ) {
-	$directory = get_post( absint( $directory_id ) );
+	$directory_id = is_numeric( $directory_id ) ? absint( $directory_id ) : 0;
+
+	// get_post() falls back to the current post for 0, so don't look that up.
+	$directory = $directory_id ? get_post( $directory_id ) : null;
 
 	if ( ! $directory || 'wpum_directory' !== $directory->post_type ) {
 		return new WP_Error( 'wpum_directory_not_found', esc_html__( 'The directory does not exist.', 'wp-user-manager' ), array( 'status' => 404 ) );
@@ -287,6 +313,12 @@ function wpum_get_directory_settings( $directory_id ) {
 
 	if ( is_wp_error( $directory ) ) {
 		return $directory;
+	}
+
+	$ready = wpum_check_directory_settings_ready();
+
+	if ( is_wp_error( $ready ) ) {
+		return $ready;
 	}
 
 	$names      = array_keys( wpum_get_directory_settings_fields() );
@@ -364,7 +396,8 @@ function wpum_create_directory( $title, $settings = array() ) {
 	}
 
 	$directory_id = wp_insert_post( array(
-		'post_title'  => $title,
+		// wp_insert_post() unslashes its input.
+		'post_title'  => wp_slash( $title ),
 		'post_type'   => 'wpum_directory',
 		'post_status' => 'publish',
 	), true );
