@@ -256,6 +256,40 @@ class FieldUpdateServiceTest extends WPUMTestCase {
 		$this->assertSame( 'wpum_field_duplicate_meta_key', $result->get_error_code() );
 	}
 
+	public function test_strict_rejects_meta_key_the_model_would_change() {
+		$result = wpum_update_field_settings( $this->create_field(), array( 'user_meta_key' => 'wpum_com!pany' ), array( 'strict' => true ) );
+
+		$this->assertWPError( $result );
+		$this->assertSame( 'wpum_field_invalid_meta_key', $result->get_error_code() );
+	}
+
+	public function test_strict_compares_meta_keys_as_the_model_reads_them() {
+		// Stored before keys were checked: the model reads it as wpum_company.
+		$this->create_field( 'text', array( 'user_meta_key' => 'wpum_Com!pany' ) );
+
+		$result = wpum_update_field_settings( $this->create_field(), array( 'user_meta_key' => 'company' ), array( 'strict' => true ) );
+
+		$this->assertWPError( $result );
+		$this->assertSame( 'wpum_field_duplicate_meta_key', $result->get_error_code() );
+	}
+
+	public function test_strict_rejects_array_title() {
+		$result = wpum_update_field_settings( $this->create_field(), array( 'field_title' => array( 'Company' ) ), array( 'strict' => true ) );
+
+		$this->assertWPError( $result );
+		$this->assertSame( 'wpum_field_invalid_title', $result->get_error_code() );
+	}
+
+	public function test_strict_rejects_select_value_outside_choices() {
+		$field_id = $this->create_field( 'taxonomy' );
+
+		$result = wpum_update_field_settings( $field_id, array( 'field_type' => 'not_a_control' ), array( 'strict' => true ) );
+		$this->assertWPError( $result );
+		$this->assertSame( 'wpum_field_invalid_option', $result->get_error_code() );
+
+		$this->assertTrue( wpum_update_field_settings( $field_id, array( 'field_type' => 'select' ), array( 'strict' => true ) ) );
+	}
+
 	public function test_strict_allows_field_to_keep_its_own_meta_key() {
 		$field_id = $this->create_field( 'text', array( 'user_meta_key' => 'wpum_company' ) );
 

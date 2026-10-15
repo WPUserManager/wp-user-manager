@@ -768,15 +768,25 @@ function wpum_prepare_field_user_meta_key( $field, $meta_key ) {
  *
  * @param string $meta_key         The full meta key, with its `wpum_` prefix.
  * @param int    $exclude_field_id Field to leave out of the check, usually the one being edited.
+ * @param bool   $canonical        Compare the keys as the field model reads them, lowercase with
+ *                                 other characters removed, rather than exactly. Default false.
  *
  * @return bool
  */
-function wpum_field_user_meta_key_exists( $meta_key, $exclude_field_id = 0 ) {
+function wpum_field_user_meta_key_exists( $meta_key, $exclude_field_id = 0, $canonical = false ) {
 	global $wpdb;
 
-	$meta_count = $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(meta_id) FROM {$wpdb->prefix}wpum_fieldmeta WHERE meta_key = 'user_meta_key' AND meta_value = %s AND wpum_field_id != %d", $meta_key, $exclude_field_id ) ); // phpcs:ignore
+	if ( ! $canonical ) {
+		$meta_count = $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(meta_id) FROM {$wpdb->prefix}wpum_fieldmeta WHERE meta_key = 'user_meta_key' AND meta_value = %s AND wpum_field_id != %d", $meta_key, $exclude_field_id ) ); // phpcs:ignore
 
-	return intval( $meta_count ) > 0;
+		return intval( $meta_count ) > 0;
+	}
+
+	// Sanitize as the field model does when it reads a key.
+	$sanitize    = array( new WPUM_Field(), 'wpum_sanitize_key' );
+	$stored_keys = $wpdb->get_col( $wpdb->prepare( "SELECT meta_value FROM {$wpdb->prefix}wpum_fieldmeta WHERE meta_key = 'user_meta_key' AND wpum_field_id != %d", $exclude_field_id ) ); // phpcs:ignore
+
+	return in_array( call_user_func( $sanitize, $meta_key ), array_map( $sanitize, $stored_keys ), true );
 }
 
 /**
@@ -793,6 +803,21 @@ function wpum_get_field_setting_allowed_values( $setting ) {
 
 	if ( 'radios' === $setting['type'] && ! empty( $setting['values'] ) && is_array( $setting['values'] ) ) {
 		return array_map( 'strval', wp_list_pluck( $setting['values'], 'value' ) );
+	}
+
+	// Select settings list their choices as `id` and `name` pairs.
+	if ( 'select' === $setting['type'] && ! empty( $setting['values'] ) && is_array( $setting['values'] ) ) {
+		$values = array();
+
+		foreach ( $setting['values'] as $choice ) {
+			if ( is_array( $choice ) ) {
+				$values[] = (string) ( isset( $choice['id'] ) ? $choice['id'] : ( isset( $choice['value'] ) ? $choice['value'] : '' ) );
+			} else {
+				$values[] = (string) $choice;
+			}
+		}
+
+		return $values;
 	}
 
 	if ( 'multiselect' === $setting['type'] && ! empty( $setting['options'] ) && is_array( $setting['options'] ) ) {
@@ -826,7 +851,7 @@ function wpum_validate_field_settings( $field, $data, $settings ) {
 			return new WP_Error( 'wpum_field_unknown_setting', sprintf( esc_html__( 'This field has no %s setting that can be updated here.', 'wp-user-manager' ), esc_html( $setting_id ) ), array( 'status' => 400 ) );
 		}
 
-		if ( 'field_title' === $setting_id && '' === sanitize_text_field( (string) $setting_data ) ) {
+		if ( 'field_title' === $setting_id && ( ! is_scalar( $setting_data ) || '' === sanitize_text_field( (string) $setting_data ) ) ) {
 			return new WP_Error( 'wpum_field_invalid_title', esc_html__( 'The field needs a title.', 'wp-user-manager' ), array( 'status' => 400 ) );
 		}
 
@@ -835,7 +860,14 @@ function wpum_validate_field_settings( $field, $data, $settings ) {
 				return new WP_Error( 'wpum_field_invalid_meta_key', esc_html__( 'The field needs a meta key.', 'wp-user-manager' ), array( 'status' => 400 ) );
 			}
 
-			if ( wpum_field_user_meta_key_exists( wpum_prepare_field_user_meta_key( $field, $setting_data ), $field->get_ID() ) ) {
+			$meta_key = wpum_prepare_field_user_meta_key( $field, $setting_data );
+
+			// The field model sanitizes the key when it reads it, so a key it would change is refused.
+			if ( $field->wpum_sanitize_key( $meta_key ) !== $meta_key ) {
+				return new WP_Error( 'wpum_field_invalid_meta_key', esc_html__( 'The meta key can only use lowercase letters, numbers, dashes and underscores.', 'wp-user-manager' ), array( 'status' => 400 ) );
+			}
+
+			if ( wpum_field_user_meta_key_exists( $meta_key, $field->get_ID(), true ) ) {
 				return new WP_Error( 'wpum_field_duplicate_meta_key', esc_html__( 'The user meta key must be unique for each field.', 'wp-user-manager' ), array( 'status' => 400 ) );
 			}
 
