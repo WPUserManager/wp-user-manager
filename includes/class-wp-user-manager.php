@@ -308,6 +308,7 @@ if ( ! class_exists( 'WP_User_Manager' ) ) :
 		private function includes() {
 			require_once WPUM_PLUGIN_DIR . 'includes/functions.php';
 			require_once WPUM_PLUGIN_DIR . 'includes/forms/trait-wpum-account.php';
+			require_once WPUM_PLUGIN_DIR . 'includes/forms/wpum-profile-functions.php';
 			require_once WPUM_PLUGIN_DIR . 'includes/permalinks.php';
 			require_once WPUM_PLUGIN_DIR . 'includes/actions.php';
 			require_once WPUM_PLUGIN_DIR . 'includes/filters.php';
