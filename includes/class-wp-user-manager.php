@@ -606,15 +606,22 @@ if ( ! class_exists( 'WP_User_Manager' ) ) :
 		}
 
 		/**
-		 * PHP extensions that are missing from this server but needed by the
-		 * plugin or its bundled libraries, such as stripe-php.
+		 * PHP extensions needed by the plugin or its bundled libraries:
+		 * mbstring and curl for stripe-php, dom and mbstring for dompdf.
+		 *
+		 * @return array
+		 */
+		public static function get_required_php_extensions() {
+			return (array) apply_filters( 'wpum_required_php_extensions', array( 'mbstring', 'curl', 'dom' ) );
+		}
+
+		/**
+		 * Required PHP extensions that are missing from this server.
 		 *
 		 * @return array
 		 */
 		public static function get_missing_php_extensions() {
-			$required = apply_filters( 'wpum_required_php_extensions', array( 'mbstring' ) );
-
-			return array_values( array_filter( (array) $required, function ( $extension ) {
+			return array_values( array_filter( self::get_required_php_extensions(), function ( $extension ) {
 				return ! extension_loaded( $extension );
 			} ) );
 		}
@@ -638,7 +645,7 @@ if ( ! class_exists( 'WP_User_Manager' ) ) :
 
 			$message = sprintf(
 				/* translators: %s: comma separated list of PHP extension names */
-				esc_html__( 'WP User Manager needs the PHP %s extension, which is not enabled on this server. Stripe payments and some other features may not work until it is. Please ask your host to enable it.', 'wp-user-manager' ),
+				esc_html__( 'WP User Manager needs these PHP extensions, which are not enabled on this server: %s. Stripe payments, PDF invoices and some other features may not work until they are. Please ask your host to enable them.', 'wp-user-manager' ),
 				'<code>' . implode( '</code>, <code>', array_map( 'esc_html', $missing ) ) . '</code>'
 			);
 

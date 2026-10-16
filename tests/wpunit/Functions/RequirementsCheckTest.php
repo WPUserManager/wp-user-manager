@@ -29,10 +29,12 @@ class RequirementsCheckTest extends WPUMTestCase {
 		return ob_get_clean();
 	}
 
-	public function test_mbstring_is_required() {
-		$required = apply_filters( 'wpum_required_php_extensions', array( 'mbstring' ) );
+	public function test_library_extensions_are_required() {
+		$required = WP_User_Manager::get_required_php_extensions();
 
-		$this->assertContains( 'mbstring', $required );
+		foreach ( array( 'mbstring', 'curl', 'dom' ) as $extension ) {
+			$this->assertContains( $extension, $required );
+		}
 		$this->assertNotFalse( has_action( 'admin_notices', array( WPUM(), 'missing_php_extensions_notice' ) ) );
 	}
 
