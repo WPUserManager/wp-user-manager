@@ -643,3 +643,417 @@ function wpum_sanitize_text( $data ) {
 
 	return sanitize_text_field( $data );
 }
+
+/**
+ * Retrieve the definition of a registered field type: name, icon, group and
+ * editor settings.
+ *
+ * @param string $type
+ *
+ * @return array|false
+ */
+function wpum_get_registered_field_type( $type ) {
+	if ( ! $type ) {
+		return false;
+	}
+
+	$registered_fields = wpum_get_registered_field_types();
+	$criteria          = array( 'type' => $type );
+
+	// Look in the default, standard and advanced groups, in that order.
+	foreach ( array( 'default', 'standard', 'advanced' ) as $group ) {
+		if ( empty( $registered_fields[ $group ]['fields'] ) ) {
+			continue;
+		}
+
+		$found = wp_list_filter( $registered_fields[ $group ]['fields'], $criteria );
+
+		if ( ! empty( $found ) ) {
+			return reset( $found );
+		}
+	}
+
+	return false;
+}
+
+/**
+ * Retrieve the editor settings a field doesn't use. Primary fields have a fixed
+ * meta key, and some have no placeholder.
+ *
+ * @param WPUM_Field $field
+ *
+ * @return array Setting keys.
+ */
+function wpum_get_field_deregistered_settings( $field ) {
+	$deregistered = array();
+
+	if ( ! empty( $field->get_primary_id() ) ) {
+		// All primary fields do not need the meta key setting.
+		$deregistered[] = 'user_meta_key';
+
+		switch ( $field->get_primary_id() ) {
+			case 'username':
+			case 'user_displayname':
+			case 'user_avatar':
+			case 'user_cover':
+				$deregistered[] = 'placeholder';
+				break;
+		}
+	}
+
+	return $deregistered;
+}
+
+/**
+ * Retrieve every editor setting for a field, from all the editor's tabs, keyed
+ * by setting key. Settings the field doesn't use are left out, as in the editor.
+ *
+ * @param WPUM_Field $field
+ *
+ * @return array
+ */
+function wpum_get_field_settings_config( $field ) {
+	$field_type = wpum_get_registered_field_type( $field->get_type() );
+
+	if ( ! $field_type || empty( $field_type['settings'] ) || ! is_array( $field_type['settings'] ) ) {
+		return array();
+	}
+
+	$settings = array();
+
+	foreach ( $field_type['settings'] as $group => $group_settings ) {
+		$group_settings = apply_filters( 'wpum_fields_editor_field_settings', $group_settings, $field_type, $group );
+
+		foreach ( (array) $group_settings as $key => $setting ) {
+			$settings[ $key ] = $setting;
+		}
+	}
+
+	foreach ( wpum_get_field_deregistered_settings( $field ) as $setting_key ) {
+		unset( $settings[ $setting_key ] );
+	}
+
+	return apply_filters( 'wpum_fields_editor_deregister_settings', $settings, $field->get_primary_id(), $field );
+}
+
+/**
+ * Turn the meta key typed in the field editor into the stored user meta key.
+ *
+ * Custom fields store their values under a `wpum_` key, and file fields under
+ * `wpum_file_field_`. A key that already starts with `wpum_` is kept as it is.
+ *
+ * @param WPUM_Field $field
+ * @param string     $meta_key
+ *
+ * @return string
+ */
+function wpum_prepare_field_user_meta_key( $field, $meta_key ) {
+	$meta_key = (string) $meta_key;
+
+	if ( strpos( $meta_key, 'wpum_' ) !== 0 ) {
+		$meta_key = 'wpum_' . $meta_key;
+		$meta_key = $field->wpum_sanitize_key( $meta_key );
+		if ( 'file' === $field->get_type() ) {
+			$append_key = str_replace( 'wpum_file_field_', '', $meta_key );
+			$append_key = str_replace( 'wpum_', '', $append_key );
+			$meta_key   = 'wpum_file_field_' . $append_key;
+		}
+	}
+
+	return $meta_key;
+}
+
+/**
+ * Check whether another field already stores its values under a user meta key.
+ *
+ * @param string $meta_key         The full meta key, with its `wpum_` prefix.
+ * @param int    $exclude_field_id Field to leave out of the check, usually the one being edited.
+ * @param bool   $canonical        Compare the keys as the field model reads them, lowercase with
+ *                                 other characters removed, rather than exactly. Default false.
+ *
+ * @return bool
+ */
+function wpum_field_user_meta_key_exists( $meta_key, $exclude_field_id = 0, $canonical = false ) {
+	global $wpdb;
+
+	if ( ! $canonical ) {
+		$meta_count = $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(meta_id) FROM {$wpdb->prefix}wpum_fieldmeta WHERE meta_key = 'user_meta_key' AND meta_value = %s AND wpum_field_id != %d", $meta_key, $exclude_field_id ) ); // phpcs:ignore
+
+		return intval( $meta_count ) > 0;
+	}
+
+	// Sanitize as the field model does when it reads a key.
+	$sanitize    = array( new WPUM_Field(), 'wpum_sanitize_key' );
+	$stored_keys = $wpdb->get_col( $wpdb->prepare( "SELECT meta_value FROM {$wpdb->prefix}wpum_fieldmeta WHERE meta_key = 'user_meta_key' AND wpum_field_id != %d", $exclude_field_id ) ); // phpcs:ignore
+
+	return in_array( call_user_func( $sanitize, $meta_key ), array_map( $sanitize, $stored_keys ), true );
+}
+
+/**
+ * Retrieve the values a field setting accepts, for settings with a fixed list.
+ *
+ * @param array $setting The setting from the field type's editor settings.
+ *
+ * @return array|false Values as strings, or false if the setting takes any value.
+ */
+function wpum_get_field_setting_allowed_values( $setting ) {
+	if ( ! isset( $setting['type'] ) ) {
+		return false;
+	}
+
+	if ( 'radios' === $setting['type'] && ! empty( $setting['values'] ) && is_array( $setting['values'] ) ) {
+		return array_map( 'strval', wp_list_pluck( $setting['values'], 'value' ) );
+	}
+
+	// Select settings list their choices as `id` and `name` pairs.
+	if ( 'select' === $setting['type'] && ! empty( $setting['values'] ) && is_array( $setting['values'] ) ) {
+		$values = array();
+
+		foreach ( $setting['values'] as $choice ) {
+			if ( is_array( $choice ) ) {
+				$values[] = (string) ( isset( $choice['id'] ) ? $choice['id'] : ( isset( $choice['value'] ) ? $choice['value'] : '' ) );
+			} else {
+				$values[] = (string) $choice;
+			}
+		}
+
+		return $values;
+	}
+
+	if ( 'multiselect' === $setting['type'] && ! empty( $setting['options'] ) && is_array( $setting['options'] ) ) {
+		$values = array();
+
+		foreach ( $setting['options'] as $key => $option ) {
+			$values[] = is_array( $option ) && isset( $option['value'] ) ? (string) $option['value'] : (string) $key;
+		}
+
+		return $values;
+	}
+
+	return false;
+}
+
+/**
+ * Check field settings before they're saved.
+ *
+ * @param WPUM_Field $field
+ * @param array      $data     Setting key => value.
+ * @param array      $settings Editor settings for the field, keyed by setting key.
+ *
+ * @return true|WP_Error
+ */
+function wpum_validate_field_settings( $field, $data, $settings ) {
+	foreach ( $data as $setting_id => $setting_data ) {
+		$is_known = in_array( $setting_id, array( 'field_title', 'field_description' ), true ) || ( 'user_meta_key' === $setting_id && ! $field->is_primary() ) || isset( $settings[ $setting_id ] );
+
+		if ( ! $is_known || in_array( $setting_id, apply_filters( 'wpum_update_field_excluded_settings', array( 'conditions' ) ), true ) ) {
+			// translators: %s setting key
+			return new WP_Error( 'wpum_field_unknown_setting', sprintf( esc_html__( 'This field has no %s setting that can be updated here.', 'wp-user-manager' ), esc_html( $setting_id ) ), array( 'status' => 400 ) );
+		}
+
+		if ( 'field_title' === $setting_id && ( ! is_scalar( $setting_data ) || '' === sanitize_text_field( (string) $setting_data ) ) ) {
+			return new WP_Error( 'wpum_field_invalid_title', esc_html__( 'The field needs a title.', 'wp-user-manager' ), array( 'status' => 400 ) );
+		}
+
+		if ( 'user_meta_key' === $setting_id ) {
+			if ( ! is_string( $setting_data ) || '' === sanitize_key( $setting_data ) ) {
+				return new WP_Error( 'wpum_field_invalid_meta_key', esc_html__( 'The field needs a meta key.', 'wp-user-manager' ), array( 'status' => 400 ) );
+			}
+
+			$meta_key = wpum_prepare_field_user_meta_key( $field, $setting_data );
+
+			// The field model sanitizes the key when it reads it, so a key it would change is refused.
+			if ( $field->wpum_sanitize_key( $meta_key ) !== $meta_key ) {
+				return new WP_Error( 'wpum_field_invalid_meta_key', esc_html__( 'The meta key can only use lowercase letters, numbers, dashes and underscores.', 'wp-user-manager' ), array( 'status' => 400 ) );
+			}
+
+			if ( wpum_field_user_meta_key_exists( $meta_key, $field->get_ID(), true ) ) {
+				return new WP_Error( 'wpum_field_duplicate_meta_key', esc_html__( 'The user meta key must be unique for each field.', 'wp-user-manager' ), array( 'status' => 400 ) );
+			}
+
+			continue;
+		}
+
+		$setting_type = isset( $settings[ $setting_id ]['type'] ) ? $settings[ $setting_id ]['type'] : '';
+
+		// A multiselect takes a list. Every other setting is saved as a single value, so
+		// a list would be lost, unless an addon's sanitize method accepts one.
+		$single_value = 'multiselect' !== $setting_type && (
+			in_array( $setting_type, array( 'input', 'radios', 'textarea', 'textArea', 'checkbox' ), true )
+			|| 'sanitize_text_field' === apply_filters( 'wpum_update_fields_sanitize_method', 'sanitize_text_field', $setting_type, $setting_data )
+		);
+		$wrong_shape  = ( 'multiselect' === $setting_type && ! is_array( $setting_data ) && ! in_array( $setting_data, array( '', null ), true ) )
+			|| ( $single_value && is_array( $setting_data ) );
+
+		if ( $wrong_shape ) {
+			// translators: %s setting key
+			return new WP_Error( 'wpum_field_invalid_value', sprintf( esc_html__( 'The %s setting takes a different kind of value.', 'wp-user-manager' ), esc_html( $setting_id ) ), array( 'status' => 400 ) );
+		}
+
+		$allowed = isset( $settings[ $setting_id ] ) ? wpum_get_field_setting_allowed_values( $settings[ $setting_id ] ) : false;
+
+		if ( false === $allowed ) {
+			continue;
+		}
+
+		foreach ( (array) $setting_data as $value ) {
+			if ( '' !== $value && ! in_array( (string) $value, $allowed, true ) ) {
+				// translators: %1$s value, %2$s setting key
+				return new WP_Error( 'wpum_field_invalid_option', sprintf( esc_html__( '%1$s is not an option for the %2$s setting.', 'wp-user-manager' ), esc_html( $value ), esc_html( $setting_id ) ), array( 'status' => 400 ) );
+			}
+		}
+	}
+
+	return true;
+}
+
+/**
+ * Update a field's name, description, meta key and settings.
+ *
+ * Values are sanitized by the type of each setting, as the fields editor does.
+ * An empty value deletes the setting.
+ *
+ * @param int   $field_id
+ * @param array $data Setting key => value, e.g. `field_title`, `field_description`,
+ *                    `user_meta_key`, `required`, `visibility`, `placeholder`.
+ * @param array $args {
+ *     @type array|null $settings         The editor settings to sanitize against, keyed or listed
+ *                                        with a `model` key. Default null: every setting of the
+ *                                        field's type.
+ *     @type array|null $dropdown_options Options for dropdown, multiselect, multicheckbox and
+ *                                        radio fields: a list of `value` and `label` pairs.
+ *     @type bool       $strict           Return an error, and save nothing, for an unknown
+ *                                        setting, an empty title or meta key, a meta key used by
+ *                                        another field, or a value outside a setting's options.
+ *                                        When false, unknown settings are skipped. Default false.
+ * }
+ *
+ * @return true|WP_Error
+ */
+function wpum_update_field_settings( $field_id, $data, $args = array() ) {
+	$args = wp_parse_args( $args, array(
+		'settings'         => null,
+		'dropdown_options' => null,
+		'strict'           => false,
+	) );
+
+	$field_to_update = new WPUM_Field( $field_id );
+
+	if ( ! $field_to_update->exists() ) {
+		return new WP_Error( 'wpum_field_not_found', esc_html__( 'The field does not exist.', 'wp-user-manager' ), array( 'status' => 404 ) );
+	}
+
+	$data           = is_array( $data ) ? $data : array();
+	$setting_fields = null === $args['settings'] ? wpum_get_field_settings_config( $field_to_update ) : (array) $args['settings'];
+
+	if ( $args['strict'] ) {
+		$settings_by_key = array();
+
+		foreach ( $setting_fields as $setting_field ) {
+			if ( is_array( $setting_field ) && isset( $setting_field['model'] ) ) {
+				$settings_by_key[ $setting_field['model'] ] = $setting_field;
+			}
+		}
+
+		$valid = wpum_validate_field_settings( $field_to_update, $data, $settings_by_key );
+
+		if ( is_wp_error( $valid ) ) {
+			return $valid;
+		}
+	}
+
+	foreach ( $data as $setting_id => $setting_data ) {
+		if ( in_array( $setting_id, apply_filters( 'wpum_update_field_excluded_settings', array( 'conditions' ) ), true ) ) {
+			continue;
+		}
+
+		// Update the name and description.
+		if ( 'field_title' === $setting_id ) {
+			$field_to_update->update( array( 'name' => sanitize_text_field( $setting_data ) ) );
+		} elseif ( 'field_description' === $setting_id ) {
+			$field_to_update->update( array( 'description' => wp_kses_post( $setting_data ) ) );
+			// Now update the meta data.
+		} elseif ( 'user_meta_key' === $setting_id && ! $field_to_update->is_primary() ) {
+			$field_to_update->update_meta( $setting_id, wpum_prepare_field_user_meta_key( $field_to_update, $setting_data ) );
+		} else {
+
+			// Find the type of input for this setting.
+			$criteria       = array( 'model' => $setting_id );
+			$setting_config = wp_list_filter( $setting_fields, $criteria );
+
+			// Find the first key of the array within the setting config array.
+			reset( $setting_config );
+			$first_key      = key( $setting_config );
+			$setting_config = isset( $setting_config[ $first_key ] ) ? $setting_config[ $first_key ] : false;
+
+			if ( is_array( $setting_config ) && array_key_exists( 'type', $setting_config ) ) {
+
+				$setting_type = $setting_config['type'];
+
+				switch ( $setting_type ) {
+					case 'input':
+					case 'radios':
+						$setting_data = sanitize_text_field( $setting_data );
+						break;
+					case 'textarea':
+						$setting_data = wp_kses_post( $setting_data );
+						break;
+					case 'checkbox':
+						$setting_data = 'true' === $setting_data || true === $setting_data;
+						break;
+					case 'multiselect':
+						break;
+					default:
+						$sanitize_method = apply_filters( 'wpum_update_fields_sanitize_method', 'sanitize_text_field', $setting_type, $setting_data );
+						$setting_data    = call_user_func( $sanitize_method, $setting_data );
+						break;
+				}
+
+				// Now finally save the data.
+				if ( $setting_data ) {
+					$field_to_update->update_meta( $setting_id, $setting_data );
+				} else {
+					$field_to_update->delete_meta( $setting_id );
+				}
+			}
+		}
+	}
+
+	$dropdown_options = $args['dropdown_options'];
+
+	if ( is_array( $dropdown_options ) && ! empty( $dropdown_options ) ) {
+		$options = array();
+		foreach ( $dropdown_options as $key => $value ) {
+			$options[ $key ] = array(
+				'value' => sanitize_text_field( isset( $value['value'] ) ? $value['value'] : '' ),
+				'label' => sanitize_text_field( isset( $value['label'] ) ? $value['label'] : '' ),
+			);
+		}
+		$field_to_update->update_meta( 'dropdown_options', $options );
+	}
+
+	wpum_delete_field_group_fields_cache( $field_to_update->get_group_id() );
+
+	return true;
+}
+
+/**
+ * Delete the cached list of fields in a group.
+ *
+ * @param int $group_id
+ * @param int $parent_id Parent field ID, for the child fields of a repeater.
+ *
+ * @return void
+ */
+function wpum_delete_field_group_fields_cache( $group_id, $parent_id = 0 ) {
+	$args = array(
+		'group_id' => (int) $group_id,
+		'orderby'  => 'field_order',
+		'order'    => 'ASC',
+		'parent'   => $parent_id,
+	);
+
+	$cache_key = WPUM()->fields->get_cache_key_from_args( $args );
+
+	wp_cache_delete( $cache_key, WPUM()->fields->cache_group );
+}
