@@ -68,11 +68,12 @@ test.describe('Utility pages are noindexed', () => {
  * the final output with each one active.
  */
 const seoPlugins = [
-  { slug: 'wordpress-seo', name: 'Yoast SEO', setup: '' },
+  { slug: 'wordpress-seo', name: 'Yoast SEO', marker: 'optimized with the Yoast SEO plugin', setup: '' },
   // Turn the sitemap module on rather than relying on Rank Math's install defaults.
   {
     slug: 'seo-by-rank-math',
     name: 'Rank Math',
+    marker: 'Search Engine Optimization by Rank Math',
     setup: `eval 'update_option( "rank_math_modules", array_values( array_unique( array_merge( (array) get_option( "rank_math_modules", array() ), array( "sitemap" ) ) ) ) );'`,
   },
 ];
@@ -80,7 +81,7 @@ const seoPlugins = [
 for (const plugin of seoPlugins) {
   test.describe.serial(`Utility pages are noindexed with ${plugin.name} active`, () => {
     test.beforeAll(() => {
-      wpCli(`plugin install ${plugin.slug} --activate`, 120000);
+      console.log(`[WPUM E2E] ${wpCli(`plugin install ${plugin.slug} --activate`, 120000)}`);
       if (plugin.setup) {
         wpCli(plugin.setup);
       }
@@ -92,14 +93,21 @@ for (const plugin of seoPlugins) {
       wpCli('rewrite flush');
     });
 
+    test('plugin is active', () => {
+      expect(wpCli('plugin list --status=active --field=name').split('\n').map((name) => name.trim())).toContain(plugin.slug);
+    });
+
     test('robots meta', async ({ request, loginPage, registerPage, passwordRecoveryPage, profilePage, directoryPage, profileCardPage }) => {
       for (const path of [loginPage, registerPage, passwordRecoveryPage, profilePage]) {
         const html = await (await request.get(path)).text();
+        // The plugin built the head, so its robots output is what's checked.
+        expect(html, path).toContain(plugin.marker);
         expect(robotsMeta(html), path).toContain('noindex');
       }
 
       for (const path of [directoryPage, profileCardPage]) {
         const html = await (await request.get(path)).text();
+        expect(html, path).toContain(plugin.marker);
         const robots = robotsMeta(html);
         expect(robots, path).not.toBe('');
         expect(robots, path).not.toContain('noindex');
