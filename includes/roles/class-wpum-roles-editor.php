@@ -146,7 +146,6 @@ class WPUM_Roles_Editor {
 			'table_add_cap'         => esc_html__( 'Add New Capability', 'wp-user-manager' ),
 			'table_default_tooltip' => esc_html__( 'The default role cannot be deleted.', 'wp-user-manager' ),
 			'table_duplicate_role'  => esc_html__( 'Duplicate', 'wp-user-manager' ),
-			'table_rename_role'     => esc_html__( 'Rename', 'wp-user-manager' ),
 			'table_delete_role'     => esc_html__( 'Delete', 'wp-user-manager' ),
 			'table_customize'       => esc_html__( 'Edit Capabilities', 'wp-user-manager' ),
 			'add_new_cap'           => esc_html__( 'Add Custom Capability', 'wp-user-manager' ),
@@ -326,7 +325,7 @@ class WPUM_Roles_Editor {
 	}
 
 	/**
-	 * Rename a role via ajax. Only the display name changes, never the slug.
+	 * Update a form via ajax.
 	 *
 	 * @return void
 	 */
@@ -343,23 +342,19 @@ class WPUM_Roles_Editor {
 		$role_name = filter_input( INPUT_POST, 'role_name', FILTER_UNSAFE_RAW );
 		$role_name = sanitize_text_field( $role_name );
 
-		if ( '' === $role_id || '' === $role_name ) {
-			wp_send_json_error( esc_html__( 'Something went wrong: could not update the role details.', 'wp-user-manager' ), 403 );
-		}
+		if ( $role_id && $role_name ) {
 
-		$data = apply_filters( 'wpum_role_update', array(
-			'name' => $role_name,
-		), $role_id );
+			$data = apply_filters( 'wpum_role_update', array(
+				'name' => sanitize_text_field( $role_name ),
+			), sanitize_text_field( $role_id ) );
 
-		$renamed = wpum_rename_role( $role_id, $data['name'] );
-
-		if ( is_wp_error( $renamed ) ) {
-			wp_send_json_error( $renamed->get_error_message(), 400 );
+		} else {
+			wp_die( esc_html__( 'Something went wrong: could not update the registration form details.', 'wp-user-manager' ), 403 );
 		}
 
 		wp_send_json_success( array(
 			'id'   => $role_id,
-			'name' => wp_roles()->roles[ $role_id ]['name'],
+			'name' => $role_name,
 		) );
 	}
 
