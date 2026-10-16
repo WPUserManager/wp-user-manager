@@ -44,6 +44,8 @@ class LoggedInLoginRedirectTest extends WPUMTestCase {
 	public function tearDown(): void {
 		remove_filter( 'wp_redirect', array( $this, 'throw_redirect' ) );
 		remove_all_filters( 'wpum_shortcode_logged_in_override' );
+		remove_filter( 'login_url', 'wpum_login_url', 10 );
+		unset( $_COOKIE[ LOGGED_IN_COOKIE ] );
 		wpum_update_option( 'login_page', $this->original_login_page );
 		$_GET = array();
 		parent::tearDown();
@@ -123,5 +125,39 @@ class LoggedInLoginRedirectTest extends WPUMTestCase {
 		add_filter( 'wpum_shortcode_logged_in_override', '__return_true' );
 
 		$this->assertNull( $this->visit( $this->login_page_id, array( 'redirect_to' => admin_url() ) ) );
+	}
+
+	/**
+	 * Query args of a wp_login_url() forcing reauth, as auth_redirect() builds it.
+	 *
+	 * @param string $target
+	 *
+	 * @return array
+	 */
+	protected function forced_reauth_login_args( $target ) {
+		add_filter( 'login_url', 'wpum_login_url', 10, 3 );
+
+		$args = array();
+		wp_parse_str( (string) wp_parse_url( wp_login_url( $target, true ), PHP_URL_QUERY ), $args );
+
+		return $args;
+	}
+
+	public function test_forced_reauth_is_kept_for_visitors_still_logged_in() {
+		// wp-admin rejected the auth cookie, but the logged in cookie is valid.
+		$_COOKIE[ LOGGED_IN_COOKIE ] = wp_generate_auth_cookie( get_current_user_id(), time() + HOUR_IN_SECONDS, 'logged_in' );
+
+		$args = $this->forced_reauth_login_args( admin_url() );
+
+		$this->assertSame( '1', $args['reauth'] );
+		$this->assertNull( $this->visit( $this->login_page_id, $args ) );
+	}
+
+	public function test_forced_reauth_is_dropped_for_logged_out_visitors() {
+		// Logged out when wp-admin sent them to log in; logged in by the time the page loads.
+		$args = $this->forced_reauth_login_args( admin_url() );
+
+		$this->assertArrayNotHasKey( 'reauth', $args );
+		$this->assertSame( admin_url(), $this->visit( $this->login_page_id, $args ) );
 	}
 }

@@ -274,7 +274,7 @@ function wpum_redirect_logged_in_from_login_page() {
 		return;
 	}
 
-	// auth_redirect() adds reauth when the admin auth cookie is invalid; redirecting back would loop.
+	// Set when the admin auth cookie is rejected while the visitor is still logged in (see wpum_login_url()); redirecting back would loop.
 	if ( ! empty( $_GET['reauth'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 		return;
 	}
