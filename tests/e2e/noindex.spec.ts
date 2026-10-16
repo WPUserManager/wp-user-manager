@@ -5,10 +5,9 @@ import { test, expect, wpCli, wpAdminLogin } from './fixtures';
  *
  * @see https://github.com/WPUserManager/wp-user-manager/issues/514
  */
-const robotsMeta = (html: string): string => {
-  const match = html.match(/<meta name=['"]robots['"] content=['"]([^'"]*)['"]/);
-  return match ? match[1] : '';
-};
+// Every robots meta tag on the page, joined, so a second tag from an SEO plugin isn't missed.
+const robotsMeta = (html: string): string =>
+  [...html.matchAll(/<meta name=['"]robots['"] content=['"]([^'"]*)['"]/g)].map((match) => match[1]).join(' | ');
 
 test.describe('Utility pages are noindexed', () => {
   test('login, register, password and profile pages are noindexed for guests', async ({ request, loginPage, registerPage, passwordRecoveryPage, profilePage }) => {
@@ -63,3 +62,51 @@ test.describe('Utility pages are noindexed', () => {
     }
   });
 });
+
+/**
+ * Yoast SEO and Rank Math replace the core robots output and sitemap, so check
+ * the final output with each one active.
+ */
+const seoPlugins = [
+  { slug: 'wordpress-seo', name: 'Yoast SEO' },
+  { slug: 'seo-by-rank-math', name: 'Rank Math' },
+];
+
+for (const plugin of seoPlugins) {
+  test.describe.serial(`Utility pages are noindexed with ${plugin.name} active`, () => {
+    test.beforeAll(() => {
+      wpCli(`plugin install ${plugin.slug} --activate`, 120000);
+      wpCli('rewrite flush');
+    });
+
+    test.afterAll(() => {
+      wpCli(`plugin uninstall ${plugin.slug} --deactivate`, 60000);
+      wpCli('rewrite flush');
+    });
+
+    test('robots meta', async ({ request, loginPage, registerPage, passwordRecoveryPage, profilePage, directoryPage, profileCardPage }) => {
+      for (const path of [loginPage, registerPage, passwordRecoveryPage, profilePage]) {
+        const html = await (await request.get(path)).text();
+        expect(robotsMeta(html), path).toContain('noindex');
+      }
+
+      for (const path of [directoryPage, profileCardPage]) {
+        const html = await (await request.get(path)).text();
+        const robots = robotsMeta(html);
+        expect(robots, path).not.toBe('');
+        expect(robots, path).not.toContain('noindex');
+      }
+    });
+
+    test('page sitemap', async ({ request, loginPage, registerPage, passwordRecoveryPage, accountPage, profilePage, directoryPage }) => {
+      const response = await request.get('/page-sitemap.xml');
+      expect(response.ok()).toBeTruthy();
+      const sitemap = await response.text();
+
+      expect(sitemap).toContain(directoryPage);
+      for (const path of [loginPage, registerPage, passwordRecoveryPage, accountPage, profilePage]) {
+        expect(sitemap, path).not.toContain(`${path}<`);
+      }
+    });
+  });
+}
