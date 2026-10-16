@@ -69,12 +69,14 @@ test.describe('Utility pages are noindexed', () => {
  */
 const seoPlugins = [
   { slug: 'wordpress-seo', name: 'Yoast SEO', marker: 'optimized with the Yoast SEO plugin', setup: '' },
-  // Turn the sitemap module on rather than relying on Rank Math's install defaults.
+  // Rank Math's front end stays off until the site connects an account or the setup
+  // wizard is skipped, so skip it. Also turn the sitemap module on rather than relying
+  // on its install defaults.
   {
     slug: 'seo-by-rank-math',
     name: 'Rank Math',
     marker: 'Search Engine Optimization by Rank Math',
-    setup: `eval 'update_option( "rank_math_modules", array_values( array_unique( array_merge( (array) get_option( "rank_math_modules", array() ), array( "sitemap" ) ) ) ) );'`,
+    setup: `eval 'update_option( "rank_math_registration_skip", true ); update_option( "rank_math_modules", array_values( array_unique( array_merge( (array) get_option( "rank_math_modules", array() ), array( "sitemap" ) ) ) ) );'`,
   },
 ];
 
