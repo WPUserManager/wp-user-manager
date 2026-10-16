@@ -311,6 +311,7 @@ if ( ! class_exists( 'WP_User_Manager' ) ) :
 			require_once WPUM_PLUGIN_DIR . 'includes/permalinks.php';
 			require_once WPUM_PLUGIN_DIR . 'includes/actions.php';
 			require_once WPUM_PLUGIN_DIR . 'includes/filters.php';
+			require_once WPUM_PLUGIN_DIR . 'includes/seo.php';
 			require_once WPUM_PLUGIN_DIR . 'includes/assets.php';
 			require_once WPUM_PLUGIN_DIR . 'includes/abstracts/class-wpum-wp-db-table.php';
 			require_once WPUM_PLUGIN_DIR . 'includes/abstracts/class-wpum-db.php';
