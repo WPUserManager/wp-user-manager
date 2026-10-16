@@ -68,14 +68,22 @@ test.describe('Utility pages are noindexed', () => {
  * the final output with each one active.
  */
 const seoPlugins = [
-  { slug: 'wordpress-seo', name: 'Yoast SEO' },
-  { slug: 'seo-by-rank-math', name: 'Rank Math' },
+  { slug: 'wordpress-seo', name: 'Yoast SEO', setup: '' },
+  // Turn the sitemap module on rather than relying on Rank Math's install defaults.
+  {
+    slug: 'seo-by-rank-math',
+    name: 'Rank Math',
+    setup: `eval 'update_option( "rank_math_modules", array_values( array_unique( array_merge( (array) get_option( "rank_math_modules", array() ), array( "sitemap" ) ) ) ) );'`,
+  },
 ];
 
 for (const plugin of seoPlugins) {
   test.describe.serial(`Utility pages are noindexed with ${plugin.name} active`, () => {
     test.beforeAll(() => {
       wpCli(`plugin install ${plugin.slug} --activate`, 120000);
+      if (plugin.setup) {
+        wpCli(plugin.setup);
+      }
       wpCli('rewrite flush');
     });
 
@@ -100,8 +108,8 @@ for (const plugin of seoPlugins) {
 
     test('page sitemap', async ({ request, loginPage, registerPage, passwordRecoveryPage, accountPage, profilePage, directoryPage }) => {
       const response = await request.get('/page-sitemap.xml');
-      expect(response.ok()).toBeTruthy();
       const sitemap = await response.text();
+      expect(response.status(), sitemap.slice(0, 500)).toBe(200);
 
       expect(sitemap).toContain(directoryPage);
       for (const path of [loginPage, registerPage, passwordRecoveryPage, accountPage, profilePage]) {
