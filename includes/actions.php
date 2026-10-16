@@ -58,7 +58,7 @@ add_action( 'delete_post', 'wpum_delete_pages_transient_on_delete', 99, 2 );
  */
 function wpum_admin_bar_menu( $wp_admin_bar ) {
 
-	if ( ! current_user_can( apply_filters( 'wpum_admin_pages_capability', 'manage_options' ) ) ) {
+	if ( ! wpum_current_user_can_manage() ) {
 		return;
 	}
 
@@ -1179,7 +1179,7 @@ function validate_user_meta_key() {
 		return;
 	}
 
-	if ( ! current_user_can( apply_filters( 'wpum_admin_pages_capability', 'manage_options' ) ) ) {
+	if ( ! wpum_current_user_can_manage() ) {
 		return;
 	}
 

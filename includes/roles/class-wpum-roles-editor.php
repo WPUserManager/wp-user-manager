@@ -27,7 +27,7 @@ class WPUM_Roles_Editor {
 	 */
 	public function __construct() {
 		$this->init_hooks();
-		$this->capability = apply_filters( 'wpum_admin_pages_capability', 'manage_options' );
+		$this->capability = wpum_get_admin_capability();
 	}
 
 	/**
