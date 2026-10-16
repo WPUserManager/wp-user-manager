@@ -228,7 +228,9 @@ class WPUM_License {
 	 *
 	 * Licenses saved on 2.9.14 - 2.9.19 were stored but never activated, because
 	 * handle_activate_license() couldn't see the Carbon Fields 3 compacted input.
-	 * Only `site_inactive` is touched, so expired, disabled or invalid licenses are left alone.
+	 * EDD reports such a key as `inactive` if it has never been activated anywhere, or
+	 * `site_inactive` if it is active on another site. Only those two are touched, so
+	 * expired, disabled or invalid licenses are left alone.
 	 *
 	 * @return void
 	 */
@@ -236,7 +238,7 @@ class WPUM_License {
 		// Uses the cached status when there is one, otherwise checks with EDD.
 		$data = $this->get_license_data();
 
-		if ( ! isset( $data['status'] ) || 'site_inactive' !== $data['status'] ) {
+		if ( ! isset( $data['status'] ) || ! in_array( $data['status'], array( 'inactive', 'site_inactive' ), true ) ) {
 			return;
 		}
 

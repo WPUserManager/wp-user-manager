@@ -4,7 +4,7 @@
  *
  * This template can be overridden by copying it to yourtheme/wpum/stripe/account/plans.php
  *
- * @version 2.9.23
+ * @version 2.9.26
  */
 
 ?>
@@ -30,7 +30,7 @@ foreach ( $data->products as $product ) :
 					continue;
 				}
 				?>
-				<strong><?php echo esc_html( \WPUserManager\Stripe\Stripe::currencySymbol( $price['currency'] ) . number_format( $price['unit_amount'] / 100 ) ); ?></strong><?php echo esc_html( isset( $price['recurring']['interval'] ) ? '/' . $price['recurring']['interval'] : '' ); ?>
+				<strong><?php echo esc_html( \WPUserManager\Stripe\Stripe::currencySymbol( $price['currency'] ) . number_format( $price['unit_amount'] / 100, 2 ) ); ?></strong><?php echo esc_html( isset( $price['recurring']['interval'] ) ? '/' . $price['recurring']['interval'] : '' ); ?>
 				<br>
 			<?php endforeach; ?>
 		</div>

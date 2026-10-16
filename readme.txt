@@ -8,7 +8,7 @@ Tested up to: 7.1
 Requires PHP: 7.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
-Stable Tag: 2.9.25
+Stable Tag: 2.9.26
 
 Registration forms, a frontend login form, user profiles and a member directory for WordPress. Add Stripe payments and content restriction.
 
@@ -166,6 +166,15 @@ Please note that using WPUM and the mentioned add-ons does NOT guarantee complia
 13. Login form.
 
 == Changelog ==
+
+= 2.9.26 (16th October 2026) =
+
+- Security: Customers who haven't paid for a Stripe plan stay restricted when Stripe isn't connected (thanks to Charles Vosburgh via WPScan for responsible disclosure)
+- Security: Registration forms with Stripe products no longer accept registrations while Stripe isn't connected
+- Fix: Duplicate default registration forms are no longer created on first activation
+- Fix: WP User Manager form pages are kept out of page and browser caches
+- Fix: Menu item settings no longer query the database for every item
+- Fix: The Stripe plan choice on registration forms has a label, and billing amounts show to the cent
 
 = 2.9.25 (14th October 2026) =
 
