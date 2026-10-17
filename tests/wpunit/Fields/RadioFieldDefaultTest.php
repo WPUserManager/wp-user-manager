@@ -57,6 +57,32 @@ class RadioFieldDefaultTest extends WPUMTestCase {
 		$this->assertSame( array( 'blue' ), $this->checked_values( $this->render( array( 'default' => 'green', 'value' => 'blue' ) ) ) );
 	}
 
+	public function test_saved_zero_value_is_selected() {
+		$options = array( 'options' => array( '0' => 'No', '1' => 'Yes' ) );
+
+		$this->assertSame( array( '0' ), $this->checked_values( $this->render( $options + array( 'value' => '0' ) ) ) );
+		$this->assertSame( array( '0' ), $this->checked_values( $this->render( $options + array( 'value' => 0 ) ) ) );
+	}
+
+	public function test_saved_zero_value_wins_over_another_default() {
+		$args = array(
+			'options' => array( '0' => 'No', '1' => 'Yes' ),
+			'value'   => '0',
+			'default' => '1',
+		);
+
+		$this->assertSame( array( '0' ), $this->checked_values( $this->render( $args ) ) );
+	}
+
+	public function test_zero_default_is_selected() {
+		$args = array(
+			'options' => array( '0' => 'No', '1' => 'Yes' ),
+			'default' => '0',
+		);
+
+		$this->assertSame( array( '0' ), $this->checked_values( $this->render( $args ) ) );
+	}
+
 	public function test_filter_restores_first_option_selection() {
 		add_filter( 'wpum_radio_field_select_first_option', '__return_true' );
 

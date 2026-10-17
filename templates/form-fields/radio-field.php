@@ -20,11 +20,20 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 // Only pre-select an option when the field has a default. Pre-selecting the first
 // option chose an answer for the user (#153); the filter restores that behaviour.
-if ( empty( $data->default ) && apply_filters( 'wpum_radio_field_select_first_option', false, $data ) ) {
+// A saved or default value of "0" is a real answer, so only treat null and '' as missing.
+$wpum_radio_has = function ( $value ) {
+	return is_scalar( $value ) && '' !== (string) $value;
+};
+
+$has_value   = isset( $data->value ) && $wpum_radio_has( $data->value );
+$has_default = isset( $data->default ) && $wpum_radio_has( $data->default );
+
+if ( ! $has_default && apply_filters( 'wpum_radio_field_select_first_option', false, $data ) ) {
 	$data->default = current( array_keys( $data->options ) );
+	$has_default   = true;
 }
 
-$default = ! empty( $data->value ) ? $data->value : ( isset( $data->default ) ? $data->default : '' );
+$default = $has_value ? $data->value : ( $has_default ? $data->default : '' );
 
 foreach ( $data->options as $option_key => $value ) : ?>
 
