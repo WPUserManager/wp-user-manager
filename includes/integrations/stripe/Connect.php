@@ -202,6 +202,10 @@ class Connect {
 	 * mode is reused, since the buttons are built on every settings load,
 	 * including every REST request.
 	 *
+	 * The state carries the hash of a secret verifier that stays on this site.
+	 * The Connect service only hands the account's keys to whoever sends the
+	 * verifier, so seeing the state in a URL or a log isn't enough to get them.
+	 *
 	 * @param false $test_mode
 	 *
 	 * @return string
@@ -209,19 +213,24 @@ class Connect {
 	protected function get_state( $test_mode = false ) {
 		$mode   = $test_mode ? 'test' : 'live';
 		$issued = $this->get_issued_states();
-		if ( isset( $issued[ $mode ]['state'], $issued[ $mode ]['time'] ) && $issued[ $mode ]['time'] > time() - 12 * HOUR_IN_SECONDS ) {
+
+		// States issued by older versions have no verifier, so they aren't reused.
+		if ( isset( $issued[ $mode ]['state'], $issued[ $mode ]['time'], $issued[ $mode ]['verifier'] ) && $issued[ $mode ]['time'] > time() - 12 * HOUR_IN_SECONDS ) {
 			return $issued[ $mode ]['state'];
 		}
+
+		$verifier = wp_generate_password( 32, false );
 
 		$state = array(
 			'test_mode' => (int) $test_mode,
 			'site_id'   => str_pad( wp_rand( wp_rand(), PHP_INT_MAX ), 10, wp_rand(), STR_PAD_BOTH ),
 			'site_url'  => $this->get_site_url(),
+			'challenge' => hash( 'sha256', $verifier ),
 		);
 
 		$state = base64_encode( serialize( $state ) ); // phpcs:ignore
 
-		$this->remember_state( $mode, $state );
+		$this->remember_state( $mode, $state, $verifier );
 
 		return $state;
 	}
@@ -253,10 +262,11 @@ class Connect {
 	/**
 	 * Record a state issued to the current user so the callback can be tied to it.
 	 *
-	 * @param string $mode  'test' or 'live'.
+	 * @param string $mode     'test' or 'live'.
 	 * @param string $state
+	 * @param string $verifier The secret whose hash is the state's challenge.
 	 */
-	protected function remember_state( $mode, $state ) {
+	protected function remember_state( $mode, $state, $verifier = '' ) {
 		if ( ! get_current_user_id() ) {
 			return;
 		}
@@ -267,6 +277,10 @@ class Connect {
 			'time'  => time(),
 		);
 
+		if ( '' !== $verifier ) {
+			$states[ $mode ]['verifier'] = $verifier;
+		}
+
 		set_transient( $this->get_states_transient_key(), $states, DAY_IN_SECONDS );
 	}
 
@@ -274,10 +288,13 @@ class Connect {
 	 * Check a callback state was issued to the current user, and consume it.
 	 *
 	 * @param string $state
+	 * @param string $verifier Set to the state's verifier, or '' if it was issued without one.
 	 *
 	 * @return bool
 	 */
-	protected function consume_state( $state ) {
+	protected function consume_state( $state, &$verifier = '' ) {
+		$verifier = '';
+
 		$states = get_transient( $this->get_states_transient_key() );
 		if ( ! is_array( $states ) ) {
 			return false;
@@ -288,11 +305,15 @@ class Connect {
 		$state = rtrim( str_replace( ' ', '+', $state ), '=' );
 
 		foreach ( $states as $issued ) {
+			$issued_verifier = is_array( $issued ) && isset( $issued['verifier'] ) && is_string( $issued['verifier'] ) ? $issued['verifier'] : '';
+
 			// Before 2.9.23 each entry was the state itself.
 			$issued = is_array( $issued ) && isset( $issued['state'] ) ? $issued['state'] : $issued;
 
 			if ( is_string( $issued ) && hash_equals( rtrim( $issued, '=' ), $state ) ) {
 				delete_transient( $this->get_states_transient_key() );
+
+				$verifier = $issued_verifier;
 
 				return true;
 			}
@@ -337,6 +358,29 @@ class Connect {
 	}
 
 	/**
+	 * Ask the Connect service for the keys of the account just connected. The
+	 * verifier goes in the POST body, so it never passes through a browser.
+	 *
+	 * @param string $state
+	 * @param string $verifier Empty for a state issued without one.
+	 *
+	 * @return array|\WP_Error
+	 */
+	protected function request_credentials( $state, $verifier ) {
+		$body = array(
+			'state' => $state,
+		);
+
+		if ( '' !== $verifier ) {
+			$body['verifier'] = $verifier;
+		}
+
+		return wp_remote_post( esc_url_raw( $this->get_base_url() . '/creds' ), array(
+			'body' => $body,
+		) );
+	}
+
+	/**
 	 * Complete connection
 	 */
 	public function complete() {
@@ -366,17 +410,14 @@ class Connect {
 			return;
 		}
 
-		if ( ! $this->consume_state( $state ) ) {
+		$verifier = '';
+		if ( ! $this->consume_state( $state, $verifier ) ) {
 			/* translators: %1$s Opening anchor tag, do not translate. %2$s Closing anchor tag, do not translate. */
 			$message = '<p>' . sprintf( __( 'This Stripe connection request has expired or was not started from this site. Please %1$sconnect again%2$s.', 'wp-user-manager' ), '<a href="' . esc_url( $this->get_site_url() . '#/stripe' ) . '">', '</a>' ) . '</p>';
 			wp_die( $message );  // phpcs:ignore
 		}
 
-		$wpum_credentials_url = add_query_arg( array(
-			'state' => sanitize_text_field( $state ),
-		), $this->get_base_url() . '/creds' );
-
-		$response = wp_remote_get( esc_url_raw( $wpum_credentials_url ) );
+		$response = $this->request_credentials( $state, $verifier );
 
 		if ( is_wp_error( $response ) || 200 !== wp_remote_retrieve_response_code( $response ) ) {
 			/* translators: %1$s Opening anchor tag, do not translate. %2$s Closing anchor tag, do not translate. */
