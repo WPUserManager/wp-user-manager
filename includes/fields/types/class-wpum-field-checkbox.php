@@ -21,11 +21,12 @@ class WPUM_Field_Checkbox extends WPUM_Field_Type {
 	 * Construct
 	 */
 	public function __construct() {
-		$this->type          = 'checkbox';
-		$this->icon          = 'dashicons-yes';
-		$this->order         = 3;
-		$this->allow_default = true;
-		$this->default_type  = 'checkbox';
+		$this->type                 = 'checkbox';
+		$this->supports_placeholder = false;
+		$this->icon                 = 'dashicons-yes';
+		$this->order                = 3;
+		$this->allow_default        = true;
+		$this->default_type         = 'checkbox';
 	}
 
 	/**
