@@ -72,6 +72,13 @@ class ConnectDisconnectTest extends WPUMTestCase {
 		return $this->response;
 	}
 
+	protected function sorted_keys( $array ) {
+		$keys = array_keys( $array );
+		sort( $keys );
+
+		return $keys;
+	}
+
 	protected function settings() {
 		return new \WPUserManager\Stripe\Settings( new \WPUserManager\Stripe\Connect() );
 	}
@@ -85,6 +92,8 @@ class ConnectDisconnectTest extends WPUMTestCase {
 
 		$this->assertSame( 'https://connect.wpusermanager.com/disconnect', $request['url'] );
 		$this->assertSame( 'POST', $request['args']['method'] );
+		$this->assertSame( array( 'action', 'signature', 'stripe_account_id', 'test_mode', 'timestamp' ), $this->sorted_keys( $body ), 'The Connect service accepts exactly these fields' );
+		$this->assertSame( 'disconnect', $body['action'] );
 		$this->assertSame( 'acct_disconnect', $body['stripe_account_id'] );
 		$this->assertSame( '1', $body['test_mode'] );
 		$this->assertEqualsWithDelta( time(), (int) $body['timestamp'], 5 );

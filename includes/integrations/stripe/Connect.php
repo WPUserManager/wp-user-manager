@@ -435,7 +435,9 @@ class Connect {
 			return false;
 		}
 
+		// The action keeps a signed checkout request from being replayed as a disconnect.
 		$params = Billing::signConnectRequest( array(
+			'action'            => 'disconnect',
 			'stripe_account_id' => $account_id,
 			'test_mode'         => 'test' === $mode ? '1' : '0',
 		), $secret );
