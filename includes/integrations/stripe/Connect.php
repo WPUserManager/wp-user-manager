@@ -281,7 +281,7 @@ class Connect {
 		}
 
 		foreach ( array( 'test_legacy', 'live_legacy' ) as $legacy ) {
-			if ( isset( $states[ $legacy ] ) && ( ! isset( $states[ $legacy ]['time'] ) || $states[ $legacy ]['time'] < time() - DAY_IN_SECONDS ) ) {
+			if ( isset( $states[ $legacy ] ) && $this->is_expired_legacy_state( $legacy, $states[ $legacy ] ) ) {
 				unset( $states[ $legacy ] );
 			}
 		}
@@ -296,6 +296,22 @@ class Connect {
 		}
 
 		set_transient( $this->get_states_transient_key(), $states, DAY_IN_SECONDS );
+	}
+
+	/**
+	 * Whether an issued state is a state from an older version kept for more than a day.
+	 *
+	 * @param string|int $key    Its key among the issued states.
+	 * @param mixed      $issued The issued state.
+	 *
+	 * @return bool
+	 */
+	protected function is_expired_legacy_state( $key, $issued ) {
+		if ( ! in_array( $key, array( 'test_legacy', 'live_legacy' ), true ) ) {
+			return false;
+		}
+
+		return ! isset( $issued['time'] ) || $issued['time'] < time() - DAY_IN_SECONDS;
 	}
 
 	/**
@@ -318,7 +334,11 @@ class Connect {
 		// add_query_arg() strips a trailing '=' from the Connect URL, so ignore padding.
 		$state = rtrim( str_replace( ' ', '+', $state ), '=' );
 
-		foreach ( $states as $issued ) {
+		foreach ( $states as $key => $issued ) {
+			if ( $this->is_expired_legacy_state( $key, $issued ) ) {
+				continue;
+			}
+
 			$issued_verifier = is_array( $issued ) && isset( $issued['verifier'] ) && is_string( $issued['verifier'] ) ? $issued['verifier'] : '';
 
 			// Before 2.9.23 each entry was the state itself.

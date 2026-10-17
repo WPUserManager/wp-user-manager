@@ -494,6 +494,16 @@ class PluginDirectoryReviewTest extends WPUMTestCase {
 		$this->assertFalse( $this->call_protected( $connect, 'consume_state', array( $old ) ) );
 	}
 
+	public function test_connect_expired_legacy_state_is_refused_on_return() {
+		$admin_id = $this->create_admin();
+		$old      = base64_encode( serialize( array( 'test_mode' => 1, 'site_id' => '42', 'site_url' => 'https://example.test' ) ) ); // phpcs:ignore
+
+		// The transient was renewed by a later state, but the legacy one is over a day old.
+		set_transient( 'wpum_stripe_connect_states_' . $admin_id, array( 'test_legacy' => array( 'state' => $old, 'time' => time() - DAY_IN_SECONDS - 1 ) ), DAY_IN_SECONDS );
+
+		$this->assertFalse( $this->call_protected( new \WPUserManager\Stripe\Connect(), 'consume_state', array( $old ) ) );
+	}
+
 	public function test_connect_state_issued_without_a_verifier_is_still_accepted() {
 		$admin_id = $this->create_admin();
 		$old      = base64_encode( serialize( array( 'test_mode' => 1, 'site_id' => '42', 'site_url' => 'https://example.test' ) ) ); // phpcs:ignore
