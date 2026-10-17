@@ -600,19 +600,7 @@ class Settings {
 			return;
 		}
 
-		$prefix = $mode;
-
-		$options = array(
-			$prefix . '_stripe_publishable_key',
-			$prefix . '_stripe_secret_key',
-			$prefix . '_stripe_webhook_secret',
-		);
-
-		foreach ( $options as $option ) {
-			wpum_delete_option( $option );
-		}
-
-		Products::forget( $prefix );
+		$this->disconnect( $mode );
 
 		$redirect = remove_query_arg(
 			array(
@@ -623,6 +611,28 @@ class Settings {
 		);
 
 		return wp_safe_redirect( esc_url_raw( $redirect ) );
+	}
+
+	/**
+	 * Disconnect a mode: tell the Connect service, then forget the mode's keys.
+	 * The keys are forgotten even if the Connect service can't be reached.
+	 *
+	 * @param string $mode 'test' or 'live'.
+	 */
+	public function disconnect( $mode ) {
+		$this->connect->disconnect_from_service( $mode );
+
+		$options = array(
+			$mode . '_stripe_publishable_key',
+			$mode . '_stripe_secret_key',
+			$mode . '_stripe_webhook_secret',
+		);
+
+		foreach ( $options as $option ) {
+			wpum_delete_option( $option );
+		}
+
+		Products::forget( $mode );
 	}
 
 	/**
