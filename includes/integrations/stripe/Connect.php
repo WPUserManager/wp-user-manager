@@ -415,6 +415,40 @@ class Connect {
 	}
 
 	/**
+	 * Tell the Connect service a mode was disconnected, so it deletes the
+	 * connection and revokes its access to the Stripe account. Signed with the
+	 * mode's secret key, like checkout requests. Best effort: the caller
+	 * disconnects whatever the answer.
+	 *
+	 * @param string $mode 'test' or 'live'.
+	 *
+	 * @return array|\WP_Error|false False if there is no connection to report.
+	 */
+	public function disconnect_from_service( $mode ) {
+		if ( ! in_array( $mode, array( 'test', 'live' ), true ) ) {
+			return false;
+		}
+
+		$account_id = wpum_get_option( 'stripe_connect_account_id' );
+		$secret     = $this->get_stripe_secret( $mode );
+		if ( empty( $account_id ) || empty( $secret ) ) {
+			return false;
+		}
+
+		// The action keeps a signed checkout request from being replayed as a disconnect.
+		$params = Billing::signConnectRequest( array(
+			'action'            => 'disconnect',
+			'stripe_account_id' => $account_id,
+			'test_mode'         => 'test' === $mode ? '1' : '0',
+		), $secret );
+
+		return wp_remote_post( esc_url_raw( $this->get_base_url() . '/disconnect' ), array(
+			'body'    => $params,
+			'timeout' => 10,
+		) );
+	}
+
+	/**
 	 * Complete connection
 	 */
 	public function complete() {
