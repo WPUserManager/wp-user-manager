@@ -256,7 +256,8 @@ class Connect {
 		}
 
 		// Before 2.9.23 this held a list of states; only the by-mode entries are reused.
-		return array_intersect_key( $states, array_flip( array( 'test', 'live' ) ) );
+		// The *_legacy entries are states without a verifier, kept until they come back.
+		return array_intersect_key( $states, array_flip( array( 'test', 'live', 'test_legacy', 'live_legacy' ) ) );
 	}
 
 	/**
@@ -271,7 +272,20 @@ class Connect {
 			return;
 		}
 
-		$states          = $this->get_issued_states();
+		$states = $this->get_issued_states();
+
+		// A state issued by an older version may still be on its way back from
+		// Stripe: keep accepting it for a day, but don't reuse it for new buttons.
+		if ( isset( $states[ $mode ]['state'], $states[ $mode ]['time'] ) && ! isset( $states[ $mode ]['verifier'] ) ) {
+			$states[ $mode . '_legacy' ] = $states[ $mode ];
+		}
+
+		foreach ( array( 'test_legacy', 'live_legacy' ) as $legacy ) {
+			if ( isset( $states[ $legacy ] ) && ( ! isset( $states[ $legacy ]['time'] ) || $states[ $legacy ]['time'] < time() - DAY_IN_SECONDS ) ) {
+				unset( $states[ $legacy ] );
+			}
+		}
+
 		$states[ $mode ] = array(
 			'state' => $state,
 			'time'  => time(),

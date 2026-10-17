@@ -465,6 +465,35 @@ class PluginDirectoryReviewTest extends WPUMTestCase {
 		$this->assertArrayHasKey( 'challenge', unserialize( base64_decode( $state ), array( 'allowed_classes' => false ) ) ); // phpcs:ignore
 	}
 
+	public function test_connect_state_issued_without_a_verifier_survives_new_buttons() {
+		$admin_id = $this->create_admin();
+		$old      = base64_encode( serialize( array( 'test_mode' => 1, 'site_id' => '42', 'site_url' => 'https://example.test' ) ) ); // phpcs:ignore
+		set_transient( 'wpum_stripe_connect_states_' . $admin_id, array( 'test' => array( 'state' => $old, 'time' => time() ) ), DAY_IN_SECONDS );
+
+		// The admin clicked Connect before the upgrade; the settings rebuild the buttons while they're at Stripe.
+		$connect = new \WPUserManager\Stripe\Connect();
+		for ( $i = 0; $i < 5; $i++ ) {
+			$this->call_protected( $connect, 'get_state', array( true ) );
+			$this->call_protected( $connect, 'get_state', array( false ) );
+		}
+
+		$verifier = null;
+		$this->assertTrue( $this->call_protected( $connect, 'consume_state', array( $old, &$verifier ) ), 'The state the admin clicked before the upgrade must still be accepted' );
+		$this->assertSame( '', $verifier );
+	}
+
+	public function test_connect_state_issued_without_a_verifier_expires_after_a_day() {
+		$admin_id = $this->create_admin();
+		$old      = base64_encode( serialize( array( 'test_mode' => 1, 'site_id' => '42', 'site_url' => 'https://example.test' ) ) ); // phpcs:ignore
+		set_transient( 'wpum_stripe_connect_states_' . $admin_id, array( 'test_legacy' => array( 'state' => $old, 'time' => time() - DAY_IN_SECONDS - 1 ) ), DAY_IN_SECONDS );
+
+		$connect = new \WPUserManager\Stripe\Connect();
+		$this->call_protected( $connect, 'get_state', array( true ) );
+
+		$this->assertArrayNotHasKey( 'test_legacy', get_transient( 'wpum_stripe_connect_states_' . $admin_id ) );
+		$this->assertFalse( $this->call_protected( $connect, 'consume_state', array( $old ) ) );
+	}
+
 	public function test_connect_state_issued_without_a_verifier_is_still_accepted() {
 		$admin_id = $this->create_admin();
 		$old      = base64_encode( serialize( array( 'test_mode' => 1, 'site_id' => '42', 'site_url' => 'https://example.test' ) ) ); // phpcs:ignore
