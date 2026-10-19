@@ -21,10 +21,11 @@ class WPUM_Field_Dropdown extends WPUM_Field_Type {
 	 * Construct
 	 */
 	public function __construct() {
-		$this->type          = 'dropdown';
-		$this->icon          = 'dashicons-editor-ul';
-		$this->order         = 3;
-		$this->allow_default = true;
+		$this->type                 = 'dropdown';
+		$this->supports_placeholder = false;
+		$this->icon                 = 'dashicons-editor-ul';
+		$this->order                = 3;
+		$this->allow_default        = true;
 	}
 
 

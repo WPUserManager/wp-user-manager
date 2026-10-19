@@ -21,10 +21,11 @@ class WPUM_Field_Radio extends WPUM_Field_Type {
 	 * Construct
 	 */
 	public function __construct() {
-		$this->type          = 'radio';
-		$this->icon          = 'dashicons-list-view';
-		$this->order         = 3;
-		$this->allow_default = true;
+		$this->type                 = 'radio';
+		$this->supports_placeholder = false;
+		$this->icon                 = 'dashicons-list-view';
+		$this->order                = 3;
+		$this->allow_default        = true;
 	}
 
 	/**

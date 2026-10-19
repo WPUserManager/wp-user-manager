@@ -416,6 +416,150 @@ class PluginDirectoryReviewTest extends WPUMTestCase {
 	}
 
 	/*
+	 * Stripe Connect: only this site can collect the keys, by sending the verifier
+	 * whose hash is in the state (connect-site#4).
+	 */
+
+	public function test_connect_state_carries_the_challenge_for_a_stored_verifier() {
+		$admin_id = $this->create_admin();
+		$connect  = new \WPUserManager\Stripe\Connect();
+		$state    = $this->call_protected( $connect, 'get_state', array( true ) );
+
+		$issued   = get_transient( 'wpum_stripe_connect_states_' . $admin_id );
+		$verifier = $issued['test']['verifier'];
+		$decoded  = unserialize( base64_decode( $state ), array( 'allowed_classes' => false ) ); // phpcs:ignore
+
+		$this->assertSame( 32, strlen( $verifier ) );
+		$this->assertSame( hash( 'sha256', $verifier ), $decoded['challenge'] );
+		$this->assertStringNotContainsString( $verifier, base64_decode( $state ), 'The verifier must not travel in the state' ); // phpcs:ignore
+
+		$live = $this->call_protected( $connect, 'get_state', array( false ) );
+		$this->assertNotSame( $verifier, get_transient( 'wpum_stripe_connect_states_' . $admin_id )['live']['verifier'], 'Each state has its own verifier' );
+		$this->assertNotSame( $state, $live );
+	}
+
+	public function test_connect_consume_state_gives_back_the_verifier() {
+		$admin_id = $this->create_admin();
+		$connect  = new \WPUserManager\Stripe\Connect();
+		$state    = $this->call_protected( $connect, 'get_state', array( true ) );
+		$expected = get_transient( 'wpum_stripe_connect_states_' . $admin_id )['test']['verifier'];
+
+		$verifier = null;
+		$this->assertTrue( $this->call_protected( $connect, 'consume_state', array( $state, &$verifier ) ) );
+		$this->assertSame( $expected, $verifier );
+
+		$verifier = null;
+		$this->assertFalse( $this->call_protected( $connect, 'consume_state', array( $state, &$verifier ) ) );
+		$this->assertSame( '', $verifier );
+	}
+
+	public function test_connect_state_issued_without_a_verifier_is_replaced() {
+		$admin_id = $this->create_admin();
+		$old      = base64_encode( serialize( array( 'test_mode' => 1, 'site_id' => '42', 'site_url' => 'https://example.test' ) ) ); // phpcs:ignore
+		set_transient( 'wpum_stripe_connect_states_' . $admin_id, array( 'test' => array( 'state' => $old, 'time' => time() ) ), DAY_IN_SECONDS );
+
+		$connect = new \WPUserManager\Stripe\Connect();
+		$state   = $this->call_protected( $connect, 'get_state', array( true ) );
+
+		$this->assertNotSame( $old, $state, 'A new Connect button must carry a challenge' );
+		$this->assertArrayHasKey( 'challenge', unserialize( base64_decode( $state ), array( 'allowed_classes' => false ) ) ); // phpcs:ignore
+	}
+
+	public function test_connect_state_issued_without_a_verifier_survives_new_buttons() {
+		$admin_id = $this->create_admin();
+		$old      = base64_encode( serialize( array( 'test_mode' => 1, 'site_id' => '42', 'site_url' => 'https://example.test' ) ) ); // phpcs:ignore
+		set_transient( 'wpum_stripe_connect_states_' . $admin_id, array( 'test' => array( 'state' => $old, 'time' => time() ) ), DAY_IN_SECONDS );
+
+		// The admin clicked Connect before the upgrade; the settings rebuild the buttons while they're at Stripe.
+		$connect = new \WPUserManager\Stripe\Connect();
+		for ( $i = 0; $i < 5; $i++ ) {
+			$this->call_protected( $connect, 'get_state', array( true ) );
+			$this->call_protected( $connect, 'get_state', array( false ) );
+		}
+
+		$verifier = null;
+		$this->assertTrue( $this->call_protected( $connect, 'consume_state', array( $old, &$verifier ) ), 'The state the admin clicked before the upgrade must still be accepted' );
+		$this->assertSame( '', $verifier );
+	}
+
+	public function test_connect_state_issued_without_a_verifier_expires_after_a_day() {
+		$admin_id = $this->create_admin();
+		$old      = base64_encode( serialize( array( 'test_mode' => 1, 'site_id' => '42', 'site_url' => 'https://example.test' ) ) ); // phpcs:ignore
+		set_transient( 'wpum_stripe_connect_states_' . $admin_id, array( 'test_legacy' => array( 'state' => $old, 'time' => time() - DAY_IN_SECONDS - 1 ) ), DAY_IN_SECONDS );
+
+		$connect = new \WPUserManager\Stripe\Connect();
+		$this->call_protected( $connect, 'get_state', array( true ) );
+
+		$this->assertArrayNotHasKey( 'test_legacy', get_transient( 'wpum_stripe_connect_states_' . $admin_id ) );
+		$this->assertFalse( $this->call_protected( $connect, 'consume_state', array( $old ) ) );
+	}
+
+	public function test_connect_expired_legacy_state_is_refused_on_return() {
+		$admin_id = $this->create_admin();
+		$old      = base64_encode( serialize( array( 'test_mode' => 1, 'site_id' => '42', 'site_url' => 'https://example.test' ) ) ); // phpcs:ignore
+
+		// The transient was renewed by a later state, but the legacy one is over a day old.
+		set_transient( 'wpum_stripe_connect_states_' . $admin_id, array( 'test_legacy' => array( 'state' => $old, 'time' => time() - DAY_IN_SECONDS - 1 ) ), DAY_IN_SECONDS );
+
+		$this->assertFalse( $this->call_protected( new \WPUserManager\Stripe\Connect(), 'consume_state', array( $old ) ) );
+	}
+
+	public function test_connect_state_issued_without_a_verifier_is_still_accepted() {
+		$admin_id = $this->create_admin();
+		$old      = base64_encode( serialize( array( 'test_mode' => 1, 'site_id' => '42', 'site_url' => 'https://example.test' ) ) ); // phpcs:ignore
+		set_transient( 'wpum_stripe_connect_states_' . $admin_id, array( 'test' => array( 'state' => $old, 'time' => time() ) ), DAY_IN_SECONDS );
+
+		$verifier = null;
+		$this->assertTrue( $this->call_protected( new \WPUserManager\Stripe\Connect(), 'consume_state', array( $old, &$verifier ) ) );
+		$this->assertSame( '', $verifier );
+	}
+
+	/**
+	 * Capture the request request_credentials() makes.
+	 *
+	 * @param string $verifier
+	 *
+	 * @return array The URL and request arguments.
+	 */
+	protected function capture_credentials_request( $verifier ) {
+		$captured = array();
+		$capture  = function ( $pre, $args, $url ) use ( &$captured ) {
+			$captured = array(
+				'url'  => $url,
+				'args' => $args,
+			);
+
+			return array(
+				'headers'  => array(),
+				'body'     => '{}',
+				'response' => array( 'code' => 404, 'message' => 'Not Found' ),
+				'cookies'  => array(),
+			);
+		};
+
+		add_filter( 'pre_http_request', $capture, 10, 3 );
+		$this->call_protected( new \WPUserManager\Stripe\Connect(), 'request_credentials', array( 'c3RhdGU=', $verifier ) );
+		remove_filter( 'pre_http_request', $capture, 10 );
+
+		return $captured;
+	}
+
+	public function test_connect_credentials_request_posts_the_verifier_in_the_body() {
+		$request = $this->capture_credentials_request( 'the-verifier' );
+
+		$this->assertSame( 'https://connect.wpusermanager.com/creds', $request['url'], 'Nothing may go in the URL' );
+		$this->assertSame( 'POST', $request['args']['method'] );
+		$this->assertSame( array( 'state' => 'c3RhdGU=', 'verifier' => 'the-verifier' ), $request['args']['body'] );
+	}
+
+	public function test_connect_credentials_request_without_a_verifier() {
+		$request = $this->capture_credentials_request( '' );
+
+		$this->assertSame( 'POST', $request['args']['method'] );
+		$this->assertSame( array( 'state' => 'c3RhdGU=' ), $request['args']['body'] );
+	}
+
+	/*
 	 * License requests verify TLS certificates.
 	 */
 
