@@ -58,7 +58,8 @@ function wpum_install_fields() {
 				'name'     => 'Email',
 				'metas'    => array(
 					'required'      => true,
-					'visibility'    => 'public',
+					// Keep email addresses off public profiles unless the site owner opts in (#507).
+					'visibility'    => 'hidden',
 					'editing'       => 'public',
 					'user_meta_key' => 'user_email',
 				),
