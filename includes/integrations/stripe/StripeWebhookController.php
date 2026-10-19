@@ -357,8 +357,16 @@ class StripeWebhookController {
 			throw new \Exception( 'Subscription not found' );
 		}
 
+		$plan_id = $this->subscriptionPlanId( $payload['data']['object'] );
+
+		// The customer can switch plans in the Stripe customer portal. Record the plan they're
+		// on, but a plan they may not pay for doesn't count as subscribed (User::isSubscribed()).
+		if ( '' !== $plan_id && ! ( new User( $subscription->user_id ) )->isPlanAllowed( $plan_id ) ) {
+			do_action( 'wpum_stripe_webhook_plan_not_allowed', $subscription->user_id, $plan_id );
+		}
+
 		$subscription_data = array(
-			'plan_id'       => $payload['data']['object']['plan']['id'],
+			'plan_id'       => '' === $plan_id ? $subscription->plan_id : $plan_id,
 			'trial_ends_at' => null,
 			'ends_at'       => $payload['data']['object']['cancel_at_period_end'] ? Carbon::createFromTimestamp( $payload['data']['object']['current_period_end'] )->toDateTimeString() : null,
 		);
@@ -368,6 +376,26 @@ class StripeWebhookController {
 		do_action( 'wpum_stripe_webhook_subscription_updated', $subscription );
 
 		return new \WP_REST_Response( 'Webhook handled', 200 );
+	}
+
+	/**
+	 * The price of a Stripe subscription's first item. The top level plan is
+	 * only set for subscriptions with a single item.
+	 *
+	 * @param array $subscription
+	 *
+	 * @return string
+	 */
+	protected function subscriptionPlanId( $subscription ) {
+		if ( isset( $subscription['items']['data'][0]['price']['id'] ) ) {
+			return (string) $subscription['items']['data'][0]['price']['id'];
+		}
+
+		if ( isset( $subscription['items']['data'][0]['plan']['id'] ) ) {
+			return (string) $subscription['items']['data'][0]['plan']['id'];
+		}
+
+		return isset( $subscription['plan']['id'] ) ? (string) $subscription['plan']['id'] : '';
 	}
 
 	/**

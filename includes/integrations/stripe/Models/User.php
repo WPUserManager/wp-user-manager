@@ -73,7 +73,22 @@ class User extends \WP_User {
 	 * @return bool
 	 */
 	public function isSubscribed() {
-		return $this->isAdmin() || ( $this->subscription && $this->subscription->active() );
+		return $this->isAdmin() || $this->hasActiveAllowedSubscription();
+	}
+
+	/**
+	 * Is the subscription active, and for a plan this user may pay for?
+	 * A subscription switched to another plan, such as a cheaper one from
+	 * another registration form, doesn't count until it's switched back.
+	 *
+	 * @return bool
+	 */
+	protected function hasActiveAllowedSubscription() {
+		if ( ! $this->subscription || ! $this->subscription->active() ) {
+			return false;
+		}
+
+		return $this->isPlanAllowed( (string) $this->subscription->plan_id );
 	}
 
 	/**
@@ -157,8 +172,9 @@ class User extends \WP_User {
 	}
 
 	/**
-	 * The Stripe price IDs this user may pay for: their stored plan, their
-	 * subscription's plan, and the plans on the registration form they used.
+	 * The Stripe price IDs this user may pay for: their stored plan and the
+	 * plans on the registration form they used. Not the subscription's plan,
+	 * which the customer can change in the Stripe customer portal.
 	 *
 	 * @return array
 	 */
@@ -168,10 +184,6 @@ class User extends \WP_User {
 		$product_data = $this->getProductData();
 		if ( is_array( $product_data ) && ! empty( $product_data['id'] ) ) {
 			$plan_ids[] = (string) $product_data['id'];
-		}
-
-		if ( $this->subscription && $this->subscription->plan_id ) {
-			$plan_ids[] = (string) $this->subscription->plan_id;
 		}
 
 		$form = $this->getFormRegisteredWith();
@@ -205,7 +217,7 @@ class User extends \WP_User {
 	 * @return bool
 	 */
 	public function hasPaidByPlan( $plan ) {
-		if ( $this->subscription && $plan === $this->subscription->plan_id && $this->subscription->active() ) {
+		if ( $this->subscription && $plan === $this->subscription->plan_id && $this->hasActiveAllowedSubscription() ) {
 			return true;
 		}
 

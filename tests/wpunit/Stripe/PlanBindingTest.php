@@ -125,6 +125,44 @@ class PlanBindingTest extends WPUMTestCase {
 		);
 	}
 
+	/**
+	 * A customer subscribed to the plan they registered for.
+	 */
+	protected function subscribed_customer( $plan_id = 'price_premium' ) {
+		$this->require_subscriptions_table();
+		$customer = $this->unpaid_customer( $plan_id, 'recurring' );
+		$sub_id   = 'sub_' . wp_rand();
+
+		( new \WPUserManager\Stripe\Controllers\Subscriptions( 'test' ) )->insert( array(
+			'user_id'         => $customer->ID,
+			'customer_id'     => 'cus_' . wp_rand(),
+			'subscription_id' => $sub_id,
+			'plan_id'         => $plan_id,
+			'trial_ends_at'   => null,
+			'ends_at'         => null,
+		) );
+
+		return array( $customer, $sub_id );
+	}
+
+	/**
+	 * A customer.subscription.updated event, as sent when the customer switches price in the Stripe customer portal.
+	 */
+	protected function subscription_updated_payload( $sub_id, $price_id, $top_level_plan = true ) {
+		$object = array(
+			'id'                   => $sub_id,
+			'cancel_at_period_end' => false,
+			'current_period_end'   => time() + MONTH_IN_SECONDS,
+			'items'                => array( 'data' => array( array( 'price' => array( 'id' => $price_id ), 'plan' => array( 'id' => $price_id ) ) ) ),
+		);
+
+		if ( $top_level_plan ) {
+			$object['plan'] = array( 'id' => $price_id );
+		}
+
+		return array( 'data' => array( 'object' => $object ) );
+	}
+
 	protected function require_subscriptions_table() {
 		global $wpdb;
 
@@ -283,6 +321,85 @@ class PlanBindingTest extends WPUMTestCase {
 		$this->webhook_paying_for( 'price_premium', 'recurring' )->handle( 'handleCheckoutSessionCompleted', $this->session_payload( $customer->user_email, 'sub_premium_' . wp_rand() ) );
 
 		$this->assertTrue( ( new \WPUserManager\Stripe\Models\User( $customer->ID ) )->isSubscribed() );
+	}
+
+	/*
+	 * Switching plans in the Stripe customer portal.
+	 */
+
+	public function test_switching_to_another_forms_plan_in_the_portal_does_not_count() {
+		list( $customer, $sub_id ) = $this->subscribed_customer();
+		$this->assertTrue( ( new \WPUserManager\Stripe\Models\User( $customer->ID ) )->isSubscribed() );
+
+		$this->webhook_paying_for( 'price_cheap', 'recurring' )->handle( 'handleCustomerSubscriptionUpdated', $this->subscription_updated_payload( $sub_id, 'price_cheap' ) );
+
+		$user = new \WPUserManager\Stripe\Models\User( $customer->ID );
+		$this->assertSame( 'price_cheap', $user->subscription->plan_id, 'The stored plan should match Stripe' );
+		$this->assertFalse( $user->isSubscribed(), 'A subscription switched to a plan the customer may not pay for must not count' );
+		$this->assertFalse( $user->isPlanAllowed( 'price_cheap' ), 'The switched plan must not authorise itself' );
+		$this->assertNotContains( 'price_cheap', $user->getAllowedPlanIds() );
+		$this->assertFalse( $user->hasPaidByPlan( 'price_cheap' ) );
+		$this->assertFalse( $user->hasPaidByPlan( 'price_premium' ) );
+	}
+
+	public function test_customer_on_another_forms_plan_owes_payment() {
+		list( $customer, $sub_id ) = $this->subscribed_customer();
+
+		$this->webhook_paying_for( 'price_cheap', 'recurring' )->handle( 'handleCustomerSubscriptionUpdated', $this->subscription_updated_payload( $sub_id, 'price_cheap' ) );
+
+		$account = new \WPUserManager\Stripe\Account( 'pk_test', 'sk_test', 'test', $this->createMock( \WPUserManager\Stripe\Billing::class ), new Plan_Binding_Stripe_Products() );
+		$this->assertTrue( $account->owes_payment( $customer->ID ) );
+	}
+
+	public function test_switching_back_to_the_registered_plan_restores_access() {
+		list( $customer, $sub_id ) = $this->subscribed_customer();
+		$controller                = $this->webhook_paying_for( 'price_cheap', 'recurring' );
+
+		$controller->handle( 'handleCustomerSubscriptionUpdated', $this->subscription_updated_payload( $sub_id, 'price_cheap' ) );
+		$controller->handle( 'handleCustomerSubscriptionUpdated', $this->subscription_updated_payload( $sub_id, 'price_premium' ) );
+
+		$user = new \WPUserManager\Stripe\Models\User( $customer->ID );
+		$this->assertSame( 'price_premium', $user->subscription->plan_id );
+		$this->assertTrue( $user->isSubscribed() );
+	}
+
+	public function test_switching_to_another_plan_on_the_form_counts() {
+		list( $customer, $sub_id ) = $this->subscribed_customer();
+
+		$this->webhook_paying_for( 'price_premium_alt', 'recurring' )->handle( 'handleCustomerSubscriptionUpdated', $this->subscription_updated_payload( $sub_id, 'price_premium_alt' ) );
+
+		$user = new \WPUserManager\Stripe\Models\User( $customer->ID );
+		$this->assertSame( 'price_premium_alt', $user->subscription->plan_id );
+		$this->assertTrue( $user->isSubscribed() );
+		$this->assertTrue( $user->hasPaidByPlan( 'price_premium_alt' ) );
+	}
+
+	public function test_subscription_update_reads_the_price_from_its_items() {
+		list( $customer, $sub_id ) = $this->subscribed_customer();
+
+		// Subscriptions with more than one item have no top level plan.
+		$this->webhook_paying_for( 'price_premium_alt', 'recurring' )->handle( 'handleCustomerSubscriptionUpdated', $this->subscription_updated_payload( $sub_id, 'price_premium_alt', false ) );
+
+		$this->assertSame( 'price_premium_alt', ( new \WPUserManager\Stripe\Models\User( $customer->ID ) )->subscription->plan_id );
+	}
+
+	public function test_billing_tab_does_not_offer_another_forms_plan_after_a_switch() {
+		list( $customer, $sub_id ) = $this->subscribed_customer();
+		$this->webhook_paying_for( 'price_cheap', 'recurring' )->handle( 'handleCustomerSubscriptionUpdated', $this->subscription_updated_payload( $sub_id, 'price_cheap' ) );
+
+		$subscriptions = new \WPUserManager\Stripe\Controllers\Subscriptions( 'test' );
+		$row           = $subscriptions->where( 'subscription_id', $sub_id );
+		$subscriptions->update( $row->id, array( 'ends_at' => '2020-01-01 00:00:00' ) );
+
+		wp_set_current_user( $customer->ID );
+		$account = new \WPUserManager\Stripe\Account( 'pk_test', 'sk_test', 'test', $this->createMock( \WPUserManager\Stripe\Billing::class ), new Plan_Binding_Stripe_Products() );
+
+		ob_start();
+		$account->account_tab_content();
+		$output = ob_get_clean();
+
+		$this->assertStringContainsString( 'data-plan-id="price_premium"', $output );
+		$this->assertStringNotContainsString( 'data-plan-id="price_cheap"', $output );
 	}
 
 	/*
