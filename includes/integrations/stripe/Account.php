@@ -36,12 +36,12 @@ class Account {
 	protected $gateway_mode;
 
 	/**
-	 * @var Billing
+	 * @var Billing|null
 	 */
 	protected $billing;
 
 	/**
-	 * @var Products
+	 * @var Products|null
 	 */
 	protected $products;
 
@@ -62,11 +62,11 @@ class Account {
 	/**
 	 * Registration constructor.
 	 *
-	 * @param string   $public_key
-	 * @param string   $secret_key
-	 * @param string   $gateway_mode
-	 * @param Billing  $billing
-	 * @param Products $products
+	 * @param string        $public_key
+	 * @param string        $secret_key
+	 * @param string        $gateway_mode
+	 * @param Billing|null  $billing
+	 * @param Products|null $products
 	 */
 	public function __construct( $public_key, $secret_key, $gateway_mode, $billing, $products ) {
 		$this->public_key   = $public_key;
@@ -82,18 +82,27 @@ class Account {
 	public function init() {
 		add_filter( 'wpum_get_account_page_tabs', array( $this, 'register_account_tab' ) );
 		add_action( 'wpum_account_page_content_billing', array( $this, 'account_tab_content' ) );
-		add_action( 'template_redirect', array( $this, 'unsubscribed_redirect' ) );
-		add_filter( 'user_has_cap', array( $this, 'restrict_unpaid_capabilities' ), 10, 4 );
-		add_filter( 'wpum_user_access_roles', array( $this, 'withhold_unpaid_access_roles' ), 10, 2 );
-		add_action( 'added_user_meta', array( $this, 'flush_payment_status' ), 10, 2 );
-		add_action( 'updated_user_meta', array( $this, 'flush_payment_status' ), 10, 2 );
-		add_action( 'deleted_user_meta', array( $this, 'flush_payment_status' ), 10, 2 );
+
+		$this->enforce_payment();
 
 		add_action( 'wp_ajax_wpum_stripe_manage_billing', array( $this, 'handle_manage_billing' ) );
 		add_action( 'wp_ajax_wpum_stripe_checkout', array( $this, 'handle_checkout' ) );
 
 		add_action( 'template_redirect', array( $this, 'handle_download_invoice' ) );
 		add_action( 'wpum_account_page_content', array( $this, 'render_payment_message' ), 9 );
+	}
+
+	/**
+	 * Restrict users who still owe a payment. Runs whether or not Stripe has keys,
+	 * so disconnecting Stripe or switching mode doesn't lift the restriction.
+	 */
+	public function enforce_payment() {
+		add_action( 'template_redirect', array( $this, 'unsubscribed_redirect' ) );
+		add_filter( 'user_has_cap', array( $this, 'restrict_unpaid_capabilities' ), 10, 4 );
+		add_filter( 'wpum_user_access_roles', array( $this, 'withhold_unpaid_access_roles' ), 10, 2 );
+		add_action( 'added_user_meta', array( $this, 'flush_payment_status' ), 10, 2 );
+		add_action( 'updated_user_meta', array( $this, 'flush_payment_status' ), 10, 2 );
+		add_action( 'deleted_user_meta', array( $this, 'flush_payment_status' ), 10, 2 );
 	}
 
 	/**
@@ -124,7 +133,18 @@ class Account {
 			return;
 		}
 
-		wp_safe_redirect( $this->billing->getBillingURL() );
+		// Without Stripe keys there's no Billing tab, so send them to the account page.
+		if ( $this->billing ) {
+			$redirect = $this->billing->getBillingURL();
+		} else {
+			$redirect = $account_id ? get_permalink( $account_id ) : '';
+		}
+
+		if ( ! $redirect ) {
+			return;
+		}
+
+		wp_safe_redirect( $redirect );
 		exit;
 	}
 
@@ -138,6 +158,11 @@ class Account {
 	public function owes_payment( $user_id ) {
 		$user_id = (int) $user_id;
 		if ( ! $user_id ) {
+			return false;
+		}
+
+		// Most users never registered on a paid form: skip loading their subscription.
+		if ( ! get_user_meta( $user_id, 'wpum_stripe_plan_' . wpum_get_option( 'stripe_gateway_mode', 'test' ), true ) && ! get_user_meta( $user_id, 'wpum_stripe_payment_required', true ) ) {
 			return false;
 		}
 

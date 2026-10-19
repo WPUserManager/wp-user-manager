@@ -165,7 +165,10 @@ function wpum_install_registration_form( $fields = array() ) {
 function wpum_install_emails() {
 	$emails = wpum_get_default_emails();
 
-	$emails = array_merge( $emails, get_option( 'wpum_email', array() ) );
+	// The option can hold a non-array value, e.g. an empty string, which
+	// array_merge() rejects with a fatal error on PHP 8 (#228).
+	$stored = get_option( 'wpum_email', array() );
+	$emails = array_merge( $emails, is_array( $stored ) ? $stored : array() );
 
 	// A stored email can be partial, e.g. when only its content was ever saved,
 	// so a top level merge alone would leave it without a subject.
