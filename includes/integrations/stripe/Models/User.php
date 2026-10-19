@@ -92,6 +92,15 @@ class User extends \WP_User {
 	}
 
 	/**
+	 * Is the subscription active, but for a plan this user may not pay for?
+	 *
+	 * @return bool
+	 */
+	public function hasSubscriptionOnDisallowedPlan() {
+		return $this->subscription && $this->subscription->active() && ! $this->hasActiveAllowedSubscription();
+	}
+
+	/**
 	 * @return array
 	 */
 	public function getPlanMeta() {

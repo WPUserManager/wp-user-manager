@@ -402,6 +402,64 @@ class PlanBindingTest extends WPUMTestCase {
 		$this->assertStringNotContainsString( 'data-plan-id="price_cheap"', $output );
 	}
 
+	public function test_billing_tab_explains_a_plan_that_isnt_allowed() {
+		list( $customer, $sub_id ) = $this->subscribed_customer();
+		$this->webhook_paying_for( 'price_cheap', 'recurring' )->handle( 'handleCustomerSubscriptionUpdated', $this->subscription_updated_payload( $sub_id, 'price_cheap' ) );
+
+		wp_set_current_user( $customer->ID );
+		$account = new \WPUserManager\Stripe\Account( 'pk_test', 'sk_test', 'test', $this->createMock( \WPUserManager\Stripe\Billing::class ), new Plan_Binding_Stripe_Products() );
+
+		ob_start();
+		$account->account_tab_content();
+		$output = ob_get_clean();
+
+		$this->assertStringContainsString( 'switch back to your plan', $output );
+		$this->assertStringContainsString( 'wpum-stripe-manage-billing', $output, 'They need Manage Billing to switch back' );
+	}
+
+	/*
+	 * Telling site admins which members are on a plan they may not pay for.
+	 */
+
+	public function test_scan_finds_members_on_another_forms_plan() {
+		list( $switched, $switched_sub ) = $this->subscribed_customer();
+		list( $member ) = $this->subscribed_customer();
+		$this->webhook_paying_for( 'price_cheap', 'recurring' )->handle( 'handleCustomerSubscriptionUpdated', $this->subscription_updated_payload( $switched_sub, 'price_cheap' ) );
+
+		$check = new \WPUserManager\Stripe\SubscriptionPlanCheck( 'test' );
+		delete_option( 'wpum_stripe_disallowed_plan_users_test' );
+		$check->scan();
+
+		$affected = $check->get_affected_users();
+		$this->assertSame( 'price_cheap', $affected[ $switched->ID ] ?? null );
+		$this->assertArrayNotHasKey( $member->ID, $affected );
+	}
+
+	public function test_webhooks_keep_the_affected_members_up_to_date() {
+		list( $customer, $sub_id ) = $this->subscribed_customer();
+		$controller                = $this->webhook_paying_for( 'price_cheap', 'recurring' );
+		$check                     = new \WPUserManager\Stripe\SubscriptionPlanCheck( 'test' );
+
+		$controller->handle( 'handleCustomerSubscriptionUpdated', $this->subscription_updated_payload( $sub_id, 'price_cheap' ) );
+		$this->assertArrayHasKey( $customer->ID, $check->get_affected_users() );
+
+		$controller->handle( 'handleCustomerSubscriptionUpdated', $this->subscription_updated_payload( $sub_id, 'price_premium' ) );
+		$this->assertArrayNotHasKey( $customer->ID, $check->get_affected_users() );
+	}
+
+	public function test_notice_lists_the_members_and_what_to_do() {
+		list( $customer ) = $this->subscribed_customer();
+
+		$message = ( new \WPUserManager\Stripe\SubscriptionPlanCheck( 'test' ) )->get_notice_message( array( $customer->ID => 'price_cheap' ) );
+
+		$this->assertStringContainsString( '1 member has', $message );
+		$this->assertStringContainsString( esc_html( $customer->user_email ), $message );
+		$this->assertStringContainsString( 'price_cheap', $message );
+		$this->assertStringContainsString( esc_html( $this->registration_form->get_name() ), $message );
+		$this->assertStringContainsString( 'page=wpum-registration-forms', $message );
+		$this->assertStringContainsString( 'Customer portal', $message );
+	}
+
 	/*
 	 * Content restricted to a Stripe product.
 	 */
