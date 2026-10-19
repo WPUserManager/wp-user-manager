@@ -22,6 +22,11 @@ class Stripe {
 	protected static $products;
 
 	/**
+	 * @var array|null
+	 */
+	protected $saved_plan_ids;
+
+	/**
 	 * Init
 	 */
 	public function init() {
@@ -39,6 +44,14 @@ class Stripe {
 		$webhookEndpoint = new WebhookEndpoint( $stripeWebhook );
 
 		if ( ! $key || ! $secret || ! $webhook_secret ) {
+			// Without keys there's no checkout, but accounts that still owe a payment stay
+			// restricted, and a form with plans must not hand out its role for free.
+			( new Account( $key, $secret, $connect->get_gateway_mode(), null, null ) )->enforce_payment();
+
+			add_filter( 'submit_wpum_form_validate_fields', array( $this, 'reject_paid_registration' ), 20, 5 );
+			add_filter( 'wpum_registered_settings_sections', array( $this, 'register_registration_settings_tab' ) );
+			add_filter( 'wpum_registration_edit_form_settings_sections', array( $this, 'register_saved_plans_setting' ) );
+
 			return;
 		}
 
@@ -57,6 +70,105 @@ class Stripe {
 		( new Account( $key, $secret, $connect->get_gateway_mode(), $billing, $products ) )->init();
 
 		$webhookEndpoint->init();
+	}
+
+	/**
+	 * Refuse registration on a form with Stripe plans while Stripe isn't set up,
+	 * since the account would get the form's role without paying.
+	 *
+	 * @param bool|\WP_Error $pass
+	 * @param array          $fields
+	 * @param array          $values
+	 * @param string         $form_name
+	 * @param \WPUM_Form     $form
+	 *
+	 * @return bool|\WP_Error
+	 */
+	public function reject_paid_registration( $pass, $fields, $values, $form_name, $form = null ) { // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.FoundBeforeLastUsed -- Matches the validate fields filter signature.
+		if ( is_wp_error( $pass ) || ! $form instanceof \WPUM_Form_Registration ) {
+			return $pass;
+		}
+
+		$registration_form = $form->get_registration_form();
+		if ( ! $registration_form || ! $registration_form->exists() ) {
+			return $pass;
+		}
+
+		if ( ! array_filter( (array) $registration_form->get_setting( 'stripe_plan_id' ) ) ) {
+			return $pass;
+		}
+
+		return new \WP_Error( 'stripe-unavailable', __( 'Registration is not available at the moment. Please contact the site owner.', 'wp-user-manager' ) );
+	}
+
+	/**
+	 * @param array $sections
+	 *
+	 * @return array
+	 */
+	public function register_registration_settings_tab( $sections ) {
+		if ( ! $this->get_saved_plan_ids() ) {
+			return $sections;
+		}
+
+		$sections['registration']['payment'] = __( 'Payment', 'wp-user-manager' );
+
+		return $sections;
+	}
+
+	/**
+	 * Keep the plans saved on forms editable while Stripe isn't set up,
+	 * so they can be removed and the forms reopened without payment.
+	 *
+	 * @param array $settings
+	 *
+	 * @return array
+	 */
+	public function register_saved_plans_setting( $settings ) {
+		$plan_ids = $this->get_saved_plan_ids();
+		if ( ! $plan_ids ) {
+			return $settings;
+		}
+
+		$options = array();
+		foreach ( $plan_ids as $plan_id ) {
+			$options[] = array(
+				'value' => $plan_id,
+				'label' => $plan_id,
+			);
+		}
+
+		$new_settings = array(
+			'payment' => array(
+				array(
+					'id'       => 'stripe_plan_id',
+					'name'     => __( 'Stripe Product', 'wp-user-manager' ),
+					'desc'     => __( 'Stripe is not connected, so this form won\'t accept registrations while it has a product. Connect Stripe, or remove the products to register users without payment.', 'wp-user-manager' ),
+					'type'     => 'multiselect',
+					'multiple' => true,
+					'options'  => $options,
+				),
+			),
+		);
+
+		return array_merge_recursive( $settings, $new_settings );
+	}
+
+	/**
+	 * The Stripe price IDs saved on any registration form.
+	 *
+	 * @return array
+	 */
+	protected function get_saved_plan_ids() {
+		if ( null === $this->saved_plan_ids ) {
+			$this->saved_plan_ids = array();
+			foreach ( WPUM()->registration_forms->get_forms() as $registration_form ) {
+				$this->saved_plan_ids = array_merge( $this->saved_plan_ids, array_map( 'strval', array_filter( (array) $registration_form->get_setting( 'stripe_plan_id' ) ) ) );
+			}
+			$this->saved_plan_ids = array_values( array_unique( $this->saved_plan_ids ) );
+		}
+
+		return $this->saved_plan_ids;
 	}
 
 	/**
