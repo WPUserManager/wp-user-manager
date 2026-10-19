@@ -1448,3 +1448,24 @@ function wpum_is_request_for_url( $url ) {
 
 	return true;
 }
+
+/**
+ * Retrieve the capability required to manage WP User Manager.
+ *
+ * Filter it with `wpum_admin_pages_capability` to let another role manage the
+ * plugin's settings, forms, fields and directories.
+ *
+ * @return string
+ */
+function wpum_get_admin_capability() {
+	return apply_filters( 'wpum_admin_pages_capability', 'manage_options' );
+}
+
+/**
+ * Check whether the current user can manage WP User Manager.
+ *
+ * @return bool
+ */
+function wpum_current_user_can_manage() {
+	return current_user_can( wpum_get_admin_capability() );
+}

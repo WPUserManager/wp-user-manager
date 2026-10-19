@@ -26,7 +26,7 @@ class WPUM_Registration_Forms_Editor {
 	 * Get things started.
 	 */
 	public function __construct() {
-		$this->capability = apply_filters( 'wpum_admin_pages_capability', 'manage_options' );
+		$this->capability = wpum_get_admin_capability();
 		$this->init_hooks();
 	}
 
