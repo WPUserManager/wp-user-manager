@@ -133,6 +133,12 @@ function wpum_login_url( $login_url, $redirect, $force_reauth ) { // phpcs:ignor
 		$wpum_login_page = add_query_arg( array( 'redirect_to' => apply_filters( 'wpum_login_redirect_to_url', rawurlencode( $redirect ) ) ), $wpum_login_page );
 	}
 
+	// auth_redirect() always forces reauth. Keep the flag only when the visitor is still logged in,
+	// so the login page doesn't send them straight back to a wp-admin URL that rejects their auth cookie.
+	if ( $force_reauth && wp_validate_auth_cookie( '', 'logged_in' ) ) {
+		$wpum_login_page = add_query_arg( 'reauth', '1', $wpum_login_page );
+	}
+
 	return $wpum_login_page;
 }
 if ( wpum_get_option( 'lock_wplogin' ) || wpum_get_option( 'lock_complete_site' ) ) {
