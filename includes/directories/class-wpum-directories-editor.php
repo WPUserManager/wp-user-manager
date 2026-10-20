@@ -151,6 +151,35 @@ class WPUM_Directories_Editor {
 	public function register_directory_settings() {
 		do_action( 'wpum_before_register_directory_settings' );
 
+		$fields = $this->get_directory_settings_fields();
+
+		Container::make( 'post_meta', esc_html__( 'General settings', 'wp-user-manager' ) )
+				->where( 'post_type', '=', 'wpum_directory' )
+				->add_fields( $fields['general'] );
+
+		Container::make( 'post_meta', esc_html__( 'Search', 'wp-user-manager' ) )
+				->where( 'post_type', '=', 'wpum_directory' )
+				->add_fields( $fields['search'] );
+
+		Container::make( 'post_meta', esc_html__( 'Sorting', 'wp-user-manager' ) )
+				->where( 'post_type', '=', 'wpum_directory' )
+				->add_fields( $fields['sorting'] );
+
+		Container::make( 'post_meta', esc_html__( 'Directory template', 'wp-user-manager' ) )
+				->where( 'post_type', '=', 'wpum_directory' )
+				->set_context( 'side' )
+				->set_priority( 'default' )
+				->add_fields( $fields['template'] );
+
+		do_action( 'wpum_after_register_directory_settings' );
+	}
+
+	/**
+	 * Build the directory settings fields, grouped by the box they appear in.
+	 *
+	 * @return array Group => list of Carbon Fields fields: general, search, sorting and template.
+	 */
+	public function get_directory_settings_fields() {
 		$general_settings_fields = array(
 			Field::make( 'multiselect', 'directory_assigned_roles', esc_html__( 'User roles', 'wp-user-manager' ) )
 				->set_help_text( esc_html__( 'Leave blank to display all user roles.', 'wp-user-manager' ) )
@@ -163,10 +192,7 @@ class WPUM_Directories_Editor {
 				->set_attribute( 'min', 1 )
 				->set_help_text( esc_html__( 'Select how many profiles you wish to display per page.', 'wp-user-manager' ) ),
 		);
-
-		Container::make( 'post_meta', esc_html__( 'General settings', 'wp-user-manager' ) )
-				->where( 'post_type', '=', 'wpum_directory' )
-				->add_fields( apply_filters( 'wpum_directory_general_settings', $general_settings_fields ) );
+		$general_settings_fields = apply_filters( 'wpum_directory_general_settings', $general_settings_fields );
 
 		// translators: %s url to custom fields addon
 		$search_field_text = sprintf( __( 'Select the fields to search in. Search custom fields using the <a href="%s" target="_blank">Custom Fields</a> addon.', 'wp-user-manager' ), 'https://wpusermanager.com/addons/custom-fields?utm_source=WP%20User%20Manager&utm_medium=insideplugin&utm_campaign=WP%20User%20Manager&utm_content=edit-directory' );
@@ -181,10 +207,7 @@ class WPUM_Directories_Editor {
 				->add_options( $this->get_search_fields() )
 				->set_default_value( array( 'first_name', 'last_name' ) ),
 		);
-
-		Container::make( 'post_meta', esc_html__( 'Search', 'wp-user-manager' ) )
-				->where( 'post_type', '=', 'wpum_directory' )
-				->add_fields( apply_filters( 'wpum_directory_search_settings', $search_fields ) );
+		$search_fields = apply_filters( 'wpum_directory_search_settings', $search_fields );
 
 		$sorting_fields = array(
 			Field::make( 'checkbox', 'directory_display_sorter', esc_html__( 'Display sorter', 'wp-user-manager' ) )
@@ -202,10 +225,7 @@ class WPUM_Directories_Editor {
 					'last_name' => esc_html__( 'Last Name', 'wp-user-manager' ),
 				) ) ),
 		);
-
-		Container::make( 'post_meta', esc_html__( 'Sorting', 'wp-user-manager' ) )
-				->where( 'post_type', '=', 'wpum_directory' )
-				->add_fields( apply_filters( 'wpum_directory_sorting_settings', $sorting_fields ) );
+		$sorting_fields = apply_filters( 'wpum_directory_sorting_settings', $sorting_fields );
 
 		$template_fields = array(
 			Field::make( 'select', 'directory_template', esc_html__( 'Template', 'wp-user-manager' ) )
@@ -215,14 +235,14 @@ class WPUM_Directories_Editor {
 				->set_help_text( esc_html__( 'Select a template for the users within this directory.', 'wp-user-manager' ) )
 				->add_options( wpum_get_directory_user_templates() ),
 		);
+		$template_fields = apply_filters( 'wpum_directory_template_settings', $template_fields );
 
-		Container::make( 'post_meta', esc_html__( 'Directory template', 'wp-user-manager' ) )
-				->where( 'post_type', '=', 'wpum_directory' )
-				->set_context( 'side' )
-				->set_priority( 'default' )
-				->add_fields( apply_filters( 'wpum_directory_template_settings', $template_fields ) );
-
-		do_action( 'wpum_after_register_directory_settings' );
+		return array(
+			'general'  => $general_settings_fields,
+			'search'   => $search_fields,
+			'sorting'  => $sorting_fields,
+			'template' => $template_fields,
+		);
 	}
 
 	/**
