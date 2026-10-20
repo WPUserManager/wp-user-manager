@@ -26,7 +26,7 @@ class WPUM_Registration_Forms_Editor {
 	 * Get things started.
 	 */
 	public function __construct() {
-		$this->capability = apply_filters( 'wpum_admin_pages_capability', 'manage_options' );
+		$this->capability = wpum_get_admin_capability();
 		$this->init_hooks();
 	}
 
@@ -45,19 +45,7 @@ class WPUM_Registration_Forms_Editor {
 		add_action( 'wp_ajax_wpum_save_registration_form_settings', array( $this, 'save_form_settings' ) );
 		add_action( 'wp_ajax_wpum_get_registration_form_field', array( $this, 'get_form_field_data' ) );
 
-		add_filter( 'wpum_form_settings_sanitize_text', array( $this, 'sanitize_text_field' ) );
-		add_filter( 'wpum_form_settings_sanitize_textarea', array( $this, 'sanitize_textarea_field' ) );
-		add_filter( 'wpum_form_settings_sanitize_radio', array( $this, 'sanitize_text_field' ) );
-		add_filter( 'wpum_form_settings_sanitize_select', array( $this, 'sanitize_text_field' ) );
-		add_filter( 'wpum_form_settings_sanitize_checkbox', array( $this, 'sanitize_checkbox_field' ) );
-		add_filter( 'wpum_form_settings_sanitize_multiselect', array( $this, 'sanitize_multiple_field' ) );
-		add_filter( 'wpum_form_settings_sanitize_multicheckbox', array( $this, 'sanitize_multiple_field' ) );
-		add_filter( 'wpum_form_settings_sanitize_file', array( $this, 'sanitize_file_field' ) );
-
-		// Object Caching hooks
-		add_action( 'wpum_registration_form_insert', array( $this, 'delete_registration_forms_cache' ) );
-		add_action( 'wpum_before_registration_form_delete', array( $this, 'delete_registration_forms_cache' ) );
-		add_action( 'wpum_registration_form_duplicated', array( $this, 'delete_registration_forms_cache' ) );
+		// The settings sanitizers and object caching hooks are registered in wpum-registration-forms-functions.php.
 	}
 
 	/**
@@ -241,17 +229,9 @@ class WPUM_Registration_Forms_Editor {
 		$form_name = filter_input( INPUT_POST, 'form_name', FILTER_UNSAFE_RAW );
 		$form_name = $form_name ? sanitize_text_field( $form_name ) : false;
 
-		if ( $form_id && $form_name ) {
+		$updated = wpum_update_registration_form_name( $form_id, $form_name );
 
-			$data = apply_filters( 'wpum_registration_form_update', array(
-				'name' => $form_name,
-			), $form_id );
-
-			$updated_form = WPUM()->registration_forms->update( $form_id, $data );
-
-			$this->delete_registration_forms_cache();
-
-		} else {
+		if ( is_wp_error( $updated ) ) {
 			wp_die( esc_html__( 'Something went wrong: could not update the registration form details.', 'wp-user-manager' ), 403 );
 		}
 
@@ -373,20 +353,7 @@ class WPUM_Registration_Forms_Editor {
 			'order'   => 'ASC',
 		) );
 
-		$non_allowed_fields = array(
-			'user_nickname',
-			'user_displayname',
-		);
-
-		if ( ! wpum_get_option( 'custom_avatars' ) ) {
-			$non_allowed_fields[] = 'user_avatar';
-		}
-
-		if ( wpum_get_option( 'disable_profile_cover' ) ) {
-			$non_allowed_fields[] = 'user_cover';
-		}
-
-		$non_allowed_fields = apply_filters( 'wpum_non_allowed_fields', $non_allowed_fields );
+		$non_allowed_fields = wpum_get_registration_form_non_allowed_fields();
 
 		// Get fields already been used.
 		$form          = new WPUM_Registration_Form( $form_id );
@@ -431,22 +398,9 @@ class WPUM_Registration_Forms_Editor {
 			$fields  = filter_input( INPUT_POST, 'fields', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY );
 			$fields  = $fields ? $fields : array();
 
-			if ( $form_id ) {
-				$registration_form = new WPUM_Registration_Form( $form_id );
-				$fields_to_save    = array();
-
-				if ( $registration_form->exists() ) {
-					foreach ( $fields as $field ) {
-						$fields_to_save[] = apply_filters( 'wpum_save_registration_form_field_id', absint( $field['id'] ), $field['id'], $field );
-					}
-				}
-
-				if ( ! empty( $fields_to_save ) ) {
-					$registration_form->update_meta( 'fields', $fields_to_save );
-
-					$this->delete_registration_forms_cache();
-					wp_send_json_success();
-				}
+			// Nothing is sent back when the form or its fields are missing.
+			if ( $form_id && ! is_wp_error( wpum_update_registration_form_fields( $form_id, $fields ) ) ) {
+				wp_send_json_success();
 			}
 		} else {
 
@@ -476,46 +430,10 @@ class WPUM_Registration_Forms_Editor {
 			$this->send_json_error();
 		}
 
-		$form = new WPUM_Registration_Form( $form_id );
+		$updated = wpum_update_registration_form_settings( $form_id, $settings_model );
 
-		if ( ! $form->exists() ) {
+		if ( is_wp_error( $updated ) ) {
 			$this->send_json_error();
-		}
-
-		$registered_settings = $form->get_settings_options();
-		$settings            = array();
-		foreach ( $registered_settings as $registered_setting ) {
-			$settings[ $registered_setting['id'] ] = $registered_setting;
-		}
-		$stored_settings_model = $form->get_settings_model();
-
-		$deleted_settings = array_diff_key( $stored_settings_model, $settings_model );
-
-		foreach ( $deleted_settings as $deleted_key => $deleted_setting ) {
-			$form->delete_meta( $deleted_key, '' );
-		}
-
-		foreach ( $settings_model as $key => $value ) {
-			if ( ! isset( $settings[ $key ] ) ) {
-				continue;
-			}
-
-			$setting = $settings[ $key ];
-
-			$value = apply_filters( 'wpum_form_settings_sanitize_' . $setting['type'], $value );
-
-			if ( isset( $stored_settings_model[ $key ] ) && $value === $stored_settings_model[ $key ] ) {
-				// Setting not changed
-				continue;
-			}
-
-			if ( 'role' === $key && is_array( $value ) && ! empty( $value ) && ( 'administrator' === $value[0] || ! get_role( $value[0] ) ) ) {
-				// Illegal role selection;
-				continue;
-			}
-
-			$form->update_meta( $key, $value );
-
 		}
 
 		wp_send_json_success();
@@ -572,7 +490,7 @@ class WPUM_Registration_Forms_Editor {
 	 * @return string
 	 */
 	public function sanitize_text_field( $input ) {
-		return trim( wp_strip_all_tags( $input, true ) );
+		return wpum_sanitize_form_setting_text( $input );
 	}
 
 	/**
@@ -583,7 +501,7 @@ class WPUM_Registration_Forms_Editor {
 	 * @return string
 	 */
 	public function sanitize_textarea_field( $input ) {
-		return stripslashes( wp_kses_post( $input ) );
+		return wpum_sanitize_form_setting_textarea( $input );
 	}
 
 	/**
@@ -594,22 +512,7 @@ class WPUM_Registration_Forms_Editor {
 	 * @return array
 	 */
 	public function sanitize_multiple_field( $input ) {
-		$new_input = array();
-
-		if ( is_array( $input ) && ! empty( $input ) ) {
-			foreach ( $input as $key => $value ) {
-				$new_input[ sanitize_key( $key ) ] = sanitize_text_field( $value );
-			}
-		}
-
-		if ( ! empty( $input ) && ! is_array( $input ) ) {
-			$input = explode( ',', $input );
-			foreach ( $input as $key => $value ) {
-				$new_input[ sanitize_key( $key ) ] = sanitize_text_field( $value );
-			}
-		}
-
-		return $new_input;
+		return wpum_sanitize_form_setting_multiple( $input );
 	}
 
 	/**
@@ -620,7 +523,7 @@ class WPUM_Registration_Forms_Editor {
 	 * @return string
 	 */
 	public function sanitize_file_field( $input ) {
-		return esc_url( $input );
+		return wpum_sanitize_form_setting_file( $input );
 	}
 
 	/**
@@ -631,17 +534,7 @@ class WPUM_Registration_Forms_Editor {
 	 * @return bool
 	 */
 	public function sanitize_checkbox_field( $input ) {
-		$pass = false;
-
-		if ( 'true' === $input ) {
-			return true;
-		}
-
-		if ( 1 === (int) $input ) {
-			return true;
-		}
-
-		return $pass;
+		return wpum_sanitize_form_setting_checkbox( $input );
 	}
 
 	/**
@@ -657,17 +550,7 @@ class WPUM_Registration_Forms_Editor {
 	 * Delete forms cache
 	 */
 	public function delete_registration_forms_cache() {
-		// Both the default query and the unlimited query used by the forms list are cached.
-		$cache_keys = array(
-			WPUM()->registration_forms->get_cache_key_from_args(),
-			WPUM()->registration_forms->get_cache_key_from_args( array(
-				'number' => -1,
-			) ),
-		);
-
-		foreach ( $cache_keys as $cache_key ) {
-			wp_cache_delete( $cache_key, WPUM()->registration_forms->cache_group );
-		}
+		wpum_delete_registration_forms_cache();
 	}
 
 	/**

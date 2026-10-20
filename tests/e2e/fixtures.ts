@@ -6,14 +6,14 @@ import * as path from 'path';
 /**
  * Run a WP-CLI command via wp-env against the test site.
  */
-export function wpCli(command: string): string {
+export function wpCli(command: string, timeout = 30000): string {
   try {
     const result = execSync(
       `npx @wordpress/env run tests-cli wp ${command}`,
       {
         cwd: process.env.WPUM_PLUGIN_DIR || process.cwd(),
         encoding: 'utf-8',
-        timeout: 30000,
+        timeout,
         stdio: ['pipe', 'pipe', 'pipe'],
       }
     );

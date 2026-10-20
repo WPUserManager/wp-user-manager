@@ -178,13 +178,13 @@ class WPUM_Emails_Customizer {
 						'<br/><br/>',
 						$registered_email['description'] . '<br/><br/>'
 					),
-					'capability'  => apply_filters( 'wpum_admin_pages_capability', 'manage_options' ),
+					'capability'  => wpum_get_admin_capability(),
 				) );
 
 				$wp_customize->add_section( $email_id . '_settings', array(
 					'title'       => esc_html__( 'Email content settings', 'wp-user-manager' ),
 					'description' => '<a href="#" class="button" id="wpum-display-tags-btn"><span class="dashicons dashicons-editor-code"></span>' . esc_html__( 'View available email merge tags', 'wp-user-manager' ) . '</a><div class="wpum-email-tags-list"><strong>' . esc_html__( 'Available email merge tags:', 'wp-user-manager' ) . '</strong><br/>' . wpum_get_emails_tags_list() . '<hr/></div>',
-					'capability'  => apply_filters( 'wpum_admin_pages_capability', 'manage_options' ),
+					'capability'  => wpum_get_admin_capability(),
 					'panel'       => $email_id,
 				) );
 
@@ -210,7 +210,7 @@ class WPUM_Emails_Customizer {
 		}
 
 		$wp_customize->add_setting( 'wpum_email[' . $email_id . '][subject]', array(
-			'capability'        => apply_filters( 'wpum_admin_pages_capability', 'manage_options' ),
+			'capability'        => wpum_get_admin_capability(),
 			'sanitize_callback' => 'sanitize_text_field',
 			'transport'         => 'postMessage',
 			'default'           => $this->get_default( $email_id, 'subject' ),
@@ -225,7 +225,7 @@ class WPUM_Emails_Customizer {
 		) );
 
 		$wp_customize->add_setting( 'wpum_email[' . $email_id . '][title]', array(
-			'capability'        => apply_filters( 'wpum_admin_pages_capability', 'manage_options' ),
+			'capability'        => wpum_get_admin_capability(),
 			'sanitize_callback' => 'sanitize_text_field',
 			'transport'         => 'postMessage',
 			'default'           => $this->get_default( $email_id, 'title' ),
@@ -240,7 +240,7 @@ class WPUM_Emails_Customizer {
 		) );
 
 		$wp_customize->add_setting( 'wpum_email[' . $email_id . '][content]', array(
-			'capability'        => apply_filters( 'wpum_admin_pages_capability', 'manage_options' ),
+			'capability'        => wpum_get_admin_capability(),
 			'sanitize_callback' => 'wp_kses_post',
 			'transport'         => 'postMessage',
 			'default'           => $this->get_default( $email_id, 'content' ),
@@ -271,7 +271,7 @@ class WPUM_Emails_Customizer {
 			'registration_confirmation_subject' => esc_html__( 'Welcome to {sitename}!', 'wp-user-manager' ),
 			'registration_confirmation_content' => "<p>Hello {username}, and welcome to {sitename}. We’re thrilled to have you on board.</p>
 <p>For reference, here\'s your login information:</p>
-<p>Username: {username}<br />Login page: {login_page_url}</p>
+<p>Username: {username}<br />Login page: {login_page_link}</p>
 <p>Thanks,<br />{sitename}</p>",
 			'password_recovery_request_subject' => esc_html__( 'Reset your {sitename} password', 'wp-user-manager' ),
 			'password_recovery_request_title'   => esc_html__( 'Reset your {sitename} password', 'wp-user-manager' ),
@@ -279,7 +279,7 @@ class WPUM_Emails_Customizer {
 <p>You are receiving this message because you or somebody else has attempted to reset your password on {sitename}.</p>
 <p>If this was a mistake, just ignore this email and nothing will happen.</p>
 <p>To reset your password, visit the following address:</p>
-<p>{recovery_url}</p>',
+<p>{recovery_link}</p>',
 		) );
 
 		if ( $email_id && $field ) {

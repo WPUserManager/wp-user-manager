@@ -73,7 +73,132 @@ class User extends \WP_User {
 	 * @return bool
 	 */
 	public function isSubscribed() {
-		return $this->isAdmin() || ( $this->subscription && $this->subscription->active() );
+		return $this->isAdmin() || $this->hasActiveAllowedSubscription();
+	}
+
+	/**
+	 * Is the subscription active, and for a plan this user may pay for?
+	 * A subscription switched to another plan, such as a cheaper one from
+	 * another registration form, doesn't count until it's switched back.
+	 *
+	 * @return bool
+	 */
+	protected function hasActiveAllowedSubscription() {
+		if ( ! $this->subscription || ! $this->subscription->active() ) {
+			return false;
+		}
+
+		return $this->isSubscriptionPlanAllowed( (string) $this->subscription->plan_id );
+	}
+
+	/**
+	 * Can a subscription to this price count? Either it's one of the user's plans, or
+	 * they've upgraded in the Stripe customer portal: an eligible price that costs at
+	 * least as much as the plan they registered for.
+	 *
+	 * @param string $plan_id
+	 *
+	 * @return bool
+	 */
+	public function isSubscriptionPlanAllowed( $plan_id ) {
+		return $this->isPlanAllowed( $plan_id ) || $this->isUpgradePlan( $plan_id );
+	}
+
+	/**
+	 * Is this price an upgrade on the plan the user registered for? It must be one of the
+	 * Eligible Products in the Stripe settings, if any are set, in the same currency, and
+	 * cost at least as much per day.
+	 *
+	 * @param string $plan_id
+	 *
+	 * @return bool
+	 */
+	public function isUpgradePlan( $plan_id ) {
+		$product_data = $this->getProductData();
+		if ( ! is_array( $product_data ) || empty( $product_data['id'] ) || '' === (string) $plan_id ) {
+			return false;
+		}
+
+		$eligible = array_filter( (array) wpum_get_option( $this->gateway_mode . '_stripe_products', array() ) );
+		if ( ! empty( $eligible ) && ! in_array( (string) $plan_id, array_map( 'strval', $eligible ), true ) ) {
+			return false;
+		}
+
+		$registered = $this->getCachedPrice( (string) $product_data['id'] );
+		$price      = $this->getCachedPrice( (string) $plan_id );
+		if ( ! $registered || ! $price || strtolower( (string) $registered['currency'] ) !== strtolower( (string) $price['currency'] ) ) {
+			return false;
+		}
+
+		$registered_daily = $this->dailyAmount( $registered );
+		$daily            = $this->dailyAmount( $price );
+		if ( null === $registered_daily || null === $daily ) {
+			return false;
+		}
+
+		return apply_filters( 'wpum_stripe_user_is_upgrade_plan', $daily >= $registered_daily, $plan_id, $this );
+	}
+
+	/**
+	 * A price from the cached Stripe product list. Never calls Stripe, since this runs in
+	 * capability checks.
+	 *
+	 * @param string $price_id
+	 *
+	 * @return array|null
+	 */
+	protected function getCachedPrice( $price_id ) {
+		$cache_key = 'wpum_' . $this->gateway_mode . '_stripe_products';
+
+		$products = get_transient( $cache_key );
+		if ( ! is_array( $products ) ) {
+			$products = get_option( $cache_key . '_last_good', array() );
+		}
+
+		foreach ( (array) $products as $product ) {
+			if ( isset( $product['prices'][ $price_id ] ) && is_array( $product['prices'][ $price_id ] ) ) {
+				return $product['prices'][ $price_id ];
+			}
+		}
+
+		return null;
+	}
+
+	/**
+	 * A recurring price's cost per day, so monthly and annual prices compare fairly.
+	 *
+	 * @param array $price
+	 *
+	 * @return float|null
+	 */
+	protected function dailyAmount( $price ) {
+		if ( ! isset( $price['unit_amount'], $price['currency'], $price['recurring']['interval'] ) ) {
+			return null;
+		}
+
+		$days = array(
+			'day'   => 1,
+			'week'  => 7,
+			'month' => 365.25 / 12,
+			'year'  => 365.25,
+		);
+
+		$interval = $price['recurring']['interval'];
+		$count    = isset( $price['recurring']['interval_count'] ) ? max( 1, (int) $price['recurring']['interval_count'] ) : 1;
+		if ( ! isset( $days[ $interval ] ) ) {
+			return null;
+		}
+
+		return (float) $price['unit_amount'] / ( $days[ $interval ] * $count );
+	}
+
+	/**
+	 * Is the subscription active, but for a plan this user may not pay for?
+	 *
+	 * @return bool
+	 */
+	public function hasSubscriptionOnDisallowedPlan() {
+		return $this->subscription && $this->subscription->active() && ! $this->hasActiveAllowedSubscription();
 	}
 
 	/**
@@ -157,8 +282,9 @@ class User extends \WP_User {
 	}
 
 	/**
-	 * The Stripe price IDs this user may pay for: their stored plan, their
-	 * subscription's plan, and the plans on the registration form they used.
+	 * The Stripe price IDs this user may pay for: their stored plan and the
+	 * plans on the registration form they used. Not the subscription's plan,
+	 * which the customer can change in the Stripe customer portal.
 	 *
 	 * @return array
 	 */
@@ -168,10 +294,6 @@ class User extends \WP_User {
 		$product_data = $this->getProductData();
 		if ( is_array( $product_data ) && ! empty( $product_data['id'] ) ) {
 			$plan_ids[] = (string) $product_data['id'];
-		}
-
-		if ( $this->subscription && $this->subscription->plan_id ) {
-			$plan_ids[] = (string) $this->subscription->plan_id;
 		}
 
 		$form = $this->getFormRegisteredWith();
@@ -205,7 +327,7 @@ class User extends \WP_User {
 	 * @return bool
 	 */
 	public function hasPaidByPlan( $plan ) {
-		if ( $this->subscription && $plan === $this->subscription->plan_id && $this->subscription->active() ) {
+		if ( $this->subscription && $plan === $this->subscription->plan_id && $this->hasActiveAllowedSubscription() ) {
 			return true;
 		}
 

@@ -40,6 +40,8 @@ class Stripe {
 		$secret         = $connect->get_stripe_secret();
 		$webhook_secret = $connect->get_stripe_webhook_secret();
 
+		( new SubscriptionPlanCheck( $connect->get_gateway_mode() ) )->init();
+
 		$stripeWebhook   = new StripeWebhookController( $secret, $webhook_secret, $connect->get_gateway_mode() );
 		$webhookEndpoint = new WebhookEndpoint( $stripeWebhook );
 

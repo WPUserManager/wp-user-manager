@@ -58,7 +58,7 @@ add_action( 'delete_post', 'wpum_delete_pages_transient_on_delete', 99, 2 );
  */
 function wpum_admin_bar_menu( $wp_admin_bar ) {
 
-	if ( ! current_user_can( apply_filters( 'wpum_admin_pages_capability', 'manage_options' ) ) ) {
+	if ( ! wpum_current_user_can_manage() ) {
 		return;
 	}
 
@@ -254,6 +254,46 @@ function wpum_restrict_account_page() {
 	}
 }
 add_action( 'template_redirect', 'wpum_restrict_account_page' );
+
+/**
+ * Send logged in visitors on the login page to its redirect_to destination.
+ *
+ * Only local or allowed hosts are followed. Without a valid redirect_to, or
+ * when WordPress asks for reauthentication, the login page is shown as usual.
+ *
+ * @return void
+ */
+function wpum_redirect_logged_in_from_login_page() {
+	if ( ! is_user_logged_in() ) {
+		return;
+	}
+
+	$login_page = wpum_get_core_page_id( 'login' );
+
+	if ( ! $login_page || ! is_page( $login_page ) ) {
+		return;
+	}
+
+	// Set when the admin auth cookie is rejected while the visitor is still logged in (see wpum_login_url()); redirecting back would loop.
+	if ( ! empty( $_GET['reauth'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		return;
+	}
+
+	if ( apply_filters( 'wpum_shortcode_logged_in_override', false, 'wpum_login_form' ) ) {
+		return;
+	}
+
+	$redirect_to = isset( $_GET['redirect_to'] ) ? wp_unslash( $_GET['redirect_to'] ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+	$redirect_to = is_string( $redirect_to ) ? wp_validate_redirect( $redirect_to, '' ) : '';
+
+	if ( empty( $redirect_to ) ) {
+		return;
+	}
+
+	wp_safe_redirect( $redirect_to );
+	exit;
+}
+add_action( 'template_redirect', 'wpum_redirect_logged_in_from_login_page' );
 
 /**
  * Display the appropriate content for the account page given the currently active tab.
@@ -1167,8 +1207,6 @@ add_action( 'wp', function () {
  * AJAX handler to validate meta key for fields are unique
  */
 function validate_user_meta_key() {
-	global $wpdb;
-
 	$field_id = filter_input( INPUT_POST, 'field_id', FILTER_VALIDATE_INT );
 
 	if ( empty( $field_id ) ) {
@@ -1179,17 +1217,15 @@ function validate_user_meta_key() {
 		return;
 	}
 
-	if ( ! current_user_can( apply_filters( 'wpum_admin_pages_capability', 'manage_options' ) ) ) {
+	if ( ! wpum_current_user_can_manage() ) {
 		return;
 	}
 
 	$user_meta_key = sanitize_text_field( filter_input( INPUT_POST, 'user_meta_key' ) );
 	$user_meta_key = 'wpum_' . $user_meta_key;
 
-	$meta_count = $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(meta_id) FROM {$wpdb->prefix}wpum_fieldmeta WHERE meta_key = 'user_meta_key' AND meta_value = %s AND wpum_field_id != %d", $user_meta_key, $field_id ) ); // phpcs:ignore
-
 	$response['error'] = array();
-	if ( intval( $meta_count ) > 0 ) {
+	if ( wpum_field_user_meta_key_exists( $user_meta_key, $field_id ) ) {
 		$response['error'][] = 'The user meta key must be unique for each field';
 	}
 

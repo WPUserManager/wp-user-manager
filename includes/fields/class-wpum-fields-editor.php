@@ -33,7 +33,7 @@ class WPUM_Fields_Editor {
 	 * Get things started.
 	 */
 	public function __construct() {
-		$this->capability = apply_filters( 'wpum_admin_pages_capability', 'manage_options' );
+		$this->capability = wpum_get_admin_capability();
 		$this->init_hooks();
 	}
 
@@ -326,16 +326,7 @@ class WPUM_Fields_Editor {
 	 * @param int $parent
 	 */
 	protected function delete_group_fields_cache( $group_id, $parent = 0 ) { // phpcs:ignore Universal.NamingConventions.NoReservedKeywordParameterNames.parentFound -- Public API, cannot rename.
-		$args = array(
-			'group_id' => (int) $group_id,
-			'orderby'  => 'field_order',
-			'order'    => 'ASC',
-			'parent'   => $parent,
-		);
-
-		$cache_key = WPUM()->fields->get_cache_key_from_args( $args );
-
-		wp_cache_delete( $cache_key, WPUM()->fields->cache_group );
+		wpum_delete_field_group_fields_cache( $group_id, $parent );
 	}
 
 	/**
@@ -497,21 +488,7 @@ class WPUM_Fields_Editor {
 	 */
 	private function deregister_settings( $settings, $wpum_field ) {
 
-		$this->deregistered_settings = array();
-
-		if ( ! empty( $wpum_field->get_primary_id() ) ) {
-			// All primary fields do not need the meta key setting.
-			$this->deregistered_settings[] = 'user_meta_key';
-
-			switch ( $wpum_field->get_primary_id() ) {
-				case 'username':
-				case 'user_displayname':
-				case 'user_avatar':
-				case 'user_cover':
-					$this->deregistered_settings[] = 'placeholder';
-					break;
-			}
-		}
+		$this->deregistered_settings = wpum_get_field_deregistered_settings( $wpum_field );
 
 		if ( is_array( $this->deregistered_settings ) && ! empty( $this->deregistered_settings ) ) {
 			foreach ( $this->deregistered_settings as $setting_key ) {
@@ -548,29 +525,9 @@ class WPUM_Fields_Editor {
 	 * @return mixed
 	 */
 	private function field_type_exists( $type = null ) {
+		$field_type = wpum_get_registered_field_type( $type );
 
-		$exists = false;
-
-		if ( $type ) {
-
-			// Grab all registered field types.
-			$registered_fields = wpum_get_registered_field_types();
-			$criteria          = array( 'type' => $type );
-			$default_fields    = wp_list_filter( $registered_fields['default']['fields'], $criteria );
-			$standard_fields   = wp_list_filter( $registered_fields['standard']['fields'], $criteria );
-			$advanced_fields   = wp_list_filter( $registered_fields['advanced']['fields'], $criteria );
-
-			// If it's found in either the default, standard or advanced fields groups then it's a success!
-			if ( is_array( $default_fields ) && ! empty( $default_fields ) ) {
-				$exists = $default_fields;
-			} elseif ( is_array( $standard_fields ) && ! empty( $standard_fields ) ) {
-				$exists = $standard_fields;
-			} elseif ( is_array( $advanced_fields ) && ! empty( $advanced_fields ) ) {
-				$exists = $advanced_fields;
-			}
-		}
-
-		return $exists;
+		return $field_type ? array( $field_type ) : false;
 	}
 
 	/**
@@ -685,93 +642,18 @@ class WPUM_Fields_Editor {
 		$data             = filter_input( INPUT_POST, 'data', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY );
 		$setting_fields   = filter_input( INPUT_POST, 'settings', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY );
 		$dropdown_options = filter_input( INPUT_POST, 'dropdownOptions', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY );
-		$field_to_update  = new WPUM_Field( $field_id );
 
-		if ( $field_to_update->exists() ) {
-			foreach ( $data as $setting_id => $setting_data ) {
-				if ( in_array( $setting_id, apply_filters( 'wpum_update_field_excluded_settings', array( 'conditions' ) ), true ) ) {
-					continue;
-				}
+		// Sanitize against the settings of the tab being saved, as sent by the editor.
+		$updated = wpum_update_field_settings( $field_id, $data, array(
+			'settings'         => is_array( $setting_fields ) ? $setting_fields : array(),
+			'dropdown_options' => $dropdown_options,
+		) );
 
-				// Update the name and description.
-				if ( 'field_title' === $setting_id ) {
-					$field_to_update->update( array( 'name' => sanitize_text_field( $setting_data ) ) );
-				} elseif ( 'field_description' === $setting_id ) {
-					$field_to_update->update( array( 'description' => wp_kses_post( $setting_data ) ) );
-					// Now update the meta data.
-				} elseif ( 'user_meta_key' === $setting_id && ! $field_to_update->is_primary() ) {
-					if ( strpos( $setting_data, 'wpum_' ) !== 0 ) {
-						$setting_data = 'wpum_' . $setting_data;
-						$setting_data = $field_to_update->wpum_sanitize_key( $setting_data );
-						if ( 'file' === $field_to_update->get_type() ) {
-							$append_key   = str_replace( 'wpum_file_field_', '', $setting_data );
-							$append_key   = str_replace( 'wpum_', '', $append_key );
-							$setting_data = 'wpum_file_field_' . $append_key;
-						}
-					}
-					$field_to_update->update_meta( $setting_id, $setting_data );
-				} else {
-
-					// Find the type of input for this setting.
-					$criteria       = array( 'model' => $setting_id );
-					$setting_config = wp_list_filter( $setting_fields, $criteria );
-
-					// Find the first key of the array within the setting config array.
-					reset( $setting_config );
-					$first_key      = key( $setting_config );
-					$setting_config = isset( $setting_config[ $first_key ] ) ? $setting_config[ $first_key ] : false;
-
-					if ( is_array( $setting_config ) && array_key_exists( 'type', $setting_config ) ) {
-
-						$setting_type = $setting_config['type'];
-
-						switch ( $setting_type ) {
-							case 'input':
-							case 'radios':
-								$setting_data = sanitize_text_field( $setting_data );
-								break;
-							case 'textarea':
-								$setting_data = wp_kses_post( $setting_data );
-								break;
-							case 'checkbox':
-								$setting_data = 'true' === $setting_data;
-								break;
-							case 'multiselect':
-								$setting_data = $setting_data;
-								break;
-							default:
-								$sanitize_method = apply_filters( 'wpum_update_fields_sanitize_method', 'sanitize_text_field', $setting_type, $setting_data );
-								$setting_data    = call_user_func( $sanitize_method, $setting_data );
-								break;
-						}
-
-						// Now finally save the data.
-						if ( $setting_data ) {
-							$field_to_update->update_meta( $setting_id, $setting_data );
-						} else {
-							$field_to_update->delete_meta( $setting_id );
-						}
-					}
-				}
-			}
-
-			if ( is_array( $dropdown_options ) && ! empty( $dropdown_options ) ) {
-				$options = array();
-				foreach ( $dropdown_options as $key => $value ) {
-					$options[ $key ] = array(
-						'value' => sanitize_text_field( $value['value'] ),
-						'label' => sanitize_text_field( $value['label'] ),
-					);
-				}
-				$field_to_update->update_meta( 'dropdown_options', $options );
-			}
-
-			$this->delete_group_fields_cache( $field_to_update->get_group_id() );
-			wp_send_json_success( $data );
-
-		} else {
+		if ( is_wp_error( $updated ) ) {
 			wp_send_json_error( null, 403 );
 		}
+
+		wp_send_json_success( $data );
 	}
 }
 

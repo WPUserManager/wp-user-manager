@@ -8,7 +8,7 @@ Tested up to: 7.1
 Requires PHP: 7.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
-Stable Tag: 2.9.26
+Stable Tag: 2.10.0
 
 Registration forms, a frontend login form, user profiles and a member directory for WordPress. Add Stripe payments and content restriction.
 
@@ -166,6 +166,24 @@ Please note that using WPUM and the mentioned add-ons does NOT guarantee complia
 13. Login form.
 
 == Changelog ==
+
+= 2.10.0 (20th October 2026) =
+
+- New: Rename roles from the Roles screen
+- New: {login_page_link} and {recovery_link} email tags output a clickable link
+- New: Admins see a notice when a PHP extension the plugin needs is missing
+- Security: Stripe Connect checks the site started a connection before handing over its keys
+- Security: Disconnecting Stripe also removes the connection from the Stripe Connect service
+- Tweak: {login_page_url} and {recovery_url} now output the plain URL, for use in your own links and buttons. Existing emails are updated to keep their links
+- Tweak: New installs hide the Email field on public profiles
+- Tweak: The login, registration, password, account and profile pages are no longer indexed by search engines
+- Tweak: Logged in visitors to the login page are sent to its redirect_to address
+- Tweak: The Stripe Eligible Products setting describes what it does
+- Fix: A Stripe subscription moved to a plan the member can't choose no longer gives paid access
+- Fix: Upgrading in the Stripe customer portal keeps paid access
+- Fix: Radio groups no longer pre-select the first option
+- Fix: Fields that never show a placeholder no longer offer the Placeholder setting
+- Fix: Fatal error when the stored email settings were not in the expected format
 
 = 2.9.26 (16th October 2026) =
 
