@@ -447,17 +447,19 @@ class PlanBindingTest extends WPUMTestCase {
 		$this->assertArrayNotHasKey( $customer->ID, $check->get_affected_users() );
 	}
 
-	public function test_notice_lists_the_members_and_what_to_do() {
+	public function test_notice_links_to_the_doc_and_collapses_the_members() {
 		list( $customer ) = $this->subscribed_customer();
 
-		$message = ( new \WPUserManager\Stripe\SubscriptionPlanCheck( 'test' ) )->get_notice_message( array( $customer->ID => 'price_cheap' ) );
+		$message = wp_kses_post( ( new \WPUserManager\Stripe\SubscriptionPlanCheck( 'test' ) )->get_notice_message( array( $customer->ID => 'price_cheap' ) ) );
 
 		$this->assertStringContainsString( '1 member has', $message );
+		$this->assertStringContainsString( 'Learn more', $message );
+		$this->assertStringContainsString( '<details', $message, 'The member list should survive wp_kses_post as a collapsed list' );
+		$this->assertStringContainsString( 'Show 1 member', $message );
 		$this->assertStringContainsString( esc_html( $customer->user_email ), $message );
 		$this->assertStringContainsString( 'price_cheap', $message );
 		$this->assertStringContainsString( esc_html( $this->registration_form->get_name() ), $message );
-		$this->assertStringContainsString( 'page=wpum-registration-forms', $message );
-		$this->assertStringContainsString( 'Customer portal', $message );
+		$this->assertStringContainsString( 'wpum_stripe_check_plans', $message );
 	}
 
 	/*

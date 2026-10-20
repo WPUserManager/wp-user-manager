@@ -25,6 +25,8 @@ class SubscriptionPlanCheck {
 
 	const NOTICE_LIMIT = 10;
 
+	const DOC_URL = 'https://wpusermanager.com/docs/';
+
 	/**
 	 * @var string
 	 */
@@ -220,8 +222,8 @@ class SubscriptionPlanCheck {
 		$count = count( $affected );
 
 		/* translators: %d the number of members. */
-		$message  = '<strong>WP User Manager:</strong> ' . sprintf( _n( '%d member has an active Stripe subscription to a price that isn\'t one of their registration form\'s plans, so they don\'t have paid access.', '%d members have an active Stripe subscription to a price that isn\'t one of their registration form\'s plans, so they don\'t have paid access.', $count, 'wp-user-manager' ), $count );
-		$message .= ' ' . esc_html__( 'This usually means the price was changed in the Stripe customer portal or the Stripe dashboard.', 'wp-user-manager' );
+		$message  = '<strong>WP User Manager:</strong> ' . esc_html( sprintf( _n( '%d member has a Stripe subscription to a plan that isn\'t available for their account, so they don\'t have paid access.', '%d members have a Stripe subscription to a plan that isn\'t available for their account, so they don\'t have paid access.', $count, 'wp-user-manager' ), $count ) );
+		$message .= ' <a href="' . esc_url( apply_filters( 'wpum_stripe_disallowed_plans_doc_url', self::DOC_URL ) ) . '" target="_blank" rel="noopener noreferrer">' . esc_html__( 'Learn more', 'wp-user-manager' ) . '</a>';
 
 		$items = array();
 		foreach ( array_slice( $affected, 0, self::NOTICE_LIMIT, true ) as $user_id => $plan_id ) {
@@ -236,22 +238,15 @@ class SubscriptionPlanCheck {
 			$items[] = sprintf( '<li><a href="%s">%s</a> (%s): <code>%s</code>, %s</li>', esc_url( get_edit_user_link( $user_id ) ), esc_html( $user->display_name ), esc_html( $user->user_email ), esc_html( $plan_id ), esc_html( $form_name ) );
 		}
 
-		$message .= '<ul style="list-style: disc; padding-left: 1.5em;">' . implode( '', $items ) . '</ul>';
-
 		if ( $count > self::NOTICE_LIMIT ) {
 			/* translators: %d the number of members not listed. */
-			$message .= '<p>' . esc_html( sprintf( __( 'And %d more.', 'wp-user-manager' ), $count - self::NOTICE_LIMIT ) ) . '</p>';
+			$items[] = '<li>' . esc_html( sprintf( __( 'And %d more.', 'wp-user-manager' ), $count - self::NOTICE_LIMIT ) ) . '</li>';
 		}
 
-		$message .= '<p><strong>' . esc_html__( 'What to do', 'wp-user-manager' ) . '</strong></p><ol>';
-		/* translators: %s link to the registration forms screen. */
-		$message .= '<li>' . sprintf( esc_html__( 'If they should have access with that price, add it to the plans of their form in %s.', 'wp-user-manager' ), '<a href="' . esc_url( admin_url( 'users.php?page=wpum-registration-forms' ) ) . '">' . esc_html__( 'Users > Registration Forms', 'wp-user-manager' ) . '</a>' ) . '</li>';
-		$message .= '<li>' . esc_html__( 'If not, ask them to switch back to their plan from Account > Billing > Manage Billing, or change their subscription in the Stripe dashboard.', 'wp-user-manager' ) . '</li>';
-		$message .= '<li>' . esc_html__( 'To stop it happening, in the Stripe dashboard go to Settings > Billing > Customer portal and only offer prices from the same registration form, or turn off switching plans.', 'wp-user-manager' ) . '</li>';
-		$message .= '</ol>';
-
-		/* translators: %s the name of the filter. */
-		$message .= '<p>' . sprintf( esc_html__( 'Developers can allow more prices with the %s filter.', 'wp-user-manager' ), '<code>wpum_stripe_user_allowed_plan_ids</code>' ) . ' <a href="' . esc_url( $this->check_again_url() ) . '">' . esc_html__( 'Check again', 'wp-user-manager' ) . '</a></p>';
+		/* translators: %d the number of members. */
+		$message .= '<details style="margin: 0.5em 0;"><summary style="cursor: pointer; color: #2271b1;">' . esc_html( sprintf( _n( 'Show %d member', 'Show %d members', $count, 'wp-user-manager' ), $count ) ) . '</summary>';
+		$message .= '<ul style="list-style: disc; padding-left: 1.5em;">' . implode( '', $items ) . '</ul>';
+		$message .= '<p><a href="' . esc_url( $this->check_again_url() ) . '">' . esc_html__( 'Check again', 'wp-user-manager' ) . '</a></p></details>';
 
 		return $message;
 	}
