@@ -291,7 +291,8 @@ function wpum_email_url_tags_to_link_tags( $content ) {
 		return $content;
 	}
 
-	$parts = preg_split( '/(<[^>]*>)/', $content, -1, PREG_SPLIT_DELIM_CAPTURE );
+	// An HTML tag runs to the first > outside quotes, so a > inside an attribute value doesn't end it.
+	$parts = preg_split( '/(<(?:[^>"\']|"[^"]*"|\'[^\']*\')*>)/', $content, -1, PREG_SPLIT_DELIM_CAPTURE );
 
 	if ( false === $parts ) {
 		return $content;

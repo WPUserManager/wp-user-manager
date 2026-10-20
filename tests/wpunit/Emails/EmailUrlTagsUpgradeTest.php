@@ -71,6 +71,19 @@ class EmailUrlTagsUpgradeTest extends WPUMTestCase {
 		);
 	}
 
+	public function test_keeps_tags_in_attributes_after_a_quoted_greater_than() {
+		$content = '<a title="Reset > continue" href="{recovery_url}">Reset</a> <a title=\'Log in > now\' href=\'{login_page_url}\'>Log in</a>';
+
+		$this->assertSame( $content, wpum_email_url_tags_to_link_tags( $content ) );
+	}
+
+	public function test_converts_text_after_a_tag_with_a_quoted_greater_than() {
+		$this->assertSame(
+			'<span title="a > b">{recovery_link}</span><span title=\'c > d\'>{login_page_link}</span>',
+			wpum_email_url_tags_to_link_tags( '<span title="a > b">{recovery_url}</span><span title=\'c > d\'>{login_page_url}</span>' )
+		);
+	}
+
 	public function test_keeps_tags_in_attributes_with_whitespace() {
 		$content = '<a href=" {recovery_url}">Reset</a> <a href= {login_page_url}>Log in</a> <a title="x" href = "{recovery_url}" class="b">y</a>';
 
