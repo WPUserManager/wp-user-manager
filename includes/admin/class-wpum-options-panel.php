@@ -92,7 +92,7 @@ class WPUM_Options_Panel {
 			'parent'     => 'users.php',
 			'page_title' => __( 'WP User Manager Settings', 'wp-user-manager' ),
 			'menu_title' => __( 'Settings', 'wp-user-manager' ),
-			'capability' => apply_filters( 'wpum_admin_pages_capability', 'manage_options' ),
+			'capability' => wpum_get_admin_capability(),
 		);
 	}
 
@@ -286,6 +286,12 @@ class WPUM_Options_Panel {
 					'id'   => 'allow_multiple_user_roles',
 					'name' => __( 'Allow Multiple Roles', 'wp-user-manager' ),
 					'desc' => __( 'Users can be assigned multiple roles.', 'wp-user-manager' ),
+					'type' => 'checkbox',
+				),
+				array(
+					'id'   => 'form_styles',
+					'name' => __( 'Form Styles', 'wp-user-manager' ),
+					'desc' => __( 'Add basic styles to the login, registration, account and password forms: full-width fields and a styled submit button. Turn off if your theme already styles forms.', 'wp-user-manager' ),
 					'type' => 'checkbox',
 				),
 			),

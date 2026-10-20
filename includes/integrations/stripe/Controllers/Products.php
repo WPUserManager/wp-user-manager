@@ -46,11 +46,14 @@ class Products {
 	}
 
 	/**
-	 * @return array
-	 * @throws \Stripe\Exception\ApiErrorException
+	 * Fetch the active products, with their active prices, from Stripe.
+	 *
+	 * @return array|false False if Stripe returned an error.
 	 */
 	protected function getProducts() {
 		Stripe::setApiKey( $this->secret_key );
+
+		$products = array();
 
 		try {
 			$all_products = \WPUM\Stripe\Product::all(
@@ -59,50 +62,73 @@ class Products {
 					'limit'  => 100,
 				)
 			);
-		} catch ( \Stripe\Exception\ApiErrorException $exception ) {
-			$all_products = array();
-		}
 
-		$products = array();
-		foreach ( $all_products as $product ) {
-			$all_prices = \WPUM\Stripe\Price::all(
-				array(
-					'product' => $product->id,
-					'active'  => true,
-				)
-			);
+			foreach ( $all_products as $product ) {
+				$all_prices = \WPUM\Stripe\Price::all(
+					array(
+						'product' => $product->id,
+						'active'  => true,
+					)
+				);
 
-			$save_product = $product->toArray();
-			$prices       = array();
-			foreach ( $all_prices->data as $price ) {
-				$price_data                  = $price->toArray();
-				$prices[ $price_data['id'] ] = $price_data;
+				$save_product = $product->toArray();
+				$prices       = array();
+				foreach ( $all_prices->data as $price ) {
+					$price_data                  = $price->toArray();
+					$prices[ $price_data['id'] ] = $price_data;
+				}
+
+				$save_product['prices'] = $prices;
+				$products[]             = $save_product;
 			}
-
-			$save_product['prices'] = $prices;
-			$products[]             = $save_product;
+		} catch ( \WPUM\Stripe\Exception\ApiErrorException $exception ) {
+			return false;
 		}
 
 		return $products;
 	}
 
 	/**
+	 * Get the products, from the cache if possible.
+	 *
+	 * If Stripe can't be reached, fall back to the last list fetched successfully
+	 * and try again in a few minutes, rather than on every request.
+	 *
 	 * @param false $force
 	 *
 	 * @return array|mixed
-	 * @throws \Stripe\Exception\ApiErrorException
 	 */
 	public function all( $force = false ) {
-		$transient = get_transient( 'wpum_' . $this->gateway_mode . '_stripe_products' );
+		$cache_key = 'wpum_' . $this->gateway_mode . '_stripe_products';
+		$transient = get_transient( $cache_key );
 
-		if ( $transient && ! $force ) {
-			$products = $transient;
-		} else {
-			$products = $this->getProducts();
-			set_transient( 'wpum_' . $this->gateway_mode . '_stripe_products', $products, DAY_IN_SECONDS );
+		if ( false !== $transient && ! $force ) {
+			return $transient;
 		}
 
+		$products = $this->getProducts();
+
+		if ( false === $products ) {
+			$products = get_option( $cache_key . '_last_good', array() );
+			set_transient( $cache_key, $products, 5 * MINUTE_IN_SECONDS );
+
+			return $products;
+		}
+
+		set_transient( $cache_key, $products, DAY_IN_SECONDS );
+		update_option( $cache_key . '_last_good', $products, false );
+
 		return $products;
+	}
+
+	/**
+	 * Forget the cached products, including the last good list. Use when the Stripe account changes.
+	 *
+	 * @param string $gateway_mode
+	 */
+	public static function forget( $gateway_mode ) {
+		delete_transient( 'wpum_' . $gateway_mode . '_stripe_products' );
+		delete_option( 'wpum_' . $gateway_mode . '_stripe_products_last_good' );
 	}
 
 	/**
@@ -133,7 +159,6 @@ class Products {
 	 * @param array $allowed
 	 *
 	 * @return array
-	 * @throws \Stripe\Exception\ApiErrorException
 	 */
 	public function get_plans( $allowed = array() ) {
 		$list     = array();
@@ -156,7 +181,6 @@ class Products {
 
 	/**
 	 * @return int
-	 * @throws \Stripe\Exception\ApiErrorException
 	 */
 	public function totalRecurringProducts() {
 		$total    = 0;

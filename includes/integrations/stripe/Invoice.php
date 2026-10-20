@@ -19,7 +19,7 @@ use WPUserManager\Stripe\Models\User;
 class Invoice {
 
 	/**
-	 * @var \Stripe\Invoice
+	 * @var \WPUM\Stripe\Invoice
 	 */
 	protected $invoice;
 
@@ -52,7 +52,7 @@ class Invoice {
 
 	/**
 	 * @return Customer
-	 * @throws \Stripe\Exception\ApiErrorException
+	 * @throws \WPUM\Stripe\Exception\ApiErrorException
 	 */
 	public function stripeCustomer() {
 		if ( $this->stripe_customer ) {
@@ -73,7 +73,7 @@ class Invoice {
 
 	/**
 	 * @return string|null
-	 * @throws \Stripe\Exception\ApiErrorException
+	 * @throws \WPUM\Stripe\Exception\ApiErrorException
 	 */
 	public function customerName() {
 		return $this->stripeCustomer()->name;
@@ -81,7 +81,7 @@ class Invoice {
 
 	/**
 	 * @return string
-	 * @throws \Stripe\Exception\ApiErrorException
+	 * @throws \WPUM\Stripe\Exception\ApiErrorException
 	 */
 	public function customerAddress() {
 		$address = $this->stripeCustomer()->address;

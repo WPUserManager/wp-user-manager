@@ -125,6 +125,24 @@ function wpum_get_roles( $force = false, $admin = false ) {
 }
 
 /**
+ * Retrieve the setting that stores each WPUM core page.
+ *
+ * @return array Page => setting key.
+ */
+function wpum_get_core_page_options() {
+	return array(
+		'login'                     => 'login_page',
+		'register'                  => 'registration_page',
+		'password'                  => 'password_recovery_page',
+		'account'                   => 'account_page',
+		'profile'                   => 'profile_page',
+		'registration-confirmation' => 'registration_redirect',
+		'login-redirect'            => 'login_redirect',
+		'logout-redirect'           => 'logout_redirect',
+	);
+}
+
+/**
  * Retrieve the ID of a WPUM core page.
  *
  * @param string $page Available core pages are login, register, password, account, profile.
@@ -137,38 +155,69 @@ function wpum_get_core_page_id( $page = null ) {
 		return;
 	}
 
-	$id = null;
-
-	switch ( $page ) {
-		case 'login':
-			$id = wpum_get_option( 'login_page' );
-			break;
-		case 'register':
-			$id = wpum_get_option( 'registration_page' );
-			break;
-		case 'password':
-			$id = wpum_get_option( 'password_recovery_page' );
-			break;
-		case 'account':
-			$id = wpum_get_option( 'account_page' );
-			break;
-		case 'profile':
-			$id = wpum_get_option( 'profile_page' );
-			break;
-		case 'registration-confirmation':
-			$id = wpum_get_option( 'registration_redirect' );
-			break;
-		case 'login-redirect':
-			$id = wpum_get_option( 'login_redirect' );
-			break;
-		case 'logout-redirect':
-			$id = wpum_get_option( 'logout_redirect' );
-			break;
-	}
+	$options = wpum_get_core_page_options();
+	$id      = is_string( $page ) && isset( $options[ $page ] ) ? wpum_get_option( $options[ $page ] ) : null;
 
 	$id = is_array( $id ) ? $id[0] : false;
 
 	return $id;
+}
+
+/**
+ * Assign a page to a WPUM core page, such as the login or account page.
+ *
+ * @param string $page    A key from wpum_get_core_page_options(): login, register, password,
+ *                        account, profile, registration-confirmation, login-redirect or logout-redirect.
+ * @param int    $page_id A published or private page. 0 to unassign it.
+ *
+ * @return true|WP_Error
+ */
+function wpum_assign_core_page( $page, $page_id ) {
+	$options = wpum_get_core_page_options();
+
+	if ( ! is_string( $page ) || ! isset( $options[ $page ] ) ) {
+		// translators: %s list of core pages
+		return new WP_Error( 'wpum_unknown_core_page', sprintf( esc_html__( 'Unknown page. Use one of: %s', 'wp-user-manager' ), esc_html( implode( ', ', array_keys( $options ) ) ) ), array( 'status' => 400 ) );
+	}
+
+	$page_id = absint( $page_id );
+
+	if ( ! $page_id ) {
+		wpum_update_option( $options[ $page ], false );
+
+		return wpum_check_core_page_saved( $page, false );
+	}
+
+	$post = get_post( $page_id );
+
+	if ( ! $post || 'page' !== $post->post_type || ! in_array( $post->post_status, array( 'publish', 'private' ), true ) ) {
+		return new WP_Error( 'wpum_invalid_core_page', esc_html__( 'The page must be a published or private page.', 'wp-user-manager' ), array( 'status' => 400 ) );
+	}
+
+	// Page settings are stored as a list, as the settings panel saves them.
+	wpum_update_option( $options[ $page ], array( $page_id ) );
+
+	return wpum_check_core_page_saved( $page, $page_id );
+}
+
+/**
+ * Check that a core page assignment was saved. Saving reports failure both when
+ * it fails and when the value was already stored, so read the value back.
+ *
+ * @param string    $page
+ * @param int|false $page_id The page that should be assigned, or false for none.
+ *
+ * @return true|WP_Error
+ */
+function wpum_check_core_page_saved( $page, $page_id ) {
+	$saved = wpum_get_core_page_id( $page );
+	$saved = $saved ? (int) $saved : false;
+
+	if ( $saved !== $page_id ) {
+		return new WP_Error( 'wpum_core_page_not_saved', esc_html__( 'The page could not be saved.', 'wp-user-manager' ), array( 'status' => 500 ) );
+	}
+
+	return true;
 }
 
 /**
@@ -449,6 +498,21 @@ function wpum_send_registration_confirmation_email( $user_id, $psw = false, $pas
 
 	$emails->send( $email, $subject, $message, $attachments );
 	$emails->__set( 'plain_text_password', null );
+}
+
+/**
+ * The roles to use when deciding what content a user can see. Integrations can
+ * withhold roles, e.g. while a payment is outstanding.
+ *
+ * @param WP_User|null $user Defaults to the current user.
+ *
+ * @return array
+ */
+function wpum_get_user_access_roles( $user = null ) {
+	$user  = $user ? $user : wp_get_current_user();
+	$roles = ( $user && $user->exists() ) ? (array) $user->roles : array();
+
+	return (array) apply_filters( 'wpum_user_access_roles', $roles, $user );
 }
 
 /**
@@ -1378,11 +1442,79 @@ function wpum_strip_slashes( $content ) {
  * @return bool
  */
 function wpum_is_rest_api_request() {
-	if ( empty( $_SERVER['REQUEST_URI'] ) ) {
+	if ( defined( 'REST_REQUEST' ) && REST_REQUEST ) {
+		return true;
+	}
+
+	if ( ! empty( $_GET['rest_route'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		return true;
+	}
+
+	if ( empty( $_SERVER['REQUEST_URI'] ) || ! get_option( 'permalink_structure' ) ) {
 		return false;
 	}
 
-	$rest_prefix = trailingslashit( rest_get_url_prefix() );
+	// Only the path counts: the query string can contain anything.
+	$request_path = wp_parse_url( wp_unslash( $_SERVER['REQUEST_URI'] ), PHP_URL_PATH ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+	$rest_path    = wp_parse_url( trailingslashit( get_rest_url() ), PHP_URL_PATH );
 
-	return ( false !== strpos( $_SERVER['REQUEST_URI'], $rest_prefix ) ); // phpcs:ignore
+	if ( ! is_string( $request_path ) || ! is_string( $rest_path ) ) {
+		return false;
+	}
+
+	return 0 === strpos( trailingslashit( $request_path ), $rest_path );
+}
+
+/**
+ * Returns true if the request's path is the URL's path and the request has every
+ * query argument the URL has (for plain permalinks). Extra query arguments are
+ * allowed, so this can't say which post WordPress will serve: once the query has
+ * run, check the queried object.
+ *
+ * @param string $url
+ *
+ * @return bool
+ */
+function wpum_is_request_for_url( $url ) {
+	if ( empty( $_SERVER['REQUEST_URI'] ) || empty( $url ) ) {
+		return false;
+	}
+
+	$request_path = wp_parse_url( wp_unslash( $_SERVER['REQUEST_URI'] ), PHP_URL_PATH ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+	$url_path     = wp_parse_url( $url, PHP_URL_PATH );
+
+	if ( ! is_string( $request_path ) || untrailingslashit( rawurldecode( $request_path ) ) !== untrailingslashit( rawurldecode( (string) $url_path ) ) ) {
+		return false;
+	}
+
+	wp_parse_str( (string) wp_parse_url( $url, PHP_URL_QUERY ), $url_args );
+
+	foreach ( $url_args as $key => $value ) {
+		if ( ! isset( $_GET[ $key ] ) || ! is_string( $_GET[ $key ] ) || wp_unslash( $_GET[ $key ] ) !== (string) $value ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+			return false;
+		}
+	}
+
+	return true;
+}
+
+/**
+ * Retrieve the capability required to manage WP User Manager.
+ *
+ * Filter it with `wpum_admin_pages_capability` to let another role manage the
+ * plugin's settings, forms, fields and directories.
+ *
+ * @return string
+ */
+function wpum_get_admin_capability() {
+	return apply_filters( 'wpum_admin_pages_capability', 'manage_options' );
+}
+
+/**
+ * Check whether the current user can manage WP User Manager.
+ *
+ * @return bool
+ */
+function wpum_current_user_can_manage() {
+	return current_user_can( wpum_get_admin_capability() );
 }

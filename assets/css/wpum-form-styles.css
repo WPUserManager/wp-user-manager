@@ -1,0 +1,25 @@
+.wpum-form input[type=text], .wpum-form input[type=email], .wpum-form input[type=password], .wpum-form input[type=url], .wpum-form input[type=tel], .wpum-form input[type=number], .wpum-form textarea, .wpum-form select {
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  padding: 0.6em 0.8em;
+  border: 1px solid currentColor;
+  border-radius: 6px;
+  background: var(--wp--preset--color--base, #fff);
+  color: inherit;
+  font: inherit; }
+.wpum-form textarea {
+  min-height: 8em; }
+.wpum-form input[type=submit] {
+  display: inline-block;
+  padding: 0.7em 1.6em;
+  border: 0;
+  border-radius: 6px;
+  background: var(--wp--preset--color--contrast, #1e1e1e);
+  color: var(--wp--preset--color--base, #fff);
+  font: inherit;
+  cursor: pointer; }
+  .wpum-form input[type=submit]:hover, .wpum-form input[type=submit]:focus {
+    opacity: 0.85; }
+
+/*# sourceMappingURL=wpum-form-styles.css.map */

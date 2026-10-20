@@ -4,7 +4,7 @@
  *
  * This template can be overridden by copying it to yourtheme/wpum/stripe/account/invoices.php
  *
- * @version 2.9.0
+ * @version 2.9.26
  */
 
 ?>
@@ -27,7 +27,7 @@
 						<?php echo mysql2date( apply_filters( 'wpum_stripe_invoice_date_format', 'F j, Y' ), $invoice->created_at ); // phpcs:ignore ?>
 					</td>
 					<td class="">
-						<?php echo \WPUserManager\Stripe\Stripe::currencySymbol( $invoice->currency ); ?><?php echo number_format( $invoice->total ); ; // phpcs:ignore ?>
+						<?php echo \WPUserManager\Stripe\Stripe::currencySymbol( $invoice->currency ); ?><?php echo number_format( (float) $invoice->total, 2 ); // phpcs:ignore ?>
 					</td>
 					<td class="text-right">
 						<a href="<?php echo esc_url( get_permalink( wpum_get_core_page_id( 'account' ) ) . '/billing/?invoice_id=' . $invoice->id ); ?>">

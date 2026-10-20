@@ -9,6 +9,8 @@
 
 namespace WPUserManager\Stripe;
 
+use WPUserManager\Stripe\Controllers\Products;
+
 /**
  * Connect
  */
@@ -98,6 +100,93 @@ class Connect {
 	}
 
 	/**
+	 * Errors the Connect service gives when it can't verify a checkout request, by code.
+	 *
+	 * @return array
+	 */
+	public function get_checkout_error_messages() {
+		return array(
+			'invalid_signature'  => __( 'Stripe Connect could not verify checkout requests from this site, because the Stripe key saved here does not match your Stripe connection. Please disconnect and connect Stripe again.', 'wp-user-manager' ),
+			'signature_expired'  => __( 'Stripe Connect could not verify checkout requests from this site, because the server clock is more than 5 minutes out. Please ask your host to correct the server time.', 'wp-user-manager' ),
+			'signature_required' => __( 'Stripe Connect refused an unsigned checkout request from this site. Please disconnect and connect Stripe again.', 'wp-user-manager' ),
+		);
+	}
+
+	/**
+	 * Record the result of the last checkout request to the Connect service.
+	 *
+	 * @param string $mode 'test' or 'live'.
+	 * @param string $code Error code from the Connect service, or empty if the request was verified.
+	 */
+	public function record_checkout_error( $mode, $code ) {
+		$errors = get_option( 'wpum_stripe_connect_checkout_errors', array() );
+		$errors = is_array( $errors ) ? $errors : array();
+
+		if ( ! isset( $this->get_checkout_error_messages()[ $code ] ) ) {
+			if ( isset( $errors[ $mode ] ) ) {
+				$this->clear_checkout_error( $mode );
+			}
+
+			return;
+		}
+
+		$errors[ $mode ] = array(
+			'code' => $code,
+			'time' => time(),
+		);
+
+		update_option( 'wpum_stripe_connect_checkout_errors', $errors, false );
+
+		/**
+		 * Fires when the Connect service can't verify a checkout request from this site.
+		 *
+		 * @param string $code 'invalid_signature', 'signature_expired' or 'signature_required'.
+		 * @param string $mode 'test' or 'live'.
+		 */
+		do_action( 'wpum_stripe_connect_checkout_error', $code, $mode );
+	}
+
+	/**
+	 * Forget the Connect service checkout error for a mode.
+	 *
+	 * @param string $mode 'test' or 'live'.
+	 */
+	public function clear_checkout_error( $mode ) {
+		$errors = get_option( 'wpum_stripe_connect_checkout_errors', array() );
+		if ( ! is_array( $errors ) || ! isset( $errors[ $mode ] ) ) {
+			return;
+		}
+
+		unset( $errors[ $mode ] );
+
+		if ( empty( $errors ) ) {
+			delete_option( 'wpum_stripe_connect_checkout_errors' );
+
+			return;
+		}
+
+		update_option( 'wpum_stripe_connect_checkout_errors', $errors, false );
+	}
+
+	/**
+	 * The message for the last Connect service checkout error, if the last request failed verification.
+	 *
+	 * @param string $mode 'test' or 'live'.
+	 *
+	 * @return string
+	 */
+	public function get_checkout_error_message( $mode ) {
+		$errors = get_option( 'wpum_stripe_connect_checkout_errors', array() );
+		if ( ! is_array( $errors ) || empty( $errors[ $mode ]['code'] ) ) {
+			return '';
+		}
+
+		$messages = $this->get_checkout_error_messages();
+
+		return isset( $messages[ $errors[ $mode ]['code'] ] ) ? $messages[ $errors[ $mode ]['code'] ] : '';
+	}
+
+	/**
 	 * @return string
 	 */
 	protected function get_site_url() {
@@ -109,20 +198,39 @@ class Connect {
 	}
 
 	/**
+	 * The state for a Connect button. The current user's unused state for this
+	 * mode is reused, since the buttons are built on every settings load,
+	 * including every REST request.
+	 *
+	 * The state carries the hash of a secret verifier that stays on this site.
+	 * The Connect service only hands the account's keys to whoever sends the
+	 * verifier, so seeing the state in a URL or a log isn't enough to get them.
+	 *
 	 * @param false $test_mode
 	 *
 	 * @return string
 	 */
 	protected function get_state( $test_mode = false ) {
+		$mode   = $test_mode ? 'test' : 'live';
+		$issued = $this->get_issued_states();
+
+		// States issued by older versions have no verifier, so they aren't reused.
+		if ( isset( $issued[ $mode ]['state'], $issued[ $mode ]['time'], $issued[ $mode ]['verifier'] ) && $issued[ $mode ]['time'] > time() - 12 * HOUR_IN_SECONDS ) {
+			return $issued[ $mode ]['state'];
+		}
+
+		$verifier = wp_generate_password( 32, false );
+
 		$state = array(
 			'test_mode' => (int) $test_mode,
 			'site_id'   => str_pad( wp_rand( wp_rand(), PHP_INT_MAX ), 10, wp_rand(), STR_PAD_BOTH ),
 			'site_url'  => $this->get_site_url(),
+			'challenge' => hash( 'sha256', $verifier ),
 		);
 
 		$state = base64_encode( serialize( $state ) ); // phpcs:ignore
 
-		$this->remember_state( $state );
+		$this->remember_state( $mode, $state, $verifier );
 
 		return $state;
 	}
@@ -137,43 +245,109 @@ class Connect {
 	}
 
 	/**
+	 * The states issued to the current user, by mode.
+	 *
+	 * @return array
+	 */
+	protected function get_issued_states() {
+		$states = get_transient( $this->get_states_transient_key() );
+		if ( ! is_array( $states ) ) {
+			return array();
+		}
+
+		// Before 2.9.23 this held a list of states; only the by-mode entries are reused.
+		// The *_legacy entries are states without a verifier, kept until they come back.
+		return array_intersect_key( $states, array_flip( array( 'test', 'live', 'test_legacy', 'live_legacy' ) ) );
+	}
+
+	/**
 	 * Record a state issued to the current user so the callback can be tied to it.
 	 *
+	 * @param string $mode     'test' or 'live'.
 	 * @param string $state
+	 * @param string $verifier The secret whose hash is the state's challenge.
 	 */
-	protected function remember_state( $state ) {
+	protected function remember_state( $mode, $state, $verifier = '' ) {
 		if ( ! get_current_user_id() ) {
 			return;
 		}
 
-		$states = get_transient( $this->get_states_transient_key() );
-		$states = is_array( $states ) ? $states : array();
+		$states = $this->get_issued_states();
 
-		$states[] = $state;
-		$states   = array_slice( $states, -10 );
+		// A state issued by an older version may still be on its way back from
+		// Stripe: keep accepting it for a day, but don't reuse it for new buttons.
+		if ( isset( $states[ $mode ]['state'], $states[ $mode ]['time'] ) && ! isset( $states[ $mode ]['verifier'] ) ) {
+			$states[ $mode . '_legacy' ] = $states[ $mode ];
+		}
+
+		foreach ( array( 'test_legacy', 'live_legacy' ) as $legacy ) {
+			if ( isset( $states[ $legacy ] ) && $this->is_expired_legacy_state( $legacy, $states[ $legacy ] ) ) {
+				unset( $states[ $legacy ] );
+			}
+		}
+
+		$states[ $mode ] = array(
+			'state' => $state,
+			'time'  => time(),
+		);
+
+		if ( '' !== $verifier ) {
+			$states[ $mode ]['verifier'] = $verifier;
+		}
 
 		set_transient( $this->get_states_transient_key(), $states, DAY_IN_SECONDS );
+	}
+
+	/**
+	 * Whether an issued state is a state from an older version kept for more than a day.
+	 *
+	 * @param string|int $key    Its key among the issued states.
+	 * @param mixed      $issued The issued state.
+	 *
+	 * @return bool
+	 */
+	protected function is_expired_legacy_state( $key, $issued ) {
+		if ( ! in_array( $key, array( 'test_legacy', 'live_legacy' ), true ) ) {
+			return false;
+		}
+
+		return ! isset( $issued['time'] ) || $issued['time'] < time() - DAY_IN_SECONDS;
 	}
 
 	/**
 	 * Check a callback state was issued to the current user, and consume it.
 	 *
 	 * @param string $state
+	 * @param string $verifier Set to the state's verifier, or '' if it was issued without one.
 	 *
 	 * @return bool
 	 */
-	protected function consume_state( $state ) {
+	protected function consume_state( $state, &$verifier = '' ) {
+		$verifier = '';
+
 		$states = get_transient( $this->get_states_transient_key() );
 		if ( ! is_array( $states ) ) {
 			return false;
 		}
 
-		// A '+' in the base64 state can arrive as a space once URL-decoded.
-		$state = str_replace( ' ', '+', $state );
+		// A '+' in the base64 state can arrive as a space once URL-decoded, and
+		// add_query_arg() strips a trailing '=' from the Connect URL, so ignore padding.
+		$state = rtrim( str_replace( ' ', '+', $state ), '=' );
 
-		foreach ( $states as $issued ) {
-			if ( is_string( $issued ) && hash_equals( $issued, $state ) ) {
+		foreach ( $states as $key => $issued ) {
+			if ( $this->is_expired_legacy_state( $key, $issued ) ) {
+				continue;
+			}
+
+			$issued_verifier = is_array( $issued ) && isset( $issued['verifier'] ) && is_string( $issued['verifier'] ) ? $issued['verifier'] : '';
+
+			// Before 2.9.23 each entry was the state itself.
+			$issued = is_array( $issued ) && isset( $issued['state'] ) ? $issued['state'] : $issued;
+
+			if ( is_string( $issued ) && hash_equals( rtrim( $issued, '=' ), $state ) ) {
 				delete_transient( $this->get_states_transient_key() );
+
+				$verifier = $issued_verifier;
 
 				return true;
 			}
@@ -218,6 +392,29 @@ class Connect {
 	}
 
 	/**
+	 * Ask the Connect service for the keys of the account just connected. The
+	 * verifier goes in the POST body, so it never passes through a browser.
+	 *
+	 * @param string $state
+	 * @param string $verifier Empty for a state issued without one.
+	 *
+	 * @return array|\WP_Error
+	 */
+	protected function request_credentials( $state, $verifier ) {
+		$body = array(
+			'state' => $state,
+		);
+
+		if ( '' !== $verifier ) {
+			$body['verifier'] = $verifier;
+		}
+
+		return wp_remote_post( esc_url_raw( $this->get_base_url() . '/creds' ), array(
+			'body' => $body,
+		) );
+	}
+
+	/**
 	 * Complete connection
 	 */
 	public function complete() {
@@ -247,17 +444,14 @@ class Connect {
 			return;
 		}
 
-		if ( ! $this->consume_state( $state ) ) {
+		$verifier = '';
+		if ( ! $this->consume_state( $state, $verifier ) ) {
 			/* translators: %1$s Opening anchor tag, do not translate. %2$s Closing anchor tag, do not translate. */
 			$message = '<p>' . sprintf( __( 'This Stripe connection request has expired or was not started from this site. Please %1$sconnect again%2$s.', 'wp-user-manager' ), '<a href="' . esc_url( $this->get_site_url() . '#/stripe' ) . '">', '</a>' ) . '</p>';
 			wp_die( $message );  // phpcs:ignore
 		}
 
-		$wpum_credentials_url = add_query_arg( array(
-			'state' => sanitize_text_field( $state ),
-		), $this->get_base_url() . '/creds' );
-
-		$response = wp_remote_get( esc_url_raw( $wpum_credentials_url ) );
+		$response = $this->request_credentials( $state, $verifier );
 
 		if ( is_wp_error( $response ) || 200 !== wp_remote_retrieve_response_code( $response ) ) {
 			/* translators: %1$s Opening anchor tag, do not translate. %2$s Closing anchor tag, do not translate. */
@@ -279,7 +473,10 @@ class Connect {
 
 		wpum_update_option( 'stripe_gateway_mode', $gateway_mode );
 
-		delete_transient( 'wpum_' . $gateway_mode . '_stripe_products' );
+		// A new connection has new keys, so an earlier checkout error no longer applies.
+		$this->clear_checkout_error( $gateway_mode );
+
+		Products::forget( $gateway_mode );
 
 		wpum_update_option( 'stripe_connect_account_id', sanitize_text_field( $data['stripe_user_id'] ) );
 		wp_safe_redirect( $this->get_site_url() . '/#stripe' );

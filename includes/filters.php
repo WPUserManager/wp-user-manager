@@ -45,7 +45,9 @@ function wpum_add_settings_link( $links ) {
 	$settings_link = '<a href="' . admin_url( 'users.php?page=wpum-settings' ) . '">' . __( 'Settings', 'wp-user-manager' ) . '</a>';
 	$docs_link     = '<a href="https://wpusermanager.com/docs/?utm_source=WP%20User%20Manager&utm_medium=insideplugin&utm_campaign=WP%20User%20Manager&utm_content=plugins-table" target="_blank">' . __( 'Documentation', 'wp-user-manager' ) . '</a>';
 	$addons_link   = '<a href="https://wpusermanager.com/addons?utm_source=WP%20User%20Manager&utm_medium=insideplugin&utm_campaign=WP%20User%20Manager&utm_content=plugins-table" target="_blank">' . __( 'Addons', 'wp-user-manager' ) . '</a>';
+	$support_link  = '<a href="https://wordpress.org/support/plugin/wp-user-manager/" target="_blank">' . __( 'Support', 'wp-user-manager' ) . '</a>';
 	array_unshift( $links, $settings_link );
+	array_unshift( $links, $support_link );
 	array_unshift( $links, $docs_link );
 	array_unshift( $links, $addons_link );
 	return $links;
@@ -129,6 +131,12 @@ function wpum_login_url( $login_url, $redirect, $force_reauth ) { // phpcs:ignor
 
 	if ( $redirect ) {
 		$wpum_login_page = add_query_arg( array( 'redirect_to' => apply_filters( 'wpum_login_redirect_to_url', rawurlencode( $redirect ) ) ), $wpum_login_page );
+	}
+
+	// auth_redirect() always forces reauth. Keep the flag only when the visitor is still logged in,
+	// so the login page doesn't send them straight back to a wp-admin URL that rejects their auth cookie.
+	if ( $force_reauth && wp_validate_auth_cookie( '', 'logged_in' ) ) {
+		$wpum_login_page = add_query_arg( 'reauth', '1', $wpum_login_page );
 	}
 
 	return $wpum_login_page;
@@ -373,7 +381,7 @@ function wpum_maybe_display_field( $display, $field = null ) {
 		return false;
 	}
 
-	return count( array_intersect( wp_get_current_user()->roles, $field_roles ) ) > 0;
+	return count( array_intersect( wpum_get_user_access_roles(), $field_roles ) ) > 0;
 }
 
 /**

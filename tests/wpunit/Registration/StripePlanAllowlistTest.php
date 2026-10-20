@@ -69,6 +69,19 @@ class StripePlanAllowlistTest extends RegistrationTestCase {
 		);
 		$this->stripe_registration->init();
 
+		// The test site has no Stripe keys, so Stripe::init() refuses registration on
+		// paid forms. These tests stand in for a connected site.
+		global $wp_filter;
+		if ( isset( $wp_filter['submit_wpum_form_validate_fields'] ) ) {
+			foreach ( $wp_filter['submit_wpum_form_validate_fields']->callbacks as $priority => $callbacks ) {
+				foreach ( $callbacks as $callback ) {
+					if ( is_array( $callback['function'] ) && $callback['function'][0] instanceof \WPUserManager\Stripe\Stripe ) {
+						remove_filter( 'submit_wpum_form_validate_fields', $callback['function'], $priority );
+					}
+				}
+			}
+		}
+
 		$this->reset_registration_form_cache();
 	}
 
@@ -185,5 +198,23 @@ class StripePlanAllowlistTest extends RegistrationTestCase {
 
 		$stripe_user = new \WPUserManager\Stripe\Models\User( $user_id );
 		$this->assertEmpty( $stripe_user->getPlanMeta() );
+	}
+
+	public function test_plan_field_has_a_label() {
+		$fields = $this->stripe_registration->inject_registration_fields( array(), $this->registration_form );
+
+		$this->assertSame( 'Plan', $fields['wpum_stripe_plan']['label'], 'The plan choice showed only a required asterisk' );
+	}
+
+	public function test_plan_field_label_can_be_filtered() {
+		$label = function () {
+			return 'Membership';
+		};
+		add_filter( 'wpum_stripe_registration_label', $label );
+
+		$fields = $this->stripe_registration->inject_registration_fields( array(), $this->registration_form );
+		remove_filter( 'wpum_stripe_registration_label', $label );
+
+		$this->assertSame( 'Membership', $fields['wpum_stripe_plan']['label'] );
 	}
 }

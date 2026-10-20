@@ -24,9 +24,12 @@ jobs:
       matrix:
         php: ['7.4', '8.1', '8.2', '8.3']
     env:
-      STRIPE_SECRET_KEY: ${{ secrets.STRIPE_SECRET_KEY }}
-      STRIPE_PUBLISHABLE_KEY: ${{ secrets.STRIPE_PUBLISHABLE_KEY }}
-      WPUM_BILLING_OVERRIDE_KEY: ${{ secrets.WPUM_BILLING_OVERRIDE_KEY }}
+      # Real Stripe test payments run on one PHP version only: the jobs share one
+      # Stripe account, and in parallel they hit its rate limit and receive each
+      # other's webhooks. The other versions skip the Stripe payment specs.
+      STRIPE_SECRET_KEY: ${{ matrix.php == '8.3' && secrets.STRIPE_SECRET_KEY || '' }}
+      STRIPE_PUBLISHABLE_KEY: ${{ matrix.php == '8.3' && secrets.STRIPE_PUBLISHABLE_KEY || '' }}
+      WPUM_BILLING_OVERRIDE_KEY: ${{ matrix.php == '8.3' && secrets.WPUM_BILLING_OVERRIDE_KEY || '' }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -94,13 +97,30 @@ jobs:
       - name: Start Stripe webhook listener
         if: env.STRIPE_SECRET_KEY != ''
         run: |
-          stripe listen --forward-to http://localhost:8889/wp-json/wpum/v1/stripe --api-key $STRIPE_SECRET_KEY > /tmp/stripe-listen.log 2>&1 &
-          sleep 5
-          WEBHOOK_SECRET=$(grep -o 'whsec_[a-zA-Z0-9]*' /tmp/stripe-listen.log | head -1)
+          # Newer Stripe CLI versions refuse to listen without --events. These are
+          # the events StripeWebhookController handles.
+          stripe listen --forward-to http://localhost:8889/wp-json/wpum/v1/stripe --api-key $STRIPE_SECRET_KEY \
+            --events checkout.session.completed,checkout.session.async_payment_succeeded,customer.subscription.created,customer.subscription.updated,customer.subscription.deleted,invoice.payment_succeeded,product.created,product.updated,product.deleted \
+            > /tmp/stripe-listen.log 2>&1 &
+          for i in $(seq 1 30); do
+            WEBHOOK_SECRET=$(grep -o 'whsec_[a-zA-Z0-9]*' /tmp/stripe-listen.log | head -1)
+            [ -n "$WEBHOOK_SECRET" ] && break
+            sleep 1
+          done
+          if [ -z "$WEBHOOK_SECRET" ]; then
+            echo "stripe listen did not start:"
+            cat /tmp/stripe-listen.log
+            exit 1
+          fi
+          echo "::add-mask::$WEBHOOK_SECRET"
           echo "STRIPE_WEBHOOK_SECRET=$WEBHOOK_SECRET" >> $GITHUB_ENV
 
       - name: Run E2E tests
         run: npx playwright test
+
+      - name: Show Stripe webhook deliveries
+        if: always() && env.STRIPE_SECRET_KEY != ''
+        run: cat /tmp/stripe-listen.log || true
 
       - name: Upload Playwright report
         uses: actions/upload-artifact@v4

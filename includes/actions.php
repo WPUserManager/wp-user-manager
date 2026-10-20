@@ -58,7 +58,7 @@ add_action( 'delete_post', 'wpum_delete_pages_transient_on_delete', 99, 2 );
  */
 function wpum_admin_bar_menu( $wp_admin_bar ) {
 
-	if ( ! current_user_can( apply_filters( 'wpum_admin_pages_capability', 'manage_options' ) ) ) {
+	if ( ! wpum_current_user_can_manage() ) {
 		return;
 	}
 
@@ -256,6 +256,46 @@ function wpum_restrict_account_page() {
 add_action( 'template_redirect', 'wpum_restrict_account_page' );
 
 /**
+ * Send logged in visitors on the login page to its redirect_to destination.
+ *
+ * Only local or allowed hosts are followed. Without a valid redirect_to, or
+ * when WordPress asks for reauthentication, the login page is shown as usual.
+ *
+ * @return void
+ */
+function wpum_redirect_logged_in_from_login_page() {
+	if ( ! is_user_logged_in() ) {
+		return;
+	}
+
+	$login_page = wpum_get_core_page_id( 'login' );
+
+	if ( ! $login_page || ! is_page( $login_page ) ) {
+		return;
+	}
+
+	// Set when the admin auth cookie is rejected while the visitor is still logged in (see wpum_login_url()); redirecting back would loop.
+	if ( ! empty( $_GET['reauth'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		return;
+	}
+
+	if ( apply_filters( 'wpum_shortcode_logged_in_override', false, 'wpum_login_form' ) ) {
+		return;
+	}
+
+	$redirect_to = isset( $_GET['redirect_to'] ) ? wp_unslash( $_GET['redirect_to'] ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+	$redirect_to = is_string( $redirect_to ) ? wp_validate_redirect( $redirect_to, '' ) : '';
+
+	if ( empty( $redirect_to ) ) {
+		return;
+	}
+
+	wp_safe_redirect( $redirect_to );
+	exit;
+}
+add_action( 'template_redirect', 'wpum_redirect_logged_in_from_login_page' );
+
+/**
  * Display the appropriate content for the account page given the currently active tab.
  *
  * @return void
@@ -356,6 +396,19 @@ add_filter( 'user_row_actions', 'wpum_admin_user_action_link', 10, 2 );
 function wpum_complete_setup() {
 	if ( ! get_option( 'wpum_setup_is_complete' ) && ! get_option( 'wpum_version_upgraded_from' ) ) {
 
+		// Overlapping requests right after activation can all get here, so only one
+		// may run the setup. Otherwise the default data is installed twice (#136).
+		if ( ! wpum_create_setup_lock() ) {
+			return;
+		}
+
+		// Another request may have finished the setup after this one loaded its options.
+		if ( wpum_setup_is_complete_in_db() ) {
+			wpum_release_setup_lock();
+
+			return;
+		}
+
 		wpum_install_default_field_group();
 
 		$fields = wpum_install_fields();
@@ -368,7 +421,63 @@ function wpum_complete_setup() {
 
 		update_option( 'wpum_setup_is_complete', true );
 
+		wpum_release_setup_lock();
 	}
+}
+
+/**
+ * Take the lock for the first-run setup. Uses INSERT IGNORE so only one request
+ * can win, the same approach as WP_Upgrader::create_lock(). A lock older than
+ * the timeout is treated as left behind by a failed request and replaced.
+ *
+ * @param int $timeout Seconds before an existing lock is considered stale.
+ *
+ * @return bool True if this request holds the lock.
+ */
+function wpum_create_setup_lock( $timeout = 300 ) {
+	global $wpdb;
+
+	$lock_option = 'wpum_setup_lock';
+
+	$created = $wpdb->query( $wpdb->prepare( "INSERT IGNORE INTO `$wpdb->options` ( `option_name`, `option_value`, `autoload` ) VALUES ( %s, %s, 'no' )", $lock_option, time() ) ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery
+
+	if ( $created ) {
+		return true;
+	}
+
+	$locked_at = (int) $wpdb->get_var( $wpdb->prepare( "SELECT option_value FROM `$wpdb->options` WHERE option_name = %s", $lock_option ) ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery
+
+	if ( $locked_at > time() - $timeout ) {
+		return false;
+	}
+
+	// Stale lock: take it over only if no other request did so first.
+	$updated = $wpdb->query( $wpdb->prepare( "UPDATE `$wpdb->options` SET option_value = %s WHERE option_name = %s AND option_value = %s", time(), $lock_option, $locked_at ) ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery
+
+	return (bool) $updated;
+}
+
+/**
+ * Release the first-run setup lock.
+ *
+ * @return void
+ */
+function wpum_release_setup_lock() {
+	global $wpdb;
+
+	$wpdb->delete( $wpdb->options, array( 'option_name' => 'wpum_setup_lock' ) ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery
+}
+
+/**
+ * Check the setup flag in the database, bypassing the options cache, which can
+ * be stale when another request finished the setup during this one.
+ *
+ * @return bool
+ */
+function wpum_setup_is_complete_in_db() {
+	global $wpdb;
+
+	return (bool) $wpdb->get_var( $wpdb->prepare( "SELECT option_value FROM `$wpdb->options` WHERE option_name = %s", 'wpum_setup_is_complete' ) ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery
 }
 
 /**
@@ -406,7 +515,11 @@ function wpum_prevent_entire_site() {
 		return;
 	}
 
-	if ( wpum_is_rest_api_request() ) {
+	// A real REST request is served on parse_request (priority 10) and checked by
+	// wpum_prevent_entire_site_rest(). Check anything that only looks like one again
+	// straight after, so text in the URL can't skip the lock.
+	if ( ! doing_action( 'parse_request' ) && wpum_is_rest_api_request() ) {
+		add_action( 'parse_request', 'wpum_prevent_entire_site', 11 );
 		return;
 	}
 
@@ -436,8 +549,13 @@ function wpum_prevent_entire_site() {
 
 	$password_reset_page_id = wpum_get_core_page_id( 'password' );
 	if ( ! empty( $password_reset_page_id ) ) {
-		$password_reset_page = get_permalink( $password_reset_page_id );
-		if ( 0 === strpos( $requested_url, $password_reset_page ) ) {
+		if ( doing_action( 'wp' ) ) {
+			if ( is_page( $password_reset_page_id ) ) {
+				return;
+			}
+		} elseif ( wpum_is_request_for_url( get_permalink( $password_reset_page_id ) ) ) {
+			// Query arguments can change which page is served, so check once the query has run.
+			add_action( 'wp', 'wpum_prevent_entire_site', 0 );
 			return;
 		}
 	}
@@ -470,6 +588,32 @@ function wpum_prevent_entire_site() {
 if ( wpum_get_option( 'lock_complete_site' ) ) {
 	add_action( 'init', 'wpum_prevent_entire_site', 9 );
 }
+
+/**
+ * Require login for REST API requests when site access is prevented.
+ *
+ * The init redirect in wpum_prevent_entire_site() skips REST requests, which
+ * are authenticated later. This runs at dispatch, once the current user is known.
+ *
+ * @param mixed            $result  Response to replace the requested version with.
+ * @param \WP_REST_Server  $server  Server instance.
+ * @param \WP_REST_Request $request Request used to generate the response.
+ *
+ * @return mixed
+ */
+function wpum_prevent_entire_site_rest( $result, $server, $request ) {
+	if ( null !== $result || ! wpum_get_option( 'lock_complete_site' ) || is_user_logged_in() ) {
+		return $result;
+	}
+
+	$allowed_routes = apply_filters( 'wpum_prevent_entire_site_rest_allowed_routes', array( '/wpum/v1/stripe' ) );
+	if ( in_array( untrailingslashit( $request->get_route() ), $allowed_routes, true ) ) {
+		return $result;
+	}
+
+	return new WP_Error( 'rest_not_logged_in', esc_html__( 'You must be logged in to access this site.', 'wp-user-manager' ), array( 'status' => rest_authorization_required_code() ) );
+}
+add_filter( 'rest_pre_dispatch', 'wpum_prevent_entire_site_rest', 10, 3 );
 
 /**
  * Finish data installation after the whole plugin has booted.
@@ -574,9 +718,75 @@ function wpum_reset_password_redirect() {
 	$url = remove_query_arg( array( 'key', 'login', 'action' ) );
 	$url = add_query_arg( 'step', 'reset', $url );
 
+	nocache_headers();
 	wp_safe_redirect( $url );
 	exit;
 }
+
+/**
+ * Should the current request be kept out of page and browser caches?
+ *
+ * True for the login, registration, password recovery and account pages, and
+ * for any page that holds one of their shortcodes. Their output depends on
+ * nonces, cookies or the visitor, so a cached copy breaks the forms, e.g. a
+ * stale password reset error until the page is refreshed (#304).
+ *
+ * @return bool
+ */
+function wpum_is_uncacheable_request() {
+	$uncacheable = false;
+
+	foreach ( array( 'login', 'register', 'password', 'account' ) as $core_page ) {
+		$page_id = wpum_get_core_page_id( $core_page );
+
+		if ( $page_id && is_page( $page_id ) ) {
+			$uncacheable = true;
+			break;
+		}
+	}
+
+	if ( ! $uncacheable && is_singular() ) {
+		$post = get_post();
+
+		if ( $post ) {
+			foreach ( array( 'wpum_login_form', 'wpum_register', 'wpum_password_recovery', 'wpum_account' ) as $shortcode ) {
+				if ( has_shortcode( $post->post_content, $shortcode ) ) {
+					$uncacheable = true;
+					break;
+				}
+			}
+		}
+	}
+
+	/**
+	 * Filter whether the current request is kept out of page and browser caches.
+	 *
+	 * @param bool $uncacheable
+	 */
+	return (bool) apply_filters( 'wpum_is_uncacheable_request', $uncacheable );
+}
+
+/**
+ * Keep WPUM form pages out of page caches and browser caches (#117).
+ *
+ * DONOTCACHEPAGE is honoured by the common page cache plugins.
+ *
+ * @return void
+ */
+function wpum_prevent_caching_form_pages() {
+	if ( ! wpum_is_uncacheable_request() ) {
+		return;
+	}
+
+	if ( ! defined( 'DONOTCACHEPAGE' ) ) {
+		define( 'DONOTCACHEPAGE', true );
+	}
+
+	if ( ! headers_sent() ) {
+		nocache_headers();
+	}
+}
+add_action( 'template_redirect', 'wpum_prevent_caching_form_pages', 0 );
 
 /**
  * @param int $user_id
@@ -997,8 +1207,6 @@ add_action( 'wp', function () {
  * AJAX handler to validate meta key for fields are unique
  */
 function validate_user_meta_key() {
-	global $wpdb;
-
 	$field_id = filter_input( INPUT_POST, 'field_id', FILTER_VALIDATE_INT );
 
 	if ( empty( $field_id ) ) {
@@ -1009,17 +1217,15 @@ function validate_user_meta_key() {
 		return;
 	}
 
-	if ( ! current_user_can( apply_filters( 'wpum_admin_pages_capability', 'manage_options' ) ) ) {
+	if ( ! wpum_current_user_can_manage() ) {
 		return;
 	}
 
 	$user_meta_key = sanitize_text_field( filter_input( INPUT_POST, 'user_meta_key' ) );
 	$user_meta_key = 'wpum_' . $user_meta_key;
 
-	$meta_count = $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(meta_id) FROM {$wpdb->prefix}wpum_fieldmeta WHERE meta_key = 'user_meta_key' AND meta_value = %s AND wpum_field_id != %d", $user_meta_key, $field_id ) ); // phpcs:ignore
-
 	$response['error'] = array();
-	if ( intval( $meta_count ) > 0 ) {
+	if ( wpum_field_user_meta_key_exists( $user_meta_key, $field_id ) ) {
 		$response['error'][] = 'The user meta key must be unique for each field';
 	}
 

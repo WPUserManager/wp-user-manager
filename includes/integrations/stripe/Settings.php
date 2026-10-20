@@ -61,7 +61,7 @@ class Settings {
 	 * @param array $settings
 	 *
 	 * @return array
-	 * @throws \Stripe\Exception\ApiErrorException
+	 * @throws \WPUM\Stripe\Exception\ApiErrorException
 	 */
 	public function register_settings( $settings ) {
 		$settings['stripe'][] = array(
@@ -435,6 +435,16 @@ class Settings {
 			return wp_send_json_error( $unknown_error );
 		}
 
+		// The Connect service couldn't verify this site's last checkout request.
+		$checkout_error = $this->connect->get_checkout_error_message( $mode );
+		if ( ! empty( $account_id ) && $checkout_error ) {
+			return wp_send_json_error(
+				array(
+					'message' => wpautop( esc_html( $checkout_error ) . '<br /><br />' . $reconnect_disconnect_actions ),
+				)
+			);
+		}
+
 		$stripe = new StripeClient( $secret );
 
 		// Attempt to show account information from Stripe Connect account.
@@ -602,7 +612,7 @@ class Settings {
 			wpum_delete_option( $option );
 		}
 
-		delete_transient( 'wpum_' . $prefix . '_stripe_products' );
+		Products::forget( $prefix );
 
 		$redirect = remove_query_arg(
 			array(

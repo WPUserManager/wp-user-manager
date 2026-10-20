@@ -21,11 +21,12 @@ class WPUM_Field_Hidden extends WPUM_Field_Type {
 	 * Construct
 	 */
 	public function __construct() {
-		$this->type              = 'hidden';
-		$this->icon              = 'dashicons-hidden';
-		$this->group             = 'advanced';
-		$this->allow_default     = true;
-		$this->min_addon_version = '2.2.1';
+		$this->type                 = 'hidden';
+		$this->supports_placeholder = false;
+		$this->icon                 = 'dashicons-hidden';
+		$this->group                = 'advanced';
+		$this->allow_default        = true;
+		$this->min_addon_version    = '2.2.1';
 	}
 
 	/**

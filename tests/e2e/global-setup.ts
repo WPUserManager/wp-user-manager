@@ -1,4 +1,3 @@
-import { execSync } from 'child_process';
 import {
   activatePlugin,
   enableRegistration,
@@ -128,12 +127,8 @@ async function globalSetup(): Promise<void> {
     // Stripe environment check (non-blocking)
     if (process.env.STRIPE_SECRET_KEY) {
       console.log('[WPUM E2E] Stripe secret key detected - Stripe tests will run');
-      try {
-        execSync('curl -sf http://localhost:12111 >/dev/null 2>&1', { timeout: 3000 });
-        console.log('[WPUM E2E] Stripe CLI webhook listener is running on port 12111');
-      } catch {
-        console.log('[WPUM E2E] Warning: Stripe CLI webhook listener not detected on port 12111');
-        console.log('[WPUM E2E]   Run: stripe listen --forward-to http://localhost:8889/wp-json/wpum/v1/stripe');
+      if (!process.env.STRIPE_WEBHOOK_SECRET) {
+        console.log('[WPUM E2E] Warning: STRIPE_WEBHOOK_SECRET is empty. Run: stripe listen --forward-to http://localhost:8889/wp-json/wpum/v1/stripe (with --events) and export its whsec_ secret');
       }
     } else {
       console.log('[WPUM E2E] No STRIPE_SECRET_KEY - Stripe tests will be skipped');

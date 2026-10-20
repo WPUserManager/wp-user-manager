@@ -165,7 +165,10 @@ function wpum_install_registration_form( $fields = array() ) {
 function wpum_install_emails() {
 	$emails = wpum_get_default_emails();
 
-	$emails = array_merge( $emails, get_option( 'wpum_email', array() ) );
+	// The option can hold a non-array value, e.g. an empty string, which
+	// array_merge() rejects with a fatal error on PHP 8 (#228).
+	$stored = get_option( 'wpum_email', array() );
+	$emails = array_merge( $emails, is_array( $stored ) ? $stored : array() );
 
 	// A stored email can be partial, e.g. when only its content was ever saved,
 	// so a top level merge alone would leave it without a subject.
@@ -210,6 +213,11 @@ function wpum_run_install() {
 	wpum_update_option( 'guests_can_view_profiles', true );
 	wpum_update_option( 'members_can_view_profiles', true );
 	wpum_update_option( 'roles_editor', true );
+
+	// Default form styles on new installs only, so reactivating doesn't restyle an existing site.
+	if ( ! $current_version ) {
+		wpum_update_option( 'form_styles', true );
+	}
 
 	// Clear the permalinks.
 	flush_rewrite_rules();

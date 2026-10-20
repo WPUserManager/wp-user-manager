@@ -42,6 +42,10 @@
 							<router-link :to="{ name: 'role', params: { id: role.id }}"><span v-text="sanitized(labels.table_edit)"></span></router-link>
 							|
 							<span>
+								<a href="#" @click.prevent="showEditFormDialog( role )"><span
+									v-text="sanitized(labels.table_rename_role)"></span></a> |
+								</span>
+							<span>
 								<a href="#" @click="showAddRoleDialog( role.id )"><span
 									v-text="sanitized(labels.table_duplicate_role)"></span></a> |
 								</span>
@@ -220,12 +224,12 @@ export default {
 				 * Update the interface with the newly retrieve info from the backend.
 				 * Show a success or error message depending on what happened.
 				 */
-				updateFormDetails: ( status, data_or_message ) => {
+				updateRoleDetails: ( status, data_or_message ) => {
 					if( status == 'error' ) {
-						this.showError(data_or_message)
+						this.showError( data_or_message && data_or_message.data ? data_or_message.data : this.labels.error )
 					} else {
-						// Find object index of the updated group.
-						const roleIndex = findFormIndex( this.forms , function(o) { return o.id == data_or_message.id })
+						// Find object index of the updated role.
+						const roleIndex = findFormIndex( this.roles , function(o) { return o.id == data_or_message.id })
 						// Now update the interface content.
 						this.roles[roleIndex].name = data_or_message.name
 						// Show success message.

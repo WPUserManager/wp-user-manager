@@ -36,23 +36,37 @@ class Account {
 	protected $gateway_mode;
 
 	/**
-	 * @var Billing
+	 * @var Billing|null
 	 */
 	protected $billing;
 
 	/**
-	 * @var Products
+	 * @var Products|null
 	 */
 	protected $products;
 
 	/**
+	 * Whether each user still owes a payment, by user ID, for this request.
+	 *
+	 * @var array
+	 */
+	protected static $owes_payment = array();
+
+	/**
+	 * Set while checking payment status, since the check itself tests capabilities.
+	 *
+	 * @var bool
+	 */
+	protected static $checking_payment = false;
+
+	/**
 	 * Registration constructor.
 	 *
-	 * @param string   $public_key
-	 * @param string   $secret_key
-	 * @param string   $gateway_mode
-	 * @param Billing  $billing
-	 * @param Products $products
+	 * @param string        $public_key
+	 * @param string        $secret_key
+	 * @param string        $gateway_mode
+	 * @param Billing|null  $billing
+	 * @param Products|null $products
 	 */
 	public function __construct( $public_key, $secret_key, $gateway_mode, $billing, $products ) {
 		$this->public_key   = $public_key;
@@ -68,7 +82,8 @@ class Account {
 	public function init() {
 		add_filter( 'wpum_get_account_page_tabs', array( $this, 'register_account_tab' ) );
 		add_action( 'wpum_account_page_content_billing', array( $this, 'account_tab_content' ) );
-		add_action( 'template_redirect', array( $this, 'unsubscribed_redirect' ) );
+
+		$this->enforce_payment();
 
 		add_action( 'wp_ajax_wpum_stripe_manage_billing', array( $this, 'handle_manage_billing' ) );
 		add_action( 'wp_ajax_wpum_stripe_checkout', array( $this, 'handle_checkout' ) );
@@ -78,10 +93,23 @@ class Account {
 	}
 
 	/**
+	 * Restrict users who still owe a payment. Runs whether or not Stripe has keys,
+	 * so disconnecting Stripe or switching mode doesn't lift the restriction.
+	 */
+	public function enforce_payment() {
+		add_action( 'template_redirect', array( $this, 'unsubscribed_redirect' ) );
+		add_filter( 'user_has_cap', array( $this, 'restrict_unpaid_capabilities' ), 10, 4 );
+		add_filter( 'wpum_user_access_roles', array( $this, 'withhold_unpaid_access_roles' ), 10, 2 );
+		add_action( 'added_user_meta', array( $this, 'flush_payment_status' ), 10, 2 );
+		add_action( 'updated_user_meta', array( $this, 'flush_payment_status' ), 10, 2 );
+		add_action( 'deleted_user_meta', array( $this, 'flush_payment_status' ), 10, 2 );
+	}
+
+	/**
 	 * Redirect users who aren't subscribed or paid
 	 */
 	public function unsubscribed_redirect() {
-		if ( ! is_user_logged_in() || current_user_can( 'manage_options' ) ) {
+		if ( ! is_user_logged_in() ) {
 			return;
 		}
 
@@ -101,19 +129,115 @@ class Account {
 			return;
 		}
 
-		$user = new User( get_current_user_id() );
-
-		$shouldBeSubscribed = $user->shouldBeSubscribed();
-		if ( $shouldBeSubscribed && $user->isSubscribed() ) {
+		if ( ! $this->owes_payment( get_current_user_id() ) ) {
 			return;
 		}
 
-		if ( ! $shouldBeSubscribed && $user->isPaid() ) {
+		// Without Stripe keys there's no Billing tab, so send them to the account page.
+		if ( $this->billing ) {
+			$redirect = $this->billing->getBillingURL();
+		} else {
+			$redirect = $account_id ? get_permalink( $account_id ) : '';
+		}
+
+		if ( ! $redirect ) {
 			return;
 		}
 
-		wp_safe_redirect( $this->billing->getBillingURL() );
+		wp_safe_redirect( $redirect );
 		exit;
+	}
+
+	/**
+	 * Does the user still owe a payment: an inactive subscription, or an unpaid one-time plan?
+	 *
+	 * @param int $user_id
+	 *
+	 * @return bool
+	 */
+	public function owes_payment( $user_id ) {
+		$user_id = (int) $user_id;
+		if ( ! $user_id ) {
+			return false;
+		}
+
+		// Most users never registered on a paid form: skip loading their subscription.
+		if ( ! get_user_meta( $user_id, 'wpum_stripe_plan_' . wpum_get_option( 'stripe_gateway_mode', 'test' ), true ) && ! get_user_meta( $user_id, 'wpum_stripe_payment_required', true ) ) {
+			return false;
+		}
+
+		if ( ! isset( self::$owes_payment[ $user_id ] ) ) {
+			self::$checking_payment = true;
+
+			$user = new User( $user_id );
+			$owes = $user->shouldBeSubscribed() ? ! $user->isSubscribed() : ! $user->isPaid();
+
+			self::$checking_payment = false;
+
+			self::$owes_payment[ $user_id ] = $owes;
+		}
+
+		return self::$owes_payment[ $user_id ];
+	}
+
+	/**
+	 * Limit users who still owe a payment to reading, everywhere on the site.
+	 * The front-end redirect only covers theme pages, not wp-admin, REST or AJAX.
+	 *
+	 * @param array    $allcaps
+	 * @param array    $caps
+	 * @param array    $args
+	 * @param \WP_User $user
+	 *
+	 * @return array
+	 */
+	public function restrict_unpaid_capabilities( $allcaps, $caps, $args, $user ) { // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.FoundInExtendedClassBeforeLastUsed -- Matches the user_has_cap filter signature.
+		// Administrators count as paid in owes_payment(). Don't exempt by capability
+		// here: a custom role sold at registration can carry manage_options.
+		if ( self::$checking_payment || empty( $user->ID ) ) {
+			return $allcaps;
+		}
+
+		if ( ! apply_filters( 'wpum_stripe_restrict_unpaid_capabilities', true, $user ) ) {
+			return $allcaps;
+		}
+
+		if ( ! $this->owes_payment( $user->ID ) ) {
+			return $allcaps;
+		}
+
+		return array_intersect_key( $allcaps, array_flip( array( 'exist', 'read' ) ) );
+	}
+
+	/**
+	 * Role-restricted content checks role membership, not capabilities, so
+	 * withhold the roles too while a payment is outstanding.
+	 *
+	 * @param array    $roles
+	 * @param \WP_User $user
+	 *
+	 * @return array
+	 */
+	public function withhold_unpaid_access_roles( $roles, $user ) {
+		if ( empty( $user->ID ) ) {
+			return $roles;
+		}
+
+		if ( ! apply_filters( 'wpum_stripe_restrict_unpaid_capabilities', true, $user ) ) {
+			return $roles;
+		}
+
+		return $this->owes_payment( $user->ID ) ? array() : $roles;
+	}
+
+	/**
+	 * Forget a user's cached payment status when their meta changes, e.g. a plan is paid.
+	 *
+	 * @param int|array $meta_id
+	 * @param int       $user_id
+	 */
+	public function flush_payment_status( $meta_id, $user_id ) {
+		unset( self::$owes_payment[ (int) $user_id ] );
 	}
 
 	/**
@@ -140,7 +264,7 @@ class Account {
 	/**
 	 * Account content
 	 *
-	 * @throws \Stripe\Exception\ApiErrorException
+	 * @throws \WPUM\Stripe\Exception\ApiErrorException
 	 */
 	public function account_tab_content() {
 		ob_start();
@@ -179,9 +303,11 @@ class Account {
 		do_action( 'wpum_stripe_account_after_notices', $user );
 
 		if ( ( $shouldBeSubscribed && ( ! $user->subscription || ! $user->subscription->active() ) ) || ( ! $shouldBeSubscribed && ! $user->isPaid() ) ) {
+			$allowed_prices = $user->getAllowedPlanIds();
+
 			$plans_data = array(
-				'products'       => $this->products->all(),
-				'allowed_prices' => wpum_get_option( $this->gateway_mode . '_stripe_products', array() ),
+				'products'       => $this->get_products_for_prices( $allowed_prices ),
+				'allowed_prices' => $allowed_prices,
 			);
 			WPUM()->templates
 				->set_template_data( $plans_data )
@@ -213,8 +339,39 @@ class Account {
 	}
 
 	/**
+	 * The Stripe products, with only the given prices, and without products that have none of them.
+	 * Filtered here rather than in the template, so overridden templates can't list other plans.
+	 *
+	 * @param array $price_ids
+	 *
+	 * @return array
+	 * @throws \WPUM\Stripe\Exception\ApiErrorException
+	 */
+	public function get_products_for_prices( $price_ids ) {
+		$products = array();
+		if ( empty( $price_ids ) ) {
+			return $products;
+		}
+
+		foreach ( (array) $this->products->all() as $key => $product ) {
+			if ( empty( $product['prices'] ) ) {
+				continue;
+			}
+
+			$product['prices'] = array_intersect_key( $product['prices'], array_flip( $price_ids ) );
+			if ( empty( $product['prices'] ) ) {
+				continue;
+			}
+
+			$products[ $key ] = $product;
+		}
+
+		return $products;
+	}
+
+	/**
 	 * @return void
-	 * @throws \Stripe\Exception\ApiErrorException
+	 * @throws \WPUM\Stripe\Exception\ApiErrorException
 	 */
 	public function handle_download_invoice() {
 		$id = filter_input( INPUT_GET, 'invoice_id', FILTER_VALIDATE_INT );
@@ -252,7 +409,7 @@ class Account {
 	}
 
 	/**
-	 * @throws \Stripe\Exception\ApiErrorException
+	 * @throws \WPUM\Stripe\Exception\ApiErrorException
 	 */
 	public function handle_manage_billing() {
 		$nonce = filter_input( INPUT_POST, 'nonce', FILTER_UNSAFE_RAW );
@@ -296,6 +453,11 @@ class Account {
 		}
 
 		$user = new User( get_current_user_id() );
+
+		// Only the plans this customer signed up for, not every plan on the site.
+		if ( ! in_array( $plan_id, $user->getAllowedPlanIds(), true ) ) {
+			wp_send_json_error( __( 'Unknown plan', 'wp-user-manager' ) );
+		}
 
 		$form = $user->getFormRegisteredWith();
 

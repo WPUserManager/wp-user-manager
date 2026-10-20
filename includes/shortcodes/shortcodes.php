@@ -570,7 +570,7 @@ function wpum_restrict_to_user_roles( $atts, $content = null ) {
 	$allowed_roles = array_map( 'trim', $allowed_roles );
 	$current_user  = wp_get_current_user();
 
-	if ( is_user_logged_in() && ! is_null( $content ) && ! is_feed() && array_intersect( $current_user->roles, $allowed_roles ) ) {
+	if ( is_user_logged_in() && ! is_null( $content ) && ! is_feed() && array_intersect( wpum_get_user_access_roles( $current_user ), $allowed_roles ) ) {
 
 		echo do_shortcode( $content );
 

@@ -1,0 +1,40 @@
+// Optional default styles for WPUM forms (Users > Settings > General > Misc
+// Settings > Form Styles). Block themes leave inputs and buttons unstyled, so
+// these give fields a full width and the submit button a theme color.
+// theme.json presets are used when the theme defines them.
+
+$wpum-text-inputs: 'input[type=text], input[type=email], input[type=password], input[type=url], input[type=tel], input[type=number], textarea, select';
+
+.wpum-form {
+	#{$wpum-text-inputs} {
+		width: 100%;
+		max-width: 100%;
+		box-sizing: border-box;
+		padding: 0.6em 0.8em;
+		border: 1px solid currentColor;
+		border-radius: 6px;
+		background: var(--wp--preset--color--base, #fff);
+		color: inherit;
+		font: inherit;
+	}
+
+	textarea {
+		min-height: 8em;
+	}
+
+	input[type=submit] {
+		display: inline-block;
+		padding: 0.7em 1.6em;
+		border: 0;
+		border-radius: 6px;
+		background: var(--wp--preset--color--contrast, #1e1e1e);
+		color: var(--wp--preset--color--base, #fff);
+		font: inherit;
+		cursor: pointer;
+
+		&:hover,
+		&:focus {
+			opacity: 0.85;
+		}
+	}
+}

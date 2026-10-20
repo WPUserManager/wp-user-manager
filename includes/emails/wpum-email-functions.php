@@ -459,7 +459,7 @@ function wpum_get_email( $email_id = false, $user_id = null ) {
 function wpum_get_emails() {
 	$emails = get_option( 'wpum_email', array() );
 
-	if ( empty( $emails ) ) {
+	if ( empty( $emails ) || ! is_array( $emails ) ) {
 		$emails = wpum_install_emails();
 	}
 
