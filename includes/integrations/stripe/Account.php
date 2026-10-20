@@ -281,7 +281,11 @@ class Account {
 		$user = new User( get_current_user_id() );
 
 		$shouldBeSubscribed = $user->shouldBeSubscribed();
-		if ( $shouldBeSubscribed && ! $user->isSubscribed() ) {
+		if ( $shouldBeSubscribed && $user->hasSubscriptionOnDisallowedPlan() ) {
+			WPUM()->templates
+				->set_template_data( array( 'message' => apply_filters( 'wpum_stripe_account_subscription_plan_not_allowed_message', __( 'Your subscription has been changed to a plan that isn\'t available for your account. Use Manage Billing to switch back to your plan.', 'wp-user-manager' ) ) ) )
+				->get_template_part( 'messages/general', 'error' );
+		} elseif ( $shouldBeSubscribed && ! $user->isSubscribed() ) {
 			WPUM()->templates
 				->set_template_data( array( 'message' => apply_filters( 'wpum_stripe_account_subscription_required_error_message', __( 'An active subscription is required.', 'wp-user-manager' ) ) ) )
 				->get_template_part( 'messages/general', 'error' );
