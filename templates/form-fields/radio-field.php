@@ -10,7 +10,7 @@
  * happen. When this occurs the version of the template file will be bumped and
  * the readme will list any important changes.
  *
- * @version 1.1.0
+ * @version 2.10.0
  */
 
 // Exit if accessed directly
