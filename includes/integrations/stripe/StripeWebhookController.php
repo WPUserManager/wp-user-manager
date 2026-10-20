@@ -360,8 +360,8 @@ class StripeWebhookController {
 		$plan_id = $this->subscriptionPlanId( $payload['data']['object'] );
 
 		// The customer can switch plans in the Stripe customer portal. Record the plan they're
-		// on, but a plan they may not pay for doesn't count as subscribed (User::isSubscribed()).
-		if ( '' !== $plan_id && ! ( new User( $subscription->user_id ) )->isPlanAllowed( $plan_id ) ) {
+		// on, but only one of their plans, or an upgrade, counts as subscribed (User::isSubscribed()).
+		if ( '' !== $plan_id && ! ( new User( $subscription->user_id ) )->isSubscriptionPlanAllowed( $plan_id ) ) {
 			do_action( 'wpum_stripe_webhook_plan_not_allowed', $subscription->user_id, $plan_id );
 		}
 

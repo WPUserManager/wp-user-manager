@@ -88,7 +88,108 @@ class User extends \WP_User {
 			return false;
 		}
 
-		return $this->isPlanAllowed( (string) $this->subscription->plan_id );
+		return $this->isSubscriptionPlanAllowed( (string) $this->subscription->plan_id );
+	}
+
+	/**
+	 * Can a subscription to this price count? Either it's one of the user's plans, or
+	 * they've upgraded in the Stripe customer portal: an eligible price that costs at
+	 * least as much as the plan they registered for.
+	 *
+	 * @param string $plan_id
+	 *
+	 * @return bool
+	 */
+	public function isSubscriptionPlanAllowed( $plan_id ) {
+		return $this->isPlanAllowed( $plan_id ) || $this->isUpgradePlan( $plan_id );
+	}
+
+	/**
+	 * Is this price an upgrade on the plan the user registered for? It must be one of the
+	 * Eligible Products in the Stripe settings, if any are set, in the same currency, and
+	 * cost at least as much per day.
+	 *
+	 * @param string $plan_id
+	 *
+	 * @return bool
+	 */
+	public function isUpgradePlan( $plan_id ) {
+		$product_data = $this->getProductData();
+		if ( ! is_array( $product_data ) || empty( $product_data['id'] ) || '' === (string) $plan_id ) {
+			return false;
+		}
+
+		$eligible = array_filter( (array) wpum_get_option( $this->gateway_mode . '_stripe_products', array() ) );
+		if ( ! empty( $eligible ) && ! in_array( (string) $plan_id, array_map( 'strval', $eligible ), true ) ) {
+			return false;
+		}
+
+		$registered = $this->getCachedPrice( (string) $product_data['id'] );
+		$price      = $this->getCachedPrice( (string) $plan_id );
+		if ( ! $registered || ! $price || strtolower( (string) $registered['currency'] ) !== strtolower( (string) $price['currency'] ) ) {
+			return false;
+		}
+
+		$registered_daily = $this->dailyAmount( $registered );
+		$daily            = $this->dailyAmount( $price );
+		if ( null === $registered_daily || null === $daily ) {
+			return false;
+		}
+
+		return apply_filters( 'wpum_stripe_user_is_upgrade_plan', $daily >= $registered_daily, $plan_id, $this );
+	}
+
+	/**
+	 * A price from the cached Stripe product list. Never calls Stripe, since this runs in
+	 * capability checks.
+	 *
+	 * @param string $price_id
+	 *
+	 * @return array|null
+	 */
+	protected function getCachedPrice( $price_id ) {
+		$cache_key = 'wpum_' . $this->gateway_mode . '_stripe_products';
+
+		$products = get_transient( $cache_key );
+		if ( ! is_array( $products ) ) {
+			$products = get_option( $cache_key . '_last_good', array() );
+		}
+
+		foreach ( (array) $products as $product ) {
+			if ( isset( $product['prices'][ $price_id ] ) && is_array( $product['prices'][ $price_id ] ) ) {
+				return $product['prices'][ $price_id ];
+			}
+		}
+
+		return null;
+	}
+
+	/**
+	 * A recurring price's cost per day, so monthly and annual prices compare fairly.
+	 *
+	 * @param array $price
+	 *
+	 * @return float|null
+	 */
+	protected function dailyAmount( $price ) {
+		if ( ! isset( $price['unit_amount'], $price['currency'], $price['recurring']['interval'] ) ) {
+			return null;
+		}
+
+		$days = array(
+			'day'   => 1,
+			'week'  => 7,
+			'month' => 365.25 / 12,
+			'year'  => 365.25,
+		);
+
+		$interval = $price['recurring']['interval'];
+		$count    = isset( $price['recurring']['interval_count'] ) ? max( 1, (int) $price['recurring']['interval_count'] ) : 1;
+		if ( ! isset( $days[ $interval ] ) ) {
+			return null;
+		}
+
+		return (float) $price['unit_amount'] / ( $days[ $interval ] * $count );
 	}
 
 	/**

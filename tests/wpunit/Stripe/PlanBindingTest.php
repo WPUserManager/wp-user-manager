@@ -58,6 +58,10 @@ class PlanBindingTest extends WPUMTestCase {
 	}
 
 	public function _tearDown() {
+		delete_transient( 'wpum_test_stripe_products' );
+		delete_option( 'wpum_test_stripe_products_last_good' );
+		wpum_delete_option( 'test_stripe_products' );
+
 		if ( $this->registration_form ) {
 			$this->registration_form->delete_meta( 'stripe_plan_id', '' );
 		}
@@ -415,6 +419,129 @@ class PlanBindingTest extends WPUMTestCase {
 
 		$this->assertStringContainsString( 'switch back to your plan', $output );
 		$this->assertStringContainsString( 'wpum-stripe-manage-billing', $output, 'They need Manage Billing to switch back' );
+	}
+
+	/*
+	 * Upgrading in the Stripe customer portal.
+	 */
+
+	/**
+	 * The cached Stripe product list, with recurring prices.
+	 */
+	protected function cache_recurring_prices() {
+		$monthly = function ( $amount, $currency = 'usd', $interval = 'month' ) {
+			return array(
+				'unit_amount' => $amount,
+				'currency'    => $currency,
+				'type'        => 'recurring',
+				'recurring'   => array( 'interval' => $interval, 'interval_count' => 1 ),
+			);
+		};
+
+		set_transient( 'wpum_test_stripe_products', array(
+			array(
+				'name'   => 'Premium',
+				'prices' => array(
+					'price_premium'     => $monthly( 10000 ),
+					'price_premium_alt' => $monthly( 9000 ),
+				),
+			),
+			array(
+				'name'   => 'Cheap',
+				'prices' => array( 'price_cheap' => $monthly( 100 ) ),
+			),
+			array(
+				'name'   => 'Gold',
+				'prices' => array(
+					'price_gold'        => $monthly( 20000 ),
+					'price_gold_annual' => $monthly( 100000, 'usd', 'year' ),
+					'price_gold_eur'    => $monthly( 20000, 'eur' ),
+				),
+			),
+		), HOUR_IN_SECONDS );
+	}
+
+	protected function switch_to( $sub_id, $price_id ) {
+		$this->webhook_paying_for( $price_id, 'recurring' )->handle( 'handleCustomerSubscriptionUpdated', $this->subscription_updated_payload( $sub_id, $price_id ) );
+	}
+
+	public function test_upgrading_to_a_dearer_plan_from_another_form_keeps_access() {
+		$this->cache_recurring_prices();
+		list( $customer, $sub_id ) = $this->subscribed_customer();
+
+		$this->switch_to( $sub_id, 'price_gold' );
+
+		$user = new \WPUserManager\Stripe\Models\User( $customer->ID );
+		$this->assertTrue( $user->isSubscribed(), 'Paying more than the registered plan is an upgrade' );
+		$this->assertTrue( $user->hasPaidByPlan( 'price_gold' ), 'Content for the plan they upgraded to should open' );
+		$this->assertFalse( $user->hasSubscriptionOnDisallowedPlan() );
+		$this->assertNotContains( 'price_gold', $user->getAllowedPlanIds(), 'An upgrade is not offered for checkout on the Billing tab' );
+	}
+
+	public function test_downgrading_to_a_cheaper_eligible_plan_loses_access() {
+		$this->cache_recurring_prices();
+		wpum_update_option( 'test_stripe_products', array( 'price_premium', 'price_cheap', 'price_gold' ) );
+		list( $customer, $sub_id ) = $this->subscribed_customer();
+
+		$this->switch_to( $sub_id, 'price_cheap' );
+
+		$this->assertFalse( ( new \WPUserManager\Stripe\Models\User( $customer->ID ) )->isSubscribed(), 'Being an Eligible Product does not make a cheaper plan count' );
+	}
+
+	public function test_upgrading_to_a_plan_that_is_not_eligible_loses_access() {
+		$this->cache_recurring_prices();
+		wpum_update_option( 'test_stripe_products', array( 'price_premium', 'price_cheap' ) );
+		list( $customer, $sub_id ) = $this->subscribed_customer();
+
+		$this->switch_to( $sub_id, 'price_gold' );
+
+		$this->assertFalse( ( new \WPUserManager\Stripe\Models\User( $customer->ID ) )->isSubscribed(), 'Only Eligible Products count as upgrades when they are set' );
+	}
+
+	public function test_upgrading_to_an_eligible_plan_keeps_access() {
+		$this->cache_recurring_prices();
+		wpum_update_option( 'test_stripe_products', array( 'price_premium', 'price_gold' ) );
+		list( $customer, $sub_id ) = $this->subscribed_customer();
+
+		$this->switch_to( $sub_id, 'price_gold' );
+
+		$this->assertTrue( ( new \WPUserManager\Stripe\Models\User( $customer->ID ) )->isSubscribed() );
+	}
+
+	public function test_annual_plan_that_costs_less_per_day_is_not_an_upgrade() {
+		$this->cache_recurring_prices();
+		list( $customer, $sub_id ) = $this->subscribed_customer();
+
+		// 1000.00 a year is less per day than 100.00 a month.
+		$this->switch_to( $sub_id, 'price_gold_annual' );
+
+		$this->assertFalse( ( new \WPUserManager\Stripe\Models\User( $customer->ID ) )->isSubscribed() );
+	}
+
+	public function test_plan_in_another_currency_is_not_an_upgrade() {
+		$this->cache_recurring_prices();
+		list( $customer, $sub_id ) = $this->subscribed_customer();
+
+		$this->switch_to( $sub_id, 'price_gold_eur' );
+
+		$this->assertFalse( ( new \WPUserManager\Stripe\Models\User( $customer->ID ) )->isSubscribed() );
+	}
+
+	public function test_plan_missing_from_the_product_cache_is_not_an_upgrade() {
+		list( $customer, $sub_id ) = $this->subscribed_customer();
+
+		$this->switch_to( $sub_id, 'price_gold' );
+
+		$this->assertFalse( ( new \WPUserManager\Stripe\Models\User( $customer->ID ) )->isSubscribed(), 'Without price data an unknown plan fails closed' );
+	}
+
+	public function test_upgrade_does_not_put_the_member_on_the_admin_list() {
+		$this->cache_recurring_prices();
+		list( $customer, $sub_id ) = $this->subscribed_customer();
+
+		$this->switch_to( $sub_id, 'price_gold' );
+
+		$this->assertArrayNotHasKey( $customer->ID, ( new \WPUserManager\Stripe\SubscriptionPlanCheck( 'test' ) )->get_affected_users() );
 	}
 
 	/*
