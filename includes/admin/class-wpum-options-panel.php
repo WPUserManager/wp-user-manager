@@ -504,6 +504,13 @@ class WPUM_Options_Panel {
 					'type'    => 'multiselect',
 					'options' => wpum_get_redirect_pages(),
 				),
+				array(
+					'id'      => 'logged_in_redirect',
+					'name'    => __( 'Logged In Users', 'wp-user-manager' ),
+					'desc'    => __( 'Select the page where you want to send users who are already logged in when they visit the login or registration page. If empty those pages show an "already logged in" message.', 'wp-user-manager' ),
+					'type'    => 'multiselect',
+					'options' => wpum_get_redirect_pages(),
+				),
 			),
 			'backend_redirects'    => array(
 				array(

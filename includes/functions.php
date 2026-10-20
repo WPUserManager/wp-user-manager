@@ -339,6 +339,16 @@ function wpum_get_registration_redirect() {
 
 
 /**
+ * Retrieve the url where to send logged in users who visit the login or
+ * registration page.
+ *
+ * @return string
+ */
+function wpum_get_logged_in_redirect() {
+	return wpum_get_redirect_option_url( 'logged_in_redirect' );
+}
+
+/**
  * Retrieve the url where to redirect the user after logout.
  *
  * @return string
