@@ -25,7 +25,7 @@ class SubscriptionPlanCheck {
 
 	const NOTICE_LIMIT = 10;
 
-	const DOC_URL = 'https://wpusermanager.com/docs/';
+	const DOC_URL = 'https://wpusermanager.com/article/348-stripe-plan-not-available/';
 
 	/**
 	 * @var string
