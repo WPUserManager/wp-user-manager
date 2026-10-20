@@ -26,6 +26,7 @@ class WPUM_Plugin_Updates {
 		add_action( 'admin_init', array( $this, 'v2_upgrade_notice' ) );
 		add_action( 'admin_init', array( $this, 'upgrade' ) );
 		add_action( 'admin_init', array( $this, 'maybe_perform_minor_upgrades' ) );
+		add_action( 'init', array( $this, 'maybe_upgrade_email_link_tags' ) );
 	}
 
 	/**
@@ -73,10 +74,6 @@ class WPUM_Plugin_Updates {
 		// Also re-runs for sites already past 2.9.20, which skipped keys EDD reports as `inactive`.
 		if ( version_compare( $installed_version, '2.9.14', '>=' ) && version_compare( $installed_version, '2.9.26', '<' ) ) {
 			$this->upgrade_v2_9_26();
-		}
-
-		if ( version_compare( $installed_version, '2.9.27', '<' ) ) {
-			$this->upgrade_v2_9_27();
 		}
 
 		update_option( 'wpum_version', $latest_version );
@@ -202,13 +199,32 @@ class WPUM_Plugin_Updates {
 	}
 
 	/**
-	 * Upgrade 2.9.27
+	 * Switch stored emails to the link tags, once.
 	 *
 	 * {recovery_url} and {login_page_url} used to output a link and now output
-	 * the plain URL. Switch stored emails to {recovery_link} and {login_page_link}
-	 * so they keep sending a clickable link.
+	 * the plain URL. Runs on init rather than with the version upgrades, so
+	 * emails sent before anyone visits the admin keep their links, and a flag
+	 * rather than a version number, so it doesn't depend on the release.
+	 *
+	 * @return void
 	 */
-	protected function upgrade_v2_9_27() {
+	public function maybe_upgrade_email_link_tags() {
+		if ( get_option( 'wpum_email_link_tags_upgraded' ) ) {
+			return;
+		}
+
+		$this->upgrade_email_link_tags();
+
+		update_option( 'wpum_email_link_tags_upgraded', true );
+	}
+
+	/**
+	 * Switch {recovery_url} and {login_page_url} used as text in stored emails to
+	 * {recovery_link} and {login_page_link}, so they keep sending a clickable link.
+	 *
+	 * @return void
+	 */
+	protected function upgrade_email_link_tags() {
 		$emails = get_option( 'wpum_email' );
 
 		if ( ! is_array( $emails ) ) {

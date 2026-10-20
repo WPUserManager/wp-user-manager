@@ -277,9 +277,10 @@ function wpum_email_tag_password_recovery_link( $user_id, $password_reset_key, $
 /**
  * Swap {recovery_url} and {login_page_url} for their link tags in email content.
  *
- * Before 2.9.27 the URL tags output a link, so stored emails that use them as
- * text need the link tags to keep the same output. A tag used as an attribute
- * value, e.g. href="{recovery_url}", already wants the plain URL and is kept.
+ * The URL tags used to output a link, so stored emails that use them as text
+ * need the link tags to keep the same output. Only text between HTML tags is
+ * changed: a tag inside an HTML tag, e.g. href="{recovery_url}", already wants
+ * the plain URL and is kept.
  *
  * @param string $content
  *
@@ -290,11 +291,26 @@ function wpum_email_url_tags_to_link_tags( $content ) {
 		return $content;
 	}
 
-	return preg_replace(
-		array( '/(?<![="\'])\{recovery_url\}/', '/(?<![="\'])\{login_page_url\}/' ),
-		array( '{recovery_link}', '{login_page_link}' ),
-		$content
-	);
+	$parts = preg_split( '/(<[^>]*>)/', $content, -1, PREG_SPLIT_DELIM_CAPTURE );
+
+	if ( false === $parts ) {
+		return $content;
+	}
+
+	foreach ( $parts as $i => $part ) {
+		// Odd indexes are the HTML tags captured by the split.
+		if ( 1 === $i % 2 ) {
+			continue;
+		}
+
+		$parts[ $i ] = str_replace(
+			array( '{recovery_url}', '{login_page_url}' ),
+			array( '{recovery_link}', '{login_page_link}' ),
+			$part
+		);
+	}
+
+	return implode( '', $parts );
 }
 
 /**

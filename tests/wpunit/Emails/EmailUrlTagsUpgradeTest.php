@@ -1,6 +1,6 @@
 <?php
 /**
- * The 2.9.27 upgrade switches stored emails from {recovery_url} and
+ * A one-off upgrade switches stored emails from {recovery_url} and
  * {login_page_url}, which used to output a link and now output the plain URL,
  * to {recovery_link} and {login_page_link}, so they keep sending a link.
  *
@@ -13,22 +13,23 @@ class EmailUrlTagsUpgradeTest extends WPUMTestCase {
 
 	public function _tearDown() {
 		delete_option( 'wpum_email' );
+		delete_option( 'wpum_email_link_tags_upgraded' );
 
 		parent::_tearDown();
 	}
 
 	protected function run_upgrade() {
-		$upgrade = new \ReflectionMethod( 'WPUM_Plugin_Updates', 'upgrade_v2_9_27' );
+		$upgrade = new \ReflectionMethod( 'WPUM_Plugin_Updates', 'upgrade_email_link_tags' );
 		$upgrade->setAccessible( true );
-		$upgrade->invoke( ( new \ReflectionClass( 'WPUM_Plugin_Updates' ) )->newInstanceWithoutConstructor() );
+		$upgrade->invoke( new WPUM_Plugin_Updates() );
 	}
 
 	/**
-	 * The emails every site was installed with before 2.9.27.
+	 * The emails every site was installed with before the link tags existed.
 	 *
 	 * @return array
 	 */
-	protected function pre_2_9_27_emails() {
+	protected function legacy_emails() {
 		return array(
 			'registration_confirmation'       => array(
 				'subject' => 'Welcome to {sitename}',
@@ -63,6 +64,23 @@ class EmailUrlTagsUpgradeTest extends WPUMTestCase {
 		$this->assertSame( $content, wpum_email_url_tags_to_link_tags( $content ) );
 	}
 
+	public function test_converts_quoted_text() {
+		$this->assertSame(
+			'<p>Reset: "{recovery_link}"</p><p>\'{login_page_link}\'</p>',
+			wpum_email_url_tags_to_link_tags( '<p>Reset: "{recovery_url}"</p><p>\'{login_page_url}\'</p>' )
+		);
+	}
+
+	public function test_keeps_tags_in_attributes_with_whitespace() {
+		$content = '<a href=" {recovery_url}">Reset</a> <a href= {login_page_url}>Log in</a> <a title="x" href = "{recovery_url}" class="b">y</a>';
+
+		$this->assertSame( $content, wpum_email_url_tags_to_link_tags( $content ) );
+	}
+
+	public function test_converts_tags_outside_html() {
+		$this->assertSame( 'Reset: {recovery_link}', wpum_email_url_tags_to_link_tags( 'Reset: {recovery_url}' ) );
+	}
+
 	public function test_converts_text_tag_next_to_an_attribute_use() {
 		$this->assertSame(
 			'<a href="{recovery_url}">Reset</a> or copy {recovery_link}',
@@ -78,7 +96,7 @@ class EmailUrlTagsUpgradeTest extends WPUMTestCase {
 	}
 
 	public function test_upgrade_converts_stored_default_emails() {
-		update_option( 'wpum_email', $this->pre_2_9_27_emails() );
+		update_option( 'wpum_email', $this->legacy_emails() );
 
 		$this->run_upgrade();
 
@@ -90,7 +108,7 @@ class EmailUrlTagsUpgradeTest extends WPUMTestCase {
 	}
 
 	public function test_upgrade_keeps_everything_else() {
-		$before = $this->pre_2_9_27_emails();
+		$before = $this->legacy_emails();
 		update_option( 'wpum_email', $before );
 
 		$this->run_upgrade();
@@ -132,7 +150,7 @@ class EmailUrlTagsUpgradeTest extends WPUMTestCase {
 	}
 
 	public function test_upgrade_is_idempotent() {
-		update_option( 'wpum_email', $this->pre_2_9_27_emails() );
+		update_option( 'wpum_email', $this->legacy_emails() );
 
 		$this->run_upgrade();
 		$once = get_option( 'wpum_email' );
@@ -186,11 +204,61 @@ class EmailUrlTagsUpgradeTest extends WPUMTestCase {
 		$this->assertSame( '{recovery_link}', $emails['password_recovery_request']['footer'] );
 	}
 
+	public function test_runs_on_init() {
+		global $wp_filter;
+
+		$hooked = false;
+
+		foreach ( $wp_filter['init']->callbacks as $callbacks ) {
+			foreach ( $callbacks as $callback ) {
+				if ( is_array( $callback['function'] ) && $callback['function'][0] instanceof WPUM_Plugin_Updates && 'maybe_upgrade_email_link_tags' === $callback['function'][1] ) {
+					$hooked = true;
+				}
+			}
+		}
+
+		$this->assertTrue( $hooked );
+	}
+
+	public function test_runs_once_on_a_site_with_old_emails() {
+		delete_option( 'wpum_email_link_tags_upgraded' );
+		update_option( 'wpum_email', $this->legacy_emails() );
+
+		( new WPUM_Plugin_Updates() )->maybe_upgrade_email_link_tags();
+
+		$this->assertStringContainsString( '{recovery_link}', get_option( 'wpum_email' )['password_recovery_request']['content'] );
+		$this->assertTrue( (bool) get_option( 'wpum_email_link_tags_upgraded' ) );
+	}
+
+	public function test_does_not_run_again_after_the_flag_is_set() {
+		delete_option( 'wpum_email_link_tags_upgraded' );
+		update_option( 'wpum_email', array() );
+		( new WPUM_Plugin_Updates() )->maybe_upgrade_email_link_tags();
+
+		// An admin who later chooses {recovery_url} as text keeps it.
+		$emails = array( 'password_recovery_request' => array( 'content' => '<p>{recovery_url}</p>' ) );
+		update_option( 'wpum_email', $emails );
+
+		( new WPUM_Plugin_Updates() )->maybe_upgrade_email_link_tags();
+
+		$this->assertSame( $emails, get_option( 'wpum_email' ) );
+	}
+
+	public function test_sets_the_flag_when_there_are_no_stored_emails() {
+		delete_option( 'wpum_email_link_tags_upgraded' );
+		delete_option( 'wpum_email' );
+
+		( new WPUM_Plugin_Updates() )->maybe_upgrade_email_link_tags();
+
+		$this->assertFalse( get_option( 'wpum_email' ) );
+		$this->assertTrue( (bool) get_option( 'wpum_email_link_tags_upgraded' ) );
+	}
+
 	public function test_upgraded_defaults_match_what_new_installs_get() {
 		$defaults = wpum_get_default_emails();
 		$old      = $defaults;
 
-		// Pre-2.9.27 installs stored the same defaults with the URL tags.
+		// Older installs stored the same defaults with the URL tags.
 		foreach ( $old as $email_id => $email ) {
 			$old[ $email_id ]['content'] = str_replace( array( '{recovery_link}', '{login_page_link}' ), array( '{recovery_url}', '{login_page_url}' ), $email['content'] );
 		}

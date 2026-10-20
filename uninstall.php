@@ -45,6 +45,7 @@ $options_to_delete = array(
 	'wpdb_wpum_search_fields_version',
 	'wpum_activation_date',
 	'wpum_email',
+	'wpum_email_link_tags_upgraded',
 	'wpum_permalink',
 	'wpum_settings',
 	'wpum_version',
