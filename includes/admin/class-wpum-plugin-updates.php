@@ -75,6 +75,10 @@ class WPUM_Plugin_Updates {
 			$this->upgrade_v2_9_26();
 		}
 
+		if ( version_compare( $installed_version, '2.9.27', '<' ) ) {
+			$this->upgrade_v2_9_27();
+		}
+
 		update_option( 'wpum_version', $latest_version );
 	}
 
@@ -194,6 +198,47 @@ class WPUM_Plugin_Updates {
 	protected function upgrade_v2_9_26() {
 		if ( ! wp_next_scheduled( 'wpum_reactivate_inactive_licenses' ) ) {
 			wp_schedule_single_event( time(), 'wpum_reactivate_inactive_licenses' );
+		}
+	}
+
+	/**
+	 * Upgrade 2.9.27
+	 *
+	 * {recovery_url} and {login_page_url} used to output a link and now output
+	 * the plain URL. Switch stored emails to {recovery_link} and {login_page_link}
+	 * so they keep sending a clickable link.
+	 */
+	protected function upgrade_v2_9_27() {
+		$emails = get_option( 'wpum_email' );
+
+		if ( ! is_array( $emails ) ) {
+			return;
+		}
+
+		$updated = false;
+
+		foreach ( $emails as $email_id => $email ) {
+			if ( ! is_array( $email ) ) {
+				continue;
+			}
+
+			// The subject is plain text, where the URL is the right output.
+			foreach ( array( 'content', 'footer', 'title' ) as $field ) {
+				if ( ! isset( $email[ $field ] ) || ! is_string( $email[ $field ] ) ) {
+					continue;
+				}
+
+				$converted = wpum_email_url_tags_to_link_tags( $email[ $field ] );
+
+				if ( $converted !== $email[ $field ] ) {
+					$emails[ $email_id ][ $field ] = $converted;
+					$updated                       = true;
+				}
+			}
+		}
+
+		if ( $updated ) {
+			update_option( 'wpum_email', $emails );
 		}
 	}
 

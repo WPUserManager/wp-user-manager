@@ -275,6 +275,29 @@ function wpum_email_tag_password_recovery_link( $user_id, $password_reset_key, $
 }
 
 /**
+ * Swap {recovery_url} and {login_page_url} for their link tags in email content.
+ *
+ * Before 2.9.27 the URL tags output a link, so stored emails that use them as
+ * text need the link tags to keep the same output. A tag used as an attribute
+ * value, e.g. href="{recovery_url}", already wants the plain URL and is kept.
+ *
+ * @param string $content
+ *
+ * @return string
+ */
+function wpum_email_url_tags_to_link_tags( $content ) {
+	if ( ! is_string( $content ) || '' === $content ) {
+		return $content;
+	}
+
+	return preg_replace(
+		array( '/(?<![="\'])\{recovery_url\}/', '/(?<![="\'])\{login_page_url\}/' ),
+		array( '{recovery_link}', '{login_page_link}' ),
+		$content
+	);
+}
+
+/**
  * Retrieve registered emails
  *
  * @return array
