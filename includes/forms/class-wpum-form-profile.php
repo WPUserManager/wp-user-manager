@@ -118,18 +118,10 @@ class WPUM_Form_Profile extends WPUM_Form {
 	public function validate_nickname( $pass, $fields, $values, $form ) {
 
 		if ( $form === $this->form_name && isset( $values['account']['user_nickname'] ) ) {
+			$valid = wpum_validate_profile_values( $this->user->ID, $values['account'] );
 
-			global $wpdb;
-
-			$displayname = $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(ID) FROM $wpdb->users WHERE display_name = %s AND ID <> %d", $values['account']['user_displayname'], $this->user->ID ) ); // phpcs:ignore
-			$nickname    = $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(ID) FROM $wpdb->users as users, $wpdb->usermeta as meta WHERE users.ID = meta.user_id AND meta.meta_key = 'nickname' AND meta.meta_value = %s AND users.ID <> %d", $values['account']['user_nickname'], $this->user->ID ) );  // phpcs:ignore
-
-			if ( '1' === $displayname ) {
-				return new WP_Error( 'displayname-unique-validation-error', esc_html__( 'This display name is already in use by someone else. Display names must be unique.', 'wp-user-manager' ) );
-			}
-
-			if ( '1' === $nickname ) {
-				return new WP_Error( 'displayname-unique-validation-error', esc_html__( 'This nickname is already in use by someone else. Nicknames must be unique.', 'wp-user-manager' ) );
+			if ( is_wp_error( $valid ) ) {
+				return $valid;
 			}
 		}
 
@@ -306,27 +298,6 @@ class WPUM_Form_Profile extends WPUM_Form {
 	 * @return string
 	 */
 	private function parse_displayname( $values, $value ) {
-
-		$name = $this->user->user_login;
-
-		switch ( $value ) {
-			case 'display_nickname':
-				$name = $values['user_nickname'];
-				break;
-			case 'display_firstname':
-				$name = $values['user_firstname'];
-				break;
-			case 'display_lastname':
-				$name = $values['user_lastname'];
-				break;
-			case 'display_firstlast':
-				$name = $values['user_firstname'] . ' ' . $values['user_lastname'];
-				break;
-			case 'display_lastfirst':
-				$name = $values['user_lastname'] . ' ' . $values['user_firstname'];
-				break;
-		}
-
-		return $name;
+		return wpum_get_display_name_from_choice( $this->user, $values, $value );
 	}
 }
