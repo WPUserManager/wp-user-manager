@@ -272,7 +272,7 @@ class Settings {
 			$settings['stripe'][] = array(
 				'id'       => 'test_stripe_products',
 				'name'     => __( 'Eligible Products', 'wp-user-manager' ),
-				'desc'     => sprintf( 'Select the product prices users can subscribe to on the account page. This should be the same as the products defined in the <a target="_blank" href="%s">Stripe Customer Portal Subscription settings</a>. %s', 'https://wpusermanager.com/article/337-recurring-subscriptions/#configure-eligible-products ', $fetch_product_btn ),
+				'desc'     => sprintf( 'Select the product prices your registration forms can offer, and the prices members can upgrade to in the <a target="_blank" href="%s">Stripe Customer Portal</a>. This should match the products in the portal\'s subscription settings. A member who switches to a cheaper price that isn\'t on their registration form doesn\'t have paid access. %s', 'https://wpusermanager.com/article/337-recurring-subscriptions/#configure-eligible-products ', $fetch_product_btn ),
 				'type'     => 'multiselect',
 				'multiple' => true,
 				'options'  => $this->products->get_plans(),
@@ -292,7 +292,7 @@ class Settings {
 			$settings['stripe'][] = array(
 				'id'       => 'live_stripe_products',
 				'name'     => __( 'Eligible Products', 'wp-user-manager' ),
-				'desc'     => sprintf( 'Select the product prices users can subscribe to on the account page. This should be the same as the products defined in the <a target="_blank" href="%s">Stripe Customer Portal Subscription settings</a>. %s', 'https://wpusermanager.com/article/337-recurring-subscriptions/#configure-eligible-products', $fetch_product_btn ),
+				'desc'     => sprintf( 'Select the product prices your registration forms can offer, and the prices members can upgrade to in the <a target="_blank" href="%s">Stripe Customer Portal</a>. This should match the products in the portal\'s subscription settings. A member who switches to a cheaper price that isn\'t on their registration form doesn\'t have paid access. %s', 'https://wpusermanager.com/article/337-recurring-subscriptions/#configure-eligible-products', $fetch_product_btn ),
 				'type'     => 'multiselect',
 				'multiple' => true,
 				'options'  => $this->products->get_plans(),
