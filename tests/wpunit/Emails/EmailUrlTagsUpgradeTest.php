@@ -160,9 +160,12 @@ class EmailUrlTagsUpgradeTest extends WPUMTestCase {
 			update_option( 'wpum_email', $value );
 		}
 
+		// Options come back from the database as strings, so compare with what was stored.
+		$stored = get_option( 'wpum_email' );
+
 		$this->run_upgrade();
 
-		$this->assertSame( $value, get_option( 'wpum_email' ) );
+		$this->assertSame( $stored, get_option( 'wpum_email' ) );
 	}
 
 	public function test_upgrade_skips_malformed_email_entries() {
