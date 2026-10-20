@@ -26,6 +26,7 @@ class WPUM_Plugin_Updates {
 		add_action( 'admin_init', array( $this, 'v2_upgrade_notice' ) );
 		add_action( 'admin_init', array( $this, 'upgrade' ) );
 		add_action( 'admin_init', array( $this, 'maybe_perform_minor_upgrades' ) );
+		add_action( 'init', array( $this, 'maybe_upgrade_email_link_tags' ) );
 	}
 
 	/**
@@ -194,6 +195,66 @@ class WPUM_Plugin_Updates {
 	protected function upgrade_v2_9_26() {
 		if ( ! wp_next_scheduled( 'wpum_reactivate_inactive_licenses' ) ) {
 			wp_schedule_single_event( time(), 'wpum_reactivate_inactive_licenses' );
+		}
+	}
+
+	/**
+	 * Switch stored emails to the link tags, once.
+	 *
+	 * {recovery_url} and {login_page_url} used to output a link and now output
+	 * the plain URL. Runs on init rather than with the version upgrades, so
+	 * emails sent before anyone visits the admin keep their links, and a flag
+	 * rather than a version number, so it doesn't depend on the release.
+	 *
+	 * @return void
+	 */
+	public function maybe_upgrade_email_link_tags() {
+		if ( get_option( 'wpum_email_link_tags_upgraded' ) ) {
+			return;
+		}
+
+		$this->upgrade_email_link_tags();
+
+		update_option( 'wpum_email_link_tags_upgraded', true );
+	}
+
+	/**
+	 * Switch {recovery_url} and {login_page_url} used as text in stored emails to
+	 * {recovery_link} and {login_page_link}, so they keep sending a clickable link.
+	 *
+	 * @return void
+	 */
+	protected function upgrade_email_link_tags() {
+		$emails = get_option( 'wpum_email' );
+
+		if ( ! is_array( $emails ) ) {
+			return;
+		}
+
+		$updated = false;
+
+		foreach ( $emails as $email_id => $email ) {
+			if ( ! is_array( $email ) ) {
+				continue;
+			}
+
+			// The subject is plain text, where the URL is the right output.
+			foreach ( array( 'content', 'footer', 'title' ) as $field ) {
+				if ( ! isset( $email[ $field ] ) || ! is_string( $email[ $field ] ) ) {
+					continue;
+				}
+
+				$converted = wpum_email_url_tags_to_link_tags( $email[ $field ] );
+
+				if ( $converted !== $email[ $field ] ) {
+					$emails[ $email_id ][ $field ] = $converted;
+					$updated                       = true;
+				}
+			}
+		}
+
+		if ( $updated ) {
+			update_option( 'wpum_email', $emails );
 		}
 	}
 
