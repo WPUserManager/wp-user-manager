@@ -1,7 +1,9 @@
 # WPUM Core CI Pipeline
 #
-# PHPCS + PHPStan run once on PHP 8.2. PHP compatibility checked across 8.0-8.3.
-# Unit tests are in a separate workflow (tests.yml).
+# One Code Quality job: the PHP syntax check on 7.4 to 8.3 in turn, then PHPCS and PHPStan
+# on PHP 8.2. Unit tests and E2E are separate workflows (tests.yml, e2e.yml). Nothing runs
+# on push, on release branches or on PRs into master: release PRs only change the
+# version, and develop's PRs already ran.
 
 name: CI
 
@@ -14,24 +16,78 @@ on:
       - "phpcs.xml.dist"
       - "phpstan.neon.dist"
       - ".github/workflows/ci.yml"
-  push:
-    branches:
-      - master
-      - develop
+  # A full run on any branch, e.g. develop after a merge: gh workflow run ci.yml --ref develop
+  workflow_dispatch:
 
 concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
+  group: ci-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 jobs:
-  phpcs:
-    name: PHPCS
+  code-quality:
+    name: Code Quality
+    if: github.event_name != 'pull_request' || (!startsWith(github.head_ref, 'release/') && github.base_ref != 'master')
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Setup PHP
+      - name: Setup PHP 7.4
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: "7.4"
+          coverage: none
+
+      - name: Check for fatal errors (PHP 7.4)
+        run: |
+          php -l wp-user-manager.php
+          find includes/ -name "*.php" -print0 | xargs -0 -n1 php -l 2>&1 | { grep -v "No syntax errors" || true; } | { ! grep -q "Parse error"; }
+
+      - name: Setup PHP 8.0
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.0"
+          coverage: none
+
+      - name: Check for fatal errors (PHP 8.0)
+        run: |
+          php -l wp-user-manager.php
+          find includes/ -name "*.php" -print0 | xargs -0 -n1 php -l 2>&1 | { grep -v "No syntax errors" || true; } | { ! grep -q "Parse error"; }
+
+      - name: Setup PHP 8.1
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.1"
+          coverage: none
+
+      - name: Check for fatal errors (PHP 8.1)
+        run: |
+          php -l wp-user-manager.php
+          find includes/ -name "*.php" -print0 | xargs -0 -n1 php -l 2>&1 | { grep -v "No syntax errors" || true; } | { ! grep -q "Parse error"; }
+
+      - name: Setup PHP 8.2
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.2"
+          coverage: none
+
+      - name: Check for fatal errors (PHP 8.2)
+        run: |
+          php -l wp-user-manager.php
+          find includes/ -name "*.php" -print0 | xargs -0 -n1 php -l 2>&1 | { grep -v "No syntax errors" || true; } | { ! grep -q "Parse error"; }
+
+      - name: Setup PHP 8.3
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.3"
+          coverage: none
+
+      - name: Check for fatal errors (PHP 8.3)
+        run: |
+          php -l wp-user-manager.php
+          find includes/ -name "*.php" -print0 | xargs -0 -n1 php -l 2>&1 | { grep -v "No syntax errors" || true; } | { ! grep -q "Parse error"; }
+
+      - name: Setup PHP 8.2 for PHPCS and PHPStan
         uses: shivammathur/setup-php@v2
         with:
           php-version: "8.2"
@@ -55,33 +111,6 @@ jobs:
       - name: Detect coding standard violations
         run: vendor/bin/phpcs -q --report=checkstyle | cs2pr --graceful-warnings
 
-  phpstan:
-    name: PHPStan
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Setup PHP
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: "8.2"
-          coverage: none
-
-      - name: Get Composer cache directory
-        id: composer-cache
-        run: echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
-
-      - name: Cache Composer dependencies
-        uses: actions/cache@v4
-        with:
-          path: ${{ steps.composer-cache.outputs.dir }}
-          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
-          restore-keys: ${{ runner.os }}-composer-
-
-      - name: Install dependencies
-        run: composer install --prefer-dist --no-progress --ignore-platform-reqs
-
       - name: Build scoped vendor (vendor-dist)
         run: |
           mkdir -p release/ci
@@ -97,28 +126,3 @@ jobs:
 
       - name: Run PHPStan
         run: vendor/bin/phpstan analyse --no-progress --memory-limit=2G --error-format=github
-
-  php-compatibility:
-    name: PHP ${{ matrix.php }} Compatibility
-    runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        php: ["7.4", "8.0", "8.1", "8.2", "8.3"]
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Setup PHP
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: ${{ matrix.php }}
-          coverage: none
-
-      - name: Install dependencies
-        run: composer install --prefer-dist --no-progress --ignore-platform-reqs
-
-      - name: Check for fatal errors
-        run: |
-          php -l wp-user-manager.php
-          find includes/ -name "*.php" -print0 | xargs -0 -n1 php -l 2>&1 | { grep -v "No syntax errors" || true; } | { ! grep -q "Parse error"; }
