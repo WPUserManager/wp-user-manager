@@ -9,7 +9,17 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
+  tests:
+    uses: ./.github/workflows/tests.yml
+
+  e2e:
+    uses: ./.github/workflows/e2e.yml
+    # The real-payment Stripe specs need the Stripe test secrets.
+    secrets: inherit
+
   deploy:
+    # A tag whose tests fail is not deployed. Re-run the workflow once they pass.
+    needs: [tests, e2e]
     uses: WPUserManager/.github/.github/workflows/deploy.yml@master
     with:
       plugin-slug: wp-user-manager
