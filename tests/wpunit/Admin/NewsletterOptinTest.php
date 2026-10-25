@@ -213,8 +213,8 @@ class NewsletterOptinTest extends WPUMTestCase {
 		ob_start();
 		try {
 			$this->newsletter->$method();
-		} catch ( WPAjaxDieContinueException $e ) {
-			unset( $e );
+		} catch ( RuntimeException $e ) {
+			$this->assertSame( 'wpum_test_ajax_die', $e->getMessage() );
 		} finally {
 			$output = ob_get_clean();
 			remove_filter( 'wp_doing_ajax', '__return_true' );
@@ -229,10 +229,6 @@ class NewsletterOptinTest extends WPUMTestCase {
 	}
 
 	public function throw_on_die() {
-		throw new WPAjaxDieContinueException();
+		throw new RuntimeException( 'wpum_test_ajax_die' );
 	}
-}
-
-if ( ! class_exists( 'WPAjaxDieContinueException' ) ) {
-	class WPAjaxDieContinueException extends Exception {} // phpcs:ignore
 }
