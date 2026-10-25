@@ -49,7 +49,8 @@ test.describe('Newsletter opt-in', () => {
     await expect(notice).toHaveCount(0);
 
     expect(wpCli('option get wpum_newsletter_optin')).toBe('dismissed');
-    expect(wpCli('option get wpum_e2e_newsletter_request')).not.toContain('email');
+    // Nothing was sent to the list.
+    expect(wpCli('option list --search=wpum_e2e_newsletter_request --field=option_name')).toBe('');
 
     await page.goto('/wp-admin/users.php?page=wpum-custom-fields');
     await expect(page.locator('#wpum-newsletter-notice')).toHaveCount(0);
