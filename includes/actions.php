@@ -543,7 +543,9 @@ function wpum_prevent_entire_site() {
 		return;
 	}
 
-	if ( isset( $_POST['wp-submit'] ) && isset( $_POST['log'] ) ) { // phpcs:ignore
+	// WordPress's own login form posts to wp-login.php. Only let it through there, or
+	// any page could be read by posting the login field names to it.
+	if ( $is_wp_login && isset( $_POST['wp-submit'] ) && isset( $_POST['log'] ) ) { // phpcs:ignore
 		return;
 	}
 
