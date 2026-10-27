@@ -57,6 +57,7 @@ class PreventSiteAccessTest extends WPUMTestCase {
 		wpum_delete_option( 'lock_complete_site' );
 		wpum_delete_option( 'password_recovery_page' );
 		unset( $_GET['rest_route'] );
+		$_POST = array();
 		$this->set_permalink_structure( '' );
 		parent::tearDown();
 	}
@@ -110,6 +111,46 @@ class PreventSiteAccessTest extends WPUMTestCase {
 		$url = get_permalink( $this->page_id ) . '?rest_route=';
 
 		$this->assertNotNull( $this->visit( $url ) );
+	}
+
+	public function test_login_field_names_do_not_unlock_a_page() {
+		$_POST = array(
+			'wp-submit' => '',
+			'log'       => '',
+		);
+
+		$this->assertNotNull( $this->visit( get_permalink( $this->page_id ) ) );
+	}
+
+	public function test_login_form_post_to_wp_login_is_not_redirected() {
+		global $pagenow;
+
+		$original_pagenow = $pagenow;
+		$pagenow          = 'wp-login.php'; // phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited
+		wpum_update_option( 'lock_wplogin', true );
+
+		$_SERVER['REQUEST_URI'] = '/wp-login.php';
+		$_GET                   = array();
+		$_POST                  = array(
+			'log'       => 'someone',
+			'pwd'       => 'secret',
+			'wp-submit' => 'Log In',
+		);
+
+		$this->redirected_to = null;
+
+		try {
+			wpum_prevent_entire_site();
+		} catch ( RuntimeException $e ) {
+			if ( null === $this->redirected_to ) {
+				throw $e;
+			}
+		} finally {
+			$pagenow = $original_pagenow; // phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited
+			wpum_delete_option( 'lock_wplogin' );
+		}
+
+		$this->assertNull( $this->redirected_to );
 	}
 
 	public function test_logged_in_users_are_not_redirected() {
