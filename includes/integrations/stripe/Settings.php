@@ -308,6 +308,17 @@ class Settings {
 					),
 				),
 			);
+		} elseif ( $this->products ) {
+			// Without Eligible Products there is nowhere else for the button, so a site
+			// with one cached product could not refresh the list (#527).
+			$settings['stripe'][] = array(
+				'id'   => 'stripe_fetch_products',
+				'name' => __( 'Stripe Products', 'wp-user-manager' ),
+				'desc' => __( 'Fetch the latest products and prices from Stripe, for example after adding a product.', 'wp-user-manager' ),
+				'type' => 'html',
+				'html' => $fetch_product_btn,
+				'std'  => 1,
+			);
 		}
 
 		return $settings;
