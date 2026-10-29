@@ -15,9 +15,14 @@ test.describe('Admin sends a WPUM password reset', () => {
       // ignore
     }
     createUser(username, `${username}@example.com`, 'password123', 'subscriber');
+    // The test site has no mail server: record emails instead (tests/mu-plugins/wpum-e2e-mail.php).
+    wpCli('option update wpum_e2e_capture_mail 1');
+    wpCli('option delete wpum_e2e_sent_mail');
   });
 
   test.afterAll(() => {
+    wpCli('option delete wpum_e2e_capture_mail');
+    wpCli('option delete wpum_e2e_sent_mail');
     try {
       wpCli(`user delete ${username} --yes`);
     } catch {
@@ -39,6 +44,9 @@ test.describe('Admin sends a WPUM password reset', () => {
 
     await expect(page).toHaveURL(/users\.php\?wpum_password_reset=sent/);
     await expect(page.locator('.notice-success', { hasText: 'Password reset email sent.' })).toBeVisible();
+
+    // WPUM's email went to the user.
+    expect(wpCli('option get wpum_e2e_sent_mail --format=json')).toContain(`${username}@example.com`);
 
     // A reset key was stored for the user.
     expect(wpCli(`eval 'echo get_user_by( "login", "${username}" )->user_activation_key ? "has-key" : "no-key";'`)).toContain('has-key');
