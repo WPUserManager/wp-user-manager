@@ -228,6 +228,21 @@ function wpum_record_application_password_user( $user ) {
 add_action( 'application_password_did_authenticate', 'wpum_record_application_password_user' );
 
 /**
+ * Forget the application password user at the start of each authentication attempt,
+ * so a later account-password login in the same request gets the login method check.
+ *
+ * @param null|WP_User|WP_Error $user
+ *
+ * @return null|WP_User|WP_Error
+ */
+function wpum_reset_application_password_user( $user ) {
+	wpum_application_password_user_id( 0 );
+
+	return $user;
+}
+add_filter( 'authenticate', 'wpum_reset_application_password_user', 0 );
+
+/**
  * Was this user just authenticated by core with an application password?
  *
  * @param int $user_id

@@ -95,6 +95,16 @@ class ApplicationPasswordLoginMethodTest extends WPUMTestCase {
 		$this->assertWPError( wp_authenticate( $this->user->user_login, 'AccountPassword1!' ) );
 	}
 
+	public function test_a_later_account_password_login_still_gets_the_login_method_check() {
+		wpum_update_option( 'login_method', 'email' );
+
+		$this->assertInstanceOf( 'WP_User', wp_authenticate( $this->user->user_email, $this->app_password ) );
+
+		// Same request, same user, now the account password with a username: Email only must refuse it.
+		remove_filter( 'application_password_is_api_request', '__return_true' );
+		$this->assertWPError( wp_authenticate( $this->user->user_login, 'AccountPassword1!' ) );
+	}
+
 	public function test_only_the_user_core_authenticated_is_trusted() {
 		$other = self::factory()->user->create();
 
