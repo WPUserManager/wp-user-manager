@@ -45,6 +45,7 @@ class Settings {
 		add_action( 'update_option_wpum_settings', array( $this, 'flush_product_cache' ) );
 		add_action( 'wp_ajax_wpum_stripe_connect_account_info', array( $this, 'stripe_connect_account_info_ajax_response' ) );
 		add_action( 'admin_init', array( $this, 'handle_stripe_connect_disconnect' ) );
+		add_action( 'admin_notices', array( $this, 'thin_webhook_notice' ) );
 		add_action( 'admin_init', array( $this, 'handle_fetch_stripe_products' ) );
 	}
 
@@ -217,8 +218,7 @@ class Settings {
 			'id'     => 'test_stripe_webhook_secret',
 			'name'   => __( 'Test Webhook Signing Secret', 'wp-user-manager' ),
 			'type'   => 'text',
-			/* translators: %1$s webhook documentation URL. %2$s URL to use in the webhook. */
-			'desc'   => sprintf( __( '<a target="_blank" href="%1$s">Set up a webhook in Stripe</a> to get the webhook signing secret, using all events for this URL:<br><code>%2$s</code>', 'wp-user-manager' ), 'https://wpusermanager.com/article/334-setting-up-the-stripe-webhook/', WebhookEndpoint::get_webhook_url() ),
+			'desc'   => $this->webhook_secret_description(),
 			'toggle' => array(
 				array(
 					'key'   => 'stripe_gateway_mode',
@@ -236,8 +236,7 @@ class Settings {
 			'id'     => 'live_stripe_webhook_secret',
 			'name'   => __( 'Live Webhook Signing Secret', 'wp-user-manager' ),
 			'type'   => 'text',
-			/* translators: %1$s webhook documentation URL. %2$s URL to use in the webhook. */
-			'desc'   => sprintf( __( '<a target="_blank" href="%1$s">Set up a webhook in Stripe</a> to get the webhook signing secret, using all events for this URL:<br><code>%2$s</code>', 'wp-user-manager' ), 'https://wpusermanager.com/article/334-setting-up-the-stripe-webhook/', WebhookEndpoint::get_webhook_url() ),
+			'desc'   => $this->webhook_secret_description(),
 			'toggle' => array(
 				array(
 					'key'   => 'stripe_gateway_mode',
@@ -308,9 +307,91 @@ class Settings {
 					),
 				),
 			);
+		} elseif ( $this->products ) {
+			// Without Eligible Products there is nowhere else for the button, so a site
+			// with one cached product could not refresh the list (#527).
+			$settings['stripe'][] = array(
+				'id'   => 'stripe_fetch_products',
+				'name' => __( 'Stripe Products', 'wp-user-manager' ),
+				'desc' => __( 'Fetch the latest products and prices from Stripe, for example after adding a product.', 'wp-user-manager' ),
+				'type' => 'html',
+				'html' => $fetch_product_btn,
+				'std'  => 1,
+			);
 		}
 
 		return $settings;
+	}
+
+	/**
+	 * Stripe events the webhook handler acts on.
+	 *
+	 * @return string[]
+	 */
+	public static function webhook_events() {
+		return array(
+			'checkout.session.completed',
+			'checkout.session.async_payment_succeeded',
+			'customer.subscription.created',
+			'customer.subscription.updated',
+			'customer.subscription.deleted',
+			'invoice.payment_succeeded',
+			'product.created',
+			'product.updated',
+			'product.deleted',
+		);
+	}
+
+	/**
+	 * Help text for the webhook signing secret settings.
+	 *
+	 * Stripe's event destinations default to the Thin payload format, which the
+	 * webhook handler can't use, so the Snapshot format has to be chosen (#528).
+	 *
+	 * @return string
+	 */
+	protected function webhook_secret_description() {
+		return sprintf(
+			/* translators: %1$s webhook documentation URL. %2$s URL to use in the webhook. %3$s list of Stripe events. */
+			__( '<a target="_blank" href="%1$s">Set up a webhook in Stripe</a> (an event destination) to get the webhook signing secret. Choose the <strong>Snapshot</strong> payload format, not Thin, and send these events to this URL:<br><code>%2$s</code><br>%3$s', 'wp-user-manager' ),
+			'https://wpusermanager.com/article/334-setting-up-the-stripe-webhook/',
+			WebhookEndpoint::get_webhook_url(),
+			'<code>' . implode( '</code>, <code>', self::webhook_events() ) . '</code>'
+		);
+	}
+
+	/**
+	 * Warn on the WPUM settings screen when the webhook sends Thin events.
+	 *
+	 * @return void
+	 */
+	public function thin_webhook_notice() {
+		if ( ! current_user_can( 'manage_options' ) ) {
+			return;
+		}
+
+		$screen = function_exists( 'get_current_screen' ) ? get_current_screen() : null;
+		if ( ! $screen || 'users_page_wpum-settings' !== $screen->id ) {
+			return;
+		}
+
+		$mode  = wpum_get_option( 'stripe_gateway_mode', 'test' );
+		$event = StripeWebhookController::last_thin_event( $mode );
+		if ( ! $event ) {
+			return;
+		}
+
+		printf(
+			'<div class="notice notice-error"><p>%s</p></div>',
+			wp_kses_post(
+				sprintf(
+					/* translators: %1$s Stripe event type. %2$s documentation URL. */
+					__( '<strong>Your Stripe webhook is sending Thin events, which WP User Manager can\'t use</strong> (last one: %1$s). Subscriptions, renewals and cancellations are not reaching this site. In Stripe, create the webhook again with the <strong>Snapshot</strong> payload format, then paste its new signing secret here. <a target="_blank" href="%2$s">How to set up the webhook</a>.', 'wp-user-manager' ),
+					'<code>' . esc_html( $event['type'] ) . '</code>',
+					'https://wpusermanager.com/article/334-setting-up-the-stripe-webhook/'
+				)
+			)
+		);
 	}
 
 	/**

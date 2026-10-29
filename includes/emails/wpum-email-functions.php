@@ -179,6 +179,52 @@ function wpum_get_email_login_page_url() {
 }
 
 /**
+ * Send WPUM's password recovery email to a user, with a fresh reset key.
+ *
+ * Used by the password recovery form and by the "Send password reset (WPUM)"
+ * action on the admin users list (#370).
+ *
+ * @param WP_User $user User to send the email to.
+ *
+ * @return true|WP_Error
+ */
+function wpum_send_password_recovery_email( $user ) {
+	if ( ! $user instanceof WP_User ) {
+		return new WP_Error( 'wpum_invalid_user', esc_html__( 'The user could not be found.', 'wp-user-manager' ) );
+	}
+
+	$password_reset_key = get_password_reset_key( $user );
+
+	if ( is_wp_error( $password_reset_key ) ) {
+		return $password_reset_key;
+	}
+
+	if ( ! $password_reset_key ) {
+		return new WP_Error( 'wpum_reset_key_failed', esc_html__( 'A password reset key could not be created.', 'wp-user-manager' ) );
+	}
+
+	$password_reset_email = wpum_get_email( 'password_recovery_request', $user->ID );
+
+	if ( ! is_array( $password_reset_email ) ) {
+		return new WP_Error( 'wpum_email_missing', esc_html__( 'The password recovery email is not set up.', 'wp-user-manager' ) );
+	}
+
+	$emails = new WPUM_Emails();
+	$emails->__set( 'user_id', $user->ID );
+	$emails->__set( 'user_login', $user->user_login );
+	$emails->__set( 'heading', $password_reset_email['title'] );
+	$emails->__set( 'password_reset_key', $password_reset_key );
+
+	$sent = $emails->send( $user->user_email, $password_reset_email['subject'], $password_reset_email['content'] );
+
+	if ( ! $sent ) {
+		return new WP_Error( 'wpum_email_not_sent', esc_html__( 'The password reset email could not be sent.', 'wp-user-manager' ) );
+	}
+
+	return true;
+}
+
+/**
  * Get the unescaped personalized password reset URL.
  *
  * @param WPUM_Emails|object $email              The email being sent.

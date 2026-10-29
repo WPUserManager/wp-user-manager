@@ -56,24 +56,26 @@ class Products {
 		$products = array();
 
 		try {
+			// Follow every page: Stripe returns at most 100 items a page, and 10 by default (#527).
 			$all_products = \WPUM\Stripe\Product::all(
 				array(
 					'active' => true,
 					'limit'  => 100,
 				)
-			);
+			)->autoPagingIterator();
 
 			foreach ( $all_products as $product ) {
 				$all_prices = \WPUM\Stripe\Price::all(
 					array(
 						'product' => $product->id,
 						'active'  => true,
+						'limit'   => 100,
 					)
-				);
+				)->autoPagingIterator();
 
 				$save_product = $product->toArray();
 				$prices       = array();
-				foreach ( $all_prices->data as $price ) {
+				foreach ( $all_prices as $price ) {
 					$price_data                  = $price->toArray();
 					$prices[ $price_data['id'] ] = $price_data;
 				}

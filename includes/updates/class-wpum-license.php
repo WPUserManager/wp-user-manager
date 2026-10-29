@@ -207,7 +207,7 @@ class WPUM_License {
 			return;
 		}
 
-		$response = $this->activate_license( $license, home_url() );
+		$response = $this->activate_license( $license, $this->get_license_site_url() );
 
 		if ( ! is_wp_error( $response ) ) {
 			// Tell WordPress to look for updates.
@@ -242,7 +242,7 @@ class WPUM_License {
 			return;
 		}
 
-		$response = $this->activate_license( $this->license, home_url() );
+		$response = $this->activate_license( $this->license, $this->get_license_site_url() );
 
 		if ( is_wp_error( $response ) ) {
 			return;
@@ -274,7 +274,7 @@ class WPUM_License {
 			return;
 		}
 
-		$response = $this->deactivate_license( home_url() );
+		$response = $this->deactivate_license( $this->get_license_site_url() );
 
 		// make sure the response came back okay
 		if ( is_wp_error( $response ) ) {
@@ -357,7 +357,7 @@ class WPUM_License {
 			'item_id'   => $this->item_id,
 			'item_name' => $this->item_name,
 			'author'    => $this->author,
-			'url'       => home_url(),
+			'url'       => $this->get_license_site_url(),
 		);
 
 		new WPUM_EDD_SL_Plugin_Updater( $this->api_url, $this->file, $data );
@@ -380,7 +380,7 @@ class WPUM_License {
 	protected function prepare_license_data( $license_data ) {
 		if ( isset( $license_data->success ) && ! (bool) $license_data->success && isset( $license_data->error ) ) {
 			return array(
-				'url'    => home_url(),
+				'url'    => $this->get_license_site_url(),
 				'status' => $license_data->error,
 			);
 		}
@@ -390,7 +390,7 @@ class WPUM_License {
 		}
 
 		$data = array(
-			'url'    => home_url(),
+			'url'    => $this->get_license_site_url(),
 			'status' => $license_data->license,
 		);
 
@@ -427,17 +427,77 @@ class WPUM_License {
 			return $this->check_license();
 		}
 
-		if ( isset( $data['url'] ) && home_url() !== $data['url'] ) {
-			$this->deactivate_license( $data['url'] );
-
-			$response = $this->activate_license( $this->license, home_url() );
-			if ( ! is_wp_error( $response ) ) {
-				$data = $this->prepare_license_data( $response );
-				$this->set_license_data( $data );
-			}
+		if ( isset( $data['url'] ) && ! $this->is_same_site( $data['url'], $this->get_license_site_url() ) ) {
+			$data = $this->move_license( $data );
 		}
 
 		return $data;
+	}
+
+	/**
+	 * Move the license to this site's URL after the site has moved, such as staging to live.
+	 *
+	 * Runs at most once a day per addon. Before 2.10.2 it ran on every admin and AJAX request
+	 * whenever the URL differed, so sites whose URL changes from one request to the next
+	 * deactivated and re-activated their licenses all day.
+	 *
+	 * @param array $data The cached license data, licensed to another URL.
+	 *
+	 * @return array
+	 */
+	protected function move_license( $data ) {
+		$lock = $this->item_shortname . '_license_moved';
+
+		if ( get_site_transient( $lock ) ) {
+			return $data;
+		}
+
+		// Set before the API calls, so a failed or slow move isn't retried on the next request.
+		set_site_transient( $lock, 1, DAY_IN_SECONDS );
+
+		$this->deactivate_license( $data['url'] );
+
+		$response = $this->activate_license( $this->license, $this->get_license_site_url() );
+		if ( ! is_wp_error( $response ) ) {
+			$data = $this->prepare_license_data( $response );
+			$this->set_license_data( $data );
+		}
+
+		return $data;
+	}
+
+	/**
+	 * The URL this site's licenses are activated for.
+	 *
+	 * Uses the home option rather than home_url(), which multilingual plugins filter per
+	 * language and which follows the request's scheme. A multisite network is one site.
+	 *
+	 * @return string
+	 */
+	protected function get_license_site_url() {
+		if ( is_multisite() ) {
+			return untrailingslashit( set_url_scheme( 'http://' . get_network()->domain . get_network()->path ) );
+		}
+
+		return untrailingslashit( get_option( 'home' ) );
+	}
+
+	/**
+	 * Whether two URLs are the same site, ignoring the scheme, www and a trailing slash, as EDD does.
+	 *
+	 * @param string $url_a
+	 * @param string $url_b
+	 *
+	 * @return bool
+	 */
+	protected function is_same_site( $url_a, $url_b ) {
+		$normalise = function ( $url ) {
+			$url = strtolower( untrailingslashit( trim( $url ) ) );
+
+			return preg_replace( '#^(https?://)?(www\.)?#', '', $url );
+		};
+
+		return $normalise( $url_a ) === $normalise( $url_b );
 	}
 
 	/**
@@ -460,7 +520,7 @@ class WPUM_License {
 	 * @return array
 	 */
 	protected function check_license() {
-		$response = $this->api_request( 'check_license', $this->license, home_url() );
+		$response = $this->api_request( 'check_license', $this->license, $this->get_license_site_url() );
 
 		$data = $this->prepare_license_data( $response );
 

@@ -161,6 +161,12 @@ function wpum_authentication( $wp_user, $username, $password ) {
 		return $wp_user;
 	}
 
+	// An application password has already been checked by core (for example over
+	// XML-RPC). Checking it again as the account password would reject it (#472).
+	if ( $wp_user instanceof WP_User && wpum_authenticated_by_application_password( $wp_user->ID ) ) {
+		return $wp_user;
+	}
+
 	$authentication_method = wpum_get_option( 'login_method' );
 
 	if ( 'username' === $authentication_method ) {
@@ -189,6 +195,65 @@ function wpum_authentication( $wp_user, $username, $password ) {
 	return $wp_user;
 }
 add_filter( 'authenticate', 'wpum_authentication', 20, 3 );
+
+/**
+ * Record or read which user core just authenticated with an application password.
+ *
+ * @param int|null $user_id User ID to record, or null to read.
+ *
+ * @return int The recorded user ID, 0 if none.
+ */
+function wpum_application_password_user_id( $user_id = null ) {
+	static $recorded = 0;
+
+	if ( null !== $user_id ) {
+		$recorded = (int) $user_id;
+	}
+
+	return $recorded;
+}
+
+/**
+ * Remember the user core authenticated with an application password.
+ *
+ * @param WP_User $user
+ *
+ * @return void
+ */
+function wpum_record_application_password_user( $user ) {
+	if ( $user instanceof WP_User ) {
+		wpum_application_password_user_id( $user->ID );
+	}
+}
+add_action( 'application_password_did_authenticate', 'wpum_record_application_password_user' );
+
+/**
+ * Forget the application password user at the start of each authentication attempt,
+ * so a later account-password login in the same request gets the login method check.
+ *
+ * @param null|WP_User|WP_Error $user
+ *
+ * @return null|WP_User|WP_Error
+ */
+function wpum_reset_application_password_user( $user ) {
+	wpum_application_password_user_id( 0 );
+
+	return $user;
+}
+add_filter( 'authenticate', 'wpum_reset_application_password_user', 0 );
+
+/**
+ * Was this user just authenticated by core with an application password?
+ *
+ * @param int $user_id
+ *
+ * @return bool
+ */
+function wpum_authenticated_by_application_password( $user_id ) {
+	$recorded = wpum_application_password_user_id();
+
+	return $recorded && (int) $user_id === $recorded;
+}
 
 /**
  * Replace specific login error messages with a generic message

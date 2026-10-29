@@ -107,7 +107,7 @@
 					$editorToolbarAdded = true
 				})
 			}
-			// Initialize the editor.
+			// Initialize the editor, with a Text tab for editing the HTML directly (#63).
 			wp.editor.initialize('wpum-mail-content-editor', {
 				tinymce: {
 					setup: function (ed) {
@@ -118,8 +118,14 @@
 							wpumEditorUpdatePreview()
 						})
 					}
-				}
+				},
+				quicktags: true
 			})
+		})
+
+		// Update the preview while typing in the Text tab too.
+		$(document).on('input', '#wpum-mail-content-editor', function () {
+			wpumEditorUpdatePreview()
 		})
 
 		// ===== Close the editor if switching section =====

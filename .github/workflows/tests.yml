@@ -1,21 +1,35 @@
 name: Unit Tests
 
+# PRs run PHP 8.3 only; release tags (workflow_call) and manual runs add 7.4, 8.1 and 8.2.
+# Nothing runs on push, on release branches or on PRs into master: the tag's release run
+# tests the same code before it deploys, and develop's PRs already ran.
+
 on:
   pull_request:
-  push:
+    paths-ignore:
+      - '**.md'
+      - 'readme.txt'
+      - 'languages/**'
+  # Release runs this before it deploys.
+  workflow_call:
+  # A full run on any branch, e.g. develop after a merge: gh workflow run tests.yml --ref develop
+  workflow_dispatch:
 
 concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
+  # Its own group: inside a reusable workflow github.workflow is the caller's name, so
+  # tests and E2E called from Release would otherwise cancel each other.
+  group: tests-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 jobs:
   wpunit:
+    if: github.event_name != 'pull_request' || (!startsWith(github.head_ref, 'release/') && github.base_ref != 'master')
     name: WPUnit Tests (PHP ${{ matrix.php }})
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
-        php: ['7.4', '8.1', '8.2', '8.3']
+        php: ${{ fromJSON( github.event_name == 'pull_request' && '["8.3"]' || '["7.4", "8.1", "8.2", "8.3"]' ) }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4

@@ -337,6 +337,11 @@ class Registration {
 			$this->json_error( __( 'Please select a valid plan.', 'wp-user-manager' ) );
 		}
 
+		// Refuse a price archived in Stripe since the form was set up, before the account is created (#527).
+		if ( ! $this->products->get_by_plan( sanitize_text_field( $_POST['wpum_stripe_plan'] ) ) ) { // phpcs:ignore
+			$this->json_error( __( 'This plan is no longer available. Please contact the site owner.', 'wp-user-manager' ) );
+		}
+
 		$user_id = $form->submit_handler();
 
 		ob_start();

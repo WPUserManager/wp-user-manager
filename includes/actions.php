@@ -374,6 +374,43 @@ function wpum_check_nick_field( $errors, $update, $user ) { // phpcs:ignore Gene
 }
 
 /**
+ * Send logged in users away from the login and registration pages, when a
+ * page is set in Redirects > Logged In Users (#50).
+ *
+ * @return void
+ */
+function wpum_redirect_logged_in_users() {
+	if ( ! is_user_logged_in() || is_customize_preview() ) {
+		return;
+	}
+
+	$on_form_page = false;
+	foreach ( array( 'login', 'register' ) as $core_page ) {
+		$page_id = wpum_get_core_page_id( $core_page );
+
+		if ( $page_id && is_page( $page_id ) ) {
+			$on_form_page = true;
+			break;
+		}
+	}
+
+	if ( ! $on_form_page ) {
+		return;
+	}
+
+	$redirect = html_entity_decode( wpum_get_logged_in_redirect() );
+
+	// Never redirect a page to itself.
+	if ( ! $redirect || untrailingslashit( strtok( $redirect, '?' ) ) === untrailingslashit( get_permalink() ) ) {
+		return;
+	}
+
+	wp_safe_redirect( $redirect );
+	exit;
+}
+add_action( 'template_redirect', 'wpum_redirect_logged_in_users' );
+
+/**
  * Add a "view profile" link to the admin user table.
  *
  * @param  array  $actions     list of actions
@@ -387,6 +424,79 @@ function wpum_admin_user_action_link( $actions, $user_object ) {
 	return $actions;
 }
 add_filter( 'user_row_actions', 'wpum_admin_user_action_link', 10, 2 );
+
+/**
+ * Add a "Send password reset (WPUM)" link to the admin users list, which sends
+ * WPUM's own password recovery email rather than the WordPress one (#370).
+ *
+ * @param array   $actions     List of actions.
+ * @param WP_User $user_object User in this row.
+ *
+ * @return array
+ */
+function wpum_admin_user_password_reset_link( $actions, $user_object ) {
+	if ( ! wpum_get_core_page_id( 'password' ) || get_current_user_id() === $user_object->ID || ! current_user_can( 'edit_user', $user_object->ID ) ) {
+		return $actions;
+	}
+
+	$url = wp_nonce_url(
+		add_query_arg(
+			array(
+				'action' => 'wpum_send_password_reset',
+				'user'   => $user_object->ID,
+			),
+			admin_url( 'admin-post.php' )
+		),
+		'wpum_send_password_reset_' . $user_object->ID
+	);
+
+	$actions['wpum_password_reset'] = '<a href="' . esc_url( $url ) . '">' . esc_html__( 'Send password reset (WPUM)', 'wp-user-manager' ) . '</a>';
+
+	return $actions;
+}
+add_filter( 'user_row_actions', 'wpum_admin_user_password_reset_link', 10, 2 );
+
+/**
+ * Handle the "Send password reset (WPUM)" link.
+ *
+ * @return void
+ */
+function wpum_admin_send_password_reset() {
+	$user_id = absint( filter_input( INPUT_GET, 'user', FILTER_SANITIZE_NUMBER_INT ) );
+
+	check_admin_referer( 'wpum_send_password_reset_' . $user_id );
+
+	if ( ! $user_id || ! current_user_can( 'edit_user', $user_id ) ) {
+		wp_die( esc_html__( 'Sorry, you are not allowed to send a password reset to this user.', 'wp-user-manager' ), 403 );
+	}
+
+	$result = wpum_send_password_recovery_email( get_userdata( $user_id ) );
+
+	wp_safe_redirect( add_query_arg( 'wpum_password_reset', is_wp_error( $result ) ? 'failed' : 'sent', admin_url( 'users.php' ) ) );
+	exit;
+}
+add_action( 'admin_post_wpum_send_password_reset', 'wpum_admin_send_password_reset' );
+
+/**
+ * Confirm on the users list whether the password reset email was sent.
+ *
+ * @return void
+ */
+function wpum_admin_password_reset_notice() {
+	$status = filter_input( INPUT_GET, 'wpum_password_reset' );
+	$screen = function_exists( 'get_current_screen' ) ? get_current_screen() : null;
+
+	if ( ! $status || ! $screen || 'users' !== $screen->id ) {
+		return;
+	}
+
+	if ( 'sent' === $status ) {
+		echo '<div class="notice notice-success is-dismissible"><p>' . esc_html__( 'Password reset email sent.', 'wp-user-manager' ) . '</p></div>';
+	} elseif ( 'failed' === $status ) {
+		echo '<div class="notice notice-error is-dismissible"><p>' . esc_html__( 'The password reset email could not be sent.', 'wp-user-manager' ) . '</p></div>';
+	}
+}
+add_action( 'admin_notices', 'wpum_admin_password_reset_notice' );
 
 /**
  * Complete setup of the plugin once first loaded.

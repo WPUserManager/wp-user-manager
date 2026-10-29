@@ -8,7 +8,7 @@ Tested up to: 7.1
 Requires PHP: 7.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
-Stable Tag: 2.10.1
+Stable Tag: 2.10.2
 
 Registration forms, a frontend login form, user profiles and a member directory for WordPress. Add Stripe payments and content restriction.
 
@@ -141,6 +141,10 @@ Please refer to the [official documentation](https://docs.wpusermanager.com/arti
 
 Please report security bugs found in the source code of the WP User Manager plugin through the [Patchstack Vulnerability Disclosure Program](https://patchstack.com/database/vdp/wp-user-manager/). The Patchstack team will assist you with verification, CVE assignment, and notify the developers of this plugin. For further details, see our [security policy](https://github.com/WPUserManager/wp-user-manager/blob/develop/.github/SECURITY.md).
 
+= Does the plugin send my email address anywhere? =
+
+Only if you subscribe. The plugin's admin screens offer the WP User Manager newsletter, with your email address filled in. Nothing is sent until you click Subscribe, when your email address and first name go to our mailing list at wpusermanager.com. See our [privacy policy](https://wpusermanager.com/privacy-policy/). To stop the offer showing at all, return false from the `wpum_show_newsletter_optin` filter.
+
 = Is WP User Manager GDPR compliant? =
 
 Please refer to the [official documentation for gdpr compliance](https://docs.wpusermanager.com/article/427-gdpr-compliance/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager).
@@ -166,6 +170,17 @@ Please note that using WPUM and the mentioned add-ons does NOT guarantee complia
 13. Login form.
 
 == Changelog ==
+
+= 2.10.2 (29th October 2026) =
+
+- New: Text tab in the email editor, for editing an email's HTML directly
+- New: Send WP User Manager's password reset email from the Users list
+- New: Send logged in users away from the login and registration pages (Settings > Redirects > Logged In Users)
+- Tweak: The Stripe webhook setting says to choose the Snapshot payload format, and warns when Stripe sends Thin events
+- Fix: Stripe products beyond the first 100, and prices beyond the first 10, are now listed
+- Fix: The Fetch Stripe Products button now shows when there is only one product
+- Fix: Paying for a Stripe price that has since been archived no longer causes a fatal error
+- Fix: Application passwords now work for non-admins when login is set to Email only or Username only
 
 = 2.10.1 (27th October 2026) =
 

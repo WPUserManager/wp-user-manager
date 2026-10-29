@@ -463,6 +463,10 @@ class Account {
 			wp_send_json_error( __( 'Unknown plan', 'wp-user-manager' ) );
 		}
 
+		if ( ! $this->products->get_by_plan( $plan_id ) ) {
+			wp_send_json_error( '<div class="wpum-message error">' . esc_html__( 'This plan is no longer available. Please contact the site owner.', 'wp-user-manager' ) . '</div>' );
+		}
+
 		$form = $user->getFormRegisteredWith();
 
 		$redirect = $this->get_redirect_after_account_payment( $plan_id, $form );
@@ -489,7 +493,7 @@ class Account {
 
 		$return_url = $account_url;
 		$product    = $this->products->get_by_plan( $plan_id );
-		if ( $product->is_recurring() ) {
+		if ( $product && $product->is_recurring() ) {
 			$return_url = $billing_url;
 		}
 
