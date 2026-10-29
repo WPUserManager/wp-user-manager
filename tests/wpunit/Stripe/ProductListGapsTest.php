@@ -156,16 +156,25 @@ class ProductListGapsTest extends WPUMTestCase {
 	}
 
 	public function test_every_price_of_a_product_with_many_prices_is_listed() {
+		// 101 prices: more than one page of 100, so the second page must be fetched.
 		$tiers = array();
-		for ( $i = 1; $i <= 12; $i++ ) {
+		for ( $i = 1; $i <= 101; $i++ ) {
 			$tiers[] = 'price_tier_' . $i;
 		}
 		$this->http->add_product( 'prod_tiers', $tiers );
 
 		$prices = $this->listed_prices();
 
-		$this->assertCount( 13, $prices );
-		$this->assertContains( 'price_tier_12', $prices );
+		$this->assertCount( 102, $prices );
+		$this->assertContains( 'price_tier_101', $prices );
+
+		$tier_requests = array_filter(
+			$this->http->requests_to( '/v1/prices' ),
+			function ( $request ) {
+				return isset( $request['params']['product'] ) && 'prod_tiers' === $request['params']['product'];
+			}
+		);
+		$this->assertCount( 2, $tier_requests, 'The second page of prices should be fetched.' );
 	}
 
 	public function test_more_than_a_hundred_products_are_all_listed() {
