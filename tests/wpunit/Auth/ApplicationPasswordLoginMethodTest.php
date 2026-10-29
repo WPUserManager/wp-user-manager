@@ -98,7 +98,7 @@ class ApplicationPasswordLoginMethodTest extends WPUMTestCase {
 	public function test_only_the_user_core_authenticated_is_trusted() {
 		$other = self::factory()->user->create();
 
-		wpum_authenticated_by_application_password( $this->user );
+		wpum_record_application_password_user( $this->user );
 
 		$this->assertTrue( wpum_authenticated_by_application_password( $this->user->ID ) );
 		$this->assertFalse( wpum_authenticated_by_application_password( $other ) );

@@ -197,27 +197,48 @@ function wpum_authentication( $wp_user, $username, $password ) {
 add_filter( 'authenticate', 'wpum_authentication', 20, 3 );
 
 /**
- * Remember, or check, which user core just authenticated with an application password.
+ * Record or read which user core just authenticated with an application password.
  *
- * Hooked to application_password_did_authenticate with a WP_User, it records that
- * user. Called with a user ID, it says whether that user was the one.
+ * @param int|null $user_id User ID to record, or null to read.
  *
- * @param WP_User|int $user User to record, or ID to check.
+ * @return int The recorded user ID, 0 if none.
+ */
+function wpum_application_password_user_id( $user_id = null ) {
+	static $recorded = 0;
+
+	if ( null !== $user_id ) {
+		$recorded = (int) $user_id;
+	}
+
+	return $recorded;
+}
+
+/**
+ * Remember the user core authenticated with an application password.
+ *
+ * @param WP_User $user
+ *
+ * @return void
+ */
+function wpum_record_application_password_user( $user ) {
+	if ( $user instanceof WP_User ) {
+		wpum_application_password_user_id( $user->ID );
+	}
+}
+add_action( 'application_password_did_authenticate', 'wpum_record_application_password_user' );
+
+/**
+ * Was this user just authenticated by core with an application password?
+ *
+ * @param int $user_id
  *
  * @return bool
  */
-function wpum_authenticated_by_application_password( $user ) {
-	static $user_id = 0;
+function wpum_authenticated_by_application_password( $user_id ) {
+	$recorded = wpum_application_password_user_id();
 
-	if ( $user instanceof WP_User ) {
-		$user_id = (int) $user->ID;
-
-		return true;
-	}
-
-	return $user_id && (int) $user === $user_id;
+	return $recorded && (int) $user_id === $recorded;
 }
-add_action( 'application_password_did_authenticate', 'wpum_authenticated_by_application_password' );
 
 /**
  * Replace specific login error messages with a generic message
