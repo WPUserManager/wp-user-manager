@@ -374,6 +374,43 @@ function wpum_check_nick_field( $errors, $update, $user ) { // phpcs:ignore Gene
 }
 
 /**
+ * Send logged in users away from the login and registration pages, when a
+ * page is set in Redirects > Logged In Users (#50).
+ *
+ * @return void
+ */
+function wpum_redirect_logged_in_users() {
+	if ( ! is_user_logged_in() || is_customize_preview() ) {
+		return;
+	}
+
+	$on_form_page = false;
+	foreach ( array( 'login', 'register' ) as $core_page ) {
+		$page_id = wpum_get_core_page_id( $core_page );
+
+		if ( $page_id && is_page( $page_id ) ) {
+			$on_form_page = true;
+			break;
+		}
+	}
+
+	if ( ! $on_form_page ) {
+		return;
+	}
+
+	$redirect = html_entity_decode( wpum_get_logged_in_redirect() );
+
+	// Never redirect a page to itself.
+	if ( ! $redirect || untrailingslashit( strtok( $redirect, '?' ) ) === untrailingslashit( get_permalink() ) ) {
+		return;
+	}
+
+	wp_safe_redirect( $redirect );
+	exit;
+}
+add_action( 'template_redirect', 'wpum_redirect_logged_in_users' );
+
+/**
  * Add a "view profile" link to the admin user table.
  *
  * @param  array  $actions     list of actions
