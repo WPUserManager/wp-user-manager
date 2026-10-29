@@ -77,17 +77,78 @@ class StripeWebhookController {
 	public function handleWebhook( \WP_REST_Request $request ) {
 		$payload = json_decode( $request->get_body(), true );
 
-		$method = 'handle' . $this->studly( str_replace( '.', '_', $payload['type'] ) );
-
-		if ( ! $this->signatureIsValid( $request ) ) {
+		if ( ! is_array( $payload ) || empty( $payload['type'] ) || ! $this->signatureIsValid( $request ) ) {
 			return new \WP_REST_Response();
 		}
+
+		// A "Thin" event destination sends only a reference to what changed, with no
+		// data.object, so none of the handlers can use it (#528). Note it so the admin
+		// is told to recreate the webhook with the Snapshot payload.
+		if ( ! isset( $payload['data']['object'] ) ) {
+			self::record_thin_event( $this->gateway_mode, $payload['type'] );
+
+			return new \WP_REST_Response( 'Thin event payloads are not supported. Use the Snapshot payload format.', 200 );
+		}
+
+		self::clear_thin_event( $this->gateway_mode );
+
+		$method = 'handle' . $this->studly( str_replace( '.', '_', $payload['type'] ) );
 
 		if ( method_exists( $this, $method ) ) {
 			return $this->{$method}( $payload );
 		}
 
 		return new \WP_REST_Response();
+	}
+
+	/**
+	 * Option that records the last Thin event received for a mode.
+	 *
+	 * @param string $gateway_mode
+	 *
+	 * @return string
+	 */
+	public static function thin_event_option( $gateway_mode ) {
+		return 'wpum_stripe_' . ( 'live' === $gateway_mode ? 'live' : 'test' ) . '_thin_webhook_event';
+	}
+
+	/**
+	 * Remember that a Thin event arrived.
+	 *
+	 * @param string $gateway_mode
+	 * @param string $type
+	 */
+	public static function record_thin_event( $gateway_mode, $type ) {
+		update_option(
+			self::thin_event_option( $gateway_mode ),
+			array(
+				'type' => sanitize_text_field( $type ),
+				'time' => time(),
+			),
+			false
+		);
+	}
+
+	/**
+	 * Forget the Thin event once a usable (Snapshot) event arrives.
+	 *
+	 * @param string $gateway_mode
+	 */
+	public static function clear_thin_event( $gateway_mode ) {
+		delete_option( self::thin_event_option( $gateway_mode ) );
+	}
+
+	/**
+	 * The last Thin event received for a mode, if any.
+	 *
+	 * @param string $gateway_mode
+	 *
+	 * @return array|false Array with 'type' and 'time', or false.
+	 */
+	public static function last_thin_event( $gateway_mode ) {
+		$event = get_option( self::thin_event_option( $gateway_mode ) );
+
+		return is_array( $event ) && ! empty( $event['time'] ) ? $event : false;
 	}
 
 	/**
