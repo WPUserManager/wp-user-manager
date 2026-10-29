@@ -369,6 +369,7 @@ class WPUM_Newsletter {
 		?>
 		<style>
 			.wpum-newsletter-optin__fields input[type="email"], .wpum-newsletter-optin__fields input[type="text"] { min-width: 220px; }
+			.wpum-newsletter-optin__message { font-weight: 600; }
 			.wpum-newsletter-optin__message:empty { display: none; }
 		</style>
 		<script>

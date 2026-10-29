@@ -111,6 +111,9 @@ class WPUM_Getting_Started {
 			border-top: solid 5px #016afe;
 			font-size: 14px;
 		}
+		.wpum-newsletter-panel > .wpum-newsletter-optin__message {
+			font-weight: 600;
+		}
 		/*]]>*/
 		</style>
 		<?php
