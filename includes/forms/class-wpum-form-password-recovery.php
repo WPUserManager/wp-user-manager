@@ -239,28 +239,8 @@ class WPUM_Form_Password_Recovery extends WPUM_Form {
 			}
 
 			if ( $user instanceof WP_User ) {
-
-				// Generate a new password reset key for the selected user.
-				$password_reset_key = get_password_reset_key( $user );
-
-				// Now send an email to the user.
-				if ( $password_reset_key ) {
-
-					$password_reset_email = wpum_get_email( 'password_recovery_request', $user->data->ID );
-
-					$emails = new WPUM_Emails();
-					$emails->__set( 'user_id', $user->data->ID );
-					$emails->__set( 'user_login', $user->data->user_login );
-					$emails->__set( 'heading', $password_reset_email['title'] );
-					$emails->__set( 'password_reset_key', $password_reset_key );
-
-					if ( is_array( $password_reset_email ) ) {
-						$email   = $user->data->user_email;
-						$subject = $password_reset_email['subject'];
-						$message = $password_reset_email['content'];
-						$emails->send( $email, $subject, $message );
-					}
-				}
+				// The visitor sees the same next step whether or not the email went out.
+				wpum_send_password_recovery_email( $user );
 			} else {
 				throw new Exception( esc_html__( 'Something went wrong.', 'wp-user-manager' ) );
 			}
