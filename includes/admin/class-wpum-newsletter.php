@@ -180,7 +180,7 @@ class WPUM_Newsletter {
 
 		if ( ! $this->can_ask() ) {
 			if ( 'subscribed' === $status && 'subscribed' === get_option( self::OPTION ) ) {
-				echo '<p class="wpum-newsletter-optin__message">' . esc_html__( 'Thanks, you\'re subscribed.', 'wp-user-manager' ) . '</p>';
+				echo '<p class="wpum-newsletter-optin__message">' . esc_html( $this->success_message() ) . '</p>';
 			}
 			return;
 		}
@@ -248,7 +248,7 @@ class WPUM_Newsletter {
 			if ( is_wp_error( $result ) ) {
 				wp_send_json_error( array( 'message' => $result->get_error_message() ) );
 			}
-			wp_send_json_success( array( 'message' => __( 'Thanks, you\'re subscribed.', 'wp-user-manager' ) ) );
+			wp_send_json_success( array( 'message' => $this->success_message() ) );
 		}
 
 		$this->redirect_back( is_wp_error( $result ) ? 'error' : 'subscribed' );
@@ -328,6 +328,16 @@ class WPUM_Newsletter {
 		$reason = preg_match( '#<h2>(.*?)</h2>#is', $body, $matches ) ? wp_strip_all_tags( $matches[1] ) : '';
 
 		return new WP_Error( 'wpum_newsletter_rejected', $reason ? $reason : __( 'Sorry, that didn\'t work. Please try again later.', 'wp-user-manager' ) );
+	}
+
+	/**
+	 * What the admin sees after subscribing. The list uses double opt-in, so they
+	 * aren't on it until they click the link in Sendy's confirmation email.
+	 *
+	 * @return string
+	 */
+	private function success_message() {
+		return __( 'Thanks! Check your inbox and click the link in our email to confirm your subscription.', 'wp-user-manager' );
 	}
 
 	/**

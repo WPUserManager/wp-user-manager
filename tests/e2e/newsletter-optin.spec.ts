@@ -30,7 +30,7 @@ test.describe('Newsletter opt-in', () => {
     await expect(notice.locator('input[name="email"]')).toHaveValue(adminEmail);
 
     await notice.locator('button[type="submit"]').click();
-    await expect(notice.locator('.wpum-newsletter-optin__message')).toContainText("you're subscribed");
+    await expect(notice.locator('.wpum-newsletter-optin__message')).toContainText('Check your inbox');
     await expect(page).toHaveURL(/page=wpum-settings/);
 
     expect(wpCli('option get wpum_newsletter_optin')).toBe('subscribed');
