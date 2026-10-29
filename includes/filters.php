@@ -161,6 +161,12 @@ function wpum_authentication( $wp_user, $username, $password ) {
 		return $wp_user;
 	}
 
+	// An application password has already been checked by core (for example over
+	// XML-RPC). Checking it again as the account password would reject it (#472).
+	if ( $wp_user instanceof WP_User && wpum_authenticated_by_application_password( $wp_user->ID ) ) {
+		return $wp_user;
+	}
+
 	$authentication_method = wpum_get_option( 'login_method' );
 
 	if ( 'username' === $authentication_method ) {
@@ -189,6 +195,29 @@ function wpum_authentication( $wp_user, $username, $password ) {
 	return $wp_user;
 }
 add_filter( 'authenticate', 'wpum_authentication', 20, 3 );
+
+/**
+ * Remember, or check, which user core just authenticated with an application password.
+ *
+ * Hooked to application_password_did_authenticate with a WP_User, it records that
+ * user. Called with a user ID, it says whether that user was the one.
+ *
+ * @param WP_User|int $user User to record, or ID to check.
+ *
+ * @return bool
+ */
+function wpum_authenticated_by_application_password( $user ) {
+	static $user_id = 0;
+
+	if ( $user instanceof WP_User ) {
+		$user_id = (int) $user->ID;
+
+		return true;
+	}
+
+	return $user_id && (int) $user === $user_id;
+}
+add_action( 'application_password_did_authenticate', 'wpum_authenticated_by_application_password' );
 
 /**
  * Replace specific login error messages with a generic message
