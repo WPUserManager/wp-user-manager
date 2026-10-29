@@ -31,7 +31,9 @@ test.describe('Email editor Text tab', () => {
 
     const email = 'registration_confirmation';
     const preview = encodeURIComponent(`/?wpum_email_customizer=true&email=${email}`);
-    await page.goto(`/wp-admin/customize.php?autofocus%5Bpanel%5D=${email}&wpum_email_customizer=true&email=${email}&url=${preview}`);
+    // Open the email's settings section directly: the editor button is inside it,
+    // and stays hidden when only the panel is focused.
+    await page.goto(`/wp-admin/customize.php?autofocus%5Bsection%5D=${email}_settings&wpum_email_customizer=true&email=${email}&url=${preview}`);
 
     const openEditor = page.locator('#wpum-email-editor-btn');
     await expect(openEditor).toBeVisible({ timeout: 30000 });
