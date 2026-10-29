@@ -184,6 +184,30 @@ class NewsletterOptinTest extends WPUMTestCase {
 		$this->assertSame( 'subscribed', get_option( WPUM_Newsletter::OPTION ) );
 	}
 
+	public function test_form_records_where_it_is_shown() {
+		ob_start();
+		$this->newsletter->render_form( 'notice' );
+		$html = ob_get_clean();
+
+		$this->assertStringContainsString( 'name="placement" value="notice"', $html );
+	}
+
+	public function test_source_says_which_form_was_used() {
+		$this->ajax( 'handle_subscribe', array( 'email' => 'jane@example.com', 'placement' => 'notice' ) );
+		delete_option( WPUM_Newsletter::OPTION );
+		$this->ajax( 'handle_subscribe', array( 'email' => 'jane@example.com', 'placement' => 'welcome' ) );
+
+		$this->assertCount( 2, $this->requests );
+		$this->assertSame( 'plugin-notice', $this->requests[0]['body']['Source'] );
+		$this->assertSame( 'plugin-welcome', $this->requests[1]['body']['Source'] );
+	}
+
+	public function test_unknown_placement_is_sent_as_plain_plugin() {
+		$this->ajax( 'handle_subscribe', array( 'email' => 'jane@example.com', 'placement' => 'anything-else' ) );
+
+		$this->assertSame( 'plugin', $this->requests[0]['body']['Source'] );
+	}
+
 	public function test_failed_ajax_subscribe_keeps_asking() {
 		$this->response = $this->http_response( 200, '<h2>Email address is invalid.</h2>' );
 

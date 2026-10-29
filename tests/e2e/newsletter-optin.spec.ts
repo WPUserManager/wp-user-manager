@@ -36,7 +36,7 @@ test.describe('Newsletter opt-in', () => {
     expect(wpCli('option get wpum_newsletter_optin')).toBe('subscribed');
     const sent = JSON.parse(wpCli('option get wpum_e2e_newsletter_request --format=json'));
     expect(sent.email).toBe(adminEmail);
-    expect(sent.Source).toBe('plugin');
+    expect(sent.Source).toBe('plugin-notice');
 
     await page.reload();
     await expect(page.locator('#wpum-newsletter-notice')).toHaveCount(0);

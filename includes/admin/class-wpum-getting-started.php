@@ -161,7 +161,7 @@ class WPUM_Getting_Started {
 				echo esc_html( sprintf( __( 'Thank you for installing the latest version! WP User Manager %s is ready to provide improved control over your WordPress users.', 'wp-user-manager' ), WPUM_VERSION ) );
 				?>
 				<div class="wpum-newsletter-panel">
-					<?php WPUM_Newsletter::instance()->render_form(); ?>
+					<?php WPUM_Newsletter::instance()->render_form( 'welcome' ); ?>
 				</div>
 			</div>
 			<div class="wpum-badge">
