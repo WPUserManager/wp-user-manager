@@ -47,6 +47,19 @@ class WPUM_Newsletter {
 	const NOTICE_DELAY = 7 * DAY_IN_SECONDS;
 
 	/**
+	 * The list's Source field for each place the form is shown, so signups can be told apart.
+	 */
+	const SOURCES = array(
+		'notice'  => 'plugin-notice',
+		'welcome' => 'plugin-welcome',
+	);
+
+	/**
+	 * Source for a signup from anywhere else.
+	 */
+	const DEFAULT_SOURCE = 'plugin';
+
+	/**
 	 * Whether a form has been printed on this page, so the script is added once.
 	 *
 	 * @var bool
@@ -164,7 +177,7 @@ class WPUM_Newsletter {
 		$dismiss_url = wp_nonce_url( admin_url( 'admin-post.php?action=wpum_newsletter_dismiss' ), self::NONCE );
 		?>
 		<div id="wpum-newsletter-notice" class="notice notice-info is-dismissible wpum-newsletter-notice">
-			<?php $this->render_form(); ?>
+			<?php $this->render_form( 'notice' ); ?>
 			<p><a href="<?php echo esc_url( $dismiss_url ); ?>" class="wpum-newsletter-dismiss"><?php esc_html_e( 'No thanks', 'wp-user-manager' ); ?></a></p>
 		</div>
 		<?php
@@ -173,9 +186,11 @@ class WPUM_Newsletter {
 	/**
 	 * Print the opt-in form, pre-filled with the current user's email and first name.
 	 *
+	 * @param string $placement Where the form is shown: a key of SOURCES.
+	 *
 	 * @return void
 	 */
-	public function render_form() {
+	public function render_form( $placement = 'welcome' ) {
 		$status = isset( $_GET['wpum_newsletter'] ) ? sanitize_key( wp_unslash( $_GET['wpum_newsletter'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 
 		if ( ! $this->can_ask() ) {
@@ -218,6 +233,7 @@ class WPUM_Newsletter {
 			</p>
 			<input type="hidden" name="action" value="wpum_newsletter_subscribe">
 			<input type="hidden" name="redirect" value="<?php echo esc_attr( $redirect ); ?>">
+			<input type="hidden" name="placement" value="<?php echo esc_attr( $placement ); ?>">
 			<?php wp_nonce_field( self::NONCE ); ?>
 		</form>
 		<?php
@@ -236,9 +252,11 @@ class WPUM_Newsletter {
 			wp_die( esc_html__( 'You are not allowed to do this.', 'wp-user-manager' ), 403 );
 		}
 
-		$email  = isset( $_POST['email'] ) ? sanitize_email( wp_unslash( $_POST['email'] ) ) : '';
-		$name   = isset( $_POST['name'] ) ? sanitize_text_field( wp_unslash( $_POST['name'] ) ) : '';
-		$result = $this->subscribe( $email, $name );
+		$email     = isset( $_POST['email'] ) ? sanitize_email( wp_unslash( $_POST['email'] ) ) : '';
+		$name      = isset( $_POST['name'] ) ? sanitize_text_field( wp_unslash( $_POST['name'] ) ) : '';
+		$placement = isset( $_POST['placement'] ) ? sanitize_key( wp_unslash( $_POST['placement'] ) ) : '';
+		$source    = isset( self::SOURCES[ $placement ] ) ? self::SOURCES[ $placement ] : self::DEFAULT_SOURCE;
+		$result    = $this->subscribe( $email, $name, $source );
 
 		if ( ! is_wp_error( $result ) ) {
 			update_option( self::OPTION, 'subscribed', false );
@@ -284,12 +302,13 @@ class WPUM_Newsletter {
 	 * to the list's thank-you page or prints a "subscribed" page; on failure it prints
 	 * the reason.
 	 *
-	 * @param string $email Email address.
-	 * @param string $name  First name, may be empty.
+	 * @param string $email  Email address.
+	 * @param string $name   First name, may be empty.
+	 * @param string $source The list's Source field: one of SOURCES, or DEFAULT_SOURCE.
 	 *
 	 * @return true|WP_Error
 	 */
-	public function subscribe( $email, $name = '' ) {
+	public function subscribe( $email, $name = '', $source = self::DEFAULT_SOURCE ) {
 		if ( ! is_email( $email ) ) {
 			return new WP_Error( 'wpum_newsletter_invalid_email', __( 'Please enter a valid email address.', 'wp-user-manager' ) );
 		}
@@ -303,7 +322,7 @@ class WPUM_Newsletter {
 					'email'   => $email,
 					'name'    => $name,
 					'list'    => self::LIST_ID,
-					'Source'  => 'plugin',
+					'Source'  => $source,
 					'gdpr'    => 'true',
 					'subform' => 'yes',
 					'hp'      => '',
