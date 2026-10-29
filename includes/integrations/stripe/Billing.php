@@ -61,9 +61,15 @@ class Billing {
 	 * @param string      $returnUrl
 	 * @param null|string $stripe_account_id
 	 *
-	 * @return array
+	 * @return array|false False if the price is no longer in the product list.
 	 */
 	protected function prepareData( $test_mode, $user, $plan, $returnUrl, $stripe_account_id = null ) {
+		// A form or member can still have a price that was archived in Stripe since (#527).
+		$product = $this->products->get_by_plan( $plan );
+		if ( ! $product ) {
+			return false;
+		}
+
 		$data = array(
 			'test_mode'   => (int) $test_mode,
 			'plan'        => $plan,
@@ -82,7 +88,6 @@ class Billing {
 			$data['customer_email'] = rawurlencode( $user->email );
 		}
 
-		$product = $this->products->get_by_plan( $plan );
 		if ( ! $product->is_recurring() ) {
 			$data['amount'] = $product->amount;
 		}
@@ -111,6 +116,9 @@ class Billing {
 		}
 
 		$data = $this->prepareData( $test_mode, $user, $plan, $returnUrl, $stripe_account_id );
+		if ( false === $data ) {
+			return false;
+		}
 
 		$connect = new Connect();
 		$mode    = $test_mode ? 'test' : 'live';
