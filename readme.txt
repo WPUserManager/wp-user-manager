@@ -141,6 +141,10 @@ Please refer to the [official documentation](https://docs.wpusermanager.com/arti
 
 Please report security bugs found in the source code of the WP User Manager plugin through the [Patchstack Vulnerability Disclosure Program](https://patchstack.com/database/vdp/wp-user-manager/). The Patchstack team will assist you with verification, CVE assignment, and notify the developers of this plugin. For further details, see our [security policy](https://github.com/WPUserManager/wp-user-manager/blob/develop/.github/SECURITY.md).
 
+= Does the plugin send my email address anywhere? =
+
+Only if you subscribe. The plugin's admin screens offer the WP User Manager newsletter, with your email address filled in. Nothing is sent until you click Subscribe, when your email address and first name go to our mailing list at wpusermanager.com. See our [privacy policy](https://wpusermanager.com/privacy-policy/). To stop the offer showing at all, return false from the `wpum_show_newsletter_optin` filter.
+
 = Is WP User Manager GDPR compliant? =
 
 Please refer to the [official documentation for gdpr compliance](https://docs.wpusermanager.com/article/427-gdpr-compliance/?utm_source=wordpress.org&utm_medium=free%20plugin%20listing&utm_campaign=WP%20User%20Manager).

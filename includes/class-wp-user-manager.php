@@ -369,6 +369,7 @@ if ( ! class_exists( 'WP_User_Manager' ) ) :
 			require_once WPUM_PLUGIN_DIR . 'includes/admin/class-wpum-plugin-updates.php';
 
 			if ( is_admin() || ( defined( 'WP_CLI' ) && WP_CLI ) ) {
+				require_once WPUM_PLUGIN_DIR . 'includes/admin/class-wpum-newsletter.php';
 				require_once WPUM_PLUGIN_DIR . 'includes/admin/class-wpum-getting-started.php';
 				require_once WPUM_PLUGIN_DIR . 'includes/admin/class-wpum-addons-page.php';
 				require_once WPUM_PLUGIN_DIR . 'includes/admin/class-wpum-admin-notices.php';
