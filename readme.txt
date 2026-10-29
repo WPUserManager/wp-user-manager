@@ -8,7 +8,7 @@ Tested up to: 7.1
 Requires PHP: 7.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
-Stable Tag: 2.10.1
+Stable Tag: 2.10.2
 
 Registration forms, a frontend login form, user profiles and a member directory for WordPress. Add Stripe payments and content restriction.
 
@@ -170,6 +170,17 @@ Please note that using WPUM and the mentioned add-ons does NOT guarantee complia
 13. Login form.
 
 == Changelog ==
+
+= 2.10.2 (29th October 2026) =
+
+- New: Text tab in the email editor, for editing an email's HTML directly
+- New: Send WP User Manager's password reset email from the Users list
+- New: Send logged in users away from the login and registration pages (Settings > Redirects > Logged In Users)
+- Tweak: The Stripe webhook setting says to choose the Snapshot payload format, and warns when Stripe sends Thin events
+- Fix: Stripe products beyond the first 100, and prices beyond the first 10, are now listed
+- Fix: The Fetch Stripe Products button now shows when there is only one product
+- Fix: Paying for a Stripe price that has since been archived no longer causes a fatal error
+- Fix: Application passwords now work for non-admins when login is set to Email only or Username only
 
 = 2.10.1 (27th October 2026) =
 
