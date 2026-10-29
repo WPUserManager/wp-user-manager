@@ -2,27 +2,38 @@
 #
 # Runs Playwright browser tests against a wp-env WordPress instance.
 # Builds vendor-dist (scoped dependencies) so the plugin loads correctly.
-# Tests run across multiple PHP versions via wp-env override.
+# PRs run PHP 8.3 only; release tags (workflow_call) and manual runs add 7.4, 8.1 and 8.2,
+# via the wp-env override. Nothing runs on push, on release branches or on PRs into
+# master: the tag's release run tests the same code before it deploys.
 
 name: E2E Tests
 
 on:
   pull_request:
-  push:
-    branches: [master, develop]
+    paths-ignore:
+      - '**.md'
+      - 'readme.txt'
+      - 'languages/**'
+  # Release runs this before it deploys.
+  workflow_call:
+  # A full run on any branch, e.g. develop after a merge: gh workflow run e2e.yml --ref develop
+  workflow_dispatch:
 
 concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
+  # Its own group: inside a reusable workflow github.workflow is the caller's name, so
+  # tests and E2E called from Release would otherwise cancel each other.
+  group: e2e-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 jobs:
   e2e:
+    if: github.event_name != 'pull_request' || (!startsWith(github.head_ref, 'release/') && github.base_ref != 'master')
     name: Playwright E2E (PHP ${{ matrix.php }})
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
-        php: ['7.4', '8.1', '8.2', '8.3']
+        php: ${{ fromJSON( github.event_name == 'pull_request' && '["8.3"]' || '["7.4", "8.1", "8.2", "8.3"]' ) }}
     env:
       # Real Stripe test payments run on one PHP version only: the jobs share one
       # Stripe account, and in parallel they hit its rate limit and receive each
