@@ -121,6 +121,6 @@ class WPUM_Field_Taxonomy extends WPUM_Field_Type {
 			$values[] = $term->name;
 		}
 
-		return implode( ', ', $values );
+		return esc_html( implode( ', ', $values ) );
 	}
 }
