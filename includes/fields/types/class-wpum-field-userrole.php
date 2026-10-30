@@ -120,6 +120,6 @@ class WPUM_Field_Userrole extends WPUM_Field_Type {
 			$selected_roles[] = $available_roles[ $role ];
 		}
 
-		return implode( ', ', $selected_roles );
+		return esc_html( implode( ', ', $selected_roles ) );
 	}
 }

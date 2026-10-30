@@ -65,7 +65,7 @@ class WPUM_Field_Multicheckbox extends WPUM_Field_Type {
 			}
 		}
 
-		return implode( ', ', $values );
+		return esc_html( implode( ', ', $values ) );
 	}
 
 	/**

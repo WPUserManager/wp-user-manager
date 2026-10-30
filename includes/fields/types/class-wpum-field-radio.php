@@ -57,6 +57,6 @@ class WPUM_Field_Radio extends WPUM_Field_Type {
 			}
 		}
 
-		return $value;
+		return esc_html( $value );
 	}
 }

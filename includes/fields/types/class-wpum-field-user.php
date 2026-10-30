@@ -125,6 +125,6 @@ class WPUM_Field_User extends WPUM_Field_Type {
 
 		$users = get_users( array( 'include' => $value ) );
 
-		return implode( ', ', wp_list_pluck( $users, apply_filters( 'wpum_user_field_type_value_key', 'display_name' ) ) );
+		return esc_html( implode( ', ', wp_list_pluck( $users, apply_filters( 'wpum_user_field_type_value_key', 'display_name' ) ) ) );
 	}
 }
