@@ -782,11 +782,7 @@ function wpum_directory( $atts, $content = null ) { // phpcs:ignore Generic.Code
 	$sortby = filter_input( INPUT_GET, 'sortby', FILTER_UNSAFE_RAW );
 	$sortby = sanitize_text_field( $sortby );
 	// Set sort by method if any specified from the search form.
-	if ( $sortby ) {
-		$sortby = esc_attr( $sortby );
-	} else {
-		$sortby = $sort_by_default;
-	}
+	$sortby = wpum_get_directory_sort_method( $sortby, $sort_by_default );
 
 	// Now actually set the arguments for the sort query.
 	switch ( $sortby ) {
@@ -837,8 +833,9 @@ function wpum_directory( $atts, $content = null ) { // phpcs:ignore Generic.Code
 	$directory_search = filter_input( INPUT_GET, 'directory-search' );
 
 	if ( $directory_search ) {
-		$search_string  = sanitize_text_field( trim( wp_unslash( $directory_search ) ) );
-		$args['search'] = '*' . esc_attr( $search_string ) . '*';
+		$search_string          = sanitize_text_field( trim( wp_unslash( $directory_search ) ) );
+		$args['search']         = '*' . esc_attr( $search_string ) . '*';
+		$args['search_columns'] = wpum_get_directory_search_columns( $directory_id );
 
 		$search_field_keys = \WPUM\carbon_get_post_meta( $directory_id, 'directory_search_fields' );
 		$search_meta_keys  = apply_filters( 'wpum_directory_search_meta_keys', $search_field_keys );
@@ -896,6 +893,7 @@ function wpum_directory( $atts, $content = null ) { // phpcs:ignore Generic.Code
 				}
 
 				$uqi->query_where = str_replace( ') AND ()', ') ', $uqi->query_where );
+				$uqi->query_where = wpum_exclude_masked_display_names_from_search( $uqi->query_where );
 			}
 		} );
 	}

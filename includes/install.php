@@ -214,9 +214,10 @@ function wpum_run_install() {
 	wpum_update_option( 'members_can_view_profiles', true );
 	wpum_update_option( 'roles_editor', true );
 
-	// Default form styles on new installs only, so reactivating doesn't restyle an existing site.
+	// Default form styles and email masking on new installs only, so reactivating doesn't change an existing site.
 	if ( ! $current_version ) {
 		wpum_update_option( 'form_styles', true );
+		wpum_update_option( 'obfuscate_display_name_emails', true );
 	}
 
 	// Clear the permalinks.
