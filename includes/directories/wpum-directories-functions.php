@@ -30,6 +30,85 @@ function wpum_get_directory_sort_by_methods() {
 }
 
 /**
+ * Get the sort method to use for a directory, from the one a visitor asked for.
+ *
+ * @param string $requested The sort method in the request.
+ * @param string $fallback  The directory's default sort method.
+ *
+ * @return string
+ */
+function wpum_get_directory_sort_method( $requested, $fallback ) {
+	return array_key_exists( $requested, wpum_get_directory_sort_by_methods() ) ? $requested : $fallback;
+}
+
+/**
+ * Get the user table columns a directory search looks in.
+ *
+ * Only the display name is on show in a directory. Email addresses aren't public, and
+ * neither is a username, which is the email address for anyone who registered without one.
+ *
+ * @param int $directory_id
+ *
+ * @return array
+ */
+function wpum_get_directory_search_columns( $directory_id ) {
+	$columns = array( 'display_name' );
+
+	if ( current_user_can( 'list_users' ) ) {
+		$columns = array( 'ID', 'user_login', 'user_url', 'user_email', 'user_nicename', 'display_name' );
+	}
+
+	$columns = apply_filters( 'wpum_directory_search_columns', $columns, $directory_id );
+
+	// With no columns, WP_User_Query picks its own, and those include the email address.
+	return ! empty( $columns ) ? $columns : array( 'display_name' );
+}
+
+/**
+ * Stop a directory search matching the email address in a display name, when the
+ * site masks those addresses.
+ *
+ * @param string $where The WHERE clause of the user query.
+ *
+ * @return string
+ */
+function wpum_exclude_masked_display_names_from_search( $where ) {
+	if ( ! wpum_get_option( 'obfuscate_display_name_emails' ) || current_user_can( 'list_users' ) ) {
+		return $where;
+	}
+
+	// The search term can't contain this text: esc_like() has escaped its underscores.
+	return str_replace( 'display_name LIKE', "display_name NOT REGEXP '" . wpum_get_email_name_regexp() . "' AND display_name LIKE", $where );
+}
+
+/**
+ * Get the MySQL regular expression for a name that's an email address.
+ *
+ * @return string
+ */
+function wpum_get_email_name_regexp() {
+	return '^[^ @]+@[a-zA-Z0-9-]+([.][a-zA-Z0-9-]+)+$';
+}
+
+/**
+ * Check if any user has an email address as their display name.
+ *
+ * @return bool
+ */
+function wpum_has_email_display_names() {
+	$found = get_transient( 'wpum_has_email_display_names' );
+
+	if ( false === $found ) {
+		global $wpdb;
+
+		$found = (int) (bool) $wpdb->get_var( "SELECT ID FROM {$wpdb->users} WHERE display_name REGEXP '" . wpum_get_email_name_regexp() . "' LIMIT 1" ); // phpcs:ignore
+		set_transient( 'wpum_has_email_display_names', $found, DAY_IN_SECONDS );
+	}
+
+	return (bool) $found;
+}
+
+/**
  * Retrieve a list of options for the per page amount modifier for the directory.
  *
  * @return array
