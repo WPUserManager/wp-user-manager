@@ -172,8 +172,19 @@ class DirectoryPrivacyTest extends WPUMTestCase {
 		$this->assertSame( array( $user_id ), $this->search( 'Bloggs' ) );
 	}
 
-	public function test_masking_leaves_a_name_with_an_at_sign_searchable() {
-		$user_id = $this->factory()->user->create( array( 'display_name' => 'Jo @ Bloggs' ) );
+	public function names_with_an_at_sign_that_are_not_emails() {
+		return array(
+			'spaces'         => array( 'Jo @ Bloggs' ),
+			'no dot'         => array( 'Jo@Bloggs' ),
+			'invalid domain' => array( 'Jo@Bloggs.example/team' ),
+		);
+	}
+
+	/**
+	 * @dataProvider names_with_an_at_sign_that_are_not_emails
+	 */
+	public function test_masking_leaves_a_name_with_an_at_sign_searchable( $display_name ) {
+		$user_id = $this->factory()->user->create( array( 'display_name' => $display_name ) );
 		wpum_update_option( 'obfuscate_display_name_emails', true );
 
 		$this->assertSame( array( $user_id ), $this->search( 'Bloggs' ) );

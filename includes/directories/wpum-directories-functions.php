@@ -78,7 +78,7 @@ function wpum_exclude_masked_display_names_from_search( $where ) {
 	}
 
 	// The search term can't contain this text: esc_like() has escaped its underscores.
-	return str_replace( 'display_name LIKE', "display_name NOT REGEXP '^[^ @]+@[^ @]+[.][^ @]+$' AND display_name LIKE", $where );
+	return str_replace( 'display_name LIKE', "display_name NOT REGEXP '^[^ @]+@[a-zA-Z0-9-]+([.][a-zA-Z0-9-]+)+$' AND display_name LIKE", $where );
 }
 
 /**
