@@ -141,6 +141,78 @@ test.describe('User Directory Shortcode', () => {
     await expect(avatar).toBeVisible();
   });
 
+  test.describe('email privacy', () => {
+    const domain = 'wpum-private-domain.example';
+    const named = 'wpum-e2e-named';
+    const emailLogin = `wpum-e2e-email@${domain}`;
+    const searchFieldsKey = '"_directory_search_fields|||0|value"';
+    let directoryId = '';
+
+    const searchFor = (directoryPage: string, term: string) =>
+      `${directoryPage}?directory-search=${encodeURIComponent(term)}`;
+
+    test.beforeEach(() => {
+      wpCli(`user create "${named}" "${named}@${domain}" --first_name="Quillon" --display_name="Marlowe Vance" --role="subscriber"`);
+      wpCli(`user create "${emailLogin}" "${emailLogin}" --display_name="Thessaly Noor" --role="subscriber"`);
+
+      // Search a configured field, as a directory saved in the admin does.
+      directoryId = wpCli('post list --post_type=wpum_directory --post_status=publish --field=ID --posts_per_page=1').trim();
+      wpCli(`post meta update ${directoryId} ${searchFieldsKey} "first_name"`);
+    });
+
+    test.afterEach(() => {
+      wpCli(`post meta delete ${directoryId} ${searchFieldsKey}`);
+      wpCli(`user delete "${named}" --yes`);
+      wpCli(`user delete "${emailLogin}" --yes`);
+    });
+
+    test('guests find members by name, not by email address', async ({
+      page,
+      directoryPage,
+    }) => {
+      const userCards = page.locator('.wpum-directory-single-user');
+
+      // The configured field proves the search reached that query path.
+      await page.goto(searchFor(directoryPage, 'Quillon'));
+      await expect(userCards).toHaveCount(1);
+
+      await page.goto(searchFor(directoryPage, 'Marlowe'));
+      await expect(userCards).toHaveCount(1);
+
+      for (const term of [`@${domain}`, domain, `${named}@${domain}`, named]) {
+        await page.goto(searchFor(directoryPage, term));
+        await expect(page.locator('#wpum-user-directory')).toBeVisible({ timeout: 10000 });
+        await expect(userCards).toHaveCount(0);
+      }
+    });
+
+    test('guests can not sort members by private user meta', async ({
+      page,
+      directoryPage,
+    }) => {
+      await page.goto(`${directoryPage}?sortby=wpum_e2e_no_such_key`);
+
+      await expect(page.locator('.wpum-directory-single-user').first()).toBeVisible({ timeout: 10000 });
+    });
+
+    test('profile links leave out an email address used as a login', async ({
+      page,
+      directoryPage,
+    }) => {
+      await page.goto(searchFor(directoryPage, 'Thessaly'));
+
+      const viewProfileLink = page.locator('.wpum-directory-single-user a.button');
+      await expect(viewProfileLink).toHaveCount(1);
+
+      const href = await viewProfileLink.getAttribute('href');
+      expect(href).not.toContain(domain);
+      expect(await page.content()).not.toContain(domain);
+
+      await viewProfileLink.click();
+      await expect(page.locator('#header-name-container')).toContainText('Thessaly Noor');
+    });
+  });
+
   test('plugin deactivation and reactivation', async ({
     page,
     directoryPage,

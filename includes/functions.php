@@ -926,7 +926,39 @@ function wpum_get_queried_user_id() {
 			break;
 	}
 
+	if ( ! $user_id && ctype_digit( $queried_user ) ) {
+		$user_id = wpum_get_user_id_from_profile_id_slug( $queried_user, $profile_permalink_structure );
+	}
+
 	return $user_id;
+}
+
+/**
+ * Find the user for a profile URL that has their ID in place of an email address.
+ *
+ * @see wpum_get_profile_url()
+ *
+ * @param string $slug                The numeric part of the profile URL.
+ * @param string $permalink_structure The profile permalink structure.
+ *
+ * @return int|false
+ */
+function wpum_get_user_id_from_profile_id_slug( $slug, $permalink_structure ) {
+	$user = get_user_by( 'id', $slug );
+
+	if ( ! $user instanceof WP_User ) {
+		return false;
+	}
+
+	if ( 'username' === $permalink_structure ) {
+		$replaced = $user->user_login;
+	} elseif ( 'nickname' === $permalink_structure ) {
+		$replaced = get_user_meta( $user->ID, 'nickname', true );
+	} else {
+		return false;
+	}
+
+	return is_email( $replaced ) ? absint( $user->ID ) : false;
 }
 
 /**
@@ -940,6 +972,9 @@ function wpum_is_own_profile() {
 
 /**
  * Retrieve the user url for a given user.
+ *
+ * A login or nickname that's an email address is replaced with the user's ID, so that
+ * links to a profile don't publish the address.
  *
  * @param object $user instance of WP_User ( $user->data )
  *
@@ -956,10 +991,11 @@ function wpum_get_profile_url( $user ) {
 			$page_url .= rawurlencode( $user->ID );
 			break;
 		case 'username':
-			$page_url .= rawurlencode( $user->user_login );
+			$page_url .= rawurlencode( is_email( $user->user_login ) ? $user->ID : $user->user_login );
 			break;
 		case 'nickname':
-			$page_url .= rawurlencode( get_user_meta( $user->ID, 'nickname', true ) );
+			$nickname  = get_user_meta( $user->ID, 'nickname', true );
+			$page_url .= rawurlencode( is_email( $nickname ) ? $user->ID : $nickname );
 			break;
 	}
 

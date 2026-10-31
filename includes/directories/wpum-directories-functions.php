@@ -30,6 +30,58 @@ function wpum_get_directory_sort_by_methods() {
 }
 
 /**
+ * Get the sort method to use for a directory, from the one a visitor asked for.
+ *
+ * @param string $requested The sort method in the request.
+ * @param string $fallback  The directory's default sort method.
+ *
+ * @return string
+ */
+function wpum_get_directory_sort_method( $requested, $fallback ) {
+	return array_key_exists( $requested, wpum_get_directory_sort_by_methods() ) ? $requested : $fallback;
+}
+
+/**
+ * Get the user table columns a directory search looks in.
+ *
+ * Only the display name is on show in a directory. Email addresses aren't public, and
+ * neither is a username, which is the email address for anyone who registered without one.
+ *
+ * @param int $directory_id
+ *
+ * @return array
+ */
+function wpum_get_directory_search_columns( $directory_id ) {
+	$columns = array( 'display_name' );
+
+	if ( current_user_can( 'list_users' ) ) {
+		$columns = array( 'user_login', 'user_url', 'user_email', 'user_nicename', 'display_name' );
+	}
+
+	$columns = apply_filters( 'wpum_directory_search_columns', $columns, $directory_id );
+
+	// With no columns, WP_User_Query picks its own, and those include the email address.
+	return ! empty( $columns ) ? $columns : array( 'display_name' );
+}
+
+/**
+ * Stop a directory search matching the email address in a display name, when the
+ * site masks those addresses.
+ *
+ * @param string $where The WHERE clause of the user query.
+ *
+ * @return string
+ */
+function wpum_exclude_masked_display_names_from_search( $where ) {
+	if ( ! wpum_get_option( 'obfuscate_display_name_emails' ) ) {
+		return $where;
+	}
+
+	// The search term can't contain this text: esc_like() has escaped its underscores.
+	return str_replace( 'display_name LIKE', "display_name NOT LIKE '%@%' AND display_name LIKE", $where );
+}
+
+/**
  * Retrieve a list of options for the per page amount modifier for the directory.
  *
  * @return array
