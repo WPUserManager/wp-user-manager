@@ -134,6 +134,13 @@ class DirectoryPrivacyTest extends WPUMTestCase {
 		$this->assertSame( array( $user_id ), $this->search( '@acme.example' ) );
 	}
 
+	public function test_a_user_who_can_list_users_can_search_by_id() {
+		$user_id = $this->factory()->user->create();
+		wp_set_current_user( $this->factory()->user->create( array( 'role' => 'administrator' ) ) );
+
+		$this->assertContains( $user_id, $this->search( (string) $user_id ) );
+	}
+
 	public function test_search_columns_can_be_filtered() {
 		$user_id = $this->factory()->user->create( array( 'user_login' => 'jlogin77' ) );
 
@@ -160,6 +167,13 @@ class DirectoryPrivacyTest extends WPUMTestCase {
 
 	public function test_masking_leaves_other_display_names_searchable() {
 		$user_id = $this->factory()->user->create( array( 'display_name' => 'Jo Bloggs' ) );
+		wpum_update_option( 'obfuscate_display_name_emails', true );
+
+		$this->assertSame( array( $user_id ), $this->search( 'Bloggs' ) );
+	}
+
+	public function test_masking_leaves_a_name_with_an_at_sign_searchable() {
+		$user_id = $this->factory()->user->create( array( 'display_name' => 'Jo @ Bloggs' ) );
 		wpum_update_option( 'obfuscate_display_name_emails', true );
 
 		$this->assertSame( array( $user_id ), $this->search( 'Bloggs' ) );

@@ -55,7 +55,7 @@ function wpum_get_directory_search_columns( $directory_id ) {
 	$columns = array( 'display_name' );
 
 	if ( current_user_can( 'list_users' ) ) {
-		$columns = array( 'user_login', 'user_url', 'user_email', 'user_nicename', 'display_name' );
+		$columns = array( 'ID', 'user_login', 'user_url', 'user_email', 'user_nicename', 'display_name' );
 	}
 
 	$columns = apply_filters( 'wpum_directory_search_columns', $columns, $directory_id );
@@ -78,7 +78,7 @@ function wpum_exclude_masked_display_names_from_search( $where ) {
 	}
 
 	// The search term can't contain this text: esc_like() has escaped its underscores.
-	return str_replace( 'display_name LIKE', "display_name NOT LIKE '%@%' AND display_name LIKE", $where );
+	return str_replace( 'display_name LIKE', "display_name NOT REGEXP '^[^ @]+@[^ @]+[.][^ @]+$' AND display_name LIKE", $where );
 }
 
 /**
