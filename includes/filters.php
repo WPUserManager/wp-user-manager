@@ -504,10 +504,13 @@ add_filter( 'wpum_user_display_name', function ( $display_name, $user ) {
 	return wpum_mask_public_email( $display_name, $user->ID );
 }, 10, 2 );
 
+// Masked here, not in WPUM_Field: field values are cached by owner, and masking depends on who's viewing.
 add_filter( 'wpum_get_the_field_value', function ( $value, $field ) {
+	global $wpum_profile_fields;
+
 	if ( ! in_array( $field->get_primary_id(), array( 'user_displayname', 'user_nickname' ), true ) ) {
 		return $value;
 	}
 
-	return wpum_mask_public_email( $value, wpum_get_queried_user_id() );
+	return esc_html( wpum_mask_public_email( $value, $wpum_profile_fields->user_id ) );
 }, 10, 2 );

@@ -409,15 +409,24 @@ function wpum_mask_email_address( $email_address ) {
  * @return string
  */
 function wpum_mask_public_email( $name, $user_id ) {
-	if ( ! wpum_get_option( 'obfuscate_display_name_emails' ) || ! is_email( $name ) ) {
+	if ( ! wpum_get_option( 'obfuscate_display_name_emails' ) ) {
 		return $name;
 	}
 
-	if ( get_current_user_id() === (int) $user_id || current_user_can( 'list_users' ) ) {
+	// WordPress stores these names with special characters escaped.
+	$email = wp_specialchars_decode( $name, ENT_QUOTES );
+
+	if ( ! is_email( $email ) ) {
 		return $name;
 	}
 
-	return wpum_mask_email_address( $name );
+	$current_user_id = get_current_user_id();
+
+	if ( ( $current_user_id && $current_user_id === (int) $user_id ) || current_user_can( 'list_users' ) ) {
+		return $name;
+	}
+
+	return wpum_mask_email_address( $email );
 }
 
 /**

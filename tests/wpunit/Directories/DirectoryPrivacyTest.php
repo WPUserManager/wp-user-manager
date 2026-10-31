@@ -35,6 +35,7 @@ class DirectoryPrivacyTest extends WPUMTestCase {
 			wpum_update_option( $option, $value );
 		}
 
+		$GLOBALS['wpum_profile_fields'] = null;
 		set_query_var( 'profile', '' );
 		delete_transient( 'wpum_has_email_display_names' );
 		remove_all_filters( 'wpum_directory_search_columns' );
@@ -268,6 +269,139 @@ class DirectoryPrivacyTest extends WPUMTestCase {
 		$masked = apply_filters( 'wpum_user_display_name', $user->display_name, $user );
 
 		$this->assertStringNotContainsString( 'hidden', $masked );
+	}
+
+	public function test_a_guest_is_not_the_owner_of_an_unknown_user() {
+		wpum_update_option( 'obfuscate_display_name_emails', true );
+
+		$this->assertStringNotContainsString( 'hidden', wpum_mask_public_email( 'sam@hidden.example', 0 ) );
+	}
+
+	public function escaped_email_names() {
+		return array(
+			'ampersand'  => array( 'a&b@hidden.example' ),
+			'apostrophe' => array( "o'neil@hidden.example" ),
+		);
+	}
+
+	/**
+	 * @dataProvider escaped_email_names
+	 */
+	public function test_email_names_with_escaped_characters_are_masked( $email ) {
+		wpum_update_option( 'obfuscate_display_name_emails', true );
+		$user = get_user_by( 'id', $this->factory()->user->create( array( 'display_name' => $email ) ) );
+
+		$masked = apply_filters( 'wpum_user_display_name', $user->display_name, $user );
+
+		$this->assertStringNotContainsString( 'hidden', $masked );
+	}
+
+	/**
+	 * Get a primary profile field holding a user's value.
+	 *
+	 * @param string $primary_id
+	 * @param int    $user_id
+	 *
+	 * @return WPUM_Field
+	 */
+	private function profile_field( $primary_id, $user_id ) {
+		foreach ( WPUM()->fields->get_fields() as $field ) {
+			if ( $primary_id === $field->get_primary_id() ) {
+				$field->set_user_meta( $user_id );
+
+				return $field;
+			}
+		}
+
+		$this->fail( "No {$primary_id} field." );
+	}
+
+	/**
+	 * The value a profile field loop for a user shows.
+	 *
+	 * @param string $primary_id
+	 * @param int    $user_id
+	 *
+	 * @return string
+	 */
+	private function profile_field_value( $primary_id, $user_id ) {
+		global $wpum_profile_fields;
+
+		$wpum_profile_fields = (object) array( 'user_id' => $user_id );
+		$field               = $this->profile_field( $primary_id, $user_id );
+
+		return (string) apply_filters( 'wpum_get_the_field_value', $field->get_value(), $field );
+	}
+
+	public function name_fields() {
+		return array(
+			'display name' => array( 'user_displayname' ),
+			'nickname'     => array( 'user_nickname' ),
+		);
+	}
+
+	/**
+	 * @dataProvider name_fields
+	 */
+	public function test_profile_fields_mask_an_email_name( $primary_id ) {
+		wpum_update_option( 'obfuscate_display_name_emails', true );
+		$user_id = $this->create_email_member();
+
+		$this->assertStringNotContainsString( 'hidden', $this->profile_field_value( $primary_id, $user_id ) );
+	}
+
+	/**
+	 * @dataProvider name_fields
+	 */
+	public function test_profile_fields_show_owners_their_email_name( $primary_id ) {
+		wpum_update_option( 'obfuscate_display_name_emails', true );
+		$user_id = $this->create_email_member();
+		wp_set_current_user( $user_id );
+
+		$this->assertStringContainsString( 'hidden', $this->profile_field_value( $primary_id, $user_id ) );
+	}
+
+	/**
+	 * @dataProvider name_fields
+	 */
+	public function test_profile_fields_mask_a_user_other_than_the_viewer( $primary_id ) {
+		wpum_update_option( 'obfuscate_display_name_emails', true );
+		$other_user = $this->create_email_member();
+		wp_set_current_user( $this->create_email_member( 'viewer@elsewhere.example' ) );
+
+		$this->assertStringNotContainsString( 'hidden', $this->profile_field_value( $primary_id, $other_user ) );
+	}
+
+	/**
+	 * @dataProvider escaped_email_names
+	 */
+	public function test_profile_fields_mask_escaped_email_names( $email ) {
+		wpum_update_option( 'obfuscate_display_name_emails', true );
+		$user_id = $this->factory()->user->create( array( 'display_name' => $email ) );
+
+		$this->assertStringNotContainsString( 'hidden', $this->profile_field_value( 'user_displayname', $user_id ) );
+	}
+
+	public function test_profile_fields_use_the_loop_user_on_a_page_with_no_profile() {
+		wpum_update_option( 'obfuscate_display_name_emails', true );
+		$user_id = $this->create_email_member();
+
+		$this->assertFalse( wpum_get_queried_user_id() );
+		$this->assertStringNotContainsString( 'hidden', $this->profile_field_value( 'user_displayname', $user_id ) );
+	}
+
+	public function test_field_values_stay_unmasked_because_they_are_cached_for_every_viewer() {
+		wpum_update_option( 'obfuscate_display_name_emails', true );
+		$field = $this->profile_field( 'user_displayname', $this->create_email_member() );
+
+		$this->assertStringContainsString( 'hidden', (string) $field->get_value() );
+	}
+
+	public function test_other_profile_fields_are_left_alone() {
+		wpum_update_option( 'obfuscate_display_name_emails', true );
+		$user_id = $this->factory()->user->create( array( 'first_name' => 'sam@hidden.example' ) );
+
+		$this->assertStringContainsString( 'hidden', $this->profile_field_value( 'user_firstname', $user_id ) );
 	}
 
 	public function test_has_email_display_names_finds_one() {
