@@ -195,6 +195,28 @@ test.describe('User Directory Shortcode', () => {
       await expect(page.locator('.wpum-directory-single-user').first()).toBeVisible({ timeout: 10000 });
     });
 
+    test('email addresses used as names stay out of public pages', async ({
+      page,
+      directoryPage,
+    }) => {
+      const emailName = `wpum-e2e-masked@${domain}`;
+      wpCli(`user create "${emailName}" "${emailName}" --first_name="Isolde" --display_name="${emailName}" --role="subscriber"`);
+
+      try {
+        await page.goto(searchFor(directoryPage, 'Isolde'));
+
+        const viewProfileLink = page.locator('.wpum-directory-single-user a.button');
+        await expect(viewProfileLink).toHaveCount(1);
+        expect(await page.content()).not.toContain(domain);
+
+        await viewProfileLink.click();
+        await expect(page.locator('#header-name-container')).toBeVisible({ timeout: 10000 });
+        expect(await page.content()).not.toContain(domain);
+      } finally {
+        wpCli(`user delete "${emailName}" --yes`);
+      }
+    });
+
     test('profile links leave out an email address used as a login', async ({
       page,
       directoryPage,

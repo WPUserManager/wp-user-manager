@@ -400,6 +400,27 @@ function wpum_mask_email_address( $email_address ) {
 }
 
 /**
+ * Mask a public name that's an email address, when the site masks them. The user
+ * themselves and anyone who can list users still see it in full.
+ *
+ * @param string $name
+ * @param int    $user_id The user the name belongs to.
+ *
+ * @return string
+ */
+function wpum_mask_public_email( $name, $user_id ) {
+	if ( ! wpum_get_option( 'obfuscate_display_name_emails' ) || ! is_email( $name ) ) {
+		return $name;
+	}
+
+	if ( get_current_user_id() === (int) $user_id || current_user_can( 'list_users' ) ) {
+		return $name;
+	}
+
+	return wpum_mask_email_address( $name );
+}
+
+/**
  * Check if registrations are enabled on the site.
  *
  * @return boolean

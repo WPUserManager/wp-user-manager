@@ -78,7 +78,34 @@ function wpum_exclude_masked_display_names_from_search( $where ) {
 	}
 
 	// The search term can't contain this text: esc_like() has escaped its underscores.
-	return str_replace( 'display_name LIKE', "display_name NOT REGEXP '^[^ @]+@[a-zA-Z0-9-]+([.][a-zA-Z0-9-]+)+$' AND display_name LIKE", $where );
+	return str_replace( 'display_name LIKE', "display_name NOT REGEXP '" . wpum_get_email_name_regexp() . "' AND display_name LIKE", $where );
+}
+
+/**
+ * Get the MySQL regular expression for a name that's an email address.
+ *
+ * @return string
+ */
+function wpum_get_email_name_regexp() {
+	return '^[^ @]+@[a-zA-Z0-9-]+([.][a-zA-Z0-9-]+)+$';
+}
+
+/**
+ * Check if any user has an email address as their display name.
+ *
+ * @return bool
+ */
+function wpum_has_email_display_names() {
+	$found = get_transient( 'wpum_has_email_display_names' );
+
+	if ( false === $found ) {
+		global $wpdb;
+
+		$found = (int) (bool) $wpdb->get_var( "SELECT ID FROM {$wpdb->users} WHERE display_name REGEXP '" . wpum_get_email_name_regexp() . "' LIMIT 1" ); // phpcs:ignore
+		set_transient( 'wpum_has_email_display_names', $found, DAY_IN_SECONDS );
+	}
+
+	return (bool) $found;
 }
 
 /**

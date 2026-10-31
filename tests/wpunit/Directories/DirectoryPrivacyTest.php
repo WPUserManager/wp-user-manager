@@ -36,6 +36,7 @@ class DirectoryPrivacyTest extends WPUMTestCase {
 		}
 
 		set_query_var( 'profile', '' );
+		delete_transient( 'wpum_has_email_display_names' );
 		remove_all_filters( 'wpum_directory_search_columns' );
 		remove_all_filters( 'wpum_get_directory_sort_by_methods' );
 		parent::_tearDown();
@@ -213,6 +214,108 @@ class DirectoryPrivacyTest extends WPUMTestCase {
 	public function test_sort_method_rejects_any_other_meta_key() {
 		$this->assertSame( 'newest', wpum_get_directory_sort_method( 'wp_capabilities', 'newest' ) );
 		$this->assertSame( 'newest', wpum_get_directory_sort_method( '', 'newest' ) );
+	}
+
+	public function test_email_name_is_masked_for_guests() {
+		wpum_update_option( 'obfuscate_display_name_emails', true );
+		$user_id = $this->create_email_member();
+
+		$masked = wpum_mask_public_email( 'sam@hidden.example', $user_id );
+
+		$this->assertStringNotContainsString( 'hidden', $masked );
+	}
+
+	public function test_email_name_is_not_masked_without_the_setting() {
+		$user_id = $this->create_email_member();
+
+		$this->assertSame( 'sam@hidden.example', wpum_mask_public_email( 'sam@hidden.example', $user_id ) );
+	}
+
+	public function test_other_names_are_not_masked() {
+		wpum_update_option( 'obfuscate_display_name_emails', true );
+
+		$this->assertSame( 'Jo Bloggs', wpum_mask_public_email( 'Jo Bloggs', 1 ) );
+	}
+
+	public function test_users_see_their_own_email_name() {
+		wpum_update_option( 'obfuscate_display_name_emails', true );
+		$user_id = $this->create_email_member();
+		wp_set_current_user( $user_id );
+
+		$this->assertSame( 'sam@hidden.example', wpum_mask_public_email( 'sam@hidden.example', (string) $user_id ) );
+	}
+
+	public function test_users_who_can_list_users_see_email_names() {
+		wpum_update_option( 'obfuscate_display_name_emails', true );
+		$user_id = $this->create_email_member();
+		wp_set_current_user( $this->factory()->user->create( array( 'role' => 'administrator' ) ) );
+
+		$this->assertSame( 'sam@hidden.example', wpum_mask_public_email( 'sam@hidden.example', $user_id ) );
+	}
+
+	public function test_other_members_do_not_see_email_names() {
+		wpum_update_option( 'obfuscate_display_name_emails', true );
+		$user_id = $this->create_email_member();
+		wp_set_current_user( $this->factory()->user->create( array( 'role' => 'subscriber' ) ) );
+
+		$this->assertNotSame( 'sam@hidden.example', wpum_mask_public_email( 'sam@hidden.example', $user_id ) );
+	}
+
+	public function test_display_name_filter_masks_an_email() {
+		wpum_update_option( 'obfuscate_display_name_emails', true );
+		$user = get_user_by( 'id', $this->create_email_member() );
+
+		$masked = apply_filters( 'wpum_user_display_name', $user->display_name, $user );
+
+		$this->assertStringNotContainsString( 'hidden', $masked );
+	}
+
+	public function test_has_email_display_names_finds_one() {
+		$this->create_email_member();
+
+		$this->assertTrue( wpum_has_email_display_names() );
+	}
+
+	public function test_has_email_display_names_uses_its_cached_answer() {
+		set_transient( 'wpum_has_email_display_names', 0, DAY_IN_SECONDS );
+		$this->create_email_member();
+
+		$this->assertFalse( wpum_has_email_display_names() );
+	}
+
+	public function test_email_name_regexp_matches_an_address() {
+		global $wpdb;
+
+		$this->assertSame( '1', $wpdb->get_var( $wpdb->prepare( 'SELECT %s REGEXP %s', 'sam@hidden.example', wpum_get_email_name_regexp() ) ) );
+	}
+
+	/**
+	 * @dataProvider names_with_an_at_sign_that_are_not_emails
+	 */
+	public function test_email_name_regexp_skips_other_names( $display_name ) {
+		global $wpdb;
+
+		$this->assertSame( '0', $wpdb->get_var( $wpdb->prepare( 'SELECT %s REGEXP %s', $display_name, wpum_get_email_name_regexp() ) ) );
+	}
+
+	public function test_fresh_install_masks_email_names() {
+		$version = get_option( 'wpum_version' );
+		delete_option( 'wpum_version' );
+
+		wpum_run_install();
+
+		$this->assertTrue( (bool) wpum_get_option( 'obfuscate_display_name_emails' ) );
+		update_option( 'wpum_version', $version );
+	}
+
+	public function test_reactivation_does_not_turn_on_masking() {
+		$version = get_option( 'wpum_version' );
+		update_option( 'wpum_version', '2.9.21' );
+
+		wpum_run_install();
+
+		$this->assertFalse( (bool) wpum_get_option( 'obfuscate_display_name_emails' ) );
+		update_option( 'wpum_version', $version );
 	}
 
 	public function test_profile_url_replaces_an_email_login_with_the_id() {
