@@ -73,7 +73,7 @@ function wpum_get_directory_search_columns( $directory_id ) {
  * @return string
  */
 function wpum_exclude_masked_display_names_from_search( $where ) {
-	if ( ! wpum_get_option( 'obfuscate_display_name_emails' ) ) {
+	if ( ! wpum_get_option( 'obfuscate_display_name_emails' ) || current_user_can( 'list_users' ) ) {
 		return $where;
 	}
 

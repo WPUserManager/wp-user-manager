@@ -983,7 +983,7 @@ function wpum_get_user_id_from_profile_id_slug( $slug, $permalink_structure ) {
 	if ( 'username' === $permalink_structure ) {
 		$replaced = $user->user_login;
 	} elseif ( 'nickname' === $permalink_structure ) {
-		$replaced = get_user_meta( $user->ID, 'nickname', true );
+		$replaced = wp_specialchars_decode( get_user_meta( $user->ID, 'nickname', true ), ENT_QUOTES );
 	} else {
 		return false;
 	}
@@ -1025,7 +1025,7 @@ function wpum_get_profile_url( $user ) {
 			break;
 		case 'nickname':
 			$nickname  = get_user_meta( $user->ID, 'nickname', true );
-			$page_url .= rawurlencode( is_email( $nickname ) ? $user->ID : $nickname );
+			$page_url .= rawurlencode( is_email( wp_specialchars_decode( $nickname, ENT_QUOTES ) ) ? $user->ID : $nickname );
 			break;
 	}
 

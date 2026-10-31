@@ -192,6 +192,14 @@ class DirectoryPrivacyTest extends WPUMTestCase {
 		$this->assertSame( array( $user_id ), $this->search( 'Bloggs' ) );
 	}
 
+	public function test_a_user_who_can_list_users_can_search_masked_display_names() {
+		$user_id = $this->factory()->user->create( array( 'display_name' => 'sam@hidden.example' ) );
+		wpum_update_option( 'obfuscate_display_name_emails', true );
+		wp_set_current_user( $this->factory()->user->create( array( 'role' => 'administrator' ) ) );
+
+		$this->assertContains( $user_id, $this->search( 'hidden' ) );
+	}
+
 	public function test_where_clause_is_untouched_without_masking() {
 		$where = "WHERE (display_name LIKE '%x%')";
 
@@ -472,6 +480,23 @@ class DirectoryPrivacyTest extends WPUMTestCase {
 		update_user_meta( $user_id, 'nickname', 'sam@hidden.example' );
 
 		$this->assertStringEndsWith( '/' . $user_id, wpum_get_profile_url( get_user_by( 'id', $user_id ) ) );
+	}
+
+	public function test_profile_url_replaces_an_escaped_email_nickname_with_the_id() {
+		update_option( 'wpum_permalink', 'nickname' );
+		$user_id = $this->factory()->user->create();
+		wp_update_user( array(
+			'ID'       => $user_id,
+			'nickname' => 'a&b@hidden.example',
+		) );
+
+		$url = wpum_get_profile_url( get_user_by( 'id', $user_id ) );
+
+		$this->assertStringEndsWith( '/' . $user_id, $url );
+
+		set_query_var( 'profile', (string) $user_id );
+
+		$this->assertSame( $user_id, wpum_get_queried_user_id() );
 	}
 
 	public function test_id_in_profile_url_finds_a_user_with_an_email_login() {
