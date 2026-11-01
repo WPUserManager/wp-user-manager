@@ -8,7 +8,7 @@ Tested up to: 7.1
 Requires PHP: 7.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
-Stable Tag: 2.10.3
+Stable Tag: 2.10.4
 
 Registration forms, a frontend login form, user profiles and a member directory for WordPress. Add Stripe payments and content restriction.
 
@@ -170,6 +170,14 @@ Please note that using WPUM and the mentioned add-ons does NOT guarantee complia
 13. Login form.
 
 == Changelog ==
+
+= 2.10.4 (1st November 2026) =
+
+- Security: Directory search only looks in display names and the directory's search fields (thanks to kta1kri for responsible disclosure)
+- Security: Directory sorting only accepts the listed sort methods
+- Security: Profile links no longer contain email addresses
+- Improvement: Obfuscate Display Name Emails is on for new installs, and covers the Display Name and Nickname profile fields
+- Improvement: Admins are told if users have an email address as their display name
 
 = 2.10.3 (30th October 2026) =
 
