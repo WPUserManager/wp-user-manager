@@ -71,6 +71,15 @@ class WPUM_Admin_Notices {
 			}
 			WPUM()->notices->register_notice( 'wpum_permalinks', 'warning', $message, array( 'dismissible' => false ) );
 		}
+
+		if ( current_user_can( 'manage_options' ) && ! wpum_get_option( 'obfuscate_display_name_emails' ) && wpum_has_email_display_names() ) {
+			$message = sprintf(
+				// translators: %s URL of the profile settings
+				__( '<strong>WP User Manager:</strong> some users on this site have their email address as their display name, so it shows on their profile and in directories. To partly hide these addresses, turn on "Obfuscate Display Name Emails" in the <a href="%s">profile settings</a>.', 'wp-user-manager' ),
+				esc_url( admin_url( 'users.php?page=wpum-settings#/profiles' ) )
+			);
+			WPUM()->notices->register_notice( 'wpum_email_display_names', 'warning', $message );
+		}
 	}
 
 	/**
