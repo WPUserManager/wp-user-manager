@@ -32,6 +32,15 @@ class WPUM_Form_Login extends WPUM_Form {
 	protected $referrer;
 
 	/**
+	 * Has this request checked the login details?
+	 *
+	 * The step comes from the request, so done() can only trust this.
+	 *
+	 * @var bool
+	 */
+	protected $login_verified = false;
+
+	/**
 	 * Stores static instance of class.
 	 *
 	 * @var WPUM_Form_Login The single instance of the class
@@ -166,6 +175,8 @@ class WPUM_Form_Login extends WPUM_Form {
 
 			}
 
+			$this->login_verified = true;
+
 			// Successful, show next step.
 			++$this->step;
 
@@ -184,6 +195,12 @@ class WPUM_Form_Login extends WPUM_Form {
 	public function done() {
 
 		try {
+
+			if ( ! $this->login_verified ) {
+				$this->step = 0;
+
+				throw new Exception( esc_html__( 'Please enter your login details.', 'wp-user-manager' ) );
+			}
 
 			$values   = $this->get_posted_fields();
 			$username = $values['login']['username'];
