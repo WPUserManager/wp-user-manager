@@ -89,6 +89,15 @@ class ProfileRolesUpdateTest extends WPUMTestCase {
 		$this->assertEqualsCanonicalizing( array( 'subscriber', 'editor' ), $roles );
 	}
 
+	public function test_a_role_can_be_removed_when_only_a_role_above_theirs_stays() {
+		wp_set_current_user( $this->promoter );
+		get_userdata( $this->member )->add_role( 'editor' );
+
+		$roles = $this->post_roles( $this->member, 'editor' );
+
+		$this->assertSame( array( 'editor' ), array_values( $roles ) );
+	}
+
 	public function test_a_role_that_does_not_exist_is_not_added() {
 		wp_set_current_user( $this->factory()->user->create( array( 'role' => 'administrator' ) ) );
 

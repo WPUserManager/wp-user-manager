@@ -921,7 +921,8 @@ function wpum_action_profile_update( $user_id ) {
 
 		// Only roles this user may assign are added or removed, so a role above theirs stays as it is.
 		$editable_roles = array_keys( get_editable_roles() );
-		$wpum_roles     = array_values( array_intersect( explode( '|', $roles ), $editable_roles ) );
+		$kept_roles     = array_diff( $user->roles, $editable_roles );
+		$wpum_roles     = array_values( array_unique( array_merge( $kept_roles, array_intersect( explode( '|', $roles ), $editable_roles ) ) ) );
 
 		wpum_update_roles( $wpum_roles, $user, $editable_roles );
 	}
