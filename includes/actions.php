@@ -901,26 +901,41 @@ function wpum_prevent_caching_form_pages() {
 add_action( 'template_redirect', 'wpum_prevent_caching_form_pages', 0 );
 
 /**
- * @param int $user_id
+ * @param int          $user_id
+ * @param WP_User|null $old_user_data The user before the save, on profile_update. WordPress may
+ *                                    already have replaced the roles by then.
  */
-function wpum_action_profile_update( $user_id ) {
+function wpum_action_profile_update( $user_id, $old_user_data = null ) {
 	$allow_multiple_roles = wpum_get_option( 'allow_multiple_user_roles' );
 	if ( ! $allow_multiple_roles ) {
 		return;
 	}
 
-	if ( isset( $_POST['_wpum_user_roles'] ) && current_user_can( 'promote_user' ) ) { // phpcs:ignore
+	if ( isset( $_POST['_wpum_user_roles'] ) && current_user_can( 'promote_user', $user_id ) ) { // phpcs:ignore
 
 		$user = get_user_by( 'ID', $user_id );
 
-		$roles = filter_input( INPUT_POST, '_wpum_user_roles' );
+		$roles = sanitize_text_field( wp_unslash( $_POST['_wpum_user_roles'] ) ); // phpcs:ignore
 
-		$wpum_roles = explode( '|', $roles );
-		wpum_update_roles( $wpum_roles, $user );
+		if ( '' === $roles ) {
+			return;
+		}
+
+		if ( ! function_exists( 'get_editable_roles' ) ) {
+			require_once ABSPATH . 'wp-admin/includes/user.php';
+		}
+
+		// Only roles this user may assign are added or removed, so a role above theirs stays as it is.
+		$editable_roles = array_keys( get_editable_roles() );
+		$old_roles      = $old_user_data instanceof WP_User ? $old_user_data->roles : $user->roles;
+		$kept_roles     = array_diff( $old_roles, $editable_roles );
+		$wpum_roles     = array_values( array_unique( array_merge( $kept_roles, array_intersect( explode( '|', $roles ), $editable_roles ) ) ) );
+
+		wpum_update_roles( $wpum_roles, $user, $editable_roles );
 	}
 }
 
-add_action( 'profile_update', 'wpum_action_profile_update', 99 );
+add_action( 'profile_update', 'wpum_action_profile_update', 99, 2 );
 if ( is_multisite() ) {
 	add_action( 'add_user_to_blog', 'wpum_action_profile_update', 99 );
 } else {
