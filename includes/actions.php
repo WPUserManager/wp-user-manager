@@ -909,14 +909,21 @@ function wpum_action_profile_update( $user_id ) {
 		return;
 	}
 
-	if ( isset( $_POST['_wpum_user_roles'] ) && current_user_can( 'promote_user' ) ) { // phpcs:ignore
+	if ( isset( $_POST['_wpum_user_roles'] ) && current_user_can( 'promote_user', $user_id ) ) { // phpcs:ignore
 
 		$user = get_user_by( 'ID', $user_id );
 
-		$roles = filter_input( INPUT_POST, '_wpum_user_roles' );
+		$roles = sanitize_text_field( wp_unslash( $_POST['_wpum_user_roles'] ) ); // phpcs:ignore
 
-		$wpum_roles = explode( '|', $roles );
-		wpum_update_roles( $wpum_roles, $user );
+		if ( ! function_exists( 'get_editable_roles' ) ) {
+			require_once ABSPATH . 'wp-admin/includes/user.php';
+		}
+
+		// Only roles this user may assign are added or removed, so a role above theirs stays as it is.
+		$editable_roles = array_keys( get_editable_roles() );
+		$wpum_roles     = array_values( array_intersect( explode( '|', $roles ), $editable_roles ) );
+
+		wpum_update_roles( $wpum_roles, $user, $editable_roles );
 	}
 }
 
