@@ -98,6 +98,32 @@ class ProfileRolesUpdateTest extends WPUMTestCase {
 		$this->assertSame( array( 'editor' ), array_values( $roles ) );
 	}
 
+	/**
+	 * WordPress saves its own role field first, which can drop roles before this runs.
+	 */
+	public function test_a_role_above_theirs_comes_back_if_the_save_dropped_it() {
+		wp_set_current_user( $this->promoter );
+		$member = get_userdata( $this->member );
+		$member->add_role( 'editor' );
+		$before = clone $member;
+
+		$member->remove_role( 'editor' );
+
+		$_POST['_wpum_user_roles'] = 'subscriber';
+		wpum_action_profile_update( $this->member, $before );
+
+		$this->assertEqualsCanonicalizing( array( 'subscriber', 'editor' ), get_userdata( $this->member )->roles );
+	}
+
+	public function test_an_empty_submission_changes_nothing() {
+		wp_set_current_user( $this->promoter );
+		get_userdata( $this->member )->add_role( 'editor' );
+
+		$roles = $this->post_roles( $this->member, '' );
+
+		$this->assertEqualsCanonicalizing( array( 'subscriber', 'editor' ), $roles );
+	}
+
 	public function test_a_role_that_does_not_exist_is_not_added() {
 		wp_set_current_user( $this->factory()->user->create( array( 'role' => 'administrator' ) ) );
 
