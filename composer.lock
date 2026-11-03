@@ -1506,12 +1506,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/WPUserManager/wpum-blocks.git",
-                "reference": "6786a95a81ce3d148988e66064d35bd0c7941a14"
+                "reference": "a327de25459b7b0613dea970e8ee2b50fceedafb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/WPUserManager/wpum-blocks/zipball/6786a95a81ce3d148988e66064d35bd0c7941a14",
-                "reference": "6786a95a81ce3d148988e66064d35bd0c7941a14",
+                "url": "https://api.github.com/repos/WPUserManager/wpum-blocks/zipball/a327de25459b7b0613dea970e8ee2b50fceedafb",
+                "reference": "a327de25459b7b0613dea970e8ee2b50fceedafb",
                 "shasum": ""
             },
             "require": {
@@ -1546,7 +1546,7 @@
                 "issues": "https://github.com/WPUserManager/wpum-blocks/issues",
                 "source": "https://github.com/WPUserManager/wpum-blocks/tree/fix/payment-aware-roles"
             },
-            "time": "2026-11-03T08:52:58+00:00"
+            "time": "2026-11-03T08:58:56+00:00"
         },
         {
             "name": "wpbp/widgets-helper",
