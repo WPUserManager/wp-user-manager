@@ -243,7 +243,7 @@ class WPUM_Menus {
 					if ( is_array( $roles ) && ! empty( $roles ) && $visible ) {
 						$user = wp_get_current_user();
 
-						if ( ! array_intersect( (array) $user->roles, $roles ) ) {
+						if ( ! array_intersect( wpum_get_user_access_roles( $user ), $roles ) ) {
 							$visible = false;
 						}
 
