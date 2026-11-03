@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "b84d75b47cf96dd31acf4e158abaeb07",
+    "content-hash": "7f8ff099033b61f0431c1d130d398755",
     "packages": [
         {
             "name": "brain/cortex",
@@ -1502,16 +1502,16 @@
         },
         {
             "name": "wp-user-manager/wpum-blocks",
-            "version": "1.15",
+            "version": "dev-fix/payment-aware-roles",
             "source": {
                 "type": "git",
                 "url": "https://github.com/WPUserManager/wpum-blocks.git",
-                "reference": "fc3d01fe0baa2fb0fdf6a0f4cff30fc40bb1dbba"
+                "reference": "6786a95a81ce3d148988e66064d35bd0c7941a14"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/WPUserManager/wpum-blocks/zipball/fc3d01fe0baa2fb0fdf6a0f4cff30fc40bb1dbba",
-                "reference": "fc3d01fe0baa2fb0fdf6a0f4cff30fc40bb1dbba",
+                "url": "https://api.github.com/repos/WPUserManager/wpum-blocks/zipball/6786a95a81ce3d148988e66064d35bd0c7941a14",
+                "reference": "6786a95a81ce3d148988e66064d35bd0c7941a14",
                 "shasum": ""
             },
             "require": {
@@ -1544,9 +1544,9 @@
             ],
             "support": {
                 "issues": "https://github.com/WPUserManager/wpum-blocks/issues",
-                "source": "https://github.com/WPUserManager/wpum-blocks/tree/1.15"
+                "source": "https://github.com/WPUserManager/wpum-blocks/tree/fix/payment-aware-roles"
             },
-            "time": "2023-11-18T15:05:09+00:00"
+            "time": "2026-11-03T08:52:58+00:00"
         },
         {
             "name": "wpbp/widgets-helper",
@@ -8722,6 +8722,7 @@
     "stability-flags": {
         "brain/cortex": 20,
         "wp-user-manager/wp-notices": 20,
+        "wp-user-manager/wpum-blocks": 20,
         "wpbp/widgets-helper": 20
     },
     "prefer-stable": true,
