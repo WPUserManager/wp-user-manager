@@ -31,7 +31,7 @@ $value = $directory_search ? sanitize_text_field( $directory_search ) : false;
 	<div class="wpum-row">
 		<div class="form-fields wpum-col-xs-10">
 			<?php do_action( 'wpum_directory_search_form_top_fields' ); ?>
-				<input type="text" name="directory-search" id="wpum-directory-search" placeholder="<?php echo esc_html_e( 'Search for users', 'wp-user-manager' ); ?>" value="<?php echo esc_html( $value ); ?>">
+				<input type="text" name="directory-search" id="wpum-directory-search" placeholder="<?php esc_attr_e( 'Search for users', 'wp-user-manager' ); ?>" value="<?php echo esc_html( $value ); ?>">
 			<?php do_action( 'wpum_directory_search_form_bottom_fields' ); ?>
 		</div>
 		<div class="form-submit wpum-col-xs-2">
