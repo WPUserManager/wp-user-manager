@@ -223,8 +223,8 @@ class WPUM_Form_Registration extends WPUM_Form {
 
 		if ( $form === $this->form_name && isset( $values['register']['role'] ) ) {
 			$role_field     = $values['register']['role'];
-			$selected_roles = array_flip( $registration_form->get_setting( 'register_roles' ) );
-			if ( ! array_key_exists( $role_field, $selected_roles ) ) {
+			$selected_roles = array_flip( (array) $registration_form->get_setting( 'register_roles' ) );
+			if ( 'administrator' === $role_field || ! array_key_exists( $role_field, $selected_roles ) ) {
 				return new WP_Error( 'role-validation-error', __( 'Select a valid role from the list.', 'wp-user-manager' ) );
 			}
 		}
@@ -572,10 +572,20 @@ class WPUM_Form_Registration extends WPUM_Form {
 
 			// Assign the role set into the registration form.
 			if ( $form->get_setting( 'allow_role_select' ) && isset( $values['register']['role'] ) ) {
-				$user->set_role( $values['register']['role'] );
+				$role = $values['register']['role'];
 			} else {
-				$user->set_role( $this->role );
+				$role = $this->role;
 			}
+
+			// Registration never grants administrator, however the form was set up.
+			if ( 'administrator' === $role ) {
+				$role = get_option( 'default_role' );
+				if ( 'administrator' === $role || ! get_role( $role ) ) {
+					$role = 'subscriber';
+				}
+			}
+
+			$user->set_role( $role );
 
 			$upload_dir = wp_upload_dir()['basedir'];
 
