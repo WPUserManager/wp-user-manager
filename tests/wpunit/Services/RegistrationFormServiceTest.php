@@ -227,6 +227,19 @@ class RegistrationFormServiceTest extends WPUMTestCase {
 		$this->assertSame( 'wpum_registration_form_invalid_role', $result->get_error_code() );
 	}
 
+	public function test_update_settings_strips_administrator_from_register_roles() {
+		wpum_update_registration_form_settings( $this->form_id, array( 'register_roles' => array( 'subscriber', 'administrator' ) ) );
+
+		$this->assertSame( array( 'subscriber' ), $this->form()->get_setting( 'register_roles' ) );
+	}
+
+	public function test_update_settings_strict_rejects_administrator_in_register_roles() {
+		$result = wpum_update_registration_form_settings( $this->form_id, array( 'register_roles' => array( 'subscriber', 'administrator' ) ), array( 'strict' => true ) );
+
+		$this->assertWPError( $result );
+		$this->assertSame( 'wpum_registration_form_invalid_role', $result->get_error_code() );
+	}
+
 	public function test_update_settings_sanitizes_checkbox() {
 		wpum_update_registration_form_settings( $this->form_id, array( 'login_after_registration' => 'true' ) );
 

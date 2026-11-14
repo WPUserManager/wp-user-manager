@@ -72,6 +72,38 @@ class HelperFunctionsTest extends WPUMTestCase {
 	}
 
 	/**
+	 * A cached list that includes the admin role must not answer a call without it.
+	 */
+	public function test_wpum_get_roles_cache_keeps_admin_role_separate() {
+		delete_transient( 'wpum_get_roles' );
+		delete_transient( 'wpum_get_roles_admin' );
+
+		wpum_get_roles( true );
+		$with_admin = wpum_get_roles( true, true );
+		$without    = wpum_get_roles();
+
+		$this->assertContains( 'administrator', array_column( $with_admin, 'value' ) );
+		$this->assertNotContains( 'administrator', array_column( $without, 'value' ) );
+		$this->assertContains( 'administrator', array_column( wpum_get_roles( false, true ), 'value' ) );
+	}
+
+	/**
+	 * A cache written before the lists were split can hold the admin role.
+	 */
+	public function test_wpum_get_roles_drops_admin_role_from_stale_cache() {
+		set_transient( 'wpum_get_roles', array(
+			array( 'value' => 'administrator', 'label' => 'Administrator' ),
+			array( 'value' => 'subscriber', 'label' => 'Subscriber' ),
+		), DAY_IN_SECONDS );
+
+		$roles = wpum_get_roles();
+
+		delete_transient( 'wpum_get_roles' );
+
+		$this->assertSame( array( 'subscriber' ), array_column( $roles, 'value' ) );
+	}
+
+	/**
 	 * Test that wpum_get_login_methods returns the expected methods.
 	 */
 	public function test_wpum_get_login_methods_returns_methods() {
