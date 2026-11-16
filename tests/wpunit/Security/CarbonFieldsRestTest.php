@@ -31,6 +31,10 @@ class CarbonFieldsRestTest extends WPUMTestCase {
 			'post_type'      => 'attachment',
 		) );
 
+		// Carbon Fields finds an attachment from its URL through this metadata.
+		wp_update_attachment_metadata( $this->private_attachment_id, array( 'file' => 'backup.zip' ) );
+		wp_update_attachment_metadata( $this->public_attachment_id, array( 'file' => 'avatar.jpg' ) );
+
 		wp_set_current_user( 0 );
 	}
 
@@ -104,5 +108,26 @@ class CarbonFieldsRestTest extends WPUMTestCase {
 
 		$this->assertSame( 200, $response->get_status() );
 		$this->assertSame( $this->private_attachment_id, $response->get_data()['id'] );
+	}
+
+	public function test_a_json_body_cannot_pass_the_check_for_another_attachment() {
+		wp_set_current_user( self::factory()->user->create( array( 'role' => 'subscriber' ) ) );
+
+		// The handler reads $_GET; the request's parameters prefer a JSON body.
+		$_GET = array(
+			'type'  => 'id',
+			'value' => (string) $this->private_attachment_id,
+		);
+
+		$request = new WP_REST_Request( 'GET', '/carbon-fields/v1/attachment' );
+		$request->set_query_params( $_GET );
+		$request->set_header( 'content-type', 'application/json' );
+		$request->set_body( wp_json_encode( array(
+			'type'  => 'url',
+			'value' => 'https://example.com/avatar.png',
+		) ) );
+
+		$this->assertSame( 'url', $request->get_param( 'type' ) );
+		$this->assertSame( 403, rest_get_server()->dispatch( $request )->get_status() );
 	}
 }

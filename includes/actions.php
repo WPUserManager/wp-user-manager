@@ -757,29 +757,43 @@ add_filter( 'rest_endpoints', 'wpum_carbon_fields_rest_endpoints' );
 /**
  * Whether the current user may read an attachment's details through Carbon Fields.
  *
- * @param \WP_REST_Request $request Request for the attachment route.
+ * Reads the same input, in the same way, as the route's handler
+ * (Carbon Fields' Router::get_attachment_data()): $_GET, not the request's parameters,
+ * which a JSON body can override.
  *
  * @return bool
  */
-function wpum_carbon_fields_attachment_permission( $request ) {
+function wpum_carbon_fields_attachment_permission() {
 	if ( current_user_can( 'upload_files' ) ) {
 		return true;
 	}
 
-	if ( ! is_user_logged_in() ) {
+	if ( ! is_user_logged_in() || ! isset( $_GET['type'], $_GET['value'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 		return false;
 	}
 
-	$is_url        = 'url' === $request->get_param( 'type' );
-	$value         = (string) $request->get_param( 'value' );
-	$attachment_id = $is_url ? attachment_url_to_postid( $value ) : absint( $value );
+	// phpcs:disable WordPress.Security.NonceVerification.Recommended, WordPress.Security.ValidatedSanitizedInput.MissingUnslash, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Must match the handler exactly.
+	$type  = sanitize_text_field( $_GET['type'] );
+	$value = sanitize_text_field( $_GET['value'] );
+	// phpcs:enable
+
+	$is_url = 'url' === $type;
+
+	if ( $is_url ) {
+		if ( ! class_exists( '\WPUM\Carbon_Fields\Helper\Helper' ) ) {
+			return false;
+		}
+		$attachment = get_post( \WPUM\Carbon_Fields\Helper\Helper::get_attachment_id( $value ) );
+	} else {
+		$attachment = get_post( $value );
+	}
 
 	// A URL that isn't an attachment comes back as it was sent, so it reveals nothing.
-	if ( ! $attachment_id ) {
+	if ( ! $attachment ) {
 		return $is_url;
 	}
 
-	return 'attachment' === get_post_type( $attachment_id ) && current_user_can( 'read_post', $attachment_id );
+	return 'attachment' === $attachment->post_type && current_user_can( 'read_post', $attachment->ID );
 }
 
 /**
