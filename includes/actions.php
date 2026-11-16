@@ -728,6 +728,61 @@ function wpum_prevent_entire_site_rest( $result, $server, $request ) {
 add_filter( 'rest_pre_dispatch', 'wpum_prevent_entire_site_rest', 10, 3 );
 
 /**
+ * Check access on Carbon Fields' attachment route, which Carbon Fields leaves open to anyone.
+ *
+ * The image and file fields use it to preview the chosen file.
+ *
+ * @param array $endpoints REST routes and their handlers.
+ *
+ * @return array
+ */
+function wpum_carbon_fields_rest_endpoints( $endpoints ) {
+	$route = '/carbon-fields/v1/attachment';
+
+	if ( empty( $endpoints[ $route ] ) || ! is_array( $endpoints[ $route ] ) ) {
+		return $endpoints;
+	}
+
+	foreach ( $endpoints[ $route ] as $key => $handler ) {
+		// Handlers have numeric keys; the others are route options.
+		if ( is_numeric( $key ) && is_array( $handler ) ) {
+			$endpoints[ $route ][ $key ]['permission_callback'] = 'wpum_carbon_fields_attachment_permission';
+		}
+	}
+
+	return $endpoints;
+}
+add_filter( 'rest_endpoints', 'wpum_carbon_fields_rest_endpoints' );
+
+/**
+ * Whether the current user may read an attachment's details through Carbon Fields.
+ *
+ * @param \WP_REST_Request $request Request for the attachment route.
+ *
+ * @return bool
+ */
+function wpum_carbon_fields_attachment_permission( $request ) {
+	if ( current_user_can( 'upload_files' ) ) {
+		return true;
+	}
+
+	if ( ! is_user_logged_in() ) {
+		return false;
+	}
+
+	$is_url        = 'url' === $request->get_param( 'type' );
+	$value         = (string) $request->get_param( 'value' );
+	$attachment_id = $is_url ? attachment_url_to_postid( $value ) : absint( $value );
+
+	// A URL that isn't an attachment comes back as it was sent, so it reveals nothing.
+	if ( ! $attachment_id ) {
+		return $is_url;
+	}
+
+	return 'attachment' === get_post_type( $attachment_id ) && current_user_can( 'read_post', $attachment_id );
+}
+
+/**
  * Finish data installation after the whole plugin has booted.
  *
  * @return void
