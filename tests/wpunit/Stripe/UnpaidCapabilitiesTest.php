@@ -171,4 +171,59 @@ class UnpaidCapabilitiesTest extends WPUMTestCase {
 		wp_set_current_user( $this->user_with_plan( 'author', 'one_time', true ) );
 		$this->assertTrue( wpum_maybe_display_field( true, $field ) );
 	}
+
+	protected function role_restricted_block( $role ) {
+		return array(
+			'blockName' => 'core/html',
+			'attrs'     => array(
+				'wpum_restrict_type'         => 'wpum_restrict_type_role',
+				'wpum_restrict_roles'        => array( $role ),
+				'wpum_restrict_show_message' => false,
+			),
+		);
+	}
+
+	public function test_unpaid_user_does_not_see_role_restricted_block() {
+		$blocks = \WPUM\WPUM_Blocks::get_instance();
+		$block  = $this->role_restricted_block( 'subscriber' );
+
+		wp_set_current_user( $this->user_with_plan( 'subscriber', 'one_time', false ) );
+		$this->assertSame( '', $blocks->maybe_restrict_content( 'Members only', $block ), 'Role-restricted blocks must stay hidden while payment is outstanding' );
+
+		wp_set_current_user( $this->user_with_plan( 'subscriber', 'one_time', true ) );
+		$this->assertSame( 'Members only', $blocks->maybe_restrict_content( 'Members only', $block ) );
+
+		wp_set_current_user( $this->factory()->user->create( array( 'role' => 'contributor' ) ) );
+		$this->assertSame( '', $blocks->maybe_restrict_content( 'Members only', $block ) );
+	}
+
+	public function test_unpaid_user_does_not_see_role_restricted_widget() {
+		$blocks   = \WPUM\WPUM_Blocks::get_instance();
+		$instance = $this->role_restricted_block( 'subscriber' )['attrs'];
+
+		wp_set_current_user( $this->user_with_plan( 'subscriber', 'one_time', false ) );
+		$this->assertFalse( $blocks->maybe_restrict_widget( $instance, null, array() ), 'Role-restricted widgets must stay hidden while payment is outstanding' );
+
+		wp_set_current_user( $this->user_with_plan( 'subscriber', 'one_time', true ) );
+		$this->assertSame( $instance, $blocks->maybe_restrict_widget( $instance, null, array() ) );
+	}
+
+	public function test_unpaid_user_does_not_see_role_restricted_menu_item() {
+		$menus = new class() extends \WPUM_Menus {
+			protected function get_item_settings( $item ) {
+				return array(
+					'convert_to_logout' => false,
+					'link_visibility'   => 'in',
+					'link_roles'        => array( 'subscriber' ),
+				);
+			}
+		};
+		$item  = (object) array( 'ID' => 1, 'url' => 'https://example.com/' );
+
+		wp_set_current_user( $this->user_with_plan( 'subscriber', 'one_time', false ) );
+		$this->assertCount( 0, $menus->exclude_menu_items( array( $item ), null, array() ), 'Role-restricted menu items must stay hidden while payment is outstanding' );
+
+		wp_set_current_user( $this->user_with_plan( 'subscriber', 'one_time', true ) );
+		$this->assertCount( 1, $menus->exclude_menu_items( array( $item ), null, array() ) );
+	}
 }

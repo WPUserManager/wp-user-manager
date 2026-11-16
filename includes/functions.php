@@ -96,10 +96,17 @@ function wpum_get_login_methods() {
 function wpum_get_roles( $force = false, $admin = false ) {
 	$roles = array();
 
-	$transient = get_transient( 'wpum_get_roles' );
+	// One cache per list, so a list with the admin role never answers a call without it.
+	$transient_key = $admin ? 'wpum_get_roles_admin' : 'wpum_get_roles';
+	$transient     = get_transient( $transient_key );
 
 	if ( $transient && ! $force ) {
 		$roles = $transient;
+
+		if ( ! $admin ) {
+			// Caches written before the split can still hold the admin role.
+			$roles = array_values( wp_list_filter( $roles, array( 'value' => 'administrator' ), 'NOT' ) );
+		}
 	} else {
 
 		global $wp_roles;
@@ -117,7 +124,7 @@ function wpum_get_roles( $force = false, $admin = false ) {
 				'label' => esc_html( $role ),
 			);
 		}
-		set_transient( 'wpum_get_roles', $roles, DAY_IN_SECONDS );
+		set_transient( $transient_key, $roles, DAY_IN_SECONDS );
 
 	}
 

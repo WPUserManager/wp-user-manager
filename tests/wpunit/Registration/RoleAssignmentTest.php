@@ -90,4 +90,44 @@ class RoleAssignmentTest extends RegistrationTestCase {
 		// Reset.
 		$this->default_form->update_meta( 'allow_role_select', false );
 	}
+
+	public function test_role_select_rejects_administrator_even_when_listed() {
+		if ( ! $this->default_form ) {
+			$this->markTestSkipped( 'No default registration form found.' );
+		}
+
+		// Stored directly, as the settings save would strip it.
+		$this->default_form->update_meta( 'allow_role_select', true );
+		$this->default_form->update_meta( 'register_roles', array( 'subscriber', 'administrator' ) );
+
+		$data    = $this->get_valid_registration_data( array(
+			'register' => array( 'role' => 'administrator' ),
+		) );
+		$user_id = $this->submit_registration( $data );
+
+		$this->default_form->update_meta( 'allow_role_select', false );
+		$this->default_form->update_meta( 'register_roles', array() );
+
+		$this->assertFalse( $user_id, 'Registration must never assign the administrator role' );
+	}
+
+	public function test_form_role_administrator_falls_back_to_default_role() {
+		if ( ! $this->default_form ) {
+			$this->markTestSkipped( 'No default registration form found.' );
+		}
+
+		// Stored directly, as the settings save refuses it.
+		$this->default_form->update_meta( 'role', 'administrator' );
+
+		$data    = $this->get_valid_registration_data();
+		$user_id = $this->submit_registration( $data );
+
+		$this->default_form->update_meta( 'role', get_option( 'default_role' ) );
+
+		$this->assertIsInt( $user_id );
+
+		$user = get_userdata( $user_id );
+		$this->assertNotContains( 'administrator', $user->roles, 'Registration must never assign the administrator role' );
+		$this->assertContains( get_option( 'default_role' ), $user->roles, 'User should get the WordPress default role instead' );
+	}
 }
