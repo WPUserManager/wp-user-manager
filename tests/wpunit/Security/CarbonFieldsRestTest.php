@@ -34,6 +34,11 @@ class CarbonFieldsRestTest extends WPUMTestCase {
 		wp_set_current_user( 0 );
 	}
 
+	public function tearDown(): void {
+		$_GET = array();
+		parent::tearDown();
+	}
+
 	/**
 	 * @param string $type  id or url.
 	 * @param string $value Attachment ID or URL.
@@ -41,11 +46,16 @@ class CarbonFieldsRestTest extends WPUMTestCase {
 	 * @return WP_REST_Response
 	 */
 	protected function get_attachment( $type, $value ) {
-		$request = new WP_REST_Request( 'GET', '/carbon-fields/v1/attachment' );
-		$request->set_query_params( array(
+		$params = array(
 			'type'  => $type,
 			'value' => (string) $value,
-		) );
+		);
+
+		// Carbon Fields' handler reads $_GET rather than the request.
+		$_GET = $params;
+
+		$request = new WP_REST_Request( 'GET', '/carbon-fields/v1/attachment' );
+		$request->set_query_params( $params );
 
 		return rest_get_server()->dispatch( $request );
 	}
