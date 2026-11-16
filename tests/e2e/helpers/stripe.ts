@@ -1,4 +1,4 @@
-import { type Page } from '@playwright/test';
+import { type Frame, type Page } from '@playwright/test';
 import { execSync } from 'child_process';
 import { createHash, createDecipheriv } from 'crypto';
 import * as fs from 'fs';
@@ -316,36 +316,56 @@ export function createDirectCheckoutSession(priceId: string, email: string): str
 }
 
 /**
+ * Find the frame holding Checkout's card form. Stripe serves two layouts: the form on the
+ * page itself, or (since Nov 2026, on some sessions) inside an iframe on the page.
+ */
+async function findCheckoutForm(page: Page, timeout = 15000): Promise<Frame> {
+  const deadline = Date.now() + timeout;
+  while (Date.now() < deadline) {
+    for (const frame of page.frames()) {
+      const cardNumber = frame.getByRole('textbox', { name: 'Card number' });
+      if (await cardNumber.isVisible().catch(() => false)) {
+        return frame;
+      }
+    }
+    await page.waitForTimeout(500);
+  }
+  throw new Error('Stripe Checkout card form not found');
+}
+
+/**
  * Pay on a Stripe hosted Checkout page with a test card and wait to come back to the site.
  */
 export async function payOnStripeCheckout(page: Page): Promise<void> {
   await page.waitForURL(/checkout\.stripe\.com/, { timeout: 30000 });
 
-  // Accessibility selectors work reliably with Stripe's hosted checkout.
-  await page.getByLabel('Card number').waitFor({ timeout: 15000 });
-  await page.getByLabel('Card number').fill('4242424242424242');
-  await page.getByLabel('Expiration').fill('12 / 30');
-  await page.getByRole('textbox', { name: 'CVC' }).fill('123');
+  // Accessibility selectors work reliably with Stripe's hosted checkout. The iframe layout
+  // labels the fields "Expiration (MM/YY)", "Security code" and "Name on card".
+  const form = await findCheckoutForm(page);
+  await form.getByRole('textbox', { name: 'Card number' }).fill('4242424242424242');
+  await form.getByLabel('Expiration').fill('12 / 30');
+  await form.getByRole('textbox', { name: /CVC|Security code/ }).fill('123');
 
-  const cardholderName = page.getByLabel('Cardholder name');
+  const cardholderName = form.getByLabel(/Cardholder name|Name on card/);
   if (await cardholderName.isVisible({ timeout: 2000 }).catch(() => false)) {
     await cardholderName.fill('E2E Test User');
   }
 
   // The label is "ZIP" when US is selected, "Postal code" for other countries.
-  const zipField = page.getByRole('textbox', { name: /ZIP|Postal code/i });
+  const zipField = form.getByRole('textbox', { name: /ZIP|Postal code/i });
   if (await zipField.isVisible({ timeout: 2000 }).catch(() => false)) {
     await zipField.fill('10001');
   }
 
   // Unchecking "Save my information" avoids the phone number requirement. Since Oct 2026
   // the label is "Save my information with Link for faster checkout", ticked by default.
-  const saveInfoCheckbox = page.getByLabel(/Save my information/i);
+  const saveInfoCheckbox = form.getByLabel(/Save my information/i);
   if (await saveInfoCheckbox.isChecked({ timeout: 2000 }).catch(() => false)) {
     await saveInfoCheckbox.uncheck();
   }
 
-  await page.getByRole('button', { name: /subscribe|pay/i }).click();
+  // Skip "Pay securely with Link", which the iframe layout shows above the form.
+  await form.getByRole('button', { name: /^(?!.*\blink\b).*\b(subscribe|pay)\b/i }).click();
 
   await page.waitForURL((url) => !url.hostname.includes('stripe.com'), { timeout: 60000 });
 }
