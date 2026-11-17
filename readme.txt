@@ -174,7 +174,9 @@ Please note that using WPUM and the mentioned add-ons does NOT guarantee complia
 = 2.10.6 (16th November 2026) =
 
 - Security: Accounts that still owe a Stripe payment can't read the site's content through the REST API (thanks to HeeDong Cho for responsible disclosure)
-- Security: Role-restricted blocks, widgets and menu items stay hidden until the Stripe payment is made (thanks to elba.code for responsible disclosure)
+- Security: Role-restricted blocks, widgets and menu items stay hidden until the Stripe payment is made (thanks to elba.code and Belladonnask for responsible disclosure)
+- Security: Posting query variables to the login or registration page no longer gets past "Prevent site access to visitors" (thanks to Malvin Valerian Gultom for responsible disclosure)
+- Security: The bundled Carbon Fields attachment route only returns attachments the user can see (thanks to Belladonnask for responsible disclosure)
 - Security: Saving the multiple roles field only changes roles the editing user can assign
 - Fix: Registration never assigns the Administrator role, and role lists that hide it no longer show it
 
