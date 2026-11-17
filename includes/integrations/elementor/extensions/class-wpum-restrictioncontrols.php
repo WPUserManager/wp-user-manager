@@ -47,7 +47,7 @@ class WPUM_RestrictionControls {
 		$this->restricted_elementor_widgets = apply_filters( 'restricted_elementor_widgets', array(
 			'post-form',
 			'user-directory',
-			'logout-link',
+			'logout',
 			'group-directory',
 			'recently-registered-users',
 		) );
