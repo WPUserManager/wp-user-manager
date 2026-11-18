@@ -645,6 +645,18 @@ class WPUM_Field {
 			$value = get_user_meta( $user_id, $this->get_meta( 'user_meta_key' ), true );
 		}
 
+		/**
+		 * Filter the stored value of a field for a user.
+		 *
+		 * Applied here as it is for the account form, so fields whose value is not stored
+		 * in user meta (e.g. taxonomy fields stored as object terms) display on profiles too.
+		 *
+		 * @param mixed      $value   The field value.
+		 * @param WPUM_Field $field   The field.
+		 * @param int        $user_id The user ID.
+		 */
+		$value = apply_filters( 'wpum_custom_field_value', $value, $this, $user_id );
+
 		if ( ! empty( $value ) ) {
 			$value       = $this->format_value( $value );
 			$this->value = $value;
