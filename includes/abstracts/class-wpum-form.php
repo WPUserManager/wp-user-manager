@@ -354,7 +354,10 @@ abstract class WPUM_Form {
 					}
 				}
 				$template = isset( $field['template'] ) ? $field['template'] : $field['type'];
-				if ( 'file' === $template && ! empty( $field['allowed_mime_types'] ) ) {
+				if ( 'image' === $template && empty( $field['allowed_mime_types'] ) && class_exists( 'WPUM_Field_Image' ) ) {
+					$field['allowed_mime_types'] = WPUM_Field_Image::DEFAULT_ALLOWED_EXTENSIONS;
+				}
+				if ( in_array( $template, array( 'file', 'image' ), true ) && ! empty( $field['allowed_mime_types'] ) ) {
 					$allowed_exts = explode( ',', $field['allowed_mime_types'] );
 					$allowed_exts = array_map( 'trim', $allowed_exts );
 
@@ -369,7 +372,7 @@ abstract class WPUM_Form {
 							$file_info = wp_check_filetype( $file_url );
 							if ( ! is_numeric( $file_url ) && $file_info && ! in_array( $file_info['ext'], $allowed_exts, true ) ) {
 								// translators: %1s$ field label %2$s file extension %3$s allowed extensions
-								return new WP_Error( 'validation-error', sprintf( __( '"%1$s" (filetype %2$s) needs to be one of the following file types: %3$s', 'wp-user-manager' ), $field['label'], $file_info['ext'], $allowed_exts ) );
+								return new WP_Error( 'validation-error', sprintf( __( '"%1$s" (filetype %2$s) needs to be one of the following file types: %3$s', 'wp-user-manager' ), $field['label'], $file_info['ext'], implode( ', ', $allowed_exts ) ) );
 							}
 						}
 					}
