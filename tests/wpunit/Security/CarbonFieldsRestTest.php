@@ -132,7 +132,10 @@ class CarbonFieldsRestTest extends WPUMTestCase {
 	}
 
 	public function test_wp_admin_sends_the_rest_nonce_with_carbon_fields_requests() {
-		do_action( 'admin_enqueue_scripts', 'user-edit.php' );
+		$this->assertNotFalse( has_action( 'admin_enqueue_scripts', 'wpum_carbon_fields_rest_nonce' ) );
+
+		// Called directly: other admin_enqueue_scripts callbacks need a current screen.
+		wpum_carbon_fields_rest_nonce();
 
 		$scripts = wp_scripts();
 
