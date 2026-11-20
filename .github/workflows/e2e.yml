@@ -29,7 +29,8 @@ jobs:
   e2e:
     if: github.event_name != 'pull_request' || (!startsWith(github.head_ref, 'release/') && github.base_ref != 'master')
     name: Playwright E2E (PHP ${{ matrix.php }})
-    runs-on: ubuntu-latest
+    # Playwright can't install its browsers on Ubuntu 26.04 yet, which ubuntu-latest now is.
+    runs-on: ubuntu-24.04
     strategy:
       fail-fast: false
       matrix:

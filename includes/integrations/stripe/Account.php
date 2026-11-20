@@ -98,6 +98,7 @@ class Account {
 	 */
 	public function enforce_payment() {
 		add_action( 'template_redirect', array( $this, 'unsubscribed_redirect' ) );
+		add_filter( 'rest_pre_dispatch', array( $this, 'refuse_unpaid_rest_requests' ), 10, 3 );
 		add_filter( 'user_has_cap', array( $this, 'restrict_unpaid_capabilities' ), 10, 4 );
 		add_filter( 'wpum_user_access_roles', array( $this, 'withhold_unpaid_access_roles' ), 10, 2 );
 		add_action( 'added_user_meta', array( $this, 'flush_payment_status' ), 10, 2 );
@@ -146,6 +147,35 @@ class Account {
 
 		wp_safe_redirect( $redirect );
 		exit;
+	}
+
+	/**
+	 * Refuse REST requests from users who still owe a payment. The front-end
+	 * redirect runs on template_redirect, which REST requests never reach, so
+	 * without this an unpaid account could read the site's content through
+	 * /wp/v2/posts and /wp/v2/pages.
+	 *
+	 * @param mixed            $result  Response to replace the requested version with.
+	 * @param \WP_REST_Server  $server  Server instance.
+	 * @param \WP_REST_Request $request Request used to generate the response.
+	 *
+	 * @return mixed
+	 */
+	public function refuse_unpaid_rest_requests( $result, $server, $request ) { // phpcs:ignore Generic.CodeAnalysis.UnusedFunctionParameter.FoundInExtendedClassBeforeLastUsed -- Matches the rest_pre_dispatch filter signature.
+		if ( null !== $result || ! is_user_logged_in() ) {
+			return $result;
+		}
+
+		if ( ! $this->owes_payment( get_current_user_id() ) ) {
+			return $result;
+		}
+
+		$allowed_routes = apply_filters( 'wpum_stripe_not_paid_allowed_rest_routes', array( '/wpum/v1/stripe' ) );
+		if ( in_array( untrailingslashit( $request->get_route() ), $allowed_routes, true ) ) {
+			return $result;
+		}
+
+		return new \WP_Error( 'wpum_payment_required', esc_html__( 'Please complete your payment to access this site.', 'wp-user-manager' ), array( 'status' => 403 ) );
 	}
 
 	/**

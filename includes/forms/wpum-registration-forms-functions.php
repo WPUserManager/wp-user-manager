@@ -247,6 +247,11 @@ function wpum_update_registration_form_settings( $form_id, $settings, $args = ar
 				return $valid;
 			}
 		}
+
+		if ( 'register_roles' === $key && is_array( $values[ $key ] ) ) {
+			// Visitors choose from these roles, so administrator is never one of them.
+			$values[ $key ] = array_values( array_diff( $values[ $key ], array( 'administrator' ) ) );
+		}
 	}
 
 	$stored_settings_model = $form->get_settings_model();
@@ -310,6 +315,11 @@ function wpum_validate_registration_form_setting( $setting, $value ) {
 				return new WP_Error( 'wpum_registration_form_invalid_role', sprintf( esc_html__( 'The %s role cannot be assigned at registration.', 'wp-user-manager' ), esc_html( $role ) ), array( 'status' => 400 ) );
 			}
 		}
+	}
+
+	if ( 'register_roles' === $setting['id'] && in_array( 'administrator', (array) $value, true ) ) {
+		// translators: %s role key
+		return new WP_Error( 'wpum_registration_form_invalid_role', sprintf( esc_html__( 'The %s role cannot be assigned at registration.', 'wp-user-manager' ), 'administrator' ), array( 'status' => 400 ) );
 	}
 
 	// An empty options list allows no value, e.g. Stripe products before any are fetched.
