@@ -130,4 +130,21 @@ class CarbonFieldsRestTest extends WPUMTestCase {
 		$this->assertSame( 'url', $request->get_param( 'type' ) );
 		$this->assertSame( 403, rest_get_server()->dispatch( $request )->get_status() );
 	}
+
+	public function test_wp_admin_sends_the_rest_nonce_with_carbon_fields_requests() {
+		$this->assertNotFalse( has_action( 'admin_enqueue_scripts', 'wpum_carbon_fields_rest_nonce' ) );
+
+		// Called directly: other admin_enqueue_scripts callbacks need a current screen.
+		wpum_carbon_fields_rest_nonce();
+
+		$scripts = wp_scripts();
+
+		$this->assertTrue( wp_script_is( 'wpum-carbon-fields-rest-nonce', 'enqueued' ) );
+		// Defines wpApiSettings, which holds the nonce.
+		$this->assertContains( 'wp-api-request', $scripts->registered['wpum-carbon-fields-rest-nonce']->deps );
+
+		$inline = implode( "\n", (array) $scripts->get_data( 'wpum-carbon-fields-rest-nonce', 'after' ) );
+		$this->assertStringContainsString( "'carbon-fields/v1/'", $inline );
+		$this->assertStringContainsString( "setRequestHeader( 'X-WP-Nonce', settings.nonce )", $inline );
+	}
 }

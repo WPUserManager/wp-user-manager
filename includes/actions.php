@@ -842,6 +842,34 @@ function wpum_carbon_fields_attachment_permission() {
 }
 
 /**
+ * Send the REST nonce with Carbon Fields' requests to its own routes in wp-admin.
+ *
+ * Carbon Fields calls its routes with jQuery.ajax and no nonce, so WordPress treats the
+ * request as logged out and wpum_carbon_fields_attachment_permission() refuses it. The
+ * image and file fields then show no preview, even to an administrator.
+ *
+ * @return void
+ */
+function wpum_carbon_fields_rest_nonce() {
+	$script = "jQuery.ajaxPrefilter( function( options, originalOptions, jqXHR ) {
+		var settings = window.wpApiSettings;
+		if ( ! settings || ! settings.root || ! settings.nonce || 'string' !== typeof options.url ) {
+			return;
+		}
+		if ( 0 !== options.url.indexOf( settings.root + 'carbon-fields/v1/' ) ) {
+			return;
+		}
+		jqXHR.setRequestHeader( 'X-WP-Nonce', settings.nonce );
+	} );";
+
+	// wp-api-request defines wpApiSettings, which Carbon Fields also reads its REST root from.
+	wp_register_script( 'wpum-carbon-fields-rest-nonce', false, array( 'jquery', 'wp-api-request' ), WPUM_VERSION, false );
+	wp_enqueue_script( 'wpum-carbon-fields-rest-nonce' );
+	wp_add_inline_script( 'wpum-carbon-fields-rest-nonce', $script );
+}
+add_action( 'admin_enqueue_scripts', 'wpum_carbon_fields_rest_nonce' );
+
+/**
  * Finish data installation after the whole plugin has booted.
  *
  * @return void
