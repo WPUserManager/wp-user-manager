@@ -17,6 +17,7 @@ import {
   waitForPlanState,
   createDirectCheckoutSession,
   payOnStripeCheckout,
+  findCheckoutForm,
 } from './helpers/stripe';
 
 // The registration form offers the subscription and the premium one-time plan.
@@ -135,7 +136,9 @@ test.describe('Stripe Registration', () => {
     await page.locator('input[name="submit_registration"]').click();
 
     await page.waitForURL(/checkout\.stripe\.com/, { timeout: 30000 });
-    await expect(page.getByLabel('Card number')).toBeVisible({ timeout: 15000 });
+    // The card form may sit on the page or inside an iframe, depending on the Checkout layout.
+    const form = await findCheckoutForm(page);
+    await expect(form.getByRole('textbox', { name: 'Card number' })).toBeVisible();
 
     // Registering doesn't pay: the account is created with its plan unpaid and no role capabilities.
     const state = getPlanState('stripe_e2e_redirect@example.com');
