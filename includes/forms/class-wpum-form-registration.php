@@ -514,6 +514,11 @@ class WPUM_Form_Registration extends WPUM_Form {
 				return false;
 			}
 
+			// Enforce the site's registration setting here too, not only when rendering the form.
+			if ( ! wpum_is_registration_enabled() ) {
+				throw new Exception( esc_html( apply_filters( 'wpum_registration_disabled_message', __( 'Registrations are currently disabled.', 'wp-user-manager' ) ) ) );
+			}
+
 			// Security: reject array values for avatar/cover POST fields to prevent path injection.
 			if ( ( isset( $_POST['current_user_avatar'] ) && is_array( $_POST['current_user_avatar'] ) ) || ( isset( $_POST['current_user_cover'] ) && is_array( $_POST['current_user_cover'] ) ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce already verified above.
 				throw new Exception( esc_html__( 'Invalid input.', 'wp-user-manager' ) );
