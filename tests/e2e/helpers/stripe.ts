@@ -319,7 +319,7 @@ export function createDirectCheckoutSession(priceId: string, email: string): str
  * Find the frame holding Checkout's card form. Stripe serves two layouts: the form on the
  * page itself, or (since Nov 2026, on some sessions) inside an iframe on the page.
  */
-async function findCheckoutForm(page: Page, timeout = 15000): Promise<Frame> {
+export async function findCheckoutForm(page: Page, timeout = 15000): Promise<Frame> {
   const deadline = Date.now() + timeout;
   while (Date.now() < deadline) {
     for (const frame of page.frames()) {
