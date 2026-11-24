@@ -129,8 +129,8 @@ class WPUM_Form_Registration extends WPUM_Form {
 			}
 
 			if ( ! is_email( $values['register'][ $key ] ) ) {
-				// translators: %s invalid email address string
-				return new WP_Error( 'email-validation-error', esc_html( sprintf( __( '%s is not a valid email address.', 'wp-user-manager' ), $values['register'][ $key ] ) ) );
+				// The message doesn't repeat the submitted value, so visitor text never reaches the page.
+				return new WP_Error( 'email-validation-error', esc_html__( 'Please enter a valid email address.', 'wp-user-manager' ) );
 			}
 		}
 
