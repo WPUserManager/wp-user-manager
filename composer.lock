@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "22eeb0bd108e9afd1858553967a4a553",
+    "content-hash": "38b6bf4060ff0ca50497f5a33388e43d",
     "packages": [
         {
             "name": "brain/cortex",
@@ -1502,16 +1502,16 @@
         },
         {
             "name": "wp-user-manager/wpum-blocks",
-            "version": "dev-fix/escape-shortcode-brackets",
+            "version": "1.17",
             "source": {
                 "type": "git",
                 "url": "https://github.com/WPUserManager/wpum-blocks.git",
-                "reference": "e2cd89b640e52f431abc39aec3f31f3da4836a3d"
+                "reference": "d644380ef8e2f9665eb8b97e4dedfd9a9efe55fb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/WPUserManager/wpum-blocks/zipball/e2cd89b640e52f431abc39aec3f31f3da4836a3d",
-                "reference": "e2cd89b640e52f431abc39aec3f31f3da4836a3d",
+                "url": "https://api.github.com/repos/WPUserManager/wpum-blocks/zipball/d644380ef8e2f9665eb8b97e4dedfd9a9efe55fb",
+                "reference": "d644380ef8e2f9665eb8b97e4dedfd9a9efe55fb",
                 "shasum": ""
             },
             "require": {
@@ -1544,9 +1544,9 @@
             ],
             "support": {
                 "issues": "https://github.com/WPUserManager/wpum-blocks/issues",
-                "source": "https://github.com/WPUserManager/wpum-blocks/tree/fix/escape-shortcode-brackets"
+                "source": "https://github.com/WPUserManager/wpum-blocks/tree/1.17"
             },
-            "time": "2026-11-24T07:53:31+00:00"
+            "time": "2026-11-24T09:07:19+00:00"
         },
         {
             "name": "wpbp/widgets-helper",
@@ -8722,7 +8722,6 @@
     "stability-flags": {
         "brain/cortex": 20,
         "wp-user-manager/wp-notices": 20,
-        "wp-user-manager/wpum-blocks": 20,
         "wpbp/widgets-helper": 20
     },
     "prefer-stable": true,
