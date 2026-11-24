@@ -728,18 +728,26 @@ function wpum_site_lock_query_is_for_url( $url ) {
 		return false;
 	}
 
-	// The URL's own page or post.
-	$post_id = url_to_postid( $url );
-	if ( $post_id && is_singular() && get_queried_object_id() === $post_id ) {
-		return true;
-	}
-
-	// Anything else, such as an archive, is only open if the body set no query variable
-	// WordPress reads, so the URL alone decided what is served.
+	// The URL alone must decide what is served, so the body may not set a query
+	// variable WordPress reads. This applies to the URL's own page too: WordPress can
+	// keep that page as the queried object while serving the posts the body picked.
 	$public_query_vars = isset( $wp->public_query_vars ) ? (array) $wp->public_query_vars : array();
 	foreach ( array_keys( $_POST ) as $key ) { // phpcs:ignore
 		if ( in_array( $key, $public_query_vars, true ) ) {
 			return false;
+		}
+	}
+
+	// The URL's own page or post, and nothing else, is what the main query serves.
+	$post_id = url_to_postid( $url );
+	if ( $post_id && is_singular() && get_queried_object_id() === $post_id ) {
+		global $wp_query;
+
+		$posts = isset( $wp_query->posts ) ? (array) $wp_query->posts : array();
+		foreach ( $posts as $post ) {
+			if ( (int) ( is_object( $post ) ? $post->ID : $post ) !== $post_id ) {
+				return false;
+			}
 		}
 	}
 

@@ -318,6 +318,9 @@ class PreventSiteAccessTest extends WPUMTestCase {
 				'pagename' => '',
 				'page_id'  => (string) $this->page_id,
 			),
+			// On its own, page_id picks the posts while the URL's page stays the queried object.
+			'page_id alone' => array( 'page_id' => (string) $this->page_id ),
+			'p alone'       => array( 'p' => (string) $this->page_id ),
 			'name'     => array(
 				'pagename' => '',
 				'name'     => 'board-memo',
