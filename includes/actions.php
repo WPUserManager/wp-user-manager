@@ -663,7 +663,9 @@ function wpum_prevent_entire_site() {
 	$password_reset_page_id = wpum_get_core_page_id( 'password' );
 	if ( ! empty( $password_reset_page_id ) ) {
 		if ( doing_action( 'wp' ) ) {
-			if ( is_page( $password_reset_page_id ) ) {
+			// is_page() reads only the queried object, which can stay the reset page while
+			// the request body picks the posts served, so check those too.
+			if ( is_page( $password_reset_page_id ) && wpum_site_lock_query_is_for_url( get_permalink( $password_reset_page_id ) ) ) {
 				return;
 			}
 		} elseif ( wpum_is_request_for_url( get_permalink( $password_reset_page_id ) ) ) {
