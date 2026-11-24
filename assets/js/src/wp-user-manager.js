@@ -1,17 +1,25 @@
 jQuery( function( $ ) {
+	// Only the fields the plugin renders: its select and input elements. Post
+	// content can carry these classes on other elements, but WordPress removes
+	// select and input elements from content written without unfiltered_html.
 	function initFields() {
-		$( '.wpum-multiselect:not(.wpum-clone-field)' ).each( function() {
+		$( 'select.wpum-multiselect:not(.wpum-clone-field)' ).each( function() {
 			initSelect2( $( this ) );
 		} );
 
-		$( '.wpum-datepicker:not([readonly]):not(.wpum-clone-field)' ).flatpickr( {
+		$( 'input.wpum-datepicker:not([readonly]):not(.wpum-clone-field)' ).flatpickr( {
 			altFormat : wpumFrontend.dateFormat,
 			altInput: true,
 			dateFormat: "Y-m-d",
 			// Flatpickr swaps itself for a native date input on touch devices unless
 			// this is set, which ignores the site date format and leaves the field
 			// inert on some mobile browsers. See issue #202.
-			disableMobile: 'undefined' === typeof wpumFrontend.disableMobile ? true : !! wpumFrontend.disableMobile
+			disableMobile: 'undefined' === typeof wpumFrontend.disableMobile ? true : !! wpumFrontend.disableMobile,
+			// Flatpickr reads options from the element's data attributes and writes
+			// these two as HTML. Options set here take precedence, so set them to
+			// flatpickr's own arrows.
+			prevArrow: "<svg version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' viewBox='0 0 17 17'><g></g><path d='M5.207 8.471l7.146 7.147-0.707 0.707-7.853-7.854 7.854-7.853 0.707 0.707-7.147 7.146z' /></svg>",
+			nextArrow: "<svg version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' viewBox='0 0 17 17'><g></g><path d='M13.207 8.472l-7.854 7.854-0.707-0.707 7.146-7.146-7.146-7.148 0.707-0.707 7.854 7.854z' /></svg>"
 		} );
 	}
 

@@ -165,3 +165,55 @@ test.describe('Datepicker on desktop', () => {
     await expect(page.locator('input.flatpickr-mobile')).toHaveCount(0);
   });
 });
+
+/**
+ * The calendar is only set up on the date fields WPUM renders. Post content
+ * can carry the same class on another element, along with flatpickr options
+ * in data attributes, and must stay inert.
+ */
+test.describe('Datepicker and other elements with its class', () => {
+  const PAYLOAD = '&lt;img src=x onerror=window.__wpumE2E=1&gt;';
+  const SPAN = `<span class="wpum-datepicker" data-prev-arrow="${PAYLOAD}" data-next-arrow="${PAYLOAD}">date</span>`;
+
+  test.beforeEach(async ({ page }) => {
+    await wpAdminLogin(page, 'testuser_login', 'TestPass123!');
+  });
+
+  test('sets up the field WPUM renders and leaves the other element alone', async ({
+    page,
+    accountPage,
+  }) => {
+    // Serve the account page with the element added to its markup, as post
+    // content would put it, before the front-end script runs.
+    await page.route(
+      `**${accountPage}`,
+      async (route) => {
+        if (route.request().resourceType() !== 'document') {
+          return route.continue();
+        }
+
+        const response = await route.fetch();
+        const body = (await response.text()).replace(/(<body[^>]*>)/i, `$1${SPAN}`);
+        await route.fulfill({ response, body });
+      }
+    );
+
+    await page.goto(accountPage);
+
+    const altInput = page.locator(ALT_INPUT).first();
+    await expect(altInput).toBeVisible({ timeout: 10000 });
+
+    // The span is not turned into a date picker.
+    await expect(page.locator('span.wpum-datepicker')).toHaveText('date');
+    await expect(page.locator('span.wpum-datepicker.flatpickr-input')).toHaveCount(0);
+
+    // The calendar uses flatpickr's own arrows, not the data attributes.
+    await altInput.click();
+    const calendar = page.locator('.flatpickr-calendar.open');
+    await expect(calendar).toBeVisible();
+    await expect(calendar.locator('.flatpickr-prev-month svg')).toHaveCount(1);
+    await expect(page.locator('.flatpickr-calendar img')).toHaveCount(0);
+
+    expect(await page.evaluate(() => (window as any).__wpumE2E)).toBeUndefined();
+  });
+});
