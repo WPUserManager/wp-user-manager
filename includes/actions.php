@@ -663,7 +663,9 @@ function wpum_prevent_entire_site() {
 	$password_reset_page_id = wpum_get_core_page_id( 'password' );
 	if ( ! empty( $password_reset_page_id ) ) {
 		if ( doing_action( 'wp' ) ) {
-			if ( is_page( $password_reset_page_id ) ) {
+			// is_page() reads only the queried object, which can stay the reset page while
+			// the request body picks the posts served, so check those too.
+			if ( is_page( $password_reset_page_id ) && wpum_site_lock_query_is_for_url( get_permalink( $password_reset_page_id ) ) ) {
 				return;
 			}
 		} elseif ( wpum_is_request_for_url( get_permalink( $password_reset_page_id ) ) ) {
@@ -728,18 +730,26 @@ function wpum_site_lock_query_is_for_url( $url ) {
 		return false;
 	}
 
-	// The URL's own page or post.
-	$post_id = url_to_postid( $url );
-	if ( $post_id && is_singular() && get_queried_object_id() === $post_id ) {
-		return true;
-	}
-
-	// Anything else, such as an archive, is only open if the body set no query variable
-	// WordPress reads, so the URL alone decided what is served.
+	// The URL alone must decide what is served, so the body may not set a query
+	// variable WordPress reads. This applies to the URL's own page too: WordPress can
+	// keep that page as the queried object while serving the posts the body picked.
 	$public_query_vars = isset( $wp->public_query_vars ) ? (array) $wp->public_query_vars : array();
 	foreach ( array_keys( $_POST ) as $key ) { // phpcs:ignore
 		if ( in_array( $key, $public_query_vars, true ) ) {
 			return false;
+		}
+	}
+
+	// The URL's own page or post, and nothing else, is what the main query serves.
+	$post_id = url_to_postid( $url );
+	if ( $post_id && is_singular() && get_queried_object_id() === $post_id ) {
+		global $wp_query;
+
+		$posts = isset( $wp_query->posts ) ? (array) $wp_query->posts : array();
+		foreach ( $posts as $post ) {
+			if ( (int) ( is_object( $post ) ? $post->ID : $post ) !== $post_id ) {
+				return false;
+			}
 		}
 	}
 
@@ -840,6 +850,34 @@ function wpum_carbon_fields_attachment_permission() {
 
 	return 'attachment' === $attachment->post_type && current_user_can( 'read_post', $attachment->ID );
 }
+
+/**
+ * Send the REST nonce with Carbon Fields' requests to its own routes in wp-admin.
+ *
+ * Carbon Fields calls its routes with jQuery.ajax and no nonce, so WordPress treats the
+ * request as logged out and wpum_carbon_fields_attachment_permission() refuses it. The
+ * image and file fields then show no preview, even to an administrator.
+ *
+ * @return void
+ */
+function wpum_carbon_fields_rest_nonce() {
+	$script = "jQuery.ajaxPrefilter( function( options, originalOptions, jqXHR ) {
+		var settings = window.wpApiSettings;
+		if ( ! settings || ! settings.root || ! settings.nonce || 'string' !== typeof options.url ) {
+			return;
+		}
+		if ( 0 !== options.url.indexOf( settings.root + 'carbon-fields/v1/' ) ) {
+			return;
+		}
+		jqXHR.setRequestHeader( 'X-WP-Nonce', settings.nonce );
+	} );";
+
+	// wp-api-request defines wpApiSettings, which Carbon Fields also reads its REST root from.
+	wp_register_script( 'wpum-carbon-fields-rest-nonce', false, array( 'jquery', 'wp-api-request' ), WPUM_VERSION, false );
+	wp_enqueue_script( 'wpum-carbon-fields-rest-nonce' );
+	wp_add_inline_script( 'wpum-carbon-fields-rest-nonce', $script );
+}
+add_action( 'admin_enqueue_scripts', 'wpum_carbon_fields_rest_nonce' );
 
 /**
  * Finish data installation after the whole plugin has booted.

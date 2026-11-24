@@ -31,6 +31,15 @@ class WPUM_LoginLink extends WPUM_Elementor_Widget {
 	);
 
 	/**
+	 * Elementor has its own "login" widget, which the name built from the shortcode would clash with.
+	 *
+	 * @return string
+	 */
+	public function get_name() {
+		return 'wpum-login-link';
+	}
+
+	/**
 	 * @return string
 	 */
 	public function get_title() {

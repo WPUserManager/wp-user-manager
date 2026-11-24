@@ -67,6 +67,28 @@ class SecurityTest extends RegistrationTestCase {
 		$this->assertFalse( $user_id, 'Submission without submit button value should be rejected' );
 	}
 
+	public function test_submission_rejected_when_registration_disabled() {
+		update_option( 'users_can_register', false );
+
+		$data    = $this->get_valid_registration_data();
+		$email   = $data['register']['user_email'];
+		$user_id = $this->submit_registration( $data );
+
+		$this->assertFalse( $user_id, 'Submission should be rejected when registration is disabled' );
+		$this->assertFalse( email_exists( $email ), 'No user should be created when registration is disabled' );
+	}
+
+	public function test_registration_enabled_filter_allows_submission_when_option_disabled() {
+		update_option( 'users_can_register', false );
+		add_filter( 'wpum_registration_enabled', '__return_true' );
+
+		$user_id = $this->submit_registration( $this->get_valid_registration_data() );
+
+		remove_filter( 'wpum_registration_enabled', '__return_true' );
+
+		$this->assertIsInt( $user_id, 'The wpum_registration_enabled filter should still be able to allow registration' );
+	}
+
 	public function test_xss_in_first_name_is_sanitised() {
 		$data    = $this->get_valid_registration_data( array(
 			'register' => array(

@@ -265,6 +265,20 @@ class PreventSiteAccessTest extends WPUMTestCase {
 		$this->assertNull( $this->visit( $url ) );
 	}
 
+	public function test_password_reset_form_post_stays_open() {
+		$this->assertNull( $this->post( get_permalink( $this->reset_page_id ), array(
+			'username_email'          => 'someone@example.com',
+			'wpum_form'               => 'password-recovery',
+			'submit_password_recovery' => 'Reset password',
+		) ) );
+	}
+
+	public function test_query_vars_in_body_do_not_unlock_the_password_reset_page() {
+		foreach ( $this->content_picking_bodies() as $label => $body ) {
+			$this->assertNotNull( $this->post( get_permalink( $this->reset_page_id ), $body ), $label );
+		}
+	}
+
 	public function test_child_of_password_reset_page_is_locked() {
 		$child_id = self::factory()->post->create( array(
 			'post_type'   => 'page',
@@ -318,6 +332,9 @@ class PreventSiteAccessTest extends WPUMTestCase {
 				'pagename' => '',
 				'page_id'  => (string) $this->page_id,
 			),
+			// On its own, page_id picks the posts while the URL's page stays the queried object.
+			'page_id alone' => array( 'page_id' => (string) $this->page_id ),
+			'p alone'       => array( 'p' => (string) $this->page_id ),
 			'name'     => array(
 				'pagename' => '',
 				'name'     => 'board-memo',

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "d78b00da451a9ba983dfd878291160e9",
+    "content-hash": "38b6bf4060ff0ca50497f5a33388e43d",
     "packages": [
         {
             "name": "brain/cortex",
@@ -1502,16 +1502,16 @@
         },
         {
             "name": "wp-user-manager/wpum-blocks",
-            "version": "1.16",
+            "version": "1.17",
             "source": {
                 "type": "git",
                 "url": "https://github.com/WPUserManager/wpum-blocks.git",
-                "reference": "78f6530be071a36de78892e862fa5a713318f849"
+                "reference": "d644380ef8e2f9665eb8b97e4dedfd9a9efe55fb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/WPUserManager/wpum-blocks/zipball/78f6530be071a36de78892e862fa5a713318f849",
-                "reference": "78f6530be071a36de78892e862fa5a713318f849",
+                "url": "https://api.github.com/repos/WPUserManager/wpum-blocks/zipball/d644380ef8e2f9665eb8b97e4dedfd9a9efe55fb",
+                "reference": "d644380ef8e2f9665eb8b97e4dedfd9a9efe55fb",
                 "shasum": ""
             },
             "require": {
@@ -1544,9 +1544,9 @@
             ],
             "support": {
                 "issues": "https://github.com/WPUserManager/wpum-blocks/issues",
-                "source": "https://github.com/WPUserManager/wpum-blocks/tree/1.16"
+                "source": "https://github.com/WPUserManager/wpum-blocks/tree/1.17"
             },
-            "time": "2026-11-03T11:41:39+00:00"
+            "time": "2026-11-24T09:07:19+00:00"
         },
         {
             "name": "wpbp/widgets-helper",

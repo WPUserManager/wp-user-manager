@@ -8,7 +8,7 @@ Tested up to: 7.1
 Requires PHP: 7.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
-Stable Tag: 2.10.6
+Stable Tag: 2.10.7
 
 Registration forms, a frontend login form, user profiles and a member directory for WordPress. Add Stripe payments and content restriction.
 
@@ -170,6 +170,17 @@ Please note that using WPUM and the mentioned add-ons does NOT guarantee complia
 13. Login form.
 
 == Changelog ==
+
+= 2.10.7 (24th November 2026) =
+
+- Security: Posting query variables to the login, registration or password reset page no longer gets past "Prevent site access to visitors" (thanks to Sahidar for responsible disclosure)
+- Security: Restricted blocks stay restricted in REST API responses, and restricted Elementor widgets are left out of the post's saved text (thanks to Kang MinSeok (AhnLab) for responsible disclosure)
+- Security: Block output is never run as shortcodes, and the registration form's invalid email message no longer repeats what was entered (thanks to Santh for responsible disclosure)
+- Security: The date picker and multiselect only start on fields the plugin renders (thanks to AndrewN for responsible disclosure)
+- Fix: Registration submissions are refused while "Anyone can register" is off
+- Fix: Image and file field previews in wp-admin
+- Fix: The Login Link Elementor widget shows in the widget panel again
+- Fix: The Logout Link Elementor widget has the restriction controls
 
 = 2.10.6 (16th November 2026) =
 
