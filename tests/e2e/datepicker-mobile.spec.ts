@@ -165,3 +165,64 @@ test.describe('Datepicker on desktop', () => {
     await expect(page.locator('input.flatpickr-mobile')).toHaveCount(0);
   });
 });
+
+/**
+ * The calendar is only set up on the date fields WPUM renders. Post content
+ * can carry the same class on another element, along with flatpickr options
+ * in data attributes, and must stay inert.
+ */
+test.describe('Datepicker and other elements with its class', () => {
+  let pageId = '';
+  let pageUrl = '';
+
+  test.beforeAll(() => {
+    const php = [
+      '$attr = esc_attr( "<img src=x onerror=window.__wpumE2E=1>" );',
+      '$content = "<span class=\\"wpum-datepicker\\" data-prev-arrow=\\"" . $attr . "\\" data-next-arrow=\\"" . $attr . "\\">date</span>[wpum_account]";',
+      '$id = wp_insert_post( array( "post_type" => "page", "post_status" => "publish", "post_title" => "E2E Datepicker Content", "post_content" => $content ) );',
+      'echo "PAGE:" . $id . "|" . get_permalink( $id );',
+    ].join(' ');
+
+    const output = wpCli(`eval '${php}'`);
+    const match = output.match(/PAGE:(\d+)\|(\S+)/);
+
+    if (!match) {
+      throw new Error(`Could not create the page: ${output}`);
+    }
+
+    pageId = match[1];
+    pageUrl = match[2];
+  });
+
+  test.afterAll(() => {
+    if (pageId) {
+      wpCli(`post delete ${pageId} --force`);
+    }
+  });
+
+  test.beforeEach(async ({ page }) => {
+    await wpAdminLogin(page, 'testuser_login', 'TestPass123!');
+  });
+
+  test('sets up the field WPUM renders and leaves the other element alone', async ({
+    page,
+  }) => {
+    await page.goto(pageUrl);
+
+    const altInput = page.locator(ALT_INPUT).first();
+    await expect(altInput).toBeVisible({ timeout: 10000 });
+
+    // The span is not turned into a date picker.
+    await expect(page.locator('span.wpum-datepicker')).toHaveText('date');
+    await expect(page.locator('span.wpum-datepicker.flatpickr-input')).toHaveCount(0);
+
+    // The calendar uses flatpickr's own arrows, not the data attributes.
+    await altInput.click();
+    const calendar = page.locator('.flatpickr-calendar.open');
+    await expect(calendar).toBeVisible();
+    await expect(calendar.locator('.flatpickr-prev-month svg')).toHaveCount(1);
+    await expect(page.locator('.flatpickr-calendar img')).toHaveCount(0);
+
+    expect(await page.evaluate(() => (window as any).__wpumE2E)).toBeUndefined();
+  });
+});
