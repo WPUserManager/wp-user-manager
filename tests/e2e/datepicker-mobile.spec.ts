@@ -172,33 +172,8 @@ test.describe('Datepicker on desktop', () => {
  * in data attributes, and must stay inert.
  */
 test.describe('Datepicker and other elements with its class', () => {
-  let pageId = '';
-  let pageUrl = '';
-
-  test.beforeAll(() => {
-    const php = [
-      '$attr = esc_attr( "<img src=x onerror=window.__wpumE2E=1>" );',
-      '$content = "<span class=\\"wpum-datepicker\\" data-prev-arrow=\\"" . $attr . "\\" data-next-arrow=\\"" . $attr . "\\">date</span>[wpum_account]";',
-      '$id = wp_insert_post( array( "post_type" => "page", "post_status" => "publish", "post_title" => "E2E Datepicker Content", "post_content" => $content ) );',
-      'echo "PAGE:" . $id . "|" . get_permalink( $id );',
-    ].join(' ');
-
-    const output = wpCli(`eval '${php}'`);
-    const match = output.match(/PAGE:(\d+)\|(\S+)/);
-
-    if (!match) {
-      throw new Error(`Could not create the page: ${output}`);
-    }
-
-    pageId = match[1];
-    pageUrl = match[2];
-  });
-
-  test.afterAll(() => {
-    if (pageId) {
-      wpCli(`post delete ${pageId} --force`);
-    }
-  });
+  const PAYLOAD = '&lt;img src=x onerror=window.__wpumE2E=1&gt;';
+  const SPAN = `<span class="wpum-datepicker" data-prev-arrow="${PAYLOAD}" data-next-arrow="${PAYLOAD}">date</span>`;
 
   test.beforeEach(async ({ page }) => {
     await wpAdminLogin(page, 'testuser_login', 'TestPass123!');
@@ -206,8 +181,24 @@ test.describe('Datepicker and other elements with its class', () => {
 
   test('sets up the field WPUM renders and leaves the other element alone', async ({
     page,
+    accountPage,
   }) => {
-    await page.goto(pageUrl);
+    // Serve the account page with the element added to its markup, as post
+    // content would put it, before the front-end script runs.
+    await page.route(
+      `**${accountPage}`,
+      async (route) => {
+        if (route.request().resourceType() !== 'document') {
+          return route.continue();
+        }
+
+        const response = await route.fetch();
+        const body = (await response.text()).replace(/(<body[^>]*>)/i, `$1${SPAN}`);
+        await route.fulfill({ response, body });
+      }
+    );
+
+    await page.goto(accountPage);
 
     const altInput = page.locator(ALT_INPUT).first();
     await expect(altInput).toBeVisible({ timeout: 10000 });
